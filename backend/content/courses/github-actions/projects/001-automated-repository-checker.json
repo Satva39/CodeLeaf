@@ -1,0 +1,134 @@
+{
+  "id": "github-actions-project-01",
+  "slug": "automated-repository-checker",
+  "title": "Automated Repository Checker",
+  "sequence": 1,
+  "tier": "beginner",
+  "objective": "Automatically validate a repository on push and pull request.",
+  "prerequisite_lesson_ids": [
+    "github-actions-lesson-009",
+    "github-actions-lesson-010",
+    "github-actions-lesson-021"
+  ],
+  "recommended_lesson_range": [
+    9,
+    21
+  ],
+  "skills": [
+    "Introduction to GitHub Actions",
+    "Environment Setup and Your First Workflow",
+    "YAML and Workflow Structure",
+    "workflow YAML",
+    "CI/CD design",
+    "security review",
+    "testing and operations"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Required-file validation",
+      "acceptance_criteria": [
+        "Demonstrate required-file validation.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Linting and automated status reporting",
+      "acceptance_criteria": [
+        "Demonstrate linting and automated status reporting.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Clear failure messages",
+      "acceptance_criteria": [
+        "Demonstrate clear failure messages.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Pull-request quality checks",
+      "acceptance_criteria": [
+        "Demonstrate pull-request quality checks.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "contents": "# Automated Repository Checker\n\nAutomatically validate a repository on push and pull request.\n\n## Verification record\n\n- Trigger tested:\n- Checks that passed:\n- Failure path checked:\n- Permission review:\n- Remaining limitations:\n"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "language": "yaml",
+      "contents": "name: CI\non: [push, pull_request]\npermissions:\n  contents: read\njobs:\n  checks:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Repository check\n        run: test -f README.md\n"
+    }
+  ],
+  "required_features": [
+    "Required-file validation",
+    "Linting and automated status reporting",
+    "Clear failure messages",
+    "Pull-request quality checks"
+  ],
+  "stretch_features": [
+    "Add an explicit cancellation/timeout policy and test it.",
+    "Pin third-party action dependencies to verified immutable references per repository policy.",
+    "Add a troubleshooting guide with sanitized logs and a rollback or recovery plan."
+  ],
+  "tests": [
+    {
+      "name": "Required workflow evidence",
+      "mode": "human_review",
+      "criteria": [
+        "Workflow triggers match the documented intent.",
+        "Required jobs and checks actually run.",
+        "No production secret is exposed.",
+        "Permissions are limited to required operations.",
+        "Failure and recovery behavior is documented."
+      ]
+    },
+    {
+      "name": "Safe execution",
+      "mode": "human_review",
+      "criteria": [
+        "Validate in a disposable repository/environment.",
+        "Do not deploy real resources until configuration, access, and rollback are reviewed."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correct behavior and completion criteria",
+      "points": 30
+    },
+    {
+      "criterion": "Workflow design, clarity, and maintainability",
+      "points": 20
+    },
+    {
+      "criterion": "Permissions, credential handling, and trust boundaries",
+      "points": 25
+    },
+    {
+      "criterion": "Testing, failure handling, and traceable evidence",
+      "points": 15
+    },
+    {
+      "criterion": "Documentation and operational handover",
+      "points": 10
+    }
+  ],
+  "rubric_total": 100,
+  "review_method": "Human review against the rubric and recorded workflow-run evidence; local static checks do not replace a live GitHub Actions run.",
+  "reference_solution_file": "projects/solutions/001-automated-repository-checker-solution.json",
+  "status": "draft"
+}

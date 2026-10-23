@@ -1,0 +1,96 @@
+{
+  "id": "c-lesson-283",
+  "slug": "using-errno-correctly",
+  "title": "Using errno Correctly",
+  "sequence": 283,
+  "module_id": "c-module-25",
+  "module_slug": "error-handling-and-defensive-programming",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "c-lesson-282"
+  ],
+  "previous_lesson_id": "c-lesson-282",
+  "next_lesson_id": "c-lesson-284",
+  "keywords": [
+    "using-errno-correctly",
+    "error-handling-and-defensive-programming"
+  ],
+  "source_syllabus_number": 283,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the main idea behind using errno correctly in your own words.",
+    "Apply using errno correctly to a minimal C example and predict the result.",
+    "Identify a relevant boundary, portability assumption, or failure mode."
+  ],
+  "content": {
+    "intro": "This lesson explores Using errno Correctly through an original visual, a compact C example and a check you can perform locally.",
+    "why_it_matters": "Understanding using errno correctly helps you reason about C programs rather than relying on trial and error. It also helps you communicate assumptions, write safer code, and debug behavior across toolchains.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 25 roadmap",
+        "asset_path": "diagrams/module-25-overview.svg",
+        "alt_text": "Module 25 overview for Error Handling and Defensive Programming, showing this lesson in sequence with the surrounding syllabus topics.",
+        "caption": "Module visual overview; the numbered syllabus map remains the canonical order."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Using errno Correctly is studied as part of **Error Handling and Defensive Programming**. Start with the contract: identify the inputs or program state, the rule C applies, and the observable result. Then check the behavior in a small, repeatable example.\n\nIn C, details can depend on the selected language standard and implementation. Distinguish defined behavior from unspecified, implementation-defined, or undefined behavior, and consult the cited standard/compiler references when portability matters."
+      },
+      {
+        "type": "paragraph",
+        "title": "Practical reasoning",
+        "text": "For “Using errno Correctly”, write down the preconditions first. Identify valid inputs and boundaries, decide which C rule applies, then choose evidence that would falsify your assumption. Prefer a small test with a clear expected result and compile with diagnostics enabled."
+      },
+      {
+        "type": "code",
+        "title": "Error reporting",
+        "language": "c",
+        "code": "#include <errno.h>\n#include <stdio.h>\n#include <stdlib.h>\n\nint parse_positive(const char *text, long *result) {\n    char *end = NULL; errno = 0;\n    long value = strtol(text, &end, 10);\n    if (text == end || *end != '\\0' || errno != 0 || value <= 0) return 0;\n    *result = value; return 1;\n}\n\nint main(void) {\n    long value;\n    if (!parse_positive(\"42\", &value)) return EXIT_FAILURE;\n    printf(\"value = %ld\\n\", value);\n    return EXIT_SUCCESS;\n}",
+        "expected_output": "value = 42",
+        "run_instructions": "Validate full input, check conversion range/error indicators, and distinguish invalid user data from environmental failure.",
+        "reset_steps": "Restore the original example, rebuild with the same compiler flags, rerun the same inputs, and compare actual output with the stated result. For time-, platform-, or input-dependent examples, record the environment and do not expect identical values everywhere.",
+        "execution_mode": "static-validation",
+        "limitations": "The CodeLeaf lesson page does not run C code. Compile locally or use a separately deployed, isolated C runner; do not execute arbitrary learner code inside FastAPI."
+      },
+      {
+        "type": "callout",
+        "title": "Portability and safety check",
+        "text": "Use a documented standard mode; treat compiler extensions as extensions, not ISO C guarantees. Check return values, buffer bounds, and object lifetime. This course example is draft material and needs code review on the target toolchain before publication."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-283-questions.json"
+  },
+  "task": "In a scratch file, create one small example that demonstrates using errno correctly. Explain the expected result before running it, compile with warnings enabled, and record one boundary case or portability question.",
+  "hints": [
+    "Reduce the program to the smallest example that still shows the concept.",
+    "Write down the input, expected result, and assumptions before running it.",
+    "Check the official language/compiler reference and test a boundary case."
+  ],
+  "expected_output": "A short, reproducible C example and explanation showing using errno correctly, plus a note about one boundary or portability consideration.",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    "Treating using errno correctly as a rule to memorize rather than a behavior to test.",
+    "Ignoring compiler warnings, input validity, or object lifetime.",
+    "Assuming behavior observed on one compiler is guaranteed by every C implementation."
+  ],
+  "summary": [
+    "Using errno Correctly belongs to Error Handling and Defensive Programming.",
+    "State the assumptions, verify the smallest example, and test boundaries.",
+    "Check the selected language standard and target compiler when portability matters."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C Language — Complete Learning Curriculum, Section B, module 25, topic 283.",
+    "Official and technical sources indexed in references/reference-index.json."
+  ],
+  "status": "draft"
+}

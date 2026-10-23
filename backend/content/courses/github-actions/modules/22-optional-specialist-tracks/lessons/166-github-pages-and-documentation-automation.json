@@ -1,0 +1,267 @@
+{
+  "id": "github-actions-lesson-166",
+  "slug": "github-pages-and-documentation-automation",
+  "title": "GitHub Pages and Documentation Automation",
+  "sequence": 166,
+  "module_id": "github-actions-module-22",
+  "module_slug": "optional-specialist-tracks",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "optional",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "github-actions-lesson-165"
+  ],
+  "previous_lesson_id": "github-actions-lesson-165",
+  "next_lesson_id": "github-actions-lesson-167",
+  "keywords": [
+    "github-pages-and-documentation-automation",
+    "optional-specialist-tracks",
+    "documentation-build-workflows",
+    "static-site-generation",
+    "documentation-previews",
+    "link-validation",
+    "publishing-documentation",
+    "handling-deployment-failures"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of github pages and documentation automation and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to github pages and documentation automation.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on github pages and documentation automation. Documentation workflows can build a site, check links, upload a site artifact, and gate publishing so broken changes do not reach the public site. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "GitHub Pages and Documentation Automation matters because it affects correctness, security, maintainability, or operating cost. Documentation workflows can build a site, check links, upload a site artifact, and gate publishing so broken changes do not reach the public site. Optional specializations extend the core workflow model; keep new scanners, docs publishing, container delivery, and release controls scoped, observable, and reviewed.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 22 visual map",
+        "asset_path": "diagrams/module-22-overview.svg",
+        "alt_text": "Ordered overview of module 22: Code Security Automation; Dependency and Supply-Chain Security; Advanced Workflow Threat Modeling; GitHub Pages and Documentation Automation; Advanced Container Delivery; Advanced Release Engineering.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Documentation workflows can build a site, check links, upload a site artifact, and gate publishing so broken changes do not reach the public site. Optional specializations extend the core workflow model; keep new scanners, docs publishing, container delivery, and release controls scoped, observable, and reviewed. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "Documentation build workflows",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Static-site generation",
+            "text": "For static-site generation, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Documentation previews",
+            "text": "For documentation previews, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Link validation",
+            "text": "For link validation, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Publishing documentation",
+            "text": "Trace the release to a source commit, validate the selected version/ref, restrict publication permissions, retain build evidence, and verify the published artifact before promoting it."
+          },
+          {
+            "title": "Handling deployment failures",
+            "text": "Start with the first failed step and its exit code, then inspect the event, conditions, permissions, tool versions, network, and runner state. Capture sanitized diagnostics and preserve evidence of the failure."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "name: Build and publish GitHub Pages\non:\n  push:\n    branches: [main]\npermissions:\n  contents: read\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: echo \"Build your documentation site into ./dist\"\n      - uses: actions/upload-pages-artifact@v3\n        with:\n          path: ./dist\n  deploy:\n    needs: build\n    permissions:\n      pages: write\n      id-token: write\n    environment:\n      name: github-pages\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/deploy-pages@v4",
+        "expected_output": "The workflow uploads `dist` and passes it to the Pages deployment action; the site build command and repository Pages configuration still need to be supplied.",
+        "run_instructions": "Run the build in a test project and verify that `dist` exists before the upload step.",
+        "reset_steps": "Do not enable publishing until source, branch, and environment restrictions have been reviewed.",
+        "execution_mode": "workflow-fragment"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to github pages and documentation automation. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain github pages and documentation automation, read the example, and identify a way to validate it. The wider system goal remains: Apply optional security, documentation, container, and release specializations after core concepts are understood."
+      }
+    ],
+    "task": "Apply github pages and documentation automation to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: Documentation workflows can build a site, check links, upload a site artifact, and gate publishing so broken changes do not reach the public site.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: Documentation workflows can build a site, check links, upload a site artifact, and gate publishing so broken changes do not reach the public site. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "Documentation workflows can build a site, check links, upload a site artifact, and gate publishing so broken changes do not reach the public site.",
+      "Optional specializations extend the core workflow model; keep new scanners, docs publishing, container delivery, and release controls scoped, observable, and reviewed.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-166-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "workflow-fragment",
+    "references": [
+      {
+        "title": "GitHub code scanning with CodeQL",
+        "url": "https://docs.github.com/en/code-security/code-scanning/introduction-to-code-scanning/about-code-scanning-with-codeql",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "security_guidance",
+        "supports": [
+          "CodeQL",
+          "static analysis",
+          "security alert handling"
+        ]
+      },
+      {
+        "title": "About dependency review",
+        "url": "https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-dependency-review",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "security_guidance",
+        "supports": [
+          "dependency review",
+          "supply-chain risk"
+        ]
+      },
+      {
+        "title": "Artifact attestations",
+        "url": "https://docs.github.com/en/actions/concepts/security/artifact-attestations",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "security_guidance",
+        "supports": [
+          "build provenance",
+          "artifact verification",
+          "trusted publishing concepts"
+        ]
+      },
+      {
+        "title": "Configuring and managing deployments",
+        "url": "https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "deployment environments",
+          "protection rules",
+          "approvals",
+          "concurrency",
+          "deployment history"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [
+    "../exercises/044-github-pages-and-documentation-automation-practice.json"
+  ],
+  "sources": [
+    {
+      "title": "GitHub code scanning with CodeQL",
+      "url": "https://docs.github.com/en/code-security/code-scanning/introduction-to-code-scanning/about-code-scanning-with-codeql",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "security_guidance",
+      "supports": [
+        "CodeQL",
+        "static analysis",
+        "security alert handling"
+      ]
+    },
+    {
+      "title": "About dependency review",
+      "url": "https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-dependency-review",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "security_guidance",
+      "supports": [
+        "dependency review",
+        "supply-chain risk"
+      ]
+    },
+    {
+      "title": "Artifact attestations",
+      "url": "https://docs.github.com/en/actions/concepts/security/artifact-attestations",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "security_guidance",
+      "supports": [
+        "build provenance",
+        "artifact verification",
+        "trusted publishing concepts"
+      ]
+    },
+    {
+      "title": "Configuring and managing deployments",
+      "url": "https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "deployment environments",
+        "protection rules",
+        "approvals",
+        "concurrency",
+        "deployment history"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section E: Optional and Specialized Topics",
+    "source_lesson_number": "E4",
+    "module_title": "Optional Specialist Tracks",
+    "subtopics": [
+      "Documentation build workflows",
+      "Static-site generation",
+      "Documentation previews",
+      "Link validation",
+      "Publishing documentation",
+      "Handling deployment failures"
+    ]
+  }
+}

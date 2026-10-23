@@ -1,0 +1,198 @@
+{
+  "id": "go-lesson-062",
+  "slug": "function-design-and-documentation",
+  "title": "Function Design and Documentation",
+  "sequence": 62,
+  "module_id": "go-module-07",
+  "module_slug": "functions-in-go",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "go-lesson-061"
+  ],
+  "previous_lesson_id": "go-lesson-061",
+  "next_lesson_id": "go-lesson-063",
+  "keywords": [
+    "function design and documentation",
+    "single purpose functions",
+    "function naming",
+    "parameter design",
+    "return value design",
+    "documenting function contracts",
+    "Go",
+    "Golang"
+  ],
+  "source_syllabus_number": 62,
+  "subtopics": [
+    "Single-purpose functions",
+    "Function naming",
+    "Parameter design",
+    "Return-value design",
+    "Documenting function contracts"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and behavior of function design and documentation.",
+    "Apply at least one lesson concept—single-purpose functions—in a small Go example or workflow.",
+    "Predict a representative result, then test a boundary case and explain any difference."
+  ],
+  "exercise_files": [],
+  "content": {
+    "intro": "Function Design and Documentation helps transform a small program into a reusable data-processing tool. Trace each function input, returned value, and mutation of any collection. For arrays, slices, and maps, pay attention to whether a value is copied or shares underlying storage.",
+    "why_it_matters": "These building blocks appear in everyday Go utilities, APIs, and services; understanding the data flow helps prevent subtle correctness bugs.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 7 overview: Functions in Go",
+        "asset_path": "diagrams/module-07-overview.svg",
+        "alt_text": "Overview of Module 7, Functions in Go; this lesson is lesson 62 in the ordered module sequence.",
+        "caption": "Use the module map to place “Function Design and Documentation” within the larger sequence, then return to the individual code and practice below."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Function Design and Documentation helps transform a small program into a reusable data-processing tool. Trace each function input, returned value, and mutation of any collection. For arrays, slices, and maps, pay attention to whether a value is copied or shares underlying storage."
+      },
+      {
+        "type": "list",
+        "title": "Topics covered in this lesson",
+        "items": [
+          {
+            "title": "Single-purpose functions",
+            "text": "Be able to explain single-purpose functions, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Function naming",
+            "text": "Be able to explain function naming, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Parameter design",
+            "text": "Be able to explain parameter design, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Return-value design",
+            "text": "Be able to explain return-value design, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Documenting function contracts",
+            "text": "Be able to explain documenting function contracts, identify the inputs or program state it affects, and name one boundary case worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Function Design and Documentation",
+        "language": "go",
+        "code": "package main\n\nimport \"fmt\"\n\nfunc double(n int) int { return n * 2 }\nfunc main() { fmt.Println(double(21)) }\n",
+        "expected_output": "42",
+        "run_mode": "server-runner",
+        "run_instructions": "Save as main.go and run `go run main.go`. Keep functions focused and make error results explicit where needed."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through the example",
+        "text": "First, identify the input or initial state in the example for function design and documentation. Next, trace the operation or contract that matters, and predict the result before running it. If the example depends on a version-specific feature, a driver, or an external service, follow the stated prerequisites rather than assuming it works in a browser preview."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to one subtopic—Single-purpose functions—and add a second case that could fail or behave differently. Write down the expected result before testing."
+      }
+    ],
+    "task": "Create a small example connected to “Function Design and Documentation”. Use Single-purpose functions as the starting point, predict the output, then add one invalid, empty, or boundary case and document its result.",
+    "task_acceptance_criteria": [
+      "The example demonstrates single-purpose functions or a closely related concept.",
+      "Inputs, relevant state changes, and expected output are clear.",
+      "At least one boundary case is deliberately tested or documented.",
+      "Errors are handled honestly and no success state is reported when the operation fails."
+    ],
+    "hints": [
+      "Start from the simplest example related to single-purpose functions.",
+      "Predict the result manually and annotate the value that changes at each step.",
+      "Run `gofmt` and the appropriate local `go run`, `go test`, `go vet`, or inspection command when prerequisites are available."
+    ],
+    "expected_output": "42",
+    "run_mode": "server-runner",
+    "knowledge_check_file": "exams/question-files/lesson-062-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the happy-path output proves all inputs are safe.",
+        "why": "Empty, malformed, boundary, or concurrent cases may follow different paths.",
+        "fix": "Add focused tests for a normal input and at least one relevant edge case."
+      },
+      {
+        "problem": "Ignoring returned errors or external-system status.",
+        "why": "Go APIs commonly report expected failures as explicit error values.",
+        "fix": "Check errors close to the operation, add useful context when propagating, and clean up resources."
+      },
+      {
+        "problem": "Using an API or syntax without checking the selected Go version.",
+        "why": "Language and standard-library capabilities can change between releases.",
+        "fix": "Record `go version`, inspect the `go` directive, and read official release notes for version-specific topics."
+      }
+    ],
+    "summary": [
+      "Function Design and Documentation provides a reusable rule or workflow for Go programs.",
+      "The subtopics to revisit are: Single-purpose functions; Function naming; Parameter design; Return-value design; Documenting function contracts.",
+      "Prefer a small reproducible example, explicit errors, appropriate tests, and version-matched official documentation."
+    ],
+    "references": [
+      {
+        "title": "Go Documentation",
+        "url": "https://go.dev/doc/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "tutorials",
+          "language concepts",
+          "tooling",
+          "application development"
+        ]
+      },
+      {
+        "title": "The Go Programming Language Specification",
+        "url": "https://go.dev/ref/spec",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "syntax",
+          "types",
+          "control flow",
+          "interfaces"
+        ]
+      }
+    ],
+    "accessibility_note": "The diagram includes descriptive alt text and a text caption. Code examples are also described in prose; do not rely on color alone to understand a sequence.",
+    "execution_note": "Save as main.go and run `go run main.go`. Keep functions focused and make error results explicit where needed. Examples that need a database driver, external service, isolated execution environment, or version-specific feature are labeled as static examples and should not be treated as already executed."
+  },
+  "sources": [
+    {
+      "title": "Go Documentation",
+      "url": "https://go.dev/doc/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tutorials",
+        "language concepts",
+        "tooling",
+        "application development"
+      ]
+    },
+    {
+      "title": "The Go Programming Language Specification",
+      "url": "https://go.dev/ref/spec",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "syntax",
+        "types",
+        "control flow",
+        "interfaces"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied Go.pdf syllabus mapping. Human review and local runtime verification are required before publication."
+}

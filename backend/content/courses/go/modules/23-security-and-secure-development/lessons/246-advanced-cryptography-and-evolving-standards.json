@@ -1,0 +1,271 @@
+{
+  "id": "go-lesson-246",
+  "slug": "advanced-cryptography-and-evolving-standards",
+  "title": "Advanced Cryptography and Evolving Standards",
+  "sequence": 246,
+  "module_id": "go-module-23",
+  "module_slug": "security-and-secure-development",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "elective",
+  "estimated_minutes": 23,
+  "prerequisites": [
+    "go-lesson-245"
+  ],
+  "previous_lesson_id": "go-lesson-245",
+  "next_lesson_id": "go-lesson-247",
+  "keywords": [
+    "advanced cryptography and evolving standards",
+    "standard cryptographic package review",
+    "protocol compatibility",
+    "post quantum cryptography concepts",
+    "go 127 cryptographic library additions",
+    "monitoring security advisories and release notes",
+    "Go",
+    "Golang"
+  ],
+  "source_syllabus_number": 246,
+  "subtopics": [
+    "Standard cryptographic package review",
+    "Protocol compatibility",
+    "Post-quantum cryptography concepts",
+    "Go 1.27 cryptographic library additions",
+    "Monitoring security advisories and release notes"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and behavior of advanced cryptography and evolving standards.",
+    "Apply at least one lesson concept—standard cryptographic package review—in a small Go example or workflow.",
+    "Predict a representative result, then test a boundary case and explain any difference."
+  ],
+  "exercise_files": [],
+  "content": {
+    "intro": "Advanced Cryptography and Evolving Standards belongs to secure, reliable operation of Go applications. Treat outside data as untrusted, enforce authorization on the server, bound time and resource use, avoid leaking secrets into errors/logs, and validate the resulting behavior with tests and operational signals.",
+    "why_it_matters": "Secure defaults, reliable release procedures, and actionable observability help teams prevent and respond to defects without claiming that a single check guarantees safety.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 23 overview: Security and Secure Development",
+        "asset_path": "diagrams/module-23-overview.svg",
+        "alt_text": "Overview of Module 23, Security and Secure Development; this lesson is lesson 246 in the ordered module sequence.",
+        "caption": "Use the module map to place “Advanced Cryptography and Evolving Standards” within the larger sequence, then return to the individual code and practice below."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Advanced Cryptography and Evolving Standards belongs to secure, reliable operation of Go applications. Treat outside data as untrusted, enforce authorization on the server, bound time and resource use, avoid leaking secrets into errors/logs, and validate the resulting behavior with tests and operational signals."
+      },
+      {
+        "type": "list",
+        "title": "Topics covered in this lesson",
+        "items": [
+          {
+            "title": "Standard cryptographic package review",
+            "text": "Be able to explain standard cryptographic package review, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Protocol compatibility",
+            "text": "Be able to explain protocol compatibility, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Post-quantum cryptography concepts",
+            "text": "Be able to explain post-quantum cryptography concepts, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Go 1.27 cryptographic library additions",
+            "text": "Be able to explain go 1.27 cryptographic library additions, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Monitoring security advisories and release notes",
+            "text": "Be able to explain monitoring security advisories and release notes, identify the inputs or program state it affects, and name one boundary case worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Advanced Cryptography and Evolving Standards",
+        "language": "text",
+        "code": "// Security review pattern\n// 1. Parse and validate untrusted input.\n// 2. Authorize the action for the authenticated principal.\n// 3. Use parameterized queries and context deadlines.\n// 4. Return safe errors; redact credentials and tokens from logs.\n",
+        "expected_output": "Input is validated, authorization is enforced, queries are parameterized, and secrets are not logged.",
+        "run_mode": "static-validation",
+        "run_instructions": "Review the checklist against a local test service; do not test against systems without permission."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through the example",
+        "text": "First, identify the input or initial state in the example for advanced cryptography and evolving standards. Next, trace the operation or contract that matters, and predict the result before running it. If the example depends on a version-specific feature, a driver, or an external service, follow the stated prerequisites rather than assuming it works in a browser preview."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to one subtopic—Standard cryptographic package review—and add a second case that could fail or behave differently. Write down the expected result before testing."
+      },
+      {
+        "type": "callout",
+        "title": "Scope and compatibility",
+        "text": "Optional or version-sensitive material: consult the version-matched official release notes, isolate the implementation, and verify target/runtime assumptions. Experimental features are not stable API commitments."
+      }
+    ],
+    "task": "Create a small example connected to “Advanced Cryptography and Evolving Standards”. Use Standard cryptographic package review as the starting point, predict the output, then add one invalid, empty, or boundary case and document its result.",
+    "task_acceptance_criteria": [
+      "The example demonstrates standard cryptographic package review or a closely related concept.",
+      "Inputs, relevant state changes, and expected output are clear.",
+      "At least one boundary case is deliberately tested or documented.",
+      "Errors are handled honestly and no success state is reported when the operation fails."
+    ],
+    "hints": [
+      "Start from the simplest example related to standard cryptographic package review.",
+      "Predict the result manually and annotate the value that changes at each step.",
+      "Run `gofmt` and the appropriate local `go run`, `go test`, `go vet`, or inspection command when prerequisites are available."
+    ],
+    "expected_output": "Input is validated, authorization is enforced, queries are parameterized, and secrets are not logged.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-246-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the happy-path output proves all inputs are safe.",
+        "why": "Empty, malformed, boundary, or concurrent cases may follow different paths.",
+        "fix": "Add focused tests for a normal input and at least one relevant edge case."
+      },
+      {
+        "problem": "Ignoring returned errors or external-system status.",
+        "why": "Go APIs commonly report expected failures as explicit error values.",
+        "fix": "Check errors close to the operation, add useful context when propagating, and clean up resources."
+      },
+      {
+        "problem": "Using an API or syntax without checking the selected Go version.",
+        "why": "Language and standard-library capabilities can change between releases.",
+        "fix": "Record `go version`, inspect the `go` directive, and read official release notes for version-specific topics."
+      }
+    ],
+    "summary": [
+      "Advanced Cryptography and Evolving Standards provides a reusable rule or workflow for Go programs.",
+      "The subtopics to revisit are: Standard cryptographic package review; Protocol compatibility; Post-quantum cryptography concepts; Go 1.27 cryptographic library additions; Monitoring security advisories and release notes.",
+      "Prefer a small reproducible example, explicit errors, appropriate tests, and version-matched official documentation."
+    ],
+    "references": [
+      {
+        "title": "Go Documentation",
+        "url": "https://go.dev/doc/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "tutorials",
+          "language concepts",
+          "tooling",
+          "application development"
+        ]
+      },
+      {
+        "title": "The Go Programming Language Specification",
+        "url": "https://go.dev/ref/spec",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "syntax",
+          "types",
+          "control flow",
+          "interfaces"
+        ]
+      },
+      {
+        "title": "Security Best Practices for Go Developers",
+        "url": "https://go.dev/doc/security/best-practices",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "govulncheck",
+          "fuzzing",
+          "race detection",
+          "go vet"
+        ]
+      },
+      {
+        "title": "Go Vulnerability Management",
+        "url": "https://go.dev/doc/security/vuln/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "vulnerability database",
+          "govulncheck",
+          "dependency risk assessment"
+        ]
+      },
+      {
+        "title": "Go Fuzzing",
+        "url": "https://go.dev/doc/security/fuzz/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "fuzz tests",
+          "seed corpus",
+          "input robustness"
+        ]
+      }
+    ],
+    "accessibility_note": "The diagram includes descriptive alt text and a text caption. Code examples are also described in prose; do not rely on color alone to understand a sequence.",
+    "execution_note": "Review the checklist against a local test service; do not test against systems without permission. Examples that need a database driver, external service, isolated execution environment, or version-specific feature are labeled as static examples and should not be treated as already executed."
+  },
+  "sources": [
+    {
+      "title": "Go Documentation",
+      "url": "https://go.dev/doc/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tutorials",
+        "language concepts",
+        "tooling",
+        "application development"
+      ]
+    },
+    {
+      "title": "The Go Programming Language Specification",
+      "url": "https://go.dev/ref/spec",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "syntax",
+        "types",
+        "control flow",
+        "interfaces"
+      ]
+    },
+    {
+      "title": "Security Best Practices for Go Developers",
+      "url": "https://go.dev/doc/security/best-practices",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "govulncheck",
+        "fuzzing",
+        "race detection",
+        "go vet"
+      ]
+    },
+    {
+      "title": "Go Vulnerability Management",
+      "url": "https://go.dev/doc/security/vuln/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "vulnerability database",
+        "govulncheck",
+        "dependency risk assessment"
+      ]
+    },
+    {
+      "title": "Go Fuzzing",
+      "url": "https://go.dev/doc/security/fuzz/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "fuzz tests",
+        "seed corpus",
+        "input robustness"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied Go.pdf syllabus mapping. Human review and local runtime verification are required before publication."
+}

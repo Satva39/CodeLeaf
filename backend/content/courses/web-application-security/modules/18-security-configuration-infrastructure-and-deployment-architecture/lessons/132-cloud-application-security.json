@@ -1,0 +1,189 @@
+{
+  "id": "web-application-security-lesson-132",
+  "slug": "cloud-application-security",
+  "title": "Cloud Application Security",
+  "sequence": 132,
+  "module_id": "web-application-security-module-18",
+  "module_slug": "security-configuration-infrastructure-and-deployment-architecture",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced-security",
+  "curriculum_tier": "advanced",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "web-application-security-lesson-131"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-131",
+  "next_lesson_id": "web-application-security-lesson-133",
+  "keywords": [
+    "cloud",
+    "application",
+    "security",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 132,
+  "source_syllabus_title": "Cloud Application Security",
+  "source_subtopics": [
+    {
+      "number": "132.1",
+      "title": "Shared responsibility concepts"
+    },
+    {
+      "number": "132.2",
+      "title": "Identity and access management"
+    },
+    {
+      "number": "132.3",
+      "title": "Public versus private resources"
+    },
+    {
+      "number": "132.4",
+      "title": "Object storage and managed databases"
+    },
+    {
+      "number": "132.5",
+      "title": "Network policies and workload identity"
+    },
+    {
+      "number": "132.6",
+      "title": "Cloud logging and security monitoring"
+    }
+  ],
+  "subtopics": [
+    "Shared responsibility concepts",
+    "Identity and access management",
+    "Public versus private resources",
+    "Object storage and managed databases",
+    "Network policies and workload identity",
+    "Cloud logging and security monitoring"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in Cloud Application Security.",
+    "Choose an appropriate defensive control for Cloud Application Security and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for Cloud Application Security, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 18: Security Configuration, Infrastructure, and Deployment Architecture. It builds practical understanding of Cloud Application Security with the syllabus subtopics retained below.",
+    "why_it_matters": "Cloud Application Security makes secure behavior repeatable across implementation, dependencies, configuration, and release. Record useful security events with correlation context but without secrets, define alert/escalation and response steps, preserve necessary evidence, and verify recovery or remediation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Cloud Application Security",
+        "asset_path": "diagrams/lesson-132-cloud-application-security.svg",
+        "alt_text": "Four-stage visual model for Cloud Application Security: Define requirement; Implement least privilege; Automate verification; Review exceptions.",
+        "caption": "Concept map for Cloud Application Security. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Cloud Application Security can be understood through this sequence: Define requirement → Implement least privilege → Automate verification → Review exceptions. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 132.1 Shared responsibility concepts; 132.2 Identity and access management; 132.3 Public versus private resources; 132.4 Object storage and managed databases; 132.5 Network policies and workload identity; 132.6 Cloud logging and security monitoring. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Record useful security events with correlation context but without secrets, define alert/escalation and response steps, preserve necessary evidence, and verify recovery or remediation."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "text",
+        "execution_mode": "human-review",
+        "title": "Safe reference example: Cloud Application Security",
+        "code": "Topic: Cloud Application Security\nReview artifact: define scope, assumptions, control owner, expected secure behavior, failure behavior, and a reproducible verification step.",
+        "expected_output": "A written review artifact names the control and the evidence needed to verify it.",
+        "run_instructions": "Use a local/owned application or explicitly authorized test target. Record only sanitized synthetic evidence; use human review for behavior that a static snippet cannot prove.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Record useful security events with correlation context but without secrets, define alert/escalation and response steps, preserve necessary evidence, and verify recovery or remediation. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “Cloud Application Security”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for Cloud Application Security in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "human-review",
+    "knowledge_check_file": "exams/question-files/lesson-132-questions.json",
+    "recap": [
+      "Cloud Application Security is a security boundary/control topic, not a standalone checklist item.",
+      "Record useful security events with correlation context but without secrets, define alert/escalation and response steps, preserve necessary evidence, and verify recovery or remediation.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "OWASP Top 10:2025",
+      "url": "https://owasp.org/www-project-top-ten/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "web application risk categories",
+        "OWASP A01-A10:2025"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

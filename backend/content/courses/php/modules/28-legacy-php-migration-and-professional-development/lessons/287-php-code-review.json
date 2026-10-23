@@ -1,0 +1,213 @@
+{
+  "id": "php-lesson-287",
+  "slug": "php-code-review",
+  "title": "PHP Code Review",
+  "sequence": 287,
+  "module_id": "php-module-28",
+  "module_slug": "legacy-php-migration-and-professional-development",
+  "level": "professional",
+  "difficulty": "professional",
+  "track": "professional",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "php-lesson-286"
+  ],
+  "previous_lesson_id": "php-lesson-286",
+  "next_lesson_id": "php-lesson-288",
+  "keywords": [
+    "php code review",
+    "legacy php, migration, and professional development",
+    "correctness",
+    "readability",
+    "type safety",
+    "security",
+    "test coverage and maintainability",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 287,
+  "subtopics": [
+    "Correctness.",
+    "Readability.",
+    "Type safety.",
+    "Security.",
+    "Test coverage and maintainability."
+  ],
+  "learning_outcomes": [
+    "Explain what php code review contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: correctness.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Legacy maintenance preserves real behavior while removing risky assumptions. Use tests to make changes incremental, check the supported PHP/dependency matrix, and migrate deprecated patterns with a documented plan. In this lesson, focus on correctness; then compare it with readability. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use php code review when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 28 overview: Legacy PHP, Migration, and Professional Development",
+        "asset_path": "diagrams/module-28-overview.svg",
+        "alt_text": "Four-stage overview for module 28, Legacy PHP, Migration, and Professional Development, grouping lesson topics in order.",
+        "caption": "Use this overview to place php code review in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Legacy maintenance preserves real behavior while removing risky assumptions. Use tests to make changes incremental, check the supported PHP/dependency matrix, and migrate deprecated patterns with a documented plan. For php code review, begin with correctness. Also distinguish readability; type safety; security. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Correctness",
+            "text": "Know when to use correctness, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Readability",
+            "text": "Know when to use readability, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Type safety",
+            "text": "State which values are accepted and what contract the declaration enforces; include a case that should be rejected or handled explicitly."
+          },
+          {
+            "title": "Security",
+            "text": "Know when to use security, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Test coverage and maintainability",
+            "text": "Write an assertion about observable behavior and include a boundary or failure case; a passing command alone does not prove the requirement."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for PHP Code Review",
+        "language": "php",
+        "code": "<?php\nfunction legacyLabel($value) { return trim((string) $value); }\necho legacyLabel(\" PHP \") . PHP_EOL;",
+        "expected_output": "PHP",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Change legacy code incrementally, use tests to preserve behavior, and verify the target PHP/dependency compatibility matrix."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for php code review from top to bottom. Start by identifying correctness, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for php code review that demonstrates \"correctness\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of correctness.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "PHP",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-287-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "PHP Code Review is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Change legacy code incrementally, use tests to preserve behavior, and verify the target PHP/dependency compatibility matrix."
+    ],
+    "references": [
+      {
+        "title": "Supported Versions",
+        "url": "https://www.php.net/supported-versions.php",
+        "publisher": "PHP.net",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "active support",
+          "security support",
+          "version lifecycle"
+        ]
+      },
+      {
+        "title": "Migrating from PHP 8.4.x to PHP 8.5.x",
+        "url": "https://www.php.net/manual/en/migration85.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "version compatibility",
+          "new features",
+          "backward incompatible changes"
+        ]
+      },
+      {
+        "title": "PSR-12 Extended Coding Style",
+        "url": "https://www.php-fig.org/psr/psr-12/",
+        "publisher": "PHP-FIG",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "style conventions",
+          "formatting consistency"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Supported Versions",
+      "url": "https://www.php.net/supported-versions.php",
+      "publisher": "PHP.net",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "active support",
+        "security support",
+        "version lifecycle"
+      ]
+    },
+    {
+      "title": "Migrating from PHP 8.4.x to PHP 8.5.x",
+      "url": "https://www.php.net/manual/en/migration85.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "version compatibility",
+        "new features",
+        "backward incompatible changes"
+      ]
+    },
+    {
+      "title": "PSR-12 Extended Coding Style",
+      "url": "https://www.php-fig.org/psr/psr-12/",
+      "publisher": "PHP-FIG",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "style conventions",
+        "formatting consistency"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

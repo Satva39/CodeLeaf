@@ -1,0 +1,201 @@
+{
+  "id": "sql-lesson-071",
+  "slug": "casting-and-type-safety-in-expressions",
+  "title": "Casting and Type Safety in Expressions",
+  "sequence": 71,
+  "module_id": "sql-module-07",
+  "module_slug": "sql-functions-and-expressions",
+  "level": "intermediate",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "sql-lesson-070"
+  ],
+  "previous_lesson_id": "sql-lesson-070",
+  "next_lesson_id": "sql-lesson-072",
+  "keywords": [
+    "casting and type safety in expressions",
+    "explicit casting in calculations",
+    "resolving incompatible types",
+    "preventing unintended truncation",
+    "safe handling of optional values",
+    "type inference in complex expressions"
+  ],
+  "source_syllabus_number": 71,
+  "source_module_number": 7,
+  "subtopics": [
+    "Explicit casting in calculations",
+    "Resolving incompatible types",
+    "Preventing unintended truncation",
+    "Safe handling of optional values",
+    "Type inference in complex expressions"
+  ],
+  "subtopic_source_numbers": [
+    "71.1",
+    "71.2",
+    "71.3",
+    "71.4",
+    "71.5"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and key terms of casting and type safety in expressions.",
+    "Apply explicit casting in calculations in a small PostgreSQL-oriented example or design decision.",
+    "Validate the result against the expected behavior and identify one portability, safety, or edge-case consideration."
+  ],
+  "content": {
+    "intro": "Learn casting and type safety in expressions through a short explanation, a concept diagram, and a PostgreSQL-oriented example. Focus on the reason for the query or design decision before memorizing syntax.",
+    "why_it_matters": "Casting and Type Safety in Expressions matters because database behavior becomes more reliable when the intended row meaning, data shape, and edge cases are explicit. This lesson follows the SQL curriculum's listed subtopics and calls out PostgreSQL-specific behavior when it matters.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Casting and Type Safety in Expressions",
+        "asset_path": "diagrams/lesson-071-casting-and-type-safety-in-expressions.svg",
+        "alt_text": "Original SQL concept diagram for Casting and Type Safety in Expressions; shows four steps based on the lesson subtopics.",
+        "caption": "Use this four-step visual to connect the question, the relevant SQL idea, its application, and a verification check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "The practical goal of casting and type safety in expressions is to produce a result set whose meaning is clear. Confirm which rows enter the query, how values are transformed or combined, and whether NULLs, duplicates, ties, or one-to-many relationships change the output."
+      },
+      {
+        "type": "paragraph",
+        "title": "Apply the idea",
+        "text": "Start with the subtopics: Explicit casting in calculations, Resolving incompatible types, Preventing unintended truncation, Safe handling of optional values. Define the result you expect, run or inspect the small example in your own disposable PostgreSQL lab, and change one assumption at a time. The embedded lesson editor is a demonstration shell: the current project shows the sample expected output and does not execute arbitrary SQL on the server."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics to master",
+        "items": [
+          {
+            "title": "Explicit casting in calculations",
+            "text": "Explicit casting in calculations works best when inputs and outputs have deliberate types. Use explicit casts when intent is unclear, guard against overflow or truncation, and avoid converting typed values to display strings before calculations finish."
+          },
+          {
+            "title": "Resolving incompatible types",
+            "text": "Resolving incompatible types helps you transform values with scalar functions and expressions while preserving type safety, numeric precision, time-zone meaning, and NULL semantics. Start with a concrete example, state the expected result, and verify the behavior before extending the query or design."
+          },
+          {
+            "title": "Preventing unintended truncation",
+            "text": "Preventing unintended truncation helps you transform values with scalar functions and expressions while preserving type safety, numeric precision, time-zone meaning, and NULL semantics. Start with a concrete example, state the expected result, and verify the behavior before extending the query or design."
+          },
+          {
+            "title": "Safe handling of optional values",
+            "text": "Safe handling of optional values helps you transform values with scalar functions and expressions while preserving type safety, numeric precision, time-zone meaning, and NULL semantics. Start with a concrete example, state the expected result, and verify the behavior before extending the query or design."
+          },
+          {
+            "title": "Type inference in complex expressions",
+            "text": "Type inference in complex expressions works best when inputs and outputs have deliberate types. Use explicit casts when intent is unclear, guard against overflow or truncation, and avoid converting typed values to display strings before calculations finish."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "sql",
+        "execution_mode": "static-validation",
+        "code": "SELECT CAST(price AS numeric(12,2)) AS exact_price, CAST(stock_quantity AS integer) AS unit_count FROM products ORDER BY product_id;",
+        "expected_output": "Explicit casts make the intended result types visible. Check rounding and range behavior before narrowing a type.",
+        "run_instructions": "Run in a disposable local PostgreSQL database such as codeleaf_sql_lab after loading datasets/postgresql-lab-setup.sql. Do not use production credentials or a production database. Some specialist examples require optional extensions or a specific PostgreSQL version, as stated in the lesson. The CodeLeaf lesson Run button in this scaffold only previews the documented expected output; it is not a SQL execution service.",
+        "reset_steps": "For queries, restore the original text and compare results. For statements that change data, use the transaction and rollback shown in the example, or recreate the disposable lab from the included setup instructions. Do not reset production data."
+      },
+      {
+        "type": "callout",
+        "title": "Remember",
+        "text": "SQL correctness depends on data shape, constraints, NULL behavior, row counts, and the target database dialect—not just whether a statement parses."
+      }
+    ],
+    "task": "Try it yourself: demonstrate casting and type safety in expressions using the sample schema. State what each returned row represents, test one edge case related to the lesson, and record the result.",
+    "task_acceptance_criteria": [
+      "The query or design example matches the lesson's intended behavior.",
+      "The expected row grain and relevant NULL, duplicate, boundary, or permission behavior are explained.",
+      "The test is performed only in the local disposable lab, or clearly marked as a static inspection when a real runner is unavailable."
+    ],
+    "hints": [
+      "Begin with the subtopic explicit casting in calculations and write down the result you expect.",
+      "Use the smallest valid example; verify table and column names before adding complexity.",
+      "Inspect one edge case: missing values, duplicate matches, tied sort values, a constraint violation, or an engine-specific syntax difference."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming a query is correct because it returns some rows.",
+        "why": "A result can omit valid records, multiply joined rows, mishandle NULLs, or rely on a non-deterministic order.",
+        "fix": "Check the expected row grain, add targeted edge cases, and use a stable tie-breaker whenever order or pagination matters."
+      },
+      {
+        "problem": "Copying PostgreSQL syntax into another SQL engine without checking support.",
+        "why": "PostgreSQL, MySQL, SQLite, SQL Server, and Oracle differ in types, functions, row limits, procedural features, and transaction behavior.",
+        "fix": "Label the target engine/version and verify the relevant official reference before adapting the query."
+      },
+      {
+        "problem": "Testing with production data or credentials.",
+        "why": "Practice statements can change rows or expose sensitive information if run against the wrong connection.",
+        "fix": "Use a dedicated disposable lab, check current_database() and current_user, and review all changes before committing."
+      }
+    ],
+    "summary": [
+      "Casting and Type Safety in Expressions is about making the database behavior and the expected result explicit.",
+      "Use the provided subtopics as a review checklist and validate a small test case.",
+      "Keep vendor-specific syntax, access assumptions, and production-safety boundaries visible."
+    ],
+    "references": [
+      {
+        "title": "Functions and Operators",
+        "url": "https://www.postgresql.org/docs/current/functions.html"
+      },
+      {
+        "title": "Data Types",
+        "url": "https://www.postgresql.org/docs/current/datatype.html"
+      },
+      {
+        "title": "Full Text Search",
+        "url": "https://www.postgresql.org/docs/current/textsearch.html"
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-071-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "Generated draft content. Review the query and expected output against the selected PostgreSQL version before publication."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Functions and Operators",
+      "url": "https://www.postgresql.org/docs/current/functions.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "string",
+        "numeric",
+        "date/time",
+        "conditional"
+      ]
+    },
+    {
+      "title": "Data Types",
+      "url": "https://www.postgresql.org/docs/current/datatype.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "numeric",
+        "character",
+        "date/time",
+        "boolean"
+      ]
+    },
+    {
+      "title": "Full Text Search",
+      "url": "https://www.postgresql.org/docs/current/textsearch.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "document search",
+        "text vectors",
+        "query parsing",
+        "ranking"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached SQL curriculum outline and official references; requires technical/editorial review before publication."
+}

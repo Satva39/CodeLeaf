@@ -1,0 +1,195 @@
+{
+  "id": "php-lesson-167",
+  "slug": "authorization-and-access-control",
+  "title": "Authorization and Access Control",
+  "sequence": 167,
+  "module_id": "php-module-17",
+  "module_slug": "sessions-authentication-and-authorization",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "php-lesson-166"
+  ],
+  "previous_lesson_id": "php-lesson-166",
+  "next_lesson_id": "php-lesson-168",
+  "keywords": [
+    "authorization and access control",
+    "sessions, authentication, and authorization",
+    "authentication versus authorization",
+    "roles and permissions",
+    "ownership checks",
+    "resource-level authorization",
+    "default-deny principles",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 167,
+  "subtopics": [
+    "Authentication versus authorization.",
+    "Roles and permissions.",
+    "Ownership checks.",
+    "Resource-level authorization.",
+    "Default-deny principles."
+  ],
+  "learning_outcomes": [
+    "Explain what authorization and access control contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: authentication versus authorization.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Authentication establishes who a user is; authorization determines what that user may do. Secure identity workflows depend on password APIs, session lifecycle controls, expiring tokens, and resource-level permission checks. In this lesson, focus on authentication versus authorization; then compare it with roles and permissions. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use authorization and access control when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 17 overview: Sessions, Authentication, and Authorization",
+        "asset_path": "diagrams/module-17-overview.svg",
+        "alt_text": "Four-stage overview for module 17, Sessions, Authentication, and Authorization, grouping lesson topics in order.",
+        "caption": "Use this overview to place authorization and access control in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Authentication establishes who a user is; authorization determines what that user may do. Secure identity workflows depend on password APIs, session lifecycle controls, expiring tokens, and resource-level permission checks. For authorization and access control, begin with authentication versus authorization. Also distinguish roles and permissions; ownership checks; resource-level authorization. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Authentication versus authorization",
+            "text": "Distinguish identity verification from resource permission, and test expiry, invalid credentials, and denied access as well as the success path."
+          },
+          {
+            "title": "Roles and permissions",
+            "text": "Distinguish identity verification from resource permission, and test expiry, invalid credentials, and denied access as well as the success path."
+          },
+          {
+            "title": "Ownership checks",
+            "text": "Know when to use ownership checks, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Resource-level authorization",
+            "text": "Distinguish identity verification from resource permission, and test expiry, invalid credentials, and denied access as well as the success path."
+          },
+          {
+            "title": "Default-deny principles",
+            "text": "Know when to use default-deny principles, what input or program state it changes, and which boundary case is worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Authorization and Access Control",
+        "language": "php",
+        "code": "<?php\n$hash = password_hash(\"demo-passphrase\", PASSWORD_DEFAULT);\necho password_verify(\"demo-passphrase\", $hash) ? \"verified\" : \"rejected\";",
+        "expected_output": "verified",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Use the password hashing API, renew session identifiers after authentication, and check permissions for each protected resource."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for authorization and access control from top to bottom. Start by identifying authentication versus authorization, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for authorization and access control that demonstrates \"authentication versus authorization\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of authentication versus authorization.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "verified",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-167-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Storing plain-text passwords.",
+        "why": "A database exposure would reveal the original secrets.",
+        "fix": "Use password_hash and password_verify; never design your own password hash."
+      },
+      {
+        "problem": "Confusing authentication with authorization.",
+        "why": "A signed-in user may not own every resource.",
+        "fix": "Check role and resource ownership at every protected operation."
+      },
+      {
+        "problem": "Keeping the same session identifier after sign-in.",
+        "why": "An attacker may be able to reuse a known session ID.",
+        "fix": "Regenerate the session ID at authentication boundaries and invalidate sessions on logout."
+      }
+    ],
+    "summary": [
+      "Authorization and Access Control is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Use the password hashing API, renew session identifiers after authentication, and check permissions for each protected resource."
+    ],
+    "references": [
+      {
+        "title": "Sessions",
+        "url": "https://www.php.net/manual/en/book.session.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "session lifecycle",
+          "session cookies",
+          "session configuration"
+        ]
+      },
+      {
+        "title": "Password hashing",
+        "url": "https://www.php.net/manual/en/book.password.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "password_hash",
+          "password_verify",
+          "password rehashing"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [
+    "../exercises/021-permission-system.json"
+  ],
+  "sources": [
+    {
+      "title": "Sessions",
+      "url": "https://www.php.net/manual/en/book.session.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "session lifecycle",
+        "session cookies",
+        "session configuration"
+      ]
+    },
+    {
+      "title": "Password hashing",
+      "url": "https://www.php.net/manual/en/book.password.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "password_hash",
+        "password_verify",
+        "password rehashing"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

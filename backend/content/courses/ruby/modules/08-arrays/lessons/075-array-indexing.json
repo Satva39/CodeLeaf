@@ -1,0 +1,151 @@
+{
+  "id": "ruby-lesson-075",
+  "slug": "array-indexing",
+  "title": "Array Indexing",
+  "sequence": 75,
+  "module_id": "ruby-module-08",
+  "module_slug": "arrays",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core-foundations",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "ruby-lesson-074"
+  ],
+  "previous_lesson_id": "ruby-lesson-074",
+  "next_lesson_id": "ruby-lesson-076",
+  "keywords": [
+    "array-indexing",
+    "arrays",
+    "ruby",
+    "positive-and-negative-indexes",
+    "first-and-last-elements",
+    "missing-indexes-and-nil"
+  ],
+  "source_syllabus_number": 75,
+  "subtopics": [
+    "Positive and negative indexes",
+    "First and last elements",
+    "Missing indexes and nil"
+  ],
+  "learning_outcomes": [
+    "Explain the role of array indexing in a Ruby program and name the key rule involved.",
+    "Apply array indexing in a small example and predict its result before running it.",
+    "Identify one boundary or failure case related to missing indexes and nil and verify the intended behavior."
+  ],
+  "content": {
+    "intro": "Learn Array Indexing through a visual model, a minimal Ruby example, and a practical check.",
+    "why_it_matters": "Understanding array indexing helps you write code that is easier to explain, test, and maintain. It also helps separate Ruby language guarantees from runtime assumptions, dependency behavior, and application-specific rules.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Array Indexing",
+        "asset_path": "diagrams/lesson-075-array-indexing.svg",
+        "alt_text": "Three-stage concept diagram for Array Indexing.",
+        "caption": "Use this diagram to plan a small example, then verify exact behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Array Indexing helps you reason about positive and negative indexes. In Ruby, prefer a small example whose inputs and expected result are easy to explain. This lesson connects the syllabus topic to practical code and highlights where assumptions or edge cases matter."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to think about it",
+        "text": "Begin by identifying the key rule: Positive and negative indexes. Then connect it to First and last elements. The remaining syllabus points—Missing indexes and nil—are useful checks before applying this in a larger project."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to cover",
+        "items": [
+          {
+            "title": "Positive and negative indexes",
+            "text": "Explain how positive and negative indexes affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "First and last elements",
+            "text": "Explain how first and last elements affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Missing indexes and nil",
+            "text": "Explain how missing indexes and nil affects the example, the public interface, or the behavior learners need to verify."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Array Indexing",
+        "language": "ruby",
+        "code": "languages = [\"Ruby\", \"Python\", \"Rust\"]\nputs languages[-1]\np languages[0..1]",
+        "expected_output": "Rust\n[\"Ruby\", \"Python\"]",
+        "execution_mode": "server-runner",
+        "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+        "dependencies": "Ruby standard library",
+        "notes": "Local Ruby execution is required. CodeLeaf’s existing playground only previews HTML/CSS/JavaScript; do not run arbitrary Ruby inside the FastAPI process."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming the happy path is enough",
+            "text": "Test an empty value, a boundary value, and one invalid value before depending on the behavior."
+          },
+          {
+            "title": "Treating an example as a universal rule",
+            "text": "Check Ruby version, runtime implementation, and third-party library documentation when behavior is version-sensitive."
+          },
+          {
+            "title": "Mixing too many concerns",
+            "text": "Separate input parsing, domain behavior, and output so each piece is easier to test."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Run the example as written, compare it with the expected result, and explain why each line supports array indexing. Next change one input or condition and predict the result before running it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second example for array indexing using a different input. Add one edge case from the syllabus list (Missing indexes and nil), state the expected behavior, and write a small test or manual check that would catch a regression."
+      },
+      {
+        "type": "paragraph",
+        "title": "Run, troubleshoot, and reset",
+        "text": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed. If the command fails, confirm `ruby --version`, inspect the full error message, and verify that required standard-library or gem dependencies are installed. Reset by removing temporary files created by your experiment and returning the code to the smallest reproducible example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain array indexing, identify its place in arrays, run a focused example, and verify an important boundary. Revisit the linked exercise if this is a core topic; advanced runtime or framework examples remain draft until reviewed in a suitable environment."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-075-questions.json",
+    "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+    "reset_steps": [
+      "Restore the original minimal example before trying another variation.",
+      "Remove only temporary sample data created for the lesson.",
+      "Keep credentials and personal data out of logs, fixtures, and screenshots."
+    ],
+    "guided_example": "Predict the output, run the example, and explain the relationship between positive and negative indexes and first and last elements.",
+    "try_it_yourself": "Create one variation of array indexing, test a normal input and one boundary input, and note any version or dependency assumptions.",
+    "progressive_hints": [
+      "Write down the input and output contract first.",
+      "Reduce the task to one relevant Ruby method or construct.",
+      "Add the boundary case and verify it independently."
+    ],
+    "accessibility_notes": "The diagram includes a text alternative and the lesson explains the flow in prose. Do not use color alone to infer the correct sequence.",
+    "execution_mode": "server-runner",
+    "execution_note": "CodeLeaf does not currently provide an isolated Ruby runner. Run Ruby examples locally; a production runner needs a separate sandbox with time, memory, filesystem, and network limits."
+  },
+  "exercise_files": [],
+  "sources": [
+    "https://docs.ruby-lang.org/en/4.0/",
+    "https://www.ruby-lang.org/en/documentation/"
+  ],
+  "status": "draft",
+  "status_note": "Original lesson authored from the listed PDF syllabus topics; requires technical and editorial review before publication."
+}

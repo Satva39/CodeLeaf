@@ -1,0 +1,190 @@
+{
+  "id": "java-lesson-310",
+  "slug": "separation-of-concerns",
+  "title": "Separation of Concerns",
+  "sequence": 310,
+  "module_id": "java-module-30",
+  "module_slug": "software-design-and-maintainable-java-applications",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional",
+  "estimated_minutes": 13,
+  "prerequisites": [],
+  "previous_lesson_id": "java-lesson-309",
+  "next_lesson_id": "java-lesson-311",
+  "keywords": [
+    "separation",
+    "of",
+    "concerns",
+    "business",
+    "logic",
+    "input",
+    "output",
+    "data",
+    "access",
+    "configuration",
+    "keeping",
+    "responsibilities"
+  ],
+  "source_syllabus_number": 310,
+  "subtopics": [
+    "Business logic",
+    "Input/output logic",
+    "Data access",
+    "Configuration",
+    "Keeping responsibilities distinct"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of separation of concerns and identify when it is appropriate in a Java program.",
+    "Apply at least one of the lesson topics—business logic—in a small, readable example.",
+    "Identify one failure, compatibility, security, or resource-management concern and describe a safe response."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study separation of concerns with a short explanation, an original visual map, a Java example, and a check you can perform yourself. Focus on the relationship between the rule and the behavior rather than memorizing isolated syntax.",
+    "why_it_matters": "This concept matters because it helps you keep a Java codebase understandable as its responsibilities and collaborators grow. In this lesson, focus on business logic and use a minimal example to check what the rule actually guarantees.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Separation of Concerns: concept map",
+        "asset_path": "diagrams/lesson-310.svg",
+        "alt_text": "Four-stage diagram for Separation of Concerns: Business logic; Input/output logic; Data access; Configuration.",
+        "caption": "Visual summary of Separation of Concerns; use it as a map while reading the explanation and testing the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Maintainable design makes responsibilities, contracts, and dependency direction clear. Prefer cohesive components and focused interfaces, applying patterns and SOLID principles when they solve a real problem. Apply that reasoning specifically to business logic and confirm the result with the example or a targeted test. The important habit is to make the assumptions explicit and use the code example as a small experiment."
+      },
+      {
+        "type": "paragraph",
+        "title": "How the pieces fit",
+        "text": "Connect business logic with input/output logic before choosing an implementation. The example is a small, observable case; extend it by changing one input and checking a boundary, invalid value, or compatibility limit where relevant."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Business logic",
+            "text": "Maintainable design makes responsibilities, contracts, and dependency direction clear. Prefer cohesive components and focused interfaces, applying patterns and SOLID principles when they solve a real problem. Apply that reasoning specifically to business logic and confirm the result with the example or a targeted test."
+          },
+          {
+            "title": "Input/output logic",
+            "text": "Treat console input as untrusted text. Validate format and range before using it, account for token-versus-line reading, and give users a clear way to correct invalid input."
+          },
+          {
+            "title": "Data access",
+            "text": "Maintainable design makes responsibilities, contracts, and dependency direction clear. Prefer cohesive components and focused interfaces, applying patterns and SOLID principles when they solve a real problem. Apply that reasoning specifically to data access and confirm the result with the example or a targeted test."
+          },
+          {
+            "title": "Configuration",
+            "text": "Use Path and Files for modern file operations, choose byte or character APIs based on the data, and close resources reliably. Parse external files defensively because their contents may be incomplete or malformed."
+          },
+          {
+            "title": "Keeping responsibilities distinct",
+            "text": "Maintainable design makes responsibilities, contracts, and dependency direction clear. Prefer cohesive components and focused interfaces, applying patterns and SOLID principles when they solve a real problem. Apply that reasoning specifically to keeping responsibilities distinct and confirm the result with the example or a targeted test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "java",
+        "code": "public class Main {\nstatic class OrderService { int total(int quantity, int unitPrice) { return quantity * unitPrice; } }\n    public static void main(String[] args) {\n        OrderService service = new OrderService();\n        System.out.println(service.total(3, 12));\n    }\n}\n",
+        "expected_output": "36",
+        "run_instructions": "Separate domain decisions from input/output so logic can be tested directly. For ordinary Java SE examples, use JDK 25, save a complete class as Main.java, and run `javac Main.java` followed by `java Main`. CodeLeaf does not execute Java in the browser; use a local JDK for these examples. Preview-only and configuration-file examples have their own version or filename notes.",
+        "reset_steps": "Restore the original example, remove any temporary output files it created, and rerun the baseline case. Do not leave credentials, generated private data, or large test files in the project directory."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Keep one clear hypothesis per experiment. Check the version, read the error message, test boundaries, and record what evidence supports your conclusion."
+      }
+    ],
+    "task": "Try it yourself: apply separation of concerns to a small project artifact. Record the trade-off, one verification step, and a rollback or recovery path where relevant.",
+    "task_acceptance_criteria": [
+      "The example demonstrates at least one listed topic from Separation of Concerns.",
+      "The learner states the expected result before running or inspecting the example.",
+      "At least one boundary, failure, compatibility, or maintainability consideration is documented where relevant."
+    ],
+    "hints": [
+      "Start by identifying the contract or rule behind business logic.",
+      "Reduce the example to the smallest input that makes the behavior visible.",
+      "Test one boundary or failure case and compare the result with the expected behavior."
+    ],
+    "expected_output": "36",
+    "run_mode": "server-runner",
+    "execution_notes": "Java requires a JDK or a separate isolated server runner. No Java sandbox is bundled with this content; never execute learner code inside the FastAPI process or public production container.",
+    "knowledge_check_file": "exams/question-files/lesson-310-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Applying the rule from memory without checking its exact contract.",
+        "why": "Small differences in type, scope, API version, or input shape can change the result.",
+        "fix": "Inspect the relevant official API/language documentation and build a minimal reproducer."
+      },
+      {
+        "problem": "Testing only a single happy path.",
+        "why": "Boundary values and failures often reveal assumptions hidden by the simplest example.",
+        "fix": "Add an empty, boundary, or invalid case and state the expected behavior before running it."
+      },
+      {
+        "problem": "Changing several things between runs.",
+        "why": "It becomes difficult to identify the actual cause of a different result.",
+        "fix": "Change one factor at a time and keep a short record of observed behavior."
+      }
+    ],
+    "summary": [
+      "Separation of Concerns is best understood by connecting its contract to a small observable example.",
+      "Key syllabus points: Business logic, Input/output logic, Data access.",
+      "Use official versioned documentation and tests to confirm assumptions before relying on behavior in a larger application."
+    ],
+    "references": [
+      {
+        "title": "Learn Java",
+        "url": "https://dev.java/learn/"
+      },
+      {
+        "title": "Java SE 25 API Specification",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Learn Java",
+      "url": "https://dev.java/learn/",
+      "publisher": "Oracle / dev.java",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "getting started",
+        "language basics",
+        "object-oriented programming",
+        "generics",
+        "lambdas",
+        "collections",
+        "streams",
+        "modules",
+        "JVM tools",
+        "security"
+      ]
+    },
+    {
+      "title": "Java SE 25 API Specification",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "standard-library types and methods",
+        "API contracts",
+        "java.base",
+        "java.sql",
+        "java.net.http",
+        "java.nio.file",
+        "java.util.concurrent"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Java curriculum outline and current official references; requires Java subject-matter review and local verification before publication."
+}

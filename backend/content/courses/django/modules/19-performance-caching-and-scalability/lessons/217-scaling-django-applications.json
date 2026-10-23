@@ -1,0 +1,204 @@
+{
+  "id": "django-lesson-217",
+  "slug": "scaling-django-applications",
+  "title": "Scaling Django Applications",
+  "sequence": 217,
+  "module_id": "django-module-19",
+  "module_slug": "performance-caching-and-scalability",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "optional-specialization",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "django-lesson-216"
+  ],
+  "previous_lesson_id": "django-lesson-216",
+  "next_lesson_id": "django-lesson-218",
+  "keywords": [
+    "scaling-django-applications",
+    "performance-caching-and-scalability",
+    "django",
+    "horizontal-and-vertical-scaling",
+    "stateless-application-instances",
+    "shared-sessions-and-cache",
+    "load-balancing",
+    "database-capacity-planning"
+  ],
+  "source_syllabus_number": 217,
+  "subtopics": [
+    "Horizontal and vertical scaling",
+    "Stateless application instances",
+    "Shared sessions and cache",
+    "Load balancing",
+    "Database capacity planning"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of scaling django applications and at least two listed subtopics.",
+    "Interpret the scaling django applications example and predict its expected result.",
+    "Choose a verification step and identify one version, security, data, or troubleshooting consideration."
+  ],
+  "content": {
+    "intro": "Learn scaling django applications through a compact visual, an inspectable Django example, and a practical verification task.",
+    "why_it_matters": "Scaling Django Applications matters because a Django project has to behave predictably across requests, database state, configuration, and deployments. Understanding this piece makes the surrounding application easier to test, maintain, and secure.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Visual guide: Scaling Django Applications",
+        "asset_path": "diagrams/module-19-overview.svg",
+        "alt_text": "Overview visual for module 19, Performance, Caching, and Scalability; use it as a roadmap for the lesson topic Scaling Django Applications.",
+        "caption": "Use this visual to connect Scaling Django Applications to the broader flow; it is an overview, not a substitute for the worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "This lesson examines scaling django applications as part of performance, caching, and scalability. The objective is to understand the behavior, connect it to the listed subtopics, and verify it with a small example rather than relying on memorized syntax."
+      },
+      {
+        "type": "paragraph",
+        "title": "What to cover",
+        "text": "The source syllabus for this lesson names: Horizontal and vertical scaling; Stateless application instances; Shared sessions and cache; Load balancing; Database capacity planning. Keep these distinct concepts together: know what each item does, when it applies, and what assumption must be verified in your project."
+      },
+      {
+        "type": "list",
+        "title": "Lesson concepts and practical notes",
+        "items": [
+          {
+            "title": "Horizontal and vertical scaling",
+            "text": "Horizontal and vertical scaling should be evaluated using a representative workload and a measured baseline. Compare correctness and resource usage before and after the change; the best choice depends on the database backend, request mix and data size."
+          },
+          {
+            "title": "Stateless application instances",
+            "text": "For Stateless application instances, identify the Django component responsible, the inputs and outputs it owns, and the boundary conditions that matter. Use the accompanying example as a starting point, verify it with the official versioned documentation, and record one test demonstrating expected behavior."
+          },
+          {
+            "title": "Shared sessions and cache",
+            "text": "Sessions associate server-side (or configured signed-cookie) state with a browser session. Use a suitable backend, expiry and secure cookie settings; avoid storing secrets or large mutable records in cookies."
+          },
+          {
+            "title": "Load balancing",
+            "text": "For Load balancing, identify the Django component responsible, the inputs and outputs it owns, and the boundary conditions that matter. Use the accompanying example as a starting point, verify it with the official versioned documentation, and record one test demonstrating expected behavior."
+          },
+          {
+            "title": "Database capacity planning",
+            "text": "Database capacity planning should be evaluated using a representative workload and a measured baseline. Compare correctness and resource usage before and after the change; the best choice depends on the database backend, request mix and data size."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Scaling Django Applications",
+        "language": "python",
+        "code": "from django.contrib import messages\nfrom django.shortcuts import redirect\n\ndef save_settings(request):\n    # Validate and persist the submitted values before reporting success.\n    messages.success(request, \"Settings saved\")\n    return redirect(\"settings\")",
+        "expected_output": "The message is queued for the next response when the sessions/messages middleware and storage are configured.",
+        "execution_mode": "server-runner",
+        "run_instructions": "Open a local project using the documented Django 6.1-compatible Python environment. If this snippet depends on model names, URL configuration, settings, or an optional package, add those prerequisites before running it. Otherwise inspect it as a static example. CodeLeaf browser preview does not execute Django/Python server code.",
+        "troubleshooting": "Only show success after the operation succeeds; cookies and session settings must match HTTPS and privacy requirements."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "First identify the input and the responsible Django component. Next trace how the example moves through “Scaling Django Applications” and the related concept “Horizontal and vertical scaling”. Predict the result before running or inspecting it. Finally compare the observed behavior with the expected result and the cited official documentation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Change one input or configuration choice related to Horizontal and vertical scaling. Write down the expected outcome, test one normal case and one invalid or boundary case, then record what changed. Do not add real credentials or sensitive production data."
+      },
+      {
+        "type": "paragraph",
+        "title": "Common mistakes and fixes",
+        "text": "Common pitfalls include skipping a required configuration/import, copying a fragment without its model or URL context, trusting client input, or treating a development-only behavior as production-ready. Check the earliest failing assumption, consult the version-specific docs, and add a regression test for the failure you found."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to describe scaling django applications, explain the listed topics, inspect the example, and choose an appropriate verification step. Keep the scope and version caveat visible when sharing your solution."
+      }
+    ],
+    "execution_mode": "server-runner",
+    "expected_result": "The message is queued for the next response when the sessions/messages middleware and storage are configured.",
+    "run_instructions": "Use an isolated local project and synthetic data. Follow the code block instructions; setup-dependent fragments must be integrated into the relevant app. Static examples can be reviewed without execution.",
+    "troubleshooting": [
+      "Only show success after the operation succeeds; cookies and session settings must match HTTPS and privacy requirements.",
+      "Confirm the active Python virtual environment, settings module, app registration, URL routing, dependencies, and database migrations before debugging application behavior."
+    ],
+    "reset_steps": "Reset only local practice data or recreate the disposable development database as documented for your project. Never delete production data or migration history to reset an exercise.",
+    "try_it_yourself": "Apply Horizontal and vertical scaling to a small local example, then record a normal case, an invalid/boundary case, and the expected versus observed result.",
+    "progressive_hints": [
+      "Identify which Django component owns this behavior.",
+      "Trace a single request or object through the example before adding more features.",
+      "Use the relevant linked official documentation and a test for the failure case."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Copying a framework fragment without its imports, configuration, model, or URL context.",
+        "why": "The snippet may be incomplete when separated from a Django project.",
+        "fix": "Use the stated prerequisites and run the relevant management check or focused test."
+      },
+      {
+        "problem": "Trusting input or relying only on a happy-path example.",
+        "why": "Invalid values, unauthorized requests, or concurrent activity can violate assumptions.",
+        "fix": "Validate on the server and add a negative or boundary test."
+      },
+      {
+        "problem": "Treating the development sample as production-ready.",
+        "why": "Production hosting, secrets, storage, monitoring and resource limits differ from local use.",
+        "fix": "Follow the current deployment/security references and document untested areas."
+      }
+    ],
+    "recap": "Scaling Django Applications connects Horizontal and vertical scaling; Stateless application instances; Shared sessions and cache; Load balancing; Database capacity planning. Verify behavior in your project and keep any version-specific assumption documented.",
+    "knowledge_check_file": "exams/question-files/lesson-217-questions.json",
+    "content_review_status": "draft",
+    "accessibility_notes": "Use descriptive headings, meaningful labels/alt text, keyboard-accessible interactions, and text explanations alongside the diagram. Never rely on color alone.",
+    "version_notes": "Examples target Django 6.1 concepts and must be checked against the installed supported patch release. Optional third-party integrations are labelled separately; snippets with dependencies are not claimed to have been executed.",
+    "source_syllabus_topics_reviewed": true,
+    "topic_explanations_count": 5,
+    "run_mode": "static-validation",
+    "task": "Apply Horizontal and vertical scaling to a small local example, then record a normal case, an invalid/boundary case, and the expected versus observed result.",
+    "task_acceptance_criteria": [
+      "Record a predicted result before running or inspecting the example.",
+      "Include one normal case and one invalid or boundary case.",
+      "State the Python/Django version and verification method used."
+    ],
+    "hints": [
+      "Identify which Django component owns this behavior.",
+      "Trace a single request or object through the example before adding more features.",
+      "Use the relevant linked official documentation and a test for the failure case."
+    ],
+    "solution_notes": "Suggested approach: identify the responsible Django component, keep input validation and authorization at the server boundary where relevant, then verify scaling django applications with a focused test. This is a learning hint, not a claim that code was executed.",
+    "summary": [
+      "Scaling Django Applications is part of performance caching and scalability and should be understood alongside its listed subtopics.",
+      "The worked example is a starting point; review its prerequisites and version notes before local execution.",
+      "Verify the expected behavior with normal and failure cases and keep the result reproducible."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "django-queries",
+      "title": "Making queries",
+      "url": "https://docs.djangoproject.com/en/6.1/topics/db/queries/",
+      "publisher": "Django Software Foundation",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "QuerySets",
+        "lookups",
+        "related object fetching"
+      ]
+    },
+    {
+      "id": "django-caching",
+      "title": "Django cache framework",
+      "url": "https://docs.djangoproject.com/en/6.1/topics/cache/",
+      "publisher": "Django Software Foundation",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "cache backends",
+        "per-view caching",
+        "invalidation"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Django curriculum; pending Django-specialist and instructional review before publication."
+}

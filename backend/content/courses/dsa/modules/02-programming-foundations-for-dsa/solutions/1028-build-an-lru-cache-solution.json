@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-28",
+  "exercise_id": "dsa-exercise-pdf-28",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\nfrom collections import OrderedDict\nclass LRUCache:\n    def __init__(self, capacity):\n        if capacity < 0: raise ValueError(\"capacity must be non-negative\")\n        self.capacity=capacity; self.data=OrderedDict()\n    def get(self, key):\n        if key not in self.data: return None\n        self.data.move_to_end(key); return self.data[key]\n    def put(self, key, value):\n        if self.capacity == 0: return\n        if key in self.data: self.data.move_to_end(key)\n        self.data[key]=value\n        if len(self.data)>self.capacity: self.data.popitem(last=False)\n\ncache=LRUCache(2); cache.put(\"a\",1); cache.put(\"b\",2); cache.get(\"a\"); cache.put(\"c\",3)\nassert cache.get(\"b\") is None and cache.get(\"a\") == 1\n```",
+  "explanation": "OrderedDict records recency. Get/put are average O(1); eviction removes the least-recently-used item.",
+  "tested_reference_code": "from collections import OrderedDict\nclass LRUCache:\n    def __init__(self, capacity):\n        if capacity < 0: raise ValueError(\"capacity must be non-negative\")\n        self.capacity=capacity; self.data=OrderedDict()\n    def get(self, key):\n        if key not in self.data: return None\n        self.data.move_to_end(key); return self.data[key]\n    def put(self, key, value):\n        if self.capacity == 0: return\n        if key in self.data: self.data.move_to_end(key)\n        self.data[key]=value\n        if len(self.data)>self.capacity: self.data.popitem(last=False)\n\ncache=LRUCache(2); cache.put(\"a\",1); cache.put(\"b\",2); cache.get(\"a\"); cache.put(\"c\",3)\nassert cache.get(\"b\") is None and cache.get(\"a\") == 1",
+  "language": "python"
+}

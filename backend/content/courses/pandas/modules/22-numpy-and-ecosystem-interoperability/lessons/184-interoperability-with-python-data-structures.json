@@ -1,0 +1,181 @@
+{
+  "id": "pandas-lesson-184",
+  "slug": "interoperability-with-python-data-structures",
+  "title": "Interoperability with Python Data Structures",
+  "sequence": 184,
+  "module_id": "pandas-module-22",
+  "module_slug": "numpy-and-ecosystem-interoperability",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 15,
+  "prerequisites": [],
+  "previous_lesson_id": "pandas-lesson-183",
+  "next_lesson_id": "pandas-lesson-185",
+  "keywords": [
+    "interoperability with python data structures",
+    "lists and tuples",
+    "dictionaries",
+    "iterators and generators",
+    "dataclasses and record-like objects",
+    "choosing safe conversion methods",
+    "pandas",
+    "data analysis"
+  ],
+  "source_syllabus_number": 184,
+  "subtopics": [
+    "Lists and tuples",
+    "Dictionaries",
+    "Iterators and generators",
+    "Dataclasses and record-like objects",
+    "Choosing safe conversion methods"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of interoperability with python data structures and identify when the concept is useful.",
+    "Apply at least one method or decision from interoperability with python data structures to a small synthetic dataset.",
+    "Verify the result by checking relevant values, labels, row counts, dtypes, or assumptions."
+  ],
+  "content": {
+    "intro": "Learn interoperability with python data structures through a focused example and a checkable task. This lesson keeps the source syllabus subtopics visible and uses synthetic data so you can reproduce the behavior safely.",
+    "why_it_matters": "Pandas works alongside NumPy, Python containers, plotting libraries, databases, and Arrow; conversions can change labels or dtypes.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Interoperability with Python Data Structures",
+        "asset_path": "diagrams/lesson-184-interoperability-with-python-data-structures.svg",
+        "alt_text": "Diagram for Interoperability with Python Data Structures: input or question → Pandas concept → result validation.",
+        "caption": "Visual guide to Interoperability with Python Data Structures; the next blocks explain the decisions and example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Pandas works alongside NumPy, Python containers, plotting libraries, databases, and Arrow; conversions can change labels or dtypes."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "This lesson focuses on **Interoperability with Python Data Structures**. Work through the listed subtopics (Lists and tuples, Dictionaries, Iterators and generators, Dataclasses and record-like objects) as decisions in one small data workflow: identify the input and its labels, choose the relevant Pandas operation, then inspect the output shape, values, and types. Do not assume the result is correct solely because the code ran."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Lists and tuples",
+            "text": "Lists and tuples is one part of interoperability with python data structures. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Dictionaries",
+            "text": "Dictionaries is one part of interoperability with python data structures. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Iterators and generators",
+            "text": "Iterators and generators is one part of interoperability with python data structures. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Dataclasses and record-like objects",
+            "text": "Dataclasses and record-like objects is one part of interoperability with python data structures. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Choosing safe conversion methods",
+            "text": "Choosing safe conversion methods is one part of interoperability with python data structures. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "import pandas as pd\n\nrecords = [{\"id\": 1, \"name\": \"Ari\"}, {\"id\": 2, \"name\": \"Bo\"}]\nprint(pd.DataFrame.from_records(records).to_dict(\"records\"))",
+        "expected_output": "[{'id': 1, 'name': 'Ari'}, {'id': 2, 'name': 'Bo'}]",
+        "execution_mode": "static-validation",
+        "run_instructions": "Save the snippet as a .py file in a Python environment with Pandas installed, then run `python filename.py`. CodeLeaf’s current playground is a browser preview and does not execute Python; examples are shown in static-validation mode.",
+        "reset_steps": "The example uses synthetic, in-memory values and does not modify project files. Restart the Python process or recreate the DataFrame to reset its state."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to interpret the result",
+        "text": "Compare the result with the task’s intended meaning. Check whether row order, labels, missing values, inferred dtypes, and duplicate keys should be preserved or changed. When the result depends on a library version or optional dependency, test against the environment you plan to use."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          {
+            "title": "Change one input",
+            "text": "Use a tiny synthetic dataset to practise interoperability with python data structures and change one value, label, or edge case."
+          },
+          {
+            "title": "Verify the invariant",
+            "text": "State the expected row count, key uniqueness, output dtype, or numerical result before running your solution."
+          },
+          {
+            "title": "Explain a limitation",
+            "text": "Write one sentence identifying an assumption, a missing-data rule, a version concern, or a case where this operation is not suitable."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Common mistakes and fixes",
+        "text": "Avoid assuming inferred types are always correct, treating every repeated record as an error, or overlooking alignment by labels. Check the actual API documentation for the target version and assert the properties that matter to the task."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-184-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Pandas User Guide",
+      "url": "https://pandas.pydata.org/docs/user_guide/",
+      "publisher": "pandas project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Interoperability with Python Data Structures"
+      ]
+    },
+    {
+      "title": "Pandas API Reference",
+      "url": "https://pandas.pydata.org/docs/reference/index.html",
+      "publisher": "pandas project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Interoperability with Python Data Structures"
+      ]
+    }
+  ],
+  "run_mode": "static-validation",
+  "task": "Practise interoperability with python data structures with a small synthetic DataFrame. Keep the input, transformation, and expected result explicit.",
+  "task_acceptance_criteria": [
+    "The code uses an appropriate Pandas operation for the stated goal.",
+    "The result is checked for the expected values, labels, dtypes, row count, or alignment.",
+    "The solution documents a relevant edge case, assumption, or compatibility note."
+  ],
+  "hints": [
+    "Start by printing the relevant shape, labels, and dtypes.",
+    "Write down the expected result for a tiny example before applying the operation to larger data.",
+    "Use a small assertion or comparison to verify the outcome instead of relying only on visual inspection."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Trusting a result because the statement ran without raising an exception.",
+      "why": "A valid expression can still select the wrong rows, misalign labels, or use an unsuitable dtype.",
+      "fix": "Check the output shape, labels, dtypes, and at least one expected value."
+    },
+    {
+      "problem": "Using the operation without considering missing values or duplicate keys.",
+      "why": "Those records may change totals, group sizes, or join cardinality.",
+      "fix": "State the policy and test an example containing the relevant edge case."
+    }
+  ],
+  "summary": [
+    "Interoperability with Python Data Structures supports one clearly defined part of a repeatable data workflow.",
+    "Check labels, dtypes, missing values, and row counts where they affect the result.",
+    "Record assumptions and consult the official reference when version-specific behavior matters."
+  ],
+  "next_steps": [
+    "Review the next topic after interoperability with python data structures and compare how it builds on the same data model."
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached syllabus and official documentation links; subject-matter review and target-version execution are required before publication."
+}

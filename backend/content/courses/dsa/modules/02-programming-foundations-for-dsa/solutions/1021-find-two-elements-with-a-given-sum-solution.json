@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-21",
+  "exercise_id": "dsa-exercise-pdf-21",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\ndef two_sum_indices(values, target):\n    seen = {}\n    for i, value in enumerate(values):\n        complement = target - value\n        if complement in seen: return seen[complement], i\n        seen[value] = i\n    return None\n\nassert two_sum_indices([2, 7, 11, 15], 9) == (0, 1)\n```",
+  "explanation": "Store prior values by index and look up each complement. Expected O(n) time and O(n) auxiliary space; the returned indices are distinct.",
+  "tested_reference_code": "def two_sum_indices(values, target):\n    seen = {}\n    for i, value in enumerate(values):\n        complement = target - value\n        if complement in seen: return seen[complement], i\n        seen[value] = i\n    return None\n\nassert two_sum_indices([2, 7, 11, 15], 9) == (0, 1)",
+  "language": "python"
+}

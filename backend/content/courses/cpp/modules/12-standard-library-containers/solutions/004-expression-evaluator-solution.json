@@ -1,0 +1,18 @@
+{
+  "id": "cpp-exercise-solution-022",
+  "exercise_id": "cpp-exercise-022",
+  "title": "Expression evaluator reference solution notes",
+  "language": "cpp",
+  "answer": "#include <iostream>\n#include <stack>\n#include <string_view>\nint evaluate_rpn(std::initializer_list<std::string_view> tokens) {\n    std::stack<int> values;\n    for (auto token : tokens) {\n        if (token == \"+\" || token == \"*\") {\n            if (values.size() < 2) throw std::runtime_error(\"missing operand\");\n            int right = values.top(); values.pop(); int left = values.top(); values.pop();\n            values.push(token == \"+\" ? left + right : left * right);\n        } else values.push(std::stoi(std::string(token)));\n    }\n    if (values.size() != 1) throw std::runtime_error(\"invalid expression\");\n    return values.top();\n}\nint main() { std::cout << evaluate_rpn({\"3\", \"4\", \"+\", \"2\", \"*\"}) << '\\n'; }\n",
+  "explanation": "14",
+  "manual_validation_checklist": [
+    "Compile locally with C++20 and -Wall -Wextra -Wpedantic (add the external library named in the solution when applicable).",
+    "Test normal inputs and at least one boundary/failure case named in the exercise prompt.",
+    "Check integer range, object lifetime, resource cleanup and error handling where relevant.",
+    "The stack evaluates reverse Polish notation by popping operands in right/left order. Production parsing must validate every token and numeric range.",
+    "Keep this solution in repository-only protected content; do not include it in learner API responses."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only reference notes; replace with a reviewed implementation and test suite before publishing the exercise."
+}

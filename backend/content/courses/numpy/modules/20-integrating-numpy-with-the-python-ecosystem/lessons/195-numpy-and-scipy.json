@@ -1,0 +1,201 @@
+{
+  "id": "numpy-lesson-195",
+  "slug": "numpy-and-scipy",
+  "title": "NumPy and SciPy",
+  "sequence": 195,
+  "module_id": "numpy-module-20",
+  "module_slug": "integrating-numpy-with-the-python-ecosystem",
+  "level": "professional",
+  "difficulty": "professional",
+  "track": "optional",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "numpy-lesson-194"
+  ],
+  "previous_lesson_id": "numpy-lesson-194",
+  "next_lesson_id": "numpy-lesson-196",
+  "keywords": [
+    "numpy and scipy",
+    "integrating numpy with the python ecosystem",
+    "How SciPy builds on NumPy",
+    "Scientific algorithms beyond core NumPy",
+    "Specialized optimization and linear algebra",
+    "Choosing a library according to the task",
+    "NumPy",
+    "ndarray"
+  ],
+  "source_syllabus_number": 195,
+  "subtopics": [
+    "How SciPy builds on NumPy",
+    "Scientific algorithms beyond core NumPy",
+    "Specialized optimization and linear algebra",
+    "Choosing a library according to the task"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of numpy and scipy and name one situation where it is useful.",
+    "Apply how scipy builds on numpy to a small NumPy example and inspect the resulting values, shape, or dtype.",
+    "Identify one important limitation, boundary case, or validation check for numpy and scipy."
+  ],
+  "content": {
+    "intro": "This lesson develops topic 195 of the supplied curriculum: **NumPy and SciPy**. The main starting point is **How SciPy builds on NumPy**. You will connect the idea to a small, synthetic example, then use the result to reason about shape, dtype, accuracy, or memory as appropriate.",
+    "why_it_matters": "Scientific Python tools share ndarray data, but each library has its own contract. Check shape, dtype, mutability, missing values, and conversion/copy behavior at boundaries.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: NumPy and SciPy",
+        "asset_path": "diagrams/lesson-195-numpy-and-scipy.svg",
+        "alt_text": "Teaching visual for lesson 195, NumPy and SciPy. It illustrates NumPy ndarray, then Library boundary / adapter, leading to Check shape and semantics.",
+        "caption": "Visual model for NumPy and SciPy. Synthetic conceptual diagram; inspect shape, dtype, and assumptions as relevant."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Treat **NumPy and SciPy** as an explicit step in an array workflow. This lesson centers on **How SciPy builds on NumPy** and the source syllabus's related subtopics. Before trusting a result, identify the input shape and dtype, perform the smallest useful operation, and inspect the output. The example uses synthetic data so you can change one value and observe what changes."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics from the supplied curriculum",
+        "items": [
+          "How SciPy builds on NumPy",
+          "Scientific algorithms beyond core NumPy",
+          "Specialized optimization and linear algebra",
+          "Choosing a library according to the task"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "import numpy as np\n\nvalues = np.array([1.0, 4.0, 9.0])\n# SciPy routines commonly accept ndarray inputs; import the required routine explicitly.\nprint(np.sqrt(values).tolist())",
+        "expected_output": "Observed output in the available validation environment (Python 3.13.5, NumPy 2.3.5):\n[1.0, 2.0, 3.0]",
+        "execution_mode": "static-validation",
+        "run_instructions": "Save this snippet as a .py file inside the intended Python environment, then run `python filename.py`. Install NumPy in that same environment first. This learning page displays the sample; it does not execute arbitrary Python on the web server.",
+        "reset_steps": "For examples that create files, use a temporary working directory and remove its outputs after reviewing them. The memory-map example already uses a temporary directory."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "Start with the stated input and the core operation. The code example demonstrates a minimal path through numpy and scipy; inspect the output before scaling it to a larger dataset."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          "Prepare an ndarray for a downstream library boundary. Document expected shape, dtype, copy policy, and missing-value handling.",
+          "Change one input value or parameter and predict the output before running the example.",
+          "Record one edge case and explain how your code should respond."
+        ]
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          "Topic 195: NumPy and SciPy.",
+          "Core focus: How SciPy builds on NumPy.",
+          "Check the official reference when signatures or version-specific behavior matter."
+        ]
+      }
+    ],
+    "expected_output": "Observed output in the available validation environment (Python 3.13.5, NumPy 2.3.5):\n[1.0, 2.0, 3.0]",
+    "run_instructions": "Run Python examples locally in the same environment where NumPy is installed; no embedded server-side Python execution is assumed.",
+    "reset_steps": "Use temporary paths for file-writing experiments. Restore modified arrays by recreating the example input. No platform progress or rewards are created by viewing the lesson.",
+    "hints": [
+      "First identify the input values and their shape/dtype.",
+      "Run the smallest complete example and compare the actual output with the expected behavior.",
+      "Change one variable at a time; if the result differs, inspect shape, dtype, finite values, and version-specific behavior before changing the algorithm."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-195-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming a downstream library never copies or converts",
+        "why": "Boundary adapters can coerce dtype or allocate new arrays.",
+        "fix": "Check the receiving library's documented conversion and mutability behavior."
+      },
+      {
+        "problem": "Treating a NumPy array as a generic tensor everywhere",
+        "why": "Array libraries can differ in device, dtype, and operation semantics.",
+        "fix": "Document conversions and validate shapes and types at the boundary."
+      }
+    ],
+    "summary": [
+      "Topic 195 covers numpy and scipy and the subtopics listed in the curriculum.",
+      "Validate shape, dtype, copy, and device/array semantics at library boundaries.",
+      "Examples and assessments are draft and require subject-matter review before publication."
+    ],
+    "references": [
+      {
+        "title": "NumPy documentation",
+        "url": "https://numpy.org/doc/stable/",
+        "publisher": "NumPy project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "NumPy and SciPy",
+          "How SciPy builds on NumPy",
+          "Scientific algorithms beyond core NumPy"
+        ]
+      },
+      {
+        "title": "Array API standard",
+        "url": "https://data-apis.org/array-api/latest/",
+        "publisher": "Python Array API community",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "NumPy and SciPy",
+          "How SciPy builds on NumPy",
+          "Scientific algorithms beyond core NumPy"
+        ]
+      },
+      {
+        "title": "pandas documentation",
+        "url": "https://pandas.pydata.org/docs/",
+        "publisher": "pandas project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "NumPy and SciPy",
+          "How SciPy builds on NumPy",
+          "Scientific algorithms beyond core NumPy"
+        ]
+      }
+    ],
+    "accessibility_notes": "Every visual has descriptive SVG title/description and adjacent text explaining the concept. The diagram does not rely on color alone; text labels state each stage.",
+    "version_notes": "Written against the NumPy 2.5 stable documentation checked 2026-10-13. Example outputs that were executed were observed in an available NumPy 2.3.5 environment; release-specific formatting or pseudorandom streams may vary."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "NumPy documentation",
+      "url": "https://numpy.org/doc/stable/",
+      "publisher": "NumPy project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "NumPy and SciPy",
+        "How SciPy builds on NumPy",
+        "Scientific algorithms beyond core NumPy"
+      ]
+    },
+    {
+      "title": "Array API standard",
+      "url": "https://data-apis.org/array-api/latest/",
+      "publisher": "Python Array API community",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "NumPy and SciPy",
+        "How SciPy builds on NumPy",
+        "Scientific algorithms beyond core NumPy"
+      ]
+    },
+    {
+      "title": "pandas documentation",
+      "url": "https://pandas.pydata.org/docs/",
+      "publisher": "pandas project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "NumPy and SciPy",
+        "How SciPy builds on NumPy",
+        "Scientific algorithms beyond core NumPy"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the supplied syllabus with original explanations and examples. Subject-matter review, learner testing, and publication approval are still required."
+}

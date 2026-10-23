@@ -1,0 +1,243 @@
+{
+  "id": "github-actions-lesson-109",
+  "slug": "container-registries-and-image-management",
+  "title": "Container Registries and Image Management",
+  "sequence": 109,
+  "module_id": "github-actions-module-14",
+  "module_slug": "packages-containers-and-release-ecosystems",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "github-actions-lesson-108"
+  ],
+  "previous_lesson_id": "github-actions-lesson-108",
+  "next_lesson_id": "github-actions-lesson-110",
+  "keywords": [
+    "container-registries-and-image-management",
+    "packages-containers-and-release-ecosystems",
+    "container-registry-authentication",
+    "publishing-to-github-container-registry",
+    "image-tagging-strategies",
+    "commit-based-image-identification",
+    "multi-platform-image-builds",
+    "registry-retention-and-cleanup"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of container registries and image management and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to container registries and image management.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on container registries and image management. Container registries store versioned images; tag images with commit/release metadata, verify them, and plan retention/cleanup for older images. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "Container Registries and Image Management matters because it affects correctness, security, maintainability, or operating cost. Container registries store versioned images; tag images with commit/release metadata, verify them, and plan retention/cleanup for older images. Publishing is a supply-chain boundary. Make versions traceable to source commits, authenticate with scoped credentials, record provenance where supported, and validate artifacts before promotion.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 14 visual map",
+        "asset_path": "diagrams/module-14-overview.svg",
+        "alt_text": "Ordered overview of module 14: GitHub Packages and Package Publishing; Container Registries and Image Management; Dependency Management Automation; Automated Release Channels; Software Supply-Chain Provenance.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Container registries store versioned images; tag images with commit/release metadata, verify them, and plan retention/cleanup for older images. Publishing is a supply-chain boundary. Make versions traceable to source commits, authenticate with scoped credentials, record provenance where supported, and validate artifacts before promotion. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "Container registry authentication",
+            "text": "Build and identify an image deterministically, grant only required registry permissions, scan/verify before promotion, and prefer immutable digests or traceable tags over mutable “latest” references."
+          },
+          {
+            "title": "Publishing to GitHub Container Registry",
+            "text": "Build and identify an image deterministically, grant only required registry permissions, scan/verify before promotion, and prefer immutable digests or traceable tags over mutable “latest” references."
+          },
+          {
+            "title": "Image tagging strategies",
+            "text": "Use filters to reduce unnecessary runs only when skipped work is genuinely unrelated. Include shared dependencies and test the changed and unchanged path cases so required checks are not bypassed."
+          },
+          {
+            "title": "Commit-based image identification",
+            "text": "Build and identify an image deterministically, grant only required registry permissions, scan/verify before promotion, and prefer immutable digests or traceable tags over mutable “latest” references."
+          },
+          {
+            "title": "Multi-platform image builds",
+            "text": "Build and identify an image deterministically, grant only required registry permissions, scan/verify before promotion, and prefer immutable digests or traceable tags over mutable “latest” references."
+          },
+          {
+            "title": "Registry retention and cleanup",
+            "text": "Build and identify an image deterministically, grant only required registry permissions, scan/verify before promotion, and prefer immutable digests or traceable tags over mutable “latest” references."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "# Illustrative integration fragment\nsteps:\n  - name: Call an API with a protected token\n    env:\n      SERVICE_TOKEN: ${{ secrets.SERVICE_TOKEN }}\n    run: echo \"Use SERVICE_TOKEN only in the authorized API client; never print it\"",
+        "expected_output": "The token is exposed only to this step’s environment and is not printed; implement the real API request and response validation separately.",
+        "run_instructions": "Use a test repository or static validation first. Confirm the snippet matches the repository, runner, permissions, and current GitHub documentation.",
+        "reset_steps": "Remove temporary test workflows and never carry test credentials or sample outputs into production.",
+        "execution_mode": "workflow-fragment"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to container registries and image management. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain container registries and image management, read the example, and identify a way to validate it. The wider system goal remains: Publish packages and container images with traceable versions and integrity checks."
+      }
+    ],
+    "task": "Apply container registries and image management to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: Container registries store versioned images; tag images with commit/release metadata, verify them, and plan retention/cleanup for older images.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: Container registries store versioned images; tag images with commit/release metadata, verify them, and plan retention/cleanup for older images. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "Container registries store versioned images; tag images with commit/release metadata, verify them, and plan retention/cleanup for older images.",
+      "Publishing is a supply-chain boundary. Make versions traceable to source commits, authenticate with scoped credentials, record provenance where supported, and validate artifacts before promotion.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-109-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "metadata-outline",
+    "references": [
+      {
+        "title": "GitHub Packages documentation",
+        "url": "https://docs.github.com/en/packages/learn-github-packages/introduction-to-github-packages",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "package registries",
+          "package publication",
+          "access control"
+        ]
+      },
+      {
+        "title": "Workflow artifacts",
+        "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/workflow-artifacts",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "build outputs",
+          "test reports",
+          "inter-job data",
+          "artifact attestations"
+        ]
+      },
+      {
+        "title": "Artifact attestations",
+        "url": "https://docs.github.com/en/actions/concepts/security/artifact-attestations",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "security_guidance",
+        "supports": [
+          "build provenance",
+          "artifact verification",
+          "trusted publishing concepts"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [
+    "../exercises/025-build-a-container-release-pipeline.json"
+  ],
+  "sources": [
+    {
+      "title": "GitHub Packages documentation",
+      "url": "https://docs.github.com/en/packages/learn-github-packages/introduction-to-github-packages",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "package registries",
+        "package publication",
+        "access control"
+      ]
+    },
+    {
+      "title": "Workflow artifacts",
+      "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/workflow-artifacts",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "build outputs",
+        "test reports",
+        "inter-job data",
+        "artifact attestations"
+      ]
+    },
+    {
+      "title": "Artifact attestations",
+      "url": "https://docs.github.com/en/actions/concepts/security/artifact-attestations",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "security_guidance",
+      "supports": [
+        "build provenance",
+        "artifact verification",
+        "trusted publishing concepts"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "109",
+    "module_title": "Packages, Containers, and Release Ecosystems",
+    "subtopics": [
+      "Container registry authentication",
+      "Publishing to GitHub Container Registry",
+      "Image tagging strategies",
+      "Commit-based image identification",
+      "Multi-platform image builds",
+      "Registry retention and cleanup"
+    ]
+  }
+}

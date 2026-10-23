@@ -1,0 +1,152 @@
+{
+  "id": "rest-api-development-lesson-006",
+  "slug": "real-world-applications-of-rest-apis",
+  "title": "Real-World Applications of REST APIs",
+  "sequence": 6,
+  "module_id": "rest-api-development-module-01",
+  "module_slug": "introduction-to-rest-api-development",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "foundations",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "rest-api-development-lesson-005"
+  ],
+  "previous_lesson_id": "rest-api-development-lesson-005",
+  "next_lesson_id": "rest-api-development-lesson-007",
+  "keywords": [
+    "rest-api-development",
+    "real-world-applications-of-rest-apis",
+    "introduction-to-rest-api-development",
+    "e-commerce-and-order-management",
+    "authentication-and-user-management"
+  ],
+  "source_syllabus_number": 6,
+  "subtopics": [
+    "E-commerce and order management",
+    "Authentication and user management",
+    "Payments and delivery integrations",
+    "Content management and media services",
+    "Analytics and third-party integrations"
+  ],
+  "learning_outcomes": [
+    "Explain how real-world applications of rest apis affects an API contract or implementation.",
+    "Apply the key ideas from e-commerce and order management to a concrete API example.",
+    "Identify one failure, security, or compatibility risk and describe how to verify it."
+  ],
+  "content": {
+    "intro": "This lesson focuses on real-world applications of rest apis in introduction to rest api development. You will connect e-commerce and order management to a concrete API contract decision, inspect a small example, and decide what evidence proves the behavior is correct.",
+    "why_it_matters": "Real-World Applications of REST APIs matters because API consumers depend on predictable behavior even when clients, servers, networks, and stored data evolve independently. Applying e-commerce and order management deliberately reduces ambiguity, makes failures easier to diagnose, and gives tests a clear expectation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Lesson 6 concept map",
+        "asset_path": "diagrams/lesson-006-concept-map.svg",
+        "alt_text": "Lesson 6: E-commerce and order management → Authentication and user management → Payments and delivery integrations → Content management and media services → Analytics and third-party integrations.",
+        "caption": "Follow the 5 syllabus topics in order, then inspect the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "An API contract describes what a consumer may ask for and what the provider promises to return. In this lesson, treat “Real-World Applications of REST APIs” as a design or implementation decision: name the expected behavior, identify its boundary, and verify it with a representative request or test."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          "E-commerce and order management",
+          "Authentication and user management",
+          "Payments and delivery integrations",
+          "Content management and media services",
+          "Analytics and third-party integrations"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Inspect the pattern: Real-World Applications of REST APIs",
+        "language": "json",
+        "execution_mode": "static-validation",
+        "code": "{\n  \"resource\": \"tasks\",\n  \"operation\": \"list\",\n  \"consumer\": \"web-client\",\n  \"contract_version\": \"1.0\"\n}",
+        "expected_output": "A consumer can identify the target resource and requested operation from a documented contract; no implementation language is implied."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walkthrough",
+        "text": "Start with “E-commerce and order management”; it establishes the vocabulary for this topic. Next, compare it with “Authentication and user management” and “Analytics and third-party integrations”. In a real API, write down the observable behavior first, then test one normal request and one invalid or unauthorized request. Keep resource state, caller identity, and internal implementation details separate."
+      },
+      {
+        "type": "callout",
+        "title": "Professional review check",
+        "text": "Start with the problem and the consumer contract before choosing tools. The worked snippet is intentionally inspectable, not an executable hosted API. Replace example.test and placeholder identifiers with local test data only when you implement the lesson project."
+      }
+    ],
+    "task": "Create a small design note or request/response example demonstrating real-world applications of rest apis. Use the subtopics above to explain the intended behavior, the main edge case, and the evidence you would use to verify it.",
+    "task_acceptance_criteria": [
+      "Explain the role of “E-commerce and order management” in this API topic.",
+      "Provide a concrete resource, request, response, schema, test, or operational example as appropriate.",
+      "Identify one failure/security/compatibility edge case and a test or check for it."
+    ],
+    "expected_output": "A reviewable example for Real-World Applications of REST APIs with a clear expected behavior and at least one verifiable edge case.",
+    "run_instructions": "Execution mode: static-validation. This lesson example is a protocol, schema, SQL, or code fragment for inspection; it is not submitted to a production server and CodeLeaf does not execute arbitrary learner code. Validate JSON/YAML with a local linter or run the relevant HTTP request against the isolated service you implement for a project. Do not send illustrative example.test requests to a real service.",
+    "reset_steps": "Use a disposable local database or test fixture for implementation work. Restore seed data between runs; never point exercises at production customer data or live payment endpoints.",
+    "troubleshooting": [
+      "Check the exact HTTP method, path, status, header, media type, and payload before changing implementation code.",
+      "Separate a transport failure from an application validation failure, authorization denial, and dependency/database failure.",
+      "Confirm the example and its client tooling version are compatible; consult the linked standard or official guidance when behavior is ambiguous."
+    ],
+    "common_mistakes": [
+      "Treating real-world applications of rest apis as an implementation detail rather than a documented behavior.",
+      "Testing only the happy path and ignoring malformed, unauthorized, conflicting, duplicate, or dependency-failure cases.",
+      "Publishing an example without checking version assumptions, sensitive-data exposure, and the expected output."
+    ],
+    "summary": [
+      "An API contract describes what a consumer may ask for and what the provider promises to return. In this lesson, treat “Real-World Applications of REST APIs” as a design or implementation decision: name the expected behavior, identify its boundary, and verify it with a representative request or test.",
+      "Next, connect this idea to Lesson 7: Advantages, Limitations, and Trade-offs."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-006-questions.json",
+    "solution_notes": "Knowledge-check answer keys and explanations remain in repository-side question files. The public lesson API strips this file reference and serves only prompts/options from the protected endpoint.",
+    "references": [
+      {
+        "title": "RFC 9110 — HTTP Semantics",
+        "url": "https://www.rfc-editor.org/rfc/rfc9110.html"
+      },
+      {
+        "title": "Microsoft REST API Guidelines",
+        "url": "https://github.com/microsoft/api-guidelines/blob/vNext/Guidelines.md"
+      }
+    ],
+    "run_mode": "static-validation"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "RFC 9110 — HTTP Semantics",
+      "url": "https://www.rfc-editor.org/rfc/rfc9110.html",
+      "publisher": "IETF / RFC Editor",
+      "checked_on": "2026-10-19",
+      "source_type": "Internet Standard",
+      "supports": [
+        "HTTP methods and status codes",
+        "representations",
+        "content negotiation",
+        "conditional requests"
+      ]
+    },
+    {
+      "title": "Microsoft REST API Guidelines",
+      "url": "https://github.com/microsoft/api-guidelines/blob/vNext/Guidelines.md",
+      "publisher": "Microsoft",
+      "checked_on": "2026-10-19",
+      "source_type": "API design guidelines",
+      "supports": [
+        "resource and URL design",
+        "API evolution",
+        "error conventions",
+        "idempotency and retry design"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Unreviewed educational draft based on the attached REST API syllabus; verify the technical framing, worked example, and assessment before publication."
+}

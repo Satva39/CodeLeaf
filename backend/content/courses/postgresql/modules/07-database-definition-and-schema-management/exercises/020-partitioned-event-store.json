@@ -1,0 +1,56 @@
+{
+  "id": "postgresql-exercise-020",
+  "slug": "partitioned-event-store",
+  "title": "Partitioned Event Store",
+  "type": "practical",
+  "lesson_id": "postgresql-lesson-062",
+  "module_id": "postgresql-module-07",
+  "difficulty": "advanced",
+  "sequence": 1,
+  "prompt": "Design a range-partitioned event table, choose the partition key, and show a query that can prune partitions. Discuss retention and uniqueness limitations.",
+  "objective": "Partitioned Event Store",
+  "target_skills": [
+    "Partitioning concept",
+    "Temporary Tables, Unlogged Tables, and Table Inheritance",
+    "SQL correctness, verification and safe change management"
+  ],
+  "starter": {
+    "language": "sql",
+    "content": "CREATE TABLE app_events (occurred_at timestamptz NOT NULL, event_id uuid NOT NULL, payload jsonb) PARTITION BY RANGE (occurred_at);"
+  },
+  "expected_output": "A reviewable working artifact for Partitioned Event Store with stated assumptions, expected results and verification evidence. Any live database operation remains a learner-run lab; no production execution is performed by CodeLeaf.",
+  "public_tests": [
+    {
+      "name": "Required SQL or plan elements",
+      "required_strings": [
+        "PARTITION BY RANGE",
+        "occurred_at",
+        "jsonb"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Address the main task: Design a range-partitioned event table, choose the partition key, and show a query that can prune partitions. Discuss retention and uniqueness limitations.",
+    "Use only synthetic data in a disposable local database or provide a human-reviewed design artifact.",
+    "Show the expected result and at least one failure/edge-case check.",
+    "Explain any role/permission, transaction, migration, backup or cleanup implications relevant to this task."
+  ],
+  "hints": [
+    "Start from the lesson and official references. Identify the minimal schema and version assumptions before coding.",
+    "Test with a tiny synthetic dataset; include both a normal result and at least one edge case.",
+    "For operations/security/recovery tasks, capture the exact evidence and confirm cleanup or isolation."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "PARTITION BY RANGE",
+      "occurred_at",
+      "jsonb"
+    ]
+  },
+  "grading_method": "Server-side case-sensitive substring smoke-check for documented required strings plus human review of SQL semantics, constraints, execution evidence and safety. The grader does not connect to PostgreSQL or execute arbitrary learner SQL.",
+  "retry_policy": "Retries permitted after feedback; correct completion is recorded once by CodeLeaf. The platform controls XP; this file contains no XP override.",
+  "solution_file": "../solutions/020-partitioned-event-store-solution.json",
+  "status": "draft",
+  "status_note": "Derived from the attached PostgreSQL.pdf Section C exercise brief. Runtime correctness still requires a safe local PostgreSQL test and review."
+}

@@ -1,0 +1,215 @@
+{
+  "id": "php-lesson-275",
+  "slug": "deploying-php-dependencies",
+  "title": "Deploying PHP Dependencies",
+  "sequence": 275,
+  "module_id": "php-module-27",
+  "module_slug": "deployment-operations-and-production-engineering",
+  "level": "professional",
+  "difficulty": "professional",
+  "track": "professional",
+  "estimated_minutes": 13,
+  "prerequisites": [
+    "php-lesson-274"
+  ],
+  "previous_lesson_id": "php-lesson-274",
+  "next_lesson_id": "php-lesson-276",
+  "keywords": [
+    "deploying php dependencies",
+    "deployment, operations, and production engineering",
+    "installing locked dependencies",
+    "production dependency installation",
+    "optimized autoloading",
+    "build reproducibility",
+    "avoiding development-only packages in production",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 275,
+  "subtopics": [
+    "Installing locked dependencies.",
+    "Production dependency installation.",
+    "Optimized autoloading.",
+    "Build reproducibility.",
+    "Avoiding development-only packages in production."
+  ],
+  "learning_outcomes": [
+    "Explain what deploying php dependencies contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: installing locked dependencies.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Production reliability includes repeatable builds, correct runtime configuration, secret separation, compatible migrations, health checks, logging, monitoring, and a rollback strategy—not only uploading source files. In this lesson, focus on installing locked dependencies; then compare it with production dependency installation. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use deploying php dependencies when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 27 overview: Deployment, Operations, and Production Engineering",
+        "asset_path": "diagrams/module-27-overview.svg",
+        "alt_text": "Four-stage overview for module 27, Deployment, Operations, and Production Engineering, grouping lesson topics in order.",
+        "caption": "Use this overview to place deploying php dependencies in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Production reliability includes repeatable builds, correct runtime configuration, secret separation, compatible migrations, health checks, logging, monitoring, and a rollback strategy—not only uploading source files. For deploying php dependencies, begin with installing locked dependencies. Also distinguish production dependency installation; optimized autoloading; build reproducibility. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Installing locked dependencies",
+            "text": "Know when to use installing locked dependencies, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Production dependency installation",
+            "text": "Keep package metadata and source layout consistent, and verify version constraints and class-to-file mapping with the selected tools."
+          },
+          {
+            "title": "Optimized autoloading",
+            "text": "Keep package metadata and source layout consistent, and verify version constraints and class-to-file mapping with the selected tools."
+          },
+          {
+            "title": "Build reproducibility",
+            "text": "Know when to use build reproducibility, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Avoiding development-only packages in production",
+            "text": "Keep package metadata and source layout consistent, and verify version constraints and class-to-file mapping with the selected tools."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Deploying PHP Dependencies",
+        "language": "php",
+        "code": "<?php\n$namespace = \"Acme\\\\Catalog\\\\Product\";\n$path = \"src/Catalog/Product.php\";\necho $namespace . \" -> \" . $path . PHP_EOL;",
+        "expected_output": "Acme\\Catalog\\Product -> src/Catalog/Product.php",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Keep secrets outside build artifacts, run repeatable checks before rollout, and define health checks and rollback plans."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for deploying php dependencies from top to bottom. Start by identifying installing locked dependencies, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for deploying php dependencies that demonstrates \"installing locked dependencies\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of installing locked dependencies.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "Acme\\Catalog\\Product -> src/Catalog/Product.php",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-275-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Deploying PHP Dependencies is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Keep secrets outside build artifacts, run repeatable checks before rollout, and define health checks and rollback plans."
+    ],
+    "references": [
+      {
+        "title": "PHP Manual",
+        "url": "https://www.php.net/manual/en/",
+        "publisher": "PHP Documentation Group",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "language syntax",
+          "built-in functions",
+          "runtime behavior",
+          "classes and objects"
+        ]
+      },
+      {
+        "title": "Supported Versions",
+        "url": "https://www.php.net/supported-versions.php",
+        "publisher": "PHP.net",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "active support",
+          "security support",
+          "version lifecycle"
+        ]
+      },
+      {
+        "title": "Docker PHP guide",
+        "url": "https://docs.docker.com/guides/php/",
+        "publisher": "Docker",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "containerized PHP development",
+          "deployment packaging"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "PHP Manual",
+      "url": "https://www.php.net/manual/en/",
+      "publisher": "PHP Documentation Group",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "language syntax",
+        "built-in functions",
+        "runtime behavior",
+        "classes and objects"
+      ]
+    },
+    {
+      "title": "Supported Versions",
+      "url": "https://www.php.net/supported-versions.php",
+      "publisher": "PHP.net",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "active support",
+        "security support",
+        "version lifecycle"
+      ]
+    },
+    {
+      "title": "Docker PHP guide",
+      "url": "https://docs.docker.com/guides/php/",
+      "publisher": "Docker",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "containerized PHP development",
+        "deployment packaging"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

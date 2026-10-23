@@ -1,0 +1,178 @@
+{
+  "id": "flask-lesson-014",
+  "slug": "creating-your-first-flask-project",
+  "title": "Creating Your First Flask Project",
+  "sequence": 14,
+  "module_id": "flask-module-02",
+  "module_slug": "installation-and-development-environment",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core-foundations",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "flask-lesson-013"
+  ],
+  "previous_lesson_id": "flask-lesson-013",
+  "next_lesson_id": "flask-lesson-015",
+  "keywords": [
+    "creating-your-first-flask-project",
+    "flask",
+    "project-directory",
+    "application-module",
+    "basic-project-files"
+  ],
+  "source_syllabus_number": 14,
+  "subtopics": [
+    "Project directory",
+    "Application module",
+    "Basic project files"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of creating your first flask project and identify at least two of its listed subtopics.",
+    "Trace the worked example for creating your first flask project and describe its expected result.",
+    "Select a focused test or verification step for a normal case and a meaningful failure boundary."
+  ],
+  "content": {
+    "intro": "Explore creating your first flask project through the source syllabus topics, a small inspectable example, and a practical verification task. The example is teaching material, not a claim that the platform executed Flask code.",
+    "why_it_matters": "Creating Your First Flask Project makes local results reproducible. Isolated environments and explicit application discovery reduce “works on my machine” failures.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Visual guide: Creating Your First Flask Project",
+        "asset_path": "diagrams/module-02-overview.svg",
+        "alt_text": "Four-stage overview for module 2, Installation and Development Environment: Isolate Python; Install Flask; Create app entry point; Run and verify.",
+        "caption": "Module 2 roadmap for Installation and Development Environment: progress through the labeled ideas, then verify an outcome with a focused practice task."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Creating Your First Flask Project makes local results reproducible. Isolated environments and explicit application discovery reduce “works on my machine” failures."
+      },
+      {
+        "type": "paragraph",
+        "title": "What to learn",
+        "text": "This lesson covers: Project directory; Application module; Basic project files. Keep the source terms intact; for each one, name the component that owns the behavior, the inputs/assumptions, and the expected result."
+      },
+      {
+        "type": "list",
+        "title": "Concepts and practical notes",
+        "items": [
+          {
+            "title": "Project directory",
+            "text": "For project directory, identify the component responsible, the input it receives, and the observable result it should produce."
+          },
+          {
+            "title": "Application module",
+            "text": "Use application module as a named design decision: note the assumptions, the normal path, and one boundary case to test."
+          },
+          {
+            "title": "Basic project files",
+            "text": "When applying basic project files, keep the implementation small, document version-dependent behavior, and verify it with a focused check."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Creating Your First Flask Project",
+        "language": "python",
+        "code": "from flask import Flask\n\napp = Flask(__name__)\n\n@app.get(\"/health\")\ndef health():\n    return {\"lesson\": \"Creating Your First Flask Project\", \"status\": \"ok\"}",
+        "expected_output": "The local GET /health endpoint returns a JSON object naming the focus of this lesson (Creating Your First Flask Project) and status=ok.",
+        "execution_mode": "server-runner",
+        "run_instructions": "Run locally, inspect status/body/content type, and add one focused negative or boundary test relevant to this lesson."
+      },
+      {
+        "type": "callout",
+        "title": "Before using this beyond practice",
+        "text": "Validate untrusted input at the server boundary, keep secrets out of source code, and test the failure path. Optional extensions or hosting infrastructure are separate dependencies unless stated otherwise."
+      }
+    ],
+    "execution_mode": "server-runner",
+    "expected_result": "The local GET /health endpoint returns a JSON object naming the focus of this lesson (Creating Your First Flask Project) and status=ok.",
+    "run_instructions": "Run locally, inspect status/body/content type, and add one focused negative or boundary test relevant to this lesson.",
+    "troubleshooting": [
+      "Confirm the expected virtual environment and installed dependency versions before diagnosing framework behavior.",
+      "Check route/method, input shape, status code, traceback location and relevant configuration one at a time.",
+      "For database or third-party integration examples, use isolated local resources and explicit timeouts; do not use production credentials."
+    ],
+    "reset_steps": "Stop the local development server, reset only disposable local practice data if needed, and remove temporary artifacts created by the exercise. Never delete production data or migration history to reset practice.",
+    "try_it_yourself": "Apply creating your first flask project to a tiny local Flask app. Predict what a normal request should do, test one invalid or boundary case, and record expected versus observed behavior.",
+    "progressive_hints": [
+      "Name the Flask component or ecosystem tool responsible for creating your first flask project.",
+      "Run the smallest example in an isolated local project and compare the actual response with the stated expected result.",
+      "Add one negative or boundary test, then check the linked version-specific official documentation."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Copying a fragment without checking its imports, app configuration or dependencies.",
+        "why": "Many Flask examples assume a configured app and a specific runtime or extension version.",
+        "fix": "Follow the run instructions, record the Flask/Python version and test the smallest behavior first."
+      },
+      {
+        "problem": "Checking only the successful request path.",
+        "why": "Missing fields, unsupported methods, unauthorized objects and service failures often have different behavior.",
+        "fix": "Add a negative or boundary test and assert the status code and response contract."
+      },
+      {
+        "problem": "Treating a local example as production-ready.",
+        "why": "Secret management, concurrency, deployment, monitoring and failure recovery need separate design decisions.",
+        "fix": "Review the matching deployment and security references before publication or real use."
+      }
+    ],
+    "recap": "Creating Your First Flask Project connects Project directory; Application module; Basic project files. Verify the example under the selected environment and keep its assumptions visible.",
+    "knowledge_check_file": "exams/question-files/lesson-014-questions.json",
+    "content_review_status": "draft",
+    "accessibility_notes": "Use descriptive headings, meaningful labels and alt text; provide a text explanation of the diagram; keep code selectable and keyboard navigable; never rely on color alone.",
+    "version_notes": "Baseline: Flask 3.1.x, with the official changelog listing 3.1.3 on 2026-02-18. Verify current patch versions and ecosystem compatibility before use. Optional packages are not Flask built-ins.",
+    "source_syllabus_topics_reviewed": true,
+    "topic_explanations_count": 3,
+    "run_mode": "server-runner",
+    "task": "Apply creating your first flask project to a tiny local Flask app. Predict what a normal request should do, test one invalid or boundary case, and record expected versus observed behavior.",
+    "task_acceptance_criteria": [
+      "State the Python and Flask versions or the relevant non-Flask tool version.",
+      "Record expected and observed results for a normal case.",
+      "Test one invalid, unauthorized or boundary case and explain the status/result."
+    ],
+    "hints": [
+      "Identify the main responsibility behind creating your first flask project.",
+      "Keep request/data boundaries explicit and verify assumptions with a focused test.",
+      "Consult the linked official reference before using a version-sensitive API."
+    ],
+    "solution_notes": "Suggested approach: trace one input through the relevant framework component, keep validation and authorization explicit, and write the smallest test that demonstrates the intended behavior. This note does not claim the example was executed.",
+    "summary": [
+      "Creating Your First Flask Project is part of installation and development environment and should be understood alongside its listed source subtopics.",
+      "The worked example is a focused fragment; use the stated context and dependencies before running it.",
+      "Verify expected and failure behavior locally and record the check so it can be reproduced."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "flask-docs-31",
+      "title": "Flask documentation (3.1.x)",
+      "url": "https://flask.palletsprojects.com/en/stable/",
+      "publisher": "Pallets Projects",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "framework overview",
+        "API index",
+        "version-specific behavior"
+      ]
+    },
+    {
+      "id": "flask-quickstart",
+      "title": "Quickstart",
+      "url": "https://flask.palletsprojects.com/en/stable/quickstart/",
+      "publisher": "Pallets Projects",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "application object",
+        "routes",
+        "responses",
+        "templates"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_status": "generated_from_attached_curriculum_and_official_docs",
+  "status_note": "Draft: generated and structurally validated; requires subject-matter review before publication."
+}

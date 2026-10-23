@@ -1,0 +1,59 @@
+{
+  "id": "flask-exercise-001",
+  "slug": "routes-and-url-parameters",
+  "title": "Routes and URL Parameters",
+  "type": "practical",
+  "lesson_id": "flask-lesson-018",
+  "module_id": "flask-module-03",
+  "difficulty": "beginner",
+  "sequence": 1,
+  "prompt": "Build a small multi-page Flask app with a homepage, an about page, and parameterized user and product routes. Include a meaningful response for a valid identifier, an unknown URL, and an unsupported HTTP method.\n\nSubmission: provide the implementation or design, a relevant test, expected outputs, one failure/boundary case, and version/runtime notes. Flask server code is not executed inside the CodeLeaf browser preview; local verification or human review is required.",
+  "objective": "Routes and URL Parameters",
+  "target_skills": [
+    "route registration",
+    "URL converters",
+    "url_for",
+    "HTTP methods",
+    "error handling"
+  ],
+  "starter": {
+    "language": "python",
+    "content": "from flask import Flask\n\napp = Flask(__name__)\n\n# Add a homepage, about page, and parameterized routes.",
+    "code": "from flask import Flask\n\napp = Flask(__name__)\n\n# Add a homepage, about page, and parameterized routes."
+  },
+  "expected_output": "A GET to each supported route returns the expected result; an unknown resource returns a 404; unsupported methods return 405.",
+  "public_tests": [
+    {
+      "name": "Static concept smoke check",
+      "required_strings": [
+        "Flask",
+        "@app.get",
+        "url_for"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "A GET to each supported route returns the expected result; an unknown resource returns a 404; unsupported methods return 405.",
+    "Document setup/run steps and mark whether verification was static, local, or human-reviewed.",
+    "Do not include private credentials or use real personal data.",
+    "Include a negative/boundary case and explain the expected status/result."
+  ],
+  "hints": [
+    "Start with one route and verify it before adding parameters.",
+    "Use a typed converter for integer IDs and keep endpoint names unique.",
+    "Use the test client to verify status codes as well as body text."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "Flask",
+      "@app.get",
+      "url_for"
+    ]
+  },
+  "grading_method": "Static required-string smoke check plus human review of implementation correctness, tests, validation/security boundaries and reproducibility. The platform does not execute arbitrary Python/Flask code.",
+  "retry_policy": "Retries are allowed after reviewing feedback; the platform backend controls its uniform reward and idempotency rules.",
+  "solution_file": "../../../solutions/exercises/001-routes-and-url-parameters-solution.json",
+  "status": "draft",
+  "status_note": "Practice assignment mapped to the supplied Flask PDF. Needs subject-matter review before publication."
+}

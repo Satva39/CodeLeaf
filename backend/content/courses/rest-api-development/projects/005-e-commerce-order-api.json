@@ -1,0 +1,119 @@
+{
+  "id": "rest-api-development-project-005",
+  "slug": "e-commerce-order-api",
+  "title": "E-commerce Order API",
+  "sequence": 5,
+  "tier": "intermediate",
+  "objective": "Model checkout and the order lifecycle.",
+  "prerequisite_lesson_ids": [
+    "rest-api-development-lesson-035",
+    "rest-api-development-lesson-047",
+    "rest-api-development-lesson-068"
+  ],
+  "recommended_lesson_range": [
+    4,
+    18
+  ],
+  "curriculum_topics": [
+    35,
+    47,
+    68,
+    84,
+    108,
+    121,
+    125,
+    161,
+    173
+  ],
+  "skills": [
+    "resource modeling and HTTP semantics",
+    "request validation and structured errors",
+    "persistence and consistent state changes",
+    "authorization and defensive testing",
+    "API documentation and operational review"
+  ],
+  "starter_readme": "projects/starter-files/005-e-commerce-order-api/README.md",
+  "starter_files": [
+    "projects/starter-files/005-e-commerce-order-api/README.md",
+    "projects/starter-files/005-e-commerce-order-api/request-examples.txt",
+    "projects/starter-files/005-e-commerce-order-api/schema.sql"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Milestone 1: Products, carts, orders, and order items",
+      "acceptance_criteria": [
+        "Demonstrate products, carts, orders, and order items in the project.",
+        "Document the contract and test one failure or boundary case."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Milestone 2: Server-side price and inventory validation",
+      "acceptance_criteria": [
+        "Demonstrate server-side price and inventory validation in the project.",
+        "Document the contract and test one failure or boundary case."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Milestone 3: Valid order state transitions and cancellation rules",
+      "acceptance_criteria": [
+        "Demonstrate valid order state transitions and cancellation rules in the project.",
+        "Document the contract and test one failure or boundary case."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Milestone 4: Idempotent creation, ownership, transactions, and failure tests",
+      "acceptance_criteria": [
+        "Demonstrate idempotent creation, ownership, transactions, and failure tests in the project.",
+        "Document the contract and test one failure or boundary case."
+      ]
+    }
+  ],
+  "required_features": [
+    "Products, carts, orders, and order items",
+    "Server-side price and inventory validation",
+    "Valid order state transitions and cancellation rules",
+    "Idempotent creation, ownership, transactions, and failure tests"
+  ],
+  "stretch_features": [
+    "Add contract validation to CI and detect a breaking change.",
+    "Add structured request IDs and useful metrics without logging secrets.",
+    "Document a recovery or migration trade-off with alternatives."
+  ],
+  "tests": [
+    "Test success, missing-resource, validation, and authorization outcomes.",
+    "Test duplicates and concurrent updates where the domain has non-idempotent side effects.",
+    "Run tests against a disposable database with deterministic fixtures.",
+    "Review public responses and logs for secret or personal-data exposure."
+  ],
+  "rubric": [
+    {
+      "criterion": "API contract and resource model",
+      "points": 20
+    },
+    {
+      "criterion": "Correct behavior and data integrity",
+      "points": 25
+    },
+    {
+      "criterion": "Authentication, authorization and security",
+      "points": 20
+    },
+    {
+      "criterion": "Automated tests and failure handling",
+      "points": 20
+    },
+    {
+      "criterion": "Documentation, operations and maintainability",
+      "points": 15
+    }
+  ],
+  "rubric_total": 100,
+  "review_method": "Automated tests and static contract checks plus human review against the rubric; no arbitrary learner code executes inside CodeLeaf’s production API.",
+  "reference_solution_file": "projects/solutions/005-e-commerce-order-api-reference.json",
+  "status": "draft",
+  "status_note": "Unreviewed project draft; validate scope, starter files, rubric and implementation assumptions before publication."
+}

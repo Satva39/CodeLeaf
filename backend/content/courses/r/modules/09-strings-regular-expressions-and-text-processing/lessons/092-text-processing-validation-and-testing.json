@@ -1,0 +1,183 @@
+{
+  "id": "r-lesson-092",
+  "slug": "text-processing-validation-and-testing",
+  "title": "Text Processing Validation and Testing",
+  "sequence": 92,
+  "module_id": "r-module-09",
+  "module_slug": "strings-regular-expressions-and-text-processing",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "r-lesson-091"
+  ],
+  "previous_lesson_id": "r-lesson-091",
+  "next_lesson_id": "r-lesson-093",
+  "keywords": [
+    "text-processing-validation-and-testing",
+    "strings-regular-expressions-and-text-processing",
+    "testing-string-functions",
+    "testing-edge-cases",
+    "handling-missing-text",
+    "regex-performance-and-readability",
+    "building-a-text-cleaning-utility",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 92,
+  "subtopics": [
+    "Testing String Functions",
+    "Testing Edge Cases",
+    "Handling Missing Text",
+    "Regex Performance and Readability",
+    "Building a Text-Cleaning Utility"
+  ],
+  "learning_outcomes": [
+    "Explain the role of text processing validation and testing and identify its main inputs, outputs or constraints.",
+    "Apply testing string functions in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Text Processing Validation and Testing is part of Strings, Regular Expressions, and Text Processing. Start with testing string functions and connect it to the worked example and expected result.",
+    "why_it_matters": "Text processing should distinguish matching values from near-misses and account for missing text and encoding.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Text Processing Validation and Testing",
+        "asset_path": "diagrams/module-09-overview.svg",
+        "alt_text": "Concept visual supporting lesson 92, Text Processing Validation and Testing. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Text processing should distinguish matching values from near-misses and account for missing text and encoding. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Testing String Functions",
+            "text": "Turn testing string functions into a check with a clear condition, expected result and an example that should fail."
+          },
+          {
+            "title": "Testing Edge Cases",
+            "text": "Turn testing edge cases into a check with a clear condition, expected result and an example that should fail."
+          },
+          {
+            "title": "Handling Missing Text",
+            "text": "For handling missing text, include a failing or boundary case and explain how it should be detected without silently losing information."
+          },
+          {
+            "title": "Regex Performance and Readability",
+            "text": "Explain regex performance and readability in the context of text processing validation and testing, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Building a Text-Cleaning Utility",
+            "text": "Build the smallest example for building a text-cleaning utility, inspect the returned object, and confirm its names, type and shape before using it downstream."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Test at least one matching string, one non-match and one boundary or non-ASCII value. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Text Processing Validation and Testing",
+        "language": "r",
+        "code": "# Lesson 92: Text Processing Validation and Testing\nclean_text <- trimws(tolower(\"  R-topic-92  \"))\nclean_text",
+        "expected_output": "[1] \"r-topic-92\"",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "Check matching and non-matching text, whitespace, missing strings and encoding assumptions. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For text processing validation and testing, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-092-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply text processing validation and testing to a small synthetic example. Start with testing string functions, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the testing string functions idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible text processing validation and testing example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Testing String Functions” and identify the input and output before coding.",
+      "Inspect the type and shape of the result, then test one ordinary and one boundary input.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: Text processing should distinguish matching values from near-misses and account for missing text and encoding.",
+      "Practice: Test at least one matching string, one non-match and one boundary or non-ASCII value.",
+      "Source syllabus focus: Testing String Functions. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply text processing validation and testing to a small synthetic example. Start with testing string functions, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible text processing validation and testing example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Testing String Functions” and identify the input and output before coding.",
+    "Inspect the type and shape of the result, then test one ordinary and one boundary input.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: Text processing should distinguish matching values from near-misses and account for missing text and encoding.",
+    "Practice: Test at least one matching string, one non-match and one boundary or non-ASCII value.",
+    "Source syllabus focus: Testing String Functions. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 9 — Strings, Regular Expressions, and Text Processing, lesson 92: Text Processing Validation and Testing.",
+    "Official documentation: https://stringr.tidyverse.org/",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

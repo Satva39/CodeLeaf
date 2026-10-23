@@ -1,0 +1,61 @@
+{
+  "id": "web-application-security-exercise-003",
+  "slug": "inspect-session-cookies",
+  "title": "Inspect Session Cookies",
+  "type": "short_answer",
+  "lesson_id": "web-application-security-lesson-044",
+  "module_id": "web-application-security-module-06",
+  "difficulty": "beginner",
+  "sequence": 3,
+  "prompt": "Inspect cookies for a local authenticated test account and document scope, lifetime, Secure, HttpOnly, and SameSite settings.",
+  "objective": "Apply Cookies and Browser State Security through a safe, repeatable defensive review or test.",
+  "target_skills": [
+    "security reasoning",
+    "control selection",
+    "negative testing",
+    "sanitized evidence"
+  ],
+  "starter": {
+    "format": "markdown",
+    "template": "## Scope and assumptions\n- Local/owned/authorized system:\n- Asset and trust boundary:\n\n## Expected secure behavior\n\n## Test cases (include one denied/failure case)\n\n## Evidence and result\n\n## Root cause and remediation\n\n## Regression test\n"
+  },
+  "expected_output": "A sanitized cookie review with no actual cookie values copied into the report.",
+  "public_tests": [
+    {
+      "name": "Required evidence terms (static check only)",
+      "required_strings": [
+        "Secure",
+        "HttpOnly",
+        "SameSite",
+        "expiry"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Uses synthetic data and remains inside an owned, local, or explicitly authorized test scope.",
+    "States the expected secure behavior and a relevant negative/failure case.",
+    "Includes sanitized, reproducible evidence and a root-cause-oriented remediation.",
+    "Adds a regression test or a concrete verification step.",
+    "Separates observations from confirmed findings and calls out the static grader’s limitations."
+  ],
+  "hints": [
+    "Record attributes, not cookie contents.",
+    "Check logout and expiration behavior in addition to cookie attributes.",
+    "Keep credentials, session values, private data, and unrelated host details out of the submission.",
+    "The current static grader checks required terms only; a qualified human must review security correctness before the exercise is published."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "Secure",
+      "HttpOnly",
+      "SameSite",
+      "expiry"
+    ]
+  },
+  "grading_method": "Static required-term smoke check only. This does not validate real system behavior, prove a vulnerability, or establish exploitability. Human review plus local/isolated tests are required before publication.",
+  "retry_policy": "Allow retries. Completion and rewards remain governed by platform backend rules; this file defines no per-exercise reward override.",
+  "solution_file": "../../../solutions/exercises/web-application-security-exercise-003-solution.json",
+  "status": "draft",
+  "status_note": "Draft practice item from the attached PDF Section C or a clearly labeled course extension; do not publish without human review of prompt, rubric, grading limitations, and fix correctness."
+}

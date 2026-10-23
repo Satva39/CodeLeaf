@@ -1,0 +1,157 @@
+{
+  "id": "ruby-lesson-091",
+  "slug": "sets-and-unique-collections",
+  "title": "Sets and Unique Collections",
+  "sequence": 91,
+  "module_id": "ruby-module-09",
+  "module_slug": "hashes-sets-and-ranges",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-foundations",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "ruby-lesson-090"
+  ],
+  "previous_lesson_id": "ruby-lesson-090",
+  "next_lesson_id": "ruby-lesson-092",
+  "keywords": [
+    "sets-and-unique-collections",
+    "hashes-sets-and-ranges",
+    "ruby",
+    "the-set-collection",
+    "membership-testing",
+    "union-intersection-and-difference",
+    "version-and-loading-considerations"
+  ],
+  "source_syllabus_number": 91,
+  "subtopics": [
+    "The Set collection",
+    "Membership testing",
+    "Union, intersection, and difference",
+    "Version and loading considerations"
+  ],
+  "learning_outcomes": [
+    "Explain the role of sets and unique collections in a Ruby program and name the key rule involved.",
+    "Apply sets and unique collections in a small example and predict its result before running it.",
+    "Identify one boundary or failure case related to version and loading considerations and verify the intended behavior."
+  ],
+  "content": {
+    "intro": "Learn Sets and Unique Collections through a visual model, a minimal Ruby example, and a practical check.",
+    "why_it_matters": "Understanding sets and unique collections helps you write code that is easier to explain, test, and maintain. It also helps separate Ruby language guarantees from runtime assumptions, dependency behavior, and application-specific rules.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Sets and Unique Collections",
+        "asset_path": "diagrams/lesson-091-sets-and-unique-collections.svg",
+        "alt_text": "Three-stage concept diagram for Sets and Unique Collections.",
+        "caption": "Use this diagram to plan a small example, then verify exact behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Sets and Unique Collections helps you reason about the set collection. In Ruby, prefer a small example whose inputs and expected result are easy to explain. This lesson connects the syllabus topic to practical code and highlights where assumptions or edge cases matter."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to think about it",
+        "text": "Begin by identifying the key rule: The Set collection. Then connect it to Membership testing. The remaining syllabus points—Union, intersection, and difference, Version and loading considerations—are useful checks before applying this in a larger project."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to cover",
+        "items": [
+          {
+            "title": "The Set collection",
+            "text": "Explain how the set collection affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Membership testing",
+            "text": "Explain how membership testing affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Union, intersection, and difference",
+            "text": "Explain how union, intersection, and difference affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Version and loading considerations",
+            "text": "Explain how version and loading considerations affects the example, the public interface, or the behavior learners need to verify."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Sets and Unique Collections",
+        "language": "ruby",
+        "code": "require \"set\"\na = Set[1, 2, 3]\nb = Set[3, 4]\np a & b",
+        "expected_output": "#<Set: {3}>",
+        "execution_mode": "server-runner",
+        "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+        "dependencies": "Ruby standard library (set)",
+        "notes": "Local Ruby execution is required. CodeLeaf’s existing playground only previews HTML/CSS/JavaScript; do not run arbitrary Ruby inside the FastAPI process."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming the happy path is enough",
+            "text": "Test an empty value, a boundary value, and one invalid value before depending on the behavior."
+          },
+          {
+            "title": "Treating an example as a universal rule",
+            "text": "Check Ruby version, runtime implementation, and third-party library documentation when behavior is version-sensitive."
+          },
+          {
+            "title": "Mixing too many concerns",
+            "text": "Separate input parsing, domain behavior, and output so each piece is easier to test."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Run the example as written, compare it with the expected result, and explain why each line supports sets and unique collections. Next change one input or condition and predict the result before running it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second example for sets and unique collections using a different input. Add one edge case from the syllabus list (Version and loading considerations), state the expected behavior, and write a small test or manual check that would catch a regression."
+      },
+      {
+        "type": "paragraph",
+        "title": "Run, troubleshoot, and reset",
+        "text": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed. If the command fails, confirm `ruby --version`, inspect the full error message, and verify that required standard-library or gem dependencies are installed. Reset by removing temporary files created by your experiment and returning the code to the smallest reproducible example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain sets and unique collections, identify its place in hashes, sets, and ranges, run a focused example, and verify an important boundary. Revisit the linked exercise if this is a core topic; advanced runtime or framework examples remain draft until reviewed in a suitable environment."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-091-questions.json",
+    "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+    "reset_steps": [
+      "Restore the original minimal example before trying another variation.",
+      "Remove only temporary sample data created for the lesson.",
+      "Keep credentials and personal data out of logs, fixtures, and screenshots."
+    ],
+    "guided_example": "Predict the output, run the example, and explain the relationship between the set collection and membership testing.",
+    "try_it_yourself": "Create one variation of sets and unique collections, test a normal input and one boundary input, and note any version or dependency assumptions.",
+    "progressive_hints": [
+      "Write down the input and output contract first.",
+      "Reduce the task to one relevant Ruby method or construct.",
+      "Add the boundary case and verify it independently."
+    ],
+    "accessibility_notes": "The diagram includes a text alternative and the lesson explains the flow in prose. Do not use color alone to infer the correct sequence.",
+    "execution_mode": "server-runner",
+    "execution_note": "CodeLeaf does not currently provide an isolated Ruby runner. Run Ruby examples locally; a production runner needs a separate sandbox with time, memory, filesystem, and network limits."
+  },
+  "exercise_files": [],
+  "sources": [
+    "https://docs.ruby-lang.org/en/4.0/",
+    "https://www.ruby-lang.org/en/documentation/"
+  ],
+  "status": "draft",
+  "status_note": "Original lesson authored from the listed PDF syllabus topics; requires technical and editorial review before publication."
+}

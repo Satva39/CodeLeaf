@@ -1,0 +1,54 @@
+{
+  "id": "nextjs-exercise-013",
+  "slug": "implement-authentication",
+  "title": "Implement authentication",
+  "sequence": 13,
+  "module_id": "nextjs-module-12",
+  "lesson_id": "nextjs-lesson-124",
+  "lesson_slug": "introduction-to-authentication",
+  "type": "coding",
+  "difficulty": "intermediate",
+  "status": "draft",
+  "prompt": "Add registration and login flows using a suitable authentication library, secure session handling, and protected data access. Submit the relevant code or implementation notes and validate the complete behavior in a local Next.js project. CodeLeaf does not run arbitrary learner code; the configured grader is a bounded static marker check followed by review against the acceptance criteria.",
+  "target_skills": [
+    "registration",
+    "sessions",
+    "protected data"
+  ],
+  "starter": {
+    "language": "javascript",
+    "code": "const session = await verifySession();\nif (!session) return new Response('Sign in required', { status: 401 });",
+    "execution_mode": "static-validation",
+    "run_instructions": "Adapt this starter in a local JavaScript/JSX App Router project. For server-side examples, provide the real data/auth helpers locally and use test credentials. Run focused tests and a production build; never include secrets or production data in a submission."
+  },
+  "public_tests": [
+    {
+      "name": "Required concept markers",
+      "description": "A server-side static marker check confirms that the submission includes expected constructs. It does not prove complete functionality; review the listed acceptance criteria and exercise the application locally."
+    }
+  ],
+  "acceptance_criteria": [
+    "The implementation meets the prompt requirements and uses the relevant Next.js convention.",
+    "Expected behavior can be reproduced with documented setup and test steps.",
+    "A meaningful empty, invalid, error, denied, or boundary case is tested.",
+    "Authorization and ownership are enforced in server-side code for protected operations.",
+    "The result is keyboard-usable, responsive, and understandable to users where UI is involved."
+  ],
+  "hints": [
+    "Build a minimal working path first, then add the remaining acceptance criteria.",
+    "Record the expected output before testing and keep the test data synthetic.",
+    "A passing string-pattern check is not a substitute for a browser, integration, security, and production build review."
+  ],
+  "solution": {},
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "verifySession",
+      "status: 401"
+    ]
+  },
+  "grading_method": "Static pattern check only, followed by instructor/manual review for actual behavior, security, accessibility, and edge cases. This is not arbitrary-code execution or proof of correctness.",
+  "solution_file": "solutions/013-implement-authentication-solution.json",
+  "retry_policy": "Retry is allowed. Incorrect submissions award no XP; the platform awards its fixed exercise XP only when its server-side configured check first succeeds, and only once per activity.",
+  "source_lesson_id": "nextjs-lesson-124"
+}

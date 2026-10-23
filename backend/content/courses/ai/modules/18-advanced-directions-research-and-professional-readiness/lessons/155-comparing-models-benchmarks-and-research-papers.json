@@ -1,0 +1,210 @@
+{
+  "id": "ai-lesson-155",
+  "slug": "comparing-models-benchmarks-and-research-papers",
+  "title": "Comparing Models, Benchmarks, and Research Papers",
+  "sequence": 155,
+  "module_id": "ai-module-18",
+  "module_slug": "advanced-directions-research-and-professional-readiness",
+  "level": "advanced-practice",
+  "difficulty": "advanced",
+  "track": "applied",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "ai-lesson-154"
+  ],
+  "previous_lesson_id": "ai-lesson-154",
+  "next_lesson_id": "ai-lesson-156",
+  "keywords": [
+    "comparing",
+    "models",
+    "benchmarks",
+    "and",
+    "research",
+    "papers",
+    "benchmark-datasets",
+    "evaluation-protocols",
+    "contamination-and-benchmark-limitations",
+    "capability-comparisons"
+  ],
+  "source_syllabus_number": 155,
+  "subtopics": [
+    "Benchmark datasets",
+    "Evaluation protocols",
+    "Contamination and benchmark limitations",
+    "Capability comparisons",
+    "Reproducibility",
+    "Independent verification",
+    "Separating published results from unsupported claims"
+  ],
+  "learning_outcomes": [
+    "Explain comparing Models, Benchmarks, and Research Papers and connect at least two of its listed subtopics.",
+    "Apply the central idea in comparing Models, Benchmarks, and Research Papers to a small example or select a suitable approach for a stated scenario.",
+    "Identify an important assumption, failure mode, risk, or limitation and describe how it should be checked."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study comparing Models, Benchmarks, and Research Papers within Advanced Directions, Research, and Professional Readiness. You will connect the syllabus topics below to a small, inspectable example and practice stating what the evidence does—and does not—support.",
+    "why_it_matters": "Professional AI work depends on evidence, documentation, reproducibility, teamwork, and continuous learning—not only the ability to make a demo work.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 18 visual roadmap",
+        "asset_path": "diagrams/module-18-overview.svg",
+        "alt_text": "Two-column lesson roadmap for Module 18: Advanced Directions, Research, and Professional Readiness. It lists 5 curriculum topics and ends with the workflow Observe, Experiment, Evaluate, Iterate.",
+        "caption": "Module 18 visual roadmap: scan the ordered lesson cards, then use the Observe → Experiment → Evaluate → Iterate cycle when applying the concepts."
+      },
+      {
+        "type": "paragraph",
+        "title": "The central idea",
+        "text": "Benchmarks are useful only when datasets, protocols, metrics, and limitations are understood. Test contamination, task mismatch, sample uncertainty, cost, and reproducibility before generalizing a published ranking."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered in this lesson",
+        "items": [
+          {
+            "title": "Benchmark datasets",
+            "text": "A benchmark is a task, dataset, protocol, and metric used for comparison. Check representativeness, contamination, variance, licensing, and whether the benchmark reflects the actual deployment goal."
+          },
+          {
+            "title": "Evaluation protocols",
+            "text": "Evaluation protocols is one of the concepts used to reason about comparing models, benchmarks, and research papers. Define the inputs, assumptions, and intended result in this context, then test the idea on a small representative example and document where it may not apply."
+          },
+          {
+            "title": "Contamination and benchmark limitations",
+            "text": "A benchmark is a task, dataset, protocol, and metric used for comparison. Check representativeness, contamination, variance, licensing, and whether the benchmark reflects the actual deployment goal."
+          },
+          {
+            "title": "Capability comparisons",
+            "text": "Capability comparisons is one of the concepts used to reason about comparing models, benchmarks, and research papers. Define the inputs, assumptions, and intended result in this context, then test the idea on a small representative example and document where it may not apply."
+          },
+          {
+            "title": "Reproducibility",
+            "text": "Reproduction records the method, versions, data, settings, and deviations needed to repeat a result. Report discrepancies rather than forcing a match and separate what was replicated from what remains uncertain."
+          },
+          {
+            "title": "Independent verification",
+            "text": "Independent verification is one of the concepts used to reason about comparing models, benchmarks, and research papers. Define the inputs, assumptions, and intended result in this context, then test the idea on a small representative example and document where it may not apply."
+          },
+          {
+            "title": "Separating published results from unsupported claims",
+            "text": "Separating published results from unsupported claims is one of the concepts used to reason about comparing models, benchmarks, and research papers. Define the inputs, assumptions, and intended result in this context, then test the idea on a small representative example and document where it may not apply."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "1. Identify what comparing models, benchmarks, and research papers takes as input and what result or decision it is intended to support. 2. Read the example before running it and predict the output. 3. Run the small example, compare actual and expected output, then change one input or assumption and repeat. 4. Record what the example demonstrates and what it does not demonstrate about a real system."
+      },
+      {
+        "type": "paragraph",
+        "title": "A practical way to reason about it",
+        "text": "Start with the task definition and the inputs available. Make the expected behavior explicit, choose a simple reference point, and inspect both ordinary examples and cases where assumptions may fail. Professional AI work depends on evidence, documentation, reproducibility, teamwork, and continuous learning—not only the ability to make a demo work."
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "execution_mode": "static-validation",
+        "code": "baseline = {\"quality\": 0.80, \"latency_ms\": 150}\ncandidate = {\"quality\": 0.86, \"latency_ms\": 210}\nprint(\"quality gain:\", round(candidate[\"quality\"] - baseline[\"quality\"], 2))\nprint(\"latency change (ms):\", candidate[\"latency_ms\"] - baseline[\"latency_ms\"])",
+        "expected_output": "quality gain: 0.06\nlatency change (ms): 60",
+        "run_instructions": "Copy the code into a local file named main.py and run `python main.py` with Python 3. Compare the printed output with the expected result documented here. This CodeLeaf content block is static; it does not execute the snippet in the browser and needs no external API key.",
+        "reset_steps": "Restore the original snippet or return to the small synthetic input, rerun it, and change one value at a time. Do not add real credentials, private user data, or untrusted code to the example."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistakes and fixes",
+        "text": "If the output differs, check indentation and spelling, confirm you saved the intended file, and compare each input value with the example. If the example runs as expected, do not infer that it proves a trained model works; this snippet is a deterministic teaching aid. Keep sensitive data out of tests."
+      },
+      {
+        "type": "callout",
+        "title": "Check before you trust a result",
+        "text": "This is a small, deterministic teaching example—not a trained AI model or evidence of production performance. Run it with a local Python 3 interpreter; do not paste secrets or private data into experiments."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap and next step",
+        "text": "Recap: Benchmarks are useful only when datasets, protocols, metrics, and limitations are understood. Test contamination, task mismatch, sample uncertainty, cost, and reproducibility before generalizing a published ranking. Next, connect this lesson to its prerequisite or next lesson and carry the same habit forward: define success, test a representative case, inspect failures, and document limitations."
+      }
+    ],
+    "task": "Try it yourself: create a reproducible mini-study related to comparing models, benchmarks, and research papers. Record the question, sources, data and tool versions, method, evaluation criteria, results, deviations, and one limitation before drawing a conclusion. The linked practice activity is: Research Reproduction.",
+    "task_acceptance_criteria": [
+      "Explain the core concept and accurately refer to the source syllabus topics.",
+      "Record a prediction and compare it with a reproducible result or a clearly stated manual trace.",
+      "Document at least one limitation, safety consideration, or evaluation requirement."
+    ],
+    "hints": [
+      "Write down the inputs, expected output, and assumptions before changing the example.",
+      "Change only one input or condition and compare the results with your original prediction.",
+      "Ask whether the example covers realistic cases, important subgroups, and failure conditions; a toy example does not establish production reliability."
+    ],
+    "expected_output": "quality gain: 0.06\nlatency change (ms): 60",
+    "run_mode": "static-validation",
+    "troubleshooting": [
+      "Use Python 3 and run the file from the folder where it was saved.",
+      "If output differs, restore the original input and compare one changed value at a time.",
+      "If Python reports a syntax error, check copied quotation marks, indentation, and whether the full code block was copied.",
+      "These examples require no external packages, network access, model credentials, or personal data."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-155-questions.json"
+  },
+  "exercise_files": [
+    "../exercises/024-research-reproduction.json"
+  ],
+  "sources": [
+    {
+      "id": "google-mlcc",
+      "title": "Machine Learning Crash Course",
+      "url": "https://developers.google.com/machine-learning/crash-course/",
+      "publisher": "Google for Developers",
+      "checked_on": "2026-10-15",
+      "supports": [
+        "machine learning foundations",
+        "neural networks",
+        "embeddings",
+        "large language models",
+        "evaluation",
+        "production ML",
+        "fairness"
+      ],
+      "source_type": "official learning resource",
+      "notes": "Modular introductory and intermediate ML instruction; use for concept reinforcement, not as a replacement for the source syllabus."
+    },
+    {
+      "id": "nist-ai-rmf",
+      "title": "AI Risk Management Framework resources",
+      "url": "https://airc.nist.gov/airmf-resources/airmf/",
+      "publisher": "National Institute of Standards and Technology (NIST)",
+      "checked_on": "2026-10-15",
+      "supports": [
+        "trustworthiness",
+        "risk management",
+        "evaluation",
+        "safety",
+        "security",
+        "privacy",
+        "fairness"
+      ],
+      "source_type": "official risk-management framework resource",
+      "notes": "The official resource states AI RMF 1.0 is being updated; check current NIST status before adopting a version-specific policy."
+    },
+    {
+      "id": "unesco-ai-students",
+      "title": "AI competency framework for students",
+      "url": "https://www.unesco.org/en/articles/ai-competency-framework-students?hub=84624",
+      "publisher": "UNESCO",
+      "checked_on": "2026-10-15",
+      "supports": [
+        "human-centred AI",
+        "AI ethics",
+        "AI techniques and applications",
+        "AI system design",
+        "student AI competency"
+      ],
+      "source_type": "official framework",
+      "notes": "Organizes student competencies across human-centred mindset, ethics, AI techniques and applications, and AI system design."
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft authored from AI.pdf lesson 155, preserving its title and listed subtopics. Review model-specific facts, examples, and assessment wording before publishing."
+}

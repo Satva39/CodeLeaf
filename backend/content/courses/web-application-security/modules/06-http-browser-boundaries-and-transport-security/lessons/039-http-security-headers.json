@@ -1,0 +1,197 @@
+{
+  "id": "web-application-security-lesson-039",
+  "slug": "http-security-headers",
+  "title": "HTTP Security Headers",
+  "sequence": 39,
+  "module_id": "web-application-security-module-06",
+  "module_slug": "http-browser-boundaries-and-transport-security",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core-foundations",
+  "curriculum_tier": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "web-application-security-lesson-038"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-038",
+  "next_lesson_id": "web-application-security-lesson-040",
+  "keywords": [
+    "http",
+    "security",
+    "headers",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 39,
+  "source_syllabus_title": "HTTP Security Headers",
+  "source_subtopics": [
+    {
+      "number": "39.1",
+      "title": "Content Security Policy"
+    },
+    {
+      "number": "39.2",
+      "title": "Strict-Transport-Security"
+    },
+    {
+      "number": "39.3",
+      "title": "X-Content-Type-Options"
+    },
+    {
+      "number": "39.4",
+      "title": "Referrer-Policy"
+    },
+    {
+      "number": "39.5",
+      "title": "Frame restrictions using CSP"
+    },
+    {
+      "number": "39.6",
+      "title": "Permissions Policy"
+    },
+    {
+      "number": "39.7",
+      "title": "Header compatibility and deployment testing"
+    }
+  ],
+  "subtopics": [
+    "Content Security Policy",
+    "Strict-Transport-Security",
+    "X-Content-Type-Options",
+    "Referrer-Policy",
+    "Frame restrictions using CSP",
+    "Permissions Policy",
+    "Header compatibility and deployment testing"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in HTTP Security Headers.",
+    "Choose an appropriate defensive control for HTTP Security Headers and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for HTTP Security Headers, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 6: HTTP, Browser Boundaries, and Transport Security. It builds practical understanding of HTTP Security Headers with the syllabus subtopics retained below.",
+    "why_it_matters": "HTTP Security Headers helps you observe a real boundary instead of assuming that browser, proxy, transport, and server behavior are interchangeable. Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: HTTP Security Headers",
+        "asset_path": "diagrams/lesson-039-http-security-headers.svg",
+        "alt_text": "Four-stage visual model for HTTP Security Headers: Inspect request/response; Identify boundary mismatch; Apply narrow control; Test deployment behavior.",
+        "caption": "Concept map for HTTP Security Headers. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "HTTP Security Headers can be understood through this sequence: Inspect request/response → Identify boundary mismatch → Apply narrow control → Test deployment behavior. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 39.1 Content Security Policy; 39.2 Strict-Transport-Security; 39.3 X-Content-Type-Options; 39.4 Referrer-Policy; 39.5 Frame restrictions using CSP; 39.6 Permissions Policy; 39.7 Header compatibility and deployment testing. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "http",
+        "execution_mode": "static-validation",
+        "title": "Safe reference example: HTTP Security Headers",
+        "code": "Content-Security-Policy: default-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'\nX-Content-Type-Options: nosniff\nReferrer-Policy: strict-origin-when-cross-origin",
+        "expected_output": "A response declares a restrictive baseline for resource loading, framing, MIME sniffing, and referrer disclosure.",
+        "run_instructions": "Review the directives against the application’s needed resources and embedding use cases; test in staging and avoid deploying a copied policy without compatibility review.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “HTTP Security Headers”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for HTTP Security Headers in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-039-questions.json",
+    "recap": [
+      "HTTP Security Headers is a security boundary/control topic, not a standalone checklist item.",
+      "Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [
+    "../exercises/007-review-security-headers.json"
+  ],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "MDN Web Security",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "same-origin policy",
+        "browser security boundaries",
+        "web security features"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

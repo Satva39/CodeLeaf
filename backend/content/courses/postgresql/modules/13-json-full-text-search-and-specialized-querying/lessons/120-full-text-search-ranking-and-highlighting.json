@@ -1,0 +1,157 @@
+{
+  "id": "postgresql-lesson-120",
+  "slug": "full-text-search-ranking-and-highlighting",
+  "title": "Full-Text Search Ranking and Highlighting",
+  "sequence": 120,
+  "module_id": "postgresql-module-13",
+  "module_slug": "json-full-text-search-and-specialized-querying",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "postgresql-lesson-119"
+  ],
+  "previous_lesson_id": "postgresql-lesson-119",
+  "next_lesson_id": "postgresql-lesson-121",
+  "keywords": [
+    "full-text-search-ranking-and-highlighting",
+    "json-full-text-search-and-specialized-querying",
+    "search-ranking",
+    "relevance-ordering",
+    "highlighting-matches",
+    "query-construction"
+  ],
+  "source_syllabus_number": 120,
+  "subtopics": [
+    "Search ranking",
+    "Relevance ordering",
+    "Highlighting matches",
+    "Query construction",
+    "Search-result presentation"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose and main terms of Full-Text Search Ranking and Highlighting.",
+    "Use or interpret an appropriate PostgreSQL example connected to search ranking.",
+    "Identify one edge case and select a safe way to verify the expected result."
+  ],
+  "content": {
+    "intro": "This lesson focuses on Full-Text Search Ranking and Highlighting. Its primary job is to help you query document-shaped JSON and searchable text while choosing when relational columns or extensions are better. The listed PDF subtopics define the coverage expected here; work through them in order and connect each one to an example, edge case and checkable result.",
+    "why_it_matters": "This topic matters because PostgreSQL systems must preserve correct results as data grows and more sessions or services interact with it. Practicing full-text search ranking and highlighting teaches you to make assumptions explicit, apply the right SQL or operational tool, and verify behavior instead of relying on a demonstration that only worked once.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 13 Overview",
+        "asset_path": "diagrams/module-13-overview.svg",
+        "alt_text": "Four-step overview for module 13, JSON, Full-Text Search, and Specialized Querying: Querying JSON and JSONB, Advanced JSON Processing, Updating JSON Documents, and verify/test/document.",
+        "caption": "Visual aid for Full-Text Search Ranking and Highlighting. Use it alongside the subtopics and worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Keep the problem small: query document-shaped JSON and searchable text while choosing when relational columns or extensions are better. A PostgreSQL feature should be chosen for the semantics it provides, not just because it is available. Before executing a change, state the inputs, expected output and boundary conditions. The example below is intentionally small enough to inspect; it illustrates the idea but is not a substitute for a test against your schema and PostgreSQL version."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the attached curriculum",
+        "items": [
+          {
+            "title": "Search ranking",
+            "text": "Relate this point to full-text search ranking and highlighting: define the expected behavior, one edge case, and a query or check that would provide evidence."
+          },
+          {
+            "title": "Relevance ordering",
+            "text": "Relate this point to full-text search ranking and highlighting: define the expected behavior, one edge case, and a query or check that would provide evidence."
+          },
+          {
+            "title": "Highlighting matches",
+            "text": "Relate this point to full-text search ranking and highlighting: define the expected behavior, one edge case, and a query or check that would provide evidence."
+          },
+          {
+            "title": "Query construction",
+            "text": "Relate this point to full-text search ranking and highlighting: define the expected behavior, one edge case, and a query or check that would provide evidence."
+          },
+          {
+            "title": "Search-result presentation",
+            "text": "Relate this point to full-text search ranking and highlighting: define the expected behavior, one edge case, and a query or check that would provide evidence."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Full-Text Search Ranking and Highlighting",
+        "language": "sql",
+        "code": "SELECT to_tsvector('english', 'PostgreSQL makes database search useful')\n       @@ plainto_tsquery('english', 'database search') AS matches;",
+        "expected_output": "matches\n-------\nt\n\nThe exact lexemes depend on the selected text-search configuration.",
+        "safety_note": "Check language configuration and ranking behavior against representative text.",
+        "run_instructions": "Self-contained built-in text-search example.",
+        "reset_steps": "For a read-only SELECT or inspection command, no reset is needed. For DDL/DML, use a disposable database; capture the starting state, run the example, inspect the result, and ROLLBACK or drop the lab objects as appropriate. Do not use production data or credentials.",
+        "execution_mode": "query-simulation",
+        "limitations": "CodeLeaf currently previews HTML/CSS/JavaScript only; it does not execute PostgreSQL queries, shell commands or Python in the lesson page. Treat the sample as inspectable code unless you run it yourself in an approved isolated environment. Python examples require a separate isolated runner.",
+        "schema_assumptions": "Self-contained built-in text-search example."
+      },
+      {
+        "type": "callout",
+        "title": "Practical checkpoint",
+        "text": "Version note: PostgreSQL 18.6 is the primary reference. PostgreSQL 19 beta/development features are not assumed to be stable."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-120-questions.json"
+  },
+  "task": "Create a short practice artifact for “Full-Text Search Ranking and Highlighting”: explain its goal, show one example linked to “Search ranking”, state the expected result, and include one edge/failure case and verification method. Use a disposable database or static artifact as appropriate.",
+  "hints": [
+    "Start with the listed subtopics, especially “Search ranking”, and describe the expected behavior in your own words.",
+    "Run or inspect the smallest example that demonstrates the behavior; do not add unrelated features before it is verified.",
+    "When the result surprises you, capture the exact SQL/error, check version and permissions, and change one assumption at a time."
+  ],
+  "expected_output": "A reviewable note or query for Full-Text Search Ranking and Highlighting, with an explanation of “Search ranking”, expected behavior, and a documented edge-case check.",
+  "run_mode": "query-simulation",
+  "common_mistakes": [
+    {
+      "problem": "Copying the example without checking its assumptions.",
+      "why": "Object names, data types, privileges, extensions and data distribution affect database behavior.",
+      "fix": "List schema/version assumptions and test with a tiny synthetic dataset first."
+    },
+    {
+      "problem": "Treating a single successful query as proof of production readiness.",
+      "why": "A happy-path result does not test invalid input, concurrent sessions, permissions, recovery or query performance.",
+      "fix": "Add one negative/edge case and record the evidence that confirms the expected behavior."
+    },
+    {
+      "problem": "Making a production change directly from a lesson.",
+      "why": "DDL, data updates, role changes and operational commands can affect data or availability.",
+      "fix": "Use an isolated lab, reviewed migration, least privilege, rollback/recovery plan and a second-person review for production."
+    }
+  ],
+  "summary": [
+    "Full-Text Search Ranking and Highlighting fits into the broader goal to query document-shaped JSON and searchable text while choosing when relational columns or extensions are better.",
+    "Use the curriculum subtopics as a completeness checklist: Search ranking, Relevance ordering, Highlighting matches.",
+    "State the schema/version assumptions and verify one normal case plus an edge case before trusting the result."
+  ],
+  "sources": [
+    {
+      "title": "JSON Functions and Operators",
+      "url": "https://www.postgresql.org/docs/18/functions-json.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-15",
+      "supports": [
+        "JSON Functions and Operators; lesson 120 is a teaching adaptation and should be checked against this official reference."
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "Full Text Search",
+      "url": "https://www.postgresql.org/docs/18/textsearch.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-15",
+      "supports": [
+        "Text search configurations, vectors, queries and ranking."
+      ],
+      "source_type": "official documentation"
+    }
+  ],
+  "exercise_files": [],
+  "status": "draft",
+  "status_note": "Draft teaching content generated from the full PostgreSQL.pdf syllabus. Examples and operational advice require technical review and PostgreSQL 18.6 test validation before publication."
+}

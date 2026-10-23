@@ -1,0 +1,183 @@
+{
+  "id": "r-lesson-064",
+  "slug": "local-and-global-variables",
+  "title": "Local and Global Variables",
+  "sequence": 64,
+  "module_id": "r-module-07",
+  "module_slug": "functions-and-reusable-programming",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "r-lesson-063"
+  ],
+  "previous_lesson_id": "r-lesson-063",
+  "next_lesson_id": "r-lesson-065",
+  "keywords": [
+    "local-and-global-variables",
+    "functions-and-reusable-programming",
+    "function-environments",
+    "local-variables",
+    "global-variables",
+    "variable-shadowing",
+    "why-unnecessary-global-modification-is-risky",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 64,
+  "subtopics": [
+    "Function Environments",
+    "Local Variables",
+    "Global Variables",
+    "Variable Shadowing",
+    "Why Unnecessary Global Modification Is Risky"
+  ],
+  "learning_outcomes": [
+    "Explain the role of local and global variables and identify its main inputs, outputs or constraints.",
+    "Apply function environments in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Local and Global Variables is part of Functions and Reusable Programming. Start with function environments and connect it to the worked example and expected result.",
+    "why_it_matters": "Local and Global Variables is one step in Functions and Reusable Programming; functions turn repeated steps into named behavior. Lexical scoping explains how a function finds objects.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Local and Global Variables",
+        "asset_path": "diagrams/module-07-overview.svg",
+        "alt_text": "Concept visual supporting lesson 64, Local and Global Variables. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Local and Global Variables is one step in Functions and Reusable Programming; functions turn repeated steps into named behavior. Lexical scoping explains how a function finds objects. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Function Environments",
+            "text": "Use function environments to make input, output and scope explicit, then test both a typical call and one edge case."
+          },
+          {
+            "title": "Local Variables",
+            "text": "Explain local variables in the context of local and global variables, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Global Variables",
+            "text": "Explain global variables in the context of local and global variables, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Variable Shadowing",
+            "text": "Explain variable shadowing in the context of local and global variables, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Why Unnecessary Global Modification Is Risky",
+            "text": "Explain why unnecessary global modification is risky in the context of local and global variables, connect it to the example, and verify one expected result or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Validate inputs, minimize side effects, and test more than one input case. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Local and Global Variables",
+        "language": "r",
+        "code": "average <- function(x) mean(x)\naverage(c(4, 6, 8))",
+        "expected_output": "[1] 6",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "A function packages a repeatable transformation behind a clear name. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For local and global variables, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-064-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply local and global variables to a small synthetic example. Start with function environments, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the function environments idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible local and global variables example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Function Environments” and identify the input and output before coding.",
+      "Inspect the type and shape of the result, then test one ordinary and one boundary input.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: Local and Global Variables is one step in Functions and Reusable Programming; functions turn repeated steps into named behavior. Lexical scoping explains how a function finds objects.",
+      "Practice: Validate inputs, minimize side effects, and test more than one input case.",
+      "Source syllabus focus: Function Environments. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply local and global variables to a small synthetic example. Start with function environments, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible local and global variables example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Function Environments” and identify the input and output before coding.",
+    "Inspect the type and shape of the result, then test one ordinary and one boundary input.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: Local and Global Variables is one step in Functions and Reusable Programming; functions turn repeated steps into named behavior. Lexical scoping explains how a function finds objects.",
+    "Practice: Validate inputs, minimize side effects, and test more than one input case.",
+    "Source syllabus focus: Function Environments. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 7 — Functions and Reusable Programming, lesson 64: Local and Global Variables.",
+    "Official documentation: https://cran.r-project.org/doc/manuals/r-release/R-lang.html",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

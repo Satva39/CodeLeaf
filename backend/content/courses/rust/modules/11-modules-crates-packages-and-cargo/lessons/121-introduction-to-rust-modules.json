@@ -1,0 +1,142 @@
+{
+  "id": "rust-lesson-121",
+  "slug": "introduction-to-rust-modules",
+  "title": "Introduction to Rust Modules",
+  "sequence": 121,
+  "module_id": "rust-module-11",
+  "module_slug": "modules-crates-packages-and-cargo",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-language",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "rust-lesson-120"
+  ],
+  "previous_lesson_id": "rust-lesson-120",
+  "next_lesson_id": "rust-lesson-122",
+  "keywords": [
+    "introduction",
+    "modules",
+    "rust",
+    "type-safe-program-design"
+  ],
+  "source_syllabus_number": 121,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the main purpose of Introduction to Rust Modules and distinguish it from a closely related Rust concept.",
+    "Apply or trace Introduction to Rust Modules in a small Rust example, using the module guidance and stated toolchain assumptions.",
+    "Identify one relevant edge case or failure mode for Introduction to Rust Modules and select a suitable verification step."
+  ],
+  "content": {
+    "intro": "This lesson covers Introduction to Rust Modules. It sits in Module 11, Modules, Crates, Packages, and Cargo, and builds toward a practical Rust mental model rather than memorizing a term in isolation.",
+    "why_it_matters": "Introduction to Rust Modules matters when you work with type-safe program design. Understanding the rule helps you predict compiler or runtime behavior, document assumptions, and choose a safer implementation when inputs or system conditions change.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Introduction to Rust Modules",
+        "asset_path": "diagrams/lesson-121-introduction-to-rust-modules.svg",
+        "alt_text": "Concept diagram for Introduction to Rust Modules: type-safe program design; inputs flow through a rule to an outcome, followed by a verification step.",
+        "caption": "Visual model for Introduction to Rust Modules. The diagram is a learning aid; use the prose and examples for exact conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Introduction to Rust Modules is one building block of this area: Organize maintainable packages and crates with modules, visibility, and Cargo. Start with the smallest example, identify the inputs and assumptions, and check the edge cases before using the technique in a larger program."
+      },
+      {
+        "type": "paragraph",
+        "title": "A reliable way to reason about it",
+        "text": "For Introduction to Rust Modules, write down the inputs, the guarantee you expect, and the boundary where that guarantee stops. Work through a minimal example first; then deliberately test one edge case. Cargo.toml declares a package and dependency intent; Cargo.lock records a resolved graph for reproducible application builds. Keep module visibility deliberate."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Introduction to Rust Modules",
+            "text": "Introduction to Rust Modules is one building block of this area: Organize maintainable packages and crates with modules, visibility, and Cargo. Start with the smallest example, identify the inputs and assumptions, and check the edge cases before using the technique in a larger program."
+          },
+          {
+            "title": "Inputs and guarantees",
+            "text": "Identify the value, type, state, tool, or external system involved in Introduction to Rust Modules. Separate what Rust checks at compile time from what still needs validation or a test."
+          },
+          {
+            "title": "Boundary case",
+            "text": "Try an empty, missing, invalid, unusually large, or concurrently accessed input when that boundary applies to Introduction to Rust Modules. Record what should happen and how you can verify it."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "rust",
+        "execution_mode": "static-validation",
+        "code": "fn main() {\n    let language = \"Rust\";\n    println!(\"Welcome to {language}!\");\n}",
+        "expected_output": "Welcome to Rust!",
+        "run_instructions": "Save as src/main.rs and run cargo run. Treat language comparisons as workload-specific trade-offs, not universal rankings.",
+        "reset_steps": "Return the sample to its original form, run the documented command again, and compare the result. If a dependency, target, runtime, database, or hardware device is required, configure that separately before treating the result as verified."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not assume Introduction to Rust Modules guarantees more than it actually does. Reduce a failure to a small reproducer, read the full compiler diagnostic or error value, consult the matching official reference, and change one assumption at a time."
+      },
+      {
+        "type": "callout",
+        "title": "Toolchain and execution boundary",
+        "text": "Course examples are static reference snippets, not executed inside CodeLeaf. Most standard-library examples can be tried in a Rust 2024 Cargo project; specialized networking, database, async, procedural-macro, embedded, and WebAssembly scenarios require the toolchain and dependencies described in their lessons."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate Introduction to Rust Modules. Predict the result before you run it, then explain one normal case and one relevant boundary case in your own words.",
+    "task_acceptance_criteria": [
+      "Explain the purpose of Introduction to Rust Modules using a concrete example.",
+      "Verify the example using an appropriate local command, targeted test, or documented manual check.",
+      "Describe one edge case, failure mode, version assumption, or limitation that matters for this topic."
+    ],
+    "hints": [
+      "Start by identifying the inputs and guarantee involved in Introduction to Rust Modules.",
+      "Use the smallest example that isolates one rule; avoid changing multiple variables at once.",
+      "Check the matching official reference if compiler behavior, a library API, or toolchain support differs from your expectation."
+    ],
+    "expected_output": "Welcome to Rust!",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-121-questions.json",
+    "recap": [
+      "Introduction to Rust Modules supports type-safe program design.",
+      "Predict and verify behavior with small examples.",
+      "Keep library and target-specific assumptions explicit."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "The Cargo Book",
+      "url": "https://doc.rust-lang.org/cargo/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "packages and crates",
+        "Cargo.toml",
+        "Cargo.lock",
+        "dependencies",
+        "workspaces",
+        "build profiles",
+        "testing",
+        "publishing"
+      ]
+    },
+    {
+      "title": "The Rust Edition Guide",
+      "url": "https://doc.rust-lang.org/edition-guide/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "2015, 2018, 2021, and 2024 editions",
+        "edition migration",
+        "edition-sensitive syntax"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Rust.pdf; review explanation, code behavior, version notes, and assessment quality before publication."
+}

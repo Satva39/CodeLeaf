@@ -1,0 +1,13 @@
+{
+  "id": "github-actions-exercise-solution-024",
+  "exercise_id": "github-actions-exercise-024",
+  "title": "Design a monorepo pipeline reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": {
+    "approach": "A complete response for design a monorepo pipeline should include: paths:, needs:, shared.",
+    "example": "name: Web component checks\non:\n  pull_request:\n    paths:\n      - \"web/**\"\n      - \"shared/**\"\n      - \"package-lock.json\"\npermissions:\n  contents: read\njobs:\n  web-tests:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: echo \"Run web tests\"",
+    "verification": "The workflow reacts to changes in web code and its listed shared dependencies; update filters when dependency relationships change."
+  },
+  "explanation": "Reason about the trigger, permission boundary, expected observable result, and failure path for design a monorepo pipeline. Use a disposable branch or repository, compare the behavior with the official reference linked in this lesson, and reset any temporary changes afterwards. Adapt action references and runtime details against the official docs checked on 2026-10-20. Reference snippet updated to align with the linked lesson; adapt it to the exact exercise acceptance criteria before applying it."
+}

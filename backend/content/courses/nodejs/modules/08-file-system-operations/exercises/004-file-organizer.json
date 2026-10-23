@@ -1,0 +1,69 @@
+{
+  "id": "nodejs-exercise-004",
+  "slug": "file-organizer",
+  "title": "File Organizer",
+  "sequence": 4,
+  "module_id": "nodejs-module-08",
+  "lesson_id": "nodejs-lesson-065",
+  "lesson_slug": "creating-and-managing-directories",
+  "type": "coding",
+  "difficulty": "beginner",
+  "status": "draft",
+  "prompt": "Sort files into extension-based folders with a dry-run option, duplicate-name handling, and safe path checks. Submit a small source snippet or focused implementation excerpt and verify the runtime behavior locally. CodeLeaf only performs a limited static pattern check here; it does not execute learner code.",
+  "target_skills": [
+    "File Organizer",
+    "Sort files into extension-based folders with a dry-run option, duplicate-name handling, and safe path checks"
+  ],
+  "starter": {
+    "language": "javascript",
+    "code": "import path from 'node:path';\nimport { mkdir, rename } from 'node:fs/promises';\nconst source = 'report.csv';\nconst extensionFolder = path.extname(source).slice(1) || 'no-extension';\nconst destination = path.join('organized', extensionFolder, path.basename(source));\nasync function organize(dryRun = true) {\n  if (dryRun) { console.log(`Would move ${source} to ${destination}`); return; }\n  await mkdir(path.dirname(destination), { recursive: true });\n  await rename(source, destination);\n}\nawait organize(true);",
+    "execution_mode": "static-validation",
+    "run_instructions": "Use a separate local Node.js project. Place the snippet in an appropriate .mjs file, provision any named package/file/service, and run documented normal/error cases. The platform does not execute arbitrary code."
+  },
+  "public_tests": [
+    {
+      "name": "Required source markers",
+      "method": "contains_all",
+      "required_strings": [
+        "path.extname",
+        "mkdir",
+        "rename"
+      ],
+      "note": "A static marker check is not a substitute for executing tests in a separate isolated environment."
+    }
+  ],
+  "acceptance_criteria": [
+    "The implementation addresses the stated task and uses the intended Node.js API/pattern.",
+    "Input and expected output or observable behavior are documented.",
+    "At least one relevant failure, boundary, authorization, or resource-cleanup case is addressed.",
+    "The example is tested locally with a supported Node.js version before being considered complete."
+  ],
+  "hints": [
+    "Write down the expected result before running the code.",
+    "Keep input validation and error handling close to the boundary where data enters.",
+    "Test one normal input and one failure or edge case."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "path.extname",
+      "mkdir",
+      "rename"
+    ],
+    "case_sensitive": false
+  },
+  "solution": {},
+  "solution_file": "solutions/004-file-organizer-solution.json",
+  "retry_policy": {
+    "unlimited_attempts": true,
+    "xp_once_per_activity": true,
+    "award_only_after_grader_pass": true
+  },
+  "execution_mode": "static-validation",
+  "references": [
+    "https://nodejs.org/api/fs.html",
+    "https://nodejs.org/api/stream.html"
+  ],
+  "topic_references_from_pdf": "54, 65, 70, 133",
+  "status_note": "Limited static-pattern assessment. No arbitrary-code execution is provided by the current CodeLeaf playground."
+}

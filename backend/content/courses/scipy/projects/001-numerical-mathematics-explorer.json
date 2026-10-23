@@ -1,0 +1,141 @@
+{
+  "id": "scipy-project-001",
+  "slug": "numerical-mathematics-explorer",
+  "title": "Numerical Mathematics Explorer",
+  "sequence": 1,
+  "tier": "beginner",
+  "objective": "Build a script or notebook that evaluates mathematical functions and solves small numerical problems.",
+  "prerequisite_lesson_ids": [
+    "scipy-lesson-012",
+    "scipy-lesson-021",
+    "scipy-lesson-022"
+  ],
+  "recommended_module_range": [
+    2,
+    8
+  ],
+  "recommended_lesson_range": [
+    12,
+    60
+  ],
+  "skills": [
+    "SciPy installation, imports, and version metadata",
+    "scipy.constants / scipy.special",
+    "scipy.differentiate",
+    "input validation",
+    "numerical tests",
+    "reproducibility"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Evaluate functions and special functions.",
+      "acceptance_criteria": [
+        "Demonstrate: Evaluate functions and special functions.",
+        "Include a reproducible test or verification step.",
+        "State one assumption or limitation."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Find roots and estimate numerical derivatives.",
+      "acceptance_criteria": [
+        "Demonstrate: Find roots and estimate numerical derivatives.",
+        "Include a reproducible test or verification step.",
+        "State one assumption or limitation."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Compute definite integrals and compare with analytical results.",
+      "acceptance_criteria": [
+        "Demonstrate: Compute definite integrals and compare with analytical results.",
+        "Include a reproducible test or verification step.",
+        "State one assumption or limitation."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Report numerical errors and assumptions.",
+      "acceptance_criteria": [
+        "Demonstrate: Report numerical errors and assumptions.",
+        "Include a reproducible test or verification step.",
+        "State one assumption or limitation."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "purpose": "Setup, run instructions, scope, assumptions, and expected deliverables."
+    },
+    {
+      "path": "src/main.py",
+      "purpose": "Small runnable starting point for the analysis pipeline."
+    },
+    {
+      "path": "tests/test_analysis.py",
+      "purpose": "Tests for known results, boundaries, invalid values, and tolerance-based numeric checks."
+    }
+  ],
+  "required_features": [
+    "Evaluate functions and special functions.",
+    "Find roots and estimate numerical derivatives.",
+    "Compute definite integrals and compare with analytical results.",
+    "Report numerical errors and assumptions."
+  ],
+  "stretch_features": [
+    "Add an independent method and explain when the two methods disagree.",
+    "Add a synthetic edge-case dataset and automated regression tests.",
+    "Provide an optional labeled visualization while keeping calculations separate from presentation."
+  ],
+  "tests": [
+    {
+      "name": "Numerical correctness",
+      "steps": [
+        "Compare at least one result with a known synthetic answer or independent method.",
+        "Use scale-aware tolerances where floating-point approximation is expected."
+      ]
+    },
+    {
+      "name": "Boundaries and failure modes",
+      "steps": [
+        "Test empty, non-finite, malformed, or boundary inputs where relevant.",
+        "Do not report success when a solver or input validation step fails."
+      ]
+    },
+    {
+      "name": "Reproducibility",
+      "steps": [
+        "Run with documented dependencies and a fixed random seed if randomness is involved.",
+        "Record the SciPy version, units, assumptions, and method settings."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Mathematical/scientific correctness and appropriate method selection",
+      "points": 25
+    },
+    {
+      "criterion": "Numerical validation, error checks, and boundary handling",
+      "points": 20
+    },
+    {
+      "criterion": "Input validation and treatment of assumptions/uncertainty",
+      "points": 20
+    },
+    {
+      "criterion": "Testing, reproducibility, and dependency/version notes",
+      "points": 20
+    },
+    {
+      "criterion": "Documentation, presentation, and maintainable structure",
+      "points": 15
+    }
+  ],
+  "review_method": "Automated local tests plus human rubric review. The production API is not an arbitrary Python execution environment; submissions require an isolated runner or human review.",
+  "reference_solution_file": "projects/solutions/001-numerical-mathematics-explorer-solution.json",
+  "status": "draft",
+  "status_note": "Draft project brief derived from Section D of the supplied SciPy PDF; full implementation, tests, data assumptions, and rubric require human review before publication."
+}

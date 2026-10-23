@@ -1,0 +1,213 @@
+{
+  "id": "php-lesson-078",
+  "slug": "nullable-and-union-types",
+  "title": "Nullable and Union Types",
+  "sequence": 78,
+  "module_id": "php-module-09",
+  "module_slug": "modern-php-type-features-and-language-constructs",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 11,
+  "prerequisites": [],
+  "previous_lesson_id": "php-lesson-077",
+  "next_lesson_id": "php-lesson-079",
+  "keywords": [
+    "nullable and union types",
+    "modern php type features and language constructs",
+    "nullable declarations",
+    "union types",
+    "combining accepted parameter types",
+    "return type design",
+    "avoiding unnecessarily broad types",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 78,
+  "subtopics": [
+    "Nullable declarations.",
+    "Union types.",
+    "Combining accepted parameter types.",
+    "Return type design.",
+    "Avoiding unnecessarily broad types."
+  ],
+  "learning_outcomes": [
+    "Explain what nullable and union types contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: nullable declarations.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Modern PHP offers stronger type declarations and language constructs for making intent explicit. Choose the narrowest useful type and use enums, attributes, and readonly design only when they model a real rule. In this lesson, focus on nullable declarations; then compare it with union types. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use nullable and union types when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 9 overview: Modern PHP Type Features and Language Constructs",
+        "asset_path": "diagrams/module-09-overview.svg",
+        "alt_text": "Four-stage overview for module 9, Modern PHP Type Features and Language Constructs, grouping lesson topics in order.",
+        "caption": "Use this overview to place nullable and union types in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Modern PHP offers stronger type declarations and language constructs for making intent explicit. Choose the narrowest useful type and use enums, attributes, and readonly design only when they model a real rule. For nullable and union types, begin with nullable declarations. Also distinguish union types; combining accepted parameter types; return type design. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Nullable declarations",
+            "text": "State which values are accepted and what contract the declaration enforces; include a case that should be rejected or handled explicitly."
+          },
+          {
+            "title": "Union types",
+            "text": "State which values are accepted and what contract the declaration enforces; include a case that should be rejected or handled explicitly."
+          },
+          {
+            "title": "Combining accepted parameter types",
+            "text": "State which values are accepted and what contract the declaration enforces; include a case that should be rejected or handled explicitly."
+          },
+          {
+            "title": "Return type design",
+            "text": "State which values are accepted and what contract the declaration enforces; include a case that should be rejected or handled explicitly."
+          },
+          {
+            "title": "Avoiding unnecessarily broad types",
+            "text": "State which values are accepted and what contract the declaration enforces; include a case that should be rejected or handled explicitly."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Nullable and Union Types",
+        "language": "php",
+        "code": "<?php\nfunction displayName(?string $name): string { return $name ?? \"Guest\"; }\necho displayName(null) . PHP_EOL;",
+        "expected_output": "Guest",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for nullable and union types from top to bottom. Start by identifying nullable declarations, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for nullable and union types that demonstrates \"nullable declarations\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of nullable declarations.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "Guest",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-078-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Nullable and Union Types is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+    ],
+    "references": [
+      {
+        "title": "Type declarations",
+        "url": "https://www.php.net/manual/en/language.types.declarations.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "parameter types",
+          "return types",
+          "union types",
+          "strict_types"
+        ]
+      },
+      {
+        "title": "Enumerations",
+        "url": "https://www.php.net/manual/en/language.enumerations.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "pure enums",
+          "backed enums",
+          "enum methods"
+        ]
+      },
+      {
+        "title": "Attributes overview",
+        "url": "https://www.php.net/manual/en/language.attributes.overview.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "attributes",
+          "reflection-based metadata"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Type declarations",
+      "url": "https://www.php.net/manual/en/language.types.declarations.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "parameter types",
+        "return types",
+        "union types",
+        "strict_types"
+      ]
+    },
+    {
+      "title": "Enumerations",
+      "url": "https://www.php.net/manual/en/language.enumerations.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "pure enums",
+        "backed enums",
+        "enum methods"
+      ]
+    },
+    {
+      "title": "Attributes overview",
+      "url": "https://www.php.net/manual/en/language.attributes.overview.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "attributes",
+        "reflection-based metadata"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

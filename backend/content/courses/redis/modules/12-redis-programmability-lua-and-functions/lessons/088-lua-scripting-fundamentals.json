@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-088",
+  "slug": "lua-scripting-fundamentals",
+  "title": "Lua Scripting Fundamentals",
+  "sequence": 88,
+  "module_id": "redis-module-12",
+  "module_slug": "redis-programmability-lua-and-functions",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-087"
+  ],
+  "previous_lesson_id": "redis-lesson-087",
+  "next_lesson_id": "redis-lesson-089",
+  "keywords": [
+    "lua-scripting-fundamentals",
+    "redis-lua-execution-environment",
+    "eval",
+    "keys-and-argv-script-arguments",
+    "returning-values-and-errors",
+    "accessing-redis-commands-from-lua",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 88,
+  "subtopics": [
+    "Redis Lua execution environment",
+    "EVAL",
+    "KEYS and ARGV script arguments",
+    "Returning values and errors",
+    "Accessing Redis commands from Lua"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Lua Scripting Fundamentals and distinguish it from a related Redis concept.",
+    "Apply or trace Lua Scripting Fundamentals in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Lua Scripting Fundamentals and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Lua Scripting Fundamentals in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Lua Scripting Fundamentals helps implement move bounded business logic next to data without exposing untrusted dynamic commands. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Lua Scripting Fundamentals",
+        "asset_path": "diagrams/lesson-088-lua-scripting-fundamentals.svg",
+        "alt_text": "Concept diagram for Lua Scripting Fundamentals, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Lua Scripting Fundamentals; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Lua Scripting Fundamentals helps implement move bounded business logic next to data without exposing untrusted dynamic commands. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Lua Scripting Fundamentals, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Redis Lua execution environment",
+            "text": "Connect Redis Lua execution environment to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "EVAL",
+            "text": "Connect EVAL to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "KEYS and ARGV script arguments",
+            "text": "Connect KEYS and ARGV script arguments to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Returning values and errors",
+            "text": "Connect Returning values and errors to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Accessing Redis commands from Lua",
+            "text": "Connect Accessing Redis commands from Lua to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Lua Scripting Fundamentals",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "EVAL \"return redis.call('PING')\" 0",
+        "expected_output": "\"PONG\"",
+        "run_instructions": "Keep scripts/functions bounded and validate all application-controlled inputs; production deployments may restrict programmability commands.",
+        "reset_steps": "No key is written.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Lua Scripting Fundamentals. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Lua Scripting Fundamentals in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Lua Scripting Fundamentals.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "\"PONG\"",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-088-questions.json",
+    "recap": [
+      "Lua Scripting Fundamentals is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Redis Functions",
+      "url": "https://redis.io/docs/latest/develop/interact/programmability/functions-intro/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "managed server-side functions and compatibility with scripting"
+      ]
+    },
+    {
+      "title": "Redis programmability",
+      "url": "https://redis.io/docs/latest/develop/interact/programmability/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "Lua scripting, execution behavior and server-side logic"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

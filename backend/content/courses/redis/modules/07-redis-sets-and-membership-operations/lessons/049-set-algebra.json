@@ -1,0 +1,154 @@
+{
+  "id": "redis-lesson-049",
+  "slug": "set-algebra",
+  "title": "Set Algebra",
+  "sequence": 49,
+  "module_id": "redis-module-07",
+  "module_slug": "redis-sets-and-membership-operations",
+  "level": "beginner to intermediate",
+  "difficulty": "intermediate",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-048"
+  ],
+  "previous_lesson_id": "redis-lesson-048",
+  "next_lesson_id": "redis-lesson-050",
+  "keywords": [
+    "set-algebra",
+    "sinter",
+    "sunion",
+    "sdiff",
+    "sinterstore",
+    "union-and-intersection-with-multiple-collections",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 49,
+  "subtopics": [
+    "SINTER",
+    "SUNION",
+    "SDIFF",
+    "SINTERSTORE",
+    "Union and intersection with multiple collections"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Set Algebra and distinguish it from a related Redis concept.",
+    "Apply or trace Set Algebra in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Set Algebra and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Set Algebra in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Set Algebra helps implement represent unique membership and use set algebra to compare groups efficiently. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Set Algebra",
+        "asset_path": "diagrams/lesson-049-set-algebra.svg",
+        "alt_text": "Concept diagram for Set Algebra, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Set Algebra; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Set Algebra helps implement represent unique membership and use set algebra to compare groups efficiently. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Set Algebra, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "SINTER",
+            "text": "Connect SINTER to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "SUNION",
+            "text": "Connect SUNION to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "SDIFF",
+            "text": "Connect SDIFF to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "SINTERSTORE",
+            "text": "Connect SINTERSTORE to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Union and intersection with multiple collections",
+            "text": "Connect Union and intersection with multiple collections to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Set Algebra",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "SADD product:tags redis database cache\nSISMEMBER product:tags cache\nSMEMBERS product:tags",
+        "expected_output": "3\n1\n1) \"cache\" 2) \"database\" 3) \"redis\"",
+        "run_instructions": "Set members are unique and unordered; do not depend on SMEMBERS display ordering.",
+        "reset_steps": "DEL product:tags",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Set Algebra. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Set Algebra in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Set Algebra.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "3\n1\n1) \"cache\" 2) \"database\" 3) \"redis\"",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-049-questions.json",
+    "recap": [
+      "Set Algebra is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [
+    "../exercises/008-membership-lookup.json"
+  ],
+  "sources": [
+    {
+      "title": "Redis data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "strings, hashes, lists, sets, sorted sets, streams, geospatial indexes, bitmaps, bitfields, JSON, arrays, time series, probabilistic structures, vector sets"
+      ]
+    },
+    {
+      "title": "Compare data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/compare-data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "data-type selection and use-case trade-offs"
+      ]
+    },
+    {
+      "title": "Redis commands reference",
+      "url": "https://redis.io/docs/latest/commands/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "command syntax, return values, complexity, compatibility and command history"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

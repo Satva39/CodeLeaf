@@ -1,0 +1,186 @@
+{
+  "id": "docker-lesson-229",
+  "slug": "health-checks-and-service-recovery",
+  "title": "Health Checks and Service Recovery",
+  "sequence": 229,
+  "module_id": "docker-module-21",
+  "module_slug": "production-deployment-and-operations",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "docker-lesson-228"
+  ],
+  "previous_lesson_id": "docker-lesson-228",
+  "next_lesson_id": "docker-lesson-230",
+  "keywords": [
+    "health-checks-and-service-recovery",
+    "health-check-design",
+    "startup-failure-handling",
+    "restart-policies",
+    "dependency-availability",
+    "verifying-recovery-behavior"
+  ],
+  "source_syllabus_number": 229,
+  "subtopics": [
+    "Health-check design",
+    "Startup failure handling",
+    "Restart policies",
+    "Dependency availability",
+    "Verifying recovery behavior"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and key terms of health checks and service recovery.",
+    "Choose and interpret a suitable Docker example connected to health checks and service recovery.",
+    "Predict an expected result and verify it using observable evidence in a controlled environment."
+  ],
+  "content": {
+    "intro": "This lesson covers Health Checks and Service Recovery. You will connect the named subtopics from the supplied Docker curriculum to a small, observable example. Work through the visual first, then use the example to form a prediction and check it against the actual behavior.",
+    "why_it_matters": "Docker Compose describes a multi-service application declaratively. It can define images/builds, networks, volumes, environment, health checks, and dependencies; startup order alone does not guarantee that a dependency is ready to accept requests. Learning health checks and service recovery helps you make deployment behavior explicit and repeatable instead of relying on a command that happened to work on one machine.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Overview roadmap for module 21, Production Deployment and Operations.",
+        "asset_path": "diagrams/module-21-overview.svg",
+        "alt_text": "Overview roadmap for module 21, Production Deployment and Operations.",
+        "caption": "Module roadmap showing the learning sequence for Production Deployment and Operations; use it to connect the lesson topics and checkpoints."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Docker Compose describes a multi-service application declaratively. It can define images/builds, networks, volumes, environment, health checks, and dependencies; startup order alone does not guarantee that a dependency is ready to accept requests."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the supplied curriculum",
+        "items": [
+          {
+            "title": "Health-check design",
+            "text": "Operational signals should help answer what failed, when it failed, and what changed. Establish a baseline and record the checks used to decide that the service recovered."
+          },
+          {
+            "title": "Startup failure handling",
+            "text": "For startup failure handling, name the relevant Docker object, setting, or operational step; predict its effect; and capture evidence from a controlled test or inspection command. Relate the result back to health checks and service recovery rather than assuming that a successful command proves the wider system is correct."
+          },
+          {
+            "title": "Restart policies",
+            "text": "For restart policies, name the relevant Docker object, setting, or operational step; predict its effect; and capture evidence from a controlled test or inspection command. Relate the result back to health checks and service recovery rather than assuming that a successful command proves the wider system is correct."
+          },
+          {
+            "title": "Dependency availability",
+            "text": "For dependency availability, name the relevant Docker object, setting, or operational step; predict its effect; and capture evidence from a controlled test or inspection command. Relate the result back to health checks and service recovery rather than assuming that a successful command proves the wider system is correct."
+          },
+          {
+            "title": "Verifying recovery behavior",
+            "text": "Write down preconditions, the expected healthy state, evidence to capture, and the recovery path; rehearse in a test environment before relying on the procedure."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "Start with the supplied example for health checks and service recovery. Before running it, state what you expect to happen. Compare the real output with that prediction, then change one variable or setting in a disposable lab to test the boundary of the idea. If a command is not supported on your operating system or installed Docker version, consult the linked official reference and record the actual version rather than guessing."
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Health Checks and Service Recovery",
+        "language": "shell",
+        "code": "docker ps -a\ndocker logs --tail 50 CONTAINER_NAME\ndocker inspect CONTAINER_NAME",
+        "expected_output": "The commands show container state, recent application output, and the inspectable runtime configuration for a chosen container.",
+        "run_instructions": "Replace CONTAINER_NAME with a container from your disposable lab. Preserve the exact error text before changing settings.",
+        "reset_steps": "Read-only diagnostics; no reset is required.",
+        "execution_mode": "human-review",
+        "safety_note": "Do not include secrets or personal data in captured logs or incident reports.",
+        "limitations": "CodeLeaf currently does not execute Docker Engine, Docker Compose, build, networking, or host-administration commands from lesson pages. Use the example as inspectable material and run only in an approved local lab. Production services and arbitrary learner commands must never run inside the FastAPI web process.",
+        "schema_assumptions": "Confirm the installed Docker Engine, CLI, Compose, and Buildx versions and the target OS before using version- or platform-sensitive options."
+      },
+      {
+        "type": "callout",
+        "title": "Practical checkpoint",
+        "text": "Keep this lesson in draft while reviewing: Health Checks and Service Recovery. Capture the command/configuration, expected and actual result, one failure or edge case, and cleanup performed. This course does not award XP from content files; CodeLeaf backend rules remain authoritative."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-229-questions.json"
+  },
+  "task": "Apply health checks and service recovery to a small local case. Record the configuration or command, expected result, observed result, one limitation/edge case, and how you verified the result.",
+  "hints": [
+    "Begin with read-only inspection commands and identify the active Docker context before any mutating action.",
+    "Use a disposable name, local test image, and synthetic data; change one thing at a time.",
+    "If the outcome differs, preserve the exact error and logs, check the official reference for your installed version, and document the verified fix."
+  ],
+  "expected_output": "The commands show container state, recent application output, and the inspectable runtime configuration for a chosen container.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Assuming that a successful start means the application is ready.",
+      "why": "A container can start while its dependent service is unavailable or the application is failing after startup.",
+      "fix": "Inspect health/status and logs; add a meaningful health check or retry strategy where appropriate."
+    },
+    {
+      "problem": "Keeping required data only in the container writable layer.",
+      "why": "Replacing the container can discard that layer and its application state.",
+      "fix": "Select a named volume or an external storage system, then rehearse a restore."
+    },
+    {
+      "problem": "Copying a command without checking context, target, or permissions.",
+      "why": "Docker commands affect the active endpoint and can change host resources or publish services.",
+      "fix": "Check `docker context show`, use an isolated lab, make the smallest change, and verify the resulting state."
+    }
+  ],
+  "summary": [
+    "Docker Compose describes a multi-service application declaratively. It can define images/builds, networks, volumes, environment, health checks, and dependencies; startup order alone does not guarantee that a dependency is ready to accept requests.",
+    "The attached PDF lists 5 subtopic(s) under this lesson; keep each one represented in the explanation and practical notes.",
+    "Docker execution mode in CodeLeaf is human-run/static validation only; do not interpret code display as evidence that a command was executed."
+  ],
+  "sources": [
+    {
+      "title": "Use Compose in production",
+      "url": "https://docs.docker.com/compose/how-tos/production/",
+      "publisher": "Docker Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "production overrides",
+        "single-host deployment",
+        "release updates"
+      ]
+    },
+    {
+      "title": "Volumes",
+      "url": "https://docs.docker.com/engine/storage/volumes/",
+      "publisher": "Docker Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "persistent storage",
+        "named volumes",
+        "volume lifecycle"
+      ]
+    },
+    {
+      "title": "Configure logging drivers",
+      "url": "https://docs.docker.com/engine/logging/configure/",
+      "publisher": "Docker Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "logging drivers",
+        "log rotation",
+        "logging configuration"
+      ]
+    },
+    {
+      "title": "Runtime resource constraints",
+      "url": "https://docs.docker.com/engine/containers/resource_constraints/",
+      "publisher": "Docker Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "CPU limits",
+        "memory limits",
+        "out-of-memory behavior"
+      ]
+    }
+  ],
+  "exercise_files": [],
+  "status": "draft",
+  "status_note": "Generated as a reviewable first draft from the full Docker syllabus. Commands and build snippets have not been executed in a Docker daemon during this generation run; review syntax and platform assumptions before publishing."
+}

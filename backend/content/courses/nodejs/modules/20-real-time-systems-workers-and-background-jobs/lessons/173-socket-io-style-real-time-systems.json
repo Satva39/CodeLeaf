@@ -1,0 +1,168 @@
+{
+  "id": "nodejs-lesson-173",
+  "slug": "socket-io-style-real-time-systems",
+  "title": "Socket.IO-Style Real-Time Systems",
+  "sequence": 173,
+  "module_id": "nodejs-module-20",
+  "module_slug": "real-time-systems-workers-and-background-jobs",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "nodejs-lesson-172"
+  ],
+  "previous_lesson_id": "nodejs-lesson-172",
+  "next_lesson_id": "nodejs-lesson-174",
+  "keywords": [
+    "Socket.IO-Style Real-Time Systems",
+    "Rooms",
+    "Event names and payloads",
+    "Acknowledgements",
+    "Reconnection behavior",
+    "Node.js",
+    "JavaScript runtime"
+  ],
+  "source_syllabus_number": 173,
+  "subtopics": [
+    "Rooms",
+    "Event names and payloads",
+    "Acknowledgements",
+    "Reconnection behavior",
+    "Distinguishing framework-specific behavior from native WebSockets"
+  ],
+  "learning_outcomes": [
+    "Describe Rooms and explain how it relates to Socket.IO-Style Real-Time Systems.",
+    "Demonstrate Event names and payloads in a small Node.js example and predict the observable result.",
+    "Test a failure, boundary, lifecycle, or version-compatibility case involving Acknowledgements."
+  ],
+  "content": {
+    "intro": "Socket.IO-Style Real-Time Systems is part of real time systems workers and background jobs. This lesson connects Rooms, Event names and payloads, Acknowledgements to a concrete Node.js example. Focus on the behavior you can observe, the assumptions the API makes, and one failure or boundary case.",
+    "why_it_matters": "Real-time systems keep connections or background work alive and must manage lifecycle, backpressure, retry, and identity. Test reconnects, duplicate messages, disconnect cleanup, worker failures, and shutdown while work is active.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Socket.IO-Style Real-Time Systems: concept map",
+        "asset_path": "diagrams/lessons/lesson-173-socket-io-style-real-time-systems.svg",
+        "alt_text": "Concept map for lesson 173: Socket.IO-Style Real-Time Systems. It shows representative syllabus concepts in a Concept → Example → Verification sequence.",
+        "caption": "Read the three labeled cards from left to right; the lesson steps connect the concept to a practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Real-time systems keep connections or background work alive and must manage lifecycle, backpressure, retry, and identity. Authenticate connections, authorize each event/resource, clean up disconnected clients, and design idempotent job handling."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Rooms",
+            "text": "For Rooms, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Event names and payloads",
+            "text": "For Event names and payloads, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Acknowledgements",
+            "text": "For Acknowledgements, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Reconnection behavior",
+            "text": "For Reconnection behavior, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Distinguishing framework-specific behavior from native WebSockets",
+            "text": "For Distinguishing framework-specific behavior from native WebSockets, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "const realtimePolicy = { authenticateConnection: true, authorizeEachRoom: true, limitMessageSize: true };\nconsole.log(Object.values(realtimePolicy).every(Boolean));",
+        "expected_output": "true; a live connection does not automatically authorize every message or room.",
+        "run_instructions": "Inspect this JavaScript in a local Node.js project. It is a static-validation teaching example: CodeLeaf does not run this arbitrary example in the API process. If it needs a package, file, server, database, or external service, provision that dependency in a separate local project and follow its official setup instructions. Run with `node example.mjs` when the example is self-contained, or adapt the required imports/inputs first.",
+        "reset_steps": "Restore the starting snippet and inputs. Repeat with one different valid value and one invalid, missing, empty, or failure input appropriate to the example.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Start with the code shown above. Predict the result before running it, then verify it against: job-42:1 Change one input or simulate one failure and describe how the behavior should change. Test reconnects, duplicate messages, disconnect cleanup, worker failures, and shutdown while work is active."
+      },
+      {
+        "type": "callout",
+        "title": "Runtime and safety note",
+        "text": "Teaching baseline: use a supported Node.js LTS release (Node.js 24 LTS as checked on 2026-10-13). The official releases page lists Node.js 26 as Current and Node.js 24/22 as LTS. Some advanced APIs, flags, permission behavior, embedded SQLite capabilities, module-loader hooks, and TypeScript integration are version-sensitive; verify the exact installed runtime. The Node.js 22 runtime available in the build-check environment is used only for syntax checks. This example is for learning and static validation, not for executing untrusted learner code inside CodeLeaf."
+      }
+    ],
+    "task": "Create or inspect a small Node.js example for Socket.IO-Style Real-Time Systems. Include at least one listed subtopic, document the expected result, and verify a normal case plus a boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates a named lesson concept, rather than only mentioning the title.",
+      "Expected output or observable behavior is documented and reproducible.",
+      "At least one invalid, empty, timeout, resource, or failure case is handled or explained.",
+      "The solution does not put secrets in source code and does not execute untrusted code inside the production API process."
+    ],
+    "hints": [
+      "Start with Rooms; identify the input, operation, and observable result.",
+      "Run the smallest relevant example in the selected Node.js release before adding frameworks or external services.",
+      "Test one failure or boundary case for Event names and payloads, then explain why the outcome is expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming a socket connection itself proves the caller can access every message or resource.",
+        "why": "The code may pass a simple demonstration yet fail with real inputs, resource limits, timing, or runtime differences.",
+        "fix": "Apply authorization at the event/resource boundary and persist critical work with explicit idempotency keys."
+      },
+      {
+        "problem": "Copying a snippet without checking its runtime, dependencies, input assumptions, or cleanup behavior.",
+        "why": "Node.js APIs and surrounding ecosystem tools have explicit version, trust, and resource boundaries.",
+        "fix": "State the environment and dependency assumptions, then rerun the example from a clean starting state."
+      }
+    ],
+    "summary": [
+      "For Rooms, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone.",
+      "This lesson covers: Rooms, Event names and payloads, Acknowledgements, Reconnection behavior.",
+      "Verify both normal and failure behavior, and document runtime, dependency, and resource assumptions."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-173-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Socket.IO documentation",
+      "url": "https://socket.io/docs/v4/",
+      "publisher": "Socket.IO project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "optional real-time framework concepts"
+      ]
+    },
+    {
+      "title": "Worker threads",
+      "url": "https://nodejs.org/api/worker_threads.html",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "worker threads",
+        "CPU-bound task offloading",
+        "message passing"
+      ]
+    },
+    {
+      "title": "Child process",
+      "url": "https://nodejs.org/api/child_process.html",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "child processes",
+        "safe process execution"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Source-derived syllabus; educational draft requiring technical/instructional review before publication."
+}

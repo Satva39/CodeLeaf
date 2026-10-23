@@ -1,0 +1,174 @@
+{
+  "id": "csharp-lesson-097",
+  "slug": "generic-constraints",
+  "title": "Generic Constraints",
+  "sequence": 97,
+  "module_id": "csharp-module-12",
+  "module_slug": "generics-and-type-safe-reuse",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "csharp-lesson-096"
+  ],
+  "previous_lesson_id": "csharp-lesson-096",
+  "next_lesson_id": "csharp-lesson-098",
+  "keywords": [
+    "generic",
+    "constraints",
+    "generics and type-safe reuse",
+    "c#",
+    ".net"
+  ],
+  "source_syllabus_number": 97,
+  "subtopics": [
+    "The where clause",
+    "Reference-type constraints",
+    "Value-type constraints",
+    "Constructor constraints",
+    "Interface constraints",
+    "Base-class constraints",
+    "Nullable and unmanaged constraints"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of generic constraints in a C#/.NET program.",
+    "Predict the result of the included C# example and verify the documented output.",
+    "Apply generic constraints to a small task and identify one relevant boundary, limitation, or version requirement."
+  ],
+  "content": {
+    "intro": "Generic Constraints is lesson 97 in Generics and Type-Safe Reuse. Generics let one implementation work with multiple types while preserving compile-time type information. Constraints state which capabilities the implementation requires.",
+    "why_it_matters": "Generics avoid duplicating algorithms while preserving useful information about the values being processed. This lesson focuses on generic constraints and shows how to verify the behavior instead of relying on assumptions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Generic Constraints: concept trace",
+        "asset_path": "diagrams/lesson-097-generic-constraints.svg",
+        "alt_text": "Four-stage concept trace for Generic Constraints: Type parameter T: One algorithm; Constraint: Required capabilities; Compiler: Checks usage; Caller: Keeps concrete type.",
+        "caption": "Trace the stages of Generic Constraints; use the code example to verify the behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Generics let one implementation work with multiple types while preserving compile-time type information. Constraints state which capabilities the implementation requires."
+      },
+      {
+        "type": "paragraph",
+        "title": "A practical way to learn it",
+        "text": "Start with the smallest valid case for generic constraints. Predict the output, run or inspect the example in the stated toolchain, then change one input or rule and compare the result. For production code, record assumptions and verify boundary cases."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics to connect",
+        "items": [
+          {
+            "title": "The where clause",
+            "text": "Generics preserve type information while letting one implementation work with many types. Constraints state requirements at compile time; variance changes assignment compatibility only in supported input/output positions."
+          },
+          {
+            "title": "Reference-type constraints",
+            "text": "A generic constraint states the operations or type relationships the implementation is allowed to rely on."
+          },
+          {
+            "title": "Value-type constraints",
+            "text": "A generic constraint states the operations or type relationships the implementation is allowed to rely on."
+          },
+          {
+            "title": "Constructor constraints",
+            "text": "Make required state explicit during object creation and keep partially initialized objects from escaping."
+          },
+          {
+            "title": "Interface constraints",
+            "text": "An interface describes a capability callers can depend on without depending on the implementation details."
+          },
+          {
+            "title": "Base-class constraints",
+            "text": "A generic constraint states the operations or type relationships the implementation is allowed to rely on."
+          },
+          {
+            "title": "Nullable and unmanaged constraints",
+            "text": "Treat absence explicitly. Check null before dereferencing, use a deliberate fallback, and do not silence nullable warnings without evidence."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "csharp",
+        "execution_mode": "static-validation",
+        "code": "// Lesson 97: Generic Constraints\nstatic T First<T>(IEnumerable<T> values) => values.First();\nConsole.WriteLine(First(new[] { 6, 7, 8 }));",
+        "expected_output": "6",
+        "run_instructions": "This snippet is a static reference; CodeLeaf does not execute C# in the browser. To run it, create a .NET 10 console app with `dotnet new console`, replace Program.cs with the example (keeping any required using directives), then run `dotnet run`. A snippet that names a test framework, provider package, unsafe setting, or advanced runtime feature must be placed in a project with that dependency/configuration.",
+        "reset_steps": "Restore the documented snippet, rerun it locally in a compatible .NET project, and compare output. Remove temporary files or test data after checking them. Do not treat the in-page output panel as execution."
+      },
+      {
+        "type": "callout",
+        "title": "Version and reliability note",
+        "text": "Generics let one implementation work with multiple types while preserving compile-time type information. Constraints state which capabilities the implementation requires."
+      }
+    ],
+    "task": "Try it yourself: create a small C# example that demonstrates generic constraints. Change one input or implementation detail, predict the result, then check it locally and explain one edge case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates generic constraints rather than only repeating its definition.",
+      "The result is checked locally or against a clearly documented reference output.",
+      "At least one relevant boundary, invalid-input case, or compatibility condition is considered."
+    ],
+    "hints": [
+      "List the assumptions and expected behavior for generic constraints before editing the code.",
+      "Change one variable or rule at a time; keep the previous output for comparison.",
+      "If behavior differs, confirm the compiler/target framework and consult the linked official documentation."
+    ],
+    "solution_notes": "Suggested approach: identify the expected input and output, start from the smallest example, use the feature only where it clarifies the rule, and verify both a typical case and a boundary/failure case.",
+    "expected_output": "6",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-097-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the feature works identically on every target",
+        "why": "Language syntax, libraries, and runtime support are version-dependent.",
+        "fix": "Check the target framework and official versioned reference before using the feature."
+      },
+      {
+        "problem": "Testing only a happy path",
+        "why": "Boundary values, malformed input, and failure states often expose the real bug.",
+        "fix": "Add one typical input and one boundary or invalid case to the manual or automated checks."
+      },
+      {
+        "problem": "Treating sample output as proof that the code ran",
+        "why": "The course reader uses static reference output for C# because it has no C# execution runner.",
+        "fix": "Run the snippet in a local .NET project or a separately isolated execution service."
+      }
+    ],
+    "summary": [
+      "Generic Constraints belongs to Generics and Type-Safe Reuse.",
+      "Generics let one implementation work with multiple types while preserving compile-time type information. Constraints state which capabilities the implementation requires.",
+      "Check assumptions, verify output, and document one meaningful limitation or edge case."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "C# language documentation",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/",
+      "publisher": "Microsoft Learn",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "Generics and Type-Safe Reuse",
+        "Generic Constraints",
+        "language and .NET concepts"
+      ]
+    },
+    {
+      "title": "C# language version history",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-version-history",
+      "publisher": "Microsoft Learn",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "feature-version history",
+        "compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson expanded from the numbered C# syllabus in C#(1).pdf. Code examples and pedagogical framing are original. Review feature compatibility and compile every runnable sample with the target .NET SDK before publication."
+}

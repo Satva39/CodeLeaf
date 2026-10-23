@@ -1,0 +1,205 @@
+{
+  "id": "cpp-lesson-239",
+  "slug": "building-production-quality-cpp-applications",
+  "title": "Building Production-Quality C++ Applications",
+  "sequence": 239,
+  "module_id": "cpp-module-21",
+  "module_slug": "real-world-cpp-development-and-capstone-work",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "specialized",
+  "estimated_minutes": 19,
+  "prerequisites": [
+    "cpp-lesson-238"
+  ],
+  "previous_lesson_id": "cpp-lesson-238",
+  "next_lesson_id": null,
+  "keywords": [
+    "building-production-quality-cpp-applications",
+    "translating-requirements-into-a-design",
+    "establishing-a-build-and-test-pipeline",
+    "implementing-core-features",
+    "managing-errors-and-failure-modes",
+    "reviewing-security-and-ownership",
+    "profiling-and-optimizing",
+    "documenting-and-packaging"
+  ],
+  "source_syllabus_number": 239,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Translating Requirements Into a Design",
+    "Establishing a Build and Test Pipeline",
+    "Implementing Core Features",
+    "Managing Errors and Failure Modes",
+    "Reviewing Security and Ownership",
+    "Profiling and Optimizing",
+    "Documenting and Packaging",
+    "Final Code Review and Release Checklist"
+  ],
+  "learning_outcomes": [
+    "Describe when building production-quality c++ applications is useful and what problem it does not solve.",
+    "Evaluate a small example against its stated constraints, standard version and implementation assumptions.",
+    "Select a test or tool that can provide evidence of correctness without treating one successful run as proof."
+  ],
+  "content": {
+    "intro": "Building Production-Quality C++ Applications focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Building Production-Quality C++ Applications matters because separate domain logic from I/O and third-party APIs, define error behavior, and deliver repeatable build, test and release instructions. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Building Production-Quality C++ Applications: visual trace",
+        "asset_path": "diagrams/lessons/lesson-239.svg",
+        "alt_text": "Lesson 239 visual for Building Production-Quality C++ Applications; concept: Translating Requirements Into a Design; apply: Establishing a Build and Test Pipeline; verify: Implementing Core Features.",
+        "caption": "Original lesson-specific overview: understand translating requirements into a design, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Real applications connect language features to requirements, interfaces, libraries, operating systems and users. External dependencies introduce their own compatibility and security contracts.\n\nBuilding Production-Quality C++ Applications focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nSeparate domain logic from I/O and third-party APIs, define error behavior, and deliver repeatable build, test and release instructions."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Building Production-Quality C++ Applications",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <iostream>\n#include <string_view>\n\nbool valid_quantity(int quantity) { return quantity >= 0 && quantity <= 100000; }\nint main() {\n    constexpr std::string_view build_mode = \"release\";\n    std::cout << build_mode << \", valid=\" << std::boolalpha << valid_quantity(12) << '\\n';\n}\n",
+        "expected_output": "release, valid=true",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "Production-quality software combines explicit contracts, tests, secure defaults, observability, reproducible builds and documented support boundaries."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Translating Requirements Into a Design",
+            "text": "Use translating requirements into a design as a design decision: state the contract, explain the trade-off, and keep the implementation maintainable and testable."
+          },
+          {
+            "title": "Establishing a Build and Test Pipeline",
+            "text": "Explain establishing a build and test pipeline in the context of Building Production-Quality C++ Applications: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Implementing Core Features",
+            "text": "Explain implementing core features in the context of Building Production-Quality C++ Applications: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Managing Errors and Failure Modes",
+            "text": "Identify how managing errors and failure modes can fail, what diagnostic evidence to collect, and which validation or design choice reduces the risk."
+          },
+          {
+            "title": "Reviewing Security and Ownership",
+            "text": "Secure C++ begins with valid ranges, explicit ownership, safe library abstractions, input validation and review of error paths and dependencies."
+          },
+          {
+            "title": "Profiling and Optimizing",
+            "text": "Profiling measures where time or memory is spent; optimize only after correctness checks and repeatable measurements establish a real bottleneck."
+          },
+          {
+            "title": "Documenting and Packaging",
+            "text": "Explain documenting and packaging in the context of Building Production-Quality C++ Applications: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Final Code Review and Release Checklist",
+            "text": "Explain final code review and release checklist in the context of Building Production-Quality C++ Applications: identify the rule, trace a minimal example, and check one boundary or failure case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate translating requirements into a design, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "This topic may depend on newer C++ language or library support; this example uses a C++20-compatible illustration. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-239-questions.json",
+    "task": "Extend the example for Building Production-Quality C++ Applications with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+    "task_acceptance_criteria": [
+      "The code compiles in the documented standard mode with warnings enabled.",
+      "The predicted output matches the actual result for the added case.",
+      "One relevant boundary, lifetime, portability or error case is tested or documented."
+    ],
+    "hints": [
+      "Start by isolating the central rule from Building Production-Quality C++ Applications.",
+      "Trace values or object lifetimes before changing the program.",
+      "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+    ],
+    "summary": [
+      "Building Production-Quality C++ Applications is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying building production-quality c++ applications.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "release, valid=true"
+  },
+  "task": "Extend the example for Building Production-Quality C++ Applications with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+  "hints": [
+    "Start by isolating the central rule from Building Production-Quality C++ Applications.",
+    "Trace values or object lifetimes before changing the program.",
+    "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+  ],
+  "expected_output": "release, valid=true",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Building Production-Quality C++ Applications is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying building production-quality c++ applications.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 21, lesson 239: Building Production-Quality C++ Applications.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

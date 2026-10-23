@@ -1,0 +1,18 @@
+{
+  "id": "cpp-exercise-solution-011",
+  "exercise_id": "cpp-exercise-011",
+  "title": "Grade calculator reference solution notes",
+  "language": "cpp",
+  "answer": "#include <iostream>\n#include <optional>\nstd::optional<char> grade_for(int score) {\n    if (score < 0 || score > 100) return std::nullopt;\n    if (score >= 90) return 'A';\n    if (score >= 80) return 'B';\n    if (score >= 70) return 'C';\n    if (score >= 60) return 'D';\n    return 'F';\n}\nint main() {\n    if (auto grade = grade_for(86)) std::cout << *grade << '\\n';\n    else std::cout << \"invalid score\\n\";\n}\n",
+  "explanation": "B",
+  "manual_validation_checklist": [
+    "Compile locally with C++20 and -Wall -Wextra -Wpedantic (add the external library named in the solution when applicable).",
+    "Test normal inputs and at least one boundary/failure case named in the exercise prompt.",
+    "Check integer range, object lifetime, resource cleanup and error handling where relevant.",
+    "Validate the score before assigning a grade. Boundaries such as 59/60 and 89/90 should have explicit tests.",
+    "Keep this solution in repository-only protected content; do not include it in learner API responses."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only reference notes; replace with a reviewed implementation and test suite before publishing the exercise."
+}

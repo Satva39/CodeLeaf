@@ -1,0 +1,207 @@
+{
+  "id": "pytorch-lesson-043",
+  "slug": "activation-functions",
+  "title": "Activation Functions",
+  "sequence": 43,
+  "module_id": "pytorch-module-06",
+  "module_slug": "neural-networks-with-torch-nn",
+  "level": "Intermediate",
+  "difficulty": "intermediate",
+  "track": "core-modeling",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "pytorch-lesson-042"
+  ],
+  "previous_lesson_id": "pytorch-lesson-042",
+  "next_lesson_id": "pytorch-lesson-044",
+  "keywords": [
+    "activation-functions",
+    "relu-and-variants",
+    "sigmoid-and-tanh",
+    "gelu-and-silu",
+    "softmax-and-log-softmax",
+    "selecting-activations-for-different-tasks",
+    "pytorch",
+    "deep-learning"
+  ],
+  "learning_outcomes": [
+    "Explain the role of activation functions in a PyTorch workflow.",
+    "Apply a small example of activation functions and interpret the output.",
+    "Identify a relevant limitation, debugging check, or reproducibility concern."
+  ],
+  "content": {
+    "intro": "Activation Functions: The torch.nn API packages layers, parameters, buffers, and reusable forward computations into modules. `nn.Module` makes model structure inspectable and composable. In this lesson, use a small example to make the inputs, outputs, and boundary conditions explicit.",
+    "why_it_matters": "Reusable model components keep parameter registration and forward logic consistent as a network grows beyond a one-off tensor expression. For this lesson, focus on relu and variants and the evidence you can collect from a controlled example.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 06 roadmap",
+        "asset_path": "diagrams/module-06-overview.svg",
+        "alt_text": "Overview diagram of the ordered lessons in module 6: Neural Networks with torch.nn. This lesson is item 43 in the 164-lesson course.",
+        "caption": "Orientation map for Neural Networks with torch.nn; use the list below to connect this lesson to related ideas."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Implement module setup in __init__, compute outputs in forward, and use registered child modules/parameters so optimizers and state_dict can discover them. The source topics for this lesson are: ReLU and variants, Sigmoid and tanh, GELU and SiLU. Keep each topic connected to a checkable input/output behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "Read the example",
+        "text": "Trace the batch dimension through each layer and confirm the model returns the expected output shape. Count parameters or inspect named_parameters when needed. The example is a teaching-scale check, not evidence of a trained model score or a hardware-independent performance claim."
+      },
+      {
+        "type": "list",
+        "title": "Source-aligned topic checklist",
+        "items": [
+          {
+            "title": "ReLU and variants",
+            "text": "Connect this topic to the lesson workflow: Implement module setup in __init__, compute outputs in forward, and use registered child modules/parameters so optimizers and state_dict can discover them. Write down the expected behavior and test it on a small, inspectable input."
+          },
+          {
+            "title": "Sigmoid and tanh",
+            "text": "Connect this topic to the lesson workflow: Implement module setup in __init__, compute outputs in forward, and use registered child modules/parameters so optimizers and state_dict can discover them. Write down the expected behavior and test it on a small, inspectable input."
+          },
+          {
+            "title": "GELU and SiLU",
+            "text": "Connect this topic to the lesson workflow: Implement module setup in __init__, compute outputs in forward, and use registered child modules/parameters so optimizers and state_dict can discover them. Write down the expected behavior and test it on a small, inspectable input."
+          },
+          {
+            "title": "Softmax and log-softmax",
+            "text": "Connect this topic to the lesson workflow: Implement module setup in __init__, compute outputs in forward, and use registered child modules/parameters so optimizers and state_dict can discover them. Write down the expected behavior and test it on a small, inspectable input."
+          },
+          {
+            "title": "Selecting activations for different tasks",
+            "text": "Connect this topic to the lesson workflow: Implement module setup in __init__, compute outputs in forward, and use registered child modules/parameters so optimizers and state_dict can discover them. Write down the expected behavior and test it on a small, inspectable input."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Guided PyTorch example",
+        "language": "python",
+        "code": "import torch\nfrom torch.nn import functional as F\nx = torch.tensor([-2.0, 0.0, 3.0])\nprint(F.relu(x).tolist())",
+        "expected_output": "[0.0, 0.0, 3.0]",
+        "run_instructions": "Save as example.py in a Python environment with a compatible PyTorch installation, then run `python example.py`. PyTorch snippets are not executed in the browser. For GPU- or package-specific snippets, install the matching supported dependencies first.",
+        "reset_steps": "Restore the code block, rerun it, and compare both the printed output and tensor metadata.",
+        "run_mode": "server-runner"
+      },
+      {
+        "type": "callout",
+        "title": "Version and execution note",
+        "text": "The code block is a local Python example, not a browser execution promise. CodeLeaf does not currently provide an isolated general-purpose Python runner; use a virtual environment. Installation commands, optional packages, hardware behavior, and rapidly evolving specialist APIs must be checked against the linked official documentation."
+      }
+    ],
+    "task": "Try it yourself: Implement an nn.Module with two linear layers and an activation; test batch sizes 1 and 4 and inspect parameter names. Record the observed result and one limitation; do not report an unrun training or performance result as measured.",
+    "task_acceptance_criteria": [
+      "The experiment demonstrates at least one relevant aspect of activation functions.",
+      "Record the expected and observed result, including shape/dtype/device information when relevant.",
+      "Explain one common failure mode, compatibility limitation, or evaluation caveat."
+    ],
+    "hints": [
+      "Begin with the smallest working example for activation functions and keep input shapes explicit.",
+      "Change only one variable at a time; compare a tensor property, a printed value, or a test assertion.",
+      "Use the linked official reference for any hardware-specific, optional-package, or version-sensitive behavior."
+    ],
+    "expected_output": "[0.0, 0.0, 3.0]",
+    "troubleshooting": [
+      {
+        "symptom": "A tensor operation raises a shape, dtype, or device mismatch.",
+        "check": "Print .shape, .dtype, and .device for each input. Resolve the mismatch intentionally instead of changing dimensions blindly."
+      },
+      {
+        "symptom": "The example fails because an optional package or accelerator is unavailable.",
+        "check": "Check the installed PyTorch/package versions and device availability. Use the official installation selector and run the CPU-compatible path where appropriate."
+      },
+      {
+        "symptom": "The result differs across runs or machines.",
+        "check": "Fix the seed where useful, record versions and inputs, and document operations that remain nondeterministic or hardware dependent."
+      }
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Relying on assumptions instead of inspecting the data or output.",
+        "why": "Many ML failures come from incorrect shapes, labels, preprocessing, or execution mode rather than a syntax error.",
+        "fix": "Inspect representative inputs and add assertions for the expected shape, dtype, range, or behavior."
+      },
+      {
+        "problem": "Mixing training-time behavior with inference-time behavior.",
+        "why": "Dropout, normalization, gradient tracking, and optimizer updates can change how a model behaves.",
+        "fix": "Do not create trainable layers inside forward on each call; register them in __init__ so their parameters persist."
+      },
+      {
+        "problem": "Using a current or experimental API without recording its version assumptions.",
+        "why": "Hardware support and ecosystem APIs can change independently of the core package.",
+        "fix": "Pin compatible dependencies, record the environment, and test after upgrades."
+      }
+    ],
+    "summary": [
+      "Activation Functions belongs to the Neural Networks with torch.nn learning path.",
+      "Practice relu and variants, sigmoid and tanh, gelu and silu using the source-aligned checklist and read-example explanation.",
+      "Do not create trainable layers inside forward on each call; register them in __init__ so their parameters persist."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-043-questions.json",
+    "solution_notes": "The linked lesson knowledge-check answers and exercise reference solutions are kept in protected backend content files. A published endpoint must return learner-safe prompts only.",
+    "run_mode": "server-runner",
+    "execution_note": "Requires a local or separately isolated Python runner. Do not execute learner-supplied Python inside the FastAPI process or the production web container.",
+    "references": [
+      {
+        "title": "PyTorch API Documentation",
+        "url": "https://docs.pytorch.org/docs/stable/",
+        "publisher": "PyTorch",
+        "checked_on": "2026-10-20",
+        "supports": [
+          "tensor operations",
+          "torch.nn",
+          "autograd",
+          "testing",
+          "serialization"
+        ]
+      },
+      {
+        "title": "Learn the Basics",
+        "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro.html",
+        "publisher": "PyTorch Tutorials",
+        "checked_on": "2026-10-20",
+        "supports": [
+          "tensors",
+          "datasets and data loaders",
+          "transforms",
+          "models",
+          "autograd"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "PyTorch API Documentation",
+      "url": "https://docs.pytorch.org/docs/stable/",
+      "publisher": "PyTorch",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "tensor operations",
+        "torch.nn",
+        "autograd",
+        "testing",
+        "serialization"
+      ]
+    },
+    {
+      "title": "Learn the Basics",
+      "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro.html",
+      "publisher": "PyTorch Tutorials",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "tensors",
+        "datasets and data loaders",
+        "transforms",
+        "models",
+        "autograd"
+      ]
+    }
+  ],
+  "status": "draft"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "java-exercise-solution-011",
+  "exercise_id": "java-exercise-011",
+  "title": "Prime Number Checker reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "language": "java",
+  "answer": "public class Main {\n    public static boolean isPrime(int n) {\n        if (n < 2) return false;\n        for (int divisor = 2; divisor <= n / divisor; divisor++) {\n            if (n % divisor == 0) return false;\n        }\n        return true;\n    }\n    public static void main(String[] args) {\n        System.out.println(\"29 is prime: \" + isPrime(29));\n    }\n}",
+  "explanation": "Only test divisors up to the square root of n. The division-based bound avoids overflow that can occur with `divisor * divisor` for very large integers.",
+  "hidden_tests": [
+    {
+      "case": "normal case",
+      "input_or_setup": "Use the deterministic sample data or representative valid input described in the exercise.",
+      "expected_behavior": "29 is prime: true",
+      "purpose": "Verify the main behavior and the output contract."
+    },
+    {
+      "case": "boundary case",
+      "input_or_setup": "Test empty, zero, minimum/maximum, duplicate, or end-of-range input as appropriate to the exercise.",
+      "expected_behavior": "The result matches the documented boundary rule and does not silently corrupt state.",
+      "purpose": "Check a boundary or invariant."
+    },
+    {
+      "case": "invalid or failure case",
+      "input_or_setup": "Provide malformed input or simulate a missing file, unavailable endpoint, missing configuration, or database failure where relevant.",
+      "expected_behavior": "The operation fails clearly or returns a safe result; resources are released and secrets are not printed.",
+      "purpose": "Check explicit error behavior and cleanup."
+    }
+  ],
+  "review_notes": "Repository-only reference material. Keep it out of public API responses and frontend bundles. The platform grader is only a required-token smoke check; complete task-specific execution tests in an isolated Java runner before publication.",
+  "sample_expected_result": "29 is prime: true"
+}

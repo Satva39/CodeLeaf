@@ -1,0 +1,203 @@
+{
+  "id": "jquery-lesson-174",
+  "slug": "understanding-jquery-ui",
+  "title": "Understanding jQuery UI",
+  "sequence": 174,
+  "module_id": "jquery-module-20",
+  "module_slug": "integration-and-the-jquery-ecosystem",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "optional",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "jquery-lesson-173"
+  ],
+  "previous_lesson_id": "jquery-lesson-173",
+  "next_lesson_id": "jquery-lesson-175",
+  "keywords": [
+    "understanding jquery ui",
+    "jquery",
+    "javascript",
+    "integration and the jquery ecosystem",
+    "jquery ui versus jquery core",
+    "widgets and interactions",
+    "theming and configuration",
+    "widget lifecycle"
+  ],
+  "source_syllabus_number": 174,
+  "subtopics": [
+    "jQuery UI versus jQuery Core",
+    "Widgets and interactions",
+    "Theming and configuration",
+    "Widget lifecycle",
+    "Assessing maintenance and compatibility before adoption"
+  ],
+  "learning_outcomes": [
+    "Explain the role of understanding jquery ui in a jQuery application.",
+    "Apply jquery ui versus jquery core in a small example and describe its expected result.",
+    "Verify widgets and interactions with an explicit test or browser observation."
+  ],
+  "exercise_files": [
+    "../exercises/174-understanding-jquery-ui.json"
+  ],
+  "sources": [
+    {
+      "title": "jQuery UI and Widget Factory",
+      "url": "https://learn.jquery.com/jquery-ui/",
+      "publisher": "jQuery Learning Center",
+      "checked_on": "2026-10-12",
+      "source_type": "official_ecosystem_reference",
+      "supports": [
+        "Optional widgets",
+        "Widget Factory",
+        "Ecosystem scope"
+      ]
+    },
+    {
+      "title": "jQuery Learning Center: Plugins",
+      "url": "https://learn.jquery.com/plugins/",
+      "publisher": "jQuery Learning Center",
+      "checked_on": "2026-10-12",
+      "source_type": "official_learning_resource",
+      "supports": [
+        "Plugin patterns",
+        "Extending jQuery collections",
+        "Plugin maintenance"
+      ]
+    },
+    {
+      "title": "jQuery Learning Center",
+      "url": "https://learn.jquery.com/",
+      "publisher": "jQuery project",
+      "checked_on": "2026-10-12",
+      "source_type": "official_learning_resource",
+      "supports": [
+        "Concept explanations",
+        "Events",
+        "Effects",
+        "AJAX",
+        "Plugins",
+        "Performance",
+        "Code organization"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the attached syllabus and official references; requires lesson-by-lesson technical review, local execution, accessibility checks, and editorial approval.",
+  "content": {
+    "intro": "In this lesson, you will work through understanding jquery ui with a focused jQuery example. The subtopics below preserve the supplied curriculum coverage and connect the API idea to a small browser interface.",
+    "why_it_matters": "This topic is useful because it turns jquery ui versus jquery core into a repeatable implementation choice. jQuery Core is separate from jQuery UI and third-party plugins. Integrate it with server-rendered pages and modern JavaScript selectively, and avoid competing ownership of the same DOM subtree.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 20 overview",
+        "asset_path": "diagrams/module-20-overview.svg",
+        "alt_text": "Overview of Integration and the jQuery Ecosystem, illustrating the sequence from understanding the concept to implementing and checking it.",
+        "caption": "Use this module map to place understanding jquery ui within the wider learning path."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "jQuery Core is separate from jQuery UI and third-party plugins. Integrate it with server-rendered pages and modern JavaScript selectively, and avoid competing ownership of the same DOM subtree."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the supplied syllabus",
+        "items": [
+          "jQuery UI versus jQuery Core",
+          "Widgets and interactions",
+          "Theming and configuration",
+          "Widget lifecycle",
+          "Assessing maintenance and compatibility before adoption"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "// Optional ecosystem dependency; verify the compatible jQuery UI version.\n$(\"#date-input\").datepicker();",
+        "expected_output": "The widget initializes only when a compatible jQuery UI build and required dependencies are loaded. This is optional, not jQuery Core.",
+        "run_instructions": "Use a local HTML page with jQuery 4.0.0 loaded before app.js for JavaScript snippets. HTML and package-manager snippets can be checked as configuration examples. Run the interaction in browser DevTools, inspect the DOM/Network panel, and compare actual behavior with the expected result. Do not submit learner code to the production API for arbitrary execution.",
+        "reset_steps": "Restore the original markup and code, clear console/network filters, reload the local page, and repeat the same interaction. For a request example, return the mock endpoint to its original response before retrying."
+      },
+      {
+        "type": "callout",
+        "title": "Guided example",
+        "text": "Start with a known DOM structure, apply the pattern for understanding jquery ui, and test one normal case plus one edge case. Keep selectors scoped to the intended component and verify the real browser result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Integrate understanding jquery ui into a small existing page while keeping library responsibilities separate. Verify dependency loading and document any optional plugin version requirements."
+      }
+    ],
+    "task": "Integrate understanding jquery ui into a small existing page while keeping library responsibilities separate. Verify dependency loading and document any optional plugin version requirements.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates understanding jquery ui using a current, documented approach.",
+      "The learner records the expected and actual behavior and checks at least one edge case.",
+      "The example preserves semantic HTML and does not render untrusted data as HTML.",
+      "The test setup and any runtime limitation are documented honestly."
+    ],
+    "hints": [
+      "First identify which DOM nodes and runtime state are involved in understanding jquery ui.",
+      "Make one small change, inspect the resulting element or request, and compare it with the expected result.",
+      "If the result differs, check the selector, script order, browser console, event target, and relevant API documentation before adding more code."
+    ],
+    "expected_output": "The widget initializes only when a compatible jQuery UI build and required dependencies are loaded. This is optional, not jQuery Core.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-174-questions.json",
+    "common_mistakes": [
+      "Assuming a selector matched an element without checking the collection length.",
+      "Confusing jQuery collections with native DOM elements or live properties with markup attributes.",
+      "Using .html() with untrusted data or assuming client-side validation enforces server rules.",
+      "Treating a demo snippet as production-ready without testing failure and accessibility states."
+    ],
+    "summary": [
+      "Understanding jQuery UI is one part of the integration and the jquery ecosystem workflow.",
+      "jQuery Core is separate from jQuery UI and third-party plugins. Integrate it with server-rendered pages and modern JavaScript selectively, and avoid competing ownership of the same DOM subtree.",
+      "Use the official API or upgrade guide for version-specific behavior and verify an example locally before relying on it."
+    ],
+    "references": [
+      {
+        "title": "jQuery UI and Widget Factory",
+        "url": "https://learn.jquery.com/jquery-ui/",
+        "publisher": "jQuery Learning Center",
+        "checked_on": "2026-10-12",
+        "source_type": "official_ecosystem_reference",
+        "supports": [
+          "Optional widgets",
+          "Widget Factory",
+          "Ecosystem scope"
+        ]
+      },
+      {
+        "title": "jQuery Learning Center: Plugins",
+        "url": "https://learn.jquery.com/plugins/",
+        "publisher": "jQuery Learning Center",
+        "checked_on": "2026-10-12",
+        "source_type": "official_learning_resource",
+        "supports": [
+          "Plugin patterns",
+          "Extending jQuery collections",
+          "Plugin maintenance"
+        ]
+      },
+      {
+        "title": "jQuery Learning Center",
+        "url": "https://learn.jquery.com/",
+        "publisher": "jQuery project",
+        "checked_on": "2026-10-12",
+        "source_type": "official_learning_resource",
+        "supports": [
+          "Concept explanations",
+          "Events",
+          "Effects",
+          "AJAX",
+          "Plugins",
+          "Performance",
+          "Code organization"
+        ]
+      }
+    ]
+  }
+}

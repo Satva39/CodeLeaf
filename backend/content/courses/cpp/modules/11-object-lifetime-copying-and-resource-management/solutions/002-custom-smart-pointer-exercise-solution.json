@@ -1,0 +1,18 @@
+{
+  "id": "cpp-exercise-solution-031",
+  "exercise_id": "cpp-exercise-031",
+  "title": "Custom smart-pointer exercise reference solution notes",
+  "language": "cpp",
+  "answer": "#include <iostream>\n#include <utility>\nclass UniqueInt {\npublic:\n    explicit UniqueInt(int value) : ptr_(new int(value)) {}\n    ~UniqueInt() { delete ptr_; }\n    UniqueInt(const UniqueInt&) = delete;\n    UniqueInt& operator=(const UniqueInt&) = delete;\n    UniqueInt(UniqueInt&& other) noexcept : ptr_(std::exchange(other.ptr_, nullptr)) {}\n    UniqueInt& operator=(UniqueInt&& other) noexcept {\n        if (this != &other) { delete ptr_; ptr_ = std::exchange(other.ptr_, nullptr); }\n        return *this;\n    }\n    int& operator*() { return *ptr_; }\nprivate: int* ptr_;\n};\nint main() { UniqueInt a{7}; UniqueInt b{std::move(a)}; std::cout << *b << '\\n'; }\n",
+  "explanation": "7",
+  "manual_validation_checklist": [
+    "Compile locally with C++20 and -Wall -Wextra -Wpedantic (add the external library named in the solution when applicable).",
+    "Test normal inputs and at least one boundary/failure case named in the exercise prompt.",
+    "Check integer range, object lifetime, resource cleanup and error handling where relevant.",
+    "This intentionally small ownership wrapper demonstrates move-only transfer; prefer std::unique_ptr in real code rather than writing a custom smart pointer.",
+    "Keep this solution in repository-only protected content; do not include it in learner API responses."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only reference notes; replace with a reviewed implementation and test suite before publishing the exercise."
+}

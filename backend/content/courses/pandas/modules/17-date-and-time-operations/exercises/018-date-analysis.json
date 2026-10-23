@@ -1,0 +1,67 @@
+{
+  "id": "pandas-exercise-18",
+  "slug": "date-analysis",
+  "title": "Date Analysis",
+  "sequence": 18,
+  "lesson_id": "pandas-lesson-145",
+  "lesson_slug": "resampling-time-series-data",
+  "module_id": "pandas-module-17",
+  "difficulty": "intermediate",
+  "type": "code",
+  "prompt": "Parse timestamps and calculate daily and monthly summaries.",
+  "scenario": "Use the synthetic data described below to practise d, a, t, e, t, i, m, e,  , c, o, n, v, e, r, s, i, o, n,  , a, n, d,  , r, e, s, a, m, p, l, i, n, g. Do not assume the input is correct without validating it.",
+  "skills": "Datetime conversion and resampling",
+  "starter": {
+    "language": "python",
+    "code": "import pandas as pd\n\nrecords = pd.DataFrame({\"time\": [\"2026-01-01\", \"2026-01-01\", \"2026-01-02\"], \"sales\": [10, 5, 7]})\nrecords[\"time\"] = pd.to_datetime(records[\"time\"], errors=\"coerce\")\nprint(records.groupby(\"time\")[\"sales\"].sum().to_dict())",
+    "dataset_note": "Use small synthetic in-memory data; do not place private or real customer data in exercises."
+  },
+  "input_schema": {
+    "description": "Create or use a synthetic DataFrame with only the columns needed for this exercise.",
+    "validation": [
+      "Document expected columns and data types.",
+      "State how missing values or duplicates should be treated."
+    ]
+  },
+  "expected_output": [
+    "Parse timestamps using a stated format and timezone assumption.",
+    "Set a time-series index and summarize at daily or monthly frequency.",
+    "Report gaps or invalid timestamps rather than silently dropping them."
+  ],
+  "public_tests": [
+    {
+      "name": "normal-case",
+      "description": "The solution returns the required columns and correctly computes the stated result."
+    },
+    {
+      "name": "edge-case",
+      "description": "The solution documents behavior for a missing value, duplicate key, empty input, invalid value, or other relevant edge case."
+    }
+  ],
+  "hints": [
+    "Write down the expected result before coding.",
+    "Use Pandas operations that preserve labels unless position-based behavior is intended.",
+    "Add a small assertion for the most important property."
+  ],
+  "acceptance_criteria": [
+    "Parse timestamps using a stated format and timezone assumption.",
+    "Set a time-series index and summarize at daily or monthly frequency.",
+    "Report gaps or invalid timestamps rather than silently dropping them."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "d"
+    ],
+    "case_sensitive": false,
+    "note": "The generic short-response grader is only an initial scaffold; a reviewed isolated Python grader is required for automatic execution of arbitrary learner code."
+  },
+  "solution_file": "solutions/018-date-analysis-solution.json",
+  "solution": {},
+  "retry_policy": {
+    "max_attempts": null,
+    "allow_retry_after_feedback": true
+  },
+  "status": "draft",
+  "status_note": "Review prompt, starter, rubric, and server-side grading before publication."
+}

@@ -1,0 +1,69 @@
+{
+  "id": "jquery-exercise-094",
+  "slug": "displaying-validation-feedback",
+  "title": "Practice: Displaying Validation Feedback",
+  "type": "coding",
+  "lesson_id": "jquery-lesson-094",
+  "module_id": "jquery-module-11",
+  "difficulty": "medium",
+  "sequence": 94,
+  "source_exercise_id": "JQ-094",
+  "source_topics": [
+    94
+  ],
+  "prompt": "Create a form path for displaying validation feedback with visible success and failure states. Test empty, malformed, and valid values; document server-side validation that is still needed.",
+  "objective": "Apply displaying validation feedback in a controlled example and demonstrate expected behavior with a small test.",
+  "target_skills": [
+    "Displaying Validation Feedback",
+    "Adding invalid-state classes",
+    "Connecting messages to fields",
+    "Focus management after failed validation"
+  ],
+  "starter": {
+    "language": "javascript",
+    "code": "$(\"#profile-form\").on(\"submit\", function (event) {\n  const value = $(\"#email\").val().trim();\n  if (!value) { event.preventDefault(); $(\"#email-error\").text(\"Email is required.\"); }\n});\n\n// TODO: adapt the example to the task and add an edge-case check.\n"
+  },
+  "expected_output": "An empty email blocks this client-side submission and presents a field-specific message. Server validation is still required.",
+  "public_tests": [
+    {
+      "name": "Required implementation evidence",
+      "required_strings": [
+        "on(\"submit\"",
+        "val()",
+        "preventDefault()"
+      ]
+    },
+    {
+      "name": "Human review",
+      "checklist": [
+        "Behavior matches the prompt and documented expected result.",
+        "At least one relevant edge case is checked.",
+        "Keyboard and accessibility behavior is verified where relevant.",
+        "The learner can explain one implementation choice and one limitation."
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Demonstrate the core behavior for displaying validation feedback.",
+    "Include a repeatable check or written evidence for expected output.",
+    "Handle an empty, repeated, malformed, or failure state where it applies.",
+    "Keep user-provided content safe and describe any server-side responsibility."
+  ],
+  "hints": [
+    "Break displaying validation feedback into the smallest requirements.",
+    "Use the narrowest selector or API that expresses the task clearly.",
+    "Inspect the browser console and the changed DOM/request before changing more code."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "on(\"submit\"",
+      "val()",
+      "preventDefault()"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus rubric/human review; this check does not prove runtime correctness, accessibility, or production readiness.",
+  "retry_policy": "Retries are allowed. Incorrect or incomplete answers do not complete the exercise or award XP; the platform applies its fixed idempotent exercise reward only after a verified correct completion.",
+  "solution_file": "solutions/094-displaying-validation-feedback-solution.json",
+  "status": "draft"
+}

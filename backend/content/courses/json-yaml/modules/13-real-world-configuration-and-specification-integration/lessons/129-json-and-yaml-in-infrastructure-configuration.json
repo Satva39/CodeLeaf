@@ -1,0 +1,190 @@
+{
+  "id": "json-yaml-lesson-129",
+  "slug": "json-and-yaml-in-infrastructure-configuration",
+  "title": "JSON and YAML in Infrastructure Configuration",
+  "sequence": 129,
+  "module_id": "json-yaml-module-13",
+  "module_slug": "real-world-configuration-and-specification-integration",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "json-yaml-lesson-128"
+  ],
+  "previous_lesson_id": "json-yaml-lesson-128",
+  "next_lesson_id": "json-yaml-lesson-130",
+  "keywords": [
+    "json-and-yaml-in-infrastructure-configuration",
+    "representing-resources-configuration-dependencies-resource-parameters-environment-separation-validation-before-deployment",
+    "change-review-applying-least-privilege-and-secret-management-practices"
+  ],
+  "source_syllabus_number": 129,
+  "subtopics": [
+    "Representing resources. Configuration dependencies. Resource parameters. Environment separation. Validation before deployment.",
+    "Change review. Applying least-privilege and secret-management practices."
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of json and yaml in infrastructure configuration and identify at least one related syllabus concept.",
+    "Interpret the example for json and yaml in infrastructure configuration and describe its expected result.",
+    "Choose a relevant syntax, type, compatibility, security, or troubleshooting check for the example."
+  ],
+  "content": {
+    "intro": "This lesson focuses on json and yaml in infrastructure configuration and connects the PDF syllabus topics to a small, inspectable example. Work from the intended data model, write down the expected result, then verify syntax and semantics with the target tool.",
+    "why_it_matters": "JSON and YAML in Infrastructure Configuration matters because structured-data files sit between people, tools, services, and deployment systems. A clear contract and repeatable checks make the result easier to maintain and safer to consume.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "JSON and YAML in Infrastructure Configuration: visual explanation",
+        "asset_path": "diagrams/lessons/lesson-129-json-and-yaml-in-infrastructure-configuration.svg",
+        "alt_text": "JSON and YAML in Infrastructure Configuration: Representing resources. Configuration dependencies. Resource parameters. Environment separation. Validation before deployment. leads to Interpret / validate, then Expected structure.",
+        "caption": "Use this concept flow to predict the result for JSON and YAML in Infrastructure Configuration before you test the snippet."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Configuration and specification files have both syntax rules and application-specific contracts. File validity alone does not prove that a workflow, infrastructure tool, API description, or deployment setting is meaningful or safe."
+      },
+      {
+        "type": "paragraph",
+        "title": "What you will cover",
+        "text": "This lesson explicitly addresses: Representing resources. Configuration dependencies. Resource parameters. Environment separation. Validation before deployment.; Change review. Applying least-privilege and secret-management practices.. Treat each as part of a workflow: define what the data should mean, represent it consistently, and test how the chosen implementation interprets it."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: JSON and YAML in Infrastructure Configuration",
+        "language": "yaml",
+        "code": "resource:\n  name: demo-bucket\n  public_access: false\n  tags:\n    owner: platform\n    environment: test",
+        "expected_output": "Infrastructure configuration needs tool-specific schema/policy checks in addition to YAML syntax validation; these settings are illustrative only.",
+        "run_instructions": "Save as example.yaml and validate it with the exact parser/linter used by the target application. For Python experiments, use an isolated environment and safe loading for untrusted content. Do not assume every parser resolves ambiguous scalars identically.",
+        "reset_steps": "Restore the starting fixture before each test. Change one field, indentation level, parser option, or schema constraint at a time, then compare the result with the prediction.",
+        "execution_mode": "static-validation",
+        "limitations": "This snippet is a reference/example, not evidence that the CodeLeaf browser executes JSON/YAML parsing, shell commands, or Python. Validate locally with a named parser or tool before relying on it."
+      },
+      {
+        "type": "list",
+        "title": "A reliable working sequence",
+        "items": [
+          {
+            "title": "1. State the contract",
+            "text": "Write down the expected root type, required fields, scalar types, and any compatibility assumptions."
+          },
+          {
+            "title": "2. Validate before use",
+            "text": "Parse the document and run the applicable schema or policy checks; syntax success alone is not full correctness."
+          },
+          {
+            "title": "3. Test a boundary",
+            "text": "Include at least one missing, malformed, ambiguous, or unexpected input and record the desired behavior."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety checkpoint",
+        "text": "Treat configuration as code: validate it before use, keep secrets out of the file, review changes, and test both the expected configuration and failure behavior. Confirm implementation-specific behavior against the target parser, tool version, and standards documentation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second synthetic fixture for “Representing resources. Configuration dependencies. Resource parameters. Environment separation. Validation before deployment.”. Predict the parsed types/result, change one relevant detail, and record whether the target tool behaved as expected. Include one invalid or boundary case."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-129-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating readable text as proof of correctness.",
+        "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+        "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+      },
+      {
+        "problem": "Assuming every parser interprets the feature identically.",
+        "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+        "fix": "Record the exact parser/version and test the target environment."
+      },
+      {
+        "problem": "Testing only a happy path.",
+        "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+        "fix": "Keep valid, invalid, and boundary fixtures in version control."
+      }
+    ],
+    "task": "Prepare a brief, reviewable demonstration of JSON and YAML in Infrastructure Configuration. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+    "task_acceptance_criteria": [
+      "The artifact clearly demonstrates Representing resources. Configuration dependencies. Resource parameters. Environment separation. Validation before deployment..",
+      "Expected behavior is written before verification.",
+      "One invalid or boundary case is documented.",
+      "The relevant format, parser/version, and any security or interoperability limits are recorded."
+    ],
+    "hints": [
+      "Start with the smallest valid example that demonstrates Representing resources. Configuration dependencies. Resource parameters. Environment separation. Validation before deployment..",
+      "Change one thing at a time and compare parsed values, not only visual formatting.",
+      "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+    ],
+    "summary": [
+      "JSON and YAML in Infrastructure Configuration fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+      "Topics retained from the source PDF include Representing resources. Configuration dependencies. Resource parameters. Environment separation. Validation before deployment.; Change review. Applying least-privilege and secret-management practices..",
+      "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "Infrastructure configuration needs tool-specific schema/policy checks in addition to YAML syntax validation; these settings are illustrative only."
+  },
+  "task": "Prepare a brief, reviewable demonstration of JSON and YAML in Infrastructure Configuration. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+  "task_acceptance_criteria": [
+    "The artifact clearly demonstrates Representing resources. Configuration dependencies. Resource parameters. Environment separation. Validation before deployment..",
+    "Expected behavior is written before verification.",
+    "One invalid or boundary case is documented.",
+    "The relevant format, parser/version, and any security or interoperability limits are recorded."
+  ],
+  "hints": [
+    "Start with the smallest valid example that demonstrates Representing resources. Configuration dependencies. Resource parameters. Environment separation. Validation before deployment..",
+    "Change one thing at a time and compare parsed values, not only visual formatting.",
+    "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+  ],
+  "summary": [
+    "JSON and YAML in Infrastructure Configuration fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+    "Topics retained from the source PDF include Representing resources. Configuration dependencies. Resource parameters. Environment separation. Validation before deployment.; Change review. Applying least-privilege and secret-management practices..",
+    "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+  ],
+  "run_mode": "static-validation",
+  "expected_output": "Infrastructure configuration needs tool-specific schema/policy checks in addition to YAML syntax validation; these settings are illustrative only.",
+  "common_mistakes": [
+    {
+      "problem": "Treating readable text as proof of correctness.",
+      "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+      "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+    },
+    {
+      "problem": "Assuming every parser interprets the feature identically.",
+      "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+      "fix": "Record the exact parser/version and test the target environment."
+    },
+    {
+      "problem": "Testing only a happy path.",
+      "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+      "fix": "Keep valid, invalid, and boundary fixtures in version control."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "id": "json-yaml-ref-yaml122",
+      "title": "YAML Ain’t Markup Language (YAML) Version 1.2.2 Specification",
+      "url": "https://yaml.org/spec/1.2.2/",
+      "publisher": "YAML Language Development Team",
+      "checked_on": "2026-10-20"
+    },
+    {
+      "id": "json-yaml-ref-pyyaml",
+      "title": "PyYAML Documentation",
+      "url": "https://pyyaml.org/wiki/PyYAMLDocumentation",
+      "publisher": "PyYAML project",
+      "checked_on": "2026-10-20"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Generated from the attached JSON and YAML syllabus; requires technical review and target-tool validation before publication.",
+  "exercise_files": []
+}

@@ -1,0 +1,204 @@
+{
+  "id": "php-lesson-026",
+  "slug": "variable-scope",
+  "title": "Variable Scope",
+  "sequence": 26,
+  "module_id": "php-module-03",
+  "module_slug": "variables-constants-and-data-types",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "php-lesson-025"
+  ],
+  "previous_lesson_id": "php-lesson-025",
+  "next_lesson_id": "php-lesson-027",
+  "keywords": [
+    "variable scope",
+    "variables, constants, and data types",
+    "local scope",
+    "global scope",
+    "global",
+    "the $globals array",
+    "static local variables",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 26,
+  "subtopics": [
+    "Local scope.",
+    "Global scope.",
+    "global.",
+    "The $GLOBALS array.",
+    "Static local variables.",
+    "Avoiding unnecessary global state."
+  ],
+  "learning_outcomes": [
+    "Explain what variable scope contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: local scope.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Reliable programs represent values deliberately. Variables hold changing values, constants name stable values, and type behavior affects comparisons, conversion, function contracts, and error handling. In this lesson, focus on local scope; then compare it with global scope. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use variable scope when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 3 overview: Variables, Constants, and Data Types",
+        "asset_path": "diagrams/module-03-overview.svg",
+        "alt_text": "Four-stage overview for module 3, Variables, Constants, and Data Types, grouping lesson topics in order.",
+        "caption": "Use this overview to place variable scope in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Reliable programs represent values deliberately. Variables hold changing values, constants name stable values, and type behavior affects comparisons, conversion, function contracts, and error handling. For variable scope, begin with local scope. Also distinguish global scope; global; the $globals array. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Local scope",
+            "text": "Know when to use local scope, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Global scope",
+            "text": "Know when to use global scope, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "global",
+            "text": "Know when to use global, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "The $GLOBALS array",
+            "text": "Trace the input keys and values, then verify the resulting order and shape, including empty collections and missing keys."
+          },
+          {
+            "title": "Static local variables",
+            "text": "Know when to use static local variables, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Avoiding unnecessary global state",
+            "text": "Know when to use avoiding unnecessary global state, what input or program state it changes, and which boundary case is worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Variable Scope",
+        "language": "php",
+        "code": "<?php\ndeclare(strict_types=1);\n$score = 95;\necho get_debug_type($score) . \": \" . $score . PHP_EOL;",
+        "expected_output": "int: 95",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for variable scope from top to bottom. Start by identifying local scope, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for variable scope that demonstrates \"local scope\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of local scope.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "int: 95",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-026-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Variable Scope is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+    ],
+    "references": [
+      {
+        "title": "Types",
+        "url": "https://www.php.net/manual/en/language.types.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "scalar types",
+          "arrays",
+          "objects",
+          "null",
+          "type conversion"
+        ]
+      },
+      {
+        "title": "Type declarations",
+        "url": "https://www.php.net/manual/en/language.types.declarations.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "parameter types",
+          "return types",
+          "union types",
+          "strict_types"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Types",
+      "url": "https://www.php.net/manual/en/language.types.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "scalar types",
+        "arrays",
+        "objects",
+        "null",
+        "type conversion"
+      ]
+    },
+    {
+      "title": "Type declarations",
+      "url": "https://www.php.net/manual/en/language.types.declarations.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "parameter types",
+        "return types",
+        "union types",
+        "strict_types"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

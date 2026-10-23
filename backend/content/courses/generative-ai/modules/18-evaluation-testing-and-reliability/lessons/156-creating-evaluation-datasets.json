@@ -1,0 +1,165 @@
+{
+  "id": "genai-lesson-156",
+  "slug": "creating-evaluation-datasets",
+  "title": "Creating Evaluation Datasets",
+  "sequence": 156,
+  "module_id": "genai-module-18",
+  "module_slug": "evaluation-testing-and-reliability",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional-practice",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "genai-lesson-155"
+  ],
+  "previous_lesson_id": "genai-lesson-155",
+  "next_lesson_id": "genai-lesson-157",
+  "keywords": [
+    "Creating Evaluation Datasets",
+    "Selecting representative tasks",
+    "Creating expected answers and reference outputs",
+    "Normal and edge-case examples",
+    "Adversarial and ambiguous test cases",
+    "Separating development and evaluation sets",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 156,
+  "subtopics": [
+    "Selecting representative tasks",
+    "Creating expected answers and reference outputs",
+    "Normal and edge-case examples",
+    "Adversarial and ambiguous test cases",
+    "Separating development and evaluation sets",
+    "Preventing evaluation data leakage"
+  ],
+  "learning_outcomes": [
+    "Explain selecting representative tasks and how it connects to creating evaluation datasets.",
+    "Apply creating expected answers and reference outputs in the example and predict the output before running it.",
+    "Test one realistic edge case for creating evaluation datasets and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers creating evaluation datasets through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Build evaluations before optimizing. Use representative examples, clear rubrics, automated regression checks, human review where needed, and operational monitoring.",
+    "why_it_matters": "Use selecting representative tasks as a lens for understanding creating evaluation datasets. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Creating Evaluation Datasets: concept map",
+        "asset_path": "diagrams/lessons/lesson-156-creating-evaluation-datasets.svg",
+        "alt_text": "Diagram for Creating Evaluation Datasets: understand Selecting representative tasks, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Selecting representative tasks, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Use selecting representative tasks as a lens for understanding creating evaluation datasets. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Selecting representative tasks",
+            "text": "Use selecting representative tasks as a lens for understanding creating evaluation datasets. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Creating expected answers and reference outputs",
+            "text": "Use creating expected answers and reference outputs as a lens for understanding creating evaluation datasets. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Normal and edge-case examples",
+            "text": "Use normal and edge-case examples as a lens for understanding creating evaluation datasets. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Adversarial and ambiguous test cases",
+            "text": "Use adversarial and ambiguous test cases as a lens for understanding creating evaluation datasets. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Separating development and evaluation sets",
+            "text": "Use separating development and evaluation sets to turn a vague quality claim into an observable criterion. Define a representative dataset, an expected outcome or rubric, a baseline, and the failure categories you will record; interpret aggregate scores alongside examples and affected groups."
+          },
+          {
+            "title": "Preventing evaluation data leakage",
+            "text": "Use preventing evaluation data leakage to turn a vague quality claim into an observable criterion. Define a representative dataset, an expected outcome or rubric, a baseline, and the failure categories you will record; interpret aggregate scores alongside examples and affected groups."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Creating Evaluation Datasets\ncases = [{\"id\": \"normal\", \"expected\": \"answer\"}, {\"id\": \"no-evidence\", \"expected\": \"abstain\"}, {\"id\": \"conflict\", \"expected\": \"flag conflict\"}]\nprint({\"unique_ids\": len({c[\"id\"] for c in cases}) == len(cases), \"coverage_cases\": len(cases)})",
+        "expected_output": "{'unique_ids': True, 'coverage_cases': 3}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice selecting representative tasks within creating evaluation datasets: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'unique_ids': True, 'coverage_cases': 3}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-156-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Creating Evaluation Datasets is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://developers.google.com/machine-learning/crash-course/",
+      "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Machine Learning Crash Course",
+      "url": "https://developers.google.com/machine-learning/crash-course/",
+      "publisher": "Google for Developers",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "AI and machine learning foundations"
+      ]
+    },
+    {
+      "title": "Design and develop a RAG solution",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide",
+      "publisher": "Microsoft Learn / Azure Architecture Center",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "RAG architecture"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

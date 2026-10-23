@@ -1,0 +1,67 @@
+{
+  "id": "pandas-exercise-25",
+  "slug": "chunked-processing",
+  "title": "Chunked Processing",
+  "sequence": 25,
+  "lesson_id": "pandas-lesson-134",
+  "lesson_slug": "handling-large-file-imports",
+  "module_id": "pandas-module-16",
+  "difficulty": "advanced",
+  "type": "code",
+  "prompt": "Read a large CSV in chunks and calculate a summary without concatenating all raw chunks.",
+  "scenario": "Use the synthetic data described below to practise c, h, u, n, k, e, d,  , c, s, v,  , a, n, d,  , a, g, g, r, e, g, a, t, i, o, n. Do not assume the input is correct without validating it.",
+  "skills": "Chunked CSV and aggregation",
+  "starter": {
+    "language": "python",
+    "code": "import pandas as pd\n\nfrom io import StringIO\nraw = StringIO(\"category,sales\\nA,10\\nB,12\\nA,5\\n\")\ntotals = {}\nfor chunk in pd.read_csv(raw, chunksize=2):\n    for key, value in chunk.groupby(\"category\")[\"sales\"].sum().items():\n        totals[key] = totals.get(key, 0) + int(value)\nprint(totals)",
+    "dataset_note": "Use small synthetic in-memory data; do not place private or real customer data in exercises."
+  },
+  "input_schema": {
+    "description": "Create or use a synthetic DataFrame with only the columns needed for this exercise.",
+    "validation": [
+      "Document expected columns and data types.",
+      "State how missing values or duplicates should be treated."
+    ]
+  },
+  "expected_output": [
+    "Read chunk by chunk using an explicit size.",
+    "Aggregate the chunk and combine partial aggregates.",
+    "Compare the result against a whole-file result on a small test input."
+  ],
+  "public_tests": [
+    {
+      "name": "normal-case",
+      "description": "The solution returns the required columns and correctly computes the stated result."
+    },
+    {
+      "name": "edge-case",
+      "description": "The solution documents behavior for a missing value, duplicate key, empty input, invalid value, or other relevant edge case."
+    }
+  ],
+  "hints": [
+    "Write down the expected result before coding.",
+    "Use Pandas operations that preserve labels unless position-based behavior is intended.",
+    "Add a small assertion for the most important property."
+  ],
+  "acceptance_criteria": [
+    "Read chunk by chunk using an explicit size.",
+    "Aggregate the chunk and combine partial aggregates.",
+    "Compare the result against a whole-file result on a small test input."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "c"
+    ],
+    "case_sensitive": false,
+    "note": "The generic short-response grader is only an initial scaffold; a reviewed isolated Python grader is required for automatic execution of arbitrary learner code."
+  },
+  "solution_file": "solutions/025-chunked-processing-solution.json",
+  "solution": {},
+  "retry_policy": {
+    "max_attempts": null,
+    "allow_retry_after_feedback": true
+  },
+  "status": "draft",
+  "status_note": "Review prompt, starter, rubric, and server-side grading before publication."
+}

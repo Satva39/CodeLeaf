@@ -1,0 +1,63 @@
+{
+  "id": "github-actions-exercise-044",
+  "slug": "github-pages-and-documentation-automation-practice",
+  "title": "GitHub Pages and Documentation Automation practice",
+  "type": "coding",
+  "lesson_id": "github-actions-lesson-166",
+  "module_id": "github-actions-module-22",
+  "difficulty": "easy",
+  "sequence": 44,
+  "prompt": "Design a docs build and link-check pipeline with a preview stage and a controlled publishing gate.",
+  "objective": "Demonstrate the behavior of github pages and documentation automation practice and capture verifiable evidence.",
+  "target_skills": [
+    "optional",
+    "workflow YAML",
+    "validation",
+    "safe automation"
+  ],
+  "starter": {
+    "language": "yaml",
+    "code": "name: Build and publish GitHub Pages\non:\n  push:\n    branches: [main]\npermissions:\n  contents: read\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: echo \"Build your documentation site into ./dist\"\n      - uses: actions/upload-pages-artifact@v3\n        with:\n          path: ./dist\n  deploy:\n    needs: build\n    permissions:\n      pages: write\n      id-token: write\n    environment:\n      name: github-pages\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/deploy-pages@v4",
+    "execution_mode": "workflow-fragment"
+  },
+  "expected_output": "A reviewed workflow or design note satisfying: link, build, publish. Verify behavior on a disposable repository where execution is required; a static sketch is not proof of a live deployment.",
+  "public_tests": [
+    {
+      "name": "Required evidence check",
+      "required_strings": [
+        "link",
+        "build",
+        "publish"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Include or explain `link`.",
+    "Include or explain `build`.",
+    "Include or explain `publish`.",
+    "Explain one validation result or limitation.",
+    "Do not include a real secret or use production resources."
+  ],
+  "hints": [
+    "First identify the trigger, input, and expected result.",
+    "Start with read-only permissions and a disposable branch or test environment.",
+    "Compare your result with the linked lesson and official documentation; distinguish a configuration sketch from a live integration."
+  ],
+  "solution": {
+    "answer": null,
+    "explanation": "The detailed reference solution is stored in a protected repository-only JSON file; it is not intended for a learner-facing response."
+  },
+  "solution_file": "../solutions/044-github-pages-and-documentation-automation-practice-solution.json",
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "link",
+      "build",
+      "publish"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus human review for workflow semantics and security boundaries.",
+  "retry_policy": "Allow retries; incorrect submissions do not award XP. The platform awards exercise XP only after server-verified successful completion and applies idempotency per activity.",
+  "status": "draft",
+  "status_note": "Source mapping: Section E: Optional specialist tracks; original learning task adapted to CodeLeaf structure. Starter example aligned with its linked lesson; review and replace any remaining repository-specific placeholders."
+}

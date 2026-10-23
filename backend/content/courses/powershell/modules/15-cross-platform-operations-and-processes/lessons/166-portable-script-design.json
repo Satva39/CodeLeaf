@@ -1,0 +1,142 @@
+{
+  "id": "powershell-lesson-166",
+  "slug": "portable-script-design",
+  "title": "Portable Script Design",
+  "sequence": 166,
+  "module_id": "powershell-module-15",
+  "module_slug": "cross-platform-operations-and-processes",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "powershell-lesson-165"
+  ],
+  "previous_lesson_id": "powershell-lesson-165",
+  "next_lesson_id": "powershell-lesson-167",
+  "keywords": [
+    "portable",
+    "script",
+    "design",
+    "powershell",
+    "module-15"
+  ],
+  "source_syllabus_number": 166,
+  "subtopics": [
+    "Avoiding hard-coded system paths",
+    "Handling platform-specific behavior",
+    "Separating shared and platform-specific code",
+    "Testing on multiple operating systems"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose of Portable Script Design and define its core vocabulary.",
+    "Apply portable script design in a small PowerShell example and predict its result.",
+    "Identify one relevant edge case, version constraint, or troubleshooting step."
+  ],
+  "content": {
+    "intro": "This lesson covers Portable Script Design in the PowerShell learning path. It expands the supplied syllabus heading into an actionable draft with a visual, a worked example, and a short knowledge check.",
+    "why_it_matters": "The PowerShell language is broadly portable, but providers, paths, permissions and system tools vary by operating system. Detect platform requirements explicitly and keep common logic separate from platform-specific commands; report unsupported capabilities rather than silently failing.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Lesson 166 visual map",
+        "asset_path": "diagrams/lesson-166-portable-script-design.svg",
+        "alt_text": "Lesson 166 concept map for Portable Script Design: concept and purpose, a local example and result, followed by practice and verification.",
+        "caption": "Follow the concept → example → verification path for Portable Script Design."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Portable Script Design belongs to Cross-Platform Operations and Processes. Focus on the rule or workflow this lesson introduces, work through a small example, and explain the expected result and one boundary case."
+      },
+      {
+        "type": "paragraph",
+        "title": "Build understanding step by step",
+        "text": "Start with the syllabus concepts: Avoiding hard-coded system paths; Handling platform-specific behavior; Separating shared and platform-specific code; Testing on multiple operating systems. Separate the input, the operation and the expected result. Use a disposable local workspace for file or system examples, and verify platform-specific behavior against the active runtime."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Avoiding hard-coded system paths",
+            "text": "Avoiding hard-coded system paths is one part of Portable Script Design. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Handling platform-specific behavior",
+            "text": "Handling platform-specific behavior is one part of Portable Script Design. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Separating shared and platform-specific code",
+            "text": "Separating shared and platform-specific code is one part of Portable Script Design. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Testing on multiple operating systems",
+            "text": "Testing on multiple operating systems is one part of Portable Script Design. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "powershell",
+        "execution_mode": "static-validation",
+        "code": "[pscustomobject]@{ IsWindows = $IsWindows; IsLinux = $IsLinux; IsMacOS = $IsMacOS }",
+        "expected_output": "Boolean values describing the current OS in modern PowerShell.",
+        "run_instructions": "Review this snippet as a static teaching example. In a local PowerShell 7.6 session, save a copy under your course workspace, run it manually, and compare the result with the stated expectation. CodeLeaf’s current course preview does not execute PowerShell. Adjust environment-dependent output to your machine.",
+        "troubleshooting": "Check command availability with Get-Command, inspect values with Get-Member, consult Get-Help -Full, and verify PowerShell version/platform before assuming identical output. Do not run examples that change system state without adapting and reviewing them.",
+        "reset_steps": "Restore the original snippet and use synthetic values. If you created test files, delete only those files within the dedicated practice folder after checking their paths."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety note",
+        "text": "The main path targets modern PowerShell 7.6 LTS. Windows PowerShell 5.1 compatibility is labeled separately. Some providers, admin cmdlets and APIs depend on OS, module version, permissions or tenant access; the examples are static references, not proof of execution."
+      }
+    ],
+    "task": "Try it yourself: apply the concept to a small reproducible automation task. Use synthetic data or a disposable practice folder, write down your predicted result, check it locally, and explain one boundary case.",
+    "task_acceptance_criteria": [
+      "Explain the central idea in Portable Script Design in your own words.",
+      "Verify the expected result using a local session or a documented manual check.",
+      "Describe one relevant edge case, limitation or troubleshooting step."
+    ],
+    "hints": [
+      "Predict the output before changing the example.",
+      "Change one input or condition at a time and compare the results.",
+      "Use Get-Help and official versioned documentation when behavior differs; do not treat a static preview as execution."
+    ],
+    "expected_output": "Boolean values describing the current OS in modern PowerShell.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-166-questions.json"
+  },
+  "exercise_files": [
+    "../exercises/009-cross-platform-inventory.json"
+  ],
+  "sources": [
+    {
+      "title": "What is PowerShell?",
+      "url": "https://learn.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7.6",
+      "publisher": "Microsoft Learn",
+      "supports": [
+        "PowerShell overview",
+        "shell and scripting concepts",
+        "cross-platform scope"
+      ],
+      "checked_on": "2026-10-20",
+      "source_type": "official_documentation"
+    },
+    {
+      "title": "Getting Started with PowerShell",
+      "url": "https://learn.microsoft.com/en-us/powershell/scripting/learn/ps101/01-getting-started?view=powershell-7.6",
+      "publisher": "Microsoft Learn",
+      "supports": [
+        "first commands",
+        "help and discovery",
+        "interactive sessions"
+      ],
+      "checked_on": "2026-10-20",
+      "source_type": "official_documentation"
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson expanded from the numbered PowerShell PDF syllabus. Static examples, answers, version details and technical phrasing need subject-matter review before publication."
+}

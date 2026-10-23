@@ -1,0 +1,144 @@
+{
+  "id": "aws-lesson-152",
+  "slug": "amazon-cloudwatch",
+  "title": "Amazon CloudWatch",
+  "sequence": 152,
+  "module_id": "aws-module-14",
+  "module_slug": "monitoring-logging-and-operations",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "primary_service": "CloudWatch, CloudTrail and operations",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "aws-lesson-151"
+  ],
+  "previous_lesson_id": "aws-lesson-151",
+  "next_lesson_id": "aws-lesson-153",
+  "keywords": [
+    "amazon-cloudwatch",
+    "monitoring-logging-and-operations",
+    "cloudwatch-cloudtrail-and-operations",
+    "metrics",
+    "logs",
+    "alarms"
+  ],
+  "source_syllabus_number": 152,
+  "subtopics": [
+    "Metrics",
+    "Logs",
+    "Alarms",
+    "Dashboards"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of amazon cloudwatch and its relationship to Monitoring, Logging, and Operations.",
+    "Interpret the example and identify at least one prerequisite or boundary relevant to amazon cloudwatch.",
+    "Propose a safe verification or troubleshooting step and record one security, reliability or cost consideration."
+  ],
+  "content": {
+    "intro": "In this lesson, you will learn amazon cloudwatch in the context of Monitoring, Logging, and Operations. You will connect the listed subtopics to a practical decision, inspect a small example, and define evidence that would confirm or disprove your assumptions.",
+    "why_it_matters": "Amazon CloudWatch matters because it is one part of cloudwatch, cloudtrail and operations. Real workloads depend on explicit prerequisites, correct permissions, predictable behavior and a way to verify outcomes. Learning the decision points helps you distinguish a working demonstration from a safe and supportable design.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Cloud operations feedback loop",
+        "asset_path": "diagrams/observability-loop.svg",
+        "alt_text": "Metrics, logs, traces and audit events inform alarms, incident response, remediation, and follow-up reliability work.",
+        "caption": "Choose signals tied to user-visible outcomes and actionable thresholds."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "**Core idea.** Amazon CloudWatch belongs to Monitoring, Logging, and Operations. Operational visibility combines metrics, logs, traces, audit history, configuration state and actionable alarms. Runbooks should specify decisions, owners, verification and recovery.\n\nThe PDF lists these subtopics: Metrics; Logs; Alarms; Dashboards. Treat them as a connected workflow rather than a list to memorize. Start with the workload requirement, identify the AWS resource/control involved, and write down who owns configuration and operation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Practical reasoning",
+        "text": "**Apply it safely.** For amazon cloudwatch, name the prerequisites and the expected result before making a change. Prefer a read-only inspection or local/static example first. Then plan a normal case, a failure case, and a verification step. In a live account, require the account owner-approved sandbox, narrow permissions, spend visibility and cleanup plan. Do not put credentials in code or commit local configuration files."
+      },
+      {
+        "type": "list",
+        "title": "PDF subtopics to cover",
+        "items": [
+          {
+            "title": "Metrics",
+            "text": "Select a signal tied to the user-visible symptom, identify its source and time window, and make the response actionable through an owner, threshold and runbook."
+          },
+          {
+            "title": "Logs",
+            "text": "Select a signal tied to the user-visible symptom, identify its source and time window, and make the response actionable through an owner, threshold and runbook."
+          },
+          {
+            "title": "Alarms",
+            "text": "Select a signal tied to the user-visible symptom, identify its source and time window, and make the response actionable through an owner, threshold and runbook."
+          },
+          {
+            "title": "Dashboards",
+            "text": "Record ownership, dependencies and teardown/recovery behavior so the design can be operated safely after the first successful test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "CloudWatch Logs Insights query",
+        "language": "text",
+        "code": "fields @timestamp, @message\n| sort @timestamp desc\n| limit 20",
+        "expected_output": "Returns at most 20 recent log events from the selected group/time range.",
+        "run_instructions": "This block is an inspectable example, not an AWS action performed by CodeLeaf. Review the example as text and adapt it only after checking current official service documentation. Do not apply/deploy changes in a real account without account-owner approval, least-privilege permissions and a reviewed cost/cleanup plan.",
+        "reset_steps": "No AWS resource is created by this lesson example. If you independently run an approved lab, capture the starting state first, follow the lab-specific teardown instructions, check dependent resources and billing/resource inventories, and document anything retained.",
+        "execution_mode": "human-review",
+        "limitations": "The CodeLeaf playground is an HTML/CSS/JavaScript preview and does not execute AWS APIs, shell commands, SQL or cloud deployments. Treat output as illustrative; live values depend on credentials, permissions, Region, service state and schema."
+      },
+      {
+        "type": "callout",
+        "title": "Security and cost checkpoint",
+        "text": "Use least privilege, keep Block Public Access/private defaults unless a justified reviewed requirement says otherwise, and document cost/cleanup before live changes."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-152-questions.json"
+  },
+  "task": "Create a one-page decision card for “Amazon CloudWatch”. State the goal, prerequisites, the AWS resource or control involved, the expected result, one read-only/static verification step, one failure case, the relevant permission boundary, and cost/cleanup considerations. Do not create or alter billable resources unless the account owner has approved the lab.",
+  "hints": [
+    "Start from the exact subtopics in the lesson and define the desired state in your own words.",
+    "Prefer a read-only check or static artifact before a mutating command; record the identity/Region and required permissions.",
+    "Verify the expected result and a failure path using current official documentation; write down cost and cleanup implications."
+  ],
+  "expected_output": "A short reviewable decision card for Amazon CloudWatch with prerequisites, evidence, a failure case, security implications and cost/cleanup notes.",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Treating one successful example as proof of production readiness.",
+      "why": "The example may not test permissions, regional/service prerequisites, retries, recovery, quotas or edge cases.",
+      "fix": "Write acceptance criteria, test a failure path, inspect logs/state and record the limits of the result."
+    },
+    {
+      "problem": "Changing a live resource before confirming its effect and cost.",
+      "why": "Cloud changes can expose data, break traffic or leave billable dependencies behind.",
+      "fix": "Start read-only, use an approved sandbox, review the change, tag ownership and verify cleanup."
+    },
+    {
+      "problem": "Copying broad permissions or credentials into source files.",
+      "why": "Broad permissions and leaked long-lived credentials increase the impact of mistakes.",
+      "fix": "Use scoped roles/temporary credentials, keep secrets in approved stores and review access boundaries."
+    }
+  ],
+  "summary": [
+    "Amazon CloudWatch is taught as part of Monitoring, Logging, and Operations.",
+    "Operational visibility combines metrics, logs, traces, audit history, configuration state and actionable alarms. Runbooks should specify decisions, owners, verification and recovery.",
+    "Verify assumptions with official service documentation and evidence from the relevant AWS resource, logs or tests.",
+    "For live labs, confirm permissions and likely charges before acting, then verify cleanup."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: AWS — Complete Learning Curriculum, Section B, Module 14: Monitoring, Logging, and Operations, lesson 152: Amazon CloudWatch.",
+    "Official AWS documentation (Amazon CloudWatch User Guide, checked 2026-10-11): https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html — Metrics, logs, alarms and operational visibility.",
+    "Official AWS documentation (AWS CloudTrail User Guide, checked 2026-10-11): https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html — Audit events and account activity investigation."
+  ],
+  "technical_review_date": "2026-10-11",
+  "status": "draft",
+  "status_note": "Generated from the PDF syllabus and official reference index; must be technically reviewed and tested for the target AWS service/Region before publication."
+}

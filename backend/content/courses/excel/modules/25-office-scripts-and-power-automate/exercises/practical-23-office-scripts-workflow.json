@@ -1,0 +1,82 @@
+{
+  "id": "excel-practical-23",
+  "slug": "practical-23-office-scripts-workflow",
+  "title": "Office Scripts Workflow",
+  "type": "workbook-practice",
+  "lesson_id": "excel-lesson-238",
+  "module_id": "excel-module-25",
+  "difficulty": "advanced",
+  "sequence": 2,
+  "source_exercise_id": "PDF-EX-23",
+  "source_topics": [
+    238
+  ],
+  "prompt": "Create a script that formats a table and generates a summary.\n\nSkills: Office Scripts and workbook APIs.\n\nUse the supplied synthetic CSV at assets/data/practical-23-office-scripts-workflow.csv. A small copy/pastable sample is included below in case the CSV is not directly downloadable from the lesson page. Complete the work in a separate .xlsx copy, preserve a raw-data sheet, and check the result against the acceptance criteria. Then answer the short grading check; it does not validate the workbook itself.\n\nSample CSV (synthetic):\nRegion,Amount\nEast,250\nWest,180\nEast,90\nNorth,320",
+  "objective": "Create a script that formats a table and generates a summary.",
+  "target_skills": [
+    "Office Scripts and workbook APIs."
+  ],
+  "starter": {
+    "format": "csv",
+    "path": "assets/data/practical-23-office-scripts-workflow.csv",
+    "headers": [
+      "Region",
+      "Amount"
+    ],
+    "rows": [
+      [
+        "East",
+        250
+      ],
+      [
+        "West",
+        180
+      ],
+      [
+        "East",
+        90
+      ],
+      [
+        "North",
+        320
+      ]
+    ],
+    "sample_row_count": 4,
+    "instructions": "Open/import the UTF-8 CSV into Excel. Keep the original source data unchanged and perform work on a separate sheet or workbook."
+  },
+  "expected_output": "Expected: script checks required objects and data before writing, and is tested in a supported tenant/environment.",
+  "public_tests": [
+    {
+      "name": "Sample-data acceptance",
+      "checklist": [
+        "Input records are preserved and data types are checked.",
+        "Totals/results reconcile with a small independent calculation.",
+        "An edge case, duplicate or threshold boundary is tested where relevant."
+      ]
+    },
+    {
+      "name": "Server-side answer check",
+      "note": "A text/choice check does not execute Excel or inspect the workbook artifact."
+    }
+  ],
+  "acceptance_criteria": [
+    "Expected: script checks required objects and data before writing, and is tested in a supported tenant/environment.",
+    "Use a labeled result area and document formulas, assumptions or transformation steps.",
+    "Compare actual results with a manual/independently calculated expected result and test one edge case.",
+    "Keep source data intact and request human review of the completed workbook; do not treat the text grader as artifact validation."
+  ],
+  "hints": [
+    "Import data without losing dates, decimals or leading zeros.",
+    "Separate raw inputs, calculations and presentation outputs.",
+    "Test empty inputs, duplicated keys, boundary values or missing matches as appropriate to the scenario."
+  ],
+  "grading_config": {
+    "mode": "exact_text",
+    "expected_text": "function main(workbook: ExcelScript.Workbook) { const sheet = workbook.getActiveWorksheet(); sheet.getRange(\"A1\").setValue(\"Report ready\"); }"
+  },
+  "grading_method": "Server-side exact_text check of the submitted answer/expression only; does not execute Excel or inspect the workbook. This workbook-practice task needs a human-reviewed artifact and test evidence for full acceptance. A simple Office Script sets A1; adapt to the supported environment and validate the target range before modifying the workbook.",
+  "retry_policy": "Retries are permitted. A failed string/choice submission does not complete the exercise. Course files do not define XP; platform-wide server logic applies.",
+  "solution_file": "solutions/practical-23-office-scripts-workflow-solution.json",
+  "status": "draft",
+  "source_data_file": "assets/data/practical-23-office-scripts-workflow.csv"
+}

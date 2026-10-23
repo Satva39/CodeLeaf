@@ -1,0 +1,192 @@
+{
+  "id": "json-yaml-lesson-152",
+  "slug": "performance-and-memory-considerations",
+  "title": "Performance and Memory Considerations",
+  "sequence": 152,
+  "module_id": "json-yaml-module-15",
+  "module_slug": "testing-quality-version-control-and-production-practice",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "json-yaml-lesson-151"
+  ],
+  "previous_lesson_id": "json-yaml-lesson-151",
+  "next_lesson_id": "json-yaml-lesson-153",
+  "keywords": [
+    "performance-and-memory-considerations",
+    "parsing-cost-serialization-cost-document-size-deeply-nested-data-repeated-structures-streaming-and-incremental-parsing",
+    "profiling-with-representative-payloads"
+  ],
+  "source_syllabus_number": 152,
+  "subtopics": [
+    "Parsing cost. Serialization cost. Document size. Deeply nested data. Repeated structures. Streaming and incremental parsing.",
+    "Profiling with representative payloads."
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of performance and memory considerations and identify at least one related syllabus concept.",
+    "Interpret the example for performance and memory considerations and describe its expected result.",
+    "Choose a relevant syntax, type, compatibility, security, or troubleshooting check for the example."
+  ],
+  "content": {
+    "intro": "This lesson focuses on performance and memory considerations and connects the PDF syllabus topics to a small, inspectable example. Work from the intended data model, write down the expected result, then verify syntax and semantics with the target tool.",
+    "why_it_matters": "Performance and Memory Considerations matters because structured-data files sit between people, tools, services, and deployment systems. A clear contract and repeatable checks make the result easier to maintain and safer to consume.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Performance and Memory Considerations: visual explanation",
+        "asset_path": "diagrams/lessons/lesson-152-performance-and-memory-considerations.svg",
+        "alt_text": "Performance and Memory Considerations: Parsing cost. Serialization cost. Document size. Deeply nested data. Repeated structures. Streaming and incremental parsing. leads to Interpret / validate, then Expected structure.",
+        "caption": "Use this concept flow to predict the result for Performance and Memory Considerations before you test the snippet."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Reliable structured-data repositories use positive and negative tests, golden fixtures, contract tests, reviewed diffs, versioned schemas, CI checks, and production observability. Make checks repeatable so configuration mistakes fail before deployment."
+      },
+      {
+        "type": "paragraph",
+        "title": "What you will cover",
+        "text": "This lesson explicitly addresses: Parsing cost. Serialization cost. Document size. Deeply nested data. Repeated structures. Streaming and incremental parsing.; Profiling with representative payloads.. Treat each as part of a workflow: define what the data should mean, represent it consistently, and test how the chosen implementation interprets it."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Performance and Memory Considerations",
+        "language": "python",
+        "code": "from pathlib import Path\nimport json\n\nsize = Path(\"large.json\").stat().st_size\nprint(f\"input_bytes={size}\")\nwith Path(\"large.json\").open(encoding=\"utf-8\") as stream:\n    data = json.load(stream)\nprint(type(data).__name__)",
+        "expected_output": "The example records file size and parses a whole document; streaming alternatives may be needed if memory use becomes too high.",
+        "run_instructions": "This example requires a local Python runtime and any named dependency. CodeLeaf does not execute arbitrary Python in its browser playground; run only in a controlled local environment with a small synthetic fixture.",
+        "reset_steps": "Restore the starting fixture before each test. Change one field, indentation level, parser option, or schema constraint at a time, then compare the result with the prediction.",
+        "execution_mode": "static-validation",
+        "limitations": "This snippet is a reference/example, not evidence that the CodeLeaf browser executes JSON/YAML parsing, shell commands, or Python. Validate locally with a named parser or tool before relying on it."
+      },
+      {
+        "type": "list",
+        "title": "A reliable working sequence",
+        "items": [
+          {
+            "title": "1. State the contract",
+            "text": "Write down the expected root type, required fields, scalar types, and any compatibility assumptions."
+          },
+          {
+            "title": "2. Validate before use",
+            "text": "Parse the document and run the applicable schema or policy checks; syntax success alone is not full correctness."
+          },
+          {
+            "title": "3. Test a boundary",
+            "text": "Include at least one missing, malformed, ambiguous, or unexpected input and record the desired behavior."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety checkpoint",
+        "text": "Treat configuration as code: validate it before use, keep secrets out of the file, review changes, and test both the expected configuration and failure behavior. Confirm implementation-specific behavior against the target parser, tool version, and standards documentation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second synthetic fixture for “Parsing cost. Serialization cost. Document size. Deeply nested data. Repeated structures. Streaming and incremental parsing.”. Predict the parsed types/result, change one relevant detail, and record whether the target tool behaved as expected. Include one invalid or boundary case."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-152-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating readable text as proof of correctness.",
+        "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+        "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+      },
+      {
+        "problem": "Assuming every parser interprets the feature identically.",
+        "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+        "fix": "Record the exact parser/version and test the target environment."
+      },
+      {
+        "problem": "Testing only a happy path.",
+        "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+        "fix": "Keep valid, invalid, and boundary fixtures in version control."
+      }
+    ],
+    "task": "Prepare a brief, reviewable demonstration of Performance and Memory Considerations. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+    "task_acceptance_criteria": [
+      "The artifact clearly demonstrates Parsing cost. Serialization cost. Document size. Deeply nested data. Repeated structures. Streaming and incremental parsing..",
+      "Expected behavior is written before verification.",
+      "One invalid or boundary case is documented.",
+      "The relevant format, parser/version, and any security or interoperability limits are recorded."
+    ],
+    "hints": [
+      "Start with the smallest valid example that demonstrates Parsing cost. Serialization cost. Document size. Deeply nested data. Repeated structures. Streaming and incremental parsing..",
+      "Change one thing at a time and compare parsed values, not only visual formatting.",
+      "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+    ],
+    "summary": [
+      "Performance and Memory Considerations fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+      "Topics retained from the source PDF include Parsing cost. Serialization cost. Document size. Deeply nested data. Repeated structures. Streaming and incremental parsing.; Profiling with representative payloads..",
+      "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "The example records file size and parses a whole document; streaming alternatives may be needed if memory use becomes too high."
+  },
+  "task": "Prepare a brief, reviewable demonstration of Performance and Memory Considerations. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+  "task_acceptance_criteria": [
+    "The artifact clearly demonstrates Parsing cost. Serialization cost. Document size. Deeply nested data. Repeated structures. Streaming and incremental parsing..",
+    "Expected behavior is written before verification.",
+    "One invalid or boundary case is documented.",
+    "The relevant format, parser/version, and any security or interoperability limits are recorded."
+  ],
+  "hints": [
+    "Start with the smallest valid example that demonstrates Parsing cost. Serialization cost. Document size. Deeply nested data. Repeated structures. Streaming and incremental parsing..",
+    "Change one thing at a time and compare parsed values, not only visual formatting.",
+    "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+  ],
+  "summary": [
+    "Performance and Memory Considerations fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+    "Topics retained from the source PDF include Parsing cost. Serialization cost. Document size. Deeply nested data. Repeated structures. Streaming and incremental parsing.; Profiling with representative payloads..",
+    "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+  ],
+  "run_mode": "static-validation",
+  "expected_output": "The example records file size and parses a whole document; streaming alternatives may be needed if memory use becomes too high.",
+  "common_mistakes": [
+    {
+      "problem": "Treating readable text as proof of correctness.",
+      "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+      "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+    },
+    {
+      "problem": "Assuming every parser interprets the feature identically.",
+      "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+      "fix": "Record the exact parser/version and test the target environment."
+    },
+    {
+      "problem": "Testing only a happy path.",
+      "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+      "fix": "Keep valid, invalid, and boundary fixtures in version control."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "id": "json-yaml-ref-rfc8259",
+      "title": "RFC 8259 — The JavaScript Object Notation (JSON) Data Interchange Format",
+      "url": "https://www.rfc-editor.org/rfc/rfc8259",
+      "publisher": "IETF / RFC Editor",
+      "checked_on": "2026-10-20"
+    },
+    {
+      "id": "json-yaml-ref-yaml122",
+      "title": "YAML Ain’t Markup Language (YAML) Version 1.2.2 Specification",
+      "url": "https://yaml.org/spec/1.2.2/",
+      "publisher": "YAML Language Development Team",
+      "checked_on": "2026-10-20"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Generated from the attached JSON and YAML syllabus; requires technical review and target-tool validation before publication.",
+  "exercise_files": [
+    "../exercises/030-benchmark-json-processing.json"
+  ]
+}

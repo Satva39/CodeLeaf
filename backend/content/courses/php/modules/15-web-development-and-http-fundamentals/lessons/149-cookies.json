@@ -1,0 +1,197 @@
+{
+  "id": "php-lesson-149",
+  "slug": "cookies",
+  "title": "Cookies",
+  "sequence": 149,
+  "module_id": "php-module-15",
+  "module_slug": "web-development-and-http-fundamentals",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "php-lesson-148"
+  ],
+  "previous_lesson_id": "php-lesson-148",
+  "next_lesson_id": "php-lesson-150",
+  "keywords": [
+    "cookies",
+    "web development and http fundamentals",
+    "setting cookies",
+    "cookie expiration",
+    "cookie options",
+    "secure and httponly flags",
+    "samesite behavior and cookie scope",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 149,
+  "subtopics": [
+    "Setting cookies.",
+    "Cookie expiration.",
+    "Cookie options.",
+    "Secure and HttpOnly flags.",
+    "SameSite behavior and cookie scope."
+  ],
+  "learning_outcomes": [
+    "Explain what cookies contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: setting cookies.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "A web request carries a method, path, headers, and optional data; PHP uses these to produce a status, headers, and body. Keep HTTP details separate from application rules and templates. In this lesson, focus on setting cookies; then compare it with cookie expiration. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use cookies when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 15 overview: Web Development and HTTP Fundamentals",
+        "asset_path": "diagrams/module-15-overview.svg",
+        "alt_text": "Four-stage overview for module 15, Web Development and HTTP Fundamentals, grouping lesson topics in order.",
+        "caption": "Use this overview to place cookies in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "A web request carries a method, path, headers, and optional data; PHP uses these to produce a status, headers, and body. Keep HTTP details separate from application rules and templates. For cookies, begin with setting cookies. Also distinguish cookie expiration; cookie options; secure and httponly flags. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Setting cookies",
+            "text": "Know when to use setting cookies, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Cookie expiration",
+            "text": "Know when to use cookie expiration, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Cookie options",
+            "text": "Know when to use cookie options, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Secure and HttpOnly flags",
+            "text": "Track where this value enters the request lifecycle and where it affects the response; client-provided data must be treated as untrusted."
+          },
+          {
+            "title": "SameSite behavior and cookie scope",
+            "text": "Know when to use samesite behavior and cookie scope, what input or program state it changes, and which boundary case is worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Cookies",
+        "language": "php",
+        "code": "<?php\n$response = [\"status\" => 200, \"content_type\" => \"application/json\"];\necho $response[\"status\"] . \" \" . $response[\"content_type\"] . PHP_EOL;",
+        "expected_output": "200 application/json",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Treat HTTP input as untrusted, choose accurate status codes, and separate request handling from application rules."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for cookies from top to bottom. Start by identifying setting cookies, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for cookies that demonstrates \"setting cookies\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of setting cookies.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "200 application/json",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-149-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Cookies is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Treat HTTP input as untrusted, choose accurate status codes, and separate request handling from application rules."
+    ],
+    "references": [
+      {
+        "title": "Basic syntax",
+        "url": "https://www.php.net/manual/en/language.basic-syntax.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "opening tags",
+          "statements",
+          "comments",
+          "PHP and HTML"
+        ]
+      },
+      {
+        "title": "PHP security",
+        "url": "https://www.php.net/manual/en/security.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "security model",
+          "filesystem security",
+          "database security",
+          "session security"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Basic syntax",
+      "url": "https://www.php.net/manual/en/language.basic-syntax.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "opening tags",
+        "statements",
+        "comments",
+        "PHP and HTML"
+      ]
+    },
+    {
+      "title": "PHP security",
+      "url": "https://www.php.net/manual/en/security.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "security model",
+        "filesystem security",
+        "database security",
+        "session security"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

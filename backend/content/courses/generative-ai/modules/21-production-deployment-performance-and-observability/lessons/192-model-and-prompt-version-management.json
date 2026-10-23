@@ -1,0 +1,165 @@
+{
+  "id": "genai-lesson-192",
+  "slug": "model-and-prompt-version-management",
+  "title": "Model and Prompt Version Management",
+  "sequence": 192,
+  "module_id": "genai-module-21",
+  "module_slug": "production-deployment-performance-and-observability",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional-practice",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "genai-lesson-087"
+  ],
+  "previous_lesson_id": "genai-lesson-191",
+  "next_lesson_id": "genai-lesson-193",
+  "keywords": [
+    "Model and Prompt Version Management",
+    "Model identifiers and version changes",
+    "Prompt templates as versioned assets",
+    "Model configuration records",
+    "Release comparisons",
+    "Regression gates",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 192,
+  "subtopics": [
+    "Model identifiers and version changes",
+    "Prompt templates as versioned assets",
+    "Model configuration records",
+    "Release comparisons",
+    "Regression gates",
+    "Rollbacks and migration planning"
+  ],
+  "learning_outcomes": [
+    "Explain model identifiers and version changes and how it connects to model and prompt version management.",
+    "Apply prompt templates as versioned assets in the example and predict the output before running it.",
+    "Test one realistic edge case for model and prompt version management and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers model and prompt version management through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Design for production: deployment boundaries, throughput, latency, cost, monitoring, recovery, prompt/model versions, CI/CD, and ongoing maintenance.",
+    "why_it_matters": "Use model identifiers and version changes as a lens for understanding model and prompt version management. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Model and Prompt Version Management: concept map",
+        "asset_path": "diagrams/lessons/lesson-192-model-and-prompt-version-management.svg",
+        "alt_text": "Diagram for Model and Prompt Version Management: understand Model identifiers and version changes, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Model identifiers and version changes, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Use model identifiers and version changes as a lens for understanding model and prompt version management. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Model identifiers and version changes",
+            "text": "Use model identifiers and version changes as a lens for understanding model and prompt version management. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Prompt templates as versioned assets",
+            "text": "Treat prompt templates as versioned assets as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs."
+          },
+          {
+            "title": "Model configuration records",
+            "text": "Use model configuration records as a lens for understanding model and prompt version management. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Release comparisons",
+            "text": "Use release comparisons as a lens for understanding model and prompt version management. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Regression gates",
+            "text": "Use regression gates to turn a vague quality claim into an observable criterion. Define a representative dataset, an expected outcome or rubric, a baseline, and the failure categories you will record; interpret aggregate scores alongside examples and affected groups."
+          },
+          {
+            "title": "Rollbacks and migration planning",
+            "text": "Rollbacks and migration planning describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Model and Prompt Version Management\ndeployments = [{\"model\": \"model-a\", \"prompt\": \"p3\"}, {\"model\": \"model-b\", \"prompt\": \"p3\"}]\nprint({\"model_changed\": deployments[0][\"model\"] != deployments[1][\"model\"], \"prompt_held_constant\": deployments[0][\"prompt\"] == deployments[1][\"prompt\"]})",
+        "expected_output": "{'model_changed': True, 'prompt_held_constant': True}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice model identifiers and version changes within model and prompt version management: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'model_changed': True, 'prompt_held_constant': True}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-192-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Model and Prompt Version Management is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://developers.openai.com/api/docs/guides/text",
+      "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Text generation",
+      "url": "https://developers.openai.com/api/docs/guides/text",
+      "publisher": "OpenAI API documentation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "text generation API patterns"
+      ]
+    },
+    {
+      "title": "Design and develop a RAG solution",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide",
+      "publisher": "Microsoft Learn / Azure Architecture Center",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "RAG architecture"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

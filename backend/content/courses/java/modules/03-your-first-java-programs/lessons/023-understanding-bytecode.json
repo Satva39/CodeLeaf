@@ -1,0 +1,220 @@
+{
+  "id": "java-lesson-023",
+  "slug": "understanding-bytecode",
+  "title": "Understanding Bytecode",
+  "sequence": 23,
+  "module_id": "java-module-03",
+  "module_slug": "your-first-java-programs",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 9,
+  "prerequisites": [],
+  "previous_lesson_id": "java-lesson-022",
+  "next_lesson_id": "java-lesson-024",
+  "keywords": [
+    "understanding",
+    "bytecode",
+    "java",
+    "generates",
+    "relationship",
+    "between",
+    "class-file",
+    "basics",
+    "platform",
+    "independence",
+    "limitations"
+  ],
+  "source_syllabus_number": 23,
+  "subtopics": [
+    "Why Java generates bytecode",
+    "The relationship between bytecode and the JVM",
+    "Class-file basics",
+    "Platform independence and its limitations"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of understanding bytecode and identify when it is appropriate in a Java program.",
+    "Apply at least one of the lesson topics—why java generates bytecode—in a small, readable example.",
+    "Predict the example result and check it against the stated output or a boundary-case test."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study understanding bytecode with a short explanation, an original visual map, a Java example, and a check you can perform yourself. Focus on the relationship between the rule and the behavior rather than memorizing isolated syntax.",
+    "why_it_matters": "This concept matters because it helps you understand what the compiler and runtime each do when a program is built and launched. In this lesson, focus on why java generates bytecode and use a minimal example to check what the rule actually guarantees.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Understanding Bytecode: concept map",
+        "asset_path": "diagrams/lesson-023.svg",
+        "alt_text": "Four-stage diagram for Understanding Bytecode: Why Java generates bytecode; The relationship between bytecode and the JVM; Class-file basics; Platform independence and its limitations.",
+        "caption": "Visual summary of Understanding Bytecode; use it as a map while reading the explanation and testing the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Java source is compiled to class-file bytecode that a compatible JVM can execute. Native libraries, file paths, runtime versions, and platform assumptions can still affect portability. The important habit is to make the assumptions explicit and use the code example as a small experiment."
+      },
+      {
+        "type": "paragraph",
+        "title": "How the pieces fit",
+        "text": "Connect why java generates bytecode with the relationship between bytecode and the jvm before choosing an implementation. The example is a small, observable case; extend it by changing one input and checking a boundary, invalid value, or compatibility limit where relevant."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Why Java generates bytecode",
+            "text": "Java source is compiled to class-file bytecode that a compatible JVM can execute. Native libraries, file paths, runtime versions, and platform assumptions can still affect portability."
+          },
+          {
+            "title": "The relationship between bytecode and the JVM",
+            "text": "Java source is compiled to class-file bytecode that a compatible JVM can execute. Native libraries, file paths, runtime versions, and platform assumptions can still affect portability."
+          },
+          {
+            "title": "Class-file basics",
+            "text": "A class defines state and behavior; an object is an instance. Encapsulation protects invariants by keeping mutable state private and validating updates through a small public API."
+          },
+          {
+            "title": "Platform independence and its limitations",
+            "text": "Java source is compiled to class-file bytecode that a compatible JVM can execute. Native libraries, file paths, runtime versions, and platform assumptions can still affect portability."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "java",
+        "code": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Source: Main.java\");\n        System.out.println(\"Compiler output: Main.class\");\n        System.out.println(\"Runtime: JVM\");\n    }\n}\n",
+        "expected_output": "A normal compile produces Main.class, which the JVM can execute.",
+        "run_instructions": "Trace source, class file, and runtime roles. For ordinary Java SE examples, use JDK 25, save a complete class as Main.java, and run `javac Main.java` followed by `java Main`. CodeLeaf does not execute Java in the browser; use a local JDK for these examples. Preview-only and configuration-file examples have their own version or filename notes.",
+        "reset_steps": "Restore the original example, remove any temporary output files it created, and rerun the baseline case. Do not leave credentials, generated private data, or large test files in the project directory."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Keep one clear hypothesis per experiment. Check the version, read the error message, test boundaries, and record what evidence supports your conclusion."
+      }
+    ],
+    "task": "Try it yourself: create a tiny Java source file that demonstrates why java generates bytecode. Compile it with javac, run it with java, and compare the output with your prediction.",
+    "task_acceptance_criteria": [
+      "The example demonstrates at least one listed topic from Understanding Bytecode.",
+      "The learner states the expected result before running or inspecting the example.",
+      "At least one boundary, failure, compatibility, or maintainability consideration is documented where relevant."
+    ],
+    "hints": [
+      "Start by identifying the contract or rule behind why java generates bytecode.",
+      "Reduce the example to the smallest input that makes the behavior visible.",
+      "Test one boundary or failure case and compare the result with the expected behavior."
+    ],
+    "expected_output": "A normal compile produces Main.class, which the JVM can execute.",
+    "run_mode": "server-runner",
+    "execution_notes": "Java requires a JDK or a separate isolated server runner. No Java sandbox is bundled with this content; never execute learner code inside the FastAPI process or public production container.",
+    "knowledge_check_file": "exams/question-files/lesson-023-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Applying the rule from memory without checking its exact contract.",
+        "why": "Small differences in type, scope, API version, or input shape can change the result.",
+        "fix": "Inspect the relevant official API/language documentation and build a minimal reproducer."
+      },
+      {
+        "problem": "Testing only a single happy path.",
+        "why": "Boundary values and failures often reveal assumptions hidden by the simplest example.",
+        "fix": "Add an empty, boundary, or invalid case and state the expected behavior before running it."
+      },
+      {
+        "problem": "Changing several things between runs.",
+        "why": "It becomes difficult to identify the actual cause of a different result.",
+        "fix": "Change one factor at a time and keep a short record of observed behavior."
+      }
+    ],
+    "summary": [
+      "Understanding Bytecode is best understood by connecting its contract to a small observable example.",
+      "Key syllabus points: Why Java generates bytecode, The relationship between bytecode and the JVM, Class-file basics.",
+      "Use official versioned documentation and tests to confirm assumptions before relying on behavior in a larger application."
+    ],
+    "references": [
+      {
+        "title": "Learn Java",
+        "url": "https://dev.java/learn/"
+      },
+      {
+        "title": "Java SE 25 API Specification",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html"
+      },
+      {
+        "title": "Java SE 25 Specifications",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/specs/index.html"
+      },
+      {
+        "title": "Java SE 25 Command-Line Tool Specifications",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/specs/man/index.html"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Learn Java",
+      "url": "https://dev.java/learn/",
+      "publisher": "Oracle / dev.java",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "getting started",
+        "language basics",
+        "object-oriented programming",
+        "generics",
+        "lambdas",
+        "collections",
+        "streams",
+        "modules",
+        "JVM tools",
+        "security"
+      ]
+    },
+    {
+      "title": "Java SE 25 API Specification",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "standard-library types and methods",
+        "API contracts",
+        "java.base",
+        "java.sql",
+        "java.net.http",
+        "java.nio.file",
+        "java.util.concurrent"
+      ]
+    },
+    {
+      "title": "Java SE 25 Specifications",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/specs/index.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "Java Language Specification",
+        "Java Virtual Machine Specification",
+        "preview feature classification",
+        "class-file and JDK tool specifications"
+      ]
+    },
+    {
+      "title": "Java SE 25 Command-Line Tool Specifications",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/specs/man/index.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "javac",
+        "java",
+        "javadoc",
+        "jdb",
+        "jcmd",
+        "jfr",
+        "jpackage",
+        "jlink"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Java curriculum outline and current official references; requires Java subject-matter review and local verification before publication."
+}

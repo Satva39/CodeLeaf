@@ -1,0 +1,215 @@
+{
+  "id": "php-lesson-276",
+  "slug": "version-control-with-git",
+  "title": "Version Control with Git",
+  "sequence": 276,
+  "module_id": "php-module-27",
+  "module_slug": "deployment-operations-and-production-engineering",
+  "level": "professional",
+  "difficulty": "professional",
+  "track": "professional",
+  "estimated_minutes": 13,
+  "prerequisites": [
+    "php-lesson-275"
+  ],
+  "previous_lesson_id": "php-lesson-275",
+  "next_lesson_id": "php-lesson-277",
+  "keywords": [
+    "version control with git",
+    "deployment, operations, and production engineering",
+    "repositories and commits",
+    "branches and merges",
+    "pull requests",
+    "code review",
+    "resolving conflicts and maintaining history",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 276,
+  "subtopics": [
+    "Repositories and commits.",
+    "Branches and merges.",
+    "Pull requests.",
+    "Code review.",
+    "Resolving conflicts and maintaining history."
+  ],
+  "learning_outcomes": [
+    "Explain what version control with git contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: repositories and commits.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Production reliability includes repeatable builds, correct runtime configuration, secret separation, compatible migrations, health checks, logging, monitoring, and a rollback strategy—not only uploading source files. In this lesson, focus on repositories and commits; then compare it with branches and merges. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use version control with git when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 27 overview: Deployment, Operations, and Production Engineering",
+        "asset_path": "diagrams/module-27-overview.svg",
+        "alt_text": "Four-stage overview for module 27, Deployment, Operations, and Production Engineering, grouping lesson topics in order.",
+        "caption": "Use this overview to place version control with git in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Production reliability includes repeatable builds, correct runtime configuration, secret separation, compatible migrations, health checks, logging, monitoring, and a rollback strategy—not only uploading source files. For version control with git, begin with repositories and commits. Also distinguish branches and merges; pull requests; code review. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Repositories and commits",
+            "text": "Know when to use repositories and commits, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Branches and merges",
+            "text": "Know when to use branches and merges, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Pull requests",
+            "text": "Track where this value enters the request lifecycle and where it affects the response; client-provided data must be treated as untrusted."
+          },
+          {
+            "title": "Code review",
+            "text": "Know when to use code review, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Resolving conflicts and maintaining history",
+            "text": "Know when to use resolving conflicts and maintaining history, what input or program state it changes, and which boundary case is worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Version Control with Git",
+        "language": "php",
+        "code": "<?php\n$release = [\"test\" => true, \"migrate\" => true, \"deploy\" => true, \"health_check\" => true];\necho count(array_filter($release)) . \" checks enabled\" . PHP_EOL;",
+        "expected_output": "4 checks enabled",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Keep secrets outside build artifacts, run repeatable checks before rollout, and define health checks and rollback plans."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for version control with git from top to bottom. Start by identifying repositories and commits, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for version control with git that demonstrates \"repositories and commits\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of repositories and commits.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "4 checks enabled",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-276-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Version Control with Git is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Keep secrets outside build artifacts, run repeatable checks before rollout, and define health checks and rollback plans."
+    ],
+    "references": [
+      {
+        "title": "PHP Manual",
+        "url": "https://www.php.net/manual/en/",
+        "publisher": "PHP Documentation Group",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "language syntax",
+          "built-in functions",
+          "runtime behavior",
+          "classes and objects"
+        ]
+      },
+      {
+        "title": "Supported Versions",
+        "url": "https://www.php.net/supported-versions.php",
+        "publisher": "PHP.net",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "active support",
+          "security support",
+          "version lifecycle"
+        ]
+      },
+      {
+        "title": "Docker PHP guide",
+        "url": "https://docs.docker.com/guides/php/",
+        "publisher": "Docker",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "containerized PHP development",
+          "deployment packaging"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "PHP Manual",
+      "url": "https://www.php.net/manual/en/",
+      "publisher": "PHP Documentation Group",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "language syntax",
+        "built-in functions",
+        "runtime behavior",
+        "classes and objects"
+      ]
+    },
+    {
+      "title": "Supported Versions",
+      "url": "https://www.php.net/supported-versions.php",
+      "publisher": "PHP.net",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "active support",
+        "security support",
+        "version lifecycle"
+      ]
+    },
+    {
+      "title": "Docker PHP guide",
+      "url": "https://docs.docker.com/guides/php/",
+      "publisher": "Docker",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "containerized PHP development",
+        "deployment packaging"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

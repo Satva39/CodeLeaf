@@ -1,0 +1,148 @@
+{
+  "id": "bash-project-010",
+  "slug": "production-ready-bash-automation-toolkit",
+  "title": "Production-Ready Bash Automation Toolkit",
+  "sequence": 10,
+  "tier": "capstone",
+  "objective": "Develop the final integrated, documented Bash toolkit.",
+  "prerequisite_lesson_ids": [
+    "bash-lesson-060",
+    "bash-lesson-197"
+  ],
+  "recommended_module_ranges": [
+    [
+      7,
+      20
+    ]
+  ],
+  "skills": [
+    "One consistent CLI with subcommands, help, argument validation, and exit statuses",
+    "Reusable functions and shared helper files",
+    "Documented environment/configuration inputs",
+    "File management, task execution, logging, and explicit error handling",
+    "Safe temporary files, cleanup, and interruption handling",
+    "Dry-run for operations that can modify data",
+    "Dependency and minimum-version checks",
+    "Automated tests, ShellCheck, and CI",
+    "Setup, usage, security assumptions, limitations, and recovery documentation"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Milestone 1: One consistent CLI with subcommands, help, argument validation, and exit statuses",
+      "acceptance_criteria": [
+        "Demonstrate one consistent cli with subcommands, help, argument validation, and exit statuses using synthetic or disposable data.",
+        "Record a repeatable check or test and its observed result.",
+        "Document one failure mode and its expected response."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Milestone 2: Reusable functions and shared helper files",
+      "acceptance_criteria": [
+        "Demonstrate reusable functions and shared helper files using synthetic or disposable data.",
+        "Record a repeatable check or test and its observed result.",
+        "Document one failure mode and its expected response."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Milestone 3: Documented environment/configuration inputs",
+      "acceptance_criteria": [
+        "Demonstrate documented environment/configuration inputs using synthetic or disposable data.",
+        "Record a repeatable check or test and its observed result.",
+        "Document one failure mode and its expected response."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Milestone 4: File management, task execution, logging, and explicit error handling",
+      "acceptance_criteria": [
+        "Demonstrate file management, task execution, logging, and explicit error handling using synthetic or disposable data.",
+        "Record a repeatable check or test and its observed result.",
+        "Document one failure mode and its expected response."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "contents": "# Production-Ready Bash Automation Toolkit\n\nProduction-Ready Bash Automation Toolkit is a draft CodeLeaf project.\n\n## Required features\n- [ ] One consistent CLI with subcommands, help, argument validation, and exit statuses\n- [ ] Reusable functions and shared helper files\n- [ ] Documented environment/configuration inputs\n- [ ] File management, task execution, logging, and explicit error handling\n- [ ] Safe temporary files, cleanup, and interruption handling\n- [ ] Dry-run for operations that can modify data\n- [ ] Dependency and minimum-version checks\n- [ ] Automated tests, ShellCheck, and CI\n- [ ] Setup, usage, security assumptions, limitations, and recovery documentation\n\nUse synthetic data and a disposable directory. Do not commit credentials or personal data. Document setup, tests, supported Bash versions, limitations, and recovery. Bash snippets run locally or in a separately isolated runner; the CodeLeaf web process must not execute arbitrary learner Bash.\n"
+    },
+    {
+      "path": "bin/main.sh",
+      "language": "bash",
+      "contents": "#!/usr/bin/env bash\n# Production-Ready Bash Automation Toolkit\n# Draft starter scaffold: validate inputs before side effects.\nset -u\n\nusage() {\n  printf 'Usage: %s [--dry-run] COMMAND [ARGS...]\\n' \"${0##*/}\"\n}\n\nmain() {\n  case ${1:-help} in\n    help|-h|--help) usage ;;\n    *) printf 'TODO: validate and handle command: %s\\n' \"$1\"; return 2 ;;\n  esac\n}\n\nmain \"$@\"\n"
+    }
+  ],
+  "required_features": [
+    "One consistent CLI with subcommands, help, argument validation, and exit statuses",
+    "Reusable functions and shared helper files",
+    "Documented environment/configuration inputs",
+    "File management, task execution, logging, and explicit error handling",
+    "Safe temporary files, cleanup, and interruption handling",
+    "Dry-run for operations that can modify data",
+    "Dependency and minimum-version checks",
+    "Automated tests, ShellCheck, and CI",
+    "Setup, usage, security assumptions, limitations, and recovery documentation"
+  ],
+  "stretch_features": [
+    "Add Bats behavioral tests and ShellCheck static analysis.",
+    "Add fixture data covering spaces, empty values, missing inputs, and command failures.",
+    "Document supported Bash and external utility versions and add a CI workflow."
+  ],
+  "tests": [
+    {
+      "name": "Functional behavior",
+      "mode": "human_review",
+      "criteria": [
+        "Required behavior works on synthetic inputs.",
+        "Expected output and exit status are documented."
+      ]
+    },
+    {
+      "name": "Failure and recovery",
+      "mode": "human_review",
+      "criteria": [
+        "Invalid inputs and failed dependencies are handled explicitly.",
+        "Side effects are limited to the configured practice directory and restore steps are documented."
+      ]
+    },
+    {
+      "name": "Security and operations",
+      "mode": "human_review",
+      "criteria": [
+        "No secrets are embedded or logged.",
+        "Dry-run/preview is available for higher-impact changes.",
+        "Minimum version, tests, limitations, and rollback/recovery are documented."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correctness and required features",
+      "points": 30
+    },
+    {
+      "criterion": "Tests and evidence",
+      "points": 25
+    },
+    {
+      "criterion": "Safety, security, and recoverability",
+      "points": 20
+    },
+    {
+      "criterion": "Design, maintainability, and documentation",
+      "points": 15
+    },
+    {
+      "criterion": "Compatibility and limitations",
+      "points": 10
+    }
+  ],
+  "review_method": "human_review",
+  "reference_solution_file": "projects/solutions/010-production-ready-bash-automation-toolkit-reference.json",
+  "status": "draft",
+  "notes": "Derived from Bash.pdf Section D; all project source files and acceptance details are original CodeLeaf materials. This is a learning project, not production approval."
+}

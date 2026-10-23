@@ -1,0 +1,177 @@
+{
+  "id": "xml-lesson-146",
+  "slug": "xml-injection-and-output-safety",
+  "title": "XML Injection and Output Safety",
+  "sequence": 146,
+  "module_id": "xml-module-17",
+  "module_slug": "xml-security-and-safe-processing",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "xml-lesson-145"
+  ],
+  "previous_lesson_id": "xml-lesson-145",
+  "next_lesson_id": "xml-lesson-147",
+  "keywords": [
+    "xml-injection-and-output-safety",
+    "xml-security-and-safe-processing",
+    "unsafe-construction-of-xml-strings",
+    "using-xml-aware-builders",
+    "correct-escaping",
+    "output-validation",
+    "avoiding-injection-through-untrusted-values"
+  ],
+  "source_syllabus_number": 146,
+  "subtopics": [
+    "Unsafe construction of XML strings",
+    "Using XML-aware builders",
+    "Correct escaping",
+    "Output validation",
+    "Avoiding injection through untrusted values"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose of xml injection and output safety and explain at least one listed subtopic.",
+    "Interpret the example related to xml injection and output safety and predict its expected result.",
+    "Identify one validation, compatibility, security, or troubleshooting consideration relevant to the example."
+  ],
+  "content": {
+    "intro": "In this lesson, you will explore xml injection and output safety within XML Security and Safe Processing. You will connect its syllabus topics to an inspectable example, check the expected result, and note tool/version limits.",
+    "why_it_matters": "XML Injection and Output Safety matters because XML workflows rely on explicit structure and predictable processing. The lesson helps you reason about unsafe construction of xml strings, avoid a common misunderstanding, and make a result reproducible for another developer.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "XML Injection and Output Safety: concept map",
+        "asset_path": "diagrams/lessons/lesson-146-xml-injection-and-output-safety.svg",
+        "alt_text": "Concept flow covering Unsafe construction of XML strings, Using XML-aware builders, Correct escaping, Output validation.",
+        "caption": "The visual introduces xml injection and output safety; inspect the worked example and then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Treat XML, schemas, and stylesheets from outside the trust boundary as untrusted input. Safe processing requires explicit parser and resolver policy, bounded resource use, and fail-closed configuration."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the subtopics",
+        "text": "This lesson explicitly covers: Unsafe construction of XML strings; Using XML-aware builders; Correct escaping; Output validation; Avoiding injection through untrusted values. Treat these as connected parts of one workflow: define the structure, make the relevant assumptions explicit, and verify a result with a small known input."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: XML Injection and Output Safety",
+        "language": "python",
+        "code": "from defusedxml.ElementTree import fromstring\n\n# Parse only a bounded, untrusted XML string with a hardened parser.\nroot = fromstring(\"<catalog><product>Notebook</product></catalog>\")\nprint(root.tag)",
+        "expected_output": "catalog",
+        "run_instructions": "Inspect this example as text. Run it only in a processor that supports the shown language/version; the standard CodeLeaf playground previews HTML/CSS/JavaScript only and does not execute XML, XSD, XPath, XSLT, XQuery, Python, or SQL. For untrusted documents, prefer a hardened parser (for Python, review defusedxml and current Expat guidance), disable DTDs and external entity resolution unless a reviewed requirement demands them, and separately restrict network/file access used by schema or stylesheet resolution.",
+        "reset_steps": "Restore the sample to its exact starting state before each experiment. Change one element, attribute, expression, or constraint at a time, then compare the result with the expected behavior.",
+        "execution_mode": "server-runner",
+        "limitations": "This defensive example requires the defusedxml package, which is not installed by this course patch. Pin and review dependencies, forbid DTDs when not needed, restrict schema/stylesheet resolvers, and enforce input/resource limits. Never run untrusted parsing in an unisolated production process."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety checkpoint",
+        "text": "For untrusted XML, use reviewed secure parser settings, disable unnecessary DTD/external-resource resolution, bound resource use, and fail closed if security configuration cannot be applied. Distinguish well-formedness, schema validity, and application-level correctness; they are different checks."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a small synthetic example that demonstrates “Unsafe construction of XML strings”. Then add one boundary case involving “Using XML-aware builders”. Write down what should happen before testing, and record the exact output or processor message afterward."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-146-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming a document is correct because it looks readable.",
+        "why": "Visual appearance does not prove well-formedness, schema validity, correct namespace handling, or application-level meaning.",
+        "fix": "Parse and validate the document with the intended processor, then assert its meaning using a focused test."
+      },
+      {
+        "problem": "Mixing specification features with processor support.",
+        "why": "A standard may define features that a specific runtime does not implement.",
+        "fix": "Record the version and feature support; test with the actual target processor."
+      },
+      {
+        "problem": "Testing only one happy-path example.",
+        "why": "Missing values, wrong types, namespace differences, or boundary inputs can expose failures.",
+        "fix": "Add a valid case, an invalid case, and an edge case to the verification notes."
+      }
+    ],
+    "task": "Build a short demonstration of xml injection and output safety using synthetic data. Include the concept “Unsafe construction of XML strings”, a known expected result, and a short note explaining one edge case.",
+    "task_acceptance_criteria": [
+      "The artifact clearly demonstrates Unsafe construction of XML strings.",
+      "The expected result is written before verification.",
+      "One invalid or boundary case is documented.",
+      "Processor/version assumptions and relevant security limits are recorded."
+    ],
+    "hints": [
+      "Start with the exact definition or construct associated with unsafe construction of xml strings.",
+      "Keep the example minimal and change one thing at a time.",
+      "Compare the observed result with the expected behavior and consult the linked specification if they differ."
+    ],
+    "summary": [
+      "XML Injection and Output Safety contributes to the larger XML workflow of creating, checking, querying, transforming, or maintaining structured documents.",
+      "The listed syllabus concepts include Unsafe construction of XML strings, Using XML-aware builders, Correct escaping.",
+      "A reproducible XML example includes the input, processor/version assumptions, expected result, and a meaningful failure case."
+    ],
+    "run_mode": "server-runner",
+    "expected_output": "catalog"
+  },
+  "task": "Build a short demonstration of xml injection and output safety using synthetic data. Include the concept “Unsafe construction of XML strings”, a known expected result, and a short note explaining one edge case.",
+  "task_acceptance_criteria": [
+    "The artifact clearly demonstrates Unsafe construction of XML strings.",
+    "The expected result is written before verification.",
+    "One invalid or boundary case is documented.",
+    "Processor/version assumptions and relevant security limits are recorded."
+  ],
+  "hints": [
+    "Start with the exact definition or construct associated with unsafe construction of xml strings.",
+    "Keep the example minimal and change one thing at a time.",
+    "Compare the observed result with the expected behavior and consult the linked specification if they differ."
+  ],
+  "summary": [
+    "XML Injection and Output Safety contributes to the larger XML workflow of creating, checking, querying, transforming, or maintaining structured documents.",
+    "The listed syllabus concepts include Unsafe construction of XML strings, Using XML-aware builders, Correct escaping.",
+    "A reproducible XML example includes the input, processor/version assumptions, expected result, and a meaningful failure case."
+  ],
+  "run_mode": "server-runner",
+  "expected_output": "catalog",
+  "common_mistakes": [
+    {
+      "problem": "Assuming a document is correct because it looks readable.",
+      "why": "Visual appearance does not prove well-formedness, schema validity, correct namespace handling, or application-level meaning.",
+      "fix": "Parse and validate the document with the intended processor, then assert its meaning using a focused test."
+    },
+    {
+      "problem": "Mixing specification features with processor support.",
+      "why": "A standard may define features that a specific runtime does not implement.",
+      "fix": "Record the version and feature support; test with the actual target processor."
+    },
+    {
+      "problem": "Testing only one happy-path example.",
+      "why": "Missing values, wrong types, namespace differences, or boundary inputs can expose failures.",
+      "fix": "Add a valid case, an invalid case, and an edge case to the verification notes."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "title": "XML External Entity Prevention Cheat Sheet",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html",
+      "publisher": "OWASP",
+      "checked_on": "2026-10-12"
+    },
+    {
+      "title": "Extensible Markup Language (XML) 1.0, Fifth Edition",
+      "url": "https://www.w3.org/TR/xml/",
+      "publisher": "W3C",
+      "checked_on": "2026-10-12"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Generated from the attached XML syllabus; requires technical review and validation in the target XML processor before publication.",
+  "exercise_files": []
+}

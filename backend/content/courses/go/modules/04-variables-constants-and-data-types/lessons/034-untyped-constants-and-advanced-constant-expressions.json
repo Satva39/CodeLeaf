@@ -1,0 +1,198 @@
+{
+  "id": "go-lesson-034",
+  "slug": "untyped-constants-and-advanced-constant-expressions",
+  "title": "Untyped Constants and Advanced Constant Expressions",
+  "sequence": 34,
+  "module_id": "go-module-04",
+  "module_slug": "variables-constants-and-data-types",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "go-lesson-033"
+  ],
+  "previous_lesson_id": "go-lesson-033",
+  "next_lesson_id": "go-lesson-035",
+  "keywords": [
+    "untyped constants and advanced constant expressions",
+    "untyped numeric constants",
+    "precision of untyped constants",
+    "constant expressions and representability",
+    "compile time evaluation",
+    "common constant related compilation errors",
+    "Go",
+    "Golang"
+  ],
+  "source_syllabus_number": 34,
+  "subtopics": [
+    "Untyped numeric constants",
+    "Precision of untyped constants",
+    "Constant expressions and representability",
+    "Compile-time evaluation",
+    "Common constant-related compilation errors"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and behavior of untyped constants and advanced constant expressions.",
+    "Apply at least one lesson concept—untyped numeric constants—in a small Go example or workflow.",
+    "Predict a representative result, then test a boundary case and explain any difference."
+  ],
+  "exercise_files": [],
+  "content": {
+    "intro": "Untyped Constants and Advanced Constant Expressions gives you a rule for reading or writing Go programs. Go is statically typed and its syntax is intentionally regular; read the declarations and expressions from their types and scope, then predict what each statement changes. The Go specification is the authoritative reference for exact behavior.",
+    "why_it_matters": "Small language rules have a large effect: they determine whether a program compiles and whether edge cases behave as expected.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 4 overview: Variables, Constants, and Data Types",
+        "asset_path": "diagrams/module-04-overview.svg",
+        "alt_text": "Overview of Module 4, Variables, Constants, and Data Types; this lesson is lesson 34 in the ordered module sequence.",
+        "caption": "Use the module map to place “Untyped Constants and Advanced Constant Expressions” within the larger sequence, then return to the individual code and practice below."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Untyped Constants and Advanced Constant Expressions gives you a rule for reading or writing Go programs. Go is statically typed and its syntax is intentionally regular; read the declarations and expressions from their types and scope, then predict what each statement changes. The Go specification is the authoritative reference for exact behavior."
+      },
+      {
+        "type": "list",
+        "title": "Topics covered in this lesson",
+        "items": [
+          {
+            "title": "Untyped numeric constants",
+            "text": "Be able to explain untyped numeric constants, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Precision of untyped constants",
+            "text": "Be able to explain precision of untyped constants, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Constant expressions and representability",
+            "text": "Be able to explain constant expressions and representability, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Compile-time evaluation",
+            "text": "Be able to explain compile-time evaluation, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Common constant-related compilation errors",
+            "text": "Be able to explain common constant-related compilation errors, identify the inputs or program state it affects, and name one boundary case worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Untyped Constants and Advanced Constant Expressions",
+        "language": "go",
+        "code": "package main\n\nimport (\n    \"errors\"\n    \"fmt\"\n)\n\nfunc positive(n int) error {\n    if n <= 0 { return errors.New(\"value must be positive\") }\n    return nil\n}\nfunc main() {\n    if err := positive(0); err != nil { fmt.Println(err); return }\n    fmt.Println(\"accepted\")\n}\n",
+        "expected_output": "value must be positive",
+        "run_mode": "server-runner",
+        "run_instructions": "Save as main.go and run `go run main.go`. Return expected errors; reserve panic/recover for exceptional boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through the example",
+        "text": "First, identify the input or initial state in the example for untyped constants and advanced constant expressions. Next, trace the operation or contract that matters, and predict the result before running it. If the example depends on a version-specific feature, a driver, or an external service, follow the stated prerequisites rather than assuming it works in a browser preview."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to one subtopic—Untyped numeric constants—and add a second case that could fail or behave differently. Write down the expected result before testing."
+      }
+    ],
+    "task": "Create a small example connected to “Untyped Constants and Advanced Constant Expressions”. Use Untyped numeric constants as the starting point, predict the output, then add one invalid, empty, or boundary case and document its result.",
+    "task_acceptance_criteria": [
+      "The example demonstrates untyped numeric constants or a closely related concept.",
+      "Inputs, relevant state changes, and expected output are clear.",
+      "At least one boundary case is deliberately tested or documented.",
+      "Errors are handled honestly and no success state is reported when the operation fails."
+    ],
+    "hints": [
+      "Start from the simplest example related to untyped numeric constants.",
+      "Predict the result manually and annotate the value that changes at each step.",
+      "Run `gofmt` and the appropriate local `go run`, `go test`, `go vet`, or inspection command when prerequisites are available."
+    ],
+    "expected_output": "value must be positive",
+    "run_mode": "server-runner",
+    "knowledge_check_file": "exams/question-files/lesson-034-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the happy-path output proves all inputs are safe.",
+        "why": "Empty, malformed, boundary, or concurrent cases may follow different paths.",
+        "fix": "Add focused tests for a normal input and at least one relevant edge case."
+      },
+      {
+        "problem": "Ignoring returned errors or external-system status.",
+        "why": "Go APIs commonly report expected failures as explicit error values.",
+        "fix": "Check errors close to the operation, add useful context when propagating, and clean up resources."
+      },
+      {
+        "problem": "Using an API or syntax without checking the selected Go version.",
+        "why": "Language and standard-library capabilities can change between releases.",
+        "fix": "Record `go version`, inspect the `go` directive, and read official release notes for version-specific topics."
+      }
+    ],
+    "summary": [
+      "Untyped Constants and Advanced Constant Expressions provides a reusable rule or workflow for Go programs.",
+      "The subtopics to revisit are: Untyped numeric constants; Precision of untyped constants; Constant expressions and representability; Compile-time evaluation; Common constant-related compilation errors.",
+      "Prefer a small reproducible example, explicit errors, appropriate tests, and version-matched official documentation."
+    ],
+    "references": [
+      {
+        "title": "Go Documentation",
+        "url": "https://go.dev/doc/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "tutorials",
+          "language concepts",
+          "tooling",
+          "application development"
+        ]
+      },
+      {
+        "title": "The Go Programming Language Specification",
+        "url": "https://go.dev/ref/spec",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "syntax",
+          "types",
+          "control flow",
+          "interfaces"
+        ]
+      }
+    ],
+    "accessibility_note": "The diagram includes descriptive alt text and a text caption. Code examples are also described in prose; do not rely on color alone to understand a sequence.",
+    "execution_note": "Save as main.go and run `go run main.go`. Return expected errors; reserve panic/recover for exceptional boundaries. Examples that need a database driver, external service, isolated execution environment, or version-specific feature are labeled as static examples and should not be treated as already executed."
+  },
+  "sources": [
+    {
+      "title": "Go Documentation",
+      "url": "https://go.dev/doc/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tutorials",
+        "language concepts",
+        "tooling",
+        "application development"
+      ]
+    },
+    {
+      "title": "The Go Programming Language Specification",
+      "url": "https://go.dev/ref/spec",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "syntax",
+        "types",
+        "control flow",
+        "interfaces"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied Go.pdf syllabus mapping. Human review and local runtime verification are required before publication."
+}

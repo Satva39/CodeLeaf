@@ -1,0 +1,142 @@
+{
+  "id": "pytorch-project-07",
+  "slug": "transformer-based-text-generation",
+  "title": "Transformer-Based Text Generation",
+  "sequence": 7,
+  "tier": "advanced",
+  "objective": "Train a compact autoregressive language model on an appropriate dataset and document its limitations.",
+  "prerequisite_lesson_ids": [
+    "pytorch-lesson-070",
+    "pytorch-lesson-092",
+    "pytorch-lesson-099",
+    "pytorch-lesson-108",
+    "pytorch-lesson-132"
+  ],
+  "recommended_lesson_range": [
+    70,
+    132
+  ],
+  "skills": [
+    "PyTorch model development",
+    "data and evaluation",
+    "testing",
+    "reproducible reporting"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Create tokenization and shifted targets",
+      "acceptance_criteria": [
+        "Demonstrate: create tokenization and shifted targets.",
+        "Include an observable test or written evidence.",
+        "Document the environment and known limitations."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Implement causal attention masks",
+      "acceptance_criteria": [
+        "Demonstrate: implement causal attention masks.",
+        "Include an observable test or written evidence.",
+        "Document the environment and known limitations."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Train transformer blocks",
+      "acceptance_criteria": [
+        "Demonstrate: train transformer blocks.",
+        "Include an observable test or written evidence.",
+        "Document the environment and known limitations."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Restore checkpoints and generate tokens",
+      "acceptance_criteria": [
+        "Demonstrate: restore checkpoints and generate tokens.",
+        "Include an observable test or written evidence.",
+        "Document the environment and known limitations."
+      ]
+    },
+    {
+      "sequence": 5,
+      "title": "Report dataset limits and evaluation results",
+      "acceptance_criteria": [
+        "Demonstrate: report dataset limits and evaluation results.",
+        "Include an observable test or written evidence.",
+        "Document the environment and known limitations."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "contents": "# Transformer-Based Text Generation\n\n## Objective\nTrain a compact autoregressive language model on an appropriate dataset and document its limitations.\n\n## Setup\nCreate a dedicated virtual environment and install a PyTorch build that matches your OS and hardware using https://pytorch.org/get-started/locally/.\n\n## Deliverables\n- Reproducible implementation and configuration\n- Tests for shapes, outputs, and at least one failure case\n- Report with metrics, versions, data provenance, and limitations\n\n## Safety and execution\nDo not load untrusted serialized objects or expose unrestricted model execution as a public service. CodeLeaf does not provide a secure arbitrary-Python runner."
+    }
+  ],
+  "required_features": [
+    "Create tokenization and shifted targets",
+    "Implement causal attention masks",
+    "Train transformer blocks",
+    "Restore checkpoints and generate tokens",
+    "Report dataset limits and evaluation results"
+  ],
+  "stretch_features": [
+    "Compare one alternative model or configuration with the same evaluation protocol.",
+    "Add structured experiment logs and a repeatable command-line entry point.",
+    "Test one realistic failure mode and document a rollback or recovery step."
+  ],
+  "tests": [
+    {
+      "name": "reproducibility and configuration",
+      "mode": "human_review",
+      "criteria": [
+        "Dataset and preprocessing versions are documented.",
+        "Seeds and hyperparameters are recorded.",
+        "The reported result can be reproduced with the README commands."
+      ]
+    },
+    {
+      "name": "functional smoke tests",
+      "mode": "human_review",
+      "criteria": [
+        "Model input and output shapes are asserted.",
+        "One invalid input or restoration failure is tested.",
+        "The inference path uses evaluation mode and disables autograd where appropriate."
+      ]
+    },
+    {
+      "name": "quality and responsible use",
+      "mode": "human_review",
+      "criteria": [
+        "Metrics fit the task and are reported on held-out data.",
+        "Known limitations and data provenance are documented.",
+        "Performance claims are supported by actual target-environment measurements."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correctness and required functionality",
+      "points": 30
+    },
+    {
+      "criterion": "Data pipeline and model design",
+      "points": 20
+    },
+    {
+      "criterion": "Evaluation, tests, and error analysis",
+      "points": 25
+    },
+    {
+      "criterion": "Reproducibility, documentation, and limitations",
+      "points": 25
+    }
+  ],
+  "rubric_total": 100,
+  "review_method": "Human review using milestone evidence, tests, and the 100-point rubric. Static checks do not replace executing the project in an isolated environment.",
+  "reference_solution_file": "projects/solutions/007-transformer-based-text-generation-solution.json",
+  "status": "draft"
+}

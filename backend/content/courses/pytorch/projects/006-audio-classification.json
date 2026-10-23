@@ -1,0 +1,143 @@
+{
+  "id": "pytorch-project-06",
+  "slug": "audio-classification",
+  "title": "Audio Classification",
+  "sequence": 6,
+  "tier": "intermediate",
+  "objective": "Classify short audio clips into defined categories using waveform or spectrogram features.",
+  "prerequisite_lesson_ids": [
+    "pytorch-lesson-048",
+    "pytorch-lesson-056",
+    "pytorch-lesson-066",
+    "pytorch-lesson-074",
+    "pytorch-lesson-156",
+    "pytorch-lesson-157"
+  ],
+  "recommended_lesson_range": [
+    48,
+    157
+  ],
+  "skills": [
+    "PyTorch model development",
+    "data and evaluation",
+    "testing",
+    "reproducible reporting"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Record sample rate and audio provenance",
+      "acceptance_criteria": [
+        "Demonstrate: record sample rate and audio provenance.",
+        "Include an observable test or written evidence.",
+        "Document the environment and known limitations."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Build repeatable preprocessing",
+      "acceptance_criteria": [
+        "Demonstrate: build repeatable preprocessing.",
+        "Include an observable test or written evidence.",
+        "Document the environment and known limitations."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Train and validate a classifier",
+      "acceptance_criteria": [
+        "Demonstrate: train and validate a classifier.",
+        "Include an observable test or written evidence.",
+        "Document the environment and known limitations."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Test on held-out recordings",
+      "acceptance_criteria": [
+        "Demonstrate: test on held-out recordings.",
+        "Include an observable test or written evidence.",
+        "Document the environment and known limitations."
+      ]
+    },
+    {
+      "sequence": 5,
+      "title": "Document codecs and package compatibility",
+      "acceptance_criteria": [
+        "Demonstrate: document codecs and package compatibility.",
+        "Include an observable test or written evidence.",
+        "Document the environment and known limitations."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "contents": "# Audio Classification\n\n## Objective\nClassify short audio clips into defined categories using waveform or spectrogram features.\n\n## Setup\nCreate a dedicated virtual environment and install a PyTorch build that matches your OS and hardware using https://pytorch.org/get-started/locally/.\n\n## Deliverables\n- Reproducible implementation and configuration\n- Tests for shapes, outputs, and at least one failure case\n- Report with metrics, versions, data provenance, and limitations\n\n## Safety and execution\nDo not load untrusted serialized objects or expose unrestricted model execution as a public service. CodeLeaf does not provide a secure arbitrary-Python runner."
+    }
+  ],
+  "required_features": [
+    "Record sample rate and audio provenance",
+    "Build repeatable preprocessing",
+    "Train and validate a classifier",
+    "Test on held-out recordings",
+    "Document codecs and package compatibility"
+  ],
+  "stretch_features": [
+    "Compare one alternative model or configuration with the same evaluation protocol.",
+    "Add structured experiment logs and a repeatable command-line entry point.",
+    "Test one realistic failure mode and document a rollback or recovery step."
+  ],
+  "tests": [
+    {
+      "name": "reproducibility and configuration",
+      "mode": "human_review",
+      "criteria": [
+        "Dataset and preprocessing versions are documented.",
+        "Seeds and hyperparameters are recorded.",
+        "The reported result can be reproduced with the README commands."
+      ]
+    },
+    {
+      "name": "functional smoke tests",
+      "mode": "human_review",
+      "criteria": [
+        "Model input and output shapes are asserted.",
+        "One invalid input or restoration failure is tested.",
+        "The inference path uses evaluation mode and disables autograd where appropriate."
+      ]
+    },
+    {
+      "name": "quality and responsible use",
+      "mode": "human_review",
+      "criteria": [
+        "Metrics fit the task and are reported on held-out data.",
+        "Known limitations and data provenance are documented.",
+        "Performance claims are supported by actual target-environment measurements."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correctness and required functionality",
+      "points": 30
+    },
+    {
+      "criterion": "Data pipeline and model design",
+      "points": 20
+    },
+    {
+      "criterion": "Evaluation, tests, and error analysis",
+      "points": 25
+    },
+    {
+      "criterion": "Reproducibility, documentation, and limitations",
+      "points": 25
+    }
+  ],
+  "rubric_total": 100,
+  "review_method": "Human review using milestone evidence, tests, and the 100-point rubric. Static checks do not replace executing the project in an isolated environment.",
+  "reference_solution_file": "projects/solutions/006-audio-classification-solution.json",
+  "status": "draft"
+}

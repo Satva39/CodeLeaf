@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-48",
+  "exercise_id": "dsa-exercise-pdf-48",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\ndef convex_hull(points):\n    pts=sorted(set(map(tuple,points)))\n    if len(pts)<=1: return pts\n    def cross(o,a,b): return (a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0])\n    lower=[]\n    for p in pts:\n        while len(lower)>=2 and cross(lower[-2],lower[-1],p)<=0: lower.pop()\n        lower.append(p)\n    upper=[]\n    for p in reversed(pts):\n        while len(upper)>=2 and cross(upper[-2],upper[-1],p)<=0: upper.pop()\n        upper.append(p)\n    return lower[:-1]+upper[:-1]\n\nassert set(convex_hull([(0,0),(1,0),(1,1),(0,1),(0.5,0.5)]))=={(0,0),(1,0),(1,1),(0,1)}\n```",
+  "explanation": "The monotone-chain convex hull sorts points then removes turns with non-positive cross product. O(n log n) time; collinear boundary points are omitted.",
+  "tested_reference_code": "def convex_hull(points):\n    pts=sorted(set(map(tuple,points)))\n    if len(pts)<=1: return pts\n    def cross(o,a,b): return (a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0])\n    lower=[]\n    for p in pts:\n        while len(lower)>=2 and cross(lower[-2],lower[-1],p)<=0: lower.pop()\n        lower.append(p)\n    upper=[]\n    for p in reversed(pts):\n        while len(upper)>=2 and cross(upper[-2],upper[-1],p)<=0: upper.pop()\n        upper.append(p)\n    return lower[:-1]+upper[:-1]\n\nassert set(convex_hull([(0,0),(1,0),(1,1),(0,1),(0.5,0.5)]))=={(0,0),(1,0),(1,1),(0,1)}",
+  "language": "python"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "pytorch-exercise-010-reference-solution",
+  "exercise_id": "pytorch-exercise-010",
+  "title": "Reference approach: First Classifier",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Implement first classifier in a small isolated script. Required implementation evidence includes: nn.Linear, CrossEntropyLoss, optimizer.step, model.eval. Use a reproducible seed, report observed output, and explain relevant edge cases.",
+  "explanation": "This exercise consolidates the topic from lesson 060. The list of required strings is only a minimal static signal; inspect numerical correctness, error handling, and test outcomes manually.",
+  "example_code": "import torch\nfrom torch import nn\ntorch.manual_seed(3); x=torch.randn(32, 2); y=(x[:, 0] + x[:, 1] > 0).long(); model=nn.Linear(2,2); opt=torch.optim.SGD(model.parameters(), lr=0.2)\nfor _ in range(30): opt.zero_grad(); loss=nn.CrossEntropyLoss()(model(x), y); loss.backward(); opt.step()\nmodel.eval()\nwith torch.inference_mode(): print(((model(x).argmax(1)==y).float().mean().item()))",
+  "reference_code": "import torch\nfrom torch import nn\ntorch.manual_seed(3); x=torch.randn(32, 2); y=(x[:, 0] + x[:, 1] > 0).long(); model=nn.Linear(2,2); opt=torch.optim.SGD(model.parameters(), lr=0.2)\nfor _ in range(30): opt.zero_grad(); loss=nn.CrossEntropyLoss()(model(x), y); loss.backward(); opt.step()\nmodel.eval()\nwith torch.inference_mode(): print(((model(x).argmax(1)==y).float().mean().item()))",
+  "review_notes": [
+    "Do not treat source-string grading as proof that numerical behavior is correct.",
+    "Run in a supported local environment or isolated runner.",
+    "Keep input data synthetic unless a dataset has an appropriate license and documented provenance."
+  ]
+}

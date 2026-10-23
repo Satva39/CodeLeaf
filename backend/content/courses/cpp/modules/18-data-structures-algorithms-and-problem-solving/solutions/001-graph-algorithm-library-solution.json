@@ -1,0 +1,18 @@
+{
+  "id": "cpp-exercise-solution-037",
+  "exercise_id": "cpp-exercise-037",
+  "title": "Graph algorithm library reference solution notes",
+  "language": "cpp",
+  "answer": "#include <iostream>\n#include <queue>\n#include <vector>\nstd::vector<int> bfs(const std::vector<std::vector<int>>& graph, int start) {\n    std::vector<bool> seen(graph.size(), false); std::vector<int> order; std::queue<int> q;\n    seen.at(start) = true; q.push(start);\n    while (!q.empty()) { int u=q.front(); q.pop(); order.push_back(u);\n        for (int v : graph.at(u)) if (!seen.at(v)) { seen[v]=true; q.push(v); }\n    }\n    return order;\n}\nint main() { const std::vector<std::vector<int>> g{{1,2},{0,3},{0},{1}}; for(int n:bfs(g,0)) std::cout << n << ' '; std::cout << '\\n'; }\n",
+  "explanation": "0 1 2 3 ",
+  "manual_validation_checklist": [
+    "Compile locally with C++20 and -Wall -Wextra -Wpedantic (add the external library named in the solution when applicable).",
+    "Test normal inputs and at least one boundary/failure case named in the exercise prompt.",
+    "Check integer range, object lifetime, resource cleanup and error handling where relevant.",
+    "Mark a vertex visited when enqueueing it so it is not enqueued repeatedly. Validate vertex indices and decide how disconnected components are handled.",
+    "Keep this solution in repository-only protected content; do not include it in learner API responses."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only reference notes; replace with a reviewed implementation and test suite before publishing the exercise."
+}

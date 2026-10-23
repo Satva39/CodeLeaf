@@ -1,0 +1,167 @@
+{
+  "id": "csharp-lesson-054",
+  "slug": "parameter-arrays-and-advanced-signatures",
+  "title": "Parameter Arrays and Advanced Signatures",
+  "sequence": 54,
+  "module_id": "csharp-module-06",
+  "module_slug": "methods-and-reusable-code",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "csharp-lesson-053"
+  ],
+  "previous_lesson_id": "csharp-lesson-053",
+  "next_lesson_id": "csharp-lesson-055",
+  "keywords": [
+    "parameter",
+    "arrays",
+    "and",
+    "advanced",
+    "signatures",
+    "methods and reusable code",
+    "c#",
+    ".net"
+  ],
+  "source_syllabus_number": 54,
+  "subtopics": [
+    "Using params",
+    "Parameter arrays",
+    "params collections in modern C#",
+    "Parameter modifiers",
+    "Common method-signature mistakes"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of parameter arrays and advanced signatures in a C#/.NET program.",
+    "Predict the result of the included C# example and verify the documented output.",
+    "Apply parameter arrays and advanced signatures to a small task and identify one relevant boundary, limitation, or version requirement."
+  ],
+  "content": {
+    "intro": "Parameter Arrays and Advanced Signatures is lesson 54 in Methods and Reusable Code. A method names a unit of behavior, with explicit inputs and an explicit result or side effect. Keep its responsibility narrow and test meaningful edge cases.",
+    "why_it_matters": "Small methods give a program testable units and make intent visible. This lesson focuses on parameter arrays and advanced signatures and shows how to verify the behavior instead of relying on assumptions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 6 visual map: Methods and Reusable Code",
+        "asset_path": "diagrams/module-06-overview.svg",
+        "alt_text": "Numbered visual roadmap of Methods and Reusable Code, with the lesson sequence and learn-inspect-test-apply workflow.",
+        "caption": "This module map locates Parameter Arrays and Advanced Signatures among the ordered concepts; the lesson text and example focus on the highlighted topic."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "A method names a unit of behavior, with explicit inputs and an explicit result or side effect. Keep its responsibility narrow and test meaningful edge cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "A practical way to learn it",
+        "text": "Start with the smallest valid case for parameter arrays and advanced signatures. Predict the output, run or inspect the example in the stated toolchain, then change one input or rule and compare the result. For production code, record assumptions and verify boundary cases."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics to connect",
+        "items": [
+          {
+            "title": "Using params",
+            "text": "For using params, define the expected behavior, inspect how it relates to parameter arrays and advanced signatures, and verify a representative case plus one boundary or failure case."
+          },
+          {
+            "title": "Parameter arrays",
+            "text": "Pick a parameter-passing form that communicates ownership and intent; avoid ref/out when a returned value is clearer."
+          },
+          {
+            "title": "params collections in modern C#",
+            "text": "Design methods around one responsibility, clear inputs, and a clear result. Prefer ordinary value parameters by default; use overloads and modifiers only when they make the contract easier to understand."
+          },
+          {
+            "title": "Parameter modifiers",
+            "text": "Pick a parameter-passing form that communicates ownership and intent; avoid ref/out when a returned value is clearer."
+          },
+          {
+            "title": "Common method-signature mistakes",
+            "text": "For common method-signature mistakes, define the expected behavior, inspect how it relates to parameter arrays and advanced signatures, and verify a representative case plus one boundary or failure case."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "csharp",
+        "execution_mode": "static-validation",
+        "code": "// Lesson 54: Parameter Arrays and Advanced Signatures\nstatic int Sum(params int[] values) => values.Sum();\nConsole.WriteLine(Sum(1, 2, 3, 4));",
+        "expected_output": "10",
+        "run_instructions": "This snippet is a static reference; CodeLeaf does not execute C# in the browser. To run it, create a .NET 10 console app with `dotnet new console`, replace Program.cs with the example (keeping any required using directives), then run `dotnet run`. A snippet that names a test framework, provider package, unsafe setting, or advanced runtime feature must be placed in a project with that dependency/configuration.",
+        "reset_steps": "Restore the documented snippet, rerun it locally in a compatible .NET project, and compare output. Remove temporary files or test data after checking them. Do not treat the in-page output panel as execution."
+      },
+      {
+        "type": "callout",
+        "title": "Version and reliability note",
+        "text": "A method names a unit of behavior, with explicit inputs and an explicit result or side effect. Keep its responsibility narrow and test meaningful edge cases."
+      }
+    ],
+    "task": "Try it yourself: create a small C# example that demonstrates parameter arrays and advanced signatures. Change one input or implementation detail, predict the result, then check it locally and explain one edge case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates parameter arrays and advanced signatures rather than only repeating its definition.",
+      "The result is checked locally or against a clearly documented reference output.",
+      "At least one relevant boundary, invalid-input case, or compatibility condition is considered."
+    ],
+    "hints": [
+      "List the assumptions and expected behavior for parameter arrays and advanced signatures before editing the code.",
+      "Change one variable or rule at a time; keep the previous output for comparison.",
+      "If behavior differs, confirm the compiler/target framework and consult the linked official documentation."
+    ],
+    "solution_notes": "Suggested approach: identify the expected input and output, start from the smallest example, use the feature only where it clarifies the rule, and verify both a typical case and a boundary/failure case.",
+    "expected_output": "10",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-054-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the feature works identically on every target",
+        "why": "Language syntax, libraries, and runtime support are version-dependent.",
+        "fix": "Check the target framework and official versioned reference before using the feature."
+      },
+      {
+        "problem": "Testing only a happy path",
+        "why": "Boundary values, malformed input, and failure states often expose the real bug.",
+        "fix": "Add one typical input and one boundary or invalid case to the manual or automated checks."
+      },
+      {
+        "problem": "Treating sample output as proof that the code ran",
+        "why": "The course reader uses static reference output for C# because it has no C# execution runner.",
+        "fix": "Run the snippet in a local .NET project or a separately isolated execution service."
+      }
+    ],
+    "summary": [
+      "Parameter Arrays and Advanced Signatures belongs to Methods and Reusable Code.",
+      "A method names a unit of behavior, with explicit inputs and an explicit result or side effect. Keep its responsibility narrow and test meaningful edge cases.",
+      "Check assumptions, verify output, and document one meaningful limitation or edge case."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "C# language documentation",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/",
+      "publisher": "Microsoft Learn",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "Methods and Reusable Code",
+        "Parameter Arrays and Advanced Signatures",
+        "language and .NET concepts"
+      ]
+    },
+    {
+      "title": "C# language version history",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-version-history",
+      "publisher": "Microsoft Learn",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "feature-version history",
+        "compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson expanded from the numbered C# syllabus in C#(1).pdf. Code examples and pedagogical framing are original. Review feature compatibility and compile every runnable sample with the target .NET SDK before publication."
+}

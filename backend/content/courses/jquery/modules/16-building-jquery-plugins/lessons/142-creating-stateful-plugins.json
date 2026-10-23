@@ -1,0 +1,193 @@
+{
+  "id": "jquery-lesson-142",
+  "slug": "creating-stateful-plugins",
+  "title": "Creating Stateful Plugins",
+  "sequence": 142,
+  "module_id": "jquery-module-16",
+  "module_slug": "building-jquery-plugins",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "jquery-lesson-141"
+  ],
+  "previous_lesson_id": "jquery-lesson-141",
+  "next_lesson_id": "jquery-lesson-143",
+  "keywords": [
+    "creating stateful plugins",
+    "jquery",
+    "javascript",
+    "building jquery plugins",
+    "storing instance data",
+    "initializing and destroying instances",
+    "preventing duplicate instances",
+    "updating plugin options"
+  ],
+  "source_syllabus_number": 142,
+  "subtopics": [
+    "Storing instance data",
+    "Initializing and destroying instances",
+    "Preventing duplicate instances",
+    "Updating plugin options",
+    "Cleaning up event handlers and other resources"
+  ],
+  "learning_outcomes": [
+    "Explain the role of creating stateful plugins in a jQuery application.",
+    "Apply storing instance data in a small example and describe its expected result.",
+    "Verify initializing and destroying instances with an explicit test or browser observation."
+  ],
+  "exercise_files": [
+    "../exercises/142-creating-stateful-plugins.json"
+  ],
+  "sources": [
+    {
+      "title": "jQuery Learning Center: Plugins",
+      "url": "https://learn.jquery.com/plugins/",
+      "publisher": "jQuery Learning Center",
+      "checked_on": "2026-10-12",
+      "source_type": "official_learning_resource",
+      "supports": [
+        "Plugin patterns",
+        "Extending jQuery collections",
+        "Plugin maintenance"
+      ]
+    },
+    {
+      "title": "jQuery API Documentation",
+      "url": "https://api.jquery.com/",
+      "publisher": "jQuery project",
+      "checked_on": "2026-10-12",
+      "source_type": "official_api_reference",
+      "supports": [
+        "Supported jQuery Core APIs",
+        "Method signatures and return values"
+      ]
+    },
+    {
+      "title": "QUnit",
+      "url": "https://qunitjs.com/",
+      "publisher": "QUnit project",
+      "checked_on": "2026-10-12",
+      "source_type": "official_testing_documentation",
+      "supports": [
+        "Assertions",
+        "Unit testing",
+        "Asynchronous tests"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the attached syllabus and official references; requires lesson-by-lesson technical review, local execution, accessibility checks, and editorial approval.",
+  "content": {
+    "intro": "In this lesson, you will work through creating stateful plugins with a focused jQuery example. The subtopics below preserve the supplied curriculum coverage and connect the API idea to a small browser interface.",
+    "why_it_matters": "This topic is useful because it turns storing instance data into a repeatable implementation choice. A jQuery plugin usually extends $.fn, acts on every element in the collection, and returns the collection for chainability. Stateful plugins need deliberate defaults, instance storage, and teardown.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 16 overview",
+        "asset_path": "diagrams/module-16-overview.svg",
+        "alt_text": "Overview of Building jQuery Plugins, illustrating the sequence from understanding the concept to implementing and checking it.",
+        "caption": "Use this module map to place creating stateful plugins within the wider learning path."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "A jQuery plugin usually extends $.fn, acts on every element in the collection, and returns the collection for chainability. Stateful plugins need deliberate defaults, instance storage, and teardown."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the supplied syllabus",
+        "items": [
+          "Storing instance data",
+          "Initializing and destroying instances",
+          "Preventing duplicate instances",
+          "Updating plugin options",
+          "Cleaning up event handlers and other resources"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "$.fn.noticeBox = function (command) {\n  return this.each(function () {\n    const $item = $(this);\n    if (command === \"destroy\") { $item.off(\".noticeBox\").removeData(\"noticeBox\"); return; }\n    $item.data(\"noticeBox\", { initialized: true });\n  });\n};",
+        "expected_output": "The sample demonstrates idempotent instance storage and a destroy path that removes namespaced handlers and stored data.",
+        "run_instructions": "Use a local HTML page with jQuery 4.0.0 loaded before app.js for JavaScript snippets. HTML and package-manager snippets can be checked as configuration examples. Run the interaction in browser DevTools, inspect the DOM/Network panel, and compare actual behavior with the expected result. Do not submit learner code to the production API for arbitrary execution.",
+        "reset_steps": "Restore the original markup and code, clear console/network filters, reload the local page, and repeat the same interaction. For a request example, return the mock endpoint to its original response before retrying."
+      },
+      {
+        "type": "callout",
+        "title": "Guided example",
+        "text": "Start with a known DOM structure, apply the pattern for creating stateful plugins, and test one normal case plus one edge case. Keep selectors scoped to the intended component and verify the real browser result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create or review a small plugin related to creating stateful plugins. Test multiple elements, default and custom options, chainability, and cleanup where applicable."
+      }
+    ],
+    "task": "Create or review a small plugin related to creating stateful plugins. Test multiple elements, default and custom options, chainability, and cleanup where applicable.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates creating stateful plugins using a current, documented approach.",
+      "The learner records the expected and actual behavior and checks at least one edge case.",
+      "The example preserves semantic HTML and does not render untrusted data as HTML.",
+      "The test setup and any runtime limitation are documented honestly."
+    ],
+    "hints": [
+      "First identify which DOM nodes and runtime state are involved in creating stateful plugins.",
+      "Make one small change, inspect the resulting element or request, and compare it with the expected result.",
+      "If the result differs, check the selector, script order, browser console, event target, and relevant API documentation before adding more code."
+    ],
+    "expected_output": "The sample demonstrates idempotent instance storage and a destroy path that removes namespaced handlers and stored data.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-142-questions.json",
+    "common_mistakes": [
+      "Assuming a selector matched an element without checking the collection length.",
+      "Confusing jQuery collections with native DOM elements or live properties with markup attributes.",
+      "Using .html() with untrusted data or assuming client-side validation enforces server rules.",
+      "Treating a demo snippet as production-ready without testing failure and accessibility states."
+    ],
+    "summary": [
+      "Creating Stateful Plugins is one part of the building jquery plugins workflow.",
+      "A jQuery plugin usually extends $.fn, acts on every element in the collection, and returns the collection for chainability. Stateful plugins need deliberate defaults, instance storage, and teardown.",
+      "Use the official API or upgrade guide for version-specific behavior and verify an example locally before relying on it."
+    ],
+    "references": [
+      {
+        "title": "jQuery Learning Center: Plugins",
+        "url": "https://learn.jquery.com/plugins/",
+        "publisher": "jQuery Learning Center",
+        "checked_on": "2026-10-12",
+        "source_type": "official_learning_resource",
+        "supports": [
+          "Plugin patterns",
+          "Extending jQuery collections",
+          "Plugin maintenance"
+        ]
+      },
+      {
+        "title": "jQuery API Documentation",
+        "url": "https://api.jquery.com/",
+        "publisher": "jQuery project",
+        "checked_on": "2026-10-12",
+        "source_type": "official_api_reference",
+        "supports": [
+          "Supported jQuery Core APIs",
+          "Method signatures and return values"
+        ]
+      },
+      {
+        "title": "QUnit",
+        "url": "https://qunitjs.com/",
+        "publisher": "QUnit project",
+        "checked_on": "2026-10-12",
+        "source_type": "official_testing_documentation",
+        "supports": [
+          "Assertions",
+          "Unit testing",
+          "Asynchronous tests"
+        ]
+      }
+    ]
+  }
+}

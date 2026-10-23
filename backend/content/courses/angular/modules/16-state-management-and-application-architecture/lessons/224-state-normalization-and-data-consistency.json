@@ -1,0 +1,151 @@
+{
+  "id": "angular-lesson-224",
+  "slug": "224-state-normalization-and-data-consistency",
+  "title": "State Normalization and Data Consistency",
+  "sequence": 224,
+  "module_id": "angular-module-16",
+  "module_slug": "state-management-and-application-architecture",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "angular-lesson-223"
+  ],
+  "previous_lesson_id": "angular-lesson-223",
+  "next_lesson_id": "angular-lesson-225",
+  "keywords": [
+    "state-normalization-and-data-consistency",
+    "state-management-and-application-architecture",
+    "normalizing-entities-by-identifier",
+    "maintaining-derived-collections",
+    "optimistic-updates",
+    "synchronizing-updates-with-the-server"
+  ],
+  "source_syllabus_number": 224,
+  "subtopics": [
+    "Normalizing entities by identifier",
+    "Maintaining derived collections",
+    "Optimistic updates",
+    "Synchronizing updates with the server"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of state normalization and data consistency and name the relevant Angular concepts.",
+    "Apply at least one syllabus item from this lesson in a focused Angular example.",
+    "Verify expected behavior and identify one compatibility, failure or trust-boundary limitation."
+  ],
+  "content": {
+    "intro": "This lesson focuses on state normalization and data consistency inside State Management and Application Architecture. Begin with the syllabus anchor “Normalizing entities by identifier”, name the data or UI behavior involved, and then verify the result with a focused example. The goal is to make one clear engineering decision rather than memorize an isolated API.",
+    "why_it_matters": "State Normalization and Data Consistency helps keep Angular features understandable as the application grows. A small explicit pattern is easier to reuse, test and review than scattered UI-specific logic.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "State Normalization and Data Consistency concept map",
+        "asset_path": "diagrams/lessons/224-state-normalization-and-data-consistency.svg",
+        "alt_text": "Lesson 224: State Normalization and Data Consistency. Four numbered stages connect the concept, its model, a practical application and verification.",
+        "caption": "Visual path for State Normalization and Data Consistency: use the numbered stages and the labels to connect normalizing entities by identifier to a practical implementation and evidence."
+      },
+      {
+        "type": "paragraph",
+        "title": "Mental model",
+        "text": "**State Normalization and Data Consistency.** This is part of **State Management and Application Architecture**. Start from the concrete question “what changes in the application when this concept is used?” Then map the supplied syllabus terms to a small behavior, keep dependencies and trust boundaries visible, and verify what the example does. State Normalization and Data Consistency helps keep Angular features understandable as the application grows. A small explicit pattern is easier to reuse, test and review than scattered UI-specific logic."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics to connect",
+        "items": [
+          {
+            "title": "Normalizing entities by identifier",
+            "text": "Identify what “Normalizing entities by identifier” contributes to state normalization and data consistency; write down its inputs, outputs or state changes before coding."
+          },
+          {
+            "title": "Maintaining derived collections",
+            "text": "Connect “Maintaining derived collections” to one small user-visible behavior. Keep the boundary explicit and consider empty, invalid or failure states."
+          },
+          {
+            "title": "Optimistic updates",
+            "text": "Use “Optimistic updates” as a checkpoint: verify the relevant behavior with a test, compiler diagnostic, browser inspection or documented human review."
+          },
+          {
+            "title": "Synchronizing updates with the server",
+            "text": "Identify what “Synchronizing updates with the server” contributes to state normalization and data consistency; write down its inputs, outputs or state changes before coding."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: State Normalization and Data Consistency",
+        "language": "typescript",
+        "code": "import { Injectable, computed, signal } from '@angular/core';\n\n@Injectable({ providedIn: 'root' })\nexport class CartState {\n  private items = signal(0);\n  readonly count = computed(() => this.items());\n  add() { this.items.update(n => n + 1); }\n}",
+        "expected_output": "Expected behavior: any consumer of CartState.count observes the derived item count after add() runs. Keep state ownership explicit.",
+        "run_instructions": "Create or use a disposable Angular CLI workspace with a compatible Angular/Node/TypeScript version. Put the snippet in the matching component, template, stylesheet or project configuration; satisfy imports and providers from the surrounding lesson context. Run `ng serve` for browser behavior and the project test command for assertions. Shell examples should be run from the stated workspace directory.",
+        "reset_steps": "Save or commit your starting point before changing configuration. Revert only files created or edited for this lesson; do not delete a shared workspace or production data.",
+        "execution_mode": "static-validation",
+        "limitations": "This is a source/example inspection, not a live Angular compiler or arbitrary-code runner. Resource and Signal Forms examples are version-sensitive; check official docs and the installed package signatures."
+      },
+      {
+        "type": "callout",
+        "title": "Engineering note",
+        "text": "Execution note: this CodeLeaf course presents Angular and TypeScript snippets as static teaching material. The browser playground does not compile Angular TypeScript; run examples in a locally generated Angular workspace and verify them with the matching CLI, tests and browser."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-224-knowledge-check.json",
+    "task": "Apply state normalization and data consistency to a small feature in a disposable Angular learning project. Demonstrate at least one supplied subtopic (Normalizing entities by identifier), record the expected UI or console result, and include one test, failure case or version note.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates “Normalizing entities by identifier” in the context of State Normalization and Data Consistency.",
+      "The learner explains the expected result and includes an empty, invalid or failure case where appropriate.",
+      "Verification evidence matches the actual environment; a static CodeLeaf snippet is not described as a successfully executed Angular build."
+    ],
+    "hints": [
+      "Start with the syllabus item “Normalizing entities by identifier” and write down the expected behavior before changing code.",
+      "Keep the example small; include only dependencies, inputs, providers and state that the example actually needs.",
+      "Reproduce the intended behavior in a pinned local Angular workspace and inspect both normal and failure paths."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Copying a snippet without checking its surrounding context.",
+        "why": "Angular examples can depend on imports, providers, template context or a particular framework version.",
+        "fix": "Use the run instructions and validate against the exact generated workspace."
+      },
+      {
+        "problem": "Treating an attractive UI result as proof of correctness.",
+        "why": "Accessibility, boundary cases, failures and server-side rules may not be visible in the happy path.",
+        "fix": "Add a focused assertion and test at least one realistic failure state."
+      },
+      {
+        "problem": "Assuming client code guarantees authorization or validates all external data.",
+        "why": "Browser code is controlled by the client and can receive unexpected network responses.",
+        "fix": "Validate external values and enforce protected business rules on the backend."
+      }
+    ],
+    "summary": [
+      "State Normalization and Data Consistency has a concrete purpose within State Management and Application Architecture.",
+      "Use “Normalizing entities by identifier” in a small example and verify the behavior.",
+      "Check version compatibility, failure states and trust boundaries before reusing the pattern."
+    ],
+    "run_mode": "static-validation",
+    "execution_mode": "static-validation",
+    "run_instructions": "Create or use a disposable Angular CLI workspace with a compatible Angular/Node/TypeScript version. Put the snippet in the matching component, template, stylesheet or project configuration; satisfy imports and providers from the surrounding lesson context. Run `ng serve` for browser behavior and the project test command for assertions. Shell examples should be run from the stated workspace directory.",
+    "reset_steps": "Save or commit your starting point before changing configuration. Revert only files created or edited for this lesson; do not delete a shared workspace or production data.",
+    "version_notes": "Version-sensitive topics require checking the official Angular version compatibility and release documentation at the time of use."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Angular Signals",
+      "url": "https://angular.dev/guide/signals",
+      "publisher": "Angular documentation",
+      "checked_on": "2026-10-14"
+    },
+    {
+      "title": "RxJS interop with Angular",
+      "url": "https://angular.dev/ecosystem/rxjs-interop",
+      "publisher": "Angular documentation",
+      "checked_on": "2026-10-14"
+    }
+  ],
+  "technical_review_date": "2026-10-14",
+  "status": "draft",
+  "status_note": "Complete syllabus-aligned draft generated from the attached curriculum. Technical examples and version-sensitive APIs require human review and local execution before publication."
+}

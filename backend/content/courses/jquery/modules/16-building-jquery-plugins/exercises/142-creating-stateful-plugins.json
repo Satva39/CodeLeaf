@@ -1,0 +1,69 @@
+{
+  "id": "jquery-exercise-142",
+  "slug": "creating-stateful-plugins",
+  "title": "Practice: Creating Stateful Plugins",
+  "type": "coding",
+  "lesson_id": "jquery-lesson-142",
+  "module_id": "jquery-module-16",
+  "difficulty": "advanced",
+  "sequence": 142,
+  "source_exercise_id": "JQ-142",
+  "source_topics": [
+    142
+  ],
+  "prompt": "Create or review a small plugin related to creating stateful plugins. Test multiple elements, default and custom options, chainability, and cleanup where applicable.",
+  "objective": "Apply creating stateful plugins in a controlled example and demonstrate expected behavior with a small test.",
+  "target_skills": [
+    "Creating Stateful Plugins",
+    "Storing instance data",
+    "Initializing and destroying instances",
+    "Preventing duplicate instances"
+  ],
+  "starter": {
+    "language": "javascript",
+    "code": "$.fn.noticeBox = function (command) {\n  return this.each(function () {\n    const $item = $(this);\n    if (command === \"destroy\") { $item.off(\".noticeBox\").removeData(\"noticeBox\"); return; }\n    $item.data(\"noticeBox\", { initialized: true });\n  });\n};\n\n// TODO: adapt the example to the task and add an edge-case check.\n"
+  },
+  "expected_output": "The sample demonstrates idempotent instance storage and a destroy path that removes namespaced handlers and stored data.",
+  "public_tests": [
+    {
+      "name": "Required implementation evidence",
+      "required_strings": [
+        "$.fn.noticeBox",
+        "removeData(\"noticeBox\")",
+        "off(\".noticeBox\")"
+      ]
+    },
+    {
+      "name": "Human review",
+      "checklist": [
+        "Behavior matches the prompt and documented expected result.",
+        "At least one relevant edge case is checked.",
+        "Keyboard and accessibility behavior is verified where relevant.",
+        "The learner can explain one implementation choice and one limitation."
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Demonstrate the core behavior for creating stateful plugins.",
+    "Include a repeatable check or written evidence for expected output.",
+    "Handle an empty, repeated, malformed, or failure state where it applies.",
+    "Keep user-provided content safe and describe any server-side responsibility."
+  ],
+  "hints": [
+    "Break creating stateful plugins into the smallest requirements.",
+    "Use the narrowest selector or API that expresses the task clearly.",
+    "Inspect the browser console and the changed DOM/request before changing more code."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "$.fn.noticeBox",
+      "removeData(\"noticeBox\")",
+      "off(\".noticeBox\")"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus rubric/human review; this check does not prove runtime correctness, accessibility, or production readiness.",
+  "retry_policy": "Retries are allowed. Incorrect or incomplete answers do not complete the exercise or award XP; the platform applies its fixed idempotent exercise reward only after a verified correct completion.",
+  "solution_file": "solutions/142-creating-stateful-plugins-solution.json",
+  "status": "draft"
+}

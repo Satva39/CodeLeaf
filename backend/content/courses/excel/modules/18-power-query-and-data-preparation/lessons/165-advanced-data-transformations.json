@@ -1,0 +1,163 @@
+{
+  "id": "excel-lesson-165",
+  "slug": "advanced-data-transformations",
+  "title": "Advanced Data Transformations",
+  "sequence": 165,
+  "module_id": "excel-module-18",
+  "module_slug": "power-query-and-data-preparation",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "excel-lesson-164"
+  ],
+  "previous_lesson_id": "excel-lesson-164",
+  "next_lesson_id": "excel-lesson-166",
+  "keywords": [
+    "advanced data transformations",
+    "excel",
+    "conditional and custom columns",
+    "group by",
+    "pivot and unpivot",
+    "fill, extract, and replace operations"
+  ],
+  "source_syllabus_number": 165,
+  "subtopics": [
+    "Conditional and custom columns",
+    "Group By",
+    "Pivot and unpivot",
+    "Fill, extract, and replace operations"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of advanced data transformations and identify when it is useful.",
+    "Apply the lesson pattern to a small Excel example using the stated assumptions.",
+    "Check the result against an expected output and test one relevant edge case."
+  ],
+  "exercise_files": [
+    "../exercises/165-advanced-data-transformations.json",
+    "../exercises/practical-14-multi-file-data-consolidation.json"
+  ],
+  "sources": [
+    {
+      "title": "About Power Query in Excel",
+      "url": "https://support.microsoft.com/en-us/excel/about-power-query-in-excel",
+      "publisher": "Microsoft Support",
+      "checked_on": "2026-10-12",
+      "source_type": "official_product_documentation",
+      "supports": [
+        "Importing, transforming, combining and refreshing data",
+        "Power Query availability notes"
+      ]
+    },
+    {
+      "title": "Excel functions (by category)",
+      "url": "https://support.microsoft.com/en-us/excel/excel-functions-by-category",
+      "publisher": "Microsoft Support",
+      "checked_on": "2026-10-12",
+      "source_type": "official_function_reference",
+      "supports": [
+        "Function syntax and categories",
+        "Version availability markers for functions"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the attached Excel curriculum and current official documentation. Requires editorial review, version-specific verification, and practical execution in a supported Excel environment before publication.",
+  "content": {
+    "intro": "This lesson covers Advanced Data Transformations as part of Power Query and Data Preparation. It follows the attached Excel curriculum, with an emphasis on small examples and verification.",
+    "why_it_matters": "Advanced Data Transformations supports repeatable analysis by organizing, cleaning, summarizing, or relating data. Preserve the raw source and reconcile a summary back to its input records. Compatibility: Power Query, the Data Model, Power Pivot and DAX are related but distinct capabilities; their exact availability varies by Excel edition, operating system, license and update channel. Follow the course’s local availability checklist before building a dependent workflow.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 18 overview",
+        "asset_path": "diagrams/module-18-overview.svg",
+        "alt_text": "A four-stage labeled map for Module 18: Power Query and Data Preparation, guiding the learner from concept to practice and verification.",
+        "caption": "This visual locates Advanced Data Transformations inside Module 18, then connects understanding with application and checking."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Advanced Data Transformations focuses on the following parts of the supplied syllabus: Conditional and custom columns; Group By; Pivot and unpivot; Fill, extract, and replace operations. Keep the underlying source data visible and make each assumption explicit."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus coverage",
+        "items": [
+          "Conditional and custom columns",
+          "Group By",
+          "Pivot and unpivot",
+          "Fill, extract, and replace operations"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "powerquery-m",
+        "code": "Table.TransformColumnTypes(Source, {{\"OrderDate\", type date}, {\"Amount\", Currency.Type}})",
+        "expected_output": "A Power Query M transformation changes OrderDate to date and Amount to currency types, assuming these source column names exist.",
+        "run_instructions": "In Excel, use Data → Get Data to open Power Query Editor; replace Source with the actual prior step and verify locale-sensitive dates and currency values before loading.",
+        "reset_steps": "Work in a duplicate workbook or a scratch sheet. Restore the input range and formula/code to the original state, clear filters or selections, then rerun the same test cases. Record expected and actual behavior rather than assuming a successful result."
+      },
+      {
+        "type": "callout",
+        "title": "Guided example",
+        "text": "Start with a small, known dataset for advanced data transformations. Apply the example above, compute or inspect at least one result independently, then deliberately try a blank, duplicate, boundary, or not-found case where relevant."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a small worksheet or workbook section that demonstrates advanced data transformations. Use clear headers, label units and assumptions, and capture expected versus actual output for a normal case and an edge case. Where the concept requires a specialized Excel feature, first verify that feature is available in your Excel edition."
+      }
+    ],
+    "task": "Build or inspect an Excel example that demonstrates advanced data transformations; use the example to verify one normal and one edge case, and write down any version or tool dependency. For a complete curriculum practice scenario, also complete “Multi-File Data Consolidation” using the synthetic dataset `assets/data/practical-14-multi-file-data-consolidation.csv`; see the linked additional exercise file.",
+    "task_acceptance_criteria": [
+      "The worksheet/workflow uses a clear, labeled source range and explicit assumptions.",
+      "The learner records an expected output and independently compares it with the actual result.",
+      "At least one relevant edge case is checked; data and formula errors are not silently concealed.",
+      "The workbook is saved as a copy and compatibility/security/accessibility notes are followed where relevant."
+    ],
+    "hints": [
+      "Reduce the problem to a small range with known values before scaling it up.",
+      "Inspect cell values and formulas, not only displayed formatting; verify data types, references and range boundaries.",
+      "Compare expected versus actual results and check the Microsoft documentation for version-specific functions or tools."
+    ],
+    "expected_output": "A Power Query M transformation changes OrderDate to date and Amount to currency types, assuming these source column names exist.",
+    "run_mode": "human-review",
+    "knowledge_check_file": "exams/question-files/lesson-165-questions.json",
+    "common_mistakes": [
+      "Assuming the displayed format is the same as the stored value or data type.",
+      "Using an incorrect range boundary, a mismatched lookup key, or an unverified assumption.",
+      "Trusting a result without comparing it with a known calculation or checking a failure/edge case."
+    ],
+    "summary": [
+      "Advanced Data Transformations supports the workflow in Power Query and Data Preparation.",
+      "Use a small example, make assumptions visible, and verify the result against the source.",
+      "Check target-version availability and keep a clean copy before making high-impact changes."
+    ],
+    "references": [
+      {
+        "title": "About Power Query in Excel",
+        "url": "https://support.microsoft.com/en-us/excel/about-power-query-in-excel",
+        "publisher": "Microsoft Support",
+        "checked_on": "2026-10-12",
+        "source_type": "official_product_documentation",
+        "supports": [
+          "Importing, transforming, combining and refreshing data",
+          "Power Query availability notes"
+        ]
+      },
+      {
+        "title": "Excel functions (by category)",
+        "url": "https://support.microsoft.com/en-us/excel/excel-functions-by-category",
+        "publisher": "Microsoft Support",
+        "checked_on": "2026-10-12",
+        "source_type": "official_function_reference",
+        "supports": [
+          "Function syntax and categories",
+          "Version availability markers for functions"
+        ]
+      }
+    ]
+  }
+}

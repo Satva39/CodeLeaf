@@ -1,0 +1,229 @@
+{
+  "id": "github-actions-lesson-002",
+  "slug": "what-is-continuous-integration-and-continuous-delivery",
+  "title": "What Is Continuous Integration and Continuous Delivery?",
+  "sequence": 2,
+  "module_id": "github-actions-module-01",
+  "module_slug": "introduction-to-github-actions",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "github-actions-lesson-001"
+  ],
+  "previous_lesson_id": "github-actions-lesson-001",
+  "next_lesson_id": "github-actions-lesson-003",
+  "keywords": [
+    "what-is-continuous-integration-and-continuous-delivery",
+    "introduction-to-github-actions",
+    "continuous-integration-ci",
+    "continuous-delivery-cd",
+    "continuous-deployment",
+    "ci-cd-pipeline-stages",
+    "differences-between-automated-testing-and-automated-deployment"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of what is continuous integration and continuous delivery? and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to what is continuous integration and continuous delivery?.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on what is continuous integration and continuous delivery?. Continuous integration validates changes frequently; continuous delivery keeps validated changes ready to release; continuous deployment automatically releases qualifying changes. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "What Is Continuous Integration and Continuous Delivery? matters because it affects correctness, security, maintainability, or operating cost. Continuous integration validates changes frequently; continuous delivery keeps validated changes ready to release; continuous deployment automatically releases qualifying changes. Treat the workflow as an event-driven automation graph: an event starts the run, jobs are scheduled, steps execute on runners, and the run records a result.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 1 visual map",
+        "asset_path": "diagrams/module-01-overview.svg",
+        "alt_text": "Ordered overview of module 1: Introduction to GitHub Actions; What Is Continuous Integration and Continuous Delivery?; Why GitHub Actions Is Used; Real-World Applications of GitHub Actions; Advantages, Limitations, and Alternatives; Prerequisites for Learning GitHub Actions; The GitHub Actions Ecosystem; Understanding the CI/CD Workflow Lifecycle.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Continuous integration validates changes frequently; continuous delivery keeps validated changes ready to release; continuous deployment automatically releases qualifying changes. Treat the workflow as an event-driven automation graph: an event starts the run, jobs are scheduled, steps execute on runners, and the run records a result. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "Continuous integration (CI)",
+            "text": "Use a scoped token, validate request inputs and event payloads, check HTTP/error status, handle pagination and rate limits, and avoid logging credentials or unneeded private response data."
+          },
+          {
+            "title": "Continuous delivery (CD)",
+            "text": "For continuous delivery (cd), state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Continuous deployment",
+            "text": "For continuous deployment, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "CI/CD pipeline stages",
+            "text": "Use filters to reduce unnecessary runs only when skipped work is genuinely unrelated. Include shared dependencies and test the changed and unchanged path cases so required checks are not bypassed."
+          },
+          {
+            "title": "Differences between automated testing and automated deployment",
+            "text": "Make the check deterministic and fail with a meaningful status when requirements are not met. Preserve reports where useful and configure required branch checks to match the checks the workflow actually emits."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "name: CI then package\non: [push, pull_request]\npermissions:\n  contents: read\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: echo \"Replace with the repository test command\"\n  package:\n    needs: test\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo \"Package only after tests pass\"",
+        "expected_output": "The `package` job runs only after `test` succeeds; replace the placeholder commands with the repository’s real test and packaging commands.",
+        "run_instructions": "Use a non-production branch and inspect the job dependency graph. The echo command is a structure demonstration, not a real build.",
+        "reset_steps": "Restore the original workflow or remove the experiment after verifying the dependency.",
+        "execution_mode": "workflow-fragment"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to what is continuous integration and continuous delivery?. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain what is continuous integration and continuous delivery?, read the example, and identify a way to validate it. The wider system goal remains: Understand why automation belongs beside source control and how events become repeatable work."
+      }
+    ],
+    "task": "Apply what is continuous integration and continuous delivery? to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: Continuous integration validates changes frequently; continuous delivery keeps validated changes ready to release; continuous deployment automatically releases qualifying changes.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: Continuous integration validates changes frequently; continuous delivery keeps validated changes ready to release; continuous deployment automatically releases qualifying changes. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "Continuous integration validates changes frequently; continuous delivery keeps validated changes ready to release; continuous deployment automatically releases qualifying changes.",
+      "Treat the workflow as an event-driven automation graph: an event starts the run, jobs are scheduled, steps execute on runners, and the run records a result.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-002-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "workflow-fragment",
+    "references": [
+      {
+        "title": "Workflow syntax for GitHub Actions",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "workflow files",
+          "jobs",
+          "steps",
+          "permissions",
+          "defaults",
+          "concurrency",
+          "matrix",
+          "environments"
+        ]
+      },
+      {
+        "title": "Events that trigger workflows",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "push",
+          "pull_request",
+          "workflow_dispatch",
+          "schedule",
+          "workflow_run",
+          "workflow_call",
+          "repository_dispatch"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [
+    "../exercises/030-compare-ci-delivery-and-deployment.json"
+  ],
+  "sources": [
+    {
+      "title": "Workflow syntax for GitHub Actions",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "workflow files",
+        "jobs",
+        "steps",
+        "permissions",
+        "defaults",
+        "concurrency",
+        "matrix",
+        "environments"
+      ]
+    },
+    {
+      "title": "Events that trigger workflows",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "push",
+        "pull_request",
+        "workflow_dispatch",
+        "schedule",
+        "workflow_run",
+        "workflow_call",
+        "repository_dispatch"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "2",
+    "module_title": "Introduction to GitHub Actions",
+    "subtopics": [
+      "Continuous integration (CI)",
+      "Continuous delivery (CD)",
+      "Continuous deployment",
+      "CI/CD pipeline stages",
+      "Differences between automated testing and automated deployment"
+    ]
+  }
+}

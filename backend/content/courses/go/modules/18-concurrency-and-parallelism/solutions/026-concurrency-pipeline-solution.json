@@ -1,0 +1,8 @@
+{
+  "id": "go-exercise-solution-026",
+  "exercise_id": "go-exercise-026",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "package main\nimport (\"context\"; \"fmt\"; \"time\")\nfunc main(){ctx,cancel:=context.WithCancel(context.Background());done:=make(chan struct{});go func(){defer close(done);select{case <-ctx.Done():fmt.Println(\"cancelled\");case <-time.After(time.Second):fmt.Println(\"finished\")}}();cancel();<-done}",
+  "explanation": "This protected reference solution for Concurrency Pipeline demonstrates the central idea (goroutines, channels, context). Complete the stated edge cases, add tests, and validate with a Go toolchain matching the course version before publication."
+}

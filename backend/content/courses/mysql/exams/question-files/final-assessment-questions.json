@@ -1,0 +1,149 @@
+{
+  "id": "mysql-final-assessment-questions",
+  "title": "MySQL professional readiness assessment",
+  "question_count": 10,
+  "status": "draft",
+  "questions": [
+    {
+      "id": "mysql-final-q-01",
+      "type": "single_choice",
+      "topic": "schema",
+      "prompt": "In a normalized e-commerce database, where should a customer email uniqueness rule be enforced?",
+      "options": [
+        "Only in frontend form validation",
+        "With a database UNIQUE constraint, plus application validation where useful",
+        "In a comment in the README",
+        "By allowing duplicates and cleaning them monthly"
+      ],
+      "answer_key": "With a database UNIQUE constraint, plus application validation where useful",
+      "explanation": "The database constraint is the authoritative integrity boundary even when an application also validates input."
+    },
+    {
+      "id": "mysql-final-q-02",
+      "type": "single_choice",
+      "topic": "null",
+      "prompt": "Which predicate correctly finds rows with no optional date?",
+      "options": [
+        "optional_date = NULL",
+        "optional_date IS NULL",
+        "optional_date == NULL",
+        "optional_date LIKE NULL"
+      ],
+      "answer_key": "optional_date IS NULL",
+      "explanation": "SQL NULL must be tested with IS NULL or IS NOT NULL, not equality."
+    },
+    {
+      "id": "mysql-final-q-03",
+      "type": "single_choice",
+      "topic": "transaction",
+      "prompt": "An order insert succeeds but inventory update fails. Which design best avoids a partial order?",
+      "options": [
+        "Run both writes independently and hope they both finish",
+        "Group the related InnoDB writes in a transaction and roll back on failure",
+        "Retry every statement without checking commit status",
+        "Remove foreign keys"
+      ],
+      "answer_key": "Group the related InnoDB writes in a transaction and roll back on failure",
+      "explanation": "The transaction makes the related changes atomic when using a transaction-capable engine and correct boundaries."
+    },
+    {
+      "id": "mysql-final-q-04",
+      "type": "single_choice",
+      "topic": "injection",
+      "prompt": "How should untrusted customer input be used in a query?",
+      "options": [
+        "Concatenate it into SQL text",
+        "Use a prepared/parameterized statement and bind the input as a value",
+        "Give the user an administrator account",
+        "Escape only spaces"
+      ],
+      "answer_key": "Use a prepared/parameterized statement and bind the input as a value",
+      "explanation": "Parameterization separates SQL structure from data values."
+    },
+    {
+      "id": "mysql-final-q-05",
+      "type": "single_choice",
+      "topic": "indexes",
+      "prompt": "What is the best first step when a query is slow?",
+      "options": [
+        "Add several indexes immediately",
+        "Measure the query and inspect EXPLAIN/actual evidence before changing one thing",
+        "Remove all constraints",
+        "Increase every server setting"
+      ],
+      "answer_key": "Measure the query and inspect EXPLAIN/actual evidence before changing one thing",
+      "explanation": "Optimization should follow evidence; indexes add write and storage cost."
+    },
+    {
+      "id": "mysql-final-q-06",
+      "type": "single_choice",
+      "topic": "backup",
+      "prompt": "Which result demonstrates a backup plan is useful?",
+      "options": [
+        "The backup command printed a message once",
+        "A restore test succeeds and data integrity and recovery objectives are checked",
+        "The backup filename exists",
+        "Backups are never deleted"
+      ],
+      "answer_key": "A restore test succeeds and data integrity and recovery objectives are checked",
+      "explanation": "Restore verification is required to prove recoverability."
+    },
+    {
+      "id": "mysql-final-q-07",
+      "type": "single_choice",
+      "topic": "replication",
+      "prompt": "What does replication lag mean operationally?",
+      "options": [
+        "A replica may not yet have applied recent source changes",
+        "The source has no binary log",
+        "All replicas are always identical instantly",
+        "The connection pool is full"
+      ],
+      "answer_key": "A replica may not yet have applied recent source changes",
+      "explanation": "Asynchronous replication can have delay; reads must account for consistency requirements."
+    },
+    {
+      "id": "mysql-final-q-08",
+      "type": "single_choice",
+      "topic": "release",
+      "prompt": "How should a version-sensitive feature be taught?",
+      "options": [
+        "Assume every MySQL release behaves identically",
+        "Check the selected release manual and release notes, then label the supported scope",
+        "Copy an old blog and omit the version",
+        "Avoid all testing"
+      ],
+      "answer_key": "Check the selected release manual and release notes, then label the supported scope",
+      "explanation": "Feature support and defaults can change between release lines."
+    },
+    {
+      "id": "mysql-final-q-09",
+      "type": "single_choice",
+      "topic": "testing",
+      "prompt": "Which database test is most valuable beyond a happy-path query?",
+      "options": [
+        "Only test that one row returns",
+        "Test constraints, NULL/duplicate boundaries, rollback and rebuild reproducibility",
+        "Avoid using synthetic fixtures",
+        "Run against production data"
+      ],
+      "answer_key": "Test constraints, NULL/duplicate boundaries, rollback and rebuild reproducibility",
+      "explanation": "Database quality includes integrity and failure behavior."
+    },
+    {
+      "id": "mysql-final-q-10",
+      "type": "single_choice",
+      "topic": "least privilege",
+      "prompt": "What access should a read-only reporting account receive?",
+      "options": [
+        "Global ALL PRIVILEGES",
+        "Only the minimum required SELECT access on the required objects",
+        "A shared root password",
+        "No authentication"
+      ],
+      "answer_key": "Only the minimum required SELECT access on the required objects",
+      "explanation": "Least privilege narrows the impact of mistakes or compromised credentials."
+    }
+  ],
+  "status_note": "Draft assessment; answer keys must remain protected in server-side content storage."
+}

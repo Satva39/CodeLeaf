@@ -1,0 +1,184 @@
+{
+  "id": "rest-api-development-lesson-236",
+  "slug": "accessibility-and-developer-experience",
+  "title": "Accessibility and Developer Experience",
+  "sequence": 236,
+  "module_id": "rest-api-development-module-24",
+  "module_slug": "api-governance-teamwork-and-professional-practices",
+  "level": "professional",
+  "difficulty": "professional",
+  "track": "professional-practice",
+  "estimated_minutes": 25,
+  "prerequisites": [
+    "rest-api-development-lesson-235"
+  ],
+  "previous_lesson_id": "rest-api-development-lesson-235",
+  "next_lesson_id": "rest-api-development-lesson-237",
+  "keywords": [
+    "rest-api-development",
+    "accessibility-and-developer-experience",
+    "api-governance-teamwork-and-professional-practices",
+    "clear-documentation-language",
+    "predictable-error-messages"
+  ],
+  "source_syllabus_number": 236,
+  "subtopics": [
+    "Clear documentation language",
+    "Predictable error messages",
+    "Consistent onboarding",
+    "Making API behavior easy to discover"
+  ],
+  "learning_outcomes": [
+    "Explain how accessibility and developer experience affects an API contract or implementation.",
+    "Apply the key ideas from clear documentation language to a concrete API example.",
+    "Identify one failure, security, or compatibility risk and describe how to verify it."
+  ],
+  "content": {
+    "intro": "This lesson focuses on accessibility and developer experience in api governance, teamwork, and professional practices. You will connect clear documentation language to a concrete API contract decision, inspect a small example, and decide what evidence proves the behavior is correct.",
+    "why_it_matters": "Accessibility and Developer Experience matters because API consumers depend on predictable behavior even when clients, servers, networks, and stored data evolve independently. Applying clear documentation language deliberately reduces ambiguity, makes failures easier to diagnose, and gives tests a clear expectation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Lesson 236 concept map",
+        "asset_path": "diagrams/lesson-236-concept-map.svg",
+        "alt_text": "Lesson 236: Clear documentation language → Predictable error messages → Consistent onboarding → Making API behavior easy to discover.",
+        "caption": "Follow the 4 syllabus topics in order, then inspect the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Professional API work includes shared standards, clear ownership, decision records, change review, lifecycle planning, and operational cost. In this lesson, treat “Accessibility and Developer Experience” as a design or implementation decision: name the expected behavior, identify its boundary, and verify it with a representative request or test."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          "Clear documentation language",
+          "Predictable error messages",
+          "Consistent onboarding",
+          "Making API behavior easy to discover",
+          "Name an accountable owner"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Inspect the pattern: Accessibility and Developer Experience",
+        "language": "yaml",
+        "execution_mode": "static-validation",
+        "code": "decision: choose_cursor_pagination\ncontext: collection_size_is_growing\noptions:\n  - offset_limit\n  - cursor_based\nchoice: cursor_based\nconsequences:\n  - stable_ordering_is_required\n  - cursor_tokens_are_validated_and_opaque\n  - clients_need_continuation_handling",
+        "expected_output": "A short decision record identifies context, alternatives, choice, and consequences so future maintainers can review the trade-off."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walkthrough",
+        "text": "Start with “Clear documentation language”; it establishes the vocabulary for this topic. Next, compare it with “Predictable error messages” and “Making API behavior easy to discover”. In a real API, write down the observable behavior first, then test one normal request and one invalid or unauthorized request. Keep resource state, caller identity, and internal implementation details separate."
+      },
+      {
+        "type": "callout",
+        "title": "Professional review check",
+        "text": "Write down important decisions and make ownership, quality gates, and retirement criteria explicit. The worked snippet is intentionally inspectable, not an executable hosted API. Replace example.test and placeholder identifiers with local test data only when you implement the lesson project."
+      }
+    ],
+    "task": "Create a small design note or request/response example demonstrating accessibility and developer experience. Use the subtopics above to explain the intended behavior, the main edge case, and the evidence you would use to verify it.",
+    "task_acceptance_criteria": [
+      "Explain the role of “Clear documentation language” in this API topic.",
+      "Provide a concrete resource, request, response, schema, test, or operational example as appropriate.",
+      "Identify one failure/security/compatibility edge case and a test or check for it."
+    ],
+    "expected_output": "A reviewable example for Accessibility and Developer Experience with a clear expected behavior and at least one verifiable edge case.",
+    "run_instructions": "Execution mode: static-validation. This lesson example is a protocol, schema, SQL, or code fragment for inspection; it is not submitted to a production server and CodeLeaf does not execute arbitrary learner code. Validate JSON/YAML with a local linter or run the relevant HTTP request against the isolated service you implement for a project. Do not send illustrative example.test requests to a real service.",
+    "reset_steps": "Use a disposable local database or test fixture for implementation work. Restore seed data between runs; never point exercises at production customer data or live payment endpoints.",
+    "troubleshooting": [
+      "Check the exact HTTP method, path, status, header, media type, and payload before changing implementation code.",
+      "Separate a transport failure from an application validation failure, authorization denial, and dependency/database failure.",
+      "Confirm the example and its client tooling version are compatible; consult the linked standard or official guidance when behavior is ambiguous."
+    ],
+    "common_mistakes": [
+      "Treating accessibility and developer experience as an implementation detail rather than a documented behavior.",
+      "Testing only the happy path and ignoring malformed, unauthorized, conflicting, duplicate, or dependency-failure cases.",
+      "Publishing an example without checking version assumptions, sensitive-data exposure, and the expected output."
+    ],
+    "summary": [
+      "Professional API work includes shared standards, clear ownership, decision records, change review, lifecycle planning, and operational cost. In this lesson, treat “Accessibility and Developer Experience” as a design or implementation decision: name the expected behavior, identify its boundary, and verify it with a representative request or test.",
+      "Next, connect this idea to Lesson 237: Cost Management."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-236-questions.json",
+    "solution_notes": "Knowledge-check answer keys and explanations remain in repository-side question files. The public lesson API strips this file reference and serves only prompts/options from the protected endpoint.",
+    "references": [
+      {
+        "title": "OpenAPI Specification v3.2.1",
+        "url": "https://spec.openapis.org/oas/v3.2.1.html"
+      },
+      {
+        "title": "OWASP API Security Top 10 (2023)",
+        "url": "https://owasp.org/API-Security/editions/2023/en/0x00-header/"
+      },
+      {
+        "title": "Microsoft REST API Guidelines",
+        "url": "https://github.com/microsoft/api-guidelines/blob/vNext/Guidelines.md"
+      },
+      {
+        "title": "Google SRE Books",
+        "url": "https://sre.google/books/"
+      }
+    ],
+    "run_mode": "static-validation"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OpenAPI Specification v3.2.1",
+      "url": "https://spec.openapis.org/oas/v3.2.1.html",
+      "publisher": "OpenAPI Initiative",
+      "checked_on": "2026-10-19",
+      "source_type": "Specification",
+      "supports": [
+        "API contracts",
+        "paths and operations",
+        "schemas",
+        "security requirements"
+      ]
+    },
+    {
+      "title": "OWASP API Security Top 10 (2023)",
+      "url": "https://owasp.org/API-Security/editions/2023/en/0x00-header/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-19",
+      "source_type": "Security awareness standard",
+      "supports": [
+        "API-specific threats",
+        "authorization failures",
+        "unrestricted resource consumption",
+        "SSRF"
+      ]
+    },
+    {
+      "title": "Microsoft REST API Guidelines",
+      "url": "https://github.com/microsoft/api-guidelines/blob/vNext/Guidelines.md",
+      "publisher": "Microsoft",
+      "checked_on": "2026-10-19",
+      "source_type": "API design guidelines",
+      "supports": [
+        "resource and URL design",
+        "API evolution",
+        "error conventions",
+        "idempotency and retry design"
+      ]
+    },
+    {
+      "title": "Google SRE Books",
+      "url": "https://sre.google/books/",
+      "publisher": "Google",
+      "checked_on": "2026-10-19",
+      "source_type": "Reliability engineering reference",
+      "supports": [
+        "SLIs and SLOs",
+        "incident response",
+        "error budgets and operational resilience"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Unreviewed educational draft based on the attached REST API syllabus; verify the technical framing, worked example, and assessment before publication."
+}

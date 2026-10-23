@@ -1,0 +1,160 @@
+{
+  "id": "nodejs-lesson-030",
+  "slug": "package-entry-points-and-the-exports-field",
+  "title": "Package Entry Points and the exports Field",
+  "sequence": 30,
+  "module_id": "nodejs-module-04",
+  "module_slug": "modules-and-code-organization",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "nodejs-lesson-029"
+  ],
+  "previous_lesson_id": "nodejs-lesson-029",
+  "next_lesson_id": "nodejs-lesson-031",
+  "keywords": [
+    "Package Entry Points and the exports Field",
+    "The main field",
+    "The exports field",
+    "Public package entry points",
+    "Package subpaths",
+    "Node.js",
+    "JavaScript runtime"
+  ],
+  "source_syllabus_number": 30,
+  "subtopics": [
+    "The main field",
+    "The exports field",
+    "Public package entry points",
+    "Package subpaths",
+    "Restricting unsupported internal imports"
+  ],
+  "learning_outcomes": [
+    "Describe The main field and explain how it relates to Package Entry Points and the exports Field.",
+    "Demonstrate The exports field in a small Node.js example and predict the observable result.",
+    "Test a failure, boundary, lifecycle, or version-compatibility case involving Public package entry points."
+  ],
+  "content": {
+    "intro": "Package Entry Points and the exports Field is part of modules and code organization. This lesson connects The main field, The exports field, Public package entry points to a concrete Node.js example. Focus on the behavior you can observe, the assumptions the API makes, and one failure or boundary case.",
+    "why_it_matters": "Node.js module systems define how code is loaded, scoped, reused, and exposed to other files. Test importing the public entry point from a separate file, not only running the implementation file directly.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Package Entry Points and the exports Field: concept map",
+        "asset_path": "diagrams/lessons/lesson-030-package-entry-points-and-the-exports-field.svg",
+        "alt_text": "Concept map for lesson 30: Package Entry Points and the exports Field. It shows representative syllabus concepts in a Concept → Example → Verification sequence.",
+        "caption": "Read the three labeled cards from left to right; the lesson steps connect the concept to a practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Node.js module systems define how code is loaded, scoped, reused, and exposed to other files. Choose CommonJS or ECMAScript modules explicitly and keep public exports small and documented."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "The main field",
+            "text": "For The main field, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "The exports field",
+            "text": "For The exports field, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Public package entry points",
+            "text": "For Public package entry points, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Package subpaths",
+            "text": "For Package subpaths, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Restricting unsupported internal imports",
+            "text": "For Restricting unsupported internal imports, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "const manifest = { main: './dist/index.cjs', exports: { '.': './dist/index.js', './format': './dist/format.js' } };\nconsole.log(manifest.exports['./format']);",
+        "expected_output": "./dist/format.js",
+        "run_instructions": "Inspect this JavaScript in a local Node.js project. It is a static-validation teaching example: CodeLeaf does not run this arbitrary example in the API process. If it needs a package, file, server, database, or external service, provision that dependency in a separate local project and follow its official setup instructions. Run with `node example.mjs` when the example is self-contained, or adapt the required imports/inputs first.",
+        "reset_steps": "Restore the starting snippet and inputs. Repeat with one different valid value and one invalid, missing, empty, or failure input appropriate to the example.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Start with the code shown above. Predict the result before running it, then verify it against: 5 Change one input or simulate one failure and describe how the behavior should change. Test importing the public entry point from a separate file, not only running the implementation file directly."
+      },
+      {
+        "type": "callout",
+        "title": "Runtime and safety note",
+        "text": "Teaching baseline: use a supported Node.js LTS release (Node.js 24 LTS as checked on 2026-10-13). The official releases page lists Node.js 26 as Current and Node.js 24/22 as LTS. Some advanced APIs, flags, permission behavior, embedded SQLite capabilities, module-loader hooks, and TypeScript integration are version-sensitive; verify the exact installed runtime. The Node.js 22 runtime available in the build-check environment is used only for syntax checks. This example is for learning and static validation, not for executing untrusted learner code inside CodeLeaf."
+      }
+    ],
+    "task": "Create or inspect a small Node.js example for Package Entry Points and the exports Field. Include at least one listed subtopic, document the expected result, and verify a normal case plus a boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates a named lesson concept, rather than only mentioning the title.",
+      "Expected output or observable behavior is documented and reproducible.",
+      "At least one invalid, empty, timeout, resource, or failure case is handled or explained.",
+      "The solution does not put secrets in source code and does not execute untrusted code inside the production API process."
+    ],
+    "hints": [
+      "Start with The main field; identify the input, operation, and observable result.",
+      "Run the smallest relevant example in the selected Node.js release before adding frameworks or external services.",
+      "Test one failure or boundary case for The exports field, then explain why the outcome is expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Mixing module formats or importing an unsupported internal package path.",
+        "why": "The code may pass a simple demonstration yet fail with real inputs, resource limits, timing, or runtime differences.",
+        "fix": "Configure package.json and file extensions deliberately, then test the actual public import path."
+      },
+      {
+        "problem": "Copying a snippet without checking its runtime, dependencies, input assumptions, or cleanup behavior.",
+        "why": "Node.js APIs and surrounding ecosystem tools have explicit version, trust, and resource boundaries.",
+        "fix": "State the environment and dependency assumptions, then rerun the example from a clean starting state."
+      }
+    ],
+    "summary": [
+      "For The main field, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone.",
+      "This lesson covers: The main field, The exports field, Public package entry points, Package subpaths.",
+      "Verify both normal and failure behavior, and document runtime, dependency, and resource assumptions."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-030-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Modules: CommonJS modules and ECMAScript modules",
+      "url": "https://nodejs.org/api/modules.html",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "CommonJS",
+        "module resolution",
+        "package entry points"
+      ]
+    },
+    {
+      "title": "ECMAScript modules",
+      "url": "https://nodejs.org/api/esm.html",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "ES modules",
+        "import/export",
+        "top-level await"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Source-derived syllabus; educational draft requiring technical/instructional review before publication."
+}

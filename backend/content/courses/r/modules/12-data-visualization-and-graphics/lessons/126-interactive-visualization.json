@@ -1,0 +1,183 @@
+{
+  "id": "r-lesson-126",
+  "slug": "interactive-visualization",
+  "title": "Interactive Visualization",
+  "sequence": 126,
+  "module_id": "r-module-12",
+  "module_slug": "data-visualization-and-graphics",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "r-lesson-125"
+  ],
+  "previous_lesson_id": "r-lesson-125",
+  "next_lesson_id": "r-lesson-127",
+  "keywords": [
+    "interactive-visualization",
+    "data-visualization-and-graphics",
+    "hover-and-tooltip-concepts",
+    "plotly-for-interactive-charts",
+    "linking-charts-and-tables",
+    "interactive-filtering",
+    "performance-considerations-for-large-visualizations",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 126,
+  "subtopics": [
+    "Hover and Tooltip Concepts",
+    "Plotly for Interactive Charts",
+    "Linking Charts and Tables",
+    "Interactive Filtering",
+    "Performance Considerations for Large Visualizations"
+  ],
+  "learning_outcomes": [
+    "Explain the role of interactive visualization and identify its main inputs, outputs or constraints.",
+    "Apply hover and tooltip concepts in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Interactive Visualization is part of Data Visualization and Graphics. Start with hover and tooltip concepts and connect it to the worked example and expected result.",
+    "why_it_matters": "A useful visualization encodes the question honestly with readable scales, descriptive labels and a clear account of uncertainty or limits.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Interactive Visualization",
+        "asset_path": "diagrams/analysis-scatterplot.svg",
+        "alt_text": "Concept visual supporting lesson 126, Interactive Visualization. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "A useful visualization encodes the question honestly with readable scales, descriptive labels and a clear account of uncertainty or limits. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Hover and Tooltip Concepts",
+            "text": "Explain hover and tooltip concepts in the context of interactive visualization, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Plotly for Interactive Charts",
+            "text": "For plotly for interactive charts, label the variables and units, check the visual scale, and state what the graphic cannot prove."
+          },
+          {
+            "title": "Linking Charts and Tables",
+            "text": "For linking charts and tables, label the variables and units, check the visual scale, and state what the graphic cannot prove."
+          },
+          {
+            "title": "Interactive Filtering",
+            "text": "Explain interactive filtering in the context of interactive visualization, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Performance Considerations for Large Visualizations",
+            "text": "For performance considerations for large visualizations, label the variables and units, check the visual scale, and state what the graphic cannot prove."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Choose a chart for the variables, label axes and units, and state what the plot cannot establish. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Interactive Visualization",
+        "language": "r",
+        "code": "# Lesson 126: Interactive Visualization\nplot(c(2, 3, 4), c(2, 5, 4), type = \"b\", xlab = \"Observation\", ylab = \"Measure\")",
+        "expected_output": "A labelled plot window shows three synthetic observations joined by lines.",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "CodeLeaf does not render an R plot; run locally and check labels, scale and interpretation. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For interactive visualization, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-126-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply interactive visualization to a small synthetic example. Start with hover and tooltip concepts, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the hover and tooltip concepts idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible interactive visualization example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Hover and Tooltip Concepts” and identify the input and output before coding.",
+      "Check labels, units, assumptions, diagnostics and uncertainty before interpreting the output.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: A useful visualization encodes the question honestly with readable scales, descriptive labels and a clear account of uncertainty or limits.",
+      "Practice: Choose a chart for the variables, label axes and units, and state what the plot cannot establish.",
+      "Source syllabus focus: Hover and Tooltip Concepts. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply interactive visualization to a small synthetic example. Start with hover and tooltip concepts, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible interactive visualization example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Hover and Tooltip Concepts” and identify the input and output before coding.",
+    "Check labels, units, assumptions, diagnostics and uncertainty before interpreting the output.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: A useful visualization encodes the question honestly with readable scales, descriptive labels and a clear account of uncertainty or limits.",
+    "Practice: Choose a chart for the variables, label axes and units, and state what the plot cannot establish.",
+    "Source syllabus focus: Hover and Tooltip Concepts. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 12 — Data Visualization and Graphics, lesson 126: Interactive Visualization.",
+    "Official documentation: https://ggplot2.tidyverse.org/",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

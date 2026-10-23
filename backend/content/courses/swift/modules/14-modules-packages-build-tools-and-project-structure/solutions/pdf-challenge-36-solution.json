@@ -1,0 +1,13 @@
+{
+  "id": "swift-exercise-pdf-36-solution",
+  "exercise_id": "swift-exercise-pdf-36",
+  "title": "Reference solution: Build a dependency-injected HTTP client",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": {
+    "language": "swift",
+    "reference_code": "import Foundation\nstruct APIMessage: Decodable { let message: String }\nlet payload = #\"{\"message\":\"Hello\"}\"#.data(using: .utf8)!\nlet message = try JSONDecoder().decode(APIMessage.self, from: payload)\nprint(message.message)",
+    "approach": "Inject a URL-loading or service protocol so unit tests can replace the network boundary."
+  },
+  "explanation": "A reference approach for build a dependency-injected http client should meet each acceptance criterion and include tests for boundary cases. Review the solution only after attempting the challenge; compile and run it in the intended Swift target."
+}

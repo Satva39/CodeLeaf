@@ -1,0 +1,152 @@
+{
+  "id": "rust-lesson-098",
+  "slug": "generic-structs-and-enums",
+  "title": "Generic Structs and Enums",
+  "sequence": 98,
+  "module_id": "rust-module-09",
+  "module_slug": "generics-traits-and-polymorphism",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-language",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "rust-lesson-097"
+  ],
+  "previous_lesson_id": "rust-lesson-097",
+  "next_lesson_id": "rust-lesson-099",
+  "keywords": [
+    "and",
+    "data-modelling-and-exhaustive-handling",
+    "enums",
+    "generic",
+    "rust",
+    "structs"
+  ],
+  "source_syllabus_number": 98,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the main purpose of Generic Structs and Enums and distinguish it from a closely related Rust concept.",
+    "Apply or trace Generic Structs and Enums in a small Rust example, using the module guidance and stated toolchain assumptions.",
+    "Identify one relevant edge case or failure mode for Generic Structs and Enums and select a suitable verification step."
+  ],
+  "content": {
+    "intro": "This lesson covers Generic Structs and Enums. It sits in Module 9, Generics, Traits, and Polymorphism, and builds toward a practical Rust mental model rather than memorizing a term in isolation.",
+    "why_it_matters": "Generic Structs and Enums matters when you work with data modelling and exhaustive handling. Understanding the rule helps you predict compiler or runtime behavior, document assumptions, and choose a safer implementation when inputs or system conditions change.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Generic Structs and Enums",
+        "asset_path": "diagrams/lesson-098-generic-structs-and-enums.svg",
+        "alt_text": "Concept diagram for Generic Structs and Enums: data modelling and exhaustive handling; inputs flow through a rule to an outcome, followed by a verification step.",
+        "caption": "Visual model for Generic Structs and Enums. The diagram is a learning aid; use the prose and examples for exact conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Generics and traits let code express reusable behavior with compile-time type checking. Rust can use static dispatch for generic parameters or dynamic dispatch through trait objects."
+      },
+      {
+        "type": "paragraph",
+        "title": "A reliable way to reason about it",
+        "text": "For Generic Structs and Enums, write down the inputs, the guarantee you expect, and the boundary where that guarantee stops. Work through a minimal example first; then deliberately test one edge case. Traits describe behavior; generic bounds constrain acceptable types. Use dyn trait objects only when dynamic dispatch or heterogeneous collections are useful."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Generic Structs and Enums",
+            "text": "Generics and traits let code express reusable behavior with compile-time type checking. Rust can use static dispatch for generic parameters or dynamic dispatch through trait objects."
+          },
+          {
+            "title": "Inputs and guarantees",
+            "text": "Identify the value, type, state, tool, or external system involved in Generic Structs and Enums. Separate what Rust checks at compile time from what still needs validation or a test."
+          },
+          {
+            "title": "Boundary case",
+            "text": "Try an empty, missing, invalid, unusually large, or concurrently accessed input when that boundary applies to Generic Structs and Enums. Record what should happen and how you can verify it."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "rust",
+        "execution_mode": "static-validation",
+        "code": "#[derive(Debug)]\nenum Status { Pending, Done }\n\nfn main() {\n    let status = Status::Done;\n    match status {\n        Status::Pending => println!(\"waiting\"),\n        Status::Done => println!(\"finished\"),\n    }\n}",
+        "expected_output": "finished",
+        "run_instructions": "Save as src/main.rs and run cargo run. Add a match arm when an enum gains a new variant so the code remains exhaustive.",
+        "reset_steps": "Return the sample to its original form, run the documented command again, and compare the result. If a dependency, target, runtime, database, or hardware device is required, configure that separately before treating the result as verified."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not assume Generic Structs and Enums guarantees more than it actually does. Reduce a failure to a small reproducer, read the full compiler diagnostic or error value, consult the matching official reference, and change one assumption at a time."
+      },
+      {
+        "type": "callout",
+        "title": "Toolchain and execution boundary",
+        "text": "Course examples are static reference snippets, not executed inside CodeLeaf. Most standard-library examples can be tried in a Rust 2024 Cargo project; specialized networking, database, async, procedural-macro, embedded, and WebAssembly scenarios require the toolchain and dependencies described in their lessons."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate Generic Structs and Enums. Predict the result before you run it, then explain one normal case and one relevant boundary case in your own words.",
+    "task_acceptance_criteria": [
+      "Explain the purpose of Generic Structs and Enums using a concrete example.",
+      "Verify the example using an appropriate local command, targeted test, or documented manual check.",
+      "Describe one edge case, failure mode, version assumption, or limitation that matters for this topic."
+    ],
+    "hints": [
+      "Start by identifying the inputs and guarantee involved in Generic Structs and Enums.",
+      "Use the smallest example that isolates one rule; avoid changing multiple variables at once.",
+      "Check the matching official reference if compiler behavior, a library API, or toolchain support differs from your expectation."
+    ],
+    "expected_output": "finished",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-098-questions.json",
+    "recap": [
+      "Generic Structs and Enums supports data modelling and exhaustive handling.",
+      "Predict and verify behavior with small examples.",
+      "Keep library and target-specific assumptions explicit."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "The Rust Programming Language (The Rust Book)",
+      "url": "https://doc.rust-lang.org/stable/book/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "learning sequence",
+        "syntax",
+        "ownership",
+        "structs and enums",
+        "collections",
+        "generics",
+        "error handling",
+        "modules",
+        "lifetimes",
+        "threads",
+        "testing"
+      ]
+    },
+    {
+      "title": "The Rust Reference",
+      "url": "https://doc.rust-lang.org/reference/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "language syntax and semantics",
+        "type system",
+        "patterns",
+        "macros",
+        "unsafe Rust",
+        "FFI",
+        "ABI",
+        "compiler behavior"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Rust.pdf; review explanation, code behavior, version notes, and assessment quality before publication."
+}

@@ -1,0 +1,18 @@
+{
+  "id": "cpp-exercise-solution-034",
+  "exercise_id": "cpp-exercise-034",
+  "title": "Multithreaded file processor reference solution notes",
+  "language": "cpp",
+  "answer": "#include <iostream>\n#include <mutex>\n#include <string>\n#include <thread>\n#include <vector>\nint main() {\n    const std::vector<std::string> items{\"alpha\", \"beta\", \"gamma\"};\n    std::mutex output_mutex; std::vector<std::jthread> workers;\n    for (const auto& item : items) workers.emplace_back([&output_mutex, item] {\n        const auto length = item.size();\n        std::lock_guard lock(output_mutex);\n        std::cout << item << ':' << length << '\\n';\n    });\n}\n",
+  "explanation": "Three lines, one each for alpha, beta and gamma; ordering is unspecified.",
+  "manual_validation_checklist": [
+    "Compile locally with C++20 and -Wall -Wextra -Wpedantic (add the external library named in the solution when applicable).",
+    "Test normal inputs and at least one boundary/failure case named in the exercise prompt.",
+    "Check integer range, object lifetime, resource cleanup and error handling where relevant.",
+    "This demonstrates safe per-item work and synchronized output without doing disk I/O. A real file processor must handle open/read errors, encoding, cancellation and bounded work.",
+    "Keep this solution in repository-only protected content; do not include it in learner API responses."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only reference notes; replace with a reviewed implementation and test suite before publishing the exercise."
+}

@@ -1,0 +1,192 @@
+{
+  "id": "vue-lesson-026",
+  "slug": "working-with-v-model",
+  "title": "Working with v-model",
+  "sequence": 26,
+  "module_id": "vue-module-04",
+  "module_slug": "directives-and-rendering-patterns",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "vue-lesson-025"
+  ],
+  "previous_lesson_id": "vue-lesson-025",
+  "next_lesson_id": "vue-lesson-027",
+  "keywords": [
+    "Working with v-model",
+    "Directives and Rendering Patterns",
+    "Two-way binding",
+    "Input and textarea binding",
+    "Checkbox and radio binding",
+    "Select menus and option values",
+    "Vue 3",
+    "Composition API"
+  ],
+  "source_syllabus_number": 26,
+  "subtopics": [
+    "Two-way binding",
+    "Input and textarea binding",
+    "Checkbox and radio binding",
+    "Select menus and option values"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Working with v-model in a Vue 3 application.",
+    "Apply at least one of the syllabus subtopics in a small, inspectable example.",
+    "Verify one expected behavior and identify a relevant edge case."
+  ],
+  "content": {
+    "intro": "This lesson studies Working with v-model within Directives and Rendering Patterns. The source PDF subtopics are preserved below and connected to an original working-style example.",
+    "why_it_matters": "Selecting a directive carefully affects lifecycle, rendering cost, security, and maintainability.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Working with v-model: Form data and validation",
+        "asset_path": "diagrams/lessons/lesson-026-working-with-v-model.svg",
+        "alt_text": "Form data and validation diagram for lesson 26: Working with v-model. Bind values with v-model or input events → Associate messages with each field → Show pending, success, and server errors",
+        "caption": "Form flow: connect input state to validation and communicate both client-side and server-side errors accessibly."
+      },
+      {
+        "type": "paragraph",
+        "title": "The idea in context",
+        "text": "Directives add reactive behavior to elements, while custom directives package focused DOM interactions when a component or composable is not a better fit. This lesson focuses on Working with v-model. Start by naming the state, component, browser behavior, or deployment boundary involved; then predict what should change and test the smallest example."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Two-way binding",
+            "text": "For Two-way binding, connect the term to a visible behavior in a small Vue 3 example. State what input or reactive dependency changes, predict the UI result, and verify the prediction with a normal case plus a boundary case."
+          },
+          {
+            "title": "Input and textarea binding",
+            "text": "For Input and textarea binding, bind the input to a clear state value, validate before submission, and associate field errors with their controls. A disabled or loading state should be reflected in the UI without treating the client as the authority for server validation."
+          },
+          {
+            "title": "Checkbox and radio binding",
+            "text": "For Checkbox and radio binding, bind the input to a clear state value, validate before submission, and associate field errors with their controls. A disabled or loading state should be reflected in the UI without treating the client as the authority for server validation."
+          },
+          {
+            "title": "Select menus and option values",
+            "text": "For Select menus and option values, bind the input to a clear state value, validate before submission, and associate field errors with their controls. A disabled or loading state should be reflected in the UI without treating the client as the authority for server validation."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "vue",
+        "code": "<script setup>\nimport { ref } from 'vue'\nconst email = ref('')\n</script>\n<template><label>Email <input v-model.trim=\"email\" type=\"email\" /></label><p>Length: {{ email.length }}</p></template>",
+        "expected_output": "Typing updates email reactively; .trim removes leading and trailing whitespace on synchronization.",
+        "run_instructions": "Run as App.vue; production forms should also handle invalid email, server errors, and pending state.",
+        "reset_steps": "Restore the initial values or original code, reload the development app/test, and repeat once with a boundary or failure case. Remove temporary logs and test data before committing.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Work through Working with v-model with a predict–change–verify loop. First state the expected UI or console output. Change only the relevant input/state value, then observe the result. Compare it with the expected output in the code block; if it differs, check the exact file, runtime/version, browser Console, and network response before widening the investigation."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Extend the example to include “Input and textarea binding”. Keep the same behavior for the ordinary input, then try an empty, invalid, repeated, or failure condition that makes sense for the example. Record the expected result before testing."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming behavior instead of checking it",
+            "text": "Write down the expected result and reproduce the issue in the smallest possible example; inspect the browser Console and the exact reactive value or request."
+          },
+          {
+            "title": "Ignoring an edge case",
+            "text": "Try empty input, a missing item, repeated interaction, a failed request, or unmounting while work is pending; handle the case explicitly."
+          },
+          {
+            "title": "Putting every responsibility in one component",
+            "text": "Separate display, reusable logic, API service, and shared state when that boundary makes the behavior easier to test and explain."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "Remember: Directives add reactive behavior to elements, while custom directives package focused DOM interactions when a component or composable is not a better fit. For Working with v-model, keep the example small, verify the rendered or logged result, and consult the official references when behavior depends on a specific Vue or ecosystem version."
+      },
+      {
+        "type": "callout",
+        "title": "Accessibility, version, and runtime notes",
+        "text": "Use semantic HTML, readable labels, keyboard-operable controls, and visible errors where the example interacts with users. Vue examples are intended for Vue 3.x with create-vue/Vite unless a legacy or specialist lesson explicitly says otherwise. This CodeLeaf playground does not execute arbitrary Vue code; the snippets are labeled for static validation and should be run in a separate local project."
+      }
+    ],
+    "task": "Create a small example for “Working with v-model” that applies “Two-way binding”, predicts the expected result, and verifies a relevant boundary case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named Vue concept rather than only mentioning it.",
+      "The expected output or observable behavior is written down and can be checked locally.",
+      "At least one boundary, loading, invalid-input, or failure case is tested or explicitly reasoned about.",
+      "The example uses semantic/accessible interaction patterns and does not treat frontend state as authoritative security."
+    ],
+    "hints": [
+      "Start with the smallest observable part of “Two-way binding”.",
+      "Predict the output before changing one input at a time.",
+      "Use the browser Console, Vue DevTools, or the appropriate test runner to isolate a mismatch."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "The example only covers the happy path.",
+        "why": "Real interfaces receive empty values, delayed responses, invalid input, and failed requests.",
+        "fix": "Add one realistic edge/failure case and state its expected behavior."
+      },
+      {
+        "problem": "The code assumes an API or feature exists in every runtime.",
+        "why": "Tool and API support depends on Vue, the build tool, or the chosen SSR/test framework.",
+        "fix": "Check the linked official reference and record the runtime/version assumption."
+      }
+    ],
+    "summary": [
+      "Working with v-model belongs to the broader area Directives and Rendering Patterns.",
+      "The main concept to practice is Two-way binding.",
+      "Verify a normal result and one meaningful boundary case before using the pattern in a production feature."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-026-questions.json",
+    "references": [
+      "https://vuejs.org/guide/essentials/template-syntax.html",
+      "https://vuejs.org/guide/best-practices/security.html"
+    ]
+  },
+  "exercise_files": [
+    "../exercises/026-directive-decision-matrix.json"
+  ],
+  "sources": [
+    {
+      "title": "Vue Template Syntax",
+      "url": "https://vuejs.org/guide/essentials/template-syntax.html",
+      "publisher": "Vue.js core team",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Working with v-model",
+        "Two-way binding",
+        "Input and textarea binding",
+        "Checkbox and radio binding"
+      ]
+    },
+    {
+      "title": "Vue Security Best Practices",
+      "url": "https://vuejs.org/guide/best-practices/security.html",
+      "publisher": "Vue.js core team",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Working with v-model",
+        "Two-way binding",
+        "Input and textarea binding",
+        "Checkbox and radio binding"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Authored as a syllabus-complete educational draft. Technical and instructional review required before publication."
+}

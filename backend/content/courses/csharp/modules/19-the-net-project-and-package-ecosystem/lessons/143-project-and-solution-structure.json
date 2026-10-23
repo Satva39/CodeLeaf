@@ -1,0 +1,171 @@
+{
+  "id": "csharp-lesson-143",
+  "slug": "project-and-solution-structure",
+  "title": "Project and Solution Structure",
+  "sequence": 143,
+  "module_id": "csharp-module-19",
+  "module_slug": "the-net-project-and-package-ecosystem",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional-practice",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "csharp-lesson-142"
+  ],
+  "previous_lesson_id": "csharp-lesson-142",
+  "next_lesson_id": "csharp-lesson-144",
+  "keywords": [
+    "project",
+    "and",
+    "solution",
+    "structure",
+    "the .net project and package ecosystem",
+    "c#",
+    ".net"
+  ],
+  "source_syllabus_number": 143,
+  "subtopics": [
+    ".csproj files",
+    "Solution files",
+    "Source and resource files",
+    "Project references",
+    "Multi-project solutions",
+    "Organizing application code"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of project and solution structure in a C#/.NET program.",
+    "Predict the result of the included C# example and verify the documented output.",
+    "Apply project and solution structure to a small task and identify one relevant boundary, limitation, or version requirement."
+  ],
+  "content": {
+    "intro": "Project and Solution Structure is lesson 143 in The .NET Project and Package Ecosystem. A reproducible .NET project describes target frameworks, settings, and dependencies in version-controlled files so another machine can restore and build the same code.",
+    "why_it_matters": "Reproducible builds depend on explicit project settings and consistent dependency management. This lesson focuses on project and solution structure and shows how to verify the behavior instead of relying on assumptions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 19 visual map: The .NET Project and Package Ecosystem",
+        "asset_path": "diagrams/module-19-overview.svg",
+        "alt_text": "Numbered visual roadmap of The .NET Project and Package Ecosystem, with the lesson sequence and learn-inspect-test-apply workflow.",
+        "caption": "This module map locates Project and Solution Structure among the ordered concepts; the lesson text and example focus on the highlighted topic."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "A reproducible .NET project describes target frameworks, settings, and dependencies in version-controlled files so another machine can restore and build the same code."
+      },
+      {
+        "type": "paragraph",
+        "title": "A practical way to learn it",
+        "text": "Start with the smallest valid case for project and solution structure. Predict the output, run or inspect the example in the stated toolchain, then change one input or rule and compare the result. For production code, record assumptions and verify boundary cases."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics to connect",
+        "items": [
+          {
+            "title": ".csproj files",
+            "text": "Use explicit paths and scoped resource disposal; test missing files, permission failures, and partial data."
+          },
+          {
+            "title": "Solution files",
+            "text": "Use explicit paths and scoped resource disposal; test missing files, permission failures, and partial data."
+          },
+          {
+            "title": "Source and resource files",
+            "text": "Use explicit paths and scoped resource disposal; test missing files, permission failures, and partial data."
+          },
+          {
+            "title": "Project references",
+            "text": "Keep dependencies and project settings reproducible, and inspect changes before committing or releasing."
+          },
+          {
+            "title": "Multi-project solutions",
+            "text": "Keep dependencies and project settings reproducible, and inspect changes before committing or releasing."
+          },
+          {
+            "title": "Organizing application code",
+            "text": "For organizing application code, define the expected behavior, inspect how it relates to project and solution structure, and verify a representative case plus one boundary or failure case."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "csharp",
+        "execution_mode": "static-validation",
+        "code": "// Lesson 143: Project and Solution Structure\nConsole.WriteLine(\"Program.cs + project file + dependencies\");",
+        "expected_output": "Program.cs + project file + dependencies",
+        "run_instructions": "This snippet is a static reference; CodeLeaf does not execute C# in the browser. To run it, create a .NET 10 console app with `dotnet new console`, replace Program.cs with the example (keeping any required using directives), then run `dotnet run`. A snippet that names a test framework, provider package, unsafe setting, or advanced runtime feature must be placed in a project with that dependency/configuration.",
+        "reset_steps": "Restore the documented snippet, rerun it locally in a compatible .NET project, and compare output. Remove temporary files or test data after checking them. Do not treat the in-page output panel as execution."
+      },
+      {
+        "type": "callout",
+        "title": "Version and reliability note",
+        "text": "A reproducible .NET project describes target frameworks, settings, and dependencies in version-controlled files so another machine can restore and build the same code."
+      }
+    ],
+    "task": "Try it yourself: create a small C# example that demonstrates project and solution structure. Change one input or implementation detail, predict the result, then check it locally and explain one edge case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates project and solution structure rather than only repeating its definition.",
+      "The result is checked locally or against a clearly documented reference output.",
+      "At least one relevant boundary, invalid-input case, or compatibility condition is considered."
+    ],
+    "hints": [
+      "List the assumptions and expected behavior for project and solution structure before editing the code.",
+      "Change one variable or rule at a time; keep the previous output for comparison.",
+      "If behavior differs, confirm the compiler/target framework and consult the linked official documentation."
+    ],
+    "solution_notes": "Suggested approach: identify the expected input and output, start from the smallest example, use the feature only where it clarifies the rule, and verify both a typical case and a boundary/failure case.",
+    "expected_output": "Program.cs + project file + dependencies",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-143-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the feature works identically on every target",
+        "why": "Language syntax, libraries, and runtime support are version-dependent.",
+        "fix": "Check the target framework and official versioned reference before using the feature."
+      },
+      {
+        "problem": "Testing only a happy path",
+        "why": "Boundary values, malformed input, and failure states often expose the real bug.",
+        "fix": "Add one typical input and one boundary or invalid case to the manual or automated checks."
+      },
+      {
+        "problem": "Treating sample output as proof that the code ran",
+        "why": "The course reader uses static reference output for C# because it has no C# execution runner.",
+        "fix": "Run the snippet in a local .NET project or a separately isolated execution service."
+      }
+    ],
+    "summary": [
+      "Project and Solution Structure belongs to The .NET Project and Package Ecosystem.",
+      "A reproducible .NET project describes target frameworks, settings, and dependencies in version-controlled files so another machine can restore and build the same code.",
+      "Check assumptions, verify output, and document one meaningful limitation or edge case."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "C# language documentation",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/",
+      "publisher": "Microsoft Learn",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "The .NET Project and Package Ecosystem",
+        "Project and Solution Structure",
+        "language and .NET concepts"
+      ]
+    },
+    {
+      "title": "C# language version history",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-version-history",
+      "publisher": "Microsoft Learn",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "feature-version history",
+        "compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson expanded from the numbered C# syllabus in C#(1).pdf. Code examples and pedagogical framing are original. Review feature compatibility and compile every runnable sample with the target .NET SDK before publication."
+}

@@ -1,0 +1,56 @@
+{
+  "id": "django-exercise-008",
+  "slug": "image-upload-and-storage-exercise",
+  "title": "Image Upload and Storage Exercise",
+  "type": "practical",
+  "lesson_id": "django-lesson-125",
+  "module_id": "django-module-12",
+  "difficulty": "intermediate",
+  "sequence": 8,
+  "prompt": "Allow authenticated uploads, validate them, protect private files, and render appropriate image URLs.\n\nSubmission: a small reviewable artifact, relevant tests, expected outputs, one failure/boundary case, and version/environment notes. Use synthetic data. Django/Python server code is not executed by CodeLeaf browser preview; local or human review is required.",
+  "objective": "Image Upload and Storage Exercise",
+  "target_skills": [
+    "Limit upload size and allowed content types using layered checks.",
+    "Store media separately from static files and keep private assets protected.",
+    "Test invalid, oversized, and authorized download cases."
+  ],
+  "starter": {
+    "language": "text",
+    "content": "from django import forms\n\nclass ImageUploadForm(forms.Form):\n    image = forms.ImageField()\n    # Add a validated size limit in clean_image() for your policy.",
+    "code": "from django import forms\n\nclass ImageUploadForm(forms.Form):\n    image = forms.ImageField()\n    # Add a validated size limit in clean_image() for your policy."
+  },
+  "expected_output": "ImageField requires Pillow; do not install unreviewed dependencies just to run this snippet.",
+  "public_tests": [
+    {
+      "name": "Required-concept smoke check",
+      "required_strings": [
+        "ImageField",
+        "request.FILES"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "A valid image follows the configured storage path.",
+    "An invalid/oversized upload is rejected.",
+    "Private media cannot be retrieved by unauthorized users.",
+    "State whether verification was local, static, or human-reviewed.",
+    "Do not claim a build/deployment or external integration was tested unless it was actually run."
+  ],
+  "hints": [
+    "Never trust the supplied filename/extension as proof of safe content.",
+    "Use request.FILES and an upload form.",
+    "Plan storage permissions, malware/content scanning, and cleanup."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "ImageField",
+      "request.FILES"
+    ]
+  },
+  "grading_method": "Required-string smoke check plus human review of technical correctness, tests, safe handling, expected result and reproducibility. This does not execute arbitrary Python/Django code.",
+  "retry_policy": "Retries are allowed after reviewing feedback; the platform backend owns its uniform XP/idempotency rules.",
+  "solution_file": "../solutions/008-image-upload-and-storage-exercise-solution.json",
+  "status": "draft",
+  "status_note": "Practical exercise from Section C of the supplied Django curriculum; content and grading need review before publication."
+}

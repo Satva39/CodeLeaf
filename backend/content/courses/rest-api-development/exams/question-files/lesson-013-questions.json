@@ -1,0 +1,49 @@
+{
+  "id": "rest-api-development-knowledge-check-013",
+  "lesson_id": "rest-api-development-lesson-013",
+  "lesson_slug": "structure-of-an-http-response",
+  "title": "Knowledge check: Structure of an HTTP Response",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "questions": [
+    {
+      "id": "rest-api-development-q-013-01",
+      "type": "single_choice",
+      "prompt": "When investigating an HTTP interaction, which inspection sequence is most reliable?",
+      "options": [
+        "Assume DNS, TLS, and application routing are the same layer.",
+        "Inspect the method and target, request headers/body, response status, response headers, and response body.",
+        "Inspect only the JSON body and ignore the method and status.",
+        "Treat a browser URL fragment as part of the HTTP request target."
+      ],
+      "answer_key": "Inspect the method and target, request headers/body, response status, response headers, and response body.",
+      "explanation": "Inspect the method and target, request headers/body, response status, response headers, and response body. This is especially relevant to “Structure of an HTTP Response” because the API contract must remain explicit and reviewable."
+    },
+    {
+      "id": "rest-api-development-q-013-02",
+      "type": "single_choice",
+      "prompt": "For the lesson “Structure of an HTTP Response”, which check provides the strongest practical evidence?",
+      "options": [
+        "Compare the complete HTTP message with the target URL structure and transport evidence.",
+        "Rely on a code review comment without running any representative check.",
+        "Run one happy-path call and skip invalid, denied, and failure scenarios.",
+        "Test against production records so the exercise cannot be repeated safely."
+      ],
+      "answer_key": "Compare the complete HTTP message with the target URL structure and transport evidence.",
+      "explanation": "A useful check is repeatable, tied to an observable contract, and includes an important negative or boundary scenario."
+    },
+    {
+      "id": "rest-api-development-q-013-03",
+      "type": "single_choice",
+      "prompt": "Which review warning is most relevant to “Structure of an HTTP Response”?",
+      "options": [
+        "The expected behavior and relevant failure cases are documented.",
+        "A representative test can reproduce the result.",
+        "The API avoids exposing internal secrets and personal data.",
+        "A diagnosis mixes network, HTTP, and application layers without inspecting the actual messages."
+      ],
+      "answer_key": "A diagnosis mixes network, HTTP, and application layers without inspecting the actual messages.",
+      "explanation": "This finding weakens a core API guarantee and should be treated as a design or release issue, not only a style concern."
+    }
+  ]
+}

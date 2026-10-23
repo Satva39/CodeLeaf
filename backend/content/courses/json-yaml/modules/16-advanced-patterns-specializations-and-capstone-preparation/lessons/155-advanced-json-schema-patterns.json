@@ -1,0 +1,190 @@
+{
+  "id": "json-yaml-lesson-155",
+  "slug": "advanced-json-schema-patterns",
+  "title": "Advanced JSON Schema Patterns",
+  "sequence": 155,
+  "module_id": "json-yaml-module-16",
+  "module_slug": "advanced-patterns-specializations-and-capstone-preparation",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "specialization",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "json-yaml-lesson-154"
+  ],
+  "previous_lesson_id": "json-yaml-lesson-154",
+  "next_lesson_id": "json-yaml-lesson-156",
+  "keywords": [
+    "advanced-json-schema-patterns",
+    "reusable-and-composed-schemas-conditional-constraints-recursive-data-structures-external-schema-references",
+    "schema-registries-and-shared-definitions-dialect-compatibility-schema-compatibility-testing"
+  ],
+  "source_syllabus_number": 155,
+  "subtopics": [
+    "Reusable and composed schemas. Conditional constraints. Recursive data structures. External schema references.",
+    "Schema registries and shared definitions. Dialect compatibility. Schema compatibility testing."
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of advanced json schema patterns and identify at least one related syllabus concept.",
+    "Interpret the example for advanced json schema patterns and describe its expected result.",
+    "Choose a relevant syntax, type, compatibility, security, or troubleshooting check for the example."
+  ],
+  "content": {
+    "intro": "This lesson focuses on advanced json schema patterns and connects the PDF syllabus topics to a small, inspectable example. Work from the intended data model, write down the expected result, then verify syntax and semantics with the target tool.",
+    "why_it_matters": "Advanced JSON Schema Patterns matters because structured-data files sit between people, tools, services, and deployment systems. A clear contract and repeatable checks make the result easier to maintain and safer to consume.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Advanced JSON Schema Patterns: visual explanation",
+        "asset_path": "diagrams/lessons/lesson-155-advanced-json-schema-patterns.svg",
+        "alt_text": "Advanced JSON Schema Patterns: Reusable and composed schemas. Conditional constraints. Recursive data structures. External schema references. leads to Interpret / validate, then Expected structure.",
+        "caption": "Use this concept flow to predict the result for Advanced JSON Schema Patterns before you test the snippet."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Advanced workflows combine data modeling, schema composition, parser portability, transformation pipelines, streaming, canonicalization, and operational documentation. Use specialized features only when their compatibility and security implications are understood."
+      },
+      {
+        "type": "paragraph",
+        "title": "What you will cover",
+        "text": "This lesson explicitly addresses: Reusable and composed schemas. Conditional constraints. Recursive data structures. External schema references.; Schema registries and shared definitions. Dialect compatibility. Schema compatibility testing.. Treat each as part of a workflow: define what the data should mean, represent it consistently, and test how the chosen implementation interprets it."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Advanced JSON Schema Patterns",
+        "language": "json",
+        "code": "{\n  \"$schema\": \"https://json-schema.org/draft/2020-12/schema\",\n  \"oneOf\": [\n    {\"type\":\"object\", \"properties\":{\"kind\":{\"const\":\"book\"},\"title\":{\"type\":\"string\"}}, \"required\":[\"kind\",\"title\"]},\n    {\"type\":\"object\", \"properties\":{\"kind\":{\"const\":\"movie\"},\"durationMinutes\":{\"type\":\"integer\",\"minimum\":0}}, \"required\":[\"kind\",\"durationMinutes\"]}\n  ]\n}",
+        "expected_output": "The oneOf composition describes two distinct shapes identified by `kind`. Test ambiguous inputs and each valid variant using a compatible 2020-12 validator.",
+        "run_instructions": "Save as example.json and run `python -m json.tool example.json`. This validates JSON syntax and formats the file; it does not validate a JSON Schema or application business rules.",
+        "reset_steps": "Restore the starting fixture before each test. Change one field, indentation level, parser option, or schema constraint at a time, then compare the result with the prediction.",
+        "execution_mode": "static-validation",
+        "limitations": "This snippet is a reference/example, not evidence that the CodeLeaf browser executes JSON/YAML parsing, shell commands, or Python. Validate locally with a named parser or tool before relying on it."
+      },
+      {
+        "type": "list",
+        "title": "A reliable working sequence",
+        "items": [
+          {
+            "title": "1. State the contract",
+            "text": "Write down the expected root type, required fields, scalar types, and any compatibility assumptions."
+          },
+          {
+            "title": "2. Validate before use",
+            "text": "Parse the document and run the applicable schema or policy checks; syntax success alone is not full correctness."
+          },
+          {
+            "title": "3. Test a boundary",
+            "text": "Include at least one missing, malformed, ambiguous, or unexpected input and record the desired behavior."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety checkpoint",
+        "text": "Advanced features are useful only when all relevant tools agree on their semantics. Prefer the simplest portable representation that meets the requirement. Confirm implementation-specific behavior against the target parser, tool version, and standards documentation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second synthetic fixture for “Reusable and composed schemas. Conditional constraints. Recursive data structures. External schema references.”. Predict the parsed types/result, change one relevant detail, and record whether the target tool behaved as expected. Include one invalid or boundary case."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-155-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating readable text as proof of correctness.",
+        "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+        "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+      },
+      {
+        "problem": "Assuming every parser interprets the feature identically.",
+        "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+        "fix": "Record the exact parser/version and test the target environment."
+      },
+      {
+        "problem": "Testing only a happy path.",
+        "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+        "fix": "Keep valid, invalid, and boundary fixtures in version control."
+      }
+    ],
+    "task": "Prepare a brief, reviewable demonstration of Advanced JSON Schema Patterns. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+    "task_acceptance_criteria": [
+      "The artifact clearly demonstrates Reusable and composed schemas. Conditional constraints. Recursive data structures. External schema references..",
+      "Expected behavior is written before verification.",
+      "One invalid or boundary case is documented.",
+      "The relevant format, parser/version, and any security or interoperability limits are recorded."
+    ],
+    "hints": [
+      "Start with the smallest valid example that demonstrates Reusable and composed schemas. Conditional constraints. Recursive data structures. External schema references..",
+      "Change one thing at a time and compare parsed values, not only visual formatting.",
+      "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+    ],
+    "summary": [
+      "Advanced JSON Schema Patterns fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+      "Topics retained from the source PDF include Reusable and composed schemas. Conditional constraints. Recursive data structures. External schema references.; Schema registries and shared definitions. Dialect compatibility. Schema compatibility testing..",
+      "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "The oneOf composition describes two distinct shapes identified by `kind`. Test ambiguous inputs and each valid variant using a compatible 2020-12 validator."
+  },
+  "task": "Prepare a brief, reviewable demonstration of Advanced JSON Schema Patterns. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+  "task_acceptance_criteria": [
+    "The artifact clearly demonstrates Reusable and composed schemas. Conditional constraints. Recursive data structures. External schema references..",
+    "Expected behavior is written before verification.",
+    "One invalid or boundary case is documented.",
+    "The relevant format, parser/version, and any security or interoperability limits are recorded."
+  ],
+  "hints": [
+    "Start with the smallest valid example that demonstrates Reusable and composed schemas. Conditional constraints. Recursive data structures. External schema references..",
+    "Change one thing at a time and compare parsed values, not only visual formatting.",
+    "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+  ],
+  "summary": [
+    "Advanced JSON Schema Patterns fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+    "Topics retained from the source PDF include Reusable and composed schemas. Conditional constraints. Recursive data structures. External schema references.; Schema registries and shared definitions. Dialect compatibility. Schema compatibility testing..",
+    "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+  ],
+  "run_mode": "static-validation",
+  "expected_output": "The oneOf composition describes two distinct shapes identified by `kind`. Test ambiguous inputs and each valid variant using a compatible 2020-12 validator.",
+  "common_mistakes": [
+    {
+      "problem": "Treating readable text as proof of correctness.",
+      "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+      "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+    },
+    {
+      "problem": "Assuming every parser interprets the feature identically.",
+      "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+      "fix": "Record the exact parser/version and test the target environment."
+    },
+    {
+      "problem": "Testing only a happy path.",
+      "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+      "fix": "Keep valid, invalid, and boundary fixtures in version control."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "id": "json-yaml-ref-rfc8259",
+      "title": "RFC 8259 — The JavaScript Object Notation (JSON) Data Interchange Format",
+      "url": "https://www.rfc-editor.org/rfc/rfc8259",
+      "publisher": "IETF / RFC Editor",
+      "checked_on": "2026-10-20"
+    },
+    {
+      "id": "json-yaml-ref-ecma404",
+      "title": "ECMA-404 — The JSON Data Interchange Syntax",
+      "url": "https://ecma-international.org/publications-and-standards/standards/ecma-404/",
+      "publisher": "Ecma International",
+      "checked_on": "2026-10-20"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Generated from the attached JSON and YAML syllabus; requires technical review and target-tool validation before publication.",
+  "exercise_files": []
+}

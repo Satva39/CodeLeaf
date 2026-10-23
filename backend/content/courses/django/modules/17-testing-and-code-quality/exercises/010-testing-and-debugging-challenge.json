@@ -1,0 +1,56 @@
+{
+  "id": "django-exercise-010",
+  "slug": "testing-and-debugging-challenge",
+  "title": "Testing and Debugging Challenge",
+  "type": "practical",
+  "lesson_id": "django-lesson-179",
+  "module_id": "django-module-17",
+  "difficulty": "intermediate",
+  "sequence": 10,
+  "prompt": "Given a deliberately faulty application, identify broken routes, incorrect queries, permission bugs, and missing tests. Submit corrected code and a test suite.\n\nSubmission: a small reviewable artifact, relevant tests, expected outputs, one failure/boundary case, and version/environment notes. Use synthetic data. Django/Python server code is not executed by CodeLeaf browser preview; local or human review is required.",
+  "objective": "Testing and Debugging Challenge",
+  "target_skills": [
+    "Reproduce and isolate at least three faults.",
+    "Write tests before or alongside fixes.",
+    "Document root cause and why each regression test would catch it."
+  ],
+  "starter": {
+    "language": "text",
+    "content": "from django.test import TestCase\nfrom django.urls import reverse\n\nclass CatalogTests(TestCase):\n    def test_missing_book_is_404(self):\n        response = self.client.get(reverse(\"book-detail\", args=[999999]))\n        self.assertEqual(response.status_code, 404)",
+    "code": "from django.test import TestCase\nfrom django.urls import reverse\n\nclass CatalogTests(TestCase):\n    def test_missing_book_is_404(self):\n        response = self.client.get(reverse(\"book-detail\", args=[999999]))\n        self.assertEqual(response.status_code, 404)"
+  },
+  "expected_output": "Test the actual project contract and keep the failing case small enough to diagnose.",
+  "public_tests": [
+    {
+      "name": "Required-concept smoke check",
+      "required_strings": [
+        "TestCase",
+        "assertEqual"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Each reported bug has a reproduction.",
+    "Regression tests fail before and pass after the fix.",
+    "No secret or debug traceback leaks in public responses.",
+    "State whether verification was local, static, or human-reviewed.",
+    "Do not claim a build/deployment or external integration was tested unless it was actually run."
+  ],
+  "hints": [
+    "Start from the first failing observable behavior.",
+    "Use URL reverse and test-client checks.",
+    "Cover denied access and missing records, not just happy paths."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "TestCase",
+      "assertEqual"
+    ]
+  },
+  "grading_method": "Required-string smoke check plus human review of technical correctness, tests, safe handling, expected result and reproducibility. This does not execute arbitrary Python/Django code.",
+  "retry_policy": "Retries are allowed after reviewing feedback; the platform backend owns its uniform XP/idempotency rules.",
+  "solution_file": "../solutions/010-testing-and-debugging-challenge-solution.json",
+  "status": "draft",
+  "status_note": "Practical exercise from Section C of the supplied Django curriculum; content and grading need review before publication."
+}

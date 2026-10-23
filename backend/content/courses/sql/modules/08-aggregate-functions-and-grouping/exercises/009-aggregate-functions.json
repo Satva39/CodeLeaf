@@ -1,0 +1,55 @@
+{
+  "id": "sql-exercise-009",
+  "slug": "aggregate-functions",
+  "title": "Aggregate Functions",
+  "type": "coding",
+  "lesson_id": "sql-lesson-074",
+  "module_id": "sql-module-08",
+  "difficulty": "beginner",
+  "sequence": 9,
+  "prompt": "Calculate the total inventory, average product price, and number of customers. Use the included PostgreSQL lab schema and synthetic data. Explain one edge case and do not run data-changing statements against production.",
+  "objective": "Demonstrate aggregate functions with a correct, explainable SQL result.",
+  "target_skills": [
+    "aggregate functions",
+    "SQL query design",
+    "result validation"
+  ],
+  "starter": {
+    "language": "sql",
+    "code": "-- Write a PostgreSQL query for this task.\n-- Keep the output deterministic and explain the expected rows.\n"
+  },
+  "expected_output": "One row summarizes product-row count, units in stock, and average price.",
+  "public_tests": [
+    {
+      "name": "Required SQL evidence",
+      "required_strings": [
+        "COUNT(*)",
+        "SUM(",
+        "AVG("
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Use SQL constructs appropriate for aggregate functions.",
+    "Use explicit joins, grouping, ordering, or predicates where they affect correctness.",
+    "Explain expected output and one edge case; keep all data changes inside a disposable lab or rollback transaction."
+  ],
+  "hints": [
+    "Write the expected output shape first: one row per what?",
+    "Use a small subset of the included seed data to inspect the behavior.",
+    "Run the result against PostgreSQL in a disposable lab; the current CodeLeaf scaffold does not execute arbitrary SQL."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "COUNT(*)",
+      "SUM(",
+      "AVG("
+    ]
+  },
+  "grading_method": "Server-side SQL-token smoke check; it does not parse SQL or prove behavior. Human review and real PostgreSQL tests are required before publishing.",
+  "retry_policy": "Allow retries. XP remains platform-controlled and only a correct server-side check can complete the exercise.",
+  "solution_file": "../solutions/exercise-009-solution.json",
+  "status": "draft",
+  "status_note": "Practical exercise derived from Section C of the source PDF. Token grading is only a smoke check; validate the solution manually before publication."
+}

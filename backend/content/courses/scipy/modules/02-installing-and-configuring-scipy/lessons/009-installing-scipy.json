@@ -1,0 +1,219 @@
+{
+  "id": "scipy-lesson-009",
+  "slug": "installing-scipy",
+  "title": "Installing SciPy",
+  "sequence": 9,
+  "module_id": "scipy-module-02",
+  "module_slug": "installing-and-configuring-scipy",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 8,
+  "prerequisites": [
+    "scipy-lesson-008"
+  ],
+  "previous_lesson_id": "scipy-lesson-008",
+  "next_lesson_id": "scipy-lesson-010",
+  "keywords": [
+    "installing scipy",
+    "scipy installation, imports, and version metadata",
+    "installing with pip",
+    "installing with conda",
+    "choosing an appropriate python environment",
+    "verifying a successful installation",
+    "troubleshooting common installation errors"
+  ],
+  "source_syllabus_number": 9,
+  "source_syllabus_page": 3,
+  "subtopics": [
+    "Installing with pip",
+    "Installing with Conda",
+    "Choosing an appropriate Python environment",
+    "Verifying a successful installation",
+    "Troubleshooting common installation errors"
+  ],
+  "learning_outcomes": [
+    "Describe the role of installing with pip in installing scipy.",
+    "Use a suitable SciPy API or numerical procedure related to installation verification in a small deterministic example.",
+    "Validate the result with a relevant tolerance, shape/domain check, residual, diagnostic, or independent calculation."
+  ],
+  "content": {
+    "intro": "In this lesson, work through **Installing SciPy** using the syllabus terms **Installing with pip** and **Installing with Conda**. Start from a clearly stated numerical question, choose the smallest appropriate SciPy tool, and inspect the result rather than treating the returned number as self-validating.",
+    "why_it_matters": "Installing SciPy supports reliable scientific computing by turning a mathematical or data-analysis problem into a repeatable computation. It is useful when you need to choose between methods, understand assumptions, and report limits rather than merely produce a number.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Installing SciPy",
+        "asset_path": "diagrams/lesson-009-installing-scipy.svg",
+        "alt_text": "Lesson 9 visual for Installing SciPy. Stages show Installing with pip, installation verification, and Troubleshooting common installation errors.",
+        "caption": "Concept map for lesson 9; the labels identify the core idea, method family, and validation focus."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "**Installing SciPy** is best approached as a deliberate numerical workflow. The supplied curriculum highlights **Installing with pip**, along with **Installing with Conda**, **Choosing an appropriate Python environment**, **Verifying a successful installation**. Define what the inputs mean and what result would count as credible before increasing problem size or complexity."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics from the supplied curriculum",
+        "items": [
+          "Installing with pip",
+          "Installing with Conda",
+          "Choosing an appropriate Python environment",
+          "Verifying a successful installation",
+          "Troubleshooting common installation errors"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about the method",
+        "text": "Connect the mathematics to the documented API family **installation verification**. Check input shape and dtype, units and domain assumptions, and whether the method is exact, approximate, iterative, or statistical. The output should be accompanied by an error estimate or a separate check when the API provides one or when the problem allows it."
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "import scipy\n\nprint('SciPy import succeeded:', hasattr(scipy, '__version__'))",
+        "expected_output": "SciPy import succeeded: True",
+        "execution_mode": "static-validation",
+        "run_instructions": "Create and activate an isolated Python virtual environment, install SciPy and NumPy with `python -m pip install scipy numpy`, save the code as a `.py` file, and run it using that environment. This lesson displays examples; it does not execute learner code on the production API.",
+        "reset_steps": "Examples use small synthetic values. Re-run with the original values to restore the stated output. Examples that write files use a temporary directory and remove it automatically."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "First identify the input and the quantity the code computes. Follow the call through the API **installation verification**, then compare the displayed result to the expected behavior. Change one input or parameter and predict what should happen before re-running. For an iterative solver, also inspect its status and stopping criteria."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          "Change one input related to installing with pip and predict the result before running the example.",
+          "Add a check for one edge case relevant to installing scipy (for example, invalid shape, boundary input, non-finite data, or a solver that does not converge).",
+          "Write one sentence describing an assumption or limitation that a reader should know before trusting the result."
+        ]
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          "Topic 9: Installing SciPy.",
+          "Keep the curriculum focus visible: Installing with pip.",
+          "Choose methods from their documented assumptions and validate numerical output independently where possible."
+        ]
+      }
+    ],
+    "expected_output": "SciPy import succeeded: True",
+    "run_instructions": "Run locally with the SciPy version used by the course environment. `static-validation` means the example is displayed and syntax-checked; it is not run inside the CodeLeaf production API.",
+    "reset_steps": "Recreate the small synthetic inputs and temporary output directory before each run; no persistent platform activity is changed by viewing a lesson.",
+    "hints": [
+      "Start by writing down the intended quantity and the role of installing with pip.",
+      "Run the smallest complete example and compare observed results with the expected behavior.",
+      "If results differ, inspect shape, dtype, valid domain, solver status, tolerances, and the installed SciPy version before changing the method."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-009-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Choosing an algorithm before stating the problem and assumptions.",
+        "why": "Two algorithms that look similar can have different domains, stability, performance, and convergence behavior.",
+        "fix": "Write down input shape, units/domain, the quantity to compute, and a validation check before selecting an API."
+      },
+      {
+        "problem": "Treating returned values as exact truths.",
+        "why": "Floating-point arithmetic and iterative numerical algorithms use finite precision and stopping conditions.",
+        "fix": "Inspect success/status fields and error estimates where available; use scale-appropriate tolerances and independent checks."
+      },
+      {
+        "problem": "Copying an example without checking version or edge cases.",
+        "why": "Signatures and legacy status can change between releases, and example data rarely covers boundary behavior.",
+        "fix": "Check the installed SciPy version, official documentation, input constraints, and a failure case."
+      }
+    ],
+    "summary": [
+      "Topic 9 is Installing SciPy; its complete subtopic list is kept in this lesson file.",
+      "The demonstration uses installation verification with synthetic values.",
+      "This generated lesson remains draft pending technical review and execution under the targeted release."
+    ],
+    "references": [
+      {
+        "title": "SciPy installation guide",
+        "url": "https://scipy.org/install/",
+        "publisher": "SciPy project",
+        "checked_on": "2026-10-17",
+        "source_type": "official installation documentation",
+        "supports": [
+          "pip and conda installation",
+          "virtual environments",
+          "source builds"
+        ]
+      },
+      {
+        "title": "SciPy User Guide",
+        "url": "https://docs.scipy.org/doc/scipy/tutorial/index.html",
+        "publisher": "SciPy project",
+        "checked_on": "2026-10-17",
+        "source_type": "official documentation",
+        "supports": [
+          "Package overview",
+          "Algorithm selection",
+          "Scientific computing workflow"
+        ]
+      },
+      {
+        "title": "SciPy release notes",
+        "url": "https://docs.scipy.org/doc/scipy/release/",
+        "publisher": "SciPy project",
+        "checked_on": "2026-10-17",
+        "source_type": "official release documentation",
+        "supports": [
+          "Version compatibility",
+          "Deprecations",
+          "Migration review"
+        ]
+      }
+    ],
+    "accessibility_notes": "The SVG has a title and description, each stage is labeled in text, and the adjacent lesson text explains the sequence without relying on color alone. Code examples are text and can be copied into a local editor.",
+    "version_notes": "Reference baseline: the official SciPy 1.18.0 manual visible on 2026-10-17. The locally available validation runtime reported SciPy 1.17.0; the examples have not been represented as run against 1.18.0. Recheck release notes and behavior before publishing."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "SciPy installation guide",
+      "url": "https://scipy.org/install/",
+      "publisher": "SciPy project",
+      "checked_on": "2026-10-17",
+      "source_type": "official installation documentation",
+      "supports": [
+        "pip and conda installation",
+        "virtual environments",
+        "source builds"
+      ]
+    },
+    {
+      "title": "SciPy User Guide",
+      "url": "https://docs.scipy.org/doc/scipy/tutorial/index.html",
+      "publisher": "SciPy project",
+      "checked_on": "2026-10-17",
+      "source_type": "official documentation",
+      "supports": [
+        "Package overview",
+        "Algorithm selection",
+        "Scientific computing workflow"
+      ]
+    },
+    {
+      "title": "SciPy release notes",
+      "url": "https://docs.scipy.org/doc/scipy/release/",
+      "publisher": "SciPy project",
+      "checked_on": "2026-10-17",
+      "source_type": "official release documentation",
+      "supports": [
+        "Version compatibility",
+        "Deprecations",
+        "Migration review"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the supplied SciPy curriculum with original explanations, synthetic examples, and original SVG visuals. Subject-matter review, targeted-version execution, accessibility review, and publication approval remain required."
+}

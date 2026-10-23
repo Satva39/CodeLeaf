@@ -1,0 +1,165 @@
+{
+  "id": "genai-lesson-058",
+  "slug": "foundation-models-and-pretraining",
+  "title": "Foundation Models and Pretraining",
+  "sequence": 58,
+  "module_id": "genai-module-07",
+  "module_slug": "transformers-foundation-models-and-large-language-models",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-foundations",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "genai-lesson-054"
+  ],
+  "previous_lesson_id": "genai-lesson-057",
+  "next_lesson_id": "genai-lesson-059",
+  "keywords": [
+    "Foundation Models and Pretraining",
+    "What makes a model a foundation model",
+    "Large-scale self-supervised pretraining",
+    "General-purpose versus task-specific models",
+    "Model adaptation and specialization",
+    "Model checkpoints and model repositories",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 58,
+  "subtopics": [
+    "What makes a model a foundation model",
+    "Large-scale self-supervised pretraining",
+    "General-purpose versus task-specific models",
+    "Model adaptation and specialization",
+    "Model checkpoints and model repositories",
+    "Licensing, provenance, and acceptable usage"
+  ],
+  "learning_outcomes": [
+    "Explain what makes a model a foundation model and how it connects to foundation models and pretraining.",
+    "Apply large-scale self-supervised pretraining in the example and predict the output before running it.",
+    "Test one realistic edge case for foundation models and pretraining and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers foundation models and pretraining through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Follow the transformer data path and understand context limits, decoding, model size, and why benchmark results do not automatically predict an application's performance.",
+    "why_it_matters": "Use what makes a model a foundation model as a lens for understanding foundation models and pretraining. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Foundation Models and Pretraining: concept map",
+        "asset_path": "diagrams/lessons/lesson-058-foundation-models-and-pretraining.svg",
+        "alt_text": "Diagram for Foundation Models and Pretraining: understand What makes a model a foundation model, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand What makes a model a foundation model, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Use what makes a model a foundation model as a lens for understanding foundation models and pretraining. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "What makes a model a foundation model",
+            "text": "Use what makes a model a foundation model as a lens for understanding foundation models and pretraining. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Large-scale self-supervised pretraining",
+            "text": "For large-scale self-supervised pretraining, distinguish the training objective from the evaluation goal. Check provenance and data quality, keep validation/test examples isolated from training, record the baseline and configuration, and evaluate both improvement on the target task and possible regressions elsewhere."
+          },
+          {
+            "title": "General-purpose versus task-specific models",
+            "text": "Use general-purpose versus task-specific models as a lens for understanding foundation models and pretraining. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Model adaptation and specialization",
+            "text": "Use model adaptation and specialization as a lens for understanding foundation models and pretraining. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Model checkpoints and model repositories",
+            "text": "Use model checkpoints and model repositories as a lens for understanding foundation models and pretraining. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Licensing, provenance, and acceptable usage",
+            "text": "Licensing, provenance, and acceptable usage addresses how information is prepared, described, versioned, or governed. Validate the input, keep source and access metadata, handle duplicates and missing values deliberately, and test the downstream effect of a data change rather than treating the data pipeline as invisible plumbing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Foundation Models and Pretraining\ntraining_stages = [\"large-scale pretraining\", \"instruction tuning\", \"task-specific adaptation\"]\nprint({\"foundation_stage\": training_stages[0], \"possible_later_adaptations\": training_stages[1:]})",
+        "expected_output": "{'foundation_stage': 'large-scale pretraining', 'possible_later_adaptations': ['instruction tuning', 'task-specific adaptation']}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice what makes a model a foundation model within foundation models and pretraining: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'foundation_stage': 'large-scale pretraining', 'possible_later_adaptations': ['instruction tuning', 'task-specific adaptation']}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-058-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Foundation Models and Pretraining is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://huggingface.co/learn/llm-course/en/chapter1/1",
+      "https://developers.google.com/machine-learning/crash-course/"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Hugging Face LLM Course",
+      "url": "https://huggingface.co/learn/llm-course/en/chapter1/1",
+      "publisher": "Hugging Face",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tokenization"
+      ]
+    },
+    {
+      "title": "Machine Learning Crash Course",
+      "url": "https://developers.google.com/machine-learning/crash-course/",
+      "publisher": "Google for Developers",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "AI and machine learning foundations"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

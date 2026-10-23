@@ -1,0 +1,186 @@
+{
+  "id": "bash-lesson-104",
+  "slug": "synchronization-and-shared-resources",
+  "title": "Synchronization and Shared Resources",
+  "sequence": 104,
+  "module_id": "bash-module-11",
+  "module_slug": "processes-jobs-signals-and-concurrency",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "bash-lesson-103"
+  ],
+  "previous_lesson_id": "bash-lesson-103",
+  "next_lesson_id": "bash-lesson-105",
+  "keywords": [
+    "synchronization",
+    "and",
+    "shared",
+    "resources",
+    "file",
+    "locks",
+    "lock",
+    "directories",
+    "atomic",
+    "replacement",
+    "patterns",
+    "race",
+    "conditions"
+  ],
+  "source_syllabus_number": 104,
+  "subtopics": [
+    "File locks and lock directories",
+    "Atomic file replacement patterns",
+    "Race conditions",
+    "Temporary-file coordination",
+    "Recovering from abandoned locks"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Synchronization and Shared Resources and identify at least two relevant syllabus points.",
+    "Apply synchronization and shared resources in a small Bash example and verify the expected output or status.",
+    "Identify one edge case or failure mode and state how to test it safely."
+  ],
+  "content": {
+    "intro": "Locks and atomic replacement patterns coordinate multiple processes that may touch the same resource.",
+    "why_it_matters": "Synchronization and Shared Resources matters because reliable shell automation depends on making this behavior explicit, testing its boundaries, and documenting environment assumptions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 11 visual roadmap",
+        "asset_path": "diagrams/module-11-overview.svg",
+        "alt_text": "Overview roadmap for Module 11: Processes, Jobs, Signals, and Concurrency, listing lessons 96 through 106 in curriculum order. Lesson focus: Synchronization and Shared Resources.",
+        "caption": "Module roadmap for context. For this lesson, focus on: File locks and lock directories; Atomic file replacement patterns; Race conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The central idea",
+        "text": "This lesson focuses on synchronization and shared resources. Connect the listed syllabus points to a minimal example, then verify normal behavior, a boundary case, and an expected failure before using the pattern in automation."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the supplied syllabus",
+        "items": [
+          {
+            "title": "File locks and lock directories",
+            "text": "Use a disposable test directory with a present file, a missing path, and a pathname containing spaces; check the resulting status before changing data."
+          },
+          {
+            "title": "Atomic file replacement patterns",
+            "text": "Use a disposable test directory with a present file, a missing path, and a pathname containing spaces; check the resulting status before changing data."
+          },
+          {
+            "title": "Race conditions",
+            "text": "Exercise every branch with representative input and verify that unsupported input reaches an explicit default/error path."
+          },
+          {
+            "title": "Temporary-file coordination",
+            "text": "Use a disposable test directory with a present file, a missing path, and a pathname containing spaces; check the resulting status before changing data."
+          },
+          {
+            "title": "Recovering from abandoned locks",
+            "text": "Define what “Recovering from abandoned locks” means in this lesson, show it with a minimal example, and verify the expected result plus one limitation or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How it fits into Bash",
+        "text": "Locks and atomic replacement patterns coordinate multiple processes that may touch the same resource. Specify ownership and stale-lock recovery, write temporary files on the same filesystem when relying on rename semantics, and test interrupted updates."
+      },
+      {
+        "type": "code",
+        "language": "bash",
+        "execution_mode": "manual-terminal",
+        "code": "printf 'Use a lock or atomic update when multiple runs can modify the same target.\\n'",
+        "expected_output": "Use a lock or atomic update when multiple runs can modify the same target.",
+        "run_instructions": "Save the snippet in a temporary practice file and run it with the locally installed Bash interpreter. The CodeLeaf in-page preview displays reference output only; it does not execute Bash code. Some examples require commands already installed on your machine.",
+        "reset_steps": "Discard the temporary file or reset the editor to the original snippet. The examples are designed not to modify important data."
+      },
+      {
+        "type": "callout",
+        "title": "Watch out",
+        "text": "Start with independent harmless tasks, bound concurrency, record each result, and plan cleanup for both normal exit and interruption. Do not assume the same command options or newer Bash features exist on every operating system."
+      },
+      {
+        "type": "paragraph",
+        "title": "Check your result",
+        "text": "Compare the observed output and exit status with the reference behavior. Change one input at a time, include a boundary or invalid input, and note what differs on your target Bash/utility version."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety note",
+        "text": "Use a local test directory, avoid secrets in commands/history/logs, and check the installed interpreter with `bash --version`. This course remains draft until technical examples and assessments receive subject-matter review."
+      }
+    ],
+    "task": "Build a small local example for “Synchronization and Shared Resources” using synthetic input or a disposable practice directory. Explain what the command should do, check its output and exit status, and test one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "Use an example aligned with the lesson and preserve arguments, paths, or streams correctly.",
+      "Record the observed output and exit status.",
+      "Test one boundary case or expected failure.",
+      "State the Bash version and any external utility dependency that matters."
+    ],
+    "hints": [
+      "Reduce the problem to one command or one small function first.",
+      "Use quoting and printf to make argument boundaries visible.",
+      "Check exit statuses as well as printed output; use syntax-only validation before testing changes."
+    ],
+    "expected_output": "A documented example for “Synchronization and Shared Resources” with the observed output/status, one tested boundary case, and an explicit statement of any version or utility dependency.",
+    "run_mode": "static-validation",
+    "troubleshooting": [
+      "If the snippet uses an external command, check availability with `command -v NAME` and consult that program’s local help.",
+      "If behavior differs by operating system or Bash version, record `bash --version` and check the official manual linked below.",
+      "For syntax-only validation run `bash -n script.sh`; this parses but does not execute the script."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming a successful-looking output means the command succeeded.",
+        "why": "Output and exit status are separate signals, and a later command may replace `$?`.",
+        "fix": "Capture important statuses immediately and check all relevant pipeline stages."
+      },
+      {
+        "problem": "Copying example commands straight into a production path.",
+        "why": "Real paths, permissions, input names, and external utility versions differ.",
+        "fix": "Use a disposable fixture and inspect the planned side effects first."
+      },
+      {
+        "problem": "Treating Bash-specific syntax as portable `sh` syntax.",
+        "why": "Arrays, `[[ ... ]]`, process substitution, and some parameter operators are extensions.",
+        "fix": "Name the interpreter and test the minimum supported version."
+      }
+    ],
+    "summary": [
+      "Synchronization and Shared Resources has specific syntax and behavior; verify it rather than relying on guesswork.",
+      "Preserve argument boundaries and keep shell commands separate from untrusted data.",
+      "Test successful, boundary, and failure cases in a safe environment."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-104-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "gnu-bash-manual-5-3",
+      "title": "GNU Bash Reference Manual, Edition 5.3",
+      "url": "https://www.gnu.org/s/bash/manual/bash.html",
+      "publisher": "GNU Project / Free Software Foundation",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "Bash syntax and parsing",
+        "quoting and expansion",
+        "variables and arrays",
+        "control flow",
+        "functions",
+        "redirection and pipelines",
+        "processes and traps",
+        "startup files and shell options",
+        "version compatibility"
+      ],
+      "source_type": "official language reference",
+      "notes": "The primary technical reference for Bash-specific behavior. Verify examples against the interpreter installed on the target system."
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft content mapped to Bash.pdf Section B lesson 104. Technical examples and grading require review before publication."
+}

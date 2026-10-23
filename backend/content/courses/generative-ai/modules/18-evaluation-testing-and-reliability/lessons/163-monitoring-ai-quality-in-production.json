@@ -1,0 +1,165 @@
+{
+  "id": "genai-lesson-163",
+  "slug": "monitoring-ai-quality-in-production",
+  "title": "Monitoring AI Quality in Production",
+  "sequence": 163,
+  "module_id": "genai-module-18",
+  "module_slug": "evaluation-testing-and-reliability",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional-practice",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "genai-lesson-162"
+  ],
+  "previous_lesson_id": "genai-lesson-162",
+  "next_lesson_id": "genai-lesson-164",
+  "keywords": [
+    "Monitoring AI Quality in Production",
+    "Logging model requests safely",
+    "User feedback and correction signals",
+    "Detecting distribution shifts",
+    "Monitoring failures and fallback rates",
+    "Quality drift and model changes",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 163,
+  "subtopics": [
+    "Logging model requests safely",
+    "User feedback and correction signals",
+    "Detecting distribution shifts",
+    "Monitoring failures and fallback rates",
+    "Quality drift and model changes",
+    "Incident review and improvement cycles"
+  ],
+  "learning_outcomes": [
+    "Explain logging model requests safely and how it connects to monitoring ai quality in production.",
+    "Apply user feedback and correction signals in the example and predict the output before running it.",
+    "Test one realistic edge case for monitoring ai quality in production and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers monitoring ai quality in production through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Build evaluations before optimizing. Use representative examples, clear rubrics, automated regression checks, human review where needed, and operational monitoring.",
+    "why_it_matters": "Logging model requests safely belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Monitoring AI Quality in Production: concept map",
+        "asset_path": "diagrams/lessons/lesson-163-monitoring-ai-quality-in-production.svg",
+        "alt_text": "Diagram for Monitoring AI Quality in Production: understand Logging model requests safely, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Logging model requests safely, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Logging model requests safely belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Logging model requests safely",
+            "text": "Logging model requests safely belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation."
+          },
+          {
+            "title": "User feedback and correction signals",
+            "text": "User feedback and correction signals connects model capabilities to a real user's task. Define an observable success measure, keep uncertainty and failure states visible, make correction or escalation possible, and compare the AI-assisted workflow with a useful baseline rather than optimizing engagement alone."
+          },
+          {
+            "title": "Detecting distribution shifts",
+            "text": "Use detecting distribution shifts as a lens for understanding monitoring ai quality in production. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Monitoring failures and fallback rates",
+            "text": "Use monitoring failures and fallback rates to turn a vague quality claim into an observable criterion. Define a representative dataset, an expected outcome or rubric, a baseline, and the failure categories you will record; interpret aggregate scores alongside examples and affected groups."
+          },
+          {
+            "title": "Quality drift and model changes",
+            "text": "Use quality drift and model changes to turn a vague quality claim into an observable criterion. Define a representative dataset, an expected outcome or rubric, a baseline, and the failure categories you will record; interpret aggregate scores alongside examples and affected groups."
+          },
+          {
+            "title": "Incident review and improvement cycles",
+            "text": "Use incident review and improvement cycles as a lens for understanding monitoring ai quality in production. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Monitoring AI Quality in Production\nevents = [{\"status\": 200, \"latency_ms\": 100}, {\"status\": 429, \"latency_ms\": 30}, {\"status\": 500, \"latency_ms\": 400}]\nprint({\"request_count\": len(events), \"error_rate\": round(sum(e[\"status\"] >= 400 for e in events)/len(events), 3), \"latency_mean_ms\": sum(e[\"latency_ms\"] for e in events)/len(events)})",
+        "expected_output": "{'request_count': 3, 'error_rate': 0.667, 'latency_mean_ms': 176.66666666666666}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice logging model requests safely within monitoring ai quality in production: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'request_count': 3, 'error_rate': 0.667, 'latency_mean_ms': 176.66666666666666}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-163-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Monitoring AI Quality in Production is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://developers.google.com/machine-learning/crash-course/",
+      "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Machine Learning Crash Course",
+      "url": "https://developers.google.com/machine-learning/crash-course/",
+      "publisher": "Google for Developers",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "AI and machine learning foundations"
+      ]
+    },
+    {
+      "title": "Design and develop a RAG solution",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide",
+      "publisher": "Microsoft Learn / Azure Architecture Center",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "RAG architecture"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

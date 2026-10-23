@@ -1,0 +1,67 @@
+{
+  "id": "pandas-exercise-24",
+  "slug": "automated-data-validation",
+  "title": "Automated Data Validation",
+  "sequence": 24,
+  "lesson_id": "pandas-lesson-194",
+  "lesson_slug": "unit-testing-data-pipelines",
+  "module_id": "pandas-module-23",
+  "difficulty": "advanced",
+  "type": "code",
+  "prompt": "Implement tests for schemas, duplicate keys, missing values, and invalid ranges.",
+  "scenario": "Use the synthetic data described below to practise t, e, s, t, i, n, g,  , h, e, l, p, e, r, s,  , a, n, d,  , r, e, g, r, e, s, s, i, o, n,  , c, h, e, c, k, s. Do not assume the input is correct without validating it.",
+  "skills": "Testing helpers and regression checks",
+  "starter": {
+    "language": "python",
+    "code": "import pandas as pd\n\ndef validate(frame):\n    assert {\"id\", \"score\"}.issubset(frame.columns)\n    assert frame[\"id\"].is_unique\n    assert frame[\"score\"].dropna().between(0, 100).all()\n\nexample = pd.DataFrame({\"id\": [1, 2], \"score\": [80, 90]})\nvalidate(example)\nprint(\"valid\")",
+    "dataset_note": "Use small synthetic in-memory data; do not place private or real customer data in exercises."
+  },
+  "input_schema": {
+    "description": "Create or use a synthetic DataFrame with only the columns needed for this exercise.",
+    "validation": [
+      "Document expected columns and data types.",
+      "State how missing values or duplicates should be treated."
+    ]
+  },
+  "expected_output": [
+    "Write assertions for required columns, unique identifiers, and valid ranges.",
+    "Test a valid sample and at least one failing sample.",
+    "Make test failures identify the violated rule."
+  ],
+  "public_tests": [
+    {
+      "name": "normal-case",
+      "description": "The solution returns the required columns and correctly computes the stated result."
+    },
+    {
+      "name": "edge-case",
+      "description": "The solution documents behavior for a missing value, duplicate key, empty input, invalid value, or other relevant edge case."
+    }
+  ],
+  "hints": [
+    "Write down the expected result before coding.",
+    "Use Pandas operations that preserve labels unless position-based behavior is intended.",
+    "Add a small assertion for the most important property."
+  ],
+  "acceptance_criteria": [
+    "Write assertions for required columns, unique identifiers, and valid ranges.",
+    "Test a valid sample and at least one failing sample.",
+    "Make test failures identify the violated rule."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "t"
+    ],
+    "case_sensitive": false,
+    "note": "The generic short-response grader is only an initial scaffold; a reviewed isolated Python grader is required for automatic execution of arbitrary learner code."
+  },
+  "solution_file": "solutions/024-automated-data-validation-solution.json",
+  "solution": {},
+  "retry_policy": {
+    "max_attempts": null,
+    "allow_retry_after_feedback": true
+  },
+  "status": "draft",
+  "status_note": "Review prompt, starter, rubric, and server-side grading before publication."
+}

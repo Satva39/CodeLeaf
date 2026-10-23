@@ -1,0 +1,154 @@
+{
+  "id": "css-project-10",
+  "slug": "commerce-design-system-and-responsive-storefront",
+  "title": "Commerce Design System and Responsive Storefront",
+  "sequence": 10,
+  "tier": "capstone",
+  "objective": "Build the complete visual layer for a realistic online store with reusable CSS architecture and a documented QA process.",
+  "prerequisite_lesson_ids": [
+    "css-lesson-001",
+    "css-lesson-009",
+    "css-lesson-017",
+    "css-lesson-028",
+    "css-lesson-038",
+    "css-lesson-049",
+    "css-lesson-059",
+    "css-lesson-070"
+  ],
+  "recommended_module_range": [
+    1,
+    25
+  ],
+  "recommended_lesson_range": [
+    1,
+    256
+  ],
+  "skills": [
+    "CSS layout",
+    "visual hierarchy",
+    "responsive design",
+    "accessibility",
+    "maintainable stylesheets"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Responsive navigation, announcement banner, and hero",
+      "acceptance_criteria": [
+        "Demonstrate responsive navigation, announcement banner, and hero in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Product cards, category grids, detail layout, and gallery",
+      "acceptance_criteria": [
+        "Demonstrate product cards, category grids, detail layout, and gallery in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Reusable button, form, badge, and card components",
+      "acceptance_criteria": [
+        "Demonstrate reusable button, form, badge, and card components in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Consistent color, spacing, typography, border, and shadow tokens",
+      "acceptance_criteria": [
+        "Demonstrate consistent color, spacing, typography, border, and shadow tokens in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    },
+    {
+      "sequence": 5,
+      "title": "Light and dark themes",
+      "acceptance_criteria": [
+        "Demonstrate light and dark themes in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "index.html",
+      "language": "html",
+      "contents": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Commerce Design System and Responsive Storefront</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n<div class=\"announcement-bar\">Complimentary delivery on sample orders over ₹2,000</div><header class=\"store-header\"><a class=\"brand\" href=\"#store\">Noma / living</a><nav aria-label=\"Store navigation\"><a href=\"#shop\">Shop</a><a href=\"#collections\">Collections</a><a href=\"#story\">Our story</a></nav><a class=\"cart-link\" href=\"#order-summary\">Bag <span aria-label=\"2 sample items\">2</span></a></header><main id=\"store\" class=\"page-shell\"><section class=\"store-hero\"><div><p class=\"eyebrow\">Seasonal collection</p><h1>Objects for slower mornings.</h1><p>Considered essentials for desks, kitchens, and the everyday rituals around them.</p><a class=\"button\" href=\"#shop\">Explore the collection</a></div><div class=\"store-hero-art\" role=\"img\" aria-label=\"Abstract composition of warm geometric shapes\"></div></section><section id=\"collections\" class=\"category-row\" aria-label=\"Shop by category\"><a href=\"#shop\">Desk</a><a href=\"#shop\">Kitchen</a><a href=\"#shop\">Soft goods</a><a href=\"#shop\">Gifts</a></section><section id=\"shop\" class=\"store-section\"><div class=\"section-heading\"><div><p class=\"eyebrow\">Made for daily use</p><h2>Current favorites</h2></div><p>4 sample products</p></div><div class=\"product-grid\"><article class=\"product-card\"><div class=\"product-art art--clay\" aria-hidden=\"true\">01</div><h3>Arc desk lamp</h3><p>Warm light, compact footprint</p><p class=\"product-price\">₹2,499</p><button class=\"button button-secondary\" type=\"button\">View product</button></article><article class=\"product-card\"><div class=\"product-art art--sage\" aria-hidden=\"true\">02</div><h3>Everyday tumbler</h3><p>Durable and easy to carry</p><p class=\"product-price\">₹899</p><button class=\"button button-secondary\" type=\"button\">View product</button></article><article class=\"product-card\"><div class=\"product-art art--sky\" aria-hidden=\"true\">03</div><h3>Soft linen throw</h3><p>A quiet layer for cool evenings</p><p class=\"product-price\">₹1,799</p><button class=\"button button-secondary\" type=\"button\">View product</button></article><article class=\"product-card\"><div class=\"product-art art--sand\" aria-hidden=\"true\">04</div><h3>Daily notebook</h3><p>Room for the next idea</p><p class=\"product-price\">₹399</p><button class=\"button button-secondary\" type=\"button\">View product</button></article></div></section><section id=\"story\" class=\"brand-story\"><h2>Good things, made to be used.</h2><p>We favor thoughtful materials, useful details, and products that fit into everyday life.</p></section><section id=\"order-summary\" class=\"order-summary\"><h2>Sample order summary</h2><p>2 illustrative items · estimated subtotal ₹3,398</p><p>Demonstration only. No cart, inventory, checkout, or payment service is connected.</p></section></main><footer class=\"site-footer\"><p>© Noma / living · sample storefront</p><a href=\"#store\">Back to top</a></footer>\n</body>\n</html>\n"
+    },
+    {
+      "path": "styles.css",
+      "language": "css",
+      "contents": "* { box-sizing: border-box; }\n:root { --color-text: #172554; --color-surface: #ffffff; --color-accent: #1d4ed8; --space: 1rem; --radius: 0.75rem; }\nbody { margin: 0; color: var(--color-text); background: #f8fafc; font-family: system-ui, sans-serif; line-height: 1.55; }\na { color: inherit; }\nbutton, input, select { font: inherit; }\n:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 3px; }\n.page-shell { width: min(calc(100% - 2rem), 74rem); margin-inline: auto; }\n.site-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space); padding: var(--space); }\n@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }\n"
+    }
+  ],
+  "required_features": [
+    "Responsive navigation, announcement banner, and hero",
+    "Product cards, category grids, detail layout, and gallery",
+    "Reusable button, form, badge, and card components",
+    "Consistent color, spacing, typography, border, and shadow tokens",
+    "Light and dark themes",
+    "Grid, Flexbox, media queries, and container queries",
+    "Accessible focus, validation, disabled, and loading states",
+    "Motion with reduced-motion behavior",
+    "Print-friendly order summary and invoice",
+    "Organized stylesheets, linting, browser tests, and performance review"
+  ],
+  "stretch_features": [
+    "Add a second theme using custom properties.",
+    "Test at 320 CSS pixels, 768 CSS pixels, and a wide desktop viewport.",
+    "Document browser support assumptions and any fallback for optional CSS features."
+  ],
+  "tests": [
+    {
+      "name": "Required CSS checks",
+      "mode": "human_review",
+      "criteria": [
+        "All listed required features are present and behave as described.",
+        "Inspect the stylesheet for invalid declarations and unintended overrides.",
+        "Check keyboard focus, responsive reflow, and reduced-motion handling where relevant."
+      ]
+    },
+    {
+      "name": "Responsive behavior",
+      "mode": "human_review",
+      "criteria": [
+        "No unintended horizontal overflow at narrow widths.",
+        "Layout remains coherent when text is longer than sample content."
+      ]
+    },
+    {
+      "name": "Maintainability",
+      "mode": "human_review",
+      "criteria": [
+        "Reusable tokens and component classes are used intentionally.",
+        "Known feature support limits and design choices are documented."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correctness and required features",
+      "points": 30
+    },
+    {
+      "criterion": "Responsive visual hierarchy and layout",
+      "points": 25
+    },
+    {
+      "criterion": "Accessibility and interaction states",
+      "points": 20
+    },
+    {
+      "criterion": "Maintainability, testing, and rationale",
+      "points": 25
+    }
+  ],
+  "rubric_total": 100,
+  "review_method": "Human-reviewed visual and accessibility evaluation supported by the listed checks; CSS string checks alone cannot prove rendered behavior.",
+  "reference_solution_file": "projects/solutions/010-commerce-design-system-and-responsive-storefront-solution.json",
+  "status": "draft",
+  "status_note": "Draft brief and starter scaffold; complete the milestones and review before publication."
+}

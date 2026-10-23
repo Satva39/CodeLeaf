@@ -1,0 +1,63 @@
+{
+  "id": "github-actions-exercise-008",
+  "slug": "upload-an-artifact",
+  "title": "Upload an artifact",
+  "type": "coding",
+  "lesson_id": "github-actions-lesson-062",
+  "module_id": "github-actions-module-09",
+  "difficulty": "easy",
+  "sequence": 8,
+  "prompt": "Create a text report during a job, upload it, then retrieve it from the workflow run.",
+  "objective": "Demonstrate the behavior of upload an artifact and capture verifiable evidence.",
+  "target_skills": [
+    "beginner",
+    "workflow YAML",
+    "validation",
+    "safe automation"
+  ],
+  "starter": {
+    "language": "yaml",
+    "code": "steps:\n  - name: Create report\n    run: |\n      mkdir -p output\n      printf 'validation=passed\\n' > output/report.txt\n  - name: Upload report\n    uses: actions/upload-artifact@v4\n    with:\n      name: validation-report\n      path: output/report.txt\n      retention-days: 7",
+    "execution_mode": "workflow-fragment"
+  },
+  "expected_output": "A reviewed workflow or design note satisfying: upload-artifact, report.txt, name:. Verify behavior on a disposable repository where execution is required; a static sketch is not proof of a live deployment.",
+  "public_tests": [
+    {
+      "name": "Required evidence check",
+      "required_strings": [
+        "upload-artifact",
+        "report.txt",
+        "name:"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Include or explain `upload-artifact`.",
+    "Include or explain `report.txt`.",
+    "Include or explain `name:`.",
+    "Explain one validation result or limitation.",
+    "Do not include a real secret or use production resources."
+  ],
+  "hints": [
+    "First identify the trigger, input, and expected result.",
+    "Start with read-only permissions and a disposable branch or test environment.",
+    "Compare your result with the linked lesson and official documentation; distinguish a configuration sketch from a live integration."
+  ],
+  "solution": {
+    "answer": null,
+    "explanation": "The detailed reference solution is stored in a protected repository-only JSON file; it is not intended for a learner-facing response."
+  },
+  "solution_file": "../solutions/008-upload-an-artifact-solution.json",
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "upload-artifact",
+      "report.txt",
+      "name:"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus human review for workflow semantics and security boundaries.",
+  "retry_policy": "Allow retries; incorrect submissions do not award XP. The platform awards exercise XP only after server-verified successful completion and applies idempotency per activity.",
+  "status": "draft",
+  "status_note": "Source mapping: Section C: Practical Exercises; original learning task adapted to CodeLeaf structure."
+}

@@ -1,0 +1,177 @@
+{
+  "id": "fastapi-lesson-022",
+  "slug": "route-organization-and-matching",
+  "title": "Route Organization and Matching",
+  "sequence": 22,
+  "module_id": "fastapi-module-04",
+  "module_slug": "routing-and-path-operations",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "fastapi-lesson-021"
+  ],
+  "previous_lesson_id": "fastapi-lesson-021",
+  "next_lesson_id": "fastapi-lesson-023",
+  "keywords": [
+    "route-organization-and-matching",
+    "routing-and-path-operations",
+    "fastapi",
+    "python",
+    "api",
+    "static-paths",
+    "dynamic-paths",
+    "route-matching-and-declaration-order"
+  ],
+  "source_syllabus_number": 22,
+  "subtopics": [
+    "Static paths",
+    "Dynamic paths",
+    "Route matching and declaration order",
+    "Avoiding ambiguous paths",
+    "Organizing endpoints by resource"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of route organization and matching in a FastAPI application.",
+    "Apply or interpret one example related to static paths.",
+    "Identify one limitation or failure case and describe how to verify it."
+  ],
+  "content": {
+    "intro": "This lesson covers route organization and matching within routing and path operations. Use the supplied syllabus topics as the coverage checklist, then connect them to the worked example and the verification task.",
+    "why_it_matters": "You will use route organization and matching to build APIs whose contracts and behavior are understandable to both clients and maintainers. The practical aim is predictable client-server contracts, resource naming, typed parameters and correct HTTP semantics.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Route Organization and Matching: concept map",
+        "asset_path": "diagrams/lesson-022-concept.svg",
+        "alt_text": "Four-step flow for Route Organization and Matching: Static paths, Dynamic paths, Route matching and declaration order, Avoiding ambiguous paths",
+        "caption": "Visual-first overview before the worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Route Organization and Matching matters because it is part of routing and path operations. In practice, focus on predictable client-server contracts, resource naming, typed parameters and correct HTTP semantics. A framework feature only helps when its assumptions match the application; keep input validation, business policy and side effects distinguishable."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus coverage",
+        "items": [
+          {
+            "title": "Static paths",
+            "text": "Use static paths as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Dynamic paths",
+            "text": "Use dynamic paths as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Route matching and declaration order",
+            "text": "Use route matching and declaration order as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Avoiding ambiguous paths",
+            "text": "Use avoiding ambiguous paths as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Organizing endpoints by resource",
+            "text": "Use organizing endpoints by resource as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Route Organization and Matching",
+        "language": "python",
+        "code": "from fastapi import FastAPI\n\napp = FastAPI(title=\"Learning API\")\n\n@app.get(\"/\")\ndef read_root():\n    return {\"message\": \"Hello, FastAPI!\"}",
+        "expected_output": "{\"message\": \"Hello, FastAPI!\"}",
+        "run_instructions": "Run: fastapi dev main.py; open http://127.0.0.1:8000/",
+        "reset_steps": "For read-only examples, no reset is needed. For any example that writes state, use a disposable local database/test fixture; record the starting state and clean up only lab data. Never use production credentials or real personal data.",
+        "execution_mode": "human-review",
+        "limitations": "This code is inspectable lesson material, not executed by CodeLeaf. Run it only in a local virtual environment or a separately isolated runner with resource/time/network limits. Security examples are sketches, not complete production authentication or authorization systems."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to cover “Static paths”. Write down the expected success result and one invalid, missing, duplicate, timeout or permission-boundary case that matters for this topic."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-022-questions.json"
+  },
+  "task": "Create a small reviewable artifact for “Route Organization and Matching”: explain its goal, cover the listed subtopics, show an example with expected result, then include one edge case and how you would verify it.",
+  "hints": [
+    "Start with “Static paths” and state the required inputs, output and assumptions.",
+    "Change one thing at a time; check the official reference and capture the actual response/error instead of guessing.",
+    "Include a negative/edge-case check and document which behavior remains untested."
+  ],
+  "expected_output": "A reviewable example or design note for Route Organization and Matching, covering the PDF subtopics, expected behavior and at least one verification check.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Copying a code fragment without checking its assumptions.",
+      "why": "Installed versions, imported types, application structure and external services affect behavior.",
+      "fix": "State assumptions; check the versioned official docs; run a minimal local test and add one failure case."
+    },
+    {
+      "problem": "Treating one happy-path response as proof of correctness.",
+      "why": "Invalid input, permissions, concurrency, timeouts and cleanup are not exercised by a single request.",
+      "fix": "Add focused normal and negative tests and record exact expected status/body."
+    },
+    {
+      "problem": "Running examples against production resources.",
+      "why": "Even short examples may mutate records, reveal data or affect availability.",
+      "fix": "Use synthetic inputs and a disposable environment; review security, cleanup and rollback before promotion."
+    }
+  ],
+  "summary": [
+    "Route Organization and Matching belongs to the broader goal of predictable client-server contracts, resource naming, typed parameters and correct HTTP semantics.",
+    "Use the source subtopics as the completeness checklist and verify expected results rather than relying on intuition.",
+    "Examples in this course are illustrative until technically reviewed and executed on a supported local environment."
+  ],
+  "sources": [
+    {
+      "title": "FastAPI Tutorial - First Steps",
+      "url": "https://fastapi.tiangolo.com/tutorial/first-steps/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "application instance, path operations, development workflow"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Tutorial - Request Body",
+      "url": "https://fastapi.tiangolo.com/tutorial/body/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "Pydantic request models and validation"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Tutorial - Response Model",
+      "url": "https://fastapi.tiangolo.com/tutorial/response-model/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "response filtering and output contracts"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Tutorial - First Steps",
+      "url": "https://fastapi.tiangolo.com/tutorial/first-steps/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "application instance, path operations, development workflow"
+      ],
+      "source_type": "official documentation"
+    }
+  ],
+  "exercise_files": [],
+  "status": "draft",
+  "status_note": "Draft expansion from the numbered topics in FastAPI.pdf. Content structure, file references and SVGs are validated locally; code snippets and integration behavior still require technical review and targeted tests before publication."
+}

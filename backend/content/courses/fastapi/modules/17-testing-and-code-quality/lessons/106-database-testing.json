@@ -1,0 +1,182 @@
+{
+  "id": "fastapi-lesson-106",
+  "slug": "database-testing",
+  "title": "Database Testing",
+  "sequence": 106,
+  "module_id": "fastapi-module-17",
+  "module_slug": "testing-and-code-quality",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "fastapi-lesson-105"
+  ],
+  "previous_lesson_id": "fastapi-lesson-105",
+  "next_lesson_id": "fastapi-lesson-107",
+  "keywords": [
+    "database-testing",
+    "testing-and-code-quality",
+    "fastapi",
+    "python",
+    "api",
+    "creating-test-databases",
+    "test-data-fixtures",
+    "transaction-rollback-strategies"
+  ],
+  "source_syllabus_number": 106,
+  "subtopics": [
+    "Creating test databases",
+    "Test data fixtures",
+    "Transaction rollback strategies",
+    "Testing CRUD behavior",
+    "Testing migrations",
+    "Cleaning test resources reliably"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of database testing in a FastAPI application.",
+    "Apply or interpret one example related to creating test databases.",
+    "Identify one limitation or failure case and describe how to verify it."
+  ],
+  "content": {
+    "intro": "This lesson covers database testing within testing and code quality. Use the supplied syllabus topics as the coverage checklist, then connect them to the worked example and the verification task.",
+    "why_it_matters": "You will use database testing to build APIs whose contracts and behavior are understandable to both clients and maintainers. The practical aim is data integrity, transaction boundaries, schema evolution and bounded database access.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Database Testing: concept map",
+        "asset_path": "diagrams/lesson-106-concept.svg",
+        "alt_text": "Four-step flow for Database Testing: Creating test databases, Test data fixtures, Transaction rollback strategies, Testing CRUD behavior",
+        "caption": "Visual-first overview before the worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Database Testing matters because it is part of testing and code quality. In practice, focus on data integrity, transaction boundaries, schema evolution and bounded database access. A framework feature only helps when its assumptions match the application; keep input validation, business policy and side effects distinguishable."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus coverage",
+        "items": [
+          {
+            "title": "Creating test databases",
+            "text": "Use creating test databases to make behavior observable and repeatable. Specify one normal case, one invalid or missing-input case, and the expected status or diagnostic. A passing happy path alone is not enough evidence."
+          },
+          {
+            "title": "Test data fixtures",
+            "text": "Use test data fixtures to make behavior observable and repeatable. Specify one normal case, one invalid or missing-input case, and the expected status or diagnostic. A passing happy path alone is not enough evidence."
+          },
+          {
+            "title": "Transaction rollback strategies",
+            "text": "Apply transaction rollback strategies against a disposable database and synthetic data first. Make transaction ownership and cleanup explicit, parameterize values, and verify constraints and behavior after failures before considering a deployment."
+          },
+          {
+            "title": "Testing CRUD behavior",
+            "text": "Use testing crud behavior to make behavior observable and repeatable. Specify one normal case, one invalid or missing-input case, and the expected status or diagnostic. A passing happy path alone is not enough evidence."
+          },
+          {
+            "title": "Testing migrations",
+            "text": "Use testing migrations to make behavior observable and repeatable. Specify one normal case, one invalid or missing-input case, and the expected status or diagnostic. A passing happy path alone is not enough evidence."
+          },
+          {
+            "title": "Cleaning test resources reliably",
+            "text": "Use cleaning test resources reliably to make behavior observable and repeatable. Specify one normal case, one invalid or missing-input case, and the expected status or diagnostic. A passing happy path alone is not enough evidence."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Database Testing",
+        "language": "python",
+        "code": "from sqlalchemy import create_engine, text\n\nengine = create_engine(\"sqlite:///./lab.db\")\nwith engine.begin() as connection:\n    result = connection.execute(text(\"SELECT 1 AS ok\"))\n    print(result.scalar_one())",
+        "expected_output": "1",
+        "run_instructions": "This tiny SQLAlchemy connection smoke test uses local SQLite. Use parameterized statements for values; place real credentials in environment configuration.",
+        "reset_steps": "For read-only examples, no reset is needed. For any example that writes state, use a disposable local database/test fixture; record the starting state and clean up only lab data. Never use production credentials or real personal data.",
+        "execution_mode": "human-review",
+        "limitations": "This code is inspectable lesson material, not executed by CodeLeaf. Run it only in a local virtual environment or a separately isolated runner with resource/time/network limits. Security examples are sketches, not complete production authentication or authorization systems."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to cover “Creating test databases”. Write down the expected success result and one invalid, missing, duplicate, timeout or permission-boundary case that matters for this topic."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-106-questions.json"
+  },
+  "task": "Create a small reviewable artifact for “Database Testing”: explain its goal, cover the listed subtopics, show an example with expected result, then include one edge case and how you would verify it.",
+  "hints": [
+    "Start with “Creating test databases” and state the required inputs, output and assumptions.",
+    "Change one thing at a time; check the official reference and capture the actual response/error instead of guessing.",
+    "Include a negative/edge-case check and document which behavior remains untested."
+  ],
+  "expected_output": "A reviewable example or design note for Database Testing, covering the PDF subtopics, expected behavior and at least one verification check.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Copying a code fragment without checking its assumptions.",
+      "why": "Installed versions, imported types, application structure and external services affect behavior.",
+      "fix": "State assumptions; check the versioned official docs; run a minimal local test and add one failure case."
+    },
+    {
+      "problem": "Treating one happy-path response as proof of correctness.",
+      "why": "Invalid input, permissions, concurrency, timeouts and cleanup are not exercised by a single request.",
+      "fix": "Add focused normal and negative tests and record exact expected status/body."
+    },
+    {
+      "problem": "Running examples against production resources.",
+      "why": "Even short examples may mutate records, reveal data or affect availability.",
+      "fix": "Use synthetic inputs and a disposable environment; review security, cleanup and rollback before promotion."
+    }
+  ],
+  "summary": [
+    "Database Testing belongs to the broader goal of data integrity, transaction boundaries, schema evolution and bounded database access.",
+    "Use the source subtopics as the completeness checklist and verify expected results rather than relying on intuition.",
+    "Examples in this course are illustrative until technically reviewed and executed on a supported local environment."
+  ],
+  "sources": [
+    {
+      "title": "FastAPI Advanced - Lifespan Events",
+      "url": "https://fastapi.tiangolo.com/advanced/events/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "lifespan context manager and startup/shutdown resource handling"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Tutorial - Security First Steps",
+      "url": "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "security utilities and bearer-token flow declarations"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Tutorial - CORS",
+      "url": "https://fastapi.tiangolo.com/tutorial/cors/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "origins, methods, headers and credentials"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Tutorial - Testing",
+      "url": "https://fastapi.tiangolo.com/tutorial/testing/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "TestClient endpoint tests"
+      ],
+      "source_type": "official documentation"
+    }
+  ],
+  "exercise_files": [],
+  "status": "draft",
+  "status_note": "Draft expansion from the numbered topics in FastAPI.pdf. Content structure, file references and SVGs are validated locally; code snippets and integration behavior still require technical review and targeted tests before publication."
+}

@@ -1,0 +1,140 @@
+{
+  "id": "bash-project-003",
+  "slug": "interactive-cli-utility",
+  "title": "Interactive CLI Utility",
+  "sequence": 3,
+  "tier": "beginner",
+  "objective": "Build a small interactive cli utility with testable inputs, outputs, and failure handling.",
+  "prerequisite_lesson_ids": [
+    "bash-lesson-040",
+    "bash-lesson-126"
+  ],
+  "recommended_module_ranges": [
+    [
+      5,
+      13
+    ]
+  ],
+  "skills": [
+    "Input validation",
+    "Functions and reusable helpers",
+    "A case-based menu",
+    "Consistent output",
+    "Clear error messages"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Milestone 1: Input validation",
+      "acceptance_criteria": [
+        "Demonstrate input validation using synthetic or disposable data.",
+        "Record a repeatable check or test and its observed result.",
+        "Document one failure mode and its expected response."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Milestone 2: Functions and reusable helpers",
+      "acceptance_criteria": [
+        "Demonstrate functions and reusable helpers using synthetic or disposable data.",
+        "Record a repeatable check or test and its observed result.",
+        "Document one failure mode and its expected response."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Milestone 3: A case-based menu",
+      "acceptance_criteria": [
+        "Demonstrate a case-based menu using synthetic or disposable data.",
+        "Record a repeatable check or test and its observed result.",
+        "Document one failure mode and its expected response."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Milestone 4: Consistent output",
+      "acceptance_criteria": [
+        "Demonstrate consistent output using synthetic or disposable data.",
+        "Record a repeatable check or test and its observed result.",
+        "Document one failure mode and its expected response."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "contents": "# Interactive CLI Utility\n\nInteractive CLI Utility is a draft CodeLeaf project.\n\n## Required features\n- [ ] Input validation\n- [ ] Functions and reusable helpers\n- [ ] A case-based menu\n- [ ] Consistent output\n- [ ] Clear error messages\n\nUse synthetic data and a disposable directory. Do not commit credentials or personal data. Document setup, tests, supported Bash versions, limitations, and recovery. Bash snippets run locally or in a separately isolated runner; the CodeLeaf web process must not execute arbitrary learner Bash.\n"
+    },
+    {
+      "path": "bin/main.sh",
+      "language": "bash",
+      "contents": "#!/usr/bin/env bash\n# Interactive CLI Utility\n# Draft starter scaffold: validate inputs before side effects.\nset -u\n\nusage() {\n  printf 'Usage: %s [--dry-run] COMMAND [ARGS...]\\n' \"${0##*/}\"\n}\n\nmain() {\n  case ${1:-help} in\n    help|-h|--help) usage ;;\n    *) printf 'TODO: validate and handle command: %s\\n' \"$1\"; return 2 ;;\n  esac\n}\n\nmain \"$@\"\n"
+    }
+  ],
+  "required_features": [
+    "Input validation",
+    "Functions and reusable helpers",
+    "A case-based menu",
+    "Consistent output",
+    "Clear error messages"
+  ],
+  "stretch_features": [
+    "Add Bats behavioral tests and ShellCheck static analysis.",
+    "Add fixture data covering spaces, empty values, missing inputs, and command failures.",
+    "Document supported Bash and external utility versions and add a CI workflow."
+  ],
+  "tests": [
+    {
+      "name": "Functional behavior",
+      "mode": "human_review",
+      "criteria": [
+        "Required behavior works on synthetic inputs.",
+        "Expected output and exit status are documented."
+      ]
+    },
+    {
+      "name": "Failure and recovery",
+      "mode": "human_review",
+      "criteria": [
+        "Invalid inputs and failed dependencies are handled explicitly.",
+        "Side effects are limited to the configured practice directory and restore steps are documented."
+      ]
+    },
+    {
+      "name": "Security and operations",
+      "mode": "human_review",
+      "criteria": [
+        "No secrets are embedded or logged.",
+        "Dry-run/preview is available for higher-impact changes.",
+        "Minimum version, tests, limitations, and rollback/recovery are documented."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correctness and required features",
+      "points": 30
+    },
+    {
+      "criterion": "Tests and evidence",
+      "points": 25
+    },
+    {
+      "criterion": "Safety, security, and recoverability",
+      "points": 20
+    },
+    {
+      "criterion": "Design, maintainability, and documentation",
+      "points": 15
+    },
+    {
+      "criterion": "Compatibility and limitations",
+      "points": 10
+    }
+  ],
+  "review_method": "human_review",
+  "reference_solution_file": "projects/solutions/003-interactive-cli-utility-reference.json",
+  "status": "draft",
+  "notes": "Derived from Bash.pdf Section D; all project source files and acceptance details are original CodeLeaf materials. This is a learning project, not production approval."
+}

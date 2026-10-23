@@ -1,0 +1,12 @@
+{
+  "id": "dsa-project-solution-003",
+  "project_id": "dsa-project-003",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "# Reference design for Contact Directory With Efficient Search\n\n## Architecture\nUse a dictionary keyed by canonical contact ID/phone/email, plus sorted indexes only if the product needs ordered or prefix lookup.\n\n## Algorithm/design sketch\nDefine normalization rules, reject duplicate IDs, and separate update/delete policy from lookup. For prefix queries use a trie or sorted key index; update indexes transactionally.\n\n## Complexity targets\nHash lookup expected O(1); sorted-list insertion O(n); trie query O(prefix length + matches).\n\n## Reference code excerpt\n```python\ndef frequencies(values):\n    counts = {}\n    for value in values:\n        counts[value] = counts.get(value, 0) + 1\n    return counts\n\nassert frequencies([2, 2, 5]) == {2: 2, 5: 1}\n```\n\n## Validation checklist\n- Define observable behavior, input constraints and error handling.\n- Verify a normal case, boundary case, invalid case and adversarial case.\n- Compare output against a simple baseline implementation.\n- Record the Python/runtime version and exact test command.\n- Keep all user submission execution outside the CodeLeaf API process; this file is a blueprint and example excerpt, not a complete deployable application.\n",
+  "explanation": "This file contains a concrete reference design and a selected algorithm excerpt for Contact Directory With Efficient Search. The project remains draft until all required features are implemented, tests are run, and the rubric is reviewed. Hash lookup expected O(1); sorted-list insertion O(n); trie query O(prefix length + matches).",
+  "reference_architecture": "Use a dictionary keyed by canonical contact ID/phone/email, plus sorted indexes only if the product needs ordered or prefix lookup.",
+  "algorithm_approach": "Define normalization rules, reject duplicate IDs, and separate update/delete policy from lookup. For prefix queries use a trie or sorted key index; update indexes transactionally.",
+  "complexity_targets": "Hash lookup expected O(1); sorted-list insertion O(n); trie query O(prefix length + matches).",
+  "code_excerpt": "def frequencies(values):\n    counts = {}\n    for value in values:\n        counts[value] = counts.get(value, 0) + 1\n    return counts\n\nassert frequencies([2, 2, 5]) == {2: 2, 5: 1}"
+}

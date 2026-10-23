@@ -1,0 +1,165 @@
+{
+  "id": "genai-lesson-172",
+  "slug": "bias-fairness-and-responsible-outputs",
+  "title": "Bias, Fairness, and Responsible Outputs",
+  "sequence": 172,
+  "module_id": "genai-module-19",
+  "module_slug": "security-privacy-and-safety-in-generative-ai",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional-practice",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "genai-lesson-155"
+  ],
+  "previous_lesson_id": "genai-lesson-171",
+  "next_lesson_id": "genai-lesson-173",
+  "keywords": [
+    "Bias, Fairness, and Responsible Outputs",
+    "Sources of bias in models and datasets",
+    "Fairness testing",
+    "Representation across different groups and languages",
+    "Stereotypes and potentially harmful outputs",
+    "Mitigation and monitoring",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 172,
+  "subtopics": [
+    "Sources of bias in models and datasets",
+    "Fairness testing",
+    "Representation across different groups and languages",
+    "Stereotypes and potentially harmful outputs",
+    "Mitigation and monitoring",
+    "Limits of universal fairness metrics"
+  ],
+  "learning_outcomes": [
+    "Explain sources of bias in models and datasets and how it connects to bias, fairness, and responsible outputs.",
+    "Apply fairness testing in the example and predict the output before running it.",
+    "Test one realistic edge case for bias, fairness, and responsible outputs and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers bias, fairness, and responsible outputs through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Defend the entire system—not just the prompt—against injection, data leakage, unsafe outputs, unauthorized actions, and supply-chain risks.",
+    "why_it_matters": "For sources of bias in models and datasets, distinguish the training objective from the evaluation goal. Check provenance and data quality, keep validation/test examples isolated from training, record the baseline and configuration, and evaluate both improvement on the target task and possible regressions elsewhere.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Bias, Fairness, and Responsible Outputs: concept map",
+        "asset_path": "diagrams/lessons/lesson-172-bias-fairness-and-responsible-outputs.svg",
+        "alt_text": "Diagram for Bias, Fairness, and Responsible Outputs: understand Sources of bias in models and datasets, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Sources of bias in models and datasets, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "For sources of bias in models and datasets, distinguish the training objective from the evaluation goal. Check provenance and data quality, keep validation/test examples isolated from training, record the baseline and configuration, and evaluate both improvement on the target task and possible regressions elsewhere."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Sources of bias in models and datasets",
+            "text": "For sources of bias in models and datasets, distinguish the training objective from the evaluation goal. Check provenance and data quality, keep validation/test examples isolated from training, record the baseline and configuration, and evaluate both improvement on the target task and possible regressions elsewhere."
+          },
+          {
+            "title": "Fairness testing",
+            "text": "Fairness testing requires a documented decision that fits the use case and jurisdiction. Identify affected stakeholders, distinguish binding obligations from voluntary guidance, retain evidence for the decision, and revisit the conclusion when the model, data, product, or applicable rules change."
+          },
+          {
+            "title": "Representation across different groups and languages",
+            "text": "Use representation across different groups and languages as a lens for understanding bias, fairness, and responsible outputs. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Stereotypes and potentially harmful outputs",
+            "text": "Use stereotypes and potentially harmful outputs as a lens for understanding bias, fairness, and responsible outputs. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Mitigation and monitoring",
+            "text": "Use mitigation and monitoring to turn a vague quality claim into an observable criterion. Define a representative dataset, an expected outcome or rubric, a baseline, and the failure categories you will record; interpret aggregate scores alongside examples and affected groups."
+          },
+          {
+            "title": "Limits of universal fairness metrics",
+            "text": "Use limits of universal fairness metrics to turn a vague quality claim into an observable criterion. Define a representative dataset, an expected outcome or rubric, a baseline, and the failure categories you will record; interpret aggregate scores alongside examples and affected groups."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Bias, Fairness, and Responsible Outputs\ngroup_results = {\"group_a\": [1,1,0,1], \"group_b\": [1,0,0,0]}\nrates = {group: sum(values)/len(values) for group,values in group_results.items()}\nprint({group: round(rate, 2) for group,rate in rates.items()})\n# Differences are a review signal, not a complete fairness conclusion.",
+        "expected_output": "{'group_a': 0.75, 'group_b': 0.25}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice sources of bias in models and datasets within bias, fairness, and responsible outputs: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'group_a': 0.75, 'group_b': 0.25}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-172-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Bias, Fairness, and Responsible Outputs is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://genai.owasp.org/initiative/owasp-top-10-for-llm-and-genai/",
+      "https://www.nist.gov/itl/ai-risk-management-framework"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Top 10 for LLM and GenAI",
+      "url": "https://genai.owasp.org/initiative/owasp-top-10-for-llm-and-genai/",
+      "publisher": "OWASP GenAI Security Project",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "prompt injection"
+      ]
+    },
+    {
+      "title": "AI Risk Management Framework",
+      "url": "https://www.nist.gov/itl/ai-risk-management-framework",
+      "publisher": "National Institute of Standards and Technology",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "risk management"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

@@ -1,0 +1,16 @@
+{
+  "id": "pytorch-exercise-018-reference-solution",
+  "exercise_id": "pytorch-exercise-018",
+  "title": "Reference approach: Transformer Basics",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Implement transformer basics in a small isolated script. Required implementation evidence includes: nn.MultiheadAttention, batch_first, attn_mask. Use a reproducible seed, report observed output, and explain relevant edge cases.",
+  "explanation": "This exercise consolidates the topic from lesson 096. The list of required strings is only a minimal static signal; inspect numerical correctness, error handling, and test outcomes manually.",
+  "example_code": "import torch\nfrom torch import nn\nattn=nn.MultiheadAttention(embed_dim=8,num_heads=2,batch_first=True); x=torch.randn(2,4,8); mask=torch.zeros(4,4,dtype=torch.bool); y,_=attn(x,x,x,attn_mask=mask,need_weights=False); print(y.shape)",
+  "reference_code": "import torch\nfrom torch import nn\nattn=nn.MultiheadAttention(embed_dim=8,num_heads=2,batch_first=True); x=torch.randn(2,4,8); mask=torch.zeros(4,4,dtype=torch.bool); y,_=attn(x,x,x,attn_mask=mask,need_weights=False); print(y.shape)",
+  "review_notes": [
+    "Do not treat source-string grading as proof that numerical behavior is correct.",
+    "Run in a supported local environment or isolated runner.",
+    "Keep input data synthetic unless a dataset has an appropriate license and documented provenance."
+  ]
+}

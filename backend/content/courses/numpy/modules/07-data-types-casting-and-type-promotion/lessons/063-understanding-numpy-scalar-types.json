@@ -1,0 +1,179 @@
+{
+  "id": "numpy-lesson-063",
+  "slug": "understanding-numpy-scalar-types",
+  "title": "Understanding NumPy Scalar Types",
+  "sequence": 63,
+  "module_id": "numpy-module-07",
+  "module_slug": "data-types-casting-and-type-promotion",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 8,
+  "prerequisites": [
+    "numpy-lesson-062"
+  ],
+  "previous_lesson_id": "numpy-lesson-062",
+  "next_lesson_id": "numpy-lesson-064",
+  "keywords": [
+    "understanding numpy scalar types",
+    "data types, casting, and type promotion",
+    "NumPy scalar objects",
+    "Relationship to built-in Python types",
+    "Converting scalar values",
+    "Accessing scalar values with .item()",
+    "NumPy",
+    "ndarray"
+  ],
+  "source_syllabus_number": 63,
+  "subtopics": [
+    "NumPy scalar objects",
+    "Relationship to built-in Python types",
+    "Converting scalar values",
+    "Accessing scalar values with .item()"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of understanding numpy scalar types and name one situation where it is useful.",
+    "Apply numpy scalar objects to a small NumPy example and inspect the resulting values, shape, or dtype.",
+    "Identify one important limitation, boundary case, or validation check for understanding numpy scalar types."
+  ],
+  "content": {
+    "intro": "This lesson develops topic 63 of the supplied curriculum: **Understanding NumPy Scalar Types**. The main starting point is **NumPy scalar objects**. You will connect the idea to a small, synthetic example, then use the result to reason about shape, dtype, accuracy, or memory as appropriate.",
+    "why_it_matters": "A dtype controls range, precision, storage, and which operations are valid. Casting should be explicit when loss, overflow, or NumPy 2.x promotion behavior matters.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Understanding NumPy Scalar Types",
+        "asset_path": "diagrams/lesson-063-understanding-numpy-scalar-types.svg",
+        "alt_text": "Teaching visual for lesson 63, Understanding NumPy Scalar Types. It illustrates Values + dtype, then Cast or promote, leading to Check range and precision.",
+        "caption": "Visual model for Understanding NumPy Scalar Types. Synthetic conceptual diagram; inspect shape, dtype, and assumptions as relevant."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Treat **Understanding NumPy Scalar Types** as an explicit step in an array workflow. This lesson centers on **NumPy scalar objects** and the source syllabus's related subtopics. Before trusting a result, identify the input shape and dtype, perform the smallest useful operation, and inspect the output. The example uses synthetic data so you can change one value and observe what changes."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics from the supplied curriculum",
+        "items": [
+          "NumPy scalar objects",
+          "Relationship to built-in Python types",
+          "Converting scalar values",
+          "Accessing scalar values with .item()"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "import numpy as np\n\nvalue = np.int64(7)\nprint(type(value).__name__, value.item(), type(value.item()).__name__)",
+        "expected_output": "Observed output in the available validation environment (Python 3.13.5, NumPy 2.3.5):\nint64 7 int",
+        "execution_mode": "static-validation",
+        "run_instructions": "Save this snippet as a .py file inside the intended Python environment, then run `python filename.py`. Install NumPy in that same environment first. This learning page displays the sample; it does not execute arbitrary Python on the web server.",
+        "reset_steps": "For examples that create files, use a temporary working directory and remove its outputs after reviewing them. The memory-map example already uses a temporary directory."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "Start with the stated input and the core operation. The code example demonstrates a minimal path through understanding numpy scalar types; inspect the output before scaling it to a larger dataset."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          "Repeat the example with a narrower or wider dtype. Note any precision, truncation, or range difference.",
+          "Change one input value or parameter and predict the output before running the example.",
+          "Record one edge case and explain how your code should respond."
+        ]
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          "Topic 63: Understanding NumPy Scalar Types.",
+          "Core focus: NumPy scalar objects.",
+          "Check the official reference when signatures or version-specific behavior matter."
+        ]
+      }
+    ],
+    "expected_output": "Observed output in the available validation environment (Python 3.13.5, NumPy 2.3.5):\nint64 7 int",
+    "run_instructions": "Run Python examples locally in the same environment where NumPy is installed; no embedded server-side Python execution is assumed.",
+    "reset_steps": "Use temporary paths for file-writing experiments. Restore modified arrays by recreating the example input. No platform progress or rewards are created by viewing the lesson.",
+    "hints": [
+      "First identify the input values and their shape/dtype.",
+      "Run the smallest complete example and compare the actual output with the expected behavior.",
+      "Change one variable at a time; if the result differs, inspect shape, dtype, finite values, and version-specific behavior before changing the algorithm."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-063-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Casting without checking loss",
+        "why": "Float-to-integer conversion truncates and narrower dtypes may overflow.",
+        "fix": "Check input ranges and precision requirements before casting."
+      },
+      {
+        "problem": "Assuming mixed types promote the same way in every version",
+        "why": "NumPy 2.x promotion semantics differ from some older code.",
+        "fix": "Test mixed-type operations and consult the migration guide."
+      }
+    ],
+    "summary": [
+      "Topic 63 covers understanding numpy scalar types and the subtopics listed in the curriculum.",
+      "Make dtype conversions and numeric-range assumptions explicit.",
+      "Examples and assessments are draft and require subject-matter review before publication."
+    ],
+    "references": [
+      {
+        "title": "Data types",
+        "url": "https://numpy.org/doc/stable/user/basics.types.html",
+        "publisher": "NumPy project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "Understanding NumPy Scalar Types",
+          "NumPy scalar objects",
+          "Relationship to built-in Python types"
+        ]
+      },
+      {
+        "title": "NumPy 2.0 migration guide",
+        "url": "https://numpy.org/doc/stable/numpy_2_0_migration_guide.html",
+        "publisher": "NumPy project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "Understanding NumPy Scalar Types",
+          "NumPy scalar objects",
+          "Relationship to built-in Python types"
+        ]
+      }
+    ],
+    "accessibility_notes": "Every visual has descriptive SVG title/description and adjacent text explaining the concept. The diagram does not rely on color alone; text labels state each stage.",
+    "version_notes": "Written against the NumPy 2.5 stable documentation checked 2026-10-13. Example outputs that were executed were observed in an available NumPy 2.3.5 environment; release-specific formatting or pseudorandom streams may vary."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Data types",
+      "url": "https://numpy.org/doc/stable/user/basics.types.html",
+      "publisher": "NumPy project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Understanding NumPy Scalar Types",
+        "NumPy scalar objects",
+        "Relationship to built-in Python types"
+      ]
+    },
+    {
+      "title": "NumPy 2.0 migration guide",
+      "url": "https://numpy.org/doc/stable/numpy_2_0_migration_guide.html",
+      "publisher": "NumPy project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Understanding NumPy Scalar Types",
+        "NumPy scalar objects",
+        "Relationship to built-in Python types"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the supplied syllabus with original explanations and examples. Subject-matter review, learner testing, and publication approval are still required."
+}

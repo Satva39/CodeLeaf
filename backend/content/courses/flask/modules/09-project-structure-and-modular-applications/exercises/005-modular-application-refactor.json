@@ -1,0 +1,59 @@
+{
+  "id": "flask-exercise-005",
+  "slug": "modular-application-refactor",
+  "title": "Modular Application Refactor",
+  "type": "practical",
+  "lesson_id": "flask-lesson-093",
+  "module_id": "flask-module-09",
+  "difficulty": "intermediate",
+  "sequence": 1,
+  "prompt": "Refactor a single-file Flask app to an application factory. Move at least two feature groups into separate blueprints and show how test configuration can create a separate app instance.\n\nSubmission: provide the implementation or design, a relevant test, expected outputs, one failure/boundary case, and version/runtime notes. Flask server code is not executed inside the CodeLeaf browser preview; local verification or human review is required.",
+  "objective": "Modular Application Refactor",
+  "target_skills": [
+    "create_app",
+    "blueprints",
+    "configuration",
+    "imports",
+    "testability"
+  ],
+  "starter": {
+    "language": "python",
+    "content": "from flask import Flask\n\ndef create_app(test_config=None):\n    app = Flask(__name__)\n    return app",
+    "code": "from flask import Flask\n\ndef create_app(test_config=None):\n    app = Flask(__name__)\n    return app"
+  },
+  "expected_output": "The factory returns a configured app, blueprints are registered once with clear prefixes, and tests can override configuration.",
+  "public_tests": [
+    {
+      "name": "Static concept smoke check",
+      "required_strings": [
+        "create_app",
+        "Blueprint",
+        "register_blueprint"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "The factory returns a configured app, blueprints are registered once with clear prefixes, and tests can override configuration.",
+    "Document setup/run steps and mark whether verification was static, local, or human-reviewed.",
+    "Do not include private credentials or use real personal data.",
+    "Include a negative/boundary case and explain the expected status/result."
+  ],
+  "hints": [
+    "Define extension objects at module scope but initialize them inside create_app.",
+    "Keep routes, services and data access separate.",
+    "Check endpoint names after adding blueprint prefixes."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "create_app",
+      "Blueprint",
+      "register_blueprint"
+    ]
+  },
+  "grading_method": "Static required-string smoke check plus human review of implementation correctness, tests, validation/security boundaries and reproducibility. The platform does not execute arbitrary Python/Flask code.",
+  "retry_policy": "Retries are allowed after reviewing feedback; the platform backend controls its uniform reward and idempotency rules.",
+  "solution_file": "../../../solutions/exercises/005-modular-application-refactor-solution.json",
+  "status": "draft",
+  "status_note": "Practice assignment mapped to the supplied Flask PDF. Needs subject-matter review before publication."
+}

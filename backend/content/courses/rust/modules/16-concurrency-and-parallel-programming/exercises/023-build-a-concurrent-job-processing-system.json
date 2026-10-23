@@ -1,0 +1,57 @@
+{
+  "id": "rust-exercise-023",
+  "slug": "build-a-concurrent-job-processing-system",
+  "title": "Build a Concurrent Job-Processing System",
+  "type": "coding",
+  "lesson_id": "rust-lesson-193",
+  "module_id": "rust-module-16",
+  "difficulty": "advanced",
+  "sequence": 23,
+  "prompt": "Distribute synthetic jobs to workers, aggregate results, propagate worker failures, and avoid indefinite waits during shutdown. Follow the acceptance criteria and include the expected behavior in a short README or code comment.",
+  "objective": "Distribute synthetic jobs to workers, aggregate results, propagate worker failures, and avoid indefinite waits during shutdown.",
+  "target_skills": [
+    "channels synchronization thread safety",
+    "input/output reasoning",
+    "edge-case testing"
+  ],
+  "starter": {
+    "language": "rust",
+    "code": "// TODO: document the design and safety/concurrency assumptions.\n// Select a maintained dependency/runtime only where the task requires one.\n"
+  },
+  "expected_output": "A Rust implementation that satisfies the acceptance criteria and passes its local cargo test suite; verify the output and failure paths in the declared environment.",
+  "public_tests": [
+    {
+      "name": "Required implementation evidence",
+      "required_strings": [
+        "thread",
+        "mpsc",
+        "join"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "The implementation addresses the stated task and represents the relevant data clearly.",
+    "The core operation is separated into readable functions or types where that improves maintainability.",
+    "At least one normal input and one edge/failure case are tested.",
+    "No secrets or real personal data are included; external effects use synthetic data or controlled test doubles.",
+    "The learner documents design decisions and any static-grader limitations."
+  ],
+  "hints": [
+    "Write down the input, output, and failure cases before coding.",
+    "Build the smallest correct version, then test boundary cases.",
+    "Use cargo fmt, cargo clippy, and cargo test; static token checks do not prove full correctness."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "thread",
+      "mpsc",
+      "join"
+    ]
+  },
+  "grading_method": "Static required-token smoke check only. This is not Rust execution and does not prove compilation or runtime correctness; run the project locally with Cargo and use human review for advanced, database, FFI, async, embedded, and WebAssembly work.",
+  "retry_policy": "Allow retries. Completion and XP decisions remain under platform backend rules; this file defines no XP override.",
+  "solution_file": "../../../solutions/exercises/023-build-a-concurrent-job-processing-system-solution.json",
+  "status": "draft",
+  "status_note": "Draft based on Section C of Rust.pdf; inspect the Rust starter, grading tokens, hidden reference solution, and target/dependency requirements before publication."
+}

@@ -1,0 +1,143 @@
+{
+  "id": "numpy-project-009",
+  "slug": "large-array-performance-lab",
+  "title": "Large-Array Performance Lab",
+  "sequence": 9,
+  "tier": "advanced",
+  "objective": "Compare alternative implementations and document speed/memory trade-offs on representative arrays.",
+  "prerequisite_lesson_ids": [
+    "numpy-lesson-169",
+    "numpy-lesson-175",
+    "numpy-lesson-181"
+  ],
+  "recommended_module_range": [
+    18,
+    18
+  ],
+  "recommended_lesson_range": [
+    169,
+    181
+  ],
+  "skills": [
+    "Views and copies",
+    "Memory layout",
+    "Benchmarking",
+    "Large array optimization"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Benchmark equivalent vectorized and iterative work.",
+      "acceptance_criteria": [
+        "Demonstrate benchmark equivalent vectorized and iterative work. in the project.",
+        "Record a reproducible test or verification step.",
+        "Explain one assumption or limitation."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Inspect dtype, nbytes, strides, contiguity, views, and copies.",
+      "acceptance_criteria": [
+        "Demonstrate inspect dtype, nbytes, strides, contiguity, views, and copies. in the project.",
+        "Record a reproducible test or verification step.",
+        "Explain one assumption or limitation."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Try chunked or memory-mapped processing where appropriate.",
+      "acceptance_criteria": [
+        "Demonstrate try chunked or memory-mapped processing where appropriate. in the project.",
+        "Record a reproducible test or verification step.",
+        "Explain one assumption or limitation."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Report repeated measurements and avoid unsupported performance claims.",
+      "acceptance_criteria": [
+        "Demonstrate report repeated measurements and avoid unsupported performance claims. in the project.",
+        "Record a reproducible test or verification step.",
+        "Explain one assumption or limitation."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "src/analysis.py",
+      "purpose": "Functions for loading, validating, transforming, and summarizing arrays."
+    },
+    {
+      "path": "data/sample.csv",
+      "purpose": "Small synthetic input data; document schema, units, and missing-value rules."
+    },
+    {
+      "path": "tests/test_analysis.py",
+      "purpose": "Automated tests for normal, boundary, and invalid inputs."
+    },
+    {
+      "path": "README.md",
+      "purpose": "Setup, run instructions, assumptions, expected output, and reproducibility notes."
+    }
+  ],
+  "required_features": [
+    "Benchmark equivalent vectorized and iterative work.",
+    "Inspect dtype, nbytes, strides, contiguity, views, and copies.",
+    "Try chunked or memory-mapped processing where appropriate.",
+    "Report repeated measurements and avoid unsupported performance claims."
+  ],
+  "stretch_features": [
+    "Process larger inputs in bounded chunks or through a memory map where it helps.",
+    "Add a reproducible benchmark or a second numerical method and document the trade-off.",
+    "Produce a simple labeled plot using an optional compatible visualization library."
+  ],
+  "tests": [
+    {
+      "name": "Numerical correctness",
+      "steps": [
+        "Run the solution against known synthetic values.",
+        "Use exact comparisons only when exactness is expected; otherwise justify tolerance values."
+      ]
+    },
+    {
+      "name": "Boundary and validation",
+      "steps": [
+        "Try empty, malformed, wrong-shape, wrong-dtype, and non-finite inputs as relevant.",
+        "Confirm failure messages are clear and no invalid success result is reported."
+      ]
+    },
+    {
+      "name": "Reproducibility and documentation",
+      "steps": [
+        "Run from a clean environment with documented dependencies.",
+        "Verify the README expected outputs and record software versions."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correctness and requirement coverage",
+      "points": 25
+    },
+    {
+      "criterion": "Array reasoning: shape, dtype, and numerical assumptions",
+      "points": 20
+    },
+    {
+      "criterion": "Validation and edge-case behavior",
+      "points": 20
+    },
+    {
+      "criterion": "Testing and reproducibility",
+      "points": 20
+    },
+    {
+      "criterion": "Documentation and maintainability",
+      "points": 15
+    }
+  ],
+  "review_method": "Automated local tests plus human rubric review. Project submission and grading are not configured to execute arbitrary Python in the production API.",
+  "reference_solution_file": "projects/solutions/009-large-array-performance-lab-solution.json",
+  "status": "draft",
+  "status_note": "Draft brief derived from the supplied PDF. Starter implementation, test data, and human-review rubric require review before publication."
+}

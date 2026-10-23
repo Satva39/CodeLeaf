@@ -1,0 +1,200 @@
+{
+  "id": "cpp-lesson-095",
+  "slug": "type-traits-and-type-properties",
+  "title": "Type Traits and Type Properties",
+  "sequence": 95,
+  "module_id": "cpp-module-09",
+  "module_slug": "user-defined-types-and-enumerations",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "cpp-lesson-094"
+  ],
+  "previous_lesson_id": "cpp-lesson-094",
+  "next_lesson_id": "cpp-lesson-096",
+  "keywords": [
+    "type-traits-and-type-properties",
+    "compile-time-type-queries",
+    "type-traits",
+    "std-is-integral",
+    "std-is-floating-point",
+    "std-is-same",
+    "trivial-and-standard-layout-types",
+    "type-properties-and-generic-code"
+  ],
+  "source_syllabus_number": 95,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Compile-Time Type Queries",
+    "<type_traits>",
+    "std::is_integral",
+    "std::is_floating_point",
+    "std::is_same",
+    "Trivial and Standard-Layout Types",
+    "Type Properties and Generic Code"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and core rule of type traits and type properties using at least one example.",
+    "Trace or adapt a minimal C++ example related to type traits and type properties and state its expected result.",
+    "Identify one precondition, error case, lifetime issue, portability assumption or version constraint relevant to the topic."
+  ],
+  "content": {
+    "intro": "Type Traits and Type Properties focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Type Traits and Type Properties matters because choose a representation that matches the domain and write down the invariants constructors or helper functions must preserve. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Type Traits and Type Properties: visual trace",
+        "asset_path": "diagrams/lessons/lesson-095.svg",
+        "alt_text": "Lesson 95 visual for Type Traits and Type Properties; concept: Compile-Time Type Queries; apply: <type_traits>; verify: std::is_integral.",
+        "caption": "Original lesson-specific overview: understand compile-time type queries, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "User-defined types give domain concepts a name and restrict values to meaningful states. Type design can prevent invalid combinations from being representable.\n\nType Traits and Type Properties focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nChoose a representation that matches the domain and write down the invariants constructors or helper functions must preserve."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Type Traits and Type Properties",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <iostream>\n#include <type_traits>\n\nint main() {\n    static_assert(std::is_integral_v<int>);\n    static_assert(!std::is_integral_v<double>);\n    std::cout << \"type traits checked\\n\";\n}\n",
+        "expected_output": "type traits checked",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "Type traits expose compile-time properties; static_assert turns an assumption into a diagnostic if the property is false."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Compile-Time Type Queries",
+            "text": "Explain compile-time type queries in the context of Type Traits and Type Properties: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "<type_traits>",
+            "text": "Explain <type_traits> in the context of Type Traits and Type Properties: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "std::is_integral",
+            "text": "Explain std::is_integral in the context of Type Traits and Type Properties: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "std::is_floating_point",
+            "text": "Explain std::is_floating_point in the context of Type Traits and Type Properties: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "std::is_same",
+            "text": "Explain std::is_same in the context of Type Traits and Type Properties: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Trivial and Standard-Layout Types",
+            "text": "Explain trivial and standard-layout types with its language-standard context and verify implementation support rather than assuming every compiler behaves identically."
+          },
+          {
+            "title": "Type Properties and Generic Code",
+            "text": "Explain type properties and generic code in the context of Type Traits and Type Properties: identify the rule, trace a minimal example, and check one boundary or failure case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate compile-time type queries, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "Use standard C++ rather than compiler-specific behavior unless the lesson explicitly labels the dependency. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-095-questions.json",
+    "task": "Extend the example for Type Traits and Type Properties with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+    "task_acceptance_criteria": [
+      "The code compiles in the documented standard mode with warnings enabled.",
+      "The predicted output matches the actual result for the added case.",
+      "One relevant boundary, lifetime, portability or error case is tested or documented."
+    ],
+    "hints": [
+      "Start by isolating the central rule from Type Traits and Type Properties.",
+      "Trace values or object lifetimes before changing the program.",
+      "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+    ],
+    "summary": [
+      "Type Traits and Type Properties is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying type traits and type properties.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "type traits checked"
+  },
+  "task": "Extend the example for Type Traits and Type Properties with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+  "hints": [
+    "Start by isolating the central rule from Type Traits and Type Properties.",
+    "Trace values or object lifetimes before changing the program.",
+    "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+  ],
+  "expected_output": "type traits checked",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Type Traits and Type Properties is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying type traits and type properties.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 9, lesson 95: Type Traits and Type Properties.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

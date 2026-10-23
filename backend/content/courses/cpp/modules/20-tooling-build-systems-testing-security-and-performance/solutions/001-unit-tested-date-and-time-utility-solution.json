@@ -1,0 +1,18 @@
+{
+  "id": "cpp-exercise-solution-030",
+  "exercise_id": "cpp-exercise-030",
+  "title": "Unit-tested date and time utility reference solution notes",
+  "language": "cpp",
+  "answer": "#include <cassert>\n#include <chrono>\n#include <iostream>\nbool valid_date(int y, unsigned m, unsigned d) {\n    using namespace std::chrono;\n    return year_month_day{year{y}, month{m}, day{d}}.ok();\n}\nint main() {\n    assert(valid_date(2024, 2, 29));\n    assert(!valid_date(2023, 2, 29));\n    std::cout << \"date tests passed\\n\";\n}\n",
+  "explanation": "date tests passed",
+  "manual_validation_checklist": [
+    "Compile locally with C++20 and -Wall -Wextra -Wpedantic (add the external library named in the solution when applicable).",
+    "Test normal inputs and at least one boundary/failure case named in the exercise prompt.",
+    "Check integer range, object lifetime, resource cleanup and error handling where relevant.",
+    "A valid date check uses the standard calendar type rather than hand-coded month lengths. Add boundary tests for leap years and invalid month/day values.",
+    "Keep this solution in repository-only protected content; do not include it in learner API responses."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only reference notes; replace with a reviewed implementation and test suite before publishing the exercise."
+}

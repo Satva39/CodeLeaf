@@ -1,0 +1,189 @@
+{
+  "id": "r-lesson-116",
+  "slug": "data-transformation-quality-assurance",
+  "title": "Data Transformation Quality Assurance",
+  "sequence": 116,
+  "module_id": "r-module-11",
+  "module_slug": "data-cleaning-and-manipulation",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "r-lesson-115"
+  ],
+  "previous_lesson_id": "r-lesson-115",
+  "next_lesson_id": "r-lesson-117",
+  "keywords": [
+    "data-transformation-quality-assurance",
+    "data-cleaning-and-manipulation",
+    "checking-row-counts-before-and-after-transformations",
+    "verifying-uniqueness-of-keys",
+    "checking-join-results",
+    "validating-business-rules",
+    "writing-reusable-cleaning-functions",
+    "designing-an-end-to-end-cleaning-pipeline",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 116,
+  "subtopics": [
+    "Checking Row Counts Before and After Transformations",
+    "Verifying Uniqueness of Keys",
+    "Checking Join Results",
+    "Validating Business Rules",
+    "Writing Reusable Cleaning Functions",
+    "Designing an End-to-End Cleaning Pipeline"
+  ],
+  "learning_outcomes": [
+    "Explain the role of data transformation quality assurance and identify its main inputs, outputs or constraints.",
+    "Apply checking row counts before and after transformations in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Data Transformation Quality Assurance is part of Data Cleaning and Manipulation. Start with checking row counts before and after transformations and connect it to the worked example and expected result.",
+    "why_it_matters": "A reliable workflow turns assumptions into checks and uses errors, tests and logs as evidence instead of hiding failures.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Data Transformation Quality Assurance",
+        "asset_path": "diagrams/module-11-overview.svg",
+        "alt_text": "Concept visual supporting lesson 116, Data Transformation Quality Assurance. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "A reliable workflow turns assumptions into checks and uses errors, tests and logs as evidence instead of hiding failures. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Checking Row Counts Before and After Transformations",
+            "text": "Explain checking row counts before and after transformations in the context of data transformation quality assurance, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Verifying Uniqueness of Keys",
+            "text": "Explain verifying uniqueness of keys in the context of data transformation quality assurance, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Checking Join Results",
+            "text": "Explain checking join results in the context of data transformation quality assurance, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Validating Business Rules",
+            "text": "Explain validating business rules in the context of data transformation quality assurance, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Writing Reusable Cleaning Functions",
+            "text": "Use writing reusable cleaning functions to make input, output and scope explicit, then test both a typical call and one edge case."
+          },
+          {
+            "title": "Designing an End-to-End Cleaning Pipeline",
+            "text": "Explain designing an end-to-end cleaning pipeline in the context of data transformation quality assurance, connect it to the example, and verify one expected result or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Write one positive test and one failure/edge test, then state what evidence would prove the check ran. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Data Transformation Quality Assurance",
+        "language": "r",
+        "code": "# Lesson 116: Data Transformation Quality Assurance\nexample_result <- 6 * 2\nstopifnot(example_result == 12)\n\"check passed\"",
+        "expected_output": "[1] \"check passed\"",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "A successful assertion is useful evidence for one condition only; add negative and boundary tests too. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For data transformation quality assurance, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-116-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply data transformation quality assurance to a small synthetic example. Start with checking row counts before and after transformations, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the checking row counts before and after transformations idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible data transformation quality assurance example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Checking Row Counts Before and After Transformations” and identify the input and output before coding.",
+      "Check file existence, column types, row counts, keys and missing-value counts.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: A reliable workflow turns assumptions into checks and uses errors, tests and logs as evidence instead of hiding failures.",
+      "Practice: Write one positive test and one failure/edge test, then state what evidence would prove the check ran.",
+      "Source syllabus focus: Checking Row Counts Before and After Transformations. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply data transformation quality assurance to a small synthetic example. Start with checking row counts before and after transformations, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible data transformation quality assurance example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Checking Row Counts Before and After Transformations” and identify the input and output before coding.",
+    "Check file existence, column types, row counts, keys and missing-value counts.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: A reliable workflow turns assumptions into checks and uses errors, tests and logs as evidence instead of hiding failures.",
+    "Practice: Write one positive test and one failure/edge test, then state what evidence would prove the check ran.",
+    "Source syllabus focus: Checking Row Counts Before and After Transformations. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 11 — Data Cleaning and Manipulation, lesson 116: Data Transformation Quality Assurance.",
+    "Official documentation: https://dplyr.tidyverse.org/",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

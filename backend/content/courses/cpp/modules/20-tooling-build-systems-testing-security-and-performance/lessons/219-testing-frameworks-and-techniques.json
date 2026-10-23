@@ -1,0 +1,204 @@
+{
+  "id": "cpp-lesson-219",
+  "slug": "testing-frameworks-and-techniques",
+  "title": "Testing Frameworks and Techniques",
+  "sequence": 219,
+  "module_id": "cpp-module-20",
+  "module_slug": "tooling-build-systems-testing-security-and-performance",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "specialized",
+  "estimated_minutes": 19,
+  "prerequisites": [
+    "cpp-lesson-218"
+  ],
+  "previous_lesson_id": "cpp-lesson-218",
+  "next_lesson_id": "cpp-lesson-220",
+  "keywords": [
+    "testing-frameworks-and-techniques",
+    "googletest",
+    "catch2",
+    "assertions",
+    "parameterized-tests",
+    "test-discovery",
+    "mocking-dependencies",
+    "testing-exception-paths"
+  ],
+  "source_syllabus_number": 219,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "GoogleTest",
+    "Catch2",
+    "Assertions",
+    "Parameterized Tests",
+    "Test Discovery",
+    "Mocking Dependencies",
+    "Testing Exception Paths",
+    "Test Coverage and Its Limitations"
+  ],
+  "learning_outcomes": [
+    "Describe when testing frameworks and techniques is useful and what problem it does not solve.",
+    "Evaluate a small example against its stated constraints, standard version and implementation assumptions.",
+    "Select a test or tool that can provide evidence of correctness without treating one successful run as proof."
+  ],
+  "content": {
+    "intro": "Testing Frameworks and Techniques focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Testing Frameworks and Techniques matters because use compiler warnings, repeatable tests, static analysis and sanitizers as complementary signals; keep tool configuration under version control. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Testing Frameworks and Techniques: visual trace",
+        "asset_path": "diagrams/lessons/lesson-219.svg",
+        "alt_text": "Lesson 219 visual for Testing Frameworks and Techniques; concept: GoogleTest; apply: Catch2; verify: Assertions.",
+        "caption": "Original lesson-specific overview: understand googletest, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Professional C++ work requires reproducible builds, diagnostics, tests, dependency hygiene, secure boundaries and measurement. A passing build alone is not proof of correctness.\n\nTesting Frameworks and Techniques focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nUse compiler warnings, repeatable tests, static analysis and sanitizers as complementary signals; keep tool configuration under version control."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Testing Frameworks and Techniques",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <iostream>\n#include <stdexcept>\n\nint divide(int numerator, int denominator) {\n    if (denominator == 0) throw std::invalid_argument(\"zero denominator\");\n    return numerator / denominator;\n}\n\nint main() {\n    try { std::cout << divide(10, 2) << '\\n'; }\n    catch (const std::exception& ex) { std::cout << ex.what() << '\\n'; }\n}\n",
+        "expected_output": "5",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "The caller handles the exceptional case at a boundary; exceptions are not a replacement for a clear function contract."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "GoogleTest",
+            "text": "Explain googletest in the context of Testing Frameworks and Techniques: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Catch2",
+            "text": "Explain catch2 in the context of Testing Frameworks and Techniques: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Assertions",
+            "text": "Explain assertions in the context of Testing Frameworks and Techniques: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Parameterized Tests",
+            "text": "Explain parameterized tests in the context of Testing Frameworks and Techniques: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Test Discovery",
+            "text": "Explain test discovery in the context of Testing Frameworks and Techniques: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Mocking Dependencies",
+            "text": "Explain mocking dependencies in the context of Testing Frameworks and Techniques: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Testing Exception Paths",
+            "text": "A test makes an expected behavior executable; useful suites include boundary and failure cases, not only successful examples."
+          },
+          {
+            "title": "Test Coverage and Its Limitations",
+            "text": "Identify how test coverage and its limitations can fail, what diagnostic evidence to collect, and which validation or design choice reduces the risk."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate googletest, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "This topic may depend on newer C++ language or library support; this example uses a C++20-compatible illustration. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-219-questions.json",
+    "task": "Create a small, independent example that demonstrates testing frameworks and techniques. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example builds under a documented standard mode with warnings enabled.",
+      "The predicted and observed result are recorded; deviations are explained.",
+      "At least one boundary, invalid-input, lifetime or portability assumption is tested or documented."
+    ],
+    "hints": [
+      "Start with the smallest example that demonstrates googletest.",
+      "Trace the relevant values and state the expected output before running the program.",
+      "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+    ],
+    "summary": [
+      "Testing Frameworks and Techniques is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying testing frameworks and techniques.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation"
+  },
+  "task": "Create a small, independent example that demonstrates testing frameworks and techniques. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+  "hints": [
+    "Start with the smallest example that demonstrates googletest.",
+    "Trace the relevant values and state the expected output before running the program.",
+    "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+  ],
+  "expected_output": "5",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Testing Frameworks and Techniques is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying testing frameworks and techniques.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 20, lesson 219: Testing Frameworks and Techniques.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

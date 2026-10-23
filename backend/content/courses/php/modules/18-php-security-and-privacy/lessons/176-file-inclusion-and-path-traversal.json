@@ -1,0 +1,213 @@
+{
+  "id": "php-lesson-176",
+  "slug": "file-inclusion-and-path-traversal",
+  "title": "File Inclusion and Path Traversal",
+  "sequence": 176,
+  "module_id": "php-module-18",
+  "module_slug": "php-security-and-privacy",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "php-lesson-175"
+  ],
+  "previous_lesson_id": "php-lesson-175",
+  "next_lesson_id": "php-lesson-177",
+  "keywords": [
+    "file inclusion and path traversal",
+    "php security and privacy",
+    "unsafe dynamic includes",
+    "local file inclusion",
+    "remote file inclusion risks",
+    "canonicalizing and restricting paths",
+    "secure template and file selection",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 176,
+  "subtopics": [
+    "Unsafe dynamic includes.",
+    "Local file inclusion.",
+    "Remote file inclusion risks.",
+    "Canonicalizing and restricting paths.",
+    "Secure template and file selection."
+  ],
+  "learning_outcomes": [
+    "Explain what file inclusion and path traversal contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: unsafe dynamic includes.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Security begins at trust boundaries. Validate data for the intended operation, encode output for its exact context, constrain file and network access, protect credentials, and apply authorization consistently. In this lesson, focus on unsafe dynamic includes; then compare it with local file inclusion. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use file inclusion and path traversal when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 18 overview: PHP Security and Privacy",
+        "asset_path": "diagrams/module-18-overview.svg",
+        "alt_text": "Four-stage overview for module 18, PHP Security and Privacy, grouping lesson topics in order.",
+        "caption": "Use this overview to place file inclusion and path traversal in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Security begins at trust boundaries. Validate data for the intended operation, encode output for its exact context, constrain file and network access, protect credentials, and apply authorization consistently. For file inclusion and path traversal, begin with unsafe dynamic includes. Also distinguish local file inclusion; remote file inclusion risks; canonicalizing and restricting paths. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Unsafe dynamic includes",
+            "text": "Know when to use unsafe dynamic includes, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Local file inclusion",
+            "text": "Check the operation result, use a known storage boundary, and consider empty files, permissions, invalid paths, and cleanup."
+          },
+          {
+            "title": "Remote file inclusion risks",
+            "text": "Check the operation result, use a known storage boundary, and consider empty files, permissions, invalid paths, and cleanup."
+          },
+          {
+            "title": "Canonicalizing and restricting paths",
+            "text": "Know when to use canonicalizing and restricting paths, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Secure template and file selection",
+            "text": "Check the operation result, use a known storage boundary, and consider empty files, permissions, invalid paths, and cleanup."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for File Inclusion and Path Traversal",
+        "language": "php",
+        "code": "<?php\n$file = tempnam(sys_get_temp_dir(), \"php-course-\");\nif ($file === false) { throw new RuntimeException(\"Cannot create temp file\"); }\nfile_put_contents($file, \"ready\\n\");\necho trim((string) file_get_contents($file)) . PHP_EOL;\nunlink($file);",
+        "expected_output": "ready",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Validate data at system boundaries and encode output for the target context; validation and escaping solve different problems."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for file inclusion and path traversal from top to bottom. Start by identifying unsafe dynamic includes, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for file inclusion and path traversal that demonstrates \"unsafe dynamic includes\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of unsafe dynamic includes.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "ready",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-176-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating input validation as output escaping.",
+        "why": "A value can be valid data and still be unsafe in an HTML or JavaScript output context.",
+        "fix": "Validate shape and business rules at input boundaries, then apply context-appropriate output encoding."
+      },
+      {
+        "problem": "Trusting client-side checks alone.",
+        "why": "A request can be sent without the original form or browser UI.",
+        "fix": "Repeat all security-relevant validation and authorization on the server."
+      },
+      {
+        "problem": "Returning internal error details to the browser.",
+        "why": "Stack traces and configuration values may expose sensitive information.",
+        "fix": "Log safe diagnostics server-side and return a generic, useful response."
+      }
+    ],
+    "summary": [
+      "File Inclusion and Path Traversal is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Validate data at system boundaries and encode output for the target context; validation and escaping solve different problems."
+    ],
+    "references": [
+      {
+        "title": "PHP security",
+        "url": "https://www.php.net/manual/en/security.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "security model",
+          "filesystem security",
+          "database security",
+          "session security"
+        ]
+      },
+      {
+        "title": "OWASP Cross Site Scripting Prevention Cheat Sheet",
+        "url": "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
+        "publisher": "OWASP",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "contextual output encoding",
+          "XSS prevention"
+        ]
+      },
+      {
+        "title": "OWASP SQL Injection Prevention Cheat Sheet",
+        "url": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+        "publisher": "OWASP",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "parameterized queries",
+          "SQL injection prevention"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "PHP security",
+      "url": "https://www.php.net/manual/en/security.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "security model",
+        "filesystem security",
+        "database security",
+        "session security"
+      ]
+    },
+    {
+      "title": "OWASP Cross Site Scripting Prevention Cheat Sheet",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
+      "publisher": "OWASP",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "contextual output encoding",
+        "XSS prevention"
+      ]
+    },
+    {
+      "title": "OWASP SQL Injection Prevention Cheat Sheet",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+      "publisher": "OWASP",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "parameterized queries",
+        "SQL injection prevention"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

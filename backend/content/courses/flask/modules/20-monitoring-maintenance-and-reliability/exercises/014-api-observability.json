@@ -1,0 +1,59 @@
+{
+  "id": "flask-exercise-014",
+  "slug": "api-observability",
+  "title": "API Observability",
+  "type": "practical",
+  "lesson_id": "flask-lesson-222",
+  "module_id": "flask-module-20",
+  "difficulty": "advanced",
+  "sequence": 1,
+  "prompt": "Add request correlation IDs, structured safe logs, request/latency/error metrics and an alert rule for repeated server errors. Exercise a synthetic error and confirm the trace is searchable without exposing secrets.\n\nSubmission: provide the implementation or design, a relevant test, expected outputs, one failure/boundary case, and version/runtime notes. Flask server code is not executed inside the CodeLeaf browser preview; local verification or human review is required.",
+  "objective": "API Observability",
+  "target_skills": [
+    "request IDs",
+    "structured logs",
+    "metrics",
+    "alert thresholds",
+    "privacy-aware diagnostics"
+  ],
+  "starter": {
+    "language": "python",
+    "content": "import logging\nfrom flask import Flask, g, request\n\napp = Flask(__name__)\n",
+    "code": "import logging\nfrom flask import Flask, g, request\n\napp = Flask(__name__)\n"
+  },
+  "expected_output": "One request can be correlated across logs and metrics; an injected test failure increments the expected signal; secrets are excluded from diagnostic output.",
+  "public_tests": [
+    {
+      "name": "Static concept smoke check",
+      "required_strings": [
+        "logging",
+        "request",
+        "g"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "One request can be correlated across logs and metrics; an injected test failure increments the expected signal; secrets are excluded from diagnostic output.",
+    "Document setup/run steps and mark whether verification was static, local, or human-reviewed.",
+    "Do not include private credentials or use real personal data.",
+    "Include a negative/boundary case and explain the expected status/result."
+  ],
+  "hints": [
+    "Use a trusted/generated request ID rather than blindly trusting any client header.",
+    "Measure count, latency and error rate separately.",
+    "Set alert thresholds based on baseline and avoid logging tokens or full cookies."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "logging",
+      "request",
+      "g"
+    ]
+  },
+  "grading_method": "Static required-string smoke check plus human review of implementation correctness, tests, validation/security boundaries and reproducibility. The platform does not execute arbitrary Python/Flask code.",
+  "retry_policy": "Retries are allowed after reviewing feedback; the platform backend controls its uniform reward and idempotency rules.",
+  "solution_file": "../../../solutions/exercises/014-api-observability-solution.json",
+  "status": "draft",
+  "status_note": "Practice assignment mapped to the supplied Flask PDF. Needs subject-matter review before publication."
+}

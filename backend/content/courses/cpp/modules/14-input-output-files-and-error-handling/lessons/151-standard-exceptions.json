@@ -1,0 +1,199 @@
+{
+  "id": "cpp-lesson-151",
+  "slug": "standard-exceptions",
+  "title": "Standard Exceptions",
+  "sequence": 151,
+  "module_id": "cpp-module-14",
+  "module_slug": "input-output-files-and-error-handling",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "cpp-lesson-150"
+  ],
+  "previous_lesson_id": "cpp-lesson-150",
+  "next_lesson_id": "cpp-lesson-152",
+  "keywords": [
+    "standard-exceptions",
+    "std-exception",
+    "std-runtime-error",
+    "std-logic-error",
+    "std-invalid-argument",
+    "std-out-of-range",
+    "std-bad-alloc",
+    "designing-meaningful-error-messages"
+  ],
+  "source_syllabus_number": 151,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "std::exception",
+    "std::runtime_error",
+    "std::logic_error",
+    "std::invalid_argument",
+    "std::out_of_range",
+    "std::bad_alloc",
+    "Designing Meaningful Error Messages"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and core rule of standard exceptions using at least one example.",
+    "Trace or adapt a minimal C++ example related to standard exceptions and state its expected result.",
+    "Identify one precondition, error case, lifetime issue, portability assumption or version constraint relevant to the topic."
+  ],
+  "content": {
+    "intro": "Standard Exceptions focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Standard Exceptions matters because try missing files, malformed input and empty data, and verify both the result and the failure path. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Standard Exceptions: visual trace",
+        "asset_path": "diagrams/lessons/lesson-151.svg",
+        "alt_text": "Lesson 151 visual for Standard Exceptions; concept: std::exception; apply: std::runtime_error; verify: std::logic_error.",
+        "caption": "Original lesson-specific overview: understand std::exception, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "I/O can fail because of stream state, filesystem conditions or malformed data. Robust programs check operations and report errors without leaving state half-updated.\n\nStandard Exceptions focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nTry missing files, malformed input and empty data, and verify both the result and the failure path."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Standard Exceptions",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <algorithm>\n#include <iostream>\n#include <vector>\n\nint main() {\n    std::vector<int> values{7, 2, 5};\n    std::sort(values.begin(), values.end());\n    const bool found = std::binary_search(values.begin(), values.end(), 5);\n    std::cout << values.front() << \", found=\" << std::boolalpha << found << '\\n';\n}\n",
+        "expected_output": "2, found=true",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "binary_search requires the range to be sorted according to the same ordering used by the search."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "std::exception",
+            "text": "Explain std::exception in the context of Standard Exceptions: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "std::runtime_error",
+            "text": "Identify how std::runtime_error can fail, what diagnostic evidence to collect, and which validation or design choice reduces the risk."
+          },
+          {
+            "title": "std::logic_error",
+            "text": "Identify how std::logic_error can fail, what diagnostic evidence to collect, and which validation or design choice reduces the risk."
+          },
+          {
+            "title": "std::invalid_argument",
+            "text": "Explain std::invalid_argument in the context of Standard Exceptions: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "std::out_of_range",
+            "text": "Explain std::out_of_range in the context of Standard Exceptions: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "std::bad_alloc",
+            "text": "Explain std::bad_alloc in the context of Standard Exceptions: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Designing Meaningful Error Messages",
+            "text": "Identify how designing meaningful error messages can fail, what diagnostic evidence to collect, and which validation or design choice reduces the risk."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate std::exception, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "Use standard C++ rather than compiler-specific behavior unless the lesson explicitly labels the dependency. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-151-questions.json",
+    "task": "Create a small, independent example that demonstrates standard exceptions. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example builds under a documented standard mode with warnings enabled.",
+      "The predicted and observed result are recorded; deviations are explained.",
+      "At least one boundary, invalid-input, lifetime or portability assumption is tested or documented."
+    ],
+    "hints": [
+      "Start with the smallest example that demonstrates std::exception.",
+      "Trace the relevant values and state the expected output before running the program.",
+      "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+    ],
+    "summary": [
+      "Standard Exceptions is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying standard exceptions.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation"
+  },
+  "task": "Create a small, independent example that demonstrates standard exceptions. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+  "hints": [
+    "Start with the smallest example that demonstrates std::exception.",
+    "Trace the relevant values and state the expected output before running the program.",
+    "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+  ],
+  "expected_output": "2, found=true",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Standard Exceptions is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying standard exceptions.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 14, lesson 151: Standard Exceptions.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

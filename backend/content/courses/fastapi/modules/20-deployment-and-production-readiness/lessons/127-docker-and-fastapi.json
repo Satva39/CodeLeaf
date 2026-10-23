@@ -1,0 +1,177 @@
+{
+  "id": "fastapi-lesson-127",
+  "slug": "docker-and-fastapi",
+  "title": "Docker and FastAPI",
+  "sequence": 127,
+  "module_id": "fastapi-module-20",
+  "module_slug": "deployment-and-production-readiness",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "fastapi-lesson-126"
+  ],
+  "previous_lesson_id": "fastapi-lesson-126",
+  "next_lesson_id": "fastapi-lesson-128",
+  "keywords": [
+    "docker-and-fastapi",
+    "deployment-and-production-readiness",
+    "fastapi",
+    "python",
+    "api",
+    "containers-and-images",
+    "writing-a-dockerfile",
+    "installing-dependencies-inside-containers"
+  ],
+  "source_syllabus_number": 127,
+  "subtopics": [
+    "Containers and images",
+    "Writing a Dockerfile",
+    "Installing dependencies inside containers",
+    "Running a FastAPI application in a container",
+    "Environment variables and secrets",
+    "Container networking",
+    "Docker Compose for local development"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of docker and fastapi in a FastAPI application.",
+    "Apply or interpret one example related to containers and images.",
+    "Identify one limitation or failure case and describe how to verify it."
+  ],
+  "content": {
+    "intro": "This lesson covers docker and fastapi within deployment and production readiness. Use the supplied syllabus topics as the coverage checklist, then connect them to the worked example and the verification task.",
+    "why_it_matters": "You will use docker and fastapi to build APIs whose contracts and behavior are understandable to both clients and maintainers. The practical aim is predictable client-server contracts, resource naming, typed parameters and correct HTTP semantics.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Docker and FastAPI: concept map",
+        "asset_path": "diagrams/lesson-127-concept.svg",
+        "alt_text": "Four-step flow for Docker and FastAPI: Containers and images, Writing a Dockerfile, Installing dependencies inside containers, Running a FastAPI application in a container",
+        "caption": "Visual-first overview before the worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Docker and FastAPI matters because it is part of deployment and production readiness. In practice, focus on predictable client-server contracts, resource naming, typed parameters and correct HTTP semantics. A framework feature only helps when its assumptions match the application; keep input validation, business policy and side effects distinguishable."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus coverage",
+        "items": [
+          {
+            "title": "Containers and images",
+            "text": "Use containers and images as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Writing a Dockerfile",
+            "text": "Use writing a dockerfile as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Installing dependencies inside containers",
+            "text": "Use installing dependencies inside containers as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Running a FastAPI application in a container",
+            "text": "Use running a fastapi application in a container as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Environment variables and secrets",
+            "text": "Treat environment variables and secrets as a trust-boundary concern. Verify identity and permissions on the server, use least privilege, keep secrets outside source control, and write negative tests for unauthorized access."
+          },
+          {
+            "title": "Container networking",
+            "text": "Use container networking as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Docker Compose for local development",
+            "text": "Use docker compose for local development as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Docker and FastAPI",
+        "language": "python",
+        "code": "from typing import Annotated\nfrom fastapi import Depends, FastAPI\n\napp = FastAPI()\n\ndef common_limit(limit: int = 10):\n    return {\"limit\": limit}\n\n@app.get(\"/items\")\ndef list_items(common: Annotated[dict, Depends(common_limit)]):\n    return common",
+        "expected_output": "{\"limit\": 10}",
+        "run_instructions": "Open /docs; change the query parameter and observe the injected value.",
+        "reset_steps": "For read-only examples, no reset is needed. For any example that writes state, use a disposable local database/test fixture; record the starting state and clean up only lab data. Never use production credentials or real personal data.",
+        "execution_mode": "human-review",
+        "limitations": "This code is inspectable lesson material, not executed by CodeLeaf. Run it only in a local virtual environment or a separately isolated runner with resource/time/network limits. Security examples are sketches, not complete production authentication or authorization systems."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to cover “Containers and images”. Write down the expected success result and one invalid, missing, duplicate, timeout or permission-boundary case that matters for this topic."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-127-questions.json"
+  },
+  "task": "Create a small reviewable artifact for “Docker and FastAPI”: explain its goal, cover the listed subtopics, show an example with expected result, then include one edge case and how you would verify it.",
+  "hints": [
+    "Start with “Containers and images” and state the required inputs, output and assumptions.",
+    "Change one thing at a time; check the official reference and capture the actual response/error instead of guessing.",
+    "Include a negative/edge-case check and document which behavior remains untested."
+  ],
+  "expected_output": "A reviewable example or design note for Docker and FastAPI, covering the PDF subtopics, expected behavior and at least one verification check.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Copying a code fragment without checking its assumptions.",
+      "why": "Installed versions, imported types, application structure and external services affect behavior.",
+      "fix": "State assumptions; check the versioned official docs; run a minimal local test and add one failure case."
+    },
+    {
+      "problem": "Treating one happy-path response as proof of correctness.",
+      "why": "Invalid input, permissions, concurrency, timeouts and cleanup are not exercised by a single request.",
+      "fix": "Add focused normal and negative tests and record exact expected status/body."
+    },
+    {
+      "problem": "Running examples against production resources.",
+      "why": "Even short examples may mutate records, reveal data or affect availability.",
+      "fix": "Use synthetic inputs and a disposable environment; review security, cleanup and rollback before promotion."
+    }
+  ],
+  "summary": [
+    "Docker and FastAPI belongs to the broader goal of predictable client-server contracts, resource naming, typed parameters and correct HTTP semantics.",
+    "Use the source subtopics as the completeness checklist and verify expected results rather than relying on intuition.",
+    "Examples in this course are illustrative until technically reviewed and executed on a supported local environment."
+  ],
+  "sources": [
+    {
+      "title": "FastAPI Async",
+      "url": "https://fastapi.tiangolo.com/async/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "sync/async trade-offs and I/O vs CPU-bound work"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Deployment Concepts",
+      "url": "https://fastapi.tiangolo.com/deployment/concepts/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "HTTPS, startup, replication, memory and pre-start steps"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Deployment with Docker",
+      "url": "https://fastapi.tiangolo.com/deployment/docker/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "container image and production start command"
+      ],
+      "source_type": "official documentation"
+    }
+  ],
+  "exercise_files": [],
+  "status": "draft",
+  "status_note": "Draft expansion from the numbered topics in FastAPI.pdf. Content structure, file references and SVGs are validated locally; code snippets and integration behavior still require technical review and targeted tests before publication."
+}

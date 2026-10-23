@@ -1,0 +1,227 @@
+{
+  "id": "github-actions-lesson-014",
+  "slug": "editing-and-maintaining-workflow-files",
+  "title": "Editing and Maintaining Workflow Files",
+  "sequence": 14,
+  "module_id": "github-actions-module-02",
+  "module_slug": "environment-setup-and-your-first-workflow",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "github-actions-lesson-013"
+  ],
+  "previous_lesson_id": "github-actions-lesson-013",
+  "next_lesson_id": "github-actions-lesson-015",
+  "keywords": [
+    "editing-and-maintaining-workflow-files",
+    "environment-setup-and-your-first-workflow",
+    "updating-workflow-definitions",
+    "reviewing-workflow-changes-in-pull-requests",
+    "checking-yaml-indentation",
+    "naming-workflows-and-jobs-clearly",
+    "validating-configuration-before-merging"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of editing and maintaining workflow files and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to editing and maintaining workflow files.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on editing and maintaining workflow files. Workflow changes should be reviewed like source code: validate YAML/schema, understand trigger and permission changes, test on a low-risk branch, and review the run. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "Editing and Maintaining Workflow Files matters because it affects correctness, security, maintainability, or operating cost. Workflow changes should be reviewed like source code: validate YAML/schema, understand trigger and permission changes, test on a low-risk branch, and review the run. Keep workflow files in `.github/workflows/`, name jobs and steps clearly, and verify a committed change from the Actions run page rather than assuming a saved YAML file executed.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 2 visual map",
+        "asset_path": "diagrams/module-02-overview.svg",
+        "alt_text": "Ordered overview of module 2: Preparing a GitHub Repository; The GitHub Actions Directory Structure; Creating Your First Workflow; Running Shell Commands in a Workflow; Running and Inspecting Your First Workflow; Editing and Maintaining Workflow Files; Creating a Simple Automated Status Check.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Workflow changes should be reviewed like source code: validate YAML/schema, understand trigger and permission changes, test on a low-risk branch, and review the run. Keep workflow files in `.github/workflows/`, name jobs and steps clearly, and verify a committed change from the Actions run page rather than assuming a saved YAML file executed. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "Updating workflow definitions",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Reviewing workflow changes in pull requests",
+            "text": "Match the event to the intended lifecycle, then test positive and negative branch/path/activity cases. Event payloads may be attacker-controlled, and scheduled jobs use UTC rather than a guaranteed exact start time."
+          },
+          {
+            "title": "Checking YAML indentation",
+            "text": "YAML is indentation-sensitive. Check that nested values are aligned, values have the expected type, special strings are quoted when needed, and the workflow schema accepts the key at that level."
+          },
+          {
+            "title": "Naming workflows and jobs clearly",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Validating configuration before merging",
+            "text": "For validating configuration before merging, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "name: Validate workflow configuration\non: [push, pull_request]\npermissions:\n  contents: read\njobs:\n  validate:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: echo \"Replace with a real validation command\"",
+        "expected_output": "A push or pull request starts a read-only job; replace the demonstration command with a check appropriate to the repository.",
+        "run_instructions": "Use a test repository or static validation first. Confirm the snippet matches the repository, runner, permissions, and current GitHub documentation.",
+        "reset_steps": "Remove temporary test workflows and never carry test credentials or sample outputs into production.",
+        "execution_mode": "workflow-fragment"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to editing and maintaining workflow files. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain editing and maintaining workflow files, read the example, and identify a way to validate it. The wider system goal remains: Create and inspect the first workflow in a repository before adding complexity."
+      }
+    ],
+    "task": "Apply editing and maintaining workflow files to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: Workflow changes should be reviewed like source code: validate YAML/schema, understand trigger and permission changes, test on a low-risk branch, and review the run.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: Workflow changes should be reviewed like source code: validate YAML/schema, understand trigger and permission changes, test on a low-risk branch, and review the run. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "Workflow changes should be reviewed like source code: validate YAML/schema, understand trigger and permission changes, test on a low-risk branch, and review the run.",
+      "Keep workflow files in `.github/workflows/`, name jobs and steps clearly, and verify a committed change from the Actions run page rather than assuming a saved YAML file executed.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-014-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "workflow-fragment",
+    "references": [
+      {
+        "title": "Workflow syntax for GitHub Actions",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "workflow files",
+          "jobs",
+          "steps",
+          "permissions",
+          "defaults",
+          "concurrency",
+          "matrix",
+          "environments"
+        ]
+      },
+      {
+        "title": "Events that trigger workflows",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "push",
+          "pull_request",
+          "workflow_dispatch",
+          "schedule",
+          "workflow_run",
+          "workflow_call",
+          "repository_dispatch"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Workflow syntax for GitHub Actions",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "workflow files",
+        "jobs",
+        "steps",
+        "permissions",
+        "defaults",
+        "concurrency",
+        "matrix",
+        "environments"
+      ]
+    },
+    {
+      "title": "Events that trigger workflows",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "push",
+        "pull_request",
+        "workflow_dispatch",
+        "schedule",
+        "workflow_run",
+        "workflow_call",
+        "repository_dispatch"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "14",
+    "module_title": "Environment Setup and Your First Workflow",
+    "subtopics": [
+      "Updating workflow definitions",
+      "Reviewing workflow changes in pull requests",
+      "Checking YAML indentation",
+      "Naming workflows and jobs clearly",
+      "Validating configuration before merging"
+    ]
+  }
+}

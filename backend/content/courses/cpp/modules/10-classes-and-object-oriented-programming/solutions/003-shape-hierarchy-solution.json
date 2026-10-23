@@ -1,0 +1,18 @@
+{
+  "id": "cpp-exercise-solution-027",
+  "exercise_id": "cpp-exercise-027",
+  "title": "Shape hierarchy reference solution notes",
+  "language": "cpp",
+  "answer": "#include <iostream>\n#include <memory>\n#include <vector>\nstruct Shape { virtual ~Shape() = default; virtual int area() const = 0; };\nstruct Rectangle final : Shape { int width, height; Rectangle(int w, int h) : width(w), height(h) {} int area() const override { return width * height; } };\nstruct Square final : Shape { int side; explicit Square(int s) : side(s) {} int area() const override { return side * side; } };\nint main() {\n    std::vector<std::unique_ptr<Shape>> shapes;\n    shapes.push_back(std::make_unique<Rectangle>(4, 5));\n    shapes.push_back(std::make_unique<Square>(3));\n    for (const auto& shape : shapes) std::cout << shape->area() << ' ';\n    std::cout << '\\n';\n}\n",
+  "explanation": "The virtual interface supports runtime substitution and has a virtual destructor so derived objects are destroyed correctly through base pointers. Constructors keep the shape dimensions explicit.",
+  "manual_validation_checklist": [
+    "Compile locally with C++20 and -Wall -Wextra -Wpedantic (add the external library named in the solution when applicable).",
+    "Test normal inputs and at least one boundary/failure case named in the exercise prompt.",
+    "Check integer range, object lifetime, resource cleanup and error handling where relevant.",
+    "Use Rectangle(4,5) and Square(3) to check that polymorphic dispatch reports areas 20 and 9.",
+    "Keep this solution in repository-only protected content; do not include it in learner API responses."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only reference notes; replace with a reviewed implementation and test suite before publishing the exercise."
+}

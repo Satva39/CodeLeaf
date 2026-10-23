@@ -1,0 +1,153 @@
+{
+  "id": "sass-project-07",
+  "slug": "sass-module-refactoring",
+  "title": "Sass Module Refactoring",
+  "sequence": 7,
+  "tier": "advanced",
+  "objective": "Transform a large, disorganized stylesheet into modular SCSS files.",
+  "prerequisite_lesson_ids": [
+    "sass-lesson-092",
+    "sass-lesson-094",
+    "sass-lesson-096",
+    "sass-lesson-097",
+    "sass-lesson-100"
+  ],
+  "recommended_lesson_range": [
+    92,
+    162
+  ],
+  "recommended_lesson_numbers": [
+    92,
+    94,
+    96,
+    97,
+    100,
+    103,
+    140,
+    147,
+    157,
+    162
+  ],
+  "skills": [
+    "Separate settings, tools, base, and component modules",
+    "Replace legacy imports with @use and @forward",
+    "Create a public entrypoint",
+    "Remove redundant variables and mixins",
+    "Compare compiled output before and after refactoring"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Separate settings, tools, base, and component modules",
+      "acceptance_criteria": [
+        "Demonstrate separate settings, tools, base, and component modules in a focused example.",
+        "Compile with Dart Sass and document expected output or behavior.",
+        "Record one relevant limitation or check."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Replace legacy imports with @use and @forward",
+      "acceptance_criteria": [
+        "Demonstrate replace legacy imports with @use and @forward in a focused example.",
+        "Compile with Dart Sass and document expected output or behavior.",
+        "Record one relevant limitation or check."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Create a public entrypoint",
+      "acceptance_criteria": [
+        "Demonstrate create a public entrypoint in a focused example.",
+        "Compile with Dart Sass and document expected output or behavior.",
+        "Record one relevant limitation or check."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Remove redundant variables and mixins",
+      "acceptance_criteria": [
+        "Demonstrate remove redundant variables and mixins in a focused example.",
+        "Compile with Dart Sass and document expected output or behavior.",
+        "Record one relevant limitation or check."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "contents": "# Sass Module Refactoring\n\nTransform a large, disorganized stylesheet into modular SCSS files.\n\n## Required behavior\n- [ ] Separate settings, tools, base, and component modules\n- [ ] Replace legacy imports with @use and @forward\n- [ ] Create a public entrypoint\n- [ ] Remove redundant variables and mixins\n- [ ] Compare compiled output before and after refactoring\n\nCompile Sass to CSS with the project-local Dart Sass CLI. Keep SCSS source, generated CSS, and notes separate. Do not claim production readiness without a browser, accessibility, and CSS-output review.\n"
+    },
+    {
+      "path": "src/scss/main.scss",
+      "language": "scss",
+      "contents": "$brand: #3157d5;\n$space: 1rem;\n\n.card {\n  color: #172033;\n  padding: $space;\n  border-radius: 0.75rem;\n}\n\n.button:focus-visible {\n  outline: 3px solid currentColor;\n  outline-offset: 3px;\n}\n"
+    }
+  ],
+  "required_features": [
+    "Separate settings, tools, base, and component modules",
+    "Replace legacy imports with @use and @forward",
+    "Create a public entrypoint",
+    "Remove redundant variables and mixins",
+    "Compare compiled output before and after refactoring"
+  ],
+  "stretch_features": [
+    "Add a repeatable compilation and output-check script.",
+    "Test keyboard focus and narrow/wide viewports in an actual browser.",
+    "Document supported Sass versions, public APIs, and migration notes."
+  ],
+  "tests": [
+    {
+      "name": "Compilation and output",
+      "mode": "human_review",
+      "criteria": [
+        "Every required entrypoint compiles with the documented Dart Sass version.",
+        "The generated CSS contains the expected selectors, declarations, and at-rules."
+      ]
+    },
+    {
+      "name": "Responsive behavior and accessibility",
+      "mode": "human_review",
+      "criteria": [
+        "Rendered UI is checked at representative viewport widths.",
+        "Keyboard focus is visible and theme/state information is not communicated by color alone."
+      ]
+    },
+    {
+      "name": "Maintainability and documentation",
+      "mode": "human_review",
+      "criteria": [
+        "Source modules and public members are clearly named.",
+        "Build steps, assumptions, output-size changes, and limitations are documented."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correctness and required features",
+      "points": 30
+    },
+    {
+      "criterion": "Maintainable Sass architecture and reuse",
+      "points": 25
+    },
+    {
+      "criterion": "Responsive and accessible rendered behavior",
+      "points": 20
+    },
+    {
+      "criterion": "Build validation, CSS output review, and tests",
+      "points": 15
+    },
+    {
+      "criterion": "Documentation and trade-off explanation",
+      "points": 10
+    }
+  ],
+  "rubric_total": 100,
+  "review_method": "human_review",
+  "reference_solution_file": "projects/solutions/007-sass-module-refactoring-reference.json",
+  "status": "draft",
+  "status_note": "Project brief is based on Section D of the supplied Sass.pdf; starter scaffolding and assessment rubric are original CodeLeaf authoring. Human review is required."
+}

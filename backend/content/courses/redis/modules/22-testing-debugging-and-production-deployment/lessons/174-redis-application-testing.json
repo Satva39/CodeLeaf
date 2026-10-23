@@ -1,0 +1,152 @@
+{
+  "id": "redis-lesson-174",
+  "slug": "redis-application-testing",
+  "title": "Redis Application Testing",
+  "sequence": 174,
+  "module_id": "redis-module-22",
+  "module_slug": "testing-debugging-and-production-deployment",
+  "level": "advanced to professional",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-173"
+  ],
+  "previous_lesson_id": "redis-lesson-173",
+  "next_lesson_id": "redis-lesson-175",
+  "keywords": [
+    "redis-application-testing",
+    "unit-tests-for-redis-backed-logic",
+    "integration-tests",
+    "test-data-setup-and-cleanup",
+    "isolated-test-instances",
+    "testing-expiration-behavior",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 174,
+  "subtopics": [
+    "Unit tests for Redis-backed logic",
+    "Integration tests",
+    "Test data setup and cleanup",
+    "Isolated test instances",
+    "Testing expiration behavior"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Redis Application Testing and distinguish it from a related Redis concept.",
+    "Apply or trace Redis Application Testing in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Redis Application Testing and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Redis Application Testing in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Redis Application Testing helps implement verify application behavior under normal, degraded, and recovery conditions. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Redis Application Testing",
+        "asset_path": "diagrams/lesson-174-redis-application-testing.svg",
+        "alt_text": "Concept diagram for Redis Application Testing, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Redis Application Testing; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Redis Application Testing helps implement verify application behavior under normal, degraded, and recovery conditions. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Redis Application Testing, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Unit tests for Redis-backed logic",
+            "text": "Connect Unit tests for Redis-backed logic to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Integration tests",
+            "text": "Connect Integration tests to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Test data setup and cleanup",
+            "text": "Connect Test data setup and cleanup to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Isolated test instances",
+            "text": "Connect Isolated test instances to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Testing expiration behavior",
+            "text": "Connect Testing expiration behavior to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Redis Application Testing",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "TYPE demo:key\nTTL demo:key\nSCAN 0 MATCH demo:* COUNT 20",
+        "expected_output": "Returns a type, remaining TTL (or -1/-2 where applicable), and a cursor/key page.",
+        "run_instructions": "SCAN COUNT is a hint; continue while the cursor is non-zero and do not assume one page is complete.",
+        "reset_steps": "Read-only inspection; no key is created.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Redis Application Testing. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Redis Application Testing in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Redis Application Testing.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "Returns a type, remaining TTL (or -1/-2 where applicable), and a cursor/key page.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-174-questions.json",
+    "recap": [
+      "Redis Application Testing is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Install Redis Open Source",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "install and development environment choices"
+      ]
+    },
+    {
+      "title": "Redis security",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/management/security/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "network exposure, ACLs, TLS and secure deployment"
+      ]
+    },
+    {
+      "title": "Redis persistence",
+      "url": "https://redis.io/docs/latest/management/persistence/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "RDB, AOF, combined persistence, backup and trade-offs"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

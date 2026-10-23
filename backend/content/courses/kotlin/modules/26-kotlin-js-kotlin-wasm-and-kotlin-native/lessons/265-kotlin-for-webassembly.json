@@ -1,0 +1,153 @@
+{
+  "id": "kotlin-lesson-265",
+  "slug": "kotlin-for-webassembly",
+  "title": "Kotlin for WebAssembly",
+  "sequence": 265,
+  "module_id": "kotlin-module-26",
+  "module_slug": "kotlin-js-kotlin-wasm-and-kotlin-native",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "specialization-web-native",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "kotlin-lesson-264"
+  ],
+  "previous_lesson_id": "kotlin-lesson-264",
+  "next_lesson_id": "kotlin-lesson-266",
+  "keywords": [
+    "kotlin-for-webassembly",
+    "webassembly-and-kotlin-wasm-co",
+    "target-specific-project-setup",
+    "browser-integration-and-compat"
+  ],
+  "source_syllabus_number": 265,
+  "subtopics": [
+    "WebAssembly and Kotlin/Wasm Concepts",
+    "Target-Specific Project Setup",
+    "Browser Integration and Compatibility"
+  ],
+  "learning_outcomes": [
+    "Explain the central rule or purpose of kotlin for webassembly using at least one correct term from the lesson.",
+    "Interpret or adapt a small Kotlin example that demonstrates kotlin for webassembly.",
+    "Identify one relevant edge case, debugging step, or version/platform constraint."
+  ],
+  "content": {
+    "intro": "In this lesson, you will learn **Kotlin for WebAssembly** as part of **Kotlin/JS, Kotlin/Wasm, and Kotlin/Native**. Apply kotlin for webassembly by identifying the required behavior, the relevant Kotlin type/API, and the conditions under which the expected result can fail. Use the subtopics—WebAssembly and Kotlin/Wasm Concepts, Target-Specific Project Setup, Browser Integration and Compatibility—as a checklist: predict what the example will do, then verify it in a project configured for the target platform.",
+    "why_it_matters": "Cross-platform targets differ in runtime APIs, toolchains, and support maturity. Check the current compatibility matrix before committing to a production target.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Concept visual",
+        "asset_path": "diagrams/lesson-265-kotlin-for-webassembly.svg",
+        "alt_text": "Concept diagram for lesson 265, Kotlin for WebAssembly: connects WebAssembly and Kotlin/Wasm Concepts with Target-Specific Project Setup and a practice/check step.",
+        "caption": "Lesson 265: Kotlin for WebAssembly. Use this concept map to connect the syllabus subtopics to the small example and test task."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Apply kotlin for webassembly by identifying the required behavior, the relevant Kotlin type/API, and the conditions under which the expected result can fail."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with webassembly and kotlin/wasm concepts. Then compare it with target-specific project setup. Identify the input, state, dependency, or branch that determines the result. The snippet is a static reference for CodeLeaf and is not executed in the lesson page."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the syllabus",
+        "items": [
+          {
+            "title": "WebAssembly and Kotlin/Wasm Concepts",
+            "text": "WebAssembly and Kotlin/Wasm Concepts is one part of kotlin for webassembly. Connect its definition to the example, identify the input/state it changes, and verify the expected behavior with a small test case."
+          },
+          {
+            "title": "Target-Specific Project Setup",
+            "text": "Target-Specific Project Setup is best learned by tracing a small collection before and after the operation. Check ordering, duplicate handling, empty inputs, and whether the API returns a new value or mutates a mutable receiver."
+          },
+          {
+            "title": "Browser Integration and Compatibility",
+            "text": "Browser Integration and Compatibility means checking the boundary between the language feature and its compiler, runtime, plugin, library, or target version. Pin the versions used by the project and verify documented support before depending on the behavior."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "kotlin-multiplatform",
+        "execution_mode": "static-validation",
+        "code": "data class Greeting(val text: String)\n\nfun greetingFor(name: String): Greeting = Greeting(\"Hello, $name\")\n\nfun main() = println(greetingFor(\"Kotlin\").text)",
+        "expected_output": "Hello, Kotlin",
+        "run_instructions": "Run inside a Kotlin/JS, Kotlin/Wasm, or Kotlin/Native project configured for the selected target. Verify platform support and maturity before production use.",
+        "reset_steps": "Restore the documented starting values, rerun the smallest test, and compare the result with the expected output. If behavior differs, check the compiler/plugin/runtime versions and the active target before changing more than one thing."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake to avoid",
+        "text": "Kotlin for WebAssembly removes the need to test boundary conditions or verify the chosen runtime/library version."
+      },
+      {
+        "type": "paragraph",
+        "title": "Troubleshooting and reset",
+        "text": "If the example fails, first confirm which runtime/project type the snippet requires. Read the first useful compiler or runtime message, check imports and declared dependencies, reduce the example to a minimal case, and rerun. For target-specific code, use the target toolchain rather than assuming a console or browser runner can execute it."
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          {
+            "title": "Explain",
+            "text": "Describe the main rule of kotlin for webassembly in your own words."
+          },
+          {
+            "title": "Apply",
+            "text": "Change one input or condition and predict the result before running it."
+          },
+          {
+            "title": "Verify",
+            "text": "Check one edge case and the official reference for the selected Kotlin/runtime version."
+          }
+        ]
+      }
+    ],
+    "task": "Try it yourself: create a small variation that demonstrates kotlin for webassembly. Write down your predicted result first, run it in the correct local project, then explain one boundary case involving webassembly and kotlin/wasm concepts.",
+    "task_acceptance_criteria": [
+      "Explain kotlin for webassembly without copying the lesson wording.",
+      "Demonstrate the concept with a small code/configuration change and state the expected result.",
+      "Test one boundary case or explain a relevant platform/version limitation."
+    ],
+    "hints": [
+      "Begin with the first syllabus subtopic: WebAssembly and Kotlin/Wasm Concepts. What input or state does it act on?",
+      "Change only one value, branch, declaration, or dependency at a time. Predict what should happen before running the code.",
+      "Compare your observed result with the expected output and the official reference; verify that you are using the required project type and dependency set."
+    ],
+    "expected_output": "Hello, Kotlin",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-265-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Kotlin Documentation",
+      "url": "https://kotlinlang.org/docs/home.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Kotlin for WebAssembly",
+        "WebAssembly and Kotlin/Wasm Concepts",
+        "Target-Specific Project Setup"
+      ]
+    },
+    {
+      "title": "Kotlin Language Features and Proposals",
+      "url": "https://kotlinlang.org/docs/kotlin-language-features-and-proposals.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "language feature stability",
+        "compiler version compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson derived from the numbered syllabus entry 265 in Kotlin.pdf. Review example compatibility and question alignment before publishing."
+}

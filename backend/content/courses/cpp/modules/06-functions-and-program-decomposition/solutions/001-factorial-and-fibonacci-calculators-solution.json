@@ -1,0 +1,18 @@
+{
+  "id": "cpp-exercise-solution-014",
+  "exercise_id": "cpp-exercise-014",
+  "title": "Factorial and Fibonacci calculators reference solution notes",
+  "language": "cpp",
+  "answer": "#include <iostream>\n#include <optional>\nstd::optional<unsigned long long> factorial(unsigned n) {\n    unsigned long long result = 1;\n    for (unsigned i = 2; i <= n; ++i) {\n        if (result > ~0ULL / i) return std::nullopt;\n        result *= i;\n    }\n    return result;\n}\nunsigned long long fibonacci(unsigned n) {\n    unsigned long long a = 0, b = 1;\n    for (unsigned i = 0; i < n; ++i) { const auto next = a + b; a = b; b = next; }\n    return a;\n}\nint main() { std::cout << *factorial(5) << ' ' << fibonacci(7) << '\\n'; }\n",
+  "explanation": "120 13",
+  "manual_validation_checklist": [
+    "Compile locally with C++20 and -Wall -Wextra -Wpedantic (add the external library named in the solution when applicable).",
+    "Test normal inputs and at least one boundary/failure case named in the exercise prompt.",
+    "Check integer range, object lifetime, resource cleanup and error handling where relevant.",
+    "Factorial checks multiplication overflow; Fibonacci must likewise define a supported input range to avoid overflow.",
+    "Keep this solution in repository-only protected content; do not include it in learner API responses."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only reference notes; replace with a reviewed implementation and test suite before publishing the exercise."
+}

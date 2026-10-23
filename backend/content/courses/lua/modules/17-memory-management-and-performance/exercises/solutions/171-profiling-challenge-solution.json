@@ -1,0 +1,9 @@
+{
+  "id": "lua-exercise-solution-171",
+  "exercise_id": "lua-exercise-171",
+  "visibility": "protected_content_repository_only",
+  "answer": "local function sum_loop(n)\n    local total = 0\n    for i = 1, n do total = total + i end\n    return total\nend\nlocal function sum_formula(n) return n * (n + 1) / 2 end\nlocal function measure(fn, n, repeats)\n    local start = os.clock(); local result\n    for _ = 1, repeats do result = fn(n) end\n    return result, os.clock() - start\nend\nlocal a, ta = measure(sum_loop, 10000, 100)\nlocal b, tb = measure(sum_formula, 10000, 100)\nassert(a == b)\nprint(a, ta >= 0, tb >= 0)",
+  "explanation": "Reference implementation for Profiling Challenge. Review it against the prompt, run under the supported runtime, and test normal plus boundary/error cases. This answer is repository-only and must never be returned by a public course API.",
+  "status": "draft",
+  "solution_code": "local function sum_loop(n)\n    local total = 0\n    for i = 1, n do total = total + i end\n    return total\nend\nlocal function sum_formula(n) return n * (n + 1) / 2 end\nlocal function measure(fn, n, repeats)\n    local start = os.clock(); local result\n    for _ = 1, repeats do result = fn(n) end\n    return result, os.clock() - start\nend\nlocal a, ta = measure(sum_loop, 10000, 100)\nlocal b, tb = measure(sum_formula, 10000, 100)\nassert(a == b)\nprint(a, ta >= 0, tb >= 0)"
+}

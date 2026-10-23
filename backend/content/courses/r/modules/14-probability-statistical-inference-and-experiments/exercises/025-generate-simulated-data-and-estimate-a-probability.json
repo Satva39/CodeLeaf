@@ -1,0 +1,56 @@
+{
+  "id": "r-exercise-025",
+  "slug": "generate-simulated-data-and-estimate-a-probability",
+  "title": "Generate simulated data and estimate a probability",
+  "type": "short_answer",
+  "lesson_id": "r-lesson-142",
+  "module_id": "r-module-14",
+  "sequence": 25,
+  "difficulty": "intermediate",
+  "prompt": "Set a random seed, simulate a binary experiment and estimate the proportion of successes; compare it with the specified probability.",
+  "objective": "Practice random sampling, simulation, random seeds with explicit acceptance criteria and a reproducible result.",
+  "target_skills": [
+    "Random sampling",
+    "simulation",
+    "random seeds"
+  ],
+  "starter": {
+    "language": "r",
+    "source_code": "set.seed(2026)\nsample <- rbinom(1000, size = 1, prob = 0.3)\nmean(sample)",
+    "mode": "static-validation"
+  },
+  "expected_output": "State the assumed probability and sample size; expect simulation variability around the theoretical value.",
+  "public_tests": [
+    {
+      "name": "Includes core concept",
+      "description": "The submission demonstrates set.seed."
+    },
+    {
+      "name": "Includes validation or outcome",
+      "description": "The submission also demonstrates rbinom."
+    }
+  ],
+  "acceptance_criteria": [
+    "The submission addresses the task and all required core concepts.",
+    "Expected behavior and an edge case are described and checked.",
+    "Input assumptions, missing-value handling and output shape are documented where relevant.",
+    "Code is readable, uses appropriate R constructs and avoids destructive/external side effects.",
+    "Any result derived from statistics includes assumptions and relevant limitations."
+  ],
+  "hints": [
+    "Identify the input, output and key R concept: Random sampling, simulation, random seeds.",
+    "State the assumed probability and sample size; expect simulation variability around the theoretical value.",
+    "Test a normal case, a boundary/failure case, and verify the output independently."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "set.seed",
+      "rbinom"
+    ]
+  },
+  "grading_method": "Draft/static token check only. The current platform grader can check whether the submitted text contains these strings, but it cannot execute R or prove program correctness. Keep unpublished and use human review or a separately isolated R runner before enabling XP-bearing completion.",
+  "retry_policy": "Allow learner retries in a reviewed course policy; this content file does not override platform retry or XP policy.",
+  "solution_file": "../solutions/025-generate-simulated-data-and-estimate-a-probability-solution.json",
+  "status": "draft"
+}

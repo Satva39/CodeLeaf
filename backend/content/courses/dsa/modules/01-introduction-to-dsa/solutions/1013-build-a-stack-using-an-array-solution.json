@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-13",
+  "exercise_id": "dsa-exercise-pdf-13",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\nclass ArrayStack:\n    def __init__(self): self._items = []\n    def push(self, item): self._items.append(item)\n    def pop(self):\n        if not self._items: raise IndexError(\"pop from empty stack\")\n        return self._items.pop()\n    def peek(self):\n        if not self._items: raise IndexError(\"peek at empty stack\")\n        return self._items[-1]\n    def __len__(self): return len(self._items)\n\nstack = ArrayStack(); stack.push(\"A\"); stack.push(\"B\")\nassert stack.pop() == \"B\" and stack.peek() == \"A\"\n```",
+  "explanation": "A list-backed stack offers amortized O(1) push/pop at the end. Empty pop/peek operations fail explicitly.",
+  "tested_reference_code": "class ArrayStack:\n    def __init__(self): self._items = []\n    def push(self, item): self._items.append(item)\n    def pop(self):\n        if not self._items: raise IndexError(\"pop from empty stack\")\n        return self._items.pop()\n    def peek(self):\n        if not self._items: raise IndexError(\"peek at empty stack\")\n        return self._items[-1]\n    def __len__(self): return len(self._items)\n\nstack = ArrayStack(); stack.push(\"A\"); stack.push(\"B\")\nassert stack.pop() == \"B\" and stack.peek() == \"A\"",
+  "language": "python"
+}

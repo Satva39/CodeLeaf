@@ -1,0 +1,215 @@
+{
+  "id": "mongodb-lesson-174",
+  "slug": "search-security-and-performance",
+  "title": "Search Security and Performance",
+  "sequence": 174,
+  "module_id": "mongodb-module-16",
+  "module_slug": "mongodb-search-and-vector-search-specialized",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "optional-specialist",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "mongodb-lesson-173"
+  ],
+  "previous_lesson_id": "mongodb-lesson-173",
+  "next_lesson_id": "mongodb-lesson-175",
+  "keywords": [
+    "search",
+    "security",
+    "and",
+    "performance",
+    "mongodb",
+    "database"
+  ],
+  "source_syllabus_number": 174,
+  "source_module_number": 16,
+  "subtopics": [
+    "Data-access restrictions",
+    "Search-index management",
+    "Query latency",
+    "Indexing costs",
+    "Monitoring search workloads"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and main trade-off of search security and performance.",
+    "Apply search security and performance to a small MongoDB data or operational scenario.",
+    "Verify the expected result, one edge case, and the relevant version/deployment assumption."
+  ],
+  "content": {
+    "intro": "Learn search security and performance as part of MongoDB Search and Vector Search — Specialized. The lesson preserves the PDF subtopics, connects them to a practical MongoDB pattern, and ends with a verification task.",
+    "why_it_matters": "Search Security and Performance is a performance decision, not a rule to apply blindly. Start from a representative query and data distribution, inspect explain() evidence, and compare read improvements with write, memory and storage overhead.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Search Security and Performance",
+        "asset_path": "diagrams/lesson-174-search-security-and-performance.svg",
+        "alt_text": "Four-step learning diagram for Search Security and Performance: Prepare corpus; Define search index; Run retrieval query; Measure relevance.",
+        "caption": "Visual guide to Search Security and Performance: follow the concept, action, verification and application steps."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Search Security and Performance is a performance decision, not a rule to apply blindly. Start from a representative query and data distribution, inspect explain() evidence, and compare read improvements with write, memory and storage overhead."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics to master",
+        "items": [
+          {
+            "title": "1. Data-access restrictions",
+            "text": "Be able to explain or demonstrate data-access restrictions in the context of search security and performance, and document the relevant design or version assumption."
+          },
+          {
+            "title": "2. Search-index management",
+            "text": "Be able to explain or demonstrate search-index management in the context of search security and performance, and document the relevant design or version assumption."
+          },
+          {
+            "title": "3. Query latency",
+            "text": "Be able to explain or demonstrate query latency in the context of search security and performance, and document the relevant design or version assumption."
+          },
+          {
+            "title": "4. Indexing costs",
+            "text": "Be able to explain or demonstrate indexing costs in the context of search security and performance, and document the relevant design or version assumption."
+          },
+          {
+            "title": "5. Monitoring search workloads",
+            "text": "Be able to explain or demonstrate monitoring search workloads in the context of search security and performance, and document the relevant design or version assumption."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the behavior you want, identify the collection/document shape and access pattern involved, then select the smallest MongoDB operation that expresses the requirement. Check the chosen deployment docs and test representative queries or interrupted consumption before promising behavior."
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "execution_mode": "static-validation",
+        "code": "db.articles.aggregate([{ $search: { index: \"default\", text: { query: \"durable data\", path: [\"title\", \"body\"] } } }, { $limit: 5 }]);",
+        "expected_output": "In a supported Atlas Search deployment with a matching index, the pipeline returns up to five matching articles by search relevance.",
+        "run_instructions": "CodeLeaf displays this example as a reference and does not execute a MongoDB server or arbitrary driver code in the page. Run shell examples with mongosh, or driver examples in a separately configured Node.js/Python lab, against a disposable database. Verify installed server/driver versions and deployment feature availability first. Never place credentials in source files.",
+        "reset_steps": "Use a dedicated training database and synthetic fixtures. Remove only objects created by this lesson or recreate the disposable database after confirming the target; do not run destructive/reset commands against production."
+      },
+      {
+        "type": "callout",
+        "title": "Environment and safety note",
+        "text": "All examples are teaching references, not production-ready configuration. MongoDB Atlas-specific Search, Vector Search, monitoring, backup and automation features are marked as deployment-dependent. Server, driver, shell and managed-service capabilities differ; check the official documentation that matches your target."
+      }
+    ],
+    "task": "Try it yourself: Create a tiny labeled retrieval dataset, define the required search/vector index, run representative queries, and evaluate relevance and metadata filters in the actual supported deployment. Submit your choice plus the expected result/evidence and one edge case.",
+    "task_acceptance_criteria": [
+      "Demonstrate the key idea in Search Security and Performance.",
+      "Predict the result and state how you would verify it.",
+      "Name one boundary, risk or version/deployment assumption."
+    ],
+    "hints": [
+      "First, explain what “Search Security and Performance” needs to accomplish in this scenario.",
+      "Write down the data shape, filter, expected output or operational evidence before running the example.",
+      "Test one normal case and one meaningful boundary/failure case; consult the matching official reference."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming specialist search/event features work everywhere",
+        "why": "Index types, resume behavior and service availability depend on the deployment and version.",
+        "fix": "Check the chosen deployment docs and test representative queries or interrupted consumption before promising behavior."
+      },
+      {
+        "problem": "Assuming a static reference result proves the environment will behave identically.",
+        "why": "MongoDB server, shell, driver, managed service and permissions can affect the available behavior.",
+        "fix": "Record the target versions and privileges, run the smallest safe test, and keep expected and actual results side by side."
+      }
+    ],
+    "summary": [
+      "Search Security and Performance is a performance decision, not a rule to apply blindly. Start from a representative query and data distribution, inspect explain() evidence, and compare read improvements with write, memory and storage overhead.",
+      "The supplied roadmap identifies these subtopics: Data-access restrictions; Search-index management; Query latency; Indexing costs; Monitoring search workloads.",
+      "Use a disposable practice environment, verify the result and keep operational assumptions explicit."
+    ],
+    "references": [
+      {
+        "title": "MongoDB Manual — Complete Documentation Index",
+        "url": "https://www.mongodb.com/docs/manual/contents/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "course-wide concepts",
+          "deployment and version navigation",
+          "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+        ]
+      },
+      {
+        "title": "Atlas Search",
+        "url": "https://www.mongodb.com/docs/atlas/atlas-search/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "full-text search",
+          "search indexes",
+          "relevance and filtering; Atlas feature scope"
+        ]
+      },
+      {
+        "title": "MongoDB Vector Search",
+        "url": "https://www.mongodb.com/docs/atlas/atlas-vector-search/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "vector indexes",
+          "semantic retrieval",
+          "query filtering and relevance; version and deployment constraints"
+        ]
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-174-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "MongoDB-specific examples are reference content. A separate isolated MongoDB server/driver runtime is required for execution; questions and solutions remain protected."
+  },
+  "exercise_files": [
+    "../exercises/174-search-security-and-performance-practice.json"
+  ],
+  "sources": [
+    {
+      "title": "MongoDB Manual — Complete Documentation Index",
+      "url": "https://www.mongodb.com/docs/manual/contents/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "course-wide concepts",
+        "deployment and version navigation",
+        "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+      ]
+    },
+    {
+      "title": "Atlas Search",
+      "url": "https://www.mongodb.com/docs/atlas/atlas-search/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "full-text search",
+        "search indexes",
+        "relevance and filtering; Atlas feature scope"
+      ]
+    },
+    {
+      "title": "MongoDB Vector Search",
+      "url": "https://www.mongodb.com/docs/atlas/atlas-vector-search/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "vector indexes",
+        "semantic retrieval",
+        "query filtering and relevance; version and deployment constraints"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson authored from the supplied MongoDB syllabus and original instructional material. Review examples against the target MongoDB release/deployment before publication."
+}

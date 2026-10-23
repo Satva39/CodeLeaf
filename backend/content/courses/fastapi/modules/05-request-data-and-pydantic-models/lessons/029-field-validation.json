@@ -1,0 +1,214 @@
+{
+  "id": "fastapi-lesson-029",
+  "slug": "field-validation",
+  "title": "Field Validation",
+  "sequence": 29,
+  "module_id": "fastapi-module-05",
+  "module_slug": "request-data-and-pydantic-models",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "fastapi-lesson-028"
+  ],
+  "previous_lesson_id": "fastapi-lesson-028",
+  "next_lesson_id": "fastapi-lesson-030",
+  "keywords": [
+    "field-validation",
+    "request-data-and-pydantic-models",
+    "fastapi",
+    "python",
+    "api",
+    "minimum-and-maximum-values",
+    "string-length-constraints",
+    "numeric-constraints"
+  ],
+  "source_syllabus_number": 29,
+  "subtopics": [
+    "Minimum and maximum values",
+    "String length constraints",
+    "Numeric constraints",
+    "Pattern and format validation",
+    "Required fields and defaults",
+    "Custom field validators"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of field validation in a FastAPI application.",
+    "Apply or interpret one example related to minimum and maximum values.",
+    "Identify one limitation or failure case and describe how to verify it."
+  ],
+  "content": {
+    "intro": "This lesson covers field validation within request data and pydantic models. Use the supplied syllabus topics as the coverage checklist, then connect them to the worked example and the verification task.",
+    "why_it_matters": "You will use field validation to build APIs whose contracts and behavior are understandable to both clients and maintainers. The practical aim is repeatable checks, explicit expected outcomes, negative cases and actionable diagnostics.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Field Validation: concept map",
+        "asset_path": "diagrams/lesson-029-concept.svg",
+        "alt_text": "Four-step flow for Field Validation: Minimum and maximum values, String length constraints, Numeric constraints, Pattern and format validation",
+        "caption": "Visual-first overview before the worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Field Validation matters because it is part of request data and pydantic models. In practice, focus on repeatable checks, explicit expected outcomes, negative cases and actionable diagnostics. A framework feature only helps when its assumptions match the application; keep input validation, business policy and side effects distinguishable."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus coverage",
+        "items": [
+          {
+            "title": "Minimum and maximum values",
+            "text": "Use minimum and maximum values as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "String length constraints",
+            "text": "Use string length constraints as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Numeric constraints",
+            "text": "Use numeric constraints as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Pattern and format validation",
+            "text": "For pattern and format validation, define the accepted shape and constraints explicitly. Validate untrusted input at the boundary, distinguish omitted values from explicit nulls, and return only fields the caller is allowed to see."
+          },
+          {
+            "title": "Required fields and defaults",
+            "text": "For required fields and defaults, define the accepted shape and constraints explicitly. Validate untrusted input at the boundary, distinguish omitted values from explicit nulls, and return only fields the caller is allowed to see."
+          },
+          {
+            "title": "Custom field validators",
+            "text": "For custom field validators, define the accepted shape and constraints explicitly. Validate untrusted input at the boundary, distinguish omitted values from explicit nulls, and return only fields the caller is allowed to see."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Field Validation",
+        "language": "python",
+        "code": "from pydantic import BaseModel, Field\nfrom fastapi import FastAPI\n\napp = FastAPI()\n\nclass ProductIn(BaseModel):\n    name: str = Field(min_length=1, max_length=80)\n    price: float = Field(gt=0)\n\n@app.post(\"/products\")\ndef create_product(product: ProductIn):\n    return product",
+        "expected_output": "POST /products with {\"name\":\"Notebook\",\"price\":2.5} returns validated JSON; price <= 0 is rejected.",
+        "run_instructions": "Run with fastapi dev main.py; use /docs to submit a valid and an invalid body.",
+        "reset_steps": "For read-only examples, no reset is needed. For any example that writes state, use a disposable local database/test fixture; record the starting state and clean up only lab data. Never use production credentials or real personal data.",
+        "execution_mode": "human-review",
+        "limitations": "This code is inspectable lesson material, not executed by CodeLeaf. Run it only in a local virtual environment or a separately isolated runner with resource/time/network limits. Security examples are sketches, not complete production authentication or authorization systems."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to cover “Minimum and maximum values”. Write down the expected success result and one invalid, missing, duplicate, timeout or permission-boundary case that matters for this topic."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-029-questions.json"
+  },
+  "task": "Create a small reviewable artifact for “Field Validation”: explain its goal, cover the listed subtopics, show an example with expected result, then include one edge case and how you would verify it.",
+  "hints": [
+    "Start with “Minimum and maximum values” and state the required inputs, output and assumptions.",
+    "Change one thing at a time; check the official reference and capture the actual response/error instead of guessing.",
+    "Include a negative/edge-case check and document which behavior remains untested."
+  ],
+  "expected_output": "A reviewable example or design note for Field Validation, covering the PDF subtopics, expected behavior and at least one verification check.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Copying a code fragment without checking its assumptions.",
+      "why": "Installed versions, imported types, application structure and external services affect behavior.",
+      "fix": "State assumptions; check the versioned official docs; run a minimal local test and add one failure case."
+    },
+    {
+      "problem": "Treating one happy-path response as proof of correctness.",
+      "why": "Invalid input, permissions, concurrency, timeouts and cleanup are not exercised by a single request.",
+      "fix": "Add focused normal and negative tests and record exact expected status/body."
+    },
+    {
+      "problem": "Running examples against production resources.",
+      "why": "Even short examples may mutate records, reveal data or affect availability.",
+      "fix": "Use synthetic inputs and a disposable environment; review security, cleanup and rollback before promotion."
+    }
+  ],
+  "summary": [
+    "Field Validation belongs to the broader goal of repeatable checks, explicit expected outcomes, negative cases and actionable diagnostics.",
+    "Use the source subtopics as the completeness checklist and verify expected results rather than relying on intuition.",
+    "Examples in this course are illustrative until technically reviewed and executed on a supported local environment."
+  ],
+  "sources": [
+    {
+      "title": "FastAPI Tutorial - First Steps",
+      "url": "https://fastapi.tiangolo.com/tutorial/first-steps/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "application instance, path operations, development workflow"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Tutorial - Request Body",
+      "url": "https://fastapi.tiangolo.com/tutorial/body/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "Pydantic request models and validation"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Tutorial - Response Model",
+      "url": "https://fastapi.tiangolo.com/tutorial/response-model/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "response filtering and output contracts"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "Pydantic Models",
+      "url": "https://docs.pydantic.dev/latest/concepts/models/",
+      "publisher": "Pydantic",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "BaseModel and validation semantics"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "SQLAlchemy Unified Tutorial",
+      "url": "https://docs.sqlalchemy.org/en/20/tutorial/",
+      "publisher": "SQLAlchemy",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "SQLAlchemy engines, connections and SQL execution"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "Alembic Tutorial",
+      "url": "https://alembic.sqlalchemy.org/en/latest/tutorial.html",
+      "publisher": "Alembic",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "migration revisions and controlled schema evolution"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "HTTPX Documentation",
+      "url": "https://www.python-httpx.org/",
+      "publisher": "Encode",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "HTTP client timeout and exception behavior"
+      ],
+      "source_type": "official documentation"
+    }
+  ],
+  "exercise_files": [
+    "../exercises/004-input-validation.json"
+  ],
+  "status": "draft",
+  "status_note": "Draft expansion from the numbered topics in FastAPI.pdf. Content structure, file references and SVGs are validated locally; code snippets and integration behavior still require technical review and targeted tests before publication."
+}

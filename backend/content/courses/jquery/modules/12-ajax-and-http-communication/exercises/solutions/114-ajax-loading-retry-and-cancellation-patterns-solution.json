@@ -1,0 +1,13 @@
+{
+  "id": "jquery-exercise-solution-114",
+  "exercise_id": "jquery-exercise-114",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "let activeRequest;\nfunction loadResults(query) {\n  if (activeRequest) activeRequest.abort();\n  activeRequest = $.ajax({ url: \"/api/search\", data: { q: query }, dataType: \"json\" });\n  activeRequest.done(renderResults).fail(showRequestError);\n}",
+  "explanation": "This reference implementation demonstrates the central idea for ajax loading, retry, and cancellation patterns. In a reviewed answer, adapt selectors to real markup, handle the documented edge cases, and test the behavior in a browser. A newer search aborts the prior request. Real code should ignore abort errors and distinguish them from genuine network failures.",
+  "test_notes": [
+    "Run against the expected markup with jQuery 4.0.0 loaded.",
+    "Check the normal behavior and one edge/failure state.",
+    "Review console/network output and keyboard behavior where relevant."
+  ]
+}

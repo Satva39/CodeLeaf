@@ -1,0 +1,183 @@
+{
+  "id": "bash-lesson-027",
+  "slug": "bash-variables",
+  "title": "Bash Variables",
+  "sequence": 27,
+  "module_id": "bash-module-04",
+  "module_slug": "variables-parameters-and-expansion",
+  "level": "beginner-to-intermediate",
+  "difficulty": "beginner-to-intermediate",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "bash-lesson-026"
+  ],
+  "previous_lesson_id": "bash-lesson-026",
+  "next_lesson_id": "bash-lesson-028",
+  "keywords": [
+    "bash",
+    "variables",
+    "variable",
+    "names",
+    "and",
+    "assignments",
+    "referencing",
+    "values",
+    "with",
+    "name",
+    "why",
+    "spaces",
+    "affect",
+    "assignment",
+    "syntax"
+  ],
+  "source_syllabus_number": 27,
+  "subtopics": [
+    "Variable names and assignments",
+    "Referencing values with $name and ${name}",
+    "Why spaces affect assignment syntax",
+    "Naming conventions"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Bash Variables and identify at least two relevant syllabus points.",
+    "Apply bash variables in a small Bash example and verify the expected output or status.",
+    "Identify one edge case or failure mode and state how to test it safely."
+  ],
+  "content": {
+    "intro": "Assignments use `name=value` with no spaces around `=`; spaces would make Bash interpret the tokens as a command and arguments.",
+    "why_it_matters": "Bash Variables matters because reliable shell automation depends on making this behavior explicit, testing its boundaries, and documenting environment assumptions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 04 visual roadmap",
+        "asset_path": "diagrams/module-04-overview.svg",
+        "alt_text": "Overview roadmap for Module 4: Variables, Parameters, and Expansion, listing lessons 27 through 39 in curriculum order. Lesson focus: Bash Variables.",
+        "caption": "Module roadmap for context. For this lesson, focus on: Variable names and assignments; Referencing values with $name and ${name}; Why spaces affect assignment syntax."
+      },
+      {
+        "type": "paragraph",
+        "title": "The central idea",
+        "text": "This lesson focuses on bash variables. Connect the listed syllabus points to a minimal example, then verify normal behavior, a boundary case, and an expected failure before using the pattern in automation."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the supplied syllabus",
+        "items": [
+          {
+            "title": "Variable names and assignments",
+            "text": "Define what “Variable names and assignments” means in this lesson, show it with a minimal example, and verify the expected result plus one limitation or edge case."
+          },
+          {
+            "title": "Referencing values with $name and ${name}",
+            "text": "Define what “Referencing values with $name and ${name}” means in this lesson, show it with a minimal example, and verify the expected result plus one limitation or edge case."
+          },
+          {
+            "title": "Why spaces affect assignment syntax",
+            "text": "Define what “Why spaces affect assignment syntax” means in this lesson, show it with a minimal example, and verify the expected result plus one limitation or edge case."
+          },
+          {
+            "title": "Naming conventions",
+            "text": "Define what “Naming conventions” means in this lesson, show it with a minimal example, and verify the expected result plus one limitation or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How it fits into Bash",
+        "text": "Assignments use `name=value` with no spaces around `=`; spaces would make Bash interpret the tokens as a command and arguments. Quote expansions at use sites to preserve the value as one argument, including when it contains spaces or is empty."
+      },
+      {
+        "type": "code",
+        "language": "bash",
+        "execution_mode": "manual-terminal",
+        "code": "project='CodeLeaf'\nproject='Bash'\nprintf 'project=%s\\n' \"$project\"",
+        "expected_output": "project=Bash",
+        "run_instructions": "Save the snippet in a temporary practice file and run it with the locally installed Bash interpreter. The CodeLeaf in-page preview displays reference output only; it does not execute Bash code. Some examples require commands already installed on your machine.",
+        "reset_steps": "Discard the temporary file or reset the editor to the original snippet. The examples are designed not to modify important data."
+      },
+      {
+        "type": "callout",
+        "title": "Watch out",
+        "text": "Quote variable expansions by default and use printf to inspect results. Keep structured data in an appropriate tool rather than improvising a parser with shell strings. Do not assume the same command options or newer Bash features exist on every operating system."
+      },
+      {
+        "type": "paragraph",
+        "title": "Check your result",
+        "text": "Compare the observed output and exit status with the reference behavior. Change one input at a time, include a boundary or invalid input, and note what differs on your target Bash/utility version."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety note",
+        "text": "Use a local test directory, avoid secrets in commands/history/logs, and check the installed interpreter with `bash --version`. This course remains draft until technical examples and assessments receive subject-matter review."
+      }
+    ],
+    "task": "Build a small local example for “Bash Variables” using synthetic input or a disposable practice directory. Explain what the command should do, check its output and exit status, and test one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "Use an example aligned with the lesson and preserve arguments, paths, or streams correctly.",
+      "Record the observed output and exit status.",
+      "Test one boundary case or expected failure.",
+      "State the Bash version and any external utility dependency that matters."
+    ],
+    "hints": [
+      "Reduce the problem to one command or one small function first.",
+      "Use quoting and printf to make argument boundaries visible.",
+      "Check exit statuses as well as printed output; use syntax-only validation before testing changes."
+    ],
+    "expected_output": "A documented example for “Bash Variables” with the observed output/status, one tested boundary case, and an explicit statement of any version or utility dependency.",
+    "run_mode": "static-validation",
+    "troubleshooting": [
+      "If the snippet uses an external command, check availability with `command -v NAME` and consult that program’s local help.",
+      "If behavior differs by operating system or Bash version, record `bash --version` and check the official manual linked below.",
+      "For syntax-only validation run `bash -n script.sh`; this parses but does not execute the script."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming a successful-looking output means the command succeeded.",
+        "why": "Output and exit status are separate signals, and a later command may replace `$?`.",
+        "fix": "Capture important statuses immediately and check all relevant pipeline stages."
+      },
+      {
+        "problem": "Copying example commands straight into a production path.",
+        "why": "Real paths, permissions, input names, and external utility versions differ.",
+        "fix": "Use a disposable fixture and inspect the planned side effects first."
+      },
+      {
+        "problem": "Treating Bash-specific syntax as portable `sh` syntax.",
+        "why": "Arrays, `[[ ... ]]`, process substitution, and some parameter operators are extensions.",
+        "fix": "Name the interpreter and test the minimum supported version."
+      }
+    ],
+    "summary": [
+      "Bash Variables has specific syntax and behavior; verify it rather than relying on guesswork.",
+      "Preserve argument boundaries and keep shell commands separate from untrusted data.",
+      "Test successful, boundary, and failure cases in a safe environment."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-027-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "gnu-bash-manual-5-3",
+      "title": "GNU Bash Reference Manual, Edition 5.3",
+      "url": "https://www.gnu.org/s/bash/manual/bash.html",
+      "publisher": "GNU Project / Free Software Foundation",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "Bash syntax and parsing",
+        "quoting and expansion",
+        "variables and arrays",
+        "control flow",
+        "functions",
+        "redirection and pipelines",
+        "processes and traps",
+        "startup files and shell options",
+        "version compatibility"
+      ],
+      "source_type": "official language reference",
+      "notes": "The primary technical reference for Bash-specific behavior. Verify examples against the interpreter installed on the target system."
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft content mapped to Bash.pdf Section B lesson 27. Technical examples and grading require review before publication."
+}

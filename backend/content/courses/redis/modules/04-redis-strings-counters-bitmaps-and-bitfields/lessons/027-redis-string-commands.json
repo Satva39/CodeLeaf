@@ -1,0 +1,152 @@
+{
+  "id": "redis-lesson-027",
+  "slug": "redis-string-commands",
+  "title": "Redis String Commands",
+  "sequence": 27,
+  "module_id": "redis-module-04",
+  "module_slug": "redis-strings-counters-bitmaps-and-bitfields",
+  "level": "beginner to intermediate",
+  "difficulty": "beginner",
+  "track": "core-redis",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "redis-lesson-026"
+  ],
+  "previous_lesson_id": "redis-lesson-026",
+  "next_lesson_id": "redis-lesson-028",
+  "keywords": [
+    "redis-string-commands",
+    "set-and-get",
+    "mset-and-mget",
+    "append",
+    "strlen",
+    "getdel-getex-and-getset",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 27,
+  "subtopics": [
+    "SET and GET",
+    "MSET and MGET",
+    "APPEND",
+    "STRLEN",
+    "GETDEL , GETEX , and GETSET"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Redis String Commands and distinguish it from a related Redis concept.",
+    "Apply or trace Redis String Commands in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Redis String Commands and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Redis String Commands in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Redis String Commands helps implement choose string-based storage, counters, bitmaps, and bitfields for compact, atomic operations. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Redis String Commands",
+        "asset_path": "diagrams/lesson-027-redis-string-commands.svg",
+        "alt_text": "Concept diagram for Redis String Commands, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Redis String Commands; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Redis String Commands helps implement choose string-based storage, counters, bitmaps, and bitfields for compact, atomic operations. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Redis String Commands, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "SET and GET",
+            "text": "Connect SET and GET to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "MSET and MGET",
+            "text": "Connect MSET and MGET to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "APPEND",
+            "text": "Connect APPEND to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "STRLEN",
+            "text": "Connect STRLEN to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "GETDEL , GETEX , and GETSET",
+            "text": "Connect GETDEL , GETEX , and GETSET to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Redis String Commands",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "SET product:42:name \"keyboard\"\nGET product:42:name",
+        "expected_output": "OK\n\"keyboard\"",
+        "run_instructions": "Use a namespaced temporary key and quote values that contain spaces.",
+        "reset_steps": "DEL product:42:name",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Redis String Commands. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Redis String Commands in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Redis String Commands.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "OK\n\"keyboard\"",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-027-questions.json",
+    "recap": [
+      "Redis String Commands is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Redis data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "strings, hashes, lists, sets, sorted sets, streams, geospatial indexes, bitmaps, bitfields, JSON, arrays, time series, probabilistic structures, vector sets"
+      ]
+    },
+    {
+      "title": "Compare data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/compare-data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "data-type selection and use-case trade-offs"
+      ]
+    },
+    {
+      "title": "Redis commands reference",
+      "url": "https://redis.io/docs/latest/commands/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "command syntax, return values, complexity, compatibility and command history"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

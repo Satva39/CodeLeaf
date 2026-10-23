@@ -1,0 +1,181 @@
+{
+  "id": "react-lesson-237",
+  "slug": "debugging-hooks",
+  "title": "Debugging Hooks",
+  "sequence": 237,
+  "module_id": "react-module-21",
+  "module_slug": "debugging-and-error-handling",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "react-lesson-236"
+  ],
+  "previous_lesson_id": "react-lesson-236",
+  "next_lesson_id": "react-lesson-238",
+  "keywords": [
+    "Debugging Hooks",
+    "Debugging and Error Handling",
+    "Rules-of-Hooks violations",
+    "Incorrect dependencies",
+    "Stale closures",
+    "Unexpected Effect execution",
+    "Hook-related lint warnings",
+    "effects"
+  ],
+  "source_syllabus_number": 237,
+  "subtopics": [
+    "Rules-of-Hooks violations",
+    "Incorrect dependencies",
+    "Stale closures",
+    "Unexpected Effect execution",
+    "Hook-related lint warnings"
+  ],
+  "learning_outcomes": [
+    "Explain how Debugging Hooks relates to Debugging and Error Handling.",
+    "Apply Rules-of-Hooks violations in a small React or JavaScript example and describe the expected result.",
+    "Test one edge/failure case and identify a maintainable, accessible fix."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study Debugging Hooks as part of Debugging and Error Handling. The syllabus topics are kept below, then connected to a small example you can inspect and adapt.",
+    "why_it_matters": "Rules-of-Hooks violations concerns synchronization with an external system. Keep render pure, declare reactive dependencies accurately, and clean up subscriptions, requests, or other resources when they become obsolete.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Debugging Hooks: concept map",
+        "asset_path": "diagrams/lessons/lesson-237-debugging-hooks.svg",
+        "alt_text": "Concept map for Debugging Hooks: Rules-of-Hooks violations, Incorrect dependencies, Stale closures.",
+        "caption": "A visual scaffold for the idea; the code and verification steps below provide the practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Rules-of-Hooks violations concerns synchronization with an external system. Keep render pure, declare reactive dependencies accurately, and clean up subscriptions, requests, or other resources when they become obsolete. Start with one responsibility at a time: identify the data, describe the expected interface, then decide which event, state update, request, or runtime boundary changes the result."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Rules-of-Hooks violations",
+            "text": "Rules-of-Hooks violations concerns synchronization with an external system. Keep render pure, declare reactive dependencies accurately, and clean up subscriptions, requests, or other resources when they become obsolete."
+          },
+          {
+            "title": "Incorrect dependencies",
+            "text": "Incorrect dependencies concerns synchronization with an external system. Keep render pure, declare reactive dependencies accurately, and clean up subscriptions, requests, or other resources when they become obsolete."
+          },
+          {
+            "title": "Stale closures",
+            "text": "Stale closures concerns synchronization with an external system. Keep render pure, declare reactive dependencies accurately, and clean up subscriptions, requests, or other resources when they become obsolete."
+          },
+          {
+            "title": "Unexpected Effect execution",
+            "text": "Unexpected Effect execution concerns synchronization with an external system. Keep render pure, declare reactive dependencies accurately, and clean up subscriptions, requests, or other resources when they become obsolete."
+          },
+          {
+            "title": "Hook-related lint warnings",
+            "text": "Hook-related lint warnings concerns synchronization with an external system. Keep render pure, declare reactive dependencies accurately, and clean up subscriptions, requests, or other resources when they become obsolete."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "jsx",
+        "code": "useEffect(() => {\n  const connection = createConnection(roomId);\n  connection.connect();\n  return () => connection.disconnect();\n}, [roomId]);",
+        "expected_output": "Changing roomId cleans up the old connection before synchronizing with the new one.",
+        "run_instructions": "This is an inspectable teaching example, not an arbitrary-code runner inside CodeLeaf. Place JSX in a React/Vite project (or the relevant CSS/HTML/config file), run the project with its documented toolchain, and compare the visible behavior with the expected result. Server rendering and framework APIs require their stated runtime.",
+        "reset_steps": "Restore the original snippet, reset the component/data to its starting state, and repeat with a different input or an edge/failure case.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Use the code as a small experiment for Debugging Hooks. First predict the result, then run or inspect it in the required runtime. Change one input and explain why the output changed. If the topic depends on React version or framework support, confirm that the project uses a compatible version before interpreting a result."
+      },
+      {
+        "type": "callout",
+        "title": "Version and environment note",
+        "text": "This course assumes the React 19.3 documentation snapshot dated 2026-10-12. Core component, JSX, props, state, and event concepts apply broadly; modern APIs and server rendering must be checked against the stated React version and the framework/runtime in use."
+      }
+    ],
+    "task": "Create a minimal example demonstrating Debugging Hooks. Include the relevant subtopic “Rules-of-Hooks violations”, explain the expected UI/result, and verify one normal case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named concept rather than merely mentioning it.",
+      "The expected visible or logged result is documented and reproducible.",
+      "At least one boundary, empty, loading, or failure case is handled or explained.",
+      "The implementation remains accessible and does not introduce avoidable mutation, stale state, or insecure client-only trust."
+    ],
+    "hints": [
+      "Start with the smallest part of “Rules-of-Hooks violations” that can be observed independently.",
+      "Write down what should appear before changing the code; then change one input at a time.",
+      "Use the browser console, React Developer Tools, or the appropriate test/runtime to isolate a mismatch."
+    ],
+    "expected_output": "Changing roomId cleans up the old connection before synchronizing with the new one.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-237-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "The example handles only the happy path.",
+        "why": "Real UI receives empty values, delayed responses, and invalid input.",
+        "fix": "Add one explicit edge/failure case and document the expected message or state."
+      },
+      {
+        "problem": "The example stores redundant data or mutates an existing array/object.",
+        "why": "The displayed result can drift from the source data or React may not observe the intended change.",
+        "fix": "Derive values where possible and create a new value when updating state."
+      },
+      {
+        "problem": "A browser or framework capability is assumed to exist everywhere.",
+        "why": "Availability can depend on the host runtime, React version, and framework.",
+        "fix": "Check the official reference, declare the runtime/version, and provide a fallback when appropriate."
+      }
+    ],
+    "summary": [
+      "Debugging Hooks fits into the broader Debugging and Error Handling workflow.",
+      "The central concept is Rules-of-Hooks violations; apply it with the smallest reproducible example.",
+      "Verify correctness with at least one normal input and one boundary or failure case."
+    ],
+    "references": [
+      "https://react.dev/learn",
+      "https://react.dev/reference/react",
+      "https://react.dev/blog/2026/09/09/react-19-3"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "React — Learn",
+      "url": "https://react.dev/learn",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "Debugging Hooks",
+        "Rules-of-Hooks violations",
+        "Incorrect dependencies"
+      ]
+    },
+    {
+      "title": "React Reference",
+      "url": "https://react.dev/reference/react",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "React APIs and behavior",
+        "Debugging Hooks"
+      ]
+    },
+    {
+      "title": "React 19.3 Release Notes",
+      "url": "https://react.dev/blog/2026/09/09/react-19-3",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "version-specific modern APIs and compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus and authored as an educational draft; technical/instructional review required before publication."
+}

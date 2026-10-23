@@ -1,0 +1,146 @@
+{
+  "id": "css-project-03",
+  "slug": "login-and-registration-ui",
+  "title": "Login and Registration UI",
+  "sequence": 3,
+  "tier": "beginner",
+  "objective": "Develop an accessible, well-structured sign-in and registration form interface.",
+  "prerequisite_lesson_ids": [
+    "css-lesson-049",
+    "css-lesson-059",
+    "css-lesson-070",
+    "css-lesson-124",
+    "css-lesson-155"
+  ],
+  "recommended_module_range": [
+    6,
+    16
+  ],
+  "recommended_lesson_range": [
+    49,
+    166
+  ],
+  "skills": [
+    "CSS layout",
+    "visual hierarchy",
+    "responsive design",
+    "accessibility",
+    "maintainable stylesheets"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Associated labels and form controls",
+      "acceptance_criteria": [
+        "Demonstrate associated labels and form controls in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Input focus and invalid states",
+      "acceptance_criteria": [
+        "Demonstrate input focus and invalid states in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Password and helper-text layout",
+      "acceptance_criteria": [
+        "Demonstrate password and helper-text layout in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Clear error and success messaging styles",
+      "acceptance_criteria": [
+        "Demonstrate clear error and success messaging styles in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    },
+    {
+      "sequence": 5,
+      "title": "Responsive form width and spacing",
+      "acceptance_criteria": [
+        "Demonstrate responsive form width and spacing in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "index.html",
+      "language": "html",
+      "contents": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Login and Registration UI</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n<header class=\"site-header\"><a class=\"brand\" href=\"#account\">Fieldnote</a><p class=\"site-note\">A calm place for your notes</p></header><main id=\"account\" class=\"page-shell auth-layout\"><section class=\"auth-intro\"><p class=\"eyebrow\">Welcome back</p><h1>Make room for good ideas.</h1><p>Sign in to return to your workspace or create a new demo account.</p><ul><li>Keep notes organized</li><li>Find your next idea</li><li>Work at your own pace</li></ul></section><section class=\"form-card\"><h2>Sign in</h2><form><div class=\"form-field\"><label for=\"signin-email\">Email address</label><input id=\"signin-email\" name=\"email\" type=\"email\" autocomplete=\"email\" required><small id=\"signin-help\">Use a sample email for this UI demo.</small></div><div class=\"form-field\"><label for=\"signin-password\">Password</label><input id=\"signin-password\" name=\"password\" type=\"password\" autocomplete=\"current-password\" required></div><div class=\"form-row\"><label class=\"checkbox-label\"><input type=\"checkbox\" name=\"remember\"> Remember me</label><a href=\"#registration\">Need help?</a></div><button class=\"button\" type=\"submit\">Sign in</button><p class=\"form-feedback\">Example helper message: your form status appears here.</p></form><hr><h2 id=\"registration\">Create account</h2><form><div class=\"form-field\"><label for=\"signup-name\">Name</label><input id=\"signup-name\" name=\"name\" autocomplete=\"name\" required></div><div class=\"form-field\"><label for=\"signup-email\">Email address</label><input id=\"signup-email\" name=\"email\" type=\"email\" autocomplete=\"email\" required></div><button class=\"button button-secondary\" type=\"submit\">Create demo account</button></form><p class=\"fine-print\">UI prototype only; it does not create accounts or authenticate users.</p></section></main>\n</body>\n</html>\n"
+    },
+    {
+      "path": "styles.css",
+      "language": "css",
+      "contents": "* { box-sizing: border-box; }\n:root { --color-text: #172554; --color-surface: #ffffff; --color-accent: #1d4ed8; --space: 1rem; --radius: 0.75rem; }\nbody { margin: 0; color: var(--color-text); background: #f8fafc; font-family: system-ui, sans-serif; line-height: 1.55; }\na { color: inherit; }\nbutton, input, select { font: inherit; }\n:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 3px; }\n.page-shell { width: min(calc(100% - 2rem), 74rem); margin-inline: auto; }\n.site-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space); padding: var(--space); }\n@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }\n"
+    }
+  ],
+  "required_features": [
+    "Associated labels and form controls",
+    "Input focus and invalid states",
+    "Password and helper-text layout",
+    "Clear error and success messaging styles",
+    "Responsive form width and spacing"
+  ],
+  "stretch_features": [
+    "Add a second theme using custom properties.",
+    "Test at 320 CSS pixels, 768 CSS pixels, and a wide desktop viewport.",
+    "Document browser support assumptions and any fallback for optional CSS features."
+  ],
+  "tests": [
+    {
+      "name": "Required CSS checks",
+      "mode": "human_review",
+      "criteria": [
+        "All listed required features are present and behave as described.",
+        "Inspect the stylesheet for invalid declarations and unintended overrides.",
+        "Check keyboard focus, responsive reflow, and reduced-motion handling where relevant."
+      ]
+    },
+    {
+      "name": "Responsive behavior",
+      "mode": "human_review",
+      "criteria": [
+        "No unintended horizontal overflow at narrow widths.",
+        "Layout remains coherent when text is longer than sample content."
+      ]
+    },
+    {
+      "name": "Maintainability",
+      "mode": "human_review",
+      "criteria": [
+        "Reusable tokens and component classes are used intentionally.",
+        "Known feature support limits and design choices are documented."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correctness and required features",
+      "points": 30
+    },
+    {
+      "criterion": "Responsive visual hierarchy and layout",
+      "points": 25
+    },
+    {
+      "criterion": "Accessibility and interaction states",
+      "points": 20
+    },
+    {
+      "criterion": "Maintainability, testing, and rationale",
+      "points": 25
+    }
+  ],
+  "rubric_total": 100,
+  "review_method": "Human-reviewed visual and accessibility evaluation supported by the listed checks; CSS string checks alone cannot prove rendered behavior.",
+  "reference_solution_file": "projects/solutions/003-login-and-registration-ui-solution.json",
+  "status": "draft",
+  "status_note": "Draft brief and starter scaffold; complete the milestones and review before publication."
+}

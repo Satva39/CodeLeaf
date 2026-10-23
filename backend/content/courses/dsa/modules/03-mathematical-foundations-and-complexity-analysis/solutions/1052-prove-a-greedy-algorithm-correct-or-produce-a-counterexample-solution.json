@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-52",
+  "exercise_id": "dsa-exercise-pdf-52",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\ndef earliest_finish_schedule(intervals):\n    \"\"\"Maximum-cardinality set of non-overlapping half-open intervals.\"\"\"\n    chosen=[]; end=float(\"-inf\")\n    for start, finish in sorted(intervals,key=lambda x:x[1]):\n        if start>=end: chosen.append((start,finish)); end=finish\n    return chosen\n\nassert len(earliest_finish_schedule([(0,4),(1,2),(2,3),(3,5)]))==3\n# Exchange argument: in an optimal schedule, replace its first interval with\n# the interval that finishes earliest. The replacement cannot block an interval\n# that the original first interval allowed, so an optimal schedule still exists.\n# Repeating on the remaining suffix proves the greedy choice is optimal.\n```",
+  "explanation": "The earliest-finish greedy solution is justified by exchange argument. The proof is valid only for the maximum number of unweighted non-overlapping intervals.",
+  "tested_reference_code": "def earliest_finish_schedule(intervals):\n    \"\"\"Maximum-cardinality set of non-overlapping half-open intervals.\"\"\"\n    chosen=[]; end=float(\"-inf\")\n    for start, finish in sorted(intervals,key=lambda x:x[1]):\n        if start>=end: chosen.append((start,finish)); end=finish\n    return chosen\n\nassert len(earliest_finish_schedule([(0,4),(1,2),(2,3),(3,5)]))==3\n# Exchange argument: in an optimal schedule, replace its first interval with\n# the interval that finishes earliest. The replacement cannot block an interval\n# that the original first interval allowed, so an optimal schedule still exists.\n# Repeating on the remaining suffix proves the greedy choice is optimal.",
+  "language": "python"
+}

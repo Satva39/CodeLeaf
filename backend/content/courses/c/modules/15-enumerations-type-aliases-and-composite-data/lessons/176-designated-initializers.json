@@ -1,0 +1,96 @@
+{
+  "id": "c-lesson-176",
+  "slug": "designated-initializers",
+  "title": "Designated Initializers",
+  "sequence": 176,
+  "module_id": "c-module-15",
+  "module_slug": "enumerations-type-aliases-and-composite-data",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 9,
+  "prerequisites": [
+    "c-lesson-175"
+  ],
+  "previous_lesson_id": "c-lesson-175",
+  "next_lesson_id": "c-lesson-177",
+  "keywords": [
+    "designated-initializers",
+    "enumerations-type-aliases-and-composite-data"
+  ],
+  "source_syllabus_number": 176,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the main idea behind designated initializers in your own words.",
+    "Apply designated initializers to a minimal C example and predict the result.",
+    "Identify a relevant boundary, portability assumption, or failure mode."
+  ],
+  "content": {
+    "intro": "This lesson explores Designated Initializers through an original visual, a compact C example and a check you can perform locally.",
+    "why_it_matters": "Understanding designated initializers helps you reason about C programs rather than relying on trial and error. It also helps you communicate assumptions, write safer code, and debug behavior across toolchains.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 15 roadmap",
+        "asset_path": "diagrams/module-15-overview.svg",
+        "alt_text": "Module 15 overview for Enumerations, Type Aliases, and Composite Data, showing this lesson in sequence with the surrounding syllabus topics.",
+        "caption": "Module visual overview; the numbered syllabus map remains the canonical order."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Designated Initializers is studied as part of **Enumerations, Type Aliases, and Composite Data**. Start with the contract: identify the inputs or program state, the rule C applies, and the observable result. Then check the behavior in a small, repeatable example.\n\nIn C, details can depend on the selected language standard and implementation. Distinguish defined behavior from unspecified, implementation-defined, or undefined behavior, and consult the cited standard/compiler references when portability matters."
+      },
+      {
+        "type": "paragraph",
+        "title": "Practical reasoning",
+        "text": "For “Designated Initializers”, write down the preconditions first. Identify valid inputs and boundaries, decide which C rule applies, then choose evidence that would falsify your assumption. Prefer a small test with a clear expected result and compile with diagnostics enabled."
+      },
+      {
+        "type": "code",
+        "title": "Enums and aliases",
+        "language": "c",
+        "code": "#include <stdio.h>\n\ntypedef enum { STATE_IDLE, STATE_RUNNING, STATE_DONE } State;\n\nint main(void) {\n    State state = STATE_RUNNING;\n    printf(\"running = %s\\n\", state == STATE_RUNNING ? \"yes\" : \"no\");\n    return 0;\n}",
+        "expected_output": "running = yes",
+        "run_instructions": "Use named enumerators for intent; do not assume their storage representation is an external file format.",
+        "reset_steps": "Restore the original example, rebuild with the same compiler flags, rerun the same inputs, and compare actual output with the stated result. For time-, platform-, or input-dependent examples, record the environment and do not expect identical values everywhere.",
+        "execution_mode": "static-validation",
+        "limitations": "The CodeLeaf lesson page does not run C code. Compile locally or use a separately deployed, isolated C runner; do not execute arbitrary learner code inside FastAPI."
+      },
+      {
+        "type": "callout",
+        "title": "Portability and safety check",
+        "text": "Use a documented standard mode; treat compiler extensions as extensions, not ISO C guarantees. Check return values, buffer bounds, and object lifetime. This course example is draft material and needs code review on the target toolchain before publication."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-176-questions.json"
+  },
+  "task": "In a scratch file, create one small example that demonstrates designated initializers. Explain the expected result before running it, compile with warnings enabled, and record one boundary case or portability question.",
+  "hints": [
+    "Reduce the program to the smallest example that still shows the concept.",
+    "Write down the input, expected result, and assumptions before running it.",
+    "Check the official language/compiler reference and test a boundary case."
+  ],
+  "expected_output": "A short, reproducible C example and explanation showing designated initializers, plus a note about one boundary or portability consideration.",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    "Treating designated initializers as a rule to memorize rather than a behavior to test.",
+    "Ignoring compiler warnings, input validity, or object lifetime.",
+    "Assuming behavior observed on one compiler is guaranteed by every C implementation."
+  ],
+  "summary": [
+    "Designated Initializers belongs to Enumerations, Type Aliases, and Composite Data.",
+    "State the assumptions, verify the smallest example, and test boundaries.",
+    "Check the selected language standard and target compiler when portability matters."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C Language — Complete Learning Curriculum, Section B, module 15, topic 176.",
+    "Official and technical sources indexed in references/reference-index.json."
+  ],
+  "status": "draft"
+}

@@ -1,0 +1,67 @@
+{
+  "id": "pandas-exercise-23",
+  "slug": "dataframe-reconciliation",
+  "title": "DataFrame Reconciliation",
+  "sequence": 23,
+  "lesson_id": "pandas-lesson-192",
+  "lesson_slug": "comparing-dataframes",
+  "module_id": "pandas-module-23",
+  "difficulty": "advanced",
+  "type": "code",
+  "prompt": "Compare two versions of a dataset and identify added, removed, and changed records.",
+  "scenario": "Use the synthetic data described below to practise m, e, r, g, i, n, g,  , a, n, d,  , c, o, m, p, a, r, i, s, o, n. Do not assume the input is correct without validating it.",
+  "skills": "Merging and comparison",
+  "starter": {
+    "language": "python",
+    "code": "import pandas as pd\n\nold = pd.DataFrame({\"id\": [1, 2], \"price\": [10, 20]}).set_index(\"id\")\nnew = pd.DataFrame({\"id\": [1, 2], \"price\": [10, 22]}).set_index(\"id\")\nprint(old.compare(new))",
+    "dataset_note": "Use small synthetic in-memory data; do not place private or real customer data in exercises."
+  },
+  "input_schema": {
+    "description": "Create or use a synthetic DataFrame with only the columns needed for this exercise.",
+    "validation": [
+      "Document expected columns and data types.",
+      "State how missing values or duplicates should be treated."
+    ]
+  },
+  "expected_output": [
+    "Align records on a stable key before comparison.",
+    "Identify inserted, removed, and changed data separately.",
+    "Produce a reconciled summary with counts and a few reviewed examples."
+  ],
+  "public_tests": [
+    {
+      "name": "normal-case",
+      "description": "The solution returns the required columns and correctly computes the stated result."
+    },
+    {
+      "name": "edge-case",
+      "description": "The solution documents behavior for a missing value, duplicate key, empty input, invalid value, or other relevant edge case."
+    }
+  ],
+  "hints": [
+    "Write down the expected result before coding.",
+    "Use Pandas operations that preserve labels unless position-based behavior is intended.",
+    "Add a small assertion for the most important property."
+  ],
+  "acceptance_criteria": [
+    "Align records on a stable key before comparison.",
+    "Identify inserted, removed, and changed data separately.",
+    "Produce a reconciled summary with counts and a few reviewed examples."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "m"
+    ],
+    "case_sensitive": false,
+    "note": "The generic short-response grader is only an initial scaffold; a reviewed isolated Python grader is required for automatic execution of arbitrary learner code."
+  },
+  "solution_file": "solutions/023-dataframe-reconciliation-solution.json",
+  "solution": {},
+  "retry_policy": {
+    "max_attempts": null,
+    "allow_retry_after_feedback": true
+  },
+  "status": "draft",
+  "status_note": "Review prompt, starter, rubric, and server-side grading before publication."
+}

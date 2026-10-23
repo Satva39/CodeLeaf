@@ -1,0 +1,186 @@
+{
+  "id": "web-application-security-lesson-013",
+  "slug": "database-and-api-fundamentals",
+  "title": "Database and API Fundamentals",
+  "sequence": 13,
+  "module_id": "web-application-security-module-02",
+  "module_slug": "web-and-internet-fundamentals",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core-foundations",
+  "curriculum_tier": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "web-application-security-lesson-012"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-012",
+  "next_lesson_id": "web-application-security-lesson-014",
+  "keywords": [
+    "database",
+    "and",
+    "api",
+    "fundamentals",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 13,
+  "source_syllabus_title": "Database and API Fundamentals",
+  "source_subtopics": [
+    {
+      "number": "13.1",
+      "title": "Relational and non-relational databases"
+    },
+    {
+      "number": "13.2",
+      "title": "Basic CRUD operations"
+    },
+    {
+      "number": "13.3",
+      "title": "REST API concepts"
+    },
+    {
+      "number": "13.4",
+      "title": "API authentication and response structures"
+    },
+    {
+      "number": "13.5",
+      "title": "Trust boundaries between application components"
+    }
+  ],
+  "subtopics": [
+    "Relational and non-relational databases",
+    "Basic CRUD operations",
+    "REST API concepts",
+    "API authentication and response structures",
+    "Trust boundaries between application components"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in Database and API Fundamentals.",
+    "Choose an appropriate defensive control for Database and API Fundamentals and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for Database and API Fundamentals, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 2: Web and Internet Fundamentals. It builds practical understanding of Database and API Fundamentals with the syllabus subtopics retained below.",
+    "why_it_matters": "Database and API Fundamentals gives you the mental model needed to recognize where a security promise begins and ends. Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Database and API Fundamentals",
+        "asset_path": "diagrams/lesson-013-database-and-api-fundamentals.svg",
+        "alt_text": "Four-stage visual model for Database and API Fundamentals: Define operation; Authenticate request; Authorize object + field; Bound load + audit.",
+        "caption": "Concept map for Database and API Fundamentals. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Database and API Fundamentals can be understood through this sequence: Define operation → Authenticate request → Authorize object + field → Bound load + audit. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 13.1 Relational and non-relational databases; 13.2 Basic CRUD operations; 13.3 REST API concepts; 13.4 API authentication and response structures; 13.5 Trust boundaries between application components. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "json",
+        "execution_mode": "static-validation",
+        "title": "Safe reference example: Database and API Fundamentals",
+        "code": "{\n  \"operation\": \"read_profile\",\n  \"authenticated\": true,\n  \"authorize_object\": true,\n  \"authorize_fields\": true,\n  \"rate_limited\": true\n}",
+        "expected_output": "The API review checks identity, object permissions, field permissions, and resource limits independently.",
+        "run_instructions": "This is a test-case record, not a complete API implementation. Add explicit positive and negative assertions to an isolated test suite.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “Database and API Fundamentals”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for Database and API Fundamentals in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-013-questions.json",
+    "recap": [
+      "Database and API Fundamentals is a security boundary/control topic, not a standalone checklist item.",
+      "Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "MDN Web Security",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "same-origin policy",
+        "browser security boundaries",
+        "web security features"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

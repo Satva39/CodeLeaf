@@ -1,0 +1,56 @@
+{
+  "id": "expressjs-exercise-026",
+  "slug": "dependency-failure-simulation",
+  "title": "Dependency Failure Simulation",
+  "type": "practical",
+  "lesson_id": "expressjs-lesson-118",
+  "module_id": "expressjs-module-13",
+  "difficulty": "advanced",
+  "sequence": 1,
+  "prompt": "Simulate database and external-service outages and return bounded, useful errors. Submit a focused JavaScript/Express artifact and explain how you would run and verify it locally. Use synthetic data and test both a normal request and an invalid or failure case.",
+  "objective": "Dependency Failure Simulation",
+  "target_skills": [
+    "timeouts",
+    "error propagation",
+    "resilience"
+  ],
+  "starter": {
+    "language": "javascript",
+    "code": "// Dependency Failure Simulation\n// TODO: implement the required behavior.\n// Lesson example reference:\napp.get('/api/external-status', async (_req, res, next) => {\n  try {\n    const response = await fetch('https://api.example.com/status', { signal: AbortSignal.timeout(3000) });\n    if (!response.ok) return res.status(502).json({ error: 'Upstream service failed' });\n    const data = await response.json();\n    if (typeof data.status !== 'string') return res.status(502).json({ error: 'Unexpected upstream response' });\n    res.json({ status: data.status });\n  } catch (error) { next(error); }\n});"
+  },
+  "expected_output": "A reviewable implementation for Dependency Failure Simulation with a documented expected response and a local test for one success case and one failure/edge case. CodeLeaf checks required strings only; it does not run submitted Node.js code in the browser.",
+  "public_tests": [
+    {
+      "name": "Required implementation markers (static smoke check)",
+      "required_strings": [
+        "AbortSignal.timeout",
+        "502",
+        "next(error)"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Address the task: Simulate database and external-service outages and return bounded, useful errors.",
+    "Use the Express.js 5 syntax and make the required status/response behavior explicit.",
+    "Document the local command and show a successful request plus one invalid or dependency-failure request.",
+    "Do not include credentials or production data; explain any remaining runtime or security review needed."
+  ],
+  "hints": [
+    "Start with the smallest route or middleware that demonstrates the requested concept, then add the validation/error path.",
+    "Check the relevant Express 5 guide and the expected status/response shape before changing the example.",
+    "Run the server locally and test both a valid request and an invalid/boundary request; capture the result rather than assuming it passed."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "AbortSignal.timeout",
+      "502",
+      "next(error)"
+    ]
+  },
+  "grading_method": "Server-side case-sensitive required-string smoke check plus human/runtime review. It is not a Node.js sandbox and does not prove that submitted code executes correctly.",
+  "retry_policy": "Retries permitted after feedback; CodeLeaf records successful completion once. XP is controlled centrally by the backend; this content file defines no reward override.",
+  "solution_file": "../solutions/expressjs-exercise-026-reference.json",
+  "status": "draft",
+  "status_note": "Adapted from Section C of ExpressJS.pdf; static grading only checks markers, so manually run and review the implementation before publication."
+}

@@ -1,0 +1,20 @@
+{
+  "id": "pytorch-project-01-reference-solution",
+  "project_id": "pytorch-project-01",
+  "title": "Reference approach: Handwritten Digit Classifier",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "approach": "Build Handwritten Digit Classifier in small milestones. Implement: Load and inspect a documented digit dataset; Build a baseline MLP; Implement training and validation loops; Report classification metrics; Save weights and predict on new images. Use synthetic data while developing, choose a documented dataset for the final experiment, and keep train/validation/test splits separate.",
+  "reference_snippets": [
+    {
+      "purpose": "Deterministic model smoke test",
+      "language": "python",
+      "code": "import torch\nfrom torch import nn\nmodel = nn.Sequential(nn.Linear(8, 16), nn.ReLU(), nn.Linear(16, 2)).eval()\nwith torch.inference_mode():\n    output = model(torch.zeros(1, 8))\nassert output.shape == (1, 2)\nprint(\"smoke test passed\")"
+    }
+  ],
+  "review_notes": [
+    "This is a protected teaching outline, not a claim that a trained artifact is included.",
+    "Benchmark the actual target hardware and report uncertainty.",
+    "Review data licensing, privacy, bias, and intended-use constraints."
+  ]
+}

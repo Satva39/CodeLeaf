@@ -1,0 +1,152 @@
+{
+  "id": "redis-lesson-055",
+  "slug": "removing-sorted-set-members",
+  "title": "Removing Sorted Set Members",
+  "sequence": 55,
+  "module_id": "redis-module-08",
+  "module_slug": "redis-sorted-sets-and-ranking-systems",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-054"
+  ],
+  "previous_lesson_id": "redis-lesson-054",
+  "next_lesson_id": "redis-lesson-056",
+  "keywords": [
+    "removing-sorted-set-members",
+    "zrem",
+    "zremrangebyrank",
+    "zremrangebyscore",
+    "zpopmin-and-zpopmax",
+    "managing-expired-leaderboard-entries",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 55,
+  "subtopics": [
+    "ZREM",
+    "ZREMRANGEBYRANK",
+    "ZREMRANGEBYSCORE",
+    "ZPOPMIN and ZPOPMAX",
+    "Managing expired leaderboard entries"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Removing Sorted Set Members and distinguish it from a related Redis concept.",
+    "Apply or trace Removing Sorted Set Members in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Removing Sorted Set Members and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Removing Sorted Set Members in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Removing Sorted Set Members helps implement rank members by score while handling updates, pagination, ties, and range semantics. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Removing Sorted Set Members",
+        "asset_path": "diagrams/lesson-055-removing-sorted-set-members.svg",
+        "alt_text": "Concept diagram for Removing Sorted Set Members, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Removing Sorted Set Members; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Removing Sorted Set Members helps implement rank members by score while handling updates, pagination, ties, and range semantics. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Removing Sorted Set Members, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "ZREM",
+            "text": "Connect ZREM to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "ZREMRANGEBYRANK",
+            "text": "Connect ZREMRANGEBYRANK to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "ZREMRANGEBYSCORE",
+            "text": "Connect ZREMRANGEBYSCORE to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "ZPOPMIN and ZPOPMAX",
+            "text": "Connect ZPOPMIN and ZPOPMAX to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Managing expired leaderboard entries",
+            "text": "Connect Managing expired leaderboard entries to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Removing Sorted Set Members",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "SADD product:tags redis database cache\nSISMEMBER product:tags cache\nSMEMBERS product:tags",
+        "expected_output": "3\n1\n1) \"cache\" 2) \"database\" 3) \"redis\"",
+        "run_instructions": "Set members are unique and unordered; do not depend on SMEMBERS display ordering.",
+        "reset_steps": "DEL product:tags",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Removing Sorted Set Members. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Removing Sorted Set Members in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Removing Sorted Set Members.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "3\n1\n1) \"cache\" 2) \"database\" 3) \"redis\"",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-055-questions.json",
+    "recap": [
+      "Removing Sorted Set Members is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Redis data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "strings, hashes, lists, sets, sorted sets, streams, geospatial indexes, bitmaps, bitfields, JSON, arrays, time series, probabilistic structures, vector sets"
+      ]
+    },
+    {
+      "title": "Compare data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/compare-data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "data-type selection and use-case trade-offs"
+      ]
+    },
+    {
+      "title": "Redis commands reference",
+      "url": "https://redis.io/docs/latest/commands/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "command syntax, return values, complexity, compatibility and command history"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

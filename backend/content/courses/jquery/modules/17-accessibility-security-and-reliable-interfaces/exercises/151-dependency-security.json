@@ -1,0 +1,69 @@
+{
+  "id": "jquery-exercise-151",
+  "slug": "dependency-security",
+  "title": "Practice: Dependency Security",
+  "type": "coding",
+  "lesson_id": "jquery-lesson-151",
+  "module_id": "jquery-module-17",
+  "difficulty": "advanced",
+  "sequence": 151,
+  "source_exercise_id": "JQ-151",
+  "source_topics": [
+    151
+  ],
+  "prompt": "Audit a widget for dependency security. Test keyboard operation, visible feedback, safe text rendering, and its server-side trust boundary.",
+  "objective": "Apply dependency security in a controlled example and demonstrate expected behavior with a small test.",
+  "target_skills": [
+    "Dependency Security",
+    "Selecting maintained dependencies",
+    "Reviewing plugin source and releases",
+    "Monitoring security advisories"
+  ],
+  "starter": {
+    "language": "javascript",
+    "code": "$.ajax({ url: \"/api/account\", method: \"GET\", dataType: \"json\", timeout: 8000 })\n  .done(renderAccount)\n  .fail(showRequestError);\n// Enforce authentication, authorization, input validation and CSRF controls on the server.\n\n// TODO: adapt the example to the task and add an edge-case check.\n"
+  },
+  "expected_output": "The client handles the response; access control and request protections must be enforced server-side.",
+  "public_tests": [
+    {
+      "name": "Required implementation evidence",
+      "required_strings": [
+        "timeout: 8000",
+        ".fail(",
+        "authorization"
+      ]
+    },
+    {
+      "name": "Human review",
+      "checklist": [
+        "Behavior matches the prompt and documented expected result.",
+        "At least one relevant edge case is checked.",
+        "Keyboard and accessibility behavior is verified where relevant.",
+        "The learner can explain one implementation choice and one limitation."
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Demonstrate the core behavior for dependency security.",
+    "Include a repeatable check or written evidence for expected output.",
+    "Handle an empty, repeated, malformed, or failure state where it applies.",
+    "Keep user-provided content safe and describe any server-side responsibility."
+  ],
+  "hints": [
+    "Break dependency security into the smallest requirements.",
+    "Use the narrowest selector or API that expresses the task clearly.",
+    "Inspect the browser console and the changed DOM/request before changing more code."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "timeout: 8000",
+      ".fail(",
+      "authorization"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus rubric/human review; this check does not prove runtime correctness, accessibility, or production readiness.",
+  "retry_policy": "Retries are allowed. Incorrect or incomplete answers do not complete the exercise or award XP; the platform applies its fixed idempotent exercise reward only after a verified correct completion.",
+  "solution_file": "solutions/151-dependency-security-solution.json",
+  "status": "draft"
+}

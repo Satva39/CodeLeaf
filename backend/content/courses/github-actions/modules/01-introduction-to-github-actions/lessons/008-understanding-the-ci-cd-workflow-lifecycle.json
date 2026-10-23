@@ -1,0 +1,243 @@
+{
+  "id": "github-actions-lesson-008",
+  "slug": "understanding-the-ci-cd-workflow-lifecycle",
+  "title": "Understanding the CI/CD Workflow Lifecycle",
+  "sequence": 8,
+  "module_id": "github-actions-module-01",
+  "module_slug": "introduction-to-github-actions",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "github-actions-lesson-007"
+  ],
+  "previous_lesson_id": "github-actions-lesson-007",
+  "next_lesson_id": "github-actions-lesson-009",
+  "keywords": [
+    "understanding-the-ci-cd-workflow-lifecycle",
+    "introduction-to-github-actions",
+    "source-code-changes",
+    "workflow-triggering",
+    "job-scheduling",
+    "step-execution",
+    "result-reporting",
+    "artifact-creation-and-deployment"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of understanding the ci/cd workflow lifecycle and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to understanding the ci/cd workflow lifecycle.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on understanding the ci/cd workflow lifecycle. A workflow run moves from a triggering event through scheduling and runner execution to logs, status checks, outputs, artifacts, and optional deployment. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "Understanding the CI/CD Workflow Lifecycle matters because it affects correctness, security, maintainability, or operating cost. A workflow run moves from a triggering event through scheduling and runner execution to logs, status checks, outputs, artifacts, and optional deployment. Treat the workflow as an event-driven automation graph: an event starts the run, jobs are scheduled, steps execute on runners, and the run records a result.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 1 visual map",
+        "asset_path": "diagrams/module-01-overview.svg",
+        "alt_text": "Ordered overview of module 1: Introduction to GitHub Actions; What Is Continuous Integration and Continuous Delivery?; Why GitHub Actions Is Used; Real-World Applications of GitHub Actions; Advantages, Limitations, and Alternatives; Prerequisites for Learning GitHub Actions; The GitHub Actions Ecosystem; Understanding the CI/CD Workflow Lifecycle.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Workflow lifecycle",
+        "asset_path": "diagrams/workflow-lifecycle.svg",
+        "alt_text": "Six stages: event, scheduler, runner, result, outputs, and next stage.",
+        "caption": "The event-to-output sequence for a workflow run."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "A workflow run moves from a triggering event through scheduling and runner execution to logs, status checks, outputs, artifacts, and optional deployment. Treat the workflow as an event-driven automation graph: an event starts the run, jobs are scheduled, steps execute on runners, and the run records a result. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "Source-code changes",
+            "text": "For source-code changes, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Workflow triggering",
+            "text": "Match the event to the intended lifecycle, then test positive and negative branch/path/activity cases. Event payloads may be attacker-controlled, and scheduled jobs use UTC rather than a guaranteed exact start time."
+          },
+          {
+            "title": "Job scheduling",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Step execution",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Result reporting",
+            "text": "For result reporting, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Artifact creation and deployment",
+            "text": "Use an artifact for a file produced by a run, choose exact upload/download paths, set retention intentionally, and verify the downloaded file is from the intended run/job."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "name: Validate workflow configuration\non: [push, pull_request]\npermissions:\n  contents: read\njobs:\n  validate:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: echo \"Replace with a real validation command\"",
+        "expected_output": "A push or pull request starts a read-only job; replace the demonstration command with a check appropriate to the repository.",
+        "run_instructions": "Use a test repository or static validation first. Confirm the snippet matches the repository, runner, permissions, and current GitHub documentation.",
+        "reset_steps": "Remove temporary test workflows and never carry test credentials or sample outputs into production.",
+        "execution_mode": "workflow-fragment"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to understanding the ci/cd workflow lifecycle. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain understanding the ci/cd workflow lifecycle, read the example, and identify a way to validate it. The wider system goal remains: Understand why automation belongs beside source control and how events become repeatable work."
+      }
+    ],
+    "task": "Apply understanding the ci/cd workflow lifecycle to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: A workflow run moves from a triggering event through scheduling and runner execution to logs, status checks, outputs, artifacts, and optional deployment.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: A workflow run moves from a triggering event through scheduling and runner execution to logs, status checks, outputs, artifacts, and optional deployment. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "A workflow run moves from a triggering event through scheduling and runner execution to logs, status checks, outputs, artifacts, and optional deployment.",
+      "Treat the workflow as an event-driven automation graph: an event starts the run, jobs are scheduled, steps execute on runners, and the run records a result.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-008-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "workflow-fragment",
+    "references": [
+      {
+        "title": "Workflow syntax for GitHub Actions",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "workflow files",
+          "jobs",
+          "steps",
+          "permissions",
+          "defaults",
+          "concurrency",
+          "matrix",
+          "environments"
+        ]
+      },
+      {
+        "title": "Events that trigger workflows",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "push",
+          "pull_request",
+          "workflow_dispatch",
+          "schedule",
+          "workflow_run",
+          "workflow_call",
+          "repository_dispatch"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [
+    "../exercises/029-map-the-workflow-lifecycle.json"
+  ],
+  "sources": [
+    {
+      "title": "Workflow syntax for GitHub Actions",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "workflow files",
+        "jobs",
+        "steps",
+        "permissions",
+        "defaults",
+        "concurrency",
+        "matrix",
+        "environments"
+      ]
+    },
+    {
+      "title": "Events that trigger workflows",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "push",
+        "pull_request",
+        "workflow_dispatch",
+        "schedule",
+        "workflow_run",
+        "workflow_call",
+        "repository_dispatch"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "8",
+    "module_title": "Introduction to GitHub Actions",
+    "subtopics": [
+      "Source-code changes",
+      "Workflow triggering",
+      "Job scheduling",
+      "Step execution",
+      "Result reporting",
+      "Artifact creation and deployment"
+    ]
+  }
+}

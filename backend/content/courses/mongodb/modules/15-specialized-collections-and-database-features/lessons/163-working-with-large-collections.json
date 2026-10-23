@@ -1,0 +1,206 @@
+{
+  "id": "mongodb-lesson-163",
+  "slug": "working-with-large-collections",
+  "title": "Working with Large Collections",
+  "sequence": 163,
+  "module_id": "mongodb-module-15",
+  "module_slug": "specialized-collections-and-database-features",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "optional-specialist",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "mongodb-lesson-162"
+  ],
+  "previous_lesson_id": "mongodb-lesson-162",
+  "next_lesson_id": "mongodb-lesson-164",
+  "keywords": [
+    "working",
+    "with",
+    "large",
+    "collections",
+    "mongodb",
+    "database"
+  ],
+  "source_syllabus_number": 163,
+  "source_module_number": 15,
+  "subtopics": [
+    "Cursor-based processing",
+    "Batching results",
+    "Streaming records through an application",
+    "Avoiding memory-heavy full-result loading"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and main trade-off of working with large collections.",
+    "Apply working with large collections to a small MongoDB data or operational scenario.",
+    "Verify the expected result, one edge case, and the relevant version/deployment assumption."
+  ],
+  "content": {
+    "intro": "Learn working with large collections as part of Specialized Collections and Database Features. The lesson preserves the PDF subtopics, connects them to a practical MongoDB pattern, and ends with a verification task.",
+    "why_it_matters": "Working with Large Collections should be treated as a repeatable data pipeline: define source and target contracts, normalize types, make duplicate behavior explicit, reconcile counts and samples, and plan retry or rollback before changing important data.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Working with Large Collections",
+        "asset_path": "diagrams/lesson-163-working-with-large-collections.svg",
+        "alt_text": "Four-step learning diagram for Working with Large Collections: Confirm data shape; Select specialized feature; Check support limits; Test lifecycle.",
+        "caption": "Visual guide to Working with Large Collections: follow the concept, action, verification and application steps."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Working with Large Collections should be treated as a repeatable data pipeline: define source and target contracts, normalize types, make duplicate behavior explicit, reconcile counts and samples, and plan retry or rollback before changing important data."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics to master",
+        "items": [
+          {
+            "title": "1. Cursor-based processing",
+            "text": "Be able to explain or demonstrate cursor-based processing in the context of working with large collections, and document the relevant design or version assumption."
+          },
+          {
+            "title": "2. Batching results",
+            "text": "Be able to explain or demonstrate batching results in the context of working with large collections, and document the relevant design or version assumption."
+          },
+          {
+            "title": "3. Streaming records through an application",
+            "text": "Be able to explain or demonstrate streaming records through an application in the context of working with large collections, and document the relevant design or version assumption."
+          },
+          {
+            "title": "4. Avoiding memory-heavy full-result loading",
+            "text": "Be able to explain or demonstrate avoiding memory-heavy full-result loading in the context of working with large collections, and document the relevant design or version assumption."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the behavior you want, identify the collection/document shape and access pattern involved, then select the smallest MongoDB operation that expresses the requirement. Document required fields and types, and test an edge case along with the normal case."
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "execution_mode": "static-validation",
+        "code": "db.runCommand({ listCollections: 1, nameOnly: true });",
+        "expected_output": "The command returns collection metadata visible to the current database user.",
+        "run_instructions": "CodeLeaf displays this example as a reference and does not execute a MongoDB server or arbitrary driver code in the page. Run shell examples with mongosh, or driver examples in a separately configured Node.js/Python lab, against a disposable database. Verify installed server/driver versions and deployment feature availability first. Never place credentials in source files.",
+        "reset_steps": "Use a dedicated training database and synthetic fixtures. Remove only objects created by this lesson or recreate the disposable database after confirming the target; do not run destructive/reset commands against production."
+      },
+      {
+        "type": "callout",
+        "title": "Environment and safety note",
+        "text": "All examples are teaching references, not production-ready configuration. MongoDB Atlas-specific Search, Vector Search, monitoring, backup and automation features are marked as deployment-dependent. Server, driver, shell and managed-service capabilities differ; check the official documentation that matches your target."
+      }
+    ],
+    "task": "Try it yourself: State the data shape and retention or file-size requirement, confirm the chosen feature is supported by the target deployment, then create a controlled proof of concept. Submit your choice plus the expected result/evidence and one edge case.",
+    "task_acceptance_criteria": [
+      "Demonstrate the key idea in Working with Large Collections.",
+      "Predict the result and state how you would verify it.",
+      "Name one boundary, risk or version/deployment assumption."
+    ],
+    "hints": [
+      "First, explain what “Working with Large Collections” needs to accomplish in this scenario.",
+      "Write down the data shape, filter, expected output or operational evidence before running the example.",
+      "Test one normal case and one meaningful boundary/failure case; consult the matching official reference."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Relying on flexible schemas without a data contract",
+        "why": "Documents can drift in field names and BSON types, which makes query behavior and application code less predictable.",
+        "fix": "Document required fields and types, and test an edge case along with the normal case."
+      },
+      {
+        "problem": "Assuming a static reference result proves the environment will behave identically.",
+        "why": "MongoDB server, shell, driver, managed service and permissions can affect the available behavior.",
+        "fix": "Record the target versions and privileges, run the smallest safe test, and keep expected and actual results side by side."
+      }
+    ],
+    "summary": [
+      "Working with Large Collections should be treated as a repeatable data pipeline: define source and target contracts, normalize types, make duplicate behavior explicit, reconcile counts and samples, and plan retry or rollback before changing important data.",
+      "The supplied roadmap identifies these subtopics: Cursor-based processing; Batching results; Streaming records through an application; Avoiding memory-heavy full-result loading.",
+      "Use a disposable practice environment, verify the result and keep operational assumptions explicit."
+    ],
+    "references": [
+      {
+        "title": "MongoDB Manual — Complete Documentation Index",
+        "url": "https://www.mongodb.com/docs/manual/contents/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "course-wide concepts",
+          "deployment and version navigation",
+          "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+        ]
+      },
+      {
+        "title": "Time Series Collections",
+        "url": "https://www.mongodb.com/docs/manual/core/timeseries-collections/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "time-series modeling",
+          "time fields",
+          "retention and query considerations"
+        ]
+      },
+      {
+        "title": "GridFS",
+        "url": "https://www.mongodb.com/docs/manual/core/gridfs/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "large file storage patterns"
+        ]
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-163-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "MongoDB-specific examples are reference content. A separate isolated MongoDB server/driver runtime is required for execution; questions and solutions remain protected."
+  },
+  "exercise_files": [
+    "../exercises/163-working-with-large-collections-practice.json"
+  ],
+  "sources": [
+    {
+      "title": "MongoDB Manual — Complete Documentation Index",
+      "url": "https://www.mongodb.com/docs/manual/contents/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "course-wide concepts",
+        "deployment and version navigation",
+        "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+      ]
+    },
+    {
+      "title": "Time Series Collections",
+      "url": "https://www.mongodb.com/docs/manual/core/timeseries-collections/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "time-series modeling",
+        "time fields",
+        "retention and query considerations"
+      ]
+    },
+    {
+      "title": "GridFS",
+      "url": "https://www.mongodb.com/docs/manual/core/gridfs/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "large file storage patterns"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson authored from the supplied MongoDB syllabus and original instructional material. Review examples against the target MongoDB release/deployment before publication."
+}

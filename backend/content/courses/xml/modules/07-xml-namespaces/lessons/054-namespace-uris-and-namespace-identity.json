@@ -1,0 +1,175 @@
+{
+  "id": "xml-lesson-054",
+  "slug": "namespace-uris-and-namespace-identity",
+  "title": "Namespace URIs and Namespace Identity",
+  "sequence": 54,
+  "module_id": "xml-module-07",
+  "module_slug": "xml-namespaces",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "xml-lesson-053"
+  ],
+  "previous_lesson_id": "xml-lesson-053",
+  "next_lesson_id": "xml-lesson-055",
+  "keywords": [
+    "namespace-uris-and-namespace-identity",
+    "xml-namespaces",
+    "namespace-names",
+    "uri-based-identification",
+    "prefixes-versus-namespace-identity",
+    "why-namespace-urls-are-not-necessarily-web-pages"
+  ],
+  "source_syllabus_number": 54,
+  "subtopics": [
+    "Namespace names",
+    "URI-based identification",
+    "Prefixes versus namespace identity",
+    "Why namespace URLs are not necessarily web pages"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose of namespace uris and namespace identity and explain at least one listed subtopic.",
+    "Interpret the example related to namespace uris and namespace identity and predict its expected result.",
+    "Identify one validation, compatibility, security, or troubleshooting consideration relevant to the example."
+  ],
+  "content": {
+    "intro": "In this lesson, you will explore namespace uris and namespace identity within XML Namespaces. You will connect its syllabus topics to an inspectable example, check the expected result, and note tool/version limits.",
+    "why_it_matters": "Namespace URIs and Namespace Identity matters because XML workflows rely on explicit structure and predictable processing. The lesson helps you reason about namespace names, avoid a common misunderstanding, and make a result reproducible for another developer.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Namespace URIs and Namespace Identity: concept map",
+        "asset_path": "diagrams/lessons/lesson-054-namespace-uris-and-namespace-identity.svg",
+        "alt_text": "Concept flow covering Namespace names, URI-based identification, Prefixes versus namespace identity, Why namespace URLs are not necessarily web pages.",
+        "caption": "The visual introduces namespace uris and namespace identity; inspect the worked example and then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "An XML namespace is identified by its namespace name (commonly a URI). A prefix is a local alias bound by xmlns; the prefix spelling is not the identity. An unprefixed attribute does not inherit the default element namespace."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the subtopics",
+        "text": "This lesson explicitly covers: Namespace names; URI-based identification; Prefixes versus namespace identity; Why namespace URLs are not necessarily web pages. Treat these as connected parts of one workflow: define the structure, make the relevant assumptions explicit, and verify a result with a small known input."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Namespace URIs and Namespace Identity",
+        "language": "xml",
+        "code": "<shop xmlns:p=\"https://example.org/products\" xmlns:o=\"https://example.org/orders\">\n  <p:item code=\"A1\">Notebook</p:item>\n  <o:item number=\"O-1\"/>\n</shop>",
+        "expected_output": "The two item elements use different namespace names even though both local names are item. Prefix spelling is only an alias for the namespace URI.",
+        "run_instructions": "Inspect this example as text. Run it only in a processor that supports the shown language/version; the standard CodeLeaf playground previews HTML/CSS/JavaScript only and does not execute XML, XSD, XPath, XSLT, XQuery, Python, or SQL. When querying namespaced XML, bind a prefix in the XPath/XSLT host context and use that prefix in expressions. Two prefixes bound to the same namespace URI refer to the same expanded names.",
+        "reset_steps": "Restore the sample to its exact starting state before each experiment. Change one element, attribute, expression, or constraint at a time, then compare the result with the expected behavior.",
+        "execution_mode": "static-validation",
+        "limitations": "This snippet is an inspectable example, not an XML execution service. Validate it with a standards-compatible XML processor; feature support depends on the processor/version."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety checkpoint",
+        "text": "Distinguish well-formedness, schema validity, and application-level correctness; they are different checks."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a small synthetic example that demonstrates “Namespace names”. Then add one boundary case involving “URI-based identification”. Write down what should happen before testing, and record the exact output or processor message afterward."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-054-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming a document is correct because it looks readable.",
+        "why": "Visual appearance does not prove well-formedness, schema validity, correct namespace handling, or application-level meaning.",
+        "fix": "Parse and validate the document with the intended processor, then assert its meaning using a focused test."
+      },
+      {
+        "problem": "Mixing specification features with processor support.",
+        "why": "A standard may define features that a specific runtime does not implement.",
+        "fix": "Record the version and feature support; test with the actual target processor."
+      },
+      {
+        "problem": "Testing only one happy-path example.",
+        "why": "Missing values, wrong types, namespace differences, or boundary inputs can expose failures.",
+        "fix": "Add a valid case, an invalid case, and an edge case to the verification notes."
+      }
+    ],
+    "task": "Build a short demonstration of namespace uris and namespace identity using synthetic data. Include the concept “Namespace names”, a known expected result, and a short note explaining one edge case.",
+    "task_acceptance_criteria": [
+      "The artifact clearly demonstrates Namespace names.",
+      "The expected result is written before verification.",
+      "One invalid or boundary case is documented.",
+      "Processor/version assumptions and relevant security limits are recorded."
+    ],
+    "hints": [
+      "Start with the exact definition or construct associated with namespace names.",
+      "Keep the example minimal and change one thing at a time.",
+      "Compare the observed result with the expected behavior and consult the linked specification if they differ."
+    ],
+    "summary": [
+      "Namespace URIs and Namespace Identity contributes to the larger XML workflow of creating, checking, querying, transforming, or maintaining structured documents.",
+      "The listed syllabus concepts include Namespace names, URI-based identification, Prefixes versus namespace identity.",
+      "A reproducible XML example includes the input, processor/version assumptions, expected result, and a meaningful failure case."
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "The two item elements use different namespace names even though both local names are item. Prefix spelling is only an alias for the namespace URI."
+  },
+  "task": "Build a short demonstration of namespace uris and namespace identity using synthetic data. Include the concept “Namespace names”, a known expected result, and a short note explaining one edge case.",
+  "task_acceptance_criteria": [
+    "The artifact clearly demonstrates Namespace names.",
+    "The expected result is written before verification.",
+    "One invalid or boundary case is documented.",
+    "Processor/version assumptions and relevant security limits are recorded."
+  ],
+  "hints": [
+    "Start with the exact definition or construct associated with namespace names.",
+    "Keep the example minimal and change one thing at a time.",
+    "Compare the observed result with the expected behavior and consult the linked specification if they differ."
+  ],
+  "summary": [
+    "Namespace URIs and Namespace Identity contributes to the larger XML workflow of creating, checking, querying, transforming, or maintaining structured documents.",
+    "The listed syllabus concepts include Namespace names, URI-based identification, Prefixes versus namespace identity.",
+    "A reproducible XML example includes the input, processor/version assumptions, expected result, and a meaningful failure case."
+  ],
+  "run_mode": "static-validation",
+  "expected_output": "The two item elements use different namespace names even though both local names are item. Prefix spelling is only an alias for the namespace URI.",
+  "common_mistakes": [
+    {
+      "problem": "Assuming a document is correct because it looks readable.",
+      "why": "Visual appearance does not prove well-formedness, schema validity, correct namespace handling, or application-level meaning.",
+      "fix": "Parse and validate the document with the intended processor, then assert its meaning using a focused test."
+    },
+    {
+      "problem": "Mixing specification features with processor support.",
+      "why": "A standard may define features that a specific runtime does not implement.",
+      "fix": "Record the version and feature support; test with the actual target processor."
+    },
+    {
+      "problem": "Testing only one happy-path example.",
+      "why": "Missing values, wrong types, namespace differences, or boundary inputs can expose failures.",
+      "fix": "Add a valid case, an invalid case, and an edge case to the verification notes."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "title": "Namespaces in XML 1.0, Third Edition",
+      "url": "https://www.w3.org/TR/xml-names/",
+      "publisher": "W3C",
+      "checked_on": "2026-10-12"
+    },
+    {
+      "title": "Extensible Markup Language (XML) 1.0, Fifth Edition",
+      "url": "https://www.w3.org/TR/xml/",
+      "publisher": "W3C",
+      "checked_on": "2026-10-12"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Generated from the attached XML syllabus; requires technical review and validation in the target XML processor before publication.",
+  "exercise_files": []
+}

@@ -1,0 +1,207 @@
+{
+  "id": "expressjs-lesson-162",
+  "slug": "reliability-and-graceful-shutdown",
+  "title": "Reliability and Graceful Shutdown",
+  "sequence": 162,
+  "module_id": "expressjs-module-17",
+  "module_slug": "performance-concurrency-and-scalability",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "expressjs-lesson-161"
+  ],
+  "previous_lesson_id": "expressjs-lesson-161",
+  "next_lesson_id": "expressjs-lesson-163",
+  "keywords": [
+    "reliability-and-graceful-shutdown",
+    "performance-concurrency-and-scalability",
+    "stopping-acceptance-of-new-work",
+    "draining-active-requests",
+    "closing-database-and-queue-resources",
+    "handling-termination-signals",
+    "health-checks-and-restart-strategies"
+  ],
+  "source_syllabus_number": 162,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Stopping acceptance of new work",
+    "Draining active requests",
+    "Closing database and queue resources",
+    "Handling termination signals",
+    "Health checks and restart strategies",
+    "Express's official performance and reliability recommendations include asynchronous operations,",
+    "appropriate logging, production configuration, caching, reverse proxies, and scaling strategies. Those",
+    "principles form the basis of this module."
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and terminology of Reliability and Graceful Shutdown.",
+    "Apply or interpret one Express.js 5 pattern related to stopping acceptance of new work.",
+    "Identify a meaningful edge case and choose a repeatable local test for it."
+  ],
+  "execution_mode": "server-runner",
+  "status": "draft",
+  "content": {
+    "intro": "In this lesson, you will learn reliability and graceful shutdown and connect the named syllabus points to a small Express.js example. The course baseline is Express 5.x on a supported Node.js LTS release; the page shows reference output, not execution of Node.js code.",
+    "why_it_matters": "Reliability and Graceful Shutdown matters because it helps keep the request/response contract explicit and the application maintainable as inputs, users and dependencies become less predictable. Measure before optimizing.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Concept map: Reliability and Graceful Shutdown",
+        "asset_path": "diagrams/lesson-162-visual.svg",
+        "alt_text": "A conceptual three-stage flow for Reliability and Graceful Shutdown: context or input, the Express.js concept, and verification of expected behavior with an edge case.",
+        "caption": "Use this visual to connect stopping acceptance of new work to reliability and graceful shutdown; the final step is to verify both normal and boundary behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Reliability and Graceful Shutdown is part of performance, concurrency, and scalability. Node handles I/O asynchronously, but CPU-heavy work can block the event loop. Measure latency and error rates, limit work, tune data access, control cache freshness, and design backpressure and shutdown behavior. For this topic, make the observable behavior explicit, then check what happens when an input is missing, malformed, unauthorized, or a dependency fails (choose the relevant cases for this lesson)."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the attached syllabus",
+        "items": [
+          {
+            "title": "Stopping acceptance of new work",
+            "text": "Connect this syllabus point to Reliability and Graceful Shutdown: state the expected behavior, identify a realistic edge case, and choose a test or observation that proves the behavior instead of relying on assumptions."
+          },
+          {
+            "title": "Draining active requests",
+            "text": "Connect this syllabus point to Reliability and Graceful Shutdown: state the expected behavior, identify a realistic edge case, and choose a test or observation that proves the behavior instead of relying on assumptions."
+          },
+          {
+            "title": "Closing database and queue resources",
+            "text": "Express does not supply a database driver. Use an established driver or ORM, parameterize data values, preserve database constraints, manage connections and test rollback/error cases."
+          },
+          {
+            "title": "Handling termination signals",
+            "text": "Connect this syllabus point to Reliability and Graceful Shutdown: state the expected behavior, identify a realistic edge case, and choose a test or observation that proves the behavior instead of relying on assumptions."
+          },
+          {
+            "title": "Health checks and restart strategies",
+            "text": "Validate required configuration at startup, keep credentials outside source control, expose a limited health check, and verify logs, deployment smoke tests and recovery steps before release."
+          },
+          {
+            "title": "Express's official performance and reliability recommendations include asynchronous operations,",
+            "text": "Use asynchronous I/O for waiting work, but remember synchronous CPU-heavy functions still block the event loop. Bound concurrent work and honor cancellation, streams and backpressure."
+          },
+          {
+            "title": "appropriate logging, production configuration, caching, reverse proxies, and scaling strategies. Those",
+            "text": "Validate required configuration at startup, keep credentials outside source control, expose a limited health check, and verify logs, deployment smoke tests and recovery steps before release."
+          },
+          {
+            "title": "principles form the basis of this module.",
+            "text": "Make the runtime version, module system, package scripts and lockfile explicit. A fresh installation should reproduce the same dependency graph and documented startup behavior."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Read the example carefully",
+        "text": "A useful way to study reliability and graceful shutdown is to start from the first syllabus point — stopping acceptance of new work — and follow it through a small request or application example. Keep Express's built-in behavior separate from optional packages and your own application policy."
+      },
+      {
+        "type": "code",
+        "title": "Worked example (reference only)",
+        "language": "javascript",
+        "code": "const server = app.listen(process.env.PORT || 3000);\nlet stopping = false;\nprocess.on('SIGTERM', () => {\n  if (stopping) return;\n  stopping = true;\n  server.close(async (error) => {\n    await closeDatabasePool();\n    if (error) process.exitCode = 1;\n  });\n});",
+        "expected_output": "On SIGTERM the server stops accepting new connections, then closes the database pool in its close callback. Production apps also need bounded shutdown time and handling for other critical resources.",
+        "notes": "Test termination during active requests. Avoid abruptly exiting before cleanup has finished."
+      },
+      {
+        "type": "callout",
+        "title": "Safety / production rule",
+        "text": "Module rule — Node handles I/O asynchronously, but CPU-heavy work can block the event loop. Measure latency and error rates, limit work, tune data access, control cache freshness, and design backpressure and shutdown behavior."
+      }
+    ],
+    "expected_output": "On SIGTERM the server stops accepting new connections, then closes the database pool in its close callback. Production apps also need bounded shutdown time and handling for other critical resources.",
+    "task": "Try it yourself: adapt the worked example to demonstrate reliability and graceful shutdown. Write down the exact request or command, expected status/body, one boundary case, and how you would reset the local lab. CodeLeaf does not execute Express code in this lesson page; run Node.js server examples locally.",
+    "task_acceptance_criteria": [
+      "The example has a clear local run or inspection path and the required dependencies are named.",
+      "A normal request and a malformed/edge/failure request have documented expected outcomes.",
+      "No credentials, production data, or claim of successful runtime execution is included."
+    ],
+    "hints": [
+      "Hint 1: identify which part of reliability and graceful shutdown is supplied by Express and which part belongs to your own application or another package.",
+      "Hint 2: check the official Express 5 guide/API reference and isolate the smallest example that proves one behavior.",
+      "Hint 3: verify a success case, a boundary case and the expected status/response; restart from a clean state before repeating."
+    ],
+    "solution_notes": "Suggested approach: Node handles I/O asynchronously, but CPU-heavy work can block the event loop. Measure latency and error rates, limit work, tune data access, control cache freshness, and design backpressure and shutdown behavior. The sample is a focused reference fragment. Review all dependency, schema, proxy and runtime assumptions before using it in an application.",
+    "common_mistakes": [
+      {
+        "problem": "Copying an example without checking its assumptions",
+        "why": "A fragment may omit route setup, middleware order, external packages, database schema or production configuration.",
+        "fix": "State the runtime/dependency assumptions, run the focused example locally, and test a success path plus one failure path."
+      },
+      {
+        "problem": "Treating all request values as trusted",
+        "why": "Parameters, query values, body properties, files and upstream responses can be missing or malicious.",
+        "fix": "Validate schema, type and bounds at the boundary; keep authorization and database constraints as separate checks."
+      },
+      {
+        "problem": "Assuming the demo output means the server executed",
+        "why": "The course page shows reference output for Node.js/Express code; it is not an isolated Node runtime.",
+        "fix": "Run the example locally with the documented Node.js version and record actual command/output and test results."
+      }
+    ],
+    "summary": [
+      "Explain the central idea behind reliability and graceful shutdown.",
+      "Connect the relevant subtopics to the request/response or application boundary.",
+      "Verify one normal outcome and one edge/error case with repeatable evidence."
+    ],
+    "run_mode": "static-validation",
+    "execution_mode": "server-runner",
+    "run_instructions": [
+      "Open a terminal in the lesson lab directory.",
+      "Install dependencies for the sample if required; use a supported Node.js LTS release.",
+      "Run the documented file with node, send the stated request with curl or an API client, and compare the actual status/body with the reference."
+    ],
+    "reset_steps": [
+      "Stop the local process with Ctrl+C.",
+      "Clear only temporary/synthetic records or files created by the lab.",
+      "Restart the server before repeating the example."
+    ],
+    "troubleshooting": [
+      "If node reports a module-syntax error, check package.json module type or use the matching CommonJS syntax.",
+      "If a package cannot be resolved, install the named dependency in the local lab and verify the lockfile.",
+      "If output differs, verify middleware order, the request path/method, environment variables and the expected runtime version."
+    ],
+    "accessibility_notes": "The lesson diagram has an explicit title, description and textual labels; color is supplementary and not the only way to distinguish stages.",
+    "version_notes": "Express 5.x teaching baseline. Check the official migration guide before applying these examples to Express 4 projects.",
+    "knowledge_check_file": "exams/question-files/lesson-162-questions.json"
+  },
+  "sources": [
+    {
+      "title": "Express.js performance best practices",
+      "url": "https://expressjs.com/en/advanced/best-practice-performance.html",
+      "publisher": "OpenJS Foundation / Express.js",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "Production environment, logging, caching, reverse proxies and performance practices."
+      ]
+    },
+    {
+      "title": "Node.js release schedule",
+      "url": "https://nodejs.org/en/about/previous-releases",
+      "publisher": "OpenJS Foundation / Node.js",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "Supported Node.js release lines and recommendation to use Active LTS or Maintenance LTS for production."
+      ]
+    },
+    {
+      "title": "Node.js test runner",
+      "url": "https://nodejs.org/api/test.html",
+      "publisher": "OpenJS Foundation / Node.js",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "Built-in test runner for unit/integration test organization in supported Node.js releases."
+      ]
+    }
+  ],
+  "exercise_files": [
+    "../exercises/028-graceful-shutdown.json"
+  ]
+}

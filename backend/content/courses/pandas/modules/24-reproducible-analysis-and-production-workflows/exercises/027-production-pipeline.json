@@ -1,0 +1,67 @@
+{
+  "id": "pandas-exercise-27",
+  "slug": "production-pipeline",
+  "title": "Production Pipeline",
+  "sequence": 27,
+  "lesson_id": "pandas-lesson-203",
+  "lesson_slug": "deployment-and-scheduling",
+  "module_id": "pandas-module-24",
+  "difficulty": "advanced",
+  "type": "code",
+  "prompt": "Combine loading, cleaning, validation, grouping, logging, and export in a repeatable workflow.",
+  "scenario": "Use the synthetic data described below to practise r, e, u, s, a, b, l, e,  , p, r, o, d, u, c, t, i, o, n,  , d, a, t, a,  , p, i, p, e, l, i, n, e. Do not assume the input is correct without validating it.",
+  "skills": "Reusable production data pipeline",
+  "starter": {
+    "language": "python",
+    "code": "import pandas as pd\n\ndef summarize(frame):\n    required = {\"category\", \"units\", \"price\"}\n    missing = required - set(frame.columns)\n    if missing: raise ValueError(f\"Missing columns: {sorted(missing)}\")\n    work = frame.assign(revenue=frame[\"units\"] * frame[\"price\"])\n    return work.groupby(\"category\", as_index=False)[\"revenue\"].sum()\n\nexample = pd.DataFrame({\"category\": [\"A\", \"A\"], \"units\": [2, 3], \"price\": [10, 5]})\nprint(summarize(example).to_dict(\"records\"))",
+    "dataset_note": "Use small synthetic in-memory data; do not place private or real customer data in exercises."
+  },
+  "input_schema": {
+    "description": "Create or use a synthetic DataFrame with only the columns needed for this exercise.",
+    "validation": [
+      "Document expected columns and data types.",
+      "State how missing values or duplicates should be treated."
+    ]
+  },
+  "expected_output": [
+    "Separate load, validation, transform, summarize, and export steps.",
+    "Log input and output row counts and failures.",
+    "Test the pipeline on a small synthetic fixture and document configuration."
+  ],
+  "public_tests": [
+    {
+      "name": "normal-case",
+      "description": "The solution returns the required columns and correctly computes the stated result."
+    },
+    {
+      "name": "edge-case",
+      "description": "The solution documents behavior for a missing value, duplicate key, empty input, invalid value, or other relevant edge case."
+    }
+  ],
+  "hints": [
+    "Write down the expected result before coding.",
+    "Use Pandas operations that preserve labels unless position-based behavior is intended.",
+    "Add a small assertion for the most important property."
+  ],
+  "acceptance_criteria": [
+    "Separate load, validation, transform, summarize, and export steps.",
+    "Log input and output row counts and failures.",
+    "Test the pipeline on a small synthetic fixture and document configuration."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "r"
+    ],
+    "case_sensitive": false,
+    "note": "The generic short-response grader is only an initial scaffold; a reviewed isolated Python grader is required for automatic execution of arbitrary learner code."
+  },
+  "solution_file": "solutions/027-production-pipeline-solution.json",
+  "solution": {},
+  "retry_policy": {
+    "max_attempts": null,
+    "allow_retry_after_feedback": true
+  },
+  "status": "draft",
+  "status_note": "Review prompt, starter, rubric, and server-side grading before publication."
+}

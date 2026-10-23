@@ -1,0 +1,193 @@
+{
+  "id": "web-application-security-lesson-053",
+  "slug": "json-web-tokens-jwt",
+  "title": "JSON Web Tokens (JWT)",
+  "sequence": 53,
+  "module_id": "web-application-security-module-07",
+  "module_slug": "authentication-and-session-management",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-security",
+  "curriculum_tier": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "web-application-security-lesson-052"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-052",
+  "next_lesson_id": "web-application-security-lesson-054",
+  "keywords": [
+    "json",
+    "web",
+    "tokens",
+    "jwt",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 53,
+  "source_syllabus_title": "JSON Web Tokens (JWT)",
+  "source_subtopics": [
+    {
+      "number": "53.1",
+      "title": "JWT structure and claims"
+    },
+    {
+      "number": "53.2",
+      "title": "Signing, encryption, and integrity"
+    },
+    {
+      "number": "53.3",
+      "title": "Allowed-algorithm and key-validation rules"
+    },
+    {
+      "number": "53.4",
+      "title": "Issuer, audience, expiry, and not-before checks"
+    },
+    {
+      "number": "53.5",
+      "title": "Token revocation and rotation strategies"
+    },
+    {
+      "number": "53.6",
+      "title": "Common JWT implementation mistakes"
+    }
+  ],
+  "subtopics": [
+    "JWT structure and claims",
+    "Signing, encryption, and integrity",
+    "Allowed-algorithm and key-validation rules",
+    "Issuer, audience, expiry, and not-before checks",
+    "Token revocation and rotation strategies",
+    "Common JWT implementation mistakes"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in JSON Web Tokens (JWT).",
+    "Choose an appropriate defensive control for JSON Web Tokens (JWT) and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for JSON Web Tokens (JWT), including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 7: Authentication and Session Management. It builds practical understanding of JSON Web Tokens (JWT) with the syllabus subtopics retained below.",
+    "why_it_matters": "JSON Web Tokens (JWT) protects identity and data boundaries. A control that exists only in the interface can be bypassed, so policy must be enforced at the authoritative server boundary. Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: JSON Web Tokens (JWT)",
+        "asset_path": "diagrams/lesson-053-json-web-tokens-jwt.svg",
+        "alt_text": "Four-stage visual model for JSON Web Tokens (JWT): Establish identity; Protect credential; Manage token/session; Test expiry + recovery.",
+        "caption": "Concept map for JSON Web Tokens (JWT). It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "JSON Web Tokens (JWT) can be understood through this sequence: Establish identity → Protect credential → Manage token/session → Test expiry + recovery. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 53.1 JWT structure and claims; 53.2 Signing, encryption, and integrity; 53.3 Allowed-algorithm and key-validation rules; 53.4 Issuer, audience, expiry, and not-before checks; 53.5 Token revocation and rotation strategies; 53.6 Common JWT implementation mistakes. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "text",
+        "execution_mode": "human-review",
+        "title": "Safe reference example: JSON Web Tokens (JWT)",
+        "code": "Before using a JWT, validate: signature; an explicitly allowed algorithm; issuer; audience; expiry; and not-before when present.\nTreat header and payload values as untrusted until verification succeeds.",
+        "expected_output": "The token is accepted only when its signature and applicable claims pass validation.",
+        "run_instructions": "Use a maintained JWT library with explicit algorithm and key configuration. Decoding a JWT is not the same as validating it.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “JSON Web Tokens (JWT)”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for JSON Web Tokens (JWT) in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "human-review",
+    "knowledge_check_file": "exams/question-files/lesson-053-questions.json",
+    "recap": [
+      "JSON Web Tokens (JWT) is a security boundary/control topic, not a standalone checklist item.",
+      "Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [
+    "../exercises/023-validate-jwt-claims.json"
+  ],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "Authentication Cheat Sheet",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication error behavior",
+        "throttling",
+        "reauthentication"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

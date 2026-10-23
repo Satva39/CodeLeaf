@@ -1,0 +1,153 @@
+{
+  "id": "kotlin-lesson-197",
+  "slug": "kotlin-reflection-on-the-jvm",
+  "title": "Kotlin Reflection on the JVM",
+  "sequence": 197,
+  "module_id": "kotlin-module-19",
+  "module_slug": "annotations-reflection-and-code-generation",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "kotlin-lesson-196"
+  ],
+  "previous_lesson_id": "kotlin-lesson-196",
+  "next_lesson_id": "kotlin-lesson-198",
+  "keywords": [
+    "kotlin-reflection-on-the-jvm",
+    "the-kotlin-reflect-dependency",
+    "discovering-members-and-types",
+    "reflection-limitations-and-cos"
+  ],
+  "source_syllabus_number": 197,
+  "subtopics": [
+    "The kotlin-reflect Dependency",
+    "Discovering Members and Types",
+    "Reflection Limitations and Costs"
+  ],
+  "learning_outcomes": [
+    "Explain the central rule or purpose of kotlin reflection on the jvm using at least one correct term from the lesson.",
+    "Interpret or adapt a small Kotlin example that demonstrates kotlin reflection on the jvm.",
+    "Identify one relevant edge case, debugging step, or version/platform constraint."
+  ],
+  "content": {
+    "intro": "In this lesson, you will learn **Kotlin Reflection on the JVM** as part of **Annotations, Reflection, and Code Generation**. Kotlin and Java interoperate, but platform types, annotations, generated JVM signatures, and collection mutability require explicit boundary checks. Use the subtopics—The kotlin-reflect Dependency, Discovering Members and Types, Reflection Limitations and Costs—as a checklist: predict what the example will do, then verify it in a project configured for the target platform.",
+    "why_it_matters": "Professional applications need repeatable tests, clear APIs, dependable dependencies, security checks, and observable failures. Apply this concept in small steps before integrating it into a larger project.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Concept visual",
+        "asset_path": "diagrams/lesson-197-kotlin-reflection-on-the-jvm.svg",
+        "alt_text": "Concept diagram for lesson 197, Kotlin Reflection on the JVM: connects The kotlin-reflect Dependency with Discovering Members and Types and a practice/check step.",
+        "caption": "Lesson 197: Kotlin Reflection on the JVM. Use this concept map to connect the syllabus subtopics to the small example and test task."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Kotlin and Java interoperate, but platform types, annotations, generated JVM signatures, and collection mutability require explicit boundary checks."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the kotlin-reflect dependency. Then compare it with discovering members and types. Identify the input, state, dependency, or branch that determines the result. The snippet is a static reference for CodeLeaf and is not executed in the lesson page."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the syllabus",
+        "items": [
+          {
+            "title": "The kotlin-reflect Dependency",
+            "text": "The kotlin-reflect Dependency is part of reproducible project configuration. Declare the dependency or plugin where it belongs, preserve a compatible version set, and use the Gradle Wrapper for repeatable builds."
+          },
+          {
+            "title": "Discovering Members and Types",
+            "text": "Discovering Members and Types is one part of kotlin reflection on the jvm. Connect its definition to the example, identify the input/state it changes, and verify the expected behavior with a small test case."
+          },
+          {
+            "title": "Reflection Limitations and Costs",
+            "text": "Reflection Limitations and Costs is one part of kotlin reflection on the jvm. Connect its definition to the example, identify the input/state it changes, and verify the expected behavior with a small test case."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "kotlin",
+        "execution_mode": "static-validation",
+        "code": "class Greeter {\n    fun greet(name: String) = \"Hello, $name\"\n}\n\nfun main() = println(Greeter().greet(\"Java\"))",
+        "expected_output": "Hello, Java",
+        "run_instructions": "Reflection examples may require kotlin-reflect; processor/compiler-plugin examples require an isolated Gradle project and compatible tooling.",
+        "reset_steps": "Restore the documented starting values, rerun the smallest test, and compare the result with the expected output. If behavior differs, check the compiler/plugin/runtime versions and the active target before changing more than one thing."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake to avoid",
+        "text": "Reflection is always faster and safer than a direct API."
+      },
+      {
+        "type": "paragraph",
+        "title": "Troubleshooting and reset",
+        "text": "If the example fails, first confirm which runtime/project type the snippet requires. Read the first useful compiler or runtime message, check imports and declared dependencies, reduce the example to a minimal case, and rerun. For target-specific code, use the target toolchain rather than assuming a console or browser runner can execute it."
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          {
+            "title": "Explain",
+            "text": "Describe the main rule of kotlin reflection on the jvm in your own words."
+          },
+          {
+            "title": "Apply",
+            "text": "Change one input or condition and predict the result before running it."
+          },
+          {
+            "title": "Verify",
+            "text": "Check one edge case and the official reference for the selected Kotlin/runtime version."
+          }
+        ]
+      }
+    ],
+    "task": "Try it yourself: create a small variation that demonstrates kotlin reflection on the jvm. Write down your predicted result first, run it in the correct local project, then explain one boundary case involving the kotlin-reflect dependency.",
+    "task_acceptance_criteria": [
+      "Explain kotlin reflection on the jvm without copying the lesson wording.",
+      "Demonstrate the concept with a small code/configuration change and state the expected result.",
+      "Test one boundary case or explain a relevant platform/version limitation."
+    ],
+    "hints": [
+      "Begin with the first syllabus subtopic: The kotlin-reflect Dependency. What input or state does it act on?",
+      "Change only one value, branch, declaration, or dependency at a time. Predict what should happen before running the code.",
+      "Compare your observed result with the expected output and the official reference; verify that you are using the required project type and dependency set."
+    ],
+    "expected_output": "Hello, Java",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-197-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Kotlin Documentation",
+      "url": "https://kotlinlang.org/docs/home.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Kotlin Reflection on the JVM",
+        "The kotlin-reflect Dependency",
+        "Discovering Members and Types"
+      ]
+    },
+    {
+      "title": "Kotlin Language Features and Proposals",
+      "url": "https://kotlinlang.org/docs/kotlin-language-features-and-proposals.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "language feature stability",
+        "compiler version compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson derived from the numbered syllabus entry 197 in Kotlin.pdf. Review example compatibility and question alignment before publishing."
+}

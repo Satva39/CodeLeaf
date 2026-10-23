@@ -1,0 +1,185 @@
+{
+  "id": "vue-lesson-098",
+  "slug": "understanding-vuex-and-legacy-state-management",
+  "title": "Understanding Vuex and Legacy State Management",
+  "sequence": 98,
+  "module_id": "vue-module-13",
+  "module_slug": "state-management-with-pinia",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-application",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "vue-lesson-097"
+  ],
+  "previous_lesson_id": "vue-lesson-097",
+  "next_lesson_id": "vue-lesson-099",
+  "keywords": [
+    "Understanding Vuex and Legacy State Management",
+    "State Management with Pinia",
+    "Overview of Vuex",
+    "State, mutations, actions, and getters",
+    "Vuex modules",
+    "Understanding legacy codebases",
+    "Choosing Pinia for new Vue applications",
+    "Vue 3",
+    "Composition API"
+  ],
+  "source_syllabus_number": 98,
+  "subtopics": [
+    "Overview of Vuex",
+    "State, mutations, actions, and getters",
+    "Vuex modules",
+    "Understanding legacy codebases",
+    "Choosing Pinia for new Vue applications"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Understanding Vuex and Legacy State Management in a Vue 3 application.",
+    "Apply at least one of the syllabus subtopics in a small, inspectable example.",
+    "Verify one expected behavior and identify a relevant edge case."
+  ],
+  "content": {
+    "intro": "This lesson studies Understanding Vuex and Legacy State Management within State Management with Pinia. The source PDF subtopics are preserved below and connected to an original working-style example.",
+    "why_it_matters": "Shared state needs a clear source of truth so multiple routes do not drift or duplicate the same business logic.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Understanding Vuex and Legacy State Management: Safe maintenance workflow",
+        "asset_path": "diagrams/lessons/lesson-098-understanding-vuex-and-legacy-state-management.svg",
+        "alt_text": "Safe maintenance workflow diagram for lesson 98: Understanding Vuex and Legacy State Management. Record versions, behavior, and constraints → Add a regression check before migration → Compare behavior and document recovery",
+        "caption": "Maintenance flow: preserve existing behavior with inventory, incremental changes, repeatable checks, and a rollback plan."
+      },
+      {
+        "type": "paragraph",
+        "title": "The idea in context",
+        "text": "Pinia organizes shared application state into stores with state, getters, and actions; Vuex remains useful legacy knowledge. This lesson focuses on Understanding Vuex and Legacy State Management. Start by naming the state, component, browser behavior, or deployment boundary involved; then predict what should change and test the smallest example."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Overview of Vuex",
+            "text": "For Overview of Vuex, define one source of truth and separate stored state from derived values and actions. Avoid duplicating the same fact in component-local state and a global store; persist only what the product genuinely needs."
+          },
+          {
+            "title": "State, mutations, actions, and getters",
+            "text": "For State, mutations, actions, and getters, define one source of truth and separate stored state from derived values and actions. Avoid duplicating the same fact in component-local state and a global store; persist only what the product genuinely needs."
+          },
+          {
+            "title": "Vuex modules",
+            "text": "For Vuex modules, define one source of truth and separate stored state from derived values and actions. Avoid duplicating the same fact in component-local state and a global store; persist only what the product genuinely needs."
+          },
+          {
+            "title": "Understanding legacy codebases",
+            "text": "For Understanding legacy codebases, inventory current behavior and dependency constraints before changing a legacy project. Make the smallest reversible change, add regression checks, and document why a new convention is safer or easier to maintain."
+          },
+          {
+            "title": "Choosing Pinia for new Vue applications",
+            "text": "For Choosing Pinia for new Vue applications, define one source of truth and separate stored state from derived values and actions. Avoid duplicating the same fact in component-local state and a global store; persist only what the product genuinely needs."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "import { defineStore } from 'pinia'\nexport const useTasksStore = defineStore('tasks', {\n  state: () => ({ items: [] }),\n  getters: { remaining: (state) => state.items.filter((item) => !item.done).length },\n  actions: { add(title) { this.items.push({ id: crypto.randomUUID(), title, done: false }) } }\n})",
+        "expected_output": "The store exposes one shared item list, a derived remaining count, and an action to add an item.",
+        "run_instructions": "Create the store in a JavaScript module, install Pinia with app.use(createPinia()), then call useTasksStore() in setup.",
+        "reset_steps": "Restore the initial values or original code, reload the development app/test, and repeat once with a boundary or failure case. Remove temporary logs and test data before committing.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Work through Understanding Vuex and Legacy State Management with a predict–change–verify loop. First state the expected UI or console output. Change only the relevant input/state value, then observe the result. Compare it with the expected output in the code block; if it differs, check the exact file, runtime/version, browser Console, and network response before widening the investigation."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Extend the example to include “State, mutations, actions, and getters”. Keep the same behavior for the ordinary input, then try an empty, invalid, repeated, or failure condition that makes sense for the example. Record the expected result before testing."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming behavior instead of checking it",
+            "text": "Write down the expected result and reproduce the issue in the smallest possible example; inspect the browser Console and the exact reactive value or request."
+          },
+          {
+            "title": "Ignoring an edge case",
+            "text": "Try empty input, a missing item, repeated interaction, a failed request, or unmounting while work is pending; handle the case explicitly."
+          },
+          {
+            "title": "Putting every responsibility in one component",
+            "text": "Separate display, reusable logic, API service, and shared state when that boundary makes the behavior easier to test and explain."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "Remember: Pinia organizes shared application state into stores with state, getters, and actions; Vuex remains useful legacy knowledge. For Understanding Vuex and Legacy State Management, keep the example small, verify the rendered or logged result, and consult the official references when behavior depends on a specific Vue or ecosystem version."
+      },
+      {
+        "type": "callout",
+        "title": "Accessibility, version, and runtime notes",
+        "text": "Use semantic HTML, readable labels, keyboard-operable controls, and visible errors where the example interacts with users. Vue examples are intended for Vue 3.x with create-vue/Vite unless a legacy or specialist lesson explicitly says otherwise. This CodeLeaf playground does not execute arbitrary Vue code; the snippets are labeled for static validation and should be run in a separate local project."
+      }
+    ],
+    "task": "Create a small example for “Understanding Vuex and Legacy State Management” that applies “Overview of Vuex”, predicts the expected result, and verifies a relevant boundary case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named Vue concept rather than only mentioning it.",
+      "The expected output or observable behavior is written down and can be checked locally.",
+      "At least one boundary, loading, invalid-input, or failure case is tested or explicitly reasoned about.",
+      "The example uses semantic/accessible interaction patterns and does not treat frontend state as authoritative security."
+    ],
+    "hints": [
+      "Start with the smallest observable part of “Overview of Vuex”.",
+      "Predict the output before changing one input at a time.",
+      "Use the browser Console, Vue DevTools, or the appropriate test runner to isolate a mismatch."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "The example only covers the happy path.",
+        "why": "Real interfaces receive empty values, delayed responses, invalid input, and failed requests.",
+        "fix": "Add one realistic edge/failure case and state its expected behavior."
+      },
+      {
+        "problem": "The code assumes an API or feature exists in every runtime.",
+        "why": "Tool and API support depends on Vue, the build tool, or the chosen SSR/test framework.",
+        "fix": "Check the linked official reference and record the runtime/version assumption."
+      }
+    ],
+    "summary": [
+      "Understanding Vuex and Legacy State Management belongs to the broader area State Management with Pinia.",
+      "The main concept to practice is Overview of Vuex.",
+      "Verify a normal result and one meaningful boundary case before using the pattern in a production feature."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-098-questions.json",
+    "references": [
+      "https://pinia.vuejs.org/core-concepts/state.html"
+    ]
+  },
+  "exercise_files": [
+    "../exercises/032-vuex-to-pinia-mapping.json"
+  ],
+  "sources": [
+    {
+      "title": "Pinia Core Concepts — State",
+      "url": "https://pinia.vuejs.org/core-concepts/state.html",
+      "publisher": "Pinia maintainers",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Understanding Vuex and Legacy State Management",
+        "Overview of Vuex",
+        "State, mutations, actions, and getters",
+        "Vuex modules"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Authored as a syllabus-complete educational draft. Technical and instructional review required before publication."
+}

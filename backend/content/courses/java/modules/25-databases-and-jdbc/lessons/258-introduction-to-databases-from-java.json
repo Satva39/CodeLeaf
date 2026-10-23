@@ -1,0 +1,204 @@
+{
+  "id": "java-lesson-258",
+  "slug": "introduction-to-databases-from-java",
+  "title": "Introduction to Databases from Java",
+  "sequence": 258,
+  "module_id": "java-module-25",
+  "module_slug": "databases-and-jdbc",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional",
+  "estimated_minutes": 13,
+  "prerequisites": [
+    "java-lesson-257"
+  ],
+  "previous_lesson_id": "java-lesson-257",
+  "next_lesson_id": "java-lesson-259",
+  "keywords": [
+    "introduction",
+    "to",
+    "databases",
+    "from",
+    "java",
+    "relational",
+    "database",
+    "fundamentals",
+    "tables",
+    "keys",
+    "relationships",
+    "drivers"
+  ],
+  "source_syllabus_number": 258,
+  "subtopics": [
+    "Relational database fundamentals",
+    "Tables, keys, and relationships",
+    "Database drivers",
+    "Application-to-database communication"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of introduction to databases from java and identify when it is appropriate in a Java program.",
+    "Apply at least one of the lesson topics—relational database fundamentals—in a small, readable example.",
+    "Identify one failure, compatibility, security, or resource-management concern and describe a safe response."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study introduction to databases from java with a short explanation, an original visual map, a Java example, and a check you can perform yourself. Focus on the relationship between the rule and the behavior rather than memorizing isolated syntax.",
+    "why_it_matters": "This concept matters because it helps you access database data safely with parameter binding, resource management, and transactions. In this lesson, focus on relational database fundamentals and use a minimal example to check what the rule actually guarantees.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Introduction to Databases from Java: concept map",
+        "asset_path": "diagrams/lesson-258.svg",
+        "alt_text": "Four-stage diagram for Introduction to Databases from Java: Relational database fundamentals; Tables, keys, and relationships; Database drivers; Application-to-database communication.",
+        "caption": "Visual summary of Introduction to Databases from Java; use it as a map while reading the explanation and testing the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Use Path and Files for modern file operations, choose byte or character APIs based on the data, and close resources reliably. Parse external files defensively because their contents may be incomplete or malformed. The important habit is to make the assumptions explicit and use the code example as a small experiment."
+      },
+      {
+        "type": "paragraph",
+        "title": "How the pieces fit",
+        "text": "Connect relational database fundamentals with tables, keys, and relationships before choosing an implementation. The example is a small, observable case; extend it by changing one input and checking a boundary, invalid value, or compatibility limit where relevant."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Relational database fundamentals",
+            "text": "Use Path and Files for modern file operations, choose byte or character APIs based on the data, and close resources reliably. Parse external files defensively because their contents may be incomplete or malformed."
+          },
+          {
+            "title": "Tables, keys, and relationships",
+            "text": "Use Path and Files for modern file operations, choose byte or character APIs based on the data, and close resources reliably. Parse external files defensively because their contents may be incomplete or malformed."
+          },
+          {
+            "title": "Database drivers",
+            "text": "Keep database work behind a data-access boundary. Use prepared statements for values, transactions for related changes, and try-with-resources to close statements, result sets, and connections."
+          },
+          {
+            "title": "Application-to-database communication",
+            "text": "Use Path and Files for modern file operations, choose byte or character APIs based on the data, and close resources reliably. Parse external files defensively because their contents may be incomplete or malformed."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "java",
+        "code": "public class Main {\n    public static void main(String[] args) {\n        String sql = \"SELECT id, name FROM customer WHERE status = ?\";\n        System.out.println(sql);\n        System.out.println(\"Bind status with PreparedStatement.setString(...)\");\n    }\n}\n",
+        "expected_output": "A parameterized query shape is printed; this example does not connect to a database.",
+        "run_instructions": "Treat SQL as data access and use PreparedStatement for values. Database execution requires a configured JDBC driver and connection. For ordinary Java SE examples, use JDK 25, save a complete class as Main.java, and run `javac Main.java` followed by `java Main`. CodeLeaf does not execute Java in the browser; use a local JDK for these examples. Preview-only and configuration-file examples have their own version or filename notes.",
+        "reset_steps": "Restore the original example, remove any temporary output files it created, and rerun the baseline case. Do not leave credentials, generated private data, or large test files in the project directory."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Keep one clear hypothesis per experiment. Check the version, read the error message, test boundaries, and record what evidence supports your conclusion."
+      }
+    ],
+    "task": "Try it yourself: model introduction to databases from java with a local test database or a mocked boundary. Use parameters for values, define transaction boundaries, and verify that resources close when an error occurs.",
+    "task_acceptance_criteria": [
+      "The example demonstrates at least one listed topic from Introduction to Databases from Java.",
+      "The learner states the expected result before running or inspecting the example.",
+      "At least one boundary, failure, compatibility, or maintainability consideration is documented where relevant."
+    ],
+    "hints": [
+      "Start by identifying the contract or rule behind relational database fundamentals.",
+      "Reduce the example to the smallest input that makes the behavior visible.",
+      "Test one boundary or failure case and compare the result with the expected behavior."
+    ],
+    "expected_output": "A parameterized query shape is printed; this example does not connect to a database.",
+    "run_mode": "server-runner",
+    "execution_notes": "Java requires a JDK or a separate isolated server runner. No Java sandbox is bundled with this content; never execute learner code inside the FastAPI process or public production container.",
+    "knowledge_check_file": "exams/question-files/lesson-258-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Applying the rule from memory without checking its exact contract.",
+        "why": "Small differences in type, scope, API version, or input shape can change the result.",
+        "fix": "Inspect the relevant official API/language documentation and build a minimal reproducer."
+      },
+      {
+        "problem": "Testing only a single happy path.",
+        "why": "Boundary values and failures often reveal assumptions hidden by the simplest example.",
+        "fix": "Add an empty, boundary, or invalid case and state the expected behavior before running it."
+      },
+      {
+        "problem": "Changing several things between runs.",
+        "why": "It becomes difficult to identify the actual cause of a different result.",
+        "fix": "Change one factor at a time and keep a short record of observed behavior."
+      }
+    ],
+    "summary": [
+      "Introduction to Databases from Java is best understood by connecting its contract to a small observable example.",
+      "Key syllabus points: Relational database fundamentals, Tables, keys, and relationships, Database drivers.",
+      "Use official versioned documentation and tests to confirm assumptions before relying on behavior in a larger application."
+    ],
+    "references": [
+      {
+        "title": "Learn Java",
+        "url": "https://dev.java/learn/"
+      },
+      {
+        "title": "Java SE 25 API Specification",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html"
+      },
+      {
+        "title": "Java JDBC API",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/api/java.sql/module-summary.html"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Learn Java",
+      "url": "https://dev.java/learn/",
+      "publisher": "Oracle / dev.java",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "getting started",
+        "language basics",
+        "object-oriented programming",
+        "generics",
+        "lambdas",
+        "collections",
+        "streams",
+        "modules",
+        "JVM tools",
+        "security"
+      ]
+    },
+    {
+      "title": "Java SE 25 API Specification",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "standard-library types and methods",
+        "API contracts",
+        "java.base",
+        "java.sql",
+        "java.net.http",
+        "java.nio.file",
+        "java.util.concurrent"
+      ]
+    },
+    {
+      "title": "Java JDBC API",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/api/java.sql/module-summary.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "Connection",
+        "PreparedStatement",
+        "ResultSet",
+        "transactions",
+        "SQL exceptions"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Java curriculum outline and current official references; requires Java subject-matter review and local verification before publication."
+}

@@ -1,0 +1,17 @@
+{
+  "id": "c-exercise-solution-020",
+  "exercise_id": "c-exercise-020",
+  "title": "Word-frequency analyzer plan reference solution",
+  "language": "c",
+  "answer": "#include <ctype.h>\n#include <stdio.h>\nint main(void) { const char *s=\"C code, C tests.\"; int in_word=0, words=0; for(size_t i=0;s[i]!='\\0';++i) { int is_word=isalnum((unsigned char)s[i]) || s[i]=='_'; if(is_word && !in_word) ++words; in_word=is_word; } printf(\"words=%d\\n\",words); return 0; }",
+  "explanation": "This reference illustrates one possible implementation, not the only acceptable solution. Review integer range, input validation, ownership/lifetime, compiler warnings and target-platform assumptions as appropriate.",
+  "manual_validation_checklist": [
+    "Build with an explicit ISO C mode and warnings enabled.",
+    "Run ordinary, boundary and invalid/failure cases.",
+    "Review all return values and object lifetime.",
+    "Check whether the example relies on platform-specific behavior."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only answer; keep protected from the learner-facing API until the platform has an explicit authorized reveal policy."
+}

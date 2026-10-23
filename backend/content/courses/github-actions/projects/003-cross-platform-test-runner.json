@@ -1,0 +1,135 @@
+{
+  "id": "github-actions-project-03",
+  "slug": "cross-platform-test-runner",
+  "title": "Cross-Platform Test Runner",
+  "sequence": 3,
+  "tier": "beginner",
+  "objective": "Run the same test suite across multiple operating systems or runtime versions.",
+  "prerequisite_lesson_ids": [
+    "github-actions-lesson-030",
+    "github-actions-lesson-031",
+    "github-actions-lesson-085"
+  ],
+  "recommended_lesson_range": [
+    30,
+    85
+  ],
+  "skills": [
+    "Runners and Execution Environments",
+    "Job Dependencies, Conditions, and Execution Strategies",
+    "Building Continuous Integration Pipelines",
+    "Monitoring, Debugging, and Troubleshooting",
+    "workflow YAML",
+    "CI/CD design",
+    "security review",
+    "testing and operations"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Matrix testing",
+      "acceptance_criteria": [
+        "Demonstrate matrix testing.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Independent jobs",
+      "acceptance_criteria": [
+        "Demonstrate independent jobs.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Consolidated results",
+      "acceptance_criteria": [
+        "Demonstrate consolidated results.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Failure diagnosis",
+      "acceptance_criteria": [
+        "Demonstrate failure diagnosis.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "contents": "# Cross-Platform Test Runner\n\nRun the same test suite across multiple operating systems or runtime versions.\n\n## Verification record\n\n- Trigger tested:\n- Checks that passed:\n- Failure path checked:\n- Permission review:\n- Remaining limitations:\n"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "language": "yaml",
+      "contents": "name: CI\non: [push, pull_request]\npermissions:\n  contents: read\njobs:\n  checks:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Repository check\n        run: test -f README.md\n"
+    }
+  ],
+  "required_features": [
+    "Matrix testing",
+    "Independent jobs",
+    "Consolidated results",
+    "Failure diagnosis"
+  ],
+  "stretch_features": [
+    "Add an explicit cancellation/timeout policy and test it.",
+    "Pin third-party action dependencies to verified immutable references per repository policy.",
+    "Add a troubleshooting guide with sanitized logs and a rollback or recovery plan."
+  ],
+  "tests": [
+    {
+      "name": "Required workflow evidence",
+      "mode": "human_review",
+      "criteria": [
+        "Workflow triggers match the documented intent.",
+        "Required jobs and checks actually run.",
+        "No production secret is exposed.",
+        "Permissions are limited to required operations.",
+        "Failure and recovery behavior is documented."
+      ]
+    },
+    {
+      "name": "Safe execution",
+      "mode": "human_review",
+      "criteria": [
+        "Validate in a disposable repository/environment.",
+        "Do not deploy real resources until configuration, access, and rollback are reviewed."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correct behavior and completion criteria",
+      "points": 30
+    },
+    {
+      "criterion": "Workflow design, clarity, and maintainability",
+      "points": 20
+    },
+    {
+      "criterion": "Permissions, credential handling, and trust boundaries",
+      "points": 25
+    },
+    {
+      "criterion": "Testing, failure handling, and traceable evidence",
+      "points": 15
+    },
+    {
+      "criterion": "Documentation and operational handover",
+      "points": 10
+    }
+  ],
+  "rubric_total": 100,
+  "review_method": "Human review against the rubric and recorded workflow-run evidence; local static checks do not replace a live GitHub Actions run.",
+  "reference_solution_file": "projects/solutions/003-cross-platform-test-runner-solution.json",
+  "status": "draft"
+}

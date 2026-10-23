@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-20",
+  "exercise_id": "dsa-exercise-pdf-20",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\ndef operation_counts(n):\n    linear = sum(1 for _ in range(n))\n    nested = sum(1 for _ in range(n) for _ in range(n))\n    return linear, nested\n\nassert operation_counts(5) == (5, 25)\n# The first loop is Theta(n); the nested loops are Theta(n^2).\n# A measurement at one n is not a proof: analyze the growth of basic operations.\n```",
+  "explanation": "The example counts operations in one and two nested loops. Linear work is Θ(n); nested work is Θ(n²). Complexity is established by analysis, not one stopwatch reading.",
+  "tested_reference_code": "def operation_counts(n):\n    linear = sum(1 for _ in range(n))\n    nested = sum(1 for _ in range(n) for _ in range(n))\n    return linear, nested\n\nassert operation_counts(5) == (5, 25)\n# The first loop is Theta(n); the nested loops are Theta(n^2).\n# A measurement at one n is not a proof: analyze the growth of basic operations.",
+  "language": "python"
+}

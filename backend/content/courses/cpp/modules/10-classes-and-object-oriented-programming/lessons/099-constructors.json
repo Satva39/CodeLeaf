@@ -1,0 +1,205 @@
+{
+  "id": "cpp-lesson-099",
+  "slug": "constructors",
+  "title": "Constructors",
+  "sequence": 99,
+  "module_id": "cpp-module-10",
+  "module_slug": "classes-and-object-oriented-programming",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "cpp-lesson-098"
+  ],
+  "previous_lesson_id": "cpp-lesson-098",
+  "next_lesson_id": "cpp-lesson-100",
+  "keywords": [
+    "constructors",
+    "default-constructors",
+    "parameterized-constructors",
+    "constructor-overloading",
+    "member-initializer-lists",
+    "default-member-initializers",
+    "delegating-constructors",
+    "explicit-constructors"
+  ],
+  "source_syllabus_number": 99,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Default Constructors",
+    "Parameterized Constructors",
+    "Constructor Overloading",
+    "Member Initializer Lists",
+    "Default Member Initializers",
+    "Delegating Constructors",
+    "explicit Constructors",
+    "Constructor Failure and Exceptions"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and core rule of constructors using at least one example.",
+    "Trace or adapt a minimal C++ example related to constructors and state its expected result.",
+    "Identify one precondition, error case, lifetime issue, portability assumption or version constraint relevant to the topic."
+  ],
+  "content": {
+    "intro": "Constructors focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Constructors matters because exercise construction, mutation and destruction, and prefer composition when it expresses the relationship without an inheritance hierarchy. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Constructors: visual trace",
+        "asset_path": "diagrams/lessons/lesson-099.svg",
+        "alt_text": "Lesson 99 visual for Constructors; concept: Default Constructors; apply: Parameterized Constructors; verify: Constructor Overloading.",
+        "caption": "Original lesson-specific overview: understand default constructors, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Classes combine state and operations behind an interface. Encapsulation protects invariants, and polymorphism is useful when runtime substitution is a real requirement.\n\nConstructors focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nExercise construction, mutation and destruction, and prefer composition when it expresses the relationship without an inheritance hierarchy."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Constructors",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <iostream>\n#include <utility>\n#include <string>\n\nclass User {\npublic:\n    User(int id, std::string name) : id_(id), name_(std::move(name)) {}\n    void print() const { std::cout << id_ << ':' << name_ << '\\n'; }\nprivate:\n    int id_;\n    std::string name_;\n};\nint main() { User user{7, \"Ari\"}; user.print(); }\n",
+        "expected_output": "7:Ari",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "A constructor establishes an object’s initial state. Members initialize in declaration order, regardless of their order in the constructor initializer list."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Default Constructors",
+            "text": "A struct groups related data under one type; in C++, its default member access is public, unlike class."
+          },
+          {
+            "title": "Parameterized Constructors",
+            "text": "A struct groups related data under one type; in C++, its default member access is public, unlike class."
+          },
+          {
+            "title": "Constructor Overloading",
+            "text": "A struct groups related data under one type; in C++, its default member access is public, unlike class."
+          },
+          {
+            "title": "Member Initializer Lists",
+            "text": "Explain member initializer lists in the context of Constructors: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Default Member Initializers",
+            "text": "Explain default member initializers in the context of Constructors: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Delegating Constructors",
+            "text": "A struct groups related data under one type; in C++, its default member access is public, unlike class."
+          },
+          {
+            "title": "explicit Constructors",
+            "text": "A struct groups related data under one type; in C++, its default member access is public, unlike class."
+          },
+          {
+            "title": "Constructor Failure and Exceptions",
+            "text": "A struct groups related data under one type; in C++, its default member access is public, unlike class."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate default constructors, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "Use standard C++ rather than compiler-specific behavior unless the lesson explicitly labels the dependency. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-099-questions.json",
+    "task": "Extend the example for Constructors with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+    "task_acceptance_criteria": [
+      "The code compiles in the documented standard mode with warnings enabled.",
+      "The predicted output matches the actual result for the added case.",
+      "One relevant boundary, lifetime, portability or error case is tested or documented."
+    ],
+    "hints": [
+      "Start by isolating the central rule from Constructors.",
+      "Trace values or object lifetimes before changing the program.",
+      "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+    ],
+    "summary": [
+      "Constructors is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying constructors.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "7:Ari"
+  },
+  "task": "Extend the example for Constructors with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+  "hints": [
+    "Start by isolating the central rule from Constructors.",
+    "Trace values or object lifetimes before changing the program.",
+    "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+  ],
+  "expected_output": "7:Ari",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Constructors is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying constructors.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 10, lesson 99: Constructors.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

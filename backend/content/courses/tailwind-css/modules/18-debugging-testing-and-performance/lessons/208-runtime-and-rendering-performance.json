@@ -1,0 +1,171 @@
+{
+  "id": "tailwind-css-lesson-208",
+  "slug": "runtime-and-rendering-performance",
+  "title": "Runtime and Rendering Performance",
+  "sequence": 208,
+  "module_id": "tailwind-css-module-18",
+  "module_slug": "debugging-testing-and-performance",
+  "level": "advanced",
+  "difficulty": "hard",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "tailwind-css-lesson-207"
+  ],
+  "previous_lesson_id": "tailwind-css-lesson-207",
+  "next_lesson_id": "tailwind-css-lesson-209",
+  "keywords": [
+    "runtime",
+    "and",
+    "rendering",
+    "performance",
+    "tailwind-css",
+    "utility-first",
+    "responsive-ui"
+  ],
+  "source_syllabus_number": 208,
+  "subtopics": [
+    "Tailwind's build-time styling model",
+    "Browser style calculation",
+    "Layout and paint costs",
+    "Efficient animation properties",
+    "Evaluating actual page performance"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of runtime and rendering performance.",
+    "Apply one appropriate technique to a small Tailwind CSS example.",
+    "Verify the expected result and identify a common failure mode."
+  ],
+  "content": {
+    "intro": "In this lesson, focus on runtime and rendering performance and connect it to the way Tailwind CSS generates and applies utility styles.",
+    "why_it_matters": "Runtime and Rendering Performance turns styling work into a repeatable engineering process that can be checked, deployed and maintained.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 18 learning map",
+        "asset_path": "diagrams/module-18-overview.svg",
+        "alt_text": "Four-step module learning map: Debugging Missing Styles → Debugging CSS Integration Problems → Runtime and Rendering Performance → Troubleshooting Workflow and Documentation. Lesson pages add code examples and practice.",
+        "caption": "Learning map for Module 18, from the opening concept to a practical checkpoint."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "The source curriculum highlights: Tailwind's build-time styling model; Browser style calculation; Layout and paint costs; Efficient animation properties; Evaluating actual page performance. Treat these as practical decisions rather than a list to memorize: identify the intended behavior, choose the smallest suitable utility or directive, and inspect what the browser receives."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to understand",
+        "items": [
+          "Tailwind's build-time styling model",
+          "Browser style calculation",
+          "Layout and paint costs",
+          "Efficient animation properties",
+          "Evaluating actual page performance"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Runtime and Rendering Performance",
+        "language": "html",
+        "execution_mode": "static-validation",
+        "code": "<form class=\"grid gap-4\">\n  <div class=\"grid gap-1\">\n    <label for=\"email\" class=\"font-medium\">Email address</label>\n    <input id=\"email\" name=\"email\" type=\"email\" required class=\"rounded-lg border px-3 py-2 focus-visible:outline-2\" />\n  </div>\n  <button class=\"rounded-lg bg-blue-700 px-4 py-2 text-white\">Continue</button>\n</form>",
+        "expected_output": "A required email field is explicitly labeled and keeps a visible focus state."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Start with the example, change one decision related to runtime and rendering performance, then compare the outcome. In a Tailwind-enabled project, confirm the generated CSS exists; class strings alone do not make styles available without a configured build."
+      },
+      {
+        "type": "callout",
+        "title": "Version and compatibility note",
+        "text": "This course prioritizes Tailwind CSS v4. Confirm your installed version and use its matching official guide. Snippets using v3 directives or configuration are labelled as legacy and should not be mixed blindly with v4 syntax."
+      }
+    ],
+    "task": "Create a minimal example demonstrating runtime and rendering performance. Include a before/after comparison and explain why the chosen utility, variant or directive is appropriate.",
+    "task_acceptance_criteria": [
+      "Demonstrate at least one decision tied to runtime and rendering performance.",
+      "Keep the example easy to inspect, with complete utility names.",
+      "Test the outcome and document one limitation or environment assumption."
+    ],
+    "hints": [
+      "Identify which listed syllabus topic is most important to runtime and rendering performance.",
+      "Change one utility, token, variant or configuration setting at a time.",
+      "Inspect generated CSS and computed styles before changing unrelated code."
+    ],
+    "expected_output": "A required email field is explicitly labeled and keeps a visible focus state.",
+    "troubleshooting": [
+      "If no style appears, verify the package, CSS import and build-tool integration before changing the HTML.",
+      "If only a state or breakpoint style fails, check the full class token, source detection, condition and computed CSS.",
+      "For a framework snippet, import the stylesheet through its supported entry point and consult the current official guide."
+    ],
+    "common_mistakes": [
+      "Applying runtime and rendering performance without checking generated styles or browser behavior.",
+      "Mixing Tailwind v3 and v4 setup examples without a migration plan.",
+      "Treating visual appearance as a substitute for semantic markup, keyboard usability or actual component behavior."
+    ],
+    "summary": [
+      "Runtime and Rendering Performance is one part of a predictable utility-first styling workflow.",
+      "Keep examples small, test the built interface and use version-matched documentation."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-208-questions.json",
+    "solution_notes": "Question answer keys remain in repository-side question files and must not be returned in learner lesson payloads. Review the example and acceptance criteria before checking the answer.",
+    "run_mode": "static-validation",
+    "references": [
+      {
+        "title": "Detecting classes in source files",
+        "url": "https://tailwindcss.com/docs/detecting-classes-in-source-files"
+      },
+      {
+        "title": "Functions and directives",
+        "url": "https://tailwindcss.com/docs/functions-and-directives"
+      },
+      {
+        "title": "Compatibility",
+        "url": "https://tailwindcss.com/docs/compatibility"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Detecting classes in source files",
+      "url": "https://tailwindcss.com/docs/detecting-classes-in-source-files",
+      "publisher": "Tailwind CSS official documentation",
+      "checked_on": "2026-10-19",
+      "source_type": "official documentation",
+      "supports": [
+        "Runtime and Rendering Performance",
+        "Tailwind's build-time styling model",
+        "Browser style calculation"
+      ]
+    },
+    {
+      "title": "Functions and directives",
+      "url": "https://tailwindcss.com/docs/functions-and-directives",
+      "publisher": "Tailwind CSS official documentation",
+      "checked_on": "2026-10-19",
+      "source_type": "official documentation",
+      "supports": [
+        "Runtime and Rendering Performance",
+        "Tailwind's build-time styling model",
+        "Browser style calculation"
+      ]
+    },
+    {
+      "title": "Compatibility",
+      "url": "https://tailwindcss.com/docs/compatibility",
+      "publisher": "Tailwind CSS official documentation",
+      "checked_on": "2026-10-19",
+      "source_type": "official documentation",
+      "supports": [
+        "Runtime and Rendering Performance",
+        "Tailwind's build-time styling model",
+        "Browser style calculation"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Unreviewed educational draft; validate the course and check examples against the target Tailwind version before publication."
+}

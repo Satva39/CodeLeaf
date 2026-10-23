@@ -1,0 +1,49 @@
+{
+  "id": "rest-api-development-knowledge-check-203",
+  "lesson_id": "rest-api-development-lesson-203",
+  "lesson_slug": "domains-dns-and-tls-deployment",
+  "title": "Knowledge check: Domains, DNS, and TLS Deployment",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "questions": [
+    {
+      "id": "rest-api-development-q-203-01",
+      "type": "single_choice",
+      "prompt": "Which practice belongs in a production-readiness checklist?",
+      "options": [
+        "Commit production credentials into the frontend bundle for convenient deployment.",
+        "Use a single readiness log line as a substitute for monitoring and alerting.",
+        "Expose detailed exception traces to every API client.",
+        "Use external secret configuration, TLS, health signals, structured telemetry, and a documented recovery/rollback path."
+      ],
+      "answer_key": "Use external secret configuration, TLS, health signals, structured telemetry, and a documented recovery/rollback path.",
+      "explanation": "Use external secret configuration, TLS, health signals, structured telemetry, and a documented recovery/rollback path. This is especially relevant to “Domains, DNS, and TLS Deployment” because the API contract must remain explicit and reviewable."
+    },
+    {
+      "id": "rest-api-development-q-203-02",
+      "type": "single_choice",
+      "prompt": "For the lesson “Domains, DNS, and TLS Deployment”, which check provides the strongest practical evidence?",
+      "options": [
+        "Run one happy-path call and skip invalid, denied, and failure scenarios.",
+        "Test against production records so the exercise cannot be repeated safely.",
+        "Verify deployment configuration, TLS, telemetry, alerting, health checks, and rollback.",
+        "Rely on a code review comment without running any representative check."
+      ],
+      "answer_key": "Verify deployment configuration, TLS, telemetry, alerting, health checks, and rollback.",
+      "explanation": "A useful check is repeatable, tied to an observable contract, and includes an important negative or boundary scenario."
+    },
+    {
+      "id": "rest-api-development-q-203-03",
+      "type": "single_choice",
+      "prompt": "Which review warning is most relevant to “Domains, DNS, and TLS Deployment”?",
+      "options": [
+        "The API avoids exposing internal secrets and personal data.",
+        "Secrets are committed, telemetry is missing, or rollback has not been planned.",
+        "The expected behavior and relevant failure cases are documented.",
+        "A representative test can reproduce the result."
+      ],
+      "answer_key": "Secrets are committed, telemetry is missing, or rollback has not been planned.",
+      "explanation": "This finding weakens a core API guarantee and should be treated as a design or release issue, not only a style concern."
+    }
+  ]
+}

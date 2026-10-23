@@ -1,0 +1,67 @@
+{
+  "id": "pandas-exercise-19",
+  "slug": "rolling-average",
+  "title": "Rolling Average",
+  "sequence": 19,
+  "lesson_id": "pandas-lesson-151",
+  "lesson_slug": "rolling-calculations",
+  "module_id": "pandas-module-18",
+  "difficulty": "intermediate",
+  "type": "code",
+  "prompt": "Calculate a rolling average and compare it with a cumulative average.",
+  "scenario": "Use the synthetic data described below to practise w, i, n, d, o, w,  , c, a, l, c, u, l, a, t, i, o, n, s. Do not assume the input is correct without validating it.",
+  "skills": "Window calculations",
+  "starter": {
+    "language": "python",
+    "code": "import pandas as pd\n\ns = pd.Series([2, 4, 6, 8])\nprint(s.rolling(2).mean().tolist())\nprint(s.expanding().mean().round(2).tolist())",
+    "dataset_note": "Use small synthetic in-memory data; do not place private or real customer data in exercises."
+  },
+  "input_schema": {
+    "description": "Create or use a synthetic DataFrame with only the columns needed for this exercise.",
+    "validation": [
+      "Document expected columns and data types.",
+      "State how missing values or duplicates should be treated."
+    ]
+  },
+  "expected_output": [
+    "Use a documented window width and minimum-period rule.",
+    "Compare rolling and expanding means on the same ordered series.",
+    "Explain why the first few rolling rows may be missing."
+  ],
+  "public_tests": [
+    {
+      "name": "normal-case",
+      "description": "The solution returns the required columns and correctly computes the stated result."
+    },
+    {
+      "name": "edge-case",
+      "description": "The solution documents behavior for a missing value, duplicate key, empty input, invalid value, or other relevant edge case."
+    }
+  ],
+  "hints": [
+    "Write down the expected result before coding.",
+    "Use Pandas operations that preserve labels unless position-based behavior is intended.",
+    "Add a small assertion for the most important property."
+  ],
+  "acceptance_criteria": [
+    "Use a documented window width and minimum-period rule.",
+    "Compare rolling and expanding means on the same ordered series.",
+    "Explain why the first few rolling rows may be missing."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "w"
+    ],
+    "case_sensitive": false,
+    "note": "The generic short-response grader is only an initial scaffold; a reviewed isolated Python grader is required for automatic execution of arbitrary learner code."
+  },
+  "solution_file": "solutions/019-rolling-average-solution.json",
+  "solution": {},
+  "retry_policy": {
+    "max_attempts": null,
+    "allow_retry_after_feedback": true
+  },
+  "status": "draft",
+  "status_note": "Review prompt, starter, rubric, and server-side grading before publication."
+}

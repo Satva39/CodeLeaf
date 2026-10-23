@@ -1,0 +1,269 @@
+{
+  "id": "go-lesson-182",
+  "slug": "worker-pools-and-backpressure",
+  "title": "Worker Pools and Backpressure",
+  "sequence": 182,
+  "module_id": "go-module-18",
+  "module_slug": "concurrency-and-parallelism",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "go-lesson-181"
+  ],
+  "previous_lesson_id": "go-lesson-181",
+  "next_lesson_id": "go-lesson-183",
+  "keywords": [
+    "worker pools and backpressure",
+    "designing worker pools",
+    "job and result channels",
+    "limiting concurrency",
+    "handling worker failures",
+    "backpressure and resource limits",
+    "Go",
+    "Golang"
+  ],
+  "source_syllabus_number": 182,
+  "subtopics": [
+    "Designing worker pools",
+    "Job and result channels",
+    "Limiting concurrency",
+    "Handling worker failures",
+    "Backpressure and resource limits"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and behavior of worker pools and backpressure.",
+    "Apply at least one lesson concept—designing worker pools—in a small Go example or workflow.",
+    "Predict a representative result, then test a boundary case and explain any difference."
+  ],
+  "exercise_files": [
+    "../exercises/019-concurrent-file-processor.json",
+    "../exercises/026-concurrency-pipeline.json"
+  ],
+  "content": {
+    "intro": "Worker Pools and Backpressure concerns safe coordination among goroutines. Identify the shared state, decide which goroutine owns each value, and choose channels or synchronization primitives intentionally. Bound concurrent work, propagate cancellation with context where appropriate, and test exercised paths with the race detector.",
+    "why_it_matters": "Concurrent code can fail only under particular schedules; explicit ownership, bounded work, cancellation, and race-aware tests improve reliability.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Bounded concurrent pipeline",
+        "asset_path": "diagrams/concept-12-goroutine-channel-pipeline.svg",
+        "alt_text": "A bounded queue and worker count constrain parallel work; context cancellation and error propagation provide a clean stop path. Labeled phases: Producer; Bounded channel; Worker pool; Result + cancellation.",
+        "caption": "A bounded queue and worker count constrain parallel work; context cancellation and error propagation provide a clean stop path."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Worker Pools and Backpressure concerns safe coordination among goroutines. Identify the shared state, decide which goroutine owns each value, and choose channels or synchronization primitives intentionally. Bound concurrent work, propagate cancellation with context where appropriate, and test exercised paths with the race detector."
+      },
+      {
+        "type": "list",
+        "title": "Topics covered in this lesson",
+        "items": [
+          {
+            "title": "Designing worker pools",
+            "text": "Be able to explain designing worker pools, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Job and result channels",
+            "text": "Be able to explain job and result channels, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Limiting concurrency",
+            "text": "Be able to explain limiting concurrency, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Handling worker failures",
+            "text": "Be able to explain handling worker failures, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Backpressure and resource limits",
+            "text": "Be able to explain backpressure and resource limits, identify the inputs or program state it affects, and name one boundary case worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Worker Pools and Backpressure",
+        "language": "go",
+        "code": "package main\n\nimport (\n    \"errors\"\n    \"fmt\"\n)\n\nfunc positive(n int) error {\n    if n <= 0 { return errors.New(\"value must be positive\") }\n    return nil\n}\nfunc main() {\n    if err := positive(0); err != nil { fmt.Println(err); return }\n    fmt.Println(\"accepted\")\n}\n",
+        "expected_output": "value must be positive",
+        "run_mode": "server-runner",
+        "run_instructions": "Save as main.go and run `go run main.go`. Return expected errors; reserve panic/recover for exceptional boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through the example",
+        "text": "First, identify the input or initial state in the example for worker pools and backpressure. Next, trace the operation or contract that matters, and predict the result before running it. If the example depends on a version-specific feature, a driver, or an external service, follow the stated prerequisites rather than assuming it works in a browser preview."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to one subtopic—Designing worker pools—and add a second case that could fail or behave differently. Write down the expected result before testing."
+      }
+    ],
+    "task": "Create a small example connected to “Worker Pools and Backpressure”. Use Designing worker pools as the starting point, predict the output, then add one invalid, empty, or boundary case and document its result.",
+    "task_acceptance_criteria": [
+      "The example demonstrates designing worker pools or a closely related concept.",
+      "Inputs, relevant state changes, and expected output are clear.",
+      "At least one boundary case is deliberately tested or documented.",
+      "Errors are handled honestly and no success state is reported when the operation fails."
+    ],
+    "hints": [
+      "Start from the simplest example related to designing worker pools.",
+      "Predict the result manually and annotate the value that changes at each step.",
+      "Run `gofmt` and the appropriate local `go run`, `go test`, `go vet`, or inspection command when prerequisites are available."
+    ],
+    "expected_output": "value must be positive",
+    "run_mode": "server-runner",
+    "knowledge_check_file": "exams/question-files/lesson-182-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the happy-path output proves all inputs are safe.",
+        "why": "Empty, malformed, boundary, or concurrent cases may follow different paths.",
+        "fix": "Add focused tests for a normal input and at least one relevant edge case."
+      },
+      {
+        "problem": "Ignoring returned errors or external-system status.",
+        "why": "Go APIs commonly report expected failures as explicit error values.",
+        "fix": "Check errors close to the operation, add useful context when propagating, and clean up resources."
+      },
+      {
+        "problem": "Using an API or syntax without checking the selected Go version.",
+        "why": "Language and standard-library capabilities can change between releases.",
+        "fix": "Record `go version`, inspect the `go` directive, and read official release notes for version-specific topics."
+      }
+    ],
+    "summary": [
+      "Worker Pools and Backpressure provides a reusable rule or workflow for Go programs.",
+      "The subtopics to revisit are: Designing worker pools; Job and result channels; Limiting concurrency; Handling worker failures; Backpressure and resource limits.",
+      "Prefer a small reproducible example, explicit errors, appropriate tests, and version-matched official documentation."
+    ],
+    "references": [
+      {
+        "title": "Go Documentation",
+        "url": "https://go.dev/doc/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "tutorials",
+          "language concepts",
+          "tooling",
+          "application development"
+        ]
+      },
+      {
+        "title": "The Go Programming Language Specification",
+        "url": "https://go.dev/ref/spec",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "syntax",
+          "types",
+          "control flow",
+          "interfaces"
+        ]
+      },
+      {
+        "title": "The Go Memory Model",
+        "url": "https://go.dev/ref/mem",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "happens-before",
+          "synchronization",
+          "data races"
+        ]
+      },
+      {
+        "title": "Go Race Detector Article",
+        "url": "https://go.dev/doc/articles/race_detector",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "race detection",
+          "concurrent tests",
+          "runtime race reports"
+        ]
+      },
+      {
+        "title": "net/http Package",
+        "url": "https://pkg.go.dev/net/http",
+        "publisher": "Go standard library",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "HTTP clients",
+          "servers",
+          "handlers",
+          "timeouts"
+        ]
+      }
+    ],
+    "accessibility_note": "The diagram includes descriptive alt text and a text caption. Code examples are also described in prose; do not rely on color alone to understand a sequence.",
+    "execution_note": "Save as main.go and run `go run main.go`. Return expected errors; reserve panic/recover for exceptional boundaries. Examples that need a database driver, external service, isolated execution environment, or version-specific feature are labeled as static examples and should not be treated as already executed."
+  },
+  "sources": [
+    {
+      "title": "Go Documentation",
+      "url": "https://go.dev/doc/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tutorials",
+        "language concepts",
+        "tooling",
+        "application development"
+      ]
+    },
+    {
+      "title": "The Go Programming Language Specification",
+      "url": "https://go.dev/ref/spec",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "syntax",
+        "types",
+        "control flow",
+        "interfaces"
+      ]
+    },
+    {
+      "title": "The Go Memory Model",
+      "url": "https://go.dev/ref/mem",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "happens-before",
+        "synchronization",
+        "data races"
+      ]
+    },
+    {
+      "title": "Go Race Detector Article",
+      "url": "https://go.dev/doc/articles/race_detector",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "race detection",
+        "concurrent tests",
+        "runtime race reports"
+      ]
+    },
+    {
+      "title": "net/http Package",
+      "url": "https://pkg.go.dev/net/http",
+      "publisher": "Go standard library",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "HTTP clients",
+        "servers",
+        "handlers",
+        "timeouts"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied Go.pdf syllabus mapping. Human review and local runtime verification are required before publication."
+}

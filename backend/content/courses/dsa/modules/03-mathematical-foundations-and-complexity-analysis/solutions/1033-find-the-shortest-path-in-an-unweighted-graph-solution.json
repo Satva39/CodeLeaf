@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-33",
+  "exercise_id": "dsa-exercise-pdf-33",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\nfrom collections import deque\n\ndef shortest_path(graph, start, target):\n    parent = {start: None}; q = deque([start])\n    while q:\n        v = q.popleft()\n        if v == target: break\n        for u in graph.get(v, []):\n            if u not in parent: parent[u] = v; q.append(u)\n    if target not in parent: return None\n    path=[]; node=target\n    while node is not None: path.append(node); node=parent[node]\n    return list(reversed(path))\n\nassert shortest_path({\"A\":[\"B\",\"C\"],\"B\":[\"D\"],\"C\":[\"D\"],\"D\":[]},\"A\",\"D\") in [[\"A\",\"B\",\"D\"],[\"A\",\"C\",\"D\"]]\n```",
+  "explanation": "BFS discovers shortest paths by edge count in unweighted graphs. Time O(V+E); parent references reconstruct a path or report no path.",
+  "tested_reference_code": "from collections import deque\n\ndef shortest_path(graph, start, target):\n    parent = {start: None}; q = deque([start])\n    while q:\n        v = q.popleft()\n        if v == target: break\n        for u in graph.get(v, []):\n            if u not in parent: parent[u] = v; q.append(u)\n    if target not in parent: return None\n    path=[]; node=target\n    while node is not None: path.append(node); node=parent[node]\n    return list(reversed(path))\n\nassert shortest_path({\"A\":[\"B\",\"C\"],\"B\":[\"D\"],\"C\":[\"D\"],\"D\":[]},\"A\",\"D\") in [[\"A\",\"B\",\"D\"],[\"A\",\"C\",\"D\"]]",
+  "language": "python"
+}

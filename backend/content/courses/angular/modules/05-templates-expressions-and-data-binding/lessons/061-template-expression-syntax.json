@@ -1,0 +1,151 @@
+{
+  "id": "angular-lesson-061",
+  "slug": "061-template-expression-syntax",
+  "title": "Template Expression Syntax",
+  "sequence": 61,
+  "module_id": "angular-module-05",
+  "module_slug": "templates-expressions-and-data-binding",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "angular-lesson-060"
+  ],
+  "previous_lesson_id": "angular-lesson-060",
+  "next_lesson_id": "angular-lesson-062",
+  "keywords": [
+    "template-expression-syntax",
+    "templates-expressions-and-data-binding",
+    "supported-expression-forms",
+    "optional-chaining-and-nullish-coalescing",
+    "expression-evaluation-and-side-effects",
+    "keeping-expressions-simple"
+  ],
+  "source_syllabus_number": 61,
+  "subtopics": [
+    "Supported expression forms",
+    "Optional chaining and nullish coalescing",
+    "Expression evaluation and side effects",
+    "Keeping expressions simple"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of template expression syntax and name the relevant Angular concepts.",
+    "Apply at least one syllabus item from this lesson in a focused Angular example.",
+    "Verify expected behavior and identify one compatibility, failure or trust-boundary limitation."
+  ],
+  "content": {
+    "intro": "This lesson focuses on template expression syntax inside Templates, Expressions, and Data Binding. Begin with the syllabus anchor “Supported expression forms”, name the data or UI behavior involved, and then verify the result with a focused example. The goal is to make one clear engineering decision rather than memorize an isolated API.",
+    "why_it_matters": "Template Expression Syntax helps keep Angular features understandable as the application grows. A small explicit pattern is easier to reuse, test and review than scattered UI-specific logic.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Template Expression Syntax concept map",
+        "asset_path": "diagrams/lessons/061-template-expression-syntax.svg",
+        "alt_text": "Lesson 61: Template Expression Syntax. Four numbered stages connect the concept, its model, a practical application and verification.",
+        "caption": "Visual path for Template Expression Syntax: use the numbered stages and the labels to connect supported expression forms to a practical implementation and evidence."
+      },
+      {
+        "type": "paragraph",
+        "title": "Mental model",
+        "text": "**Template Expression Syntax.** This is part of **Templates, Expressions, and Data Binding**. Start from the concrete question “what changes in the application when this concept is used?” Then map the supplied syllabus terms to a small behavior, keep dependencies and trust boundaries visible, and verify what the example does. Template Expression Syntax helps keep Angular features understandable as the application grows. A small explicit pattern is easier to reuse, test and review than scattered UI-specific logic."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics to connect",
+        "items": [
+          {
+            "title": "Supported expression forms",
+            "text": "Identify what “Supported expression forms” contributes to template expression syntax; write down its inputs, outputs or state changes before coding."
+          },
+          {
+            "title": "Optional chaining and nullish coalescing",
+            "text": "Connect “Optional chaining and nullish coalescing” to one small user-visible behavior. Keep the boundary explicit and consider empty, invalid or failure states."
+          },
+          {
+            "title": "Expression evaluation and side effects",
+            "text": "Use “Expression evaluation and side effects” as a checkpoint: verify the relevant behavior with a test, compiler diagnostic, browser inspection or documented human review."
+          },
+          {
+            "title": "Keeping expressions simple",
+            "text": "Identify what “Keeping expressions simple” contributes to template expression syntax; write down its inputs, outputs or state changes before coding."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Template Expression Syntax",
+        "language": "html",
+        "code": "@switch (status) {\n  @case ('loading') { <p>Loading…</p> }\n  @case ('error') { <p role=\"alert\">Could not load data.</p> }\n  @default { <p>Ready.</p> }\n}",
+        "expected_output": "Expected UI: the block corresponding to status appears; @switch cases do not fall through.",
+        "run_instructions": "Create or use a disposable Angular CLI workspace with a compatible Angular/Node/TypeScript version. Put the snippet in the matching component, template, stylesheet or project configuration; satisfy imports and providers from the surrounding lesson context. Run `ng serve` for browser behavior and the project test command for assertions. Shell examples should be run from the stated workspace directory.",
+        "reset_steps": "Save or commit your starting point before changing configuration. Revert only files created or edited for this lesson; do not delete a shared workspace or production data.",
+        "execution_mode": "static-validation",
+        "limitations": "This is a source/example inspection, not a live Angular compiler or arbitrary-code runner. Resource and Signal Forms examples are version-sensitive; check official docs and the installed package signatures."
+      },
+      {
+        "type": "callout",
+        "title": "Engineering note",
+        "text": "Execution note: this CodeLeaf course presents Angular and TypeScript snippets as static teaching material. The browser playground does not compile Angular TypeScript; run examples in a locally generated Angular workspace and verify them with the matching CLI, tests and browser."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-061-knowledge-check.json",
+    "task": "Apply template expression syntax to a small feature in a disposable Angular learning project. Demonstrate at least one supplied subtopic (Supported expression forms), record the expected UI or console result, and include one test, failure case or version note.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates “Supported expression forms” in the context of Template Expression Syntax.",
+      "The learner explains the expected result and includes an empty, invalid or failure case where appropriate.",
+      "Verification evidence matches the actual environment; a static CodeLeaf snippet is not described as a successfully executed Angular build."
+    ],
+    "hints": [
+      "Start with the syllabus item “Supported expression forms” and write down the expected behavior before changing code.",
+      "Keep the example small; include only dependencies, inputs, providers and state that the example actually needs.",
+      "Reproduce the intended behavior in a pinned local Angular workspace and inspect both normal and failure paths."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Copying a snippet without checking its surrounding context.",
+        "why": "Angular examples can depend on imports, providers, template context or a particular framework version.",
+        "fix": "Use the run instructions and validate against the exact generated workspace."
+      },
+      {
+        "problem": "Treating an attractive UI result as proof of correctness.",
+        "why": "Accessibility, boundary cases, failures and server-side rules may not be visible in the happy path.",
+        "fix": "Add a focused assertion and test at least one realistic failure state."
+      },
+      {
+        "problem": "Assuming client code guarantees authorization or validates all external data.",
+        "why": "Browser code is controlled by the client and can receive unexpected network responses.",
+        "fix": "Validate external values and enforce protected business rules on the backend."
+      }
+    ],
+    "summary": [
+      "Template Expression Syntax has a concrete purpose within Templates, Expressions, and Data Binding.",
+      "Use “Supported expression forms” in a small example and verify the behavior.",
+      "Check version compatibility, failure states and trust boundaries before reusing the pattern."
+    ],
+    "run_mode": "static-validation",
+    "execution_mode": "static-validation",
+    "run_instructions": "Create or use a disposable Angular CLI workspace with a compatible Angular/Node/TypeScript version. Put the snippet in the matching component, template, stylesheet or project configuration; satisfy imports and providers from the surrounding lesson context. Run `ng serve` for browser behavior and the project test command for assertions. Shell examples should be run from the stated workspace directory.",
+    "reset_steps": "Save or commit your starting point before changing configuration. Revert only files created or edited for this lesson; do not delete a shared workspace or production data.",
+    "version_notes": "Version-sensitive topics require checking the official Angular version compatibility and release documentation at the time of use."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Templates",
+      "url": "https://angular.dev/guide/templates",
+      "publisher": "Angular documentation",
+      "checked_on": "2026-10-14"
+    },
+    {
+      "title": "Template control flow",
+      "url": "https://angular.dev/guide/templates/control-flow",
+      "publisher": "Angular documentation",
+      "checked_on": "2026-10-14"
+    }
+  ],
+  "technical_review_date": "2026-10-14",
+  "status": "draft",
+  "status_note": "Complete syllabus-aligned draft generated from the attached curriculum. Technical examples and version-sensitive APIs require human review and local execution before publication."
+}

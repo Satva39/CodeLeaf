@@ -1,0 +1,215 @@
+{
+  "id": "php-lesson-188",
+  "slug": "crud-operations",
+  "title": "CRUD Operations",
+  "sequence": 188,
+  "module_id": "php-module-19",
+  "module_slug": "database-programming-with-php",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "php-lesson-187"
+  ],
+  "previous_lesson_id": "php-lesson-187",
+  "next_lesson_id": "php-lesson-189",
+  "keywords": [
+    "crud operations",
+    "database programming with php",
+    "create records",
+    "read records",
+    "update records",
+    "delete records",
+    "validating affected-row behavior",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 188,
+  "subtopics": [
+    "Create records.",
+    "Read records.",
+    "Update records.",
+    "Delete records.",
+    "Validating affected-row behavior."
+  ],
+  "learning_outcomes": [
+    "Explain what crud operations contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: create records.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Database correctness depends on more than constructing a query. Use PDO prepared statements for values, database constraints for integrity, transactions for related changes, and bounded queries for predictable performance. In this lesson, focus on create records; then compare it with read records. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use crud operations when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 19 overview: Database Programming with PHP",
+        "asset_path": "diagrams/module-19-overview.svg",
+        "alt_text": "Four-stage overview for module 19, Database Programming with PHP, grouping lesson topics in order.",
+        "caption": "Use this overview to place crud operations in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Database correctness depends on more than constructing a query. Use PDO prepared statements for values, database constraints for integrity, transactions for related changes, and bounded queries for predictable performance. For crud operations, begin with create records. Also distinguish read records; update records; delete records. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Create records",
+            "text": "Know when to use create records, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Read records",
+            "text": "Know when to use read records, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Update records",
+            "text": "Know when to use update records, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Delete records",
+            "text": "Know when to use delete records, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Validating affected-row behavior",
+            "text": "Know when to use validating affected-row behavior, what input or program state it changes, and which boundary case is worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for CRUD Operations",
+        "language": "php",
+        "code": "<?php\n$date = new DateTimeImmutable(\"2026-01-02T03:04:05+00:00\");\necho $date->format(\"Y-m-d H:i:s\") . PHP_EOL;",
+        "expected_output": "2026-01-02 03:04:05",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Use prepared statements for values, database constraints for integrity, and transactions for changes that must succeed together."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for crud operations from top to bottom. Start by identifying create records, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for crud operations that demonstrates \"create records\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of create records.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "2026-01-02 03:04:05",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-188-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Concatenating untrusted values into SQL.",
+        "why": "Input can change the meaning of a query.",
+        "fix": "Use PDO prepared statements and bind values separately from the query text."
+      },
+      {
+        "problem": "Assuming application checks are enough for data integrity.",
+        "why": "Concurrent requests can race and bypass check-then-write assumptions.",
+        "fix": "Use unique constraints, foreign keys, transactions, and appropriate locking."
+      },
+      {
+        "problem": "Loading an unbounded result set.",
+        "why": "Memory and response time can grow unexpectedly.",
+        "fix": "Use filtering and bounded pagination or streaming for large results."
+      }
+    ],
+    "summary": [
+      "CRUD Operations is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Use prepared statements for values, database constraints for integrity, and transactions for changes that must succeed together."
+    ],
+    "references": [
+      {
+        "title": "PDO",
+        "url": "https://www.php.net/manual/en/book.pdo.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "database connections",
+          "prepared statements",
+          "transactions",
+          "fetch modes"
+        ]
+      },
+      {
+        "title": "PDO::prepare",
+        "url": "https://www.php.net/manual/en/pdo.prepare.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "parameterized statements",
+          "safe parameter binding"
+        ]
+      },
+      {
+        "title": "OWASP SQL Injection Prevention Cheat Sheet",
+        "url": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+        "publisher": "OWASP",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "parameterized queries",
+          "SQL injection prevention"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [
+    "../exercises/019-database-crud-application.json"
+  ],
+  "sources": [
+    {
+      "title": "PDO",
+      "url": "https://www.php.net/manual/en/book.pdo.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "database connections",
+        "prepared statements",
+        "transactions",
+        "fetch modes"
+      ]
+    },
+    {
+      "title": "PDO::prepare",
+      "url": "https://www.php.net/manual/en/pdo.prepare.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "parameterized statements",
+        "safe parameter binding"
+      ]
+    },
+    {
+      "title": "OWASP SQL Injection Prevention Cheat Sheet",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+      "publisher": "OWASP",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "parameterized queries",
+        "SQL injection prevention"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

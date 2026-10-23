@@ -1,0 +1,160 @@
+{
+  "id": "nodejs-lesson-094",
+  "slug": "microtasks-and-promise-scheduling",
+  "title": "Microtasks and Promise Scheduling",
+  "sequence": 94,
+  "module_id": "nodejs-module-12",
+  "module_slug": "the-event-loop-and-runtime-internals",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "nodejs-lesson-093"
+  ],
+  "previous_lesson_id": "nodejs-lesson-093",
+  "next_lesson_id": "nodejs-lesson-095",
+  "keywords": [
+    "Microtasks and Promise Scheduling",
+    "Promise callbacks",
+    "The microtask queue",
+    "Execution-order examples",
+    "Interaction with asynchronous operations",
+    "Node.js",
+    "JavaScript runtime"
+  ],
+  "source_syllabus_number": 94,
+  "subtopics": [
+    "Promise callbacks",
+    "The microtask queue",
+    "Execution-order examples",
+    "Interaction with asynchronous operations",
+    "Avoiding starvation"
+  ],
+  "learning_outcomes": [
+    "Describe Promise callbacks and explain how it relates to Microtasks and Promise Scheduling.",
+    "Demonstrate The microtask queue in a small Node.js example and predict the observable result.",
+    "Test a failure, boundary, lifecycle, or version-compatibility case involving Execution-order examples."
+  ],
+  "content": {
+    "intro": "Microtasks and Promise Scheduling is part of the event loop and runtime internals. This lesson connects Promise callbacks, The microtask queue, Execution-order examples to a concrete Node.js example. Focus on the behavior you can observe, the assumptions the API makes, and one failure or boundary case.",
+    "why_it_matters": "The event loop coordinates JavaScript callbacks and many I/O completions; scheduling details vary by API and runtime version. Compare a controlled I/O example with a CPU-heavy task and observe timings using diagnostics.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Microtasks and Promise Scheduling: concept map",
+        "asset_path": "diagrams/lessons/lesson-094-microtasks-and-promise-scheduling.svg",
+        "alt_text": "Concept map for lesson 94: Microtasks and Promise Scheduling. It shows representative syllabus concepts in a Concept → Example → Verification sequence.",
+        "caption": "Read the three labeled cards from left to right; the lesson steps connect the concept to a practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "The event loop coordinates JavaScript callbacks and many I/O completions; scheduling details vary by API and runtime version. Keep synchronous callbacks short, measure delay, and avoid assuming a precise ordering where the API does not guarantee it."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Promise callbacks",
+            "text": "For Promise callbacks, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "The microtask queue",
+            "text": "Promise callbacks and queued microtasks run after the current synchronous stack. Compare order with a small deterministic example on the target runtime."
+          },
+          {
+            "title": "Execution-order examples",
+            "text": "For Execution-order examples, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Interaction with asynchronous operations",
+            "text": "For Interaction with asynchronous operations, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Avoiding starvation",
+            "text": "For Avoiding starvation, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "console.log('start');\nqueueMicrotask(() => console.log('microtask'));\nconsole.log('end');",
+        "expected_output": "start\nend\nmicrotask",
+        "run_instructions": "Inspect this JavaScript in a local Node.js project. It is a static-validation teaching example: CodeLeaf does not run this arbitrary example in the API process. If it needs a package, file, server, database, or external service, provision that dependency in a separate local project and follow its official setup instructions. Run with `node example.mjs` when the example is self-contained, or adapt the required imports/inputs first.",
+        "reset_steps": "Restore the starting snippet and inputs. Repeat with one different valid value and one invalid, missing, empty, or failure input appropriate to the example.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Start with the code shown above. Predict the result before running it, then verify it against: start\nend\nmicrotask Change one input or simulate one failure and describe how the behavior should change. Compare a controlled I/O example with a CPU-heavy task and observe timings using diagnostics."
+      },
+      {
+        "type": "callout",
+        "title": "Runtime and safety note",
+        "text": "Teaching baseline: use a supported Node.js LTS release (Node.js 24 LTS as checked on 2026-10-13). The official releases page lists Node.js 26 as Current and Node.js 24/22 as LTS. Some advanced APIs, flags, permission behavior, embedded SQLite capabilities, module-loader hooks, and TypeScript integration are version-sensitive; verify the exact installed runtime. The Node.js 22 runtime available in the build-check environment is used only for syntax checks. This example is for learning and static validation, not for executing untrusted learner code inside CodeLeaf."
+      }
+    ],
+    "task": "Create or inspect a small Node.js example for Microtasks and Promise Scheduling. Include at least one listed subtopic, document the expected result, and verify a normal case plus a boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates a named lesson concept, rather than only mentioning the title.",
+      "Expected output or observable behavior is documented and reproducible.",
+      "At least one invalid, empty, timeout, resource, or failure case is handled or explained.",
+      "The solution does not put secrets in source code and does not execute untrusted code inside the production API process."
+    ],
+    "hints": [
+      "Start with Promise callbacks; identify the input, operation, and observable result.",
+      "Run the smallest relevant example in the selected Node.js release before adding frameworks or external services.",
+      "Test one failure or boundary case for The microtask queue, then explain why the outcome is expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming every asynchronous operation runs on another JavaScript thread or that timers fire at an exact timestamp.",
+        "why": "The code may pass a simple demonstration yet fail with real inputs, resource limits, timing, or runtime differences.",
+        "fix": "Separate I/O concurrency from CPU parallelism and yield or offload expensive work when needed."
+      },
+      {
+        "problem": "Copying a snippet without checking its runtime, dependencies, input assumptions, or cleanup behavior.",
+        "why": "Node.js APIs and surrounding ecosystem tools have explicit version, trust, and resource boundaries.",
+        "fix": "State the environment and dependency assumptions, then rerun the example from a clean starting state."
+      }
+    ],
+    "summary": [
+      "For Promise callbacks, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone.",
+      "This lesson covers: Promise callbacks, The microtask queue, Execution-order examples, Interaction with asynchronous operations.",
+      "Verify both normal and failure behavior, and document runtime, dependency, and resource assumptions."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-094-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Learn Node.js",
+      "url": "https://nodejs.org/learn",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "getting started",
+        "CLI",
+        "HTTP"
+      ]
+    },
+    {
+      "title": "Diagnostics",
+      "url": "https://nodejs.org/en/learn/diagnostics",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "debugging",
+        "performance diagnostics",
+        "memory analysis"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Source-derived syllabus; educational draft requiring technical/instructional review before publication."
+}

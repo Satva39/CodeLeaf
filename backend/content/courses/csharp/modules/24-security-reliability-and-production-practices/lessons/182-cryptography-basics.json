@@ -1,0 +1,174 @@
+{
+  "id": "csharp-lesson-182",
+  "slug": "cryptography-basics",
+  "title": "Cryptography Basics",
+  "sequence": 182,
+  "module_id": "csharp-module-24",
+  "module_slug": "security-reliability-and-production-practices",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional-practice",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "csharp-lesson-181"
+  ],
+  "previous_lesson_id": "csharp-lesson-181",
+  "next_lesson_id": "csharp-lesson-183",
+  "keywords": [
+    "cryptography",
+    "basics",
+    "security, reliability, and production practices",
+    "c#",
+    ".net"
+  ],
+  "source_syllabus_number": 182,
+  "subtopics": [
+    "Cryptographic APIs in .NET",
+    "Hashing",
+    "Password-hashing concepts",
+    "Digital signatures",
+    "Symmetric and asymmetric encryption",
+    "Secure random-number generation",
+    "Avoiding custom cryptographic algorithms"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of cryptography basics in a C#/.NET program.",
+    "Predict the result of the included C# example and verify the documented output.",
+    "Apply cryptography basics to a small task and identify one relevant boundary, limitation, or version requirement."
+  ],
+  "content": {
+    "intro": "Cryptography Basics is lesson 182 in Security, Reliability, and Production Practices. Production code must treat inputs and dependencies as untrusted, make failure behavior explicit, protect sensitive information, and provide repeatable verification and release steps.",
+    "why_it_matters": "Production quality includes safe failure behavior, observable operation, and a repeatable way to ship updates. This lesson focuses on cryptography basics and shows how to verify the behavior instead of relying on assumptions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 24 visual map: Security, Reliability, and Production Practices",
+        "asset_path": "diagrams/module-24-overview.svg",
+        "alt_text": "Numbered visual roadmap of Security, Reliability, and Production Practices, with the lesson sequence and learn-inspect-test-apply workflow.",
+        "caption": "This module map locates Cryptography Basics among the ordered concepts; the lesson text and example focus on the highlighted topic."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Production code must treat inputs and dependencies as untrusted, make failure behavior explicit, protect sensitive information, and provide repeatable verification and release steps."
+      },
+      {
+        "type": "paragraph",
+        "title": "A practical way to learn it",
+        "text": "Start with the smallest valid case for cryptography basics. Predict the output, run or inspect the example in the stated toolchain, then change one input or rule and compare the result. For production code, record assumptions and verify boundary cases."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics to connect",
+        "items": [
+          {
+            "title": "Cryptographic APIs in .NET",
+            "text": "Use explicit timeouts, parameterized database commands, small service boundaries, and validation for external results."
+          },
+          {
+            "title": "Hashing",
+            "text": "For hashing, define the expected behavior, inspect how it relates to cryptography basics, and verify a representative case plus one boundary or failure case."
+          },
+          {
+            "title": "Password-hashing concepts",
+            "text": "For password-hashing concepts, define the expected behavior, inspect how it relates to cryptography basics, and verify a representative case plus one boundary or failure case."
+          },
+          {
+            "title": "Digital signatures",
+            "text": "For digital signatures, define the expected behavior, inspect how it relates to cryptography basics, and verify a representative case plus one boundary or failure case."
+          },
+          {
+            "title": "Symmetric and asymmetric encryption",
+            "text": "For symmetric and asymmetric encryption, define the expected behavior, inspect how it relates to cryptography basics, and verify a representative case plus one boundary or failure case."
+          },
+          {
+            "title": "Secure random-number generation",
+            "text": "For secure random-number generation, define the expected behavior, inspect how it relates to cryptography basics, and verify a representative case plus one boundary or failure case."
+          },
+          {
+            "title": "Avoiding custom cryptographic algorithms",
+            "text": "Define trust boundaries, store secrets outside source, fail safely, and verify the release artifact in the target environment."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "csharp",
+        "execution_mode": "static-validation",
+        "code": "// Lesson 182: Cryptography Basics\nbyte[] salt = System.Security.Cryptography.RandomNumberGenerator.GetBytes(16);\nConsole.WriteLine(salt.Length); // Use framework cryptography APIs; never invent a scheme.",
+        "expected_output": "16",
+        "run_instructions": "This snippet is a static reference; CodeLeaf does not execute C# in the browser. To run it, create a .NET 10 console app with `dotnet new console`, replace Program.cs with the example (keeping any required using directives), then run `dotnet run`. A snippet that names a test framework, provider package, unsafe setting, or advanced runtime feature must be placed in a project with that dependency/configuration.",
+        "reset_steps": "Restore the documented snippet, rerun it locally in a compatible .NET project, and compare output. Remove temporary files or test data after checking them. Do not treat the in-page output panel as execution."
+      },
+      {
+        "type": "callout",
+        "title": "Version and reliability note",
+        "text": "Production code must treat inputs and dependencies as untrusted, make failure behavior explicit, protect sensitive information, and provide repeatable verification and release steps."
+      }
+    ],
+    "task": "Try it yourself: create a small C# example that demonstrates cryptography basics. Change one input or implementation detail, predict the result, then check it locally and explain one edge case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates cryptography basics rather than only repeating its definition.",
+      "The result is checked locally or against a clearly documented reference output.",
+      "At least one relevant boundary, invalid-input case, or compatibility condition is considered."
+    ],
+    "hints": [
+      "List the assumptions and expected behavior for cryptography basics before editing the code.",
+      "Change one variable or rule at a time; keep the previous output for comparison.",
+      "If behavior differs, confirm the compiler/target framework and consult the linked official documentation."
+    ],
+    "solution_notes": "Suggested approach: identify the expected input and output, start from the smallest example, use the feature only where it clarifies the rule, and verify both a typical case and a boundary/failure case.",
+    "expected_output": "16",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-182-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the feature works identically on every target",
+        "why": "Language syntax, libraries, and runtime support are version-dependent.",
+        "fix": "Check the target framework and official versioned reference before using the feature."
+      },
+      {
+        "problem": "Testing only a happy path",
+        "why": "Boundary values, malformed input, and failure states often expose the real bug.",
+        "fix": "Add one typical input and one boundary or invalid case to the manual or automated checks."
+      },
+      {
+        "problem": "Treating sample output as proof that the code ran",
+        "why": "The course reader uses static reference output for C# because it has no C# execution runner.",
+        "fix": "Run the snippet in a local .NET project or a separately isolated execution service."
+      }
+    ],
+    "summary": [
+      "Cryptography Basics belongs to Security, Reliability, and Production Practices.",
+      "Production code must treat inputs and dependencies as untrusted, make failure behavior explicit, protect sensitive information, and provide repeatable verification and release steps.",
+      "Check assumptions, verify output, and document one meaningful limitation or edge case."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "C# language documentation",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/",
+      "publisher": "Microsoft Learn",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "Security, Reliability, and Production Practices",
+        "Cryptography Basics",
+        "language and .NET concepts"
+      ]
+    },
+    {
+      "title": "C# language version history",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-version-history",
+      "publisher": "Microsoft Learn",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "feature-version history",
+        "compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson expanded from the numbered C# syllabus in C#(1).pdf. Code examples and pedagogical framing are original. Review feature compatibility and compile every runnable sample with the target .NET SDK before publication."
+}

@@ -1,0 +1,179 @@
+{
+  "id": "numpy-lesson-064",
+  "slug": "inspecting-and-testing-data-types",
+  "title": "Inspecting and Testing Data Types",
+  "sequence": 64,
+  "module_id": "numpy-module-07",
+  "module_slug": "data-types-casting-and-type-promotion",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 8,
+  "prerequisites": [
+    "numpy-lesson-063"
+  ],
+  "previous_lesson_id": "numpy-lesson-063",
+  "next_lesson_id": "numpy-lesson-065",
+  "keywords": [
+    "inspecting and testing data types",
+    "data types, casting, and type promotion",
+    "np.issubdtype()",
+    "Comparing data types",
+    "Checking numeric categories",
+    "Validating incoming arrays",
+    "NumPy",
+    "ndarray"
+  ],
+  "source_syllabus_number": 64,
+  "subtopics": [
+    "np.issubdtype()",
+    "Comparing data types",
+    "Checking numeric categories",
+    "Validating incoming arrays"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of inspecting and testing data types and name one situation where it is useful.",
+    "Apply np.issubdtype() to a small NumPy example and inspect the resulting values, shape, or dtype.",
+    "Identify one important limitation, boundary case, or validation check for inspecting and testing data types."
+  ],
+  "content": {
+    "intro": "This lesson develops topic 64 of the supplied curriculum: **Inspecting and Testing Data Types**. The main starting point is **np.issubdtype()**. You will connect the idea to a small, synthetic example, then use the result to reason about shape, dtype, accuracy, or memory as appropriate.",
+    "why_it_matters": "A dtype controls range, precision, storage, and which operations are valid. Casting should be explicit when loss, overflow, or NumPy 2.x promotion behavior matters.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Inspecting and Testing Data Types",
+        "asset_path": "diagrams/lesson-064-inspecting-and-testing-data-types.svg",
+        "alt_text": "Teaching visual for lesson 64, Inspecting and Testing Data Types. It illustrates Values + dtype, then Cast or promote, leading to Check range and precision.",
+        "caption": "Visual model for Inspecting and Testing Data Types. Synthetic conceptual diagram; inspect shape, dtype, and assumptions as relevant."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Treat **Inspecting and Testing Data Types** as an explicit step in an array workflow. This lesson centers on **np.issubdtype()** and the source syllabus's related subtopics. Before trusting a result, identify the input shape and dtype, perform the smallest useful operation, and inspect the output. The example uses synthetic data so you can change one value and observe what changes."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics from the supplied curriculum",
+        "items": [
+          "np.issubdtype()",
+          "Comparing data types",
+          "Checking numeric categories",
+          "Validating incoming arrays"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "import numpy as np\n\nvalues = np.array([1, 2, 3])\nprint(np.issubdtype(values.dtype, np.integer))",
+        "expected_output": "Observed output in the available validation environment (Python 3.13.5, NumPy 2.3.5):\nTrue",
+        "execution_mode": "static-validation",
+        "run_instructions": "Save this snippet as a .py file inside the intended Python environment, then run `python filename.py`. Install NumPy in that same environment first. This learning page displays the sample; it does not execute arbitrary Python on the web server.",
+        "reset_steps": "For examples that create files, use a temporary working directory and remove its outputs after reviewing them. The memory-map example already uses a temporary directory."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "Start with the stated input and the core operation. The code example demonstrates a minimal path through inspecting and testing data types; inspect the output before scaling it to a larger dataset."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          "Repeat the example with a narrower or wider dtype. Note any precision, truncation, or range difference.",
+          "Change one input value or parameter and predict the output before running the example.",
+          "Record one edge case and explain how your code should respond."
+        ]
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          "Topic 64: Inspecting and Testing Data Types.",
+          "Core focus: np.issubdtype().",
+          "Check the official reference when signatures or version-specific behavior matter."
+        ]
+      }
+    ],
+    "expected_output": "Observed output in the available validation environment (Python 3.13.5, NumPy 2.3.5):\nTrue",
+    "run_instructions": "Run Python examples locally in the same environment where NumPy is installed; no embedded server-side Python execution is assumed.",
+    "reset_steps": "Use temporary paths for file-writing experiments. Restore modified arrays by recreating the example input. No platform progress or rewards are created by viewing the lesson.",
+    "hints": [
+      "First identify the input values and their shape/dtype.",
+      "Run the smallest complete example and compare the actual output with the expected behavior.",
+      "Change one variable at a time; if the result differs, inspect shape, dtype, finite values, and version-specific behavior before changing the algorithm."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-064-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Casting without checking loss",
+        "why": "Float-to-integer conversion truncates and narrower dtypes may overflow.",
+        "fix": "Check input ranges and precision requirements before casting."
+      },
+      {
+        "problem": "Assuming mixed types promote the same way in every version",
+        "why": "NumPy 2.x promotion semantics differ from some older code.",
+        "fix": "Test mixed-type operations and consult the migration guide."
+      }
+    ],
+    "summary": [
+      "Topic 64 covers inspecting and testing data types and the subtopics listed in the curriculum.",
+      "Make dtype conversions and numeric-range assumptions explicit.",
+      "Examples and assessments are draft and require subject-matter review before publication."
+    ],
+    "references": [
+      {
+        "title": "Testing with NumPy",
+        "url": "https://numpy.org/doc/stable/reference/routines.testing.html",
+        "publisher": "NumPy project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "Inspecting and Testing Data Types",
+          "np.issubdtype()",
+          "Comparing data types"
+        ]
+      },
+      {
+        "title": "NumPy typing",
+        "url": "https://numpy.org/doc/stable/reference/typing.html",
+        "publisher": "NumPy project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "Inspecting and Testing Data Types",
+          "np.issubdtype()",
+          "Comparing data types"
+        ]
+      }
+    ],
+    "accessibility_notes": "Every visual has descriptive SVG title/description and adjacent text explaining the concept. The diagram does not rely on color alone; text labels state each stage.",
+    "version_notes": "Written against the NumPy 2.5 stable documentation checked 2026-10-13. Example outputs that were executed were observed in an available NumPy 2.3.5 environment; release-specific formatting or pseudorandom streams may vary."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Testing with NumPy",
+      "url": "https://numpy.org/doc/stable/reference/routines.testing.html",
+      "publisher": "NumPy project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Inspecting and Testing Data Types",
+        "np.issubdtype()",
+        "Comparing data types"
+      ]
+    },
+    {
+      "title": "NumPy typing",
+      "url": "https://numpy.org/doc/stable/reference/typing.html",
+      "publisher": "NumPy project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Inspecting and Testing Data Types",
+        "np.issubdtype()",
+        "Comparing data types"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the supplied syllabus with original explanations and examples. Subject-matter review, learner testing, and publication approval are still required."
+}

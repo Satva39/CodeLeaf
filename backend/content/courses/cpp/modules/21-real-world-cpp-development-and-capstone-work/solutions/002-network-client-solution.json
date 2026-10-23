@@ -1,0 +1,18 @@
+{
+  "id": "cpp-exercise-solution-042",
+  "exercise_id": "cpp-exercise-042",
+  "title": "Network client reference solution notes",
+  "language": "cpp",
+  "answer": "#include <iostream>\n#include <string>\nstruct Request { std::string method; std::string host; std::string path; };\nint main() {\n    const Request request{\"GET\", \"example.invalid\", \"/health\"};\n    if (request.host.empty() || request.path.empty()) return 1;\n    std::cout << request.method << ' ' << request.path << \" on \" << request.host << '\\n';\n}\n",
+  "explanation": "GET /health on example.invalid",
+  "manual_validation_checklist": [
+    "Compile locally with C++20 and -Wall -Wextra -Wpedantic (add the external library named in the solution when applicable).",
+    "Test normal inputs and at least one boundary/failure case named in the exercise prompt.",
+    "Check integer range, object lifetime, resource cleanup and error handling where relevant.",
+    "This models request construction, not an actual socket or HTTP exchange. Use a maintained HTTP library for transport, TLS, timeouts, redirects and error handling.",
+    "Keep this solution in repository-only protected content; do not include it in learner API responses."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only reference notes; replace with a reviewed implementation and test suite before publishing the exercise."
+}

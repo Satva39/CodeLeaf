@@ -1,0 +1,151 @@
+{
+  "id": "rest-api-development-lesson-164",
+  "slug": "api-latency-and-throughput",
+  "title": "API Latency and Throughput",
+  "sequence": 164,
+  "module_id": "rest-api-development-module-17",
+  "module_slug": "caching-conditional-requests-and-performance",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 25,
+  "prerequisites": [
+    "rest-api-development-lesson-163"
+  ],
+  "previous_lesson_id": "rest-api-development-lesson-163",
+  "next_lesson_id": "rest-api-development-lesson-165",
+  "keywords": [
+    "rest-api-development",
+    "api-latency-and-throughput",
+    "caching-conditional-requests-and-performance",
+    "measuring-response-times",
+    "average-and-percentile-latency"
+  ],
+  "source_syllabus_number": 164,
+  "subtopics": [
+    "Measuring response times",
+    "Average and percentile latency",
+    "Network, application, and database delays",
+    "Bottleneck analysis"
+  ],
+  "learning_outcomes": [
+    "Explain how api latency and throughput affects an API contract or implementation.",
+    "Apply the key ideas from measuring response times to a concrete API example.",
+    "Identify one failure, security, or compatibility risk and describe how to verify it."
+  ],
+  "content": {
+    "intro": "This lesson focuses on api latency and throughput in caching, conditional requests, and performance. You will connect measuring response times to a concrete API contract decision, inspect a small example, and decide what evidence proves the behavior is correct.",
+    "why_it_matters": "API Latency and Throughput matters because API consumers depend on predictable behavior even when clients, servers, networks, and stored data evolve independently. Applying measuring response times deliberately reduces ambiguity, makes failures easier to diagnose, and gives tests a clear expectation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Lesson 164 concept map",
+        "asset_path": "diagrams/lesson-164-concept-map.svg",
+        "alt_text": "Lesson 164: Measuring response times → Average and percentile latency → Network, application, and database delays → Bottleneck analysis.",
+        "caption": "Follow the 4 syllabus topics in order, then inspect the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Caching and validators can reduce work and prevent stale reads or lost updates, but cache policy must protect sensitive representations. In this lesson, treat “API Latency and Throughput” as a design or implementation decision: name the expected behavior, identify its boundary, and verify it with a representative request or test."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          "Measuring response times",
+          "Average and percentile latency",
+          "Network, application, and database delays",
+          "Bottleneck analysis",
+          "Measure before tuning"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Inspect the pattern: API Latency and Throughput",
+        "language": "http",
+        "execution_mode": "static-validation",
+        "code": "HTTP/1.1 200 OK\nETag: \"task-v7\"\nCache-Control: private, max-age=0, must-revalidate\nContent-Type: application/json\n\n{\"id\":\"task_42\",\"title\":\"Review API contract\"}\n\n# Later update: If-Match: \"task-v7\"",
+        "expected_output": "An ETag identifies a representation version. A conditional write can reject stale updates rather than silently overwriting a concurrent change."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walkthrough",
+        "text": "Start with “Measuring response times”; it establishes the vocabulary for this topic. Next, compare it with “Average and percentile latency” and “Bottleneck analysis”. In a real API, write down the observable behavior first, then test one normal request and one invalid or unauthorized request. Keep resource state, caller identity, and internal implementation details separate."
+      },
+      {
+        "type": "callout",
+        "title": "Professional review check",
+        "text": "Measure before optimizing, and never cache sensitive data without a deliberate policy. The worked snippet is intentionally inspectable, not an executable hosted API. Replace example.test and placeholder identifiers with local test data only when you implement the lesson project."
+      }
+    ],
+    "task": "Create a small design note or request/response example demonstrating api latency and throughput. Use the subtopics above to explain the intended behavior, the main edge case, and the evidence you would use to verify it.",
+    "task_acceptance_criteria": [
+      "Explain the role of “Measuring response times” in this API topic.",
+      "Provide a concrete resource, request, response, schema, test, or operational example as appropriate.",
+      "Identify one failure/security/compatibility edge case and a test or check for it."
+    ],
+    "expected_output": "A reviewable example for API Latency and Throughput with a clear expected behavior and at least one verifiable edge case.",
+    "run_instructions": "Execution mode: static-validation. This lesson example is a protocol, schema, SQL, or code fragment for inspection; it is not submitted to a production server and CodeLeaf does not execute arbitrary learner code. Validate JSON/YAML with a local linter or run the relevant HTTP request against the isolated service you implement for a project. Do not send illustrative example.test requests to a real service.",
+    "reset_steps": "Use a disposable local database or test fixture for implementation work. Restore seed data between runs; never point exercises at production customer data or live payment endpoints.",
+    "troubleshooting": [
+      "Check the exact HTTP method, path, status, header, media type, and payload before changing implementation code.",
+      "Separate a transport failure from an application validation failure, authorization denial, and dependency/database failure.",
+      "Confirm the example and its client tooling version are compatible; consult the linked standard or official guidance when behavior is ambiguous."
+    ],
+    "common_mistakes": [
+      "Treating api latency and throughput as an implementation detail rather than a documented behavior.",
+      "Testing only the happy path and ignoring malformed, unauthorized, conflicting, duplicate, or dependency-failure cases.",
+      "Publishing an example without checking version assumptions, sensitive-data exposure, and the expected output."
+    ],
+    "summary": [
+      "Caching and validators can reduce work and prevent stale reads or lost updates, but cache policy must protect sensitive representations. In this lesson, treat “API Latency and Throughput” as a design or implementation decision: name the expected behavior, identify its boundary, and verify it with a representative request or test.",
+      "Next, connect this idea to Lesson 165: Efficient API Client Interactions."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-164-questions.json",
+    "solution_notes": "Knowledge-check answer keys and explanations remain in repository-side question files. The public lesson API strips this file reference and serves only prompts/options from the protected endpoint.",
+    "references": [
+      {
+        "title": "RFC 9110 — HTTP Semantics",
+        "url": "https://www.rfc-editor.org/rfc/rfc9110.html"
+      },
+      {
+        "title": "RFC 9111 — HTTP Caching",
+        "url": "https://www.rfc-editor.org/rfc/rfc9111.html"
+      }
+    ],
+    "run_mode": "static-validation"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "RFC 9110 — HTTP Semantics",
+      "url": "https://www.rfc-editor.org/rfc/rfc9110.html",
+      "publisher": "IETF / RFC Editor",
+      "checked_on": "2026-10-19",
+      "source_type": "Internet Standard",
+      "supports": [
+        "HTTP methods and status codes",
+        "representations",
+        "content negotiation",
+        "conditional requests"
+      ]
+    },
+    {
+      "title": "RFC 9111 — HTTP Caching",
+      "url": "https://www.rfc-editor.org/rfc/rfc9111.html",
+      "publisher": "IETF / RFC Editor",
+      "checked_on": "2026-10-19",
+      "source_type": "Internet Standard",
+      "supports": [
+        "cache behavior",
+        "freshness",
+        "cache validation",
+        "Cache-Control"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Unreviewed educational draft based on the attached REST API syllabus; verify the technical framing, worked example, and assessment before publication."
+}

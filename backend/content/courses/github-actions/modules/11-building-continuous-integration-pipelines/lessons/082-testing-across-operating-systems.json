@@ -1,0 +1,245 @@
+{
+  "id": "github-actions-lesson-082",
+  "slug": "testing-across-operating-systems",
+  "title": "Testing Across Operating Systems",
+  "sequence": 82,
+  "module_id": "github-actions-module-11",
+  "module_slug": "building-continuous-integration-pipelines",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "github-actions-lesson-081"
+  ],
+  "previous_lesson_id": "github-actions-lesson-081",
+  "next_lesson_id": "github-actions-lesson-083",
+  "keywords": [
+    "testing-across-operating-systems",
+    "building-continuous-integration-pipelines",
+    "linux-windows-and-macos",
+    "platform-specific-test-behavior",
+    "environment-dependent-paths",
+    "shell-differences",
+    "separating-shared-and-platform-specific-tests"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of testing across operating systems and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to testing across operating systems.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on testing across operating systems. An OS matrix catches platform-specific paths, shell, filesystem, and behavior differences on supported runners. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "Testing Across Operating Systems matters because it affects correctness, security, maintainability, or operating cost. An OS matrix catches platform-specific paths, shell, filesystem, and behavior differences on supported runners. A useful CI pipeline gives a clear pass/fail result for relevant quality checks. Keep fast checks early, use services only when tests need them, and ensure required checks cannot be skipped accidentally.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 11 visual map",
+        "asset_path": "diagrams/module-11-overview.svg",
+        "alt_text": "Ordered overview of module 11: Designing a CI Pipeline; Code Quality Automation; Automated Testing; Testing Different Language Versions; Testing Across Operating Systems; Database-Backed CI Tests; Build Automation; Pull Request Quality Gates; Monorepo and Change-Aware CI; CI Pipeline Optimization.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "An OS matrix catches platform-specific paths, shell, filesystem, and behavior differences on supported runners. A useful CI pipeline gives a clear pass/fail result for relevant quality checks. Keep fast checks early, use services only when tests need them, and ensure required checks cannot be skipped accidentally. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "Linux, Windows, and macOS",
+            "text": "For linux, windows, and macos, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Platform-specific test behavior",
+            "text": "Make the check deterministic and fail with a meaningful status when requirements are not met. Preserve reports where useful and configure required branch checks to match the checks the workflow actually emits."
+          },
+          {
+            "title": "Environment-dependent paths",
+            "text": "Use a GitHub Environment for deployment-specific secrets, variables, branch restrictions, and reviewer gates. Do not treat an environment name alone as proof that approval rules are configured."
+          },
+          {
+            "title": "Shell differences",
+            "text": "For shell differences, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Separating shared and platform-specific tests",
+            "text": "Make the check deterministic and fail with a meaningful status when requirements are not met. Preserve reports where useful and configure required branch checks to match the checks the workflow actually emits."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "name: Cross-platform smoke tests\non: workflow_dispatch\npermissions:\n  contents: read\njobs:\n  test:\n    strategy:\n      matrix:\n        os: [ubuntu-latest, windows-latest, macos-latest]\n    runs-on: ${{ matrix.os }}\n    steps:\n      - uses: actions/checkout@v4\n      - run: echo \"Run cross-platform tests here\"",
+        "expected_output": "One job runs per operating system listed in the matrix; platform-specific behavior needs real assertions, not just an echo.",
+        "run_instructions": "Use only OSes that are supported and available under the repository plan/quota.",
+        "reset_steps": "Remove platforms that are outside the project support policy.",
+        "execution_mode": "workflow-fragment"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to testing across operating systems. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain testing across operating systems, read the example, and identify a way to validate it. The wider system goal remains: Build CI checks that produce repeatable evidence and protect merge quality."
+      }
+    ],
+    "task": "Apply testing across operating systems to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: An OS matrix catches platform-specific paths, shell, filesystem, and behavior differences on supported runners.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: An OS matrix catches platform-specific paths, shell, filesystem, and behavior differences on supported runners. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "An OS matrix catches platform-specific paths, shell, filesystem, and behavior differences on supported runners.",
+      "A useful CI pipeline gives a clear pass/fail result for relevant quality checks. Keep fast checks early, use services only when tests need them, and ensure required checks cannot be skipped accidentally.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-082-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "workflow-fragment",
+    "references": [
+      {
+        "title": "Workflow syntax for GitHub Actions",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "workflow files",
+          "jobs",
+          "steps",
+          "permissions",
+          "defaults",
+          "concurrency",
+          "matrix",
+          "environments"
+        ]
+      },
+      {
+        "title": "Workflow artifacts",
+        "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/workflow-artifacts",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "build outputs",
+          "test reports",
+          "inter-job data",
+          "artifact attestations"
+        ]
+      },
+      {
+        "title": "Dependency caching",
+        "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/dependency-caching",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "dependency cache",
+          "artifacts versus cache",
+          "cache security"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Workflow syntax for GitHub Actions",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "workflow files",
+        "jobs",
+        "steps",
+        "permissions",
+        "defaults",
+        "concurrency",
+        "matrix",
+        "environments"
+      ]
+    },
+    {
+      "title": "Workflow artifacts",
+      "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/workflow-artifacts",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "build outputs",
+        "test reports",
+        "inter-job data",
+        "artifact attestations"
+      ]
+    },
+    {
+      "title": "Dependency caching",
+      "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/dependency-caching",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "dependency cache",
+        "artifacts versus cache",
+        "cache security"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "82",
+    "module_title": "Building Continuous Integration Pipelines",
+    "subtopics": [
+      "Linux, Windows, and macOS",
+      "Platform-specific test behavior",
+      "Environment-dependent paths",
+      "Shell differences",
+      "Separating shared and platform-specific tests"
+    ]
+  }
+}

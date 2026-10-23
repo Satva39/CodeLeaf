@@ -1,0 +1,201 @@
+{
+  "id": "bash-lesson-185",
+  "slug": "production-configuration-management",
+  "title": "Production Configuration Management",
+  "sequence": 185,
+  "module_id": "bash-module-19",
+  "module_slug": "advanced-reliability-and-production-patterns",
+  "level": "professional",
+  "difficulty": "professional",
+  "track": "professional",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "bash-lesson-184"
+  ],
+  "previous_lesson_id": "bash-lesson-184",
+  "next_lesson_id": "bash-lesson-186",
+  "keywords": [
+    "production",
+    "configuration",
+    "management",
+    "separating",
+    "settings",
+    "from",
+    "code",
+    "required-configuration",
+    "validation",
+    "environment-specific",
+    "defaults",
+    "and",
+    "override",
+    "precedence"
+  ],
+  "source_syllabus_number": 185,
+  "subtopics": [
+    "Separating settings from code",
+    "Required-configuration validation",
+    "Environment-specific configuration",
+    "Defaults and override precedence",
+    "Versioning configuration formats and interfaces"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Production Configuration Management and identify at least two relevant syllabus points.",
+    "Apply production configuration management in a small Bash example and verify the expected output or status.",
+    "Identify one edge case or failure mode and state how to test it safely."
+  ],
+  "content": {
+    "intro": "Production automation must assume interruption, retries, concurrent invocations, and partial failure are possible.",
+    "why_it_matters": "Production Configuration Management matters because reliable shell automation depends on making this behavior explicit, testing its boundaries, and documenting environment assumptions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 19 visual roadmap",
+        "asset_path": "diagrams/module-19-overview.svg",
+        "alt_text": "Overview roadmap for Module 19: Advanced Reliability and Production Patterns, listing lessons 179 through 188 in curriculum order. Lesson focus: Production Configuration Management.",
+        "caption": "Module roadmap for context. For this lesson, focus on: Separating settings from code; Required-configuration validation; Environment-specific configuration."
+      },
+      {
+        "type": "paragraph",
+        "title": "The central idea",
+        "text": "The environment affects command lookup and shell behavior. Document configuration precedence and test with the same non-interactive invocation that automation will use."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the supplied syllabus",
+        "items": [
+          {
+            "title": "Separating settings from code",
+            "text": "Define what “Separating settings from code” means in this lesson, show it with a minimal example, and verify the expected result plus one limitation or edge case."
+          },
+          {
+            "title": "Required-configuration validation",
+            "text": "Define what “Required-configuration validation” means in this lesson, show it with a minimal example, and verify the expected result plus one limitation or edge case."
+          },
+          {
+            "title": "Environment-specific configuration",
+            "text": "Inspect the effective environment in both an interactive terminal and a non-interactive script; document any variable or path the example depends on."
+          },
+          {
+            "title": "Defaults and override precedence",
+            "text": "Define what “Defaults and override precedence” means in this lesson, show it with a minimal example, and verify the expected result plus one limitation or edge case."
+          },
+          {
+            "title": "Versioning configuration formats and interfaces",
+            "text": "Record the supported interpreter/utility version and test on the oldest target environment rather than assuming all installations are identical."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How it fits into Bash",
+        "text": "Production automation must assume interruption, retries, concurrent invocations, and partial failure are possible. Prefer idempotent steps, atomic updates, bounded retries, explicit readiness checks, auditable logs, and a documented recovery path."
+      },
+      {
+        "type": "code",
+        "language": "bash",
+        "execution_mode": "manual-terminal",
+        "code": "default_value='./reports'\nreport_dir=${REPORT_DIR:-$default_value}\nprintf '%s\\n' \"$report_dir\"",
+        "expected_output": "./reports unless REPORT_DIR is set",
+        "run_instructions": "Save the snippet in a temporary practice file and run it with the locally installed Bash interpreter. The CodeLeaf in-page preview displays reference output only; it does not execute Bash code. Some examples require commands already installed on your machine.",
+        "reset_steps": "Discard the temporary file or reset the editor to the original snippet. The examples are designed not to modify important data."
+      },
+      {
+        "type": "callout",
+        "title": "Watch out",
+        "text": "Design for retries, partial failure, cancellation, and restart. Prefer an existing orchestration system when the workflow grows beyond a clear shell-sized task. Do not assume the same command options or newer Bash features exist on every operating system."
+      },
+      {
+        "type": "paragraph",
+        "title": "Check your result",
+        "text": "Compare the observed output and exit status with the reference behavior. Change one input at a time, include a boundary or invalid input, and note what differs on your target Bash/utility version."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety note",
+        "text": "Use a local test directory, avoid secrets in commands/history/logs, and check the installed interpreter with `bash --version`. This course remains draft until technical examples and assessments receive subject-matter review."
+      }
+    ],
+    "task": "Build a small local example for “Production Configuration Management” using synthetic input or a disposable practice directory. Explain what the command should do, check its output and exit status, and test one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "Use an example aligned with the lesson and preserve arguments, paths, or streams correctly.",
+      "Record the observed output and exit status.",
+      "Test one boundary case or expected failure.",
+      "State the Bash version and any external utility dependency that matters."
+    ],
+    "hints": [
+      "Reduce the problem to one command or one small function first.",
+      "Use quoting and printf to make argument boundaries visible.",
+      "Check exit statuses as well as printed output; use syntax-only validation before testing changes."
+    ],
+    "expected_output": "A documented example for “Production Configuration Management” with the observed output/status, one tested boundary case, and an explicit statement of any version or utility dependency.",
+    "run_mode": "static-validation",
+    "troubleshooting": [
+      "If the snippet uses an external command, check availability with `command -v NAME` and consult that program’s local help.",
+      "If behavior differs by operating system or Bash version, record `bash --version` and check the official manual linked below.",
+      "For syntax-only validation run `bash -n script.sh`; this parses but does not execute the script."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming a successful-looking output means the command succeeded.",
+        "why": "Output and exit status are separate signals, and a later command may replace `$?`.",
+        "fix": "Capture important statuses immediately and check all relevant pipeline stages."
+      },
+      {
+        "problem": "Copying example commands straight into a production path.",
+        "why": "Real paths, permissions, input names, and external utility versions differ.",
+        "fix": "Use a disposable fixture and inspect the planned side effects first."
+      },
+      {
+        "problem": "Treating Bash-specific syntax as portable `sh` syntax.",
+        "why": "Arrays, `[[ ... ]]`, process substitution, and some parameter operators are extensions.",
+        "fix": "Name the interpreter and test the minimum supported version."
+      }
+    ],
+    "summary": [
+      "Production Configuration Management has specific syntax and behavior; verify it rather than relying on guesswork.",
+      "Preserve argument boundaries and keep shell commands separate from untrusted data.",
+      "Test successful, boundary, and failure cases in a safe environment."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-185-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "gnu-bash-manual-5-3",
+      "title": "GNU Bash Reference Manual, Edition 5.3",
+      "url": "https://www.gnu.org/s/bash/manual/bash.html",
+      "publisher": "GNU Project / Free Software Foundation",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "Bash syntax and parsing",
+        "quoting and expansion",
+        "variables and arrays",
+        "control flow",
+        "functions",
+        "redirection and pipelines",
+        "processes and traps",
+        "startup files and shell options",
+        "version compatibility"
+      ],
+      "source_type": "official language reference",
+      "notes": "The primary technical reference for Bash-specific behavior. Verify examples against the interpreter installed on the target system."
+    },
+    {
+      "id": "gnu-findutils-manual",
+      "title": "GNU Findutils Manual",
+      "url": "https://www.gnu.org/software/findutils/manual/html_mono/find.html",
+      "publisher": "GNU Project / Free Software Foundation",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "find traversal",
+        "filename handling",
+        "safe file selection"
+      ],
+      "source_type": "official utility manual",
+      "notes": "Use with OS-specific documentation where GNU find is not installed."
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft content mapped to Bash.pdf Section B lesson 185. Technical examples and grading require review before publication."
+}

@@ -1,0 +1,275 @@
+{
+  "id": "github-actions-lesson-050",
+  "slug": "conditional-execution",
+  "title": "Conditional Execution",
+  "sequence": 50,
+  "module_id": "github-actions-module-07",
+  "module_slug": "variables-contexts-and-expressions",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "github-actions-lesson-049"
+  ],
+  "previous_lesson_id": "github-actions-lesson-049",
+  "next_lesson_id": "github-actions-lesson-051",
+  "keywords": [
+    "conditional-execution",
+    "variables-contexts-and-expressions",
+    "the-if-keyword",
+    "job-level-conditions",
+    "step-level-conditions",
+    "conditions-based-on-event-data",
+    "conditions-based-on-previous-results",
+    "conditions-based-on-branch-names",
+    "handling-skipped-dependencies",
+    "understanding-implicit-status-conditions"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of conditional execution and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to conditional execution.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on conditional execution. The `if` key conditionally runs steps or jobs; status-check functions and skipped dependencies affect whether later work executes. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "Conditional Execution matters because it affects correctness, security, maintainability, or operating cost. The `if` key conditionally runs steps or jobs; status-check functions and skipped dependencies affect whether later work executes. Contexts, environment variables, and expressions have different scopes and evaluation times. Treat event data as untrusted and avoid interpolating untrusted values directly into shell source.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 7 visual map",
+        "asset_path": "diagrams/module-07-overview.svg",
+        "alt_text": "Ordered overview of module 7: Default Environment Variables; Custom Environment Variables; GitHub Configuration Variables; Understanding GitHub Actions Contexts; Expression Syntax; Built-In Expression Functions; Conditional Execution; Safe Handling of Workflow Expressions; Passing Data Through Environment Files.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "The `if` key conditionally runs steps or jobs; status-check functions and skipped dependencies affect whether later work executes. Contexts, environment variables, and expressions have different scopes and evaluation times. Treat event data as untrusted and avoid interpolating untrusted values directly into shell source. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "The if keyword",
+            "text": "For the if keyword, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Job-level conditions",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Step-level conditions",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Conditions based on event data",
+            "text": "Match the event to the intended lifecycle, then test positive and negative branch/path/activity cases. Event payloads may be attacker-controlled, and scheduled jobs use UTC rather than a guaranteed exact start time."
+          },
+          {
+            "title": "Conditions based on previous results",
+            "text": "For conditions based on previous results, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Conditions based on branch names",
+            "text": "Use filters to reduce unnecessary runs only when skipped work is genuinely unrelated. Include shared dependencies and test the changed and unchanged path cases so required checks are not bypassed."
+          },
+          {
+            "title": "Handling skipped dependencies",
+            "text": "For handling skipped dependencies, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Understanding implicit status conditions",
+            "text": "For understanding implicit status conditions, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "jobs:\n  validate:\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo \"Validate input and exit status\"\n  report:\n    needs: validate\n    if: ${{ always() }}\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo \"Inspect the dependency result before acting\"",
+        "expected_output": "The reporting job waits for the validation job and runs even after it finishes; real cleanup/reporting logic should inspect `needs.validate.result` before making decisions.",
+        "run_instructions": "Use a test repository or static validation first. Confirm the snippet matches the repository, runner, permissions, and current GitHub documentation.",
+        "reset_steps": "Remove temporary test workflows and never carry test credentials or sample outputs into production.",
+        "execution_mode": "workflow-fragment"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to conditional execution. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain conditional execution, read the example, and identify a way to validate it. The wider system goal remains: Pass explicit values between workflow components while treating event data as untrusted input."
+      }
+    ],
+    "task": "Apply conditional execution to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: The `if` key conditionally runs steps or jobs; status-check functions and skipped dependencies affect whether later work executes.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: The `if` key conditionally runs steps or jobs; status-check functions and skipped dependencies affect whether later work executes. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "The `if` key conditionally runs steps or jobs; status-check functions and skipped dependencies affect whether later work executes.",
+      "Contexts, environment variables, and expressions have different scopes and evaluation times. Treat event data as untrusted and avoid interpolating untrusted values directly into shell source.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-050-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "workflow-fragment",
+    "references": [
+      {
+        "title": "Contexts reference",
+        "url": "https://docs.github.com/en/actions/reference/contexts-reference",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "github",
+          "env",
+          "vars",
+          "secrets",
+          "runner",
+          "job",
+          "steps",
+          "needs",
+          "matrix",
+          "inputs contexts"
+        ]
+      },
+      {
+        "title": "Evaluate expressions in workflows and actions",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/expressions",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "expression syntax",
+          "operators",
+          "functions",
+          "status checks",
+          "change detection"
+        ]
+      },
+      {
+        "title": "Secure use reference",
+        "url": "https://docs.github.com/en/actions/reference/security/secure-use",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "security_guidance",
+        "supports": [
+          "least privilege",
+          "third-party actions",
+          "full SHA pinning",
+          "untrusted input",
+          "privileged workflow triggers",
+          "cache security"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Contexts reference",
+      "url": "https://docs.github.com/en/actions/reference/contexts-reference",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "github",
+        "env",
+        "vars",
+        "secrets",
+        "runner",
+        "job",
+        "steps",
+        "needs",
+        "matrix",
+        "inputs contexts"
+      ]
+    },
+    {
+      "title": "Evaluate expressions in workflows and actions",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/expressions",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "expression syntax",
+        "operators",
+        "functions",
+        "status checks",
+        "change detection"
+      ]
+    },
+    {
+      "title": "Secure use reference",
+      "url": "https://docs.github.com/en/actions/reference/security/secure-use",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "security_guidance",
+      "supports": [
+        "least privilege",
+        "third-party actions",
+        "full SHA pinning",
+        "untrusted input",
+        "privileged workflow triggers",
+        "cache security"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "50",
+    "module_title": "Variables, Contexts, and Expressions",
+    "subtopics": [
+      "The if keyword",
+      "Job-level conditions",
+      "Step-level conditions",
+      "Conditions based on event data",
+      "Conditions based on previous results",
+      "Conditions based on branch names",
+      "Handling skipped dependencies",
+      "Understanding implicit status conditions"
+    ]
+  }
+}

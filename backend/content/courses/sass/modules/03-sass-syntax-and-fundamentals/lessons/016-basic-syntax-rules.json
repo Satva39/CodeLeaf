@@ -1,0 +1,162 @@
+{
+  "sequence": 16,
+  "title": "Basic Syntax Rules",
+  "slug": "basic-syntax-rules",
+  "id": "sass-lesson-016",
+  "module_id": "sass-module-03",
+  "module_slug": "sass-syntax-and-fundamentals",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 7,
+  "status": "draft",
+  "prerequisites": [
+    "sass-lesson-015"
+  ],
+  "previous_lesson_id": "sass-lesson-015",
+  "next_lesson_id": "sass-lesson-017",
+  "keywords": [
+    "basic-syntax-rules",
+    "statements-and-expressions",
+    "selectors-and-declaration-blocks",
+    "properties-and-values",
+    "whitespace-and-indentation",
+    "parentheses-and-delimiters",
+    "syntax-errors-and-parsing-rules"
+  ],
+  "source_syllabus_number": 16,
+  "learning_outcomes": [
+    "Explain basic syntax rules and connect it to at least two of its syllabus subtopics.",
+    "Apply basic syntax rules in a small SCSS example and predict the resulting CSS or compiler behavior.",
+    "Inspect the output, diagnose one plausible mistake, and state a relevant limitation or best practice."
+  ],
+  "exercise_files": [],
+  "content": {
+    "intro": "This lesson turns **Basic Syntax Rules** into a practical, inspectable step. You will connect statements and expressions with selectors and declaration blocks, then check what Dart Sass emits instead of relying on the SCSS source alone.",
+    "why_it_matters": "Sass extends CSS with a compile-time layer for reusable values, expressions, rules, and module organization. The compiler transforms the source file into ordinary CSS; the browser does not execute Sass syntax.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual map: Basic Syntax Rules",
+        "asset_path": "diagrams/lessons/lesson-016.svg",
+        "alt_text": "Three-step diagram for Basic Syntax Rules: understand the concept, apply it to statements and expressions, and verify the result.",
+        "caption": "Use this visual as a check sequence for basic syntax rules: understand, apply, and verify."
+      },
+      {
+        "type": "paragraph",
+        "title": "The mental model",
+        "text": "Start with a small example, state the expected CSS behavior, compile it with Dart Sass, and compare the output with the intent. Retain the plain-CSS alternative when Sass adds no meaningful reuse or organization."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics in this lesson",
+        "items": [
+          {
+            "title": "Statements and expressions",
+            "text": "For statements and expressions, identify the relevant source rule, predict the intended result, and check the emitted CSS against that expectation."
+          },
+          {
+            "title": "Selectors and declaration blocks",
+            "text": "Predict the expanded selector before compiling. Keep nesting shallow and verify that the emitted selector does not match more elements than intended."
+          },
+          {
+            "title": "Properties and values",
+            "text": "For properties and values, identify the relevant source rule, predict the intended result, and check the emitted CSS against that expectation."
+          },
+          {
+            "title": "Whitespace and indentation",
+            "text": "For whitespace and indentation, identify the relevant source rule, predict the intended result, and check the emitted CSS against that expectation."
+          },
+          {
+            "title": "Parentheses and delimiters",
+            "text": "For parentheses and delimiters, identify the relevant source rule, predict the intended result, and check the emitted CSS against that expectation."
+          },
+          {
+            "title": "Syntax errors and parsing rules",
+            "text": "Reproduce the issue with the smallest entrypoint, read the first relevant diagnostic, fix the source rather than the generated file, and recompile to verify the correction."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "1. Start with the smallest source file that demonstrates basic syntax rules. 2. State what should change and what should stay the same. 3. Compile the entrypoint with Dart Sass, or use the stated command if this lesson is about the toolchain. 4. Compare the resulting CSS or diagnostic with the expected result, then change one input and repeat."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Basic Syntax Rules",
+        "language": "scss",
+        "language_label": "SCSS",
+        "code": "$brand: #3157d5;\n.notice { color: $brand; }",
+        "expected_output": ".notice { color: #3157d5; }",
+        "run_mode": "static-validation",
+        "execution_note": "This course example is a Sass/SCSS or tooling example. CodeLeaf’s current in-browser playground previews HTML/CSS/JavaScript only; compile Sass locally with Dart Sass. Do not treat the browser preview as a Sass compiler."
+      },
+      {
+        "type": "callout",
+        "title": "Modern Sass note",
+        "text": "Use Dart Sass for new work. Prefer @use / @forward and namespaced sass: built-in modules. Sass compiles to CSS; browser-native CSS features still run in the browser."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a small SCSS example that demonstrates basic syntax rules. Keep the example focused on one behavior, compile it with the version used by your project, and explain which part of the output proves your understanding."
+      },
+      {
+        "type": "paragraph",
+        "title": "Common mistake to avoid",
+        "text": "Do not edit generated CSS when you intend to change source behavior. Edit the SCSS entrypoint or its module, compile again, and compare the generated output."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-016-questions.json"
+  },
+  "task": "Create a small SCSS example that demonstrates basic syntax rules. Keep the example focused on one behavior, compile it with the version used by your project, and explain which part of the output proves your understanding.",
+  "task_acceptance_criteria": [
+    "The example includes the intended Sass construct and a clear input.",
+    "The expected output or tool result is documented and consistent with the source.",
+    "The work is reproducible and includes one limitation, test, or troubleshooting note."
+  ],
+  "hints": [
+    "Reduce the example to one source file and one entrypoint before adding more abstractions.",
+    "Read the first compiler diagnostic and confirm you are editing the Sass source, not only generated CSS.",
+    "Compile and inspect the emitted CSS; compare exact selectors, values, and at-rules with your expectation."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Assuming SCSS runs directly in the browser.",
+      "why": "Browsers consume CSS, not Sass syntax.",
+      "fix": "Compile with Dart Sass and load the resulting .css file in the HTML page."
+    },
+    {
+      "problem": "Trusting source readability without inspecting generated output.",
+      "why": "Nesting, mixins, loops, and extension can emit unexpected selectors or more CSS than intended.",
+      "fix": "Compile a small example and inspect the CSS output or browser computed styles."
+    }
+  ],
+  "summary": [
+    "Basic Syntax Rules is useful when it solves the specific organization or reuse problem described in this lesson.",
+    "Keep compile-time Sass behavior distinct from browser-time CSS behavior.",
+    "Validate both source intent and generated CSS before relying on the pattern in a larger project."
+  ],
+  "sources": [
+    {
+      "title": "Sass documentation",
+      "url": "https://sass-lang.com/documentation/",
+      "publisher": "Sass",
+      "supports": [
+        "Reference for lesson 16: Basic Syntax Rules"
+      ]
+    },
+    {
+      "title": "Sass syntax",
+      "url": "https://sass-lang.com/documentation/syntax/",
+      "publisher": "Sass",
+      "supports": [
+        "Reference for lesson 16: Basic Syntax Rules"
+      ]
+    }
+  ],
+  "run_mode": "static-validation",
+  "status_note": "Draft lesson generated from the attached Sass.pdf curriculum and aligned to modern Dart Sass documentation; subject-matter and compiled-example review is required before publishing.",
+  "exercise_ids": []
+}

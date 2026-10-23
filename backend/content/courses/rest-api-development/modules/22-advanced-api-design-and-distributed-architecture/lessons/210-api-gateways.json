@@ -1,0 +1,167 @@
+{
+  "id": "rest-api-development-lesson-210",
+  "slug": "api-gateways",
+  "title": "API Gateways",
+  "sequence": 210,
+  "module_id": "rest-api-development-module-22",
+  "module_slug": "advanced-api-design-and-distributed-architecture",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 25,
+  "prerequisites": [
+    "rest-api-development-lesson-209"
+  ],
+  "previous_lesson_id": "rest-api-development-lesson-209",
+  "next_lesson_id": "rest-api-development-lesson-211",
+  "keywords": [
+    "rest-api-development",
+    "api-gateways",
+    "advanced-api-design-and-distributed-architecture",
+    "routing-and-reverse-proxy-behavior",
+    "authentication-and-policy-enforcement"
+  ],
+  "source_syllabus_number": 210,
+  "subtopics": [
+    "Routing and reverse proxy behavior",
+    "Authentication and policy enforcement",
+    "Rate limits and request transformation",
+    "Gateway versus application responsibilities"
+  ],
+  "learning_outcomes": [
+    "Explain how api gateways affects an API contract or implementation.",
+    "Apply the key ideas from routing and reverse proxy behavior to a concrete API example.",
+    "Identify one failure, security, or compatibility risk and describe how to verify it."
+  ],
+  "content": {
+    "intro": "This lesson focuses on api gateways in advanced api design and distributed architecture. You will connect routing and reverse proxy behavior to a concrete API contract decision, inspect a small example, and decide what evidence proves the behavior is correct.",
+    "why_it_matters": "API Gateways matters because API consumers depend on predictable behavior even when clients, servers, networks, and stored data evolve independently. Applying routing and reverse proxy behavior deliberately reduces ambiguity, makes failures easier to diagnose, and gives tests a clear expectation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Lesson 210 concept map",
+        "asset_path": "diagrams/lesson-210-concept-map.svg",
+        "alt_text": "Lesson 210: Routing and reverse proxy behavior → Authentication and policy enforcement → Rate limits and request transformation → Gateway versus application responsibilities.",
+        "caption": "Follow the 4 syllabus topics in order, then inspect the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Distributed services introduce partial failure, eventual consistency, and cross-service coordination trade-offs that need explicit design. In this lesson, treat “API Gateways” as a design or implementation decision: name the expected behavior, identify its boundary, and verify it with a representative request or test."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          "Routing and reverse proxy behavior",
+          "Authentication and policy enforcement",
+          "Rate limits and request transformation",
+          "Gateway versus application responsibilities",
+          "Assume dependencies can fail independently"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Inspect the pattern: API Gateways",
+        "language": "sql",
+        "execution_mode": "static-validation",
+        "code": "BEGIN;\nINSERT INTO orders (id, status) VALUES ('ord_123', 'pending');\nINSERT INTO outbox_events (event_id, event_type, payload)\nVALUES ('evt_8f2c', 'order.created', '{\"order_id\":\"ord_123\"}');\nCOMMIT;\n\n-- A separate worker publishes the committed outbox event.",
+        "expected_output": "The order and its event record commit atomically; a worker can safely retry publication after a transient failure."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walkthrough",
+        "text": "Start with “Routing and reverse proxy behavior”; it establishes the vocabulary for this topic. Next, compare it with “Authentication and policy enforcement” and “Gateway versus application responsibilities”. In a real API, write down the observable behavior first, then test one normal request and one invalid or unauthorized request. Keep resource state, caller identity, and internal implementation details separate."
+      },
+      {
+        "type": "callout",
+        "title": "Professional review check",
+        "text": "Network boundaries introduce partial failure and consistency trade-offs that local code does not have. The worked snippet is intentionally inspectable, not an executable hosted API. Replace example.test and placeholder identifiers with local test data only when you implement the lesson project."
+      }
+    ],
+    "task": "Create a small design note or request/response example demonstrating api gateways. Use the subtopics above to explain the intended behavior, the main edge case, and the evidence you would use to verify it.",
+    "task_acceptance_criteria": [
+      "Explain the role of “Routing and reverse proxy behavior” in this API topic.",
+      "Provide a concrete resource, request, response, schema, test, or operational example as appropriate.",
+      "Identify one failure/security/compatibility edge case and a test or check for it."
+    ],
+    "expected_output": "A reviewable example for API Gateways with a clear expected behavior and at least one verifiable edge case.",
+    "run_instructions": "Execution mode: static-validation. This lesson example is a protocol, schema, SQL, or code fragment for inspection; it is not submitted to a production server and CodeLeaf does not execute arbitrary learner code. Validate JSON/YAML with a local linter or run the relevant HTTP request against the isolated service you implement for a project. Do not send illustrative example.test requests to a real service.",
+    "reset_steps": "Use a disposable local database or test fixture for implementation work. Restore seed data between runs; never point exercises at production customer data or live payment endpoints.",
+    "troubleshooting": [
+      "Check the exact HTTP method, path, status, header, media type, and payload before changing implementation code.",
+      "Separate a transport failure from an application validation failure, authorization denial, and dependency/database failure.",
+      "Confirm the example and its client tooling version are compatible; consult the linked standard or official guidance when behavior is ambiguous."
+    ],
+    "common_mistakes": [
+      "Treating api gateways as an implementation detail rather than a documented behavior.",
+      "Testing only the happy path and ignoring malformed, unauthorized, conflicting, duplicate, or dependency-failure cases.",
+      "Publishing an example without checking version assumptions, sensitive-data exposure, and the expected output."
+    ],
+    "summary": [
+      "Distributed services introduce partial failure, eventual consistency, and cross-service coordination trade-offs that need explicit design. In this lesson, treat “API Gateways” as a design or implementation decision: name the expected behavior, identify its boundary, and verify it with a representative request or test.",
+      "Next, connect this idea to Lesson 211: Backend-for-Frontend and API Composition."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-210-questions.json",
+    "solution_notes": "Knowledge-check answer keys and explanations remain in repository-side question files. The public lesson API strips this file reference and serves only prompts/options from the protected endpoint.",
+    "references": [
+      {
+        "title": "Microsoft REST API Guidelines",
+        "url": "https://github.com/microsoft/api-guidelines/blob/vNext/Guidelines.md"
+      },
+      {
+        "title": "OpenTelemetry Documentation",
+        "url": "https://opentelemetry.io/docs/"
+      },
+      {
+        "title": "Google SRE Books",
+        "url": "https://sre.google/books/"
+      }
+    ],
+    "run_mode": "static-validation"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Microsoft REST API Guidelines",
+      "url": "https://github.com/microsoft/api-guidelines/blob/vNext/Guidelines.md",
+      "publisher": "Microsoft",
+      "checked_on": "2026-10-19",
+      "source_type": "API design guidelines",
+      "supports": [
+        "resource and URL design",
+        "API evolution",
+        "error conventions",
+        "idempotency and retry design"
+      ]
+    },
+    {
+      "title": "OpenTelemetry Documentation",
+      "url": "https://opentelemetry.io/docs/",
+      "publisher": "Cloud Native Computing Foundation project",
+      "checked_on": "2026-10-19",
+      "source_type": "Official documentation",
+      "supports": [
+        "traces",
+        "metrics",
+        "logs",
+        "observability concepts"
+      ]
+    },
+    {
+      "title": "Google SRE Books",
+      "url": "https://sre.google/books/",
+      "publisher": "Google",
+      "checked_on": "2026-10-19",
+      "source_type": "Reliability engineering reference",
+      "supports": [
+        "SLIs and SLOs",
+        "incident response",
+        "error budgets and operational resilience"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Unreviewed educational draft based on the attached REST API syllabus; verify the technical framing, worked example, and assessment before publication."
+}

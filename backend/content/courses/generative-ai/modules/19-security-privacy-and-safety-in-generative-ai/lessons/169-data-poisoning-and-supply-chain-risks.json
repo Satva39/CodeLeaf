@@ -1,0 +1,165 @@
+{
+  "id": "genai-lesson-169",
+  "slug": "data-poisoning-and-supply-chain-risks",
+  "title": "Data Poisoning and Supply-Chain Risks",
+  "sequence": 169,
+  "module_id": "genai-module-19",
+  "module_slug": "security-privacy-and-safety-in-generative-ai",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional-practice",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "genai-lesson-165"
+  ],
+  "previous_lesson_id": "genai-lesson-168",
+  "next_lesson_id": "genai-lesson-170",
+  "keywords": [
+    "Data Poisoning and Supply-Chain Risks",
+    "Dataset provenance and integrity",
+    "Poisoned documents in a knowledge base",
+    "Model and dependency provenance",
+    "Verifying model artifacts",
+    "Supply-chain review and access control",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 169,
+  "subtopics": [
+    "Dataset provenance and integrity",
+    "Poisoned documents in a knowledge base",
+    "Model and dependency provenance",
+    "Verifying model artifacts",
+    "Supply-chain review and access control",
+    "Incident response and recovery"
+  ],
+  "learning_outcomes": [
+    "Explain dataset provenance and integrity and how it connects to data poisoning and supply-chain risks.",
+    "Apply poisoned documents in a knowledge base in the example and predict the output before running it.",
+    "Test one realistic edge case for data poisoning and supply-chain risks and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers data poisoning and supply-chain risks through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Defend the entire system—not just the prompt—against injection, data leakage, unsafe outputs, unauthorized actions, and supply-chain risks.",
+    "why_it_matters": "For dataset provenance and integrity, distinguish the training objective from the evaluation goal. Check provenance and data quality, keep validation/test examples isolated from training, record the baseline and configuration, and evaluate both improvement on the target task and possible regressions elsewhere.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Data Poisoning and Supply-Chain Risks: concept map",
+        "asset_path": "diagrams/lessons/lesson-169-data-poisoning-and-supply-chain-risks.svg",
+        "alt_text": "Diagram for Data Poisoning and Supply-Chain Risks: understand Dataset provenance and integrity, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Dataset provenance and integrity, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "For dataset provenance and integrity, distinguish the training objective from the evaluation goal. Check provenance and data quality, keep validation/test examples isolated from training, record the baseline and configuration, and evaluate both improvement on the target task and possible regressions elsewhere."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Dataset provenance and integrity",
+            "text": "For dataset provenance and integrity, distinguish the training objective from the evaluation goal. Check provenance and data quality, keep validation/test examples isolated from training, record the baseline and configuration, and evaluate both improvement on the target task and possible regressions elsewhere."
+          },
+          {
+            "title": "Poisoned documents in a knowledge base",
+            "text": "Poisoned documents in a knowledge base addresses how information is prepared, described, versioned, or governed. Validate the input, keep source and access metadata, handle duplicates and missing values deliberately, and test the downstream effect of a data change rather than treating the data pipeline as invisible plumbing."
+          },
+          {
+            "title": "Model and dependency provenance",
+            "text": "Model and dependency provenance addresses how information is prepared, described, versioned, or governed. Validate the input, keep source and access metadata, handle duplicates and missing values deliberately, and test the downstream effect of a data change rather than treating the data pipeline as invisible plumbing."
+          },
+          {
+            "title": "Verifying model artifacts",
+            "text": "Use verifying model artifacts as a lens for understanding data poisoning and supply-chain risks. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Supply-chain review and access control",
+            "text": "Use supply-chain review and access control as a lens for understanding data poisoning and supply-chain risks. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Incident response and recovery",
+            "text": "Incident response and recovery belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Data Poisoning and Supply-Chain Risks\nsources = [{\"id\": \"set-a\", \"hash_verified\": True, \"reviewed\": True}, {\"id\": \"set-b\", \"hash_verified\": False, \"reviewed\": False}]\ntrusted = [s[\"id\"] for s in sources if s[\"hash_verified\"] and s[\"reviewed\"]]\nprint({\"trusted_sources\": trusted})",
+        "expected_output": "{'trusted_sources': ['set-a']}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice dataset provenance and integrity within data poisoning and supply-chain risks: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'trusted_sources': ['set-a']}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-169-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Data Poisoning and Supply-Chain Risks is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://genai.owasp.org/initiative/owasp-top-10-for-llm-and-genai/",
+      "https://www.nist.gov/itl/ai-risk-management-framework"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Top 10 for LLM and GenAI",
+      "url": "https://genai.owasp.org/initiative/owasp-top-10-for-llm-and-genai/",
+      "publisher": "OWASP GenAI Security Project",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "prompt injection"
+      ]
+    },
+    {
+      "title": "AI Risk Management Framework",
+      "url": "https://www.nist.gov/itl/ai-risk-management-framework",
+      "publisher": "National Institute of Standards and Technology",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "risk management"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

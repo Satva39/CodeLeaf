@@ -1,0 +1,188 @@
+{
+  "id": "web-application-security-lesson-076",
+  "slug": "secure-frames-and-cross-window-messaging",
+  "title": "Secure Frames and Cross-Window Messaging",
+  "sequence": 76,
+  "module_id": "web-application-security-module-10",
+  "module_slug": "cross-site-scripting-and-client-side-security",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-security",
+  "curriculum_tier": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "web-application-security-lesson-075"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-075",
+  "next_lesson_id": "web-application-security-lesson-077",
+  "keywords": [
+    "secure",
+    "frames",
+    "and",
+    "cross",
+    "window",
+    "messaging",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 76,
+  "source_syllabus_title": "Secure Frames and Cross-Window Messaging",
+  "source_subtopics": [
+    {
+      "number": "76.1",
+      "title": "Iframes and sandbox attributes"
+    },
+    {
+      "number": "76.2",
+      "title": "postMessage security"
+    },
+    {
+      "number": "76.3",
+      "title": "Validating message origins and data"
+    },
+    {
+      "number": "76.4",
+      "title": "Embedded authentication workflows"
+    },
+    {
+      "number": "76.5",
+      "title": "Avoiding trust in arbitrary browser messages"
+    }
+  ],
+  "subtopics": [
+    "Iframes and sandbox attributes",
+    "postMessage security",
+    "Validating message origins and data",
+    "Embedded authentication workflows",
+    "Avoiding trust in arbitrary browser messages"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in Secure Frames and Cross-Window Messaging.",
+    "Choose an appropriate defensive control for Secure Frames and Cross-Window Messaging and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for Secure Frames and Cross-Window Messaging, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 10: Cross-Site Scripting and Client-Side Security. It builds practical understanding of Secure Frames and Cross-Window Messaging with the syllabus subtopics retained below.",
+    "why_it_matters": "Secure Frames and Cross-Window Messaging addresses how untrusted data or requests cross a boundary and may influence application behavior. The safe fix should address the root cause and remain testable. Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Secure Frames and Cross-Window Messaging",
+        "asset_path": "diagrams/lesson-076-secure-frames-and-cross-window-messaging.svg",
+        "alt_text": "Four-stage visual model for Secure Frames and Cross-Window Messaging: Identify browser context; Choose safe rendering; Restrict origin/frame; Verify in local browser.",
+        "caption": "Concept map for Secure Frames and Cross-Window Messaging. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Secure Frames and Cross-Window Messaging can be understood through this sequence: Identify browser context → Choose safe rendering → Restrict origin/frame → Verify in local browser. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 76.1 Iframes and sandbox attributes; 76.2 postMessage security; 76.3 Validating message origins and data; 76.4 Embedded authentication workflows; 76.5 Avoiding trust in arbitrary browser messages. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "text",
+        "execution_mode": "human-review",
+        "title": "Safe reference example: Secure Frames and Cross-Window Messaging",
+        "code": "Topic: Secure Frames and Cross-Window Messaging\nReview artifact: define scope, assumptions, control owner, expected secure behavior, failure behavior, and a reproducible verification step.",
+        "expected_output": "A written review artifact names the control and the evidence needed to verify it.",
+        "run_instructions": "Use a local/owned application or explicitly authorized test target. Record only sanitized synthetic evidence; use human review for behavior that a static snippet cannot prove.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “Secure Frames and Cross-Window Messaging”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for Secure Frames and Cross-Window Messaging in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "human-review",
+    "knowledge_check_file": "exams/question-files/lesson-076-questions.json",
+    "recap": [
+      "Secure Frames and Cross-Window Messaging is a security boundary/control topic, not a standalone checklist item.",
+      "Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "MDN Web Security",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "same-origin policy",
+        "browser security boundaries",
+        "web security features"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

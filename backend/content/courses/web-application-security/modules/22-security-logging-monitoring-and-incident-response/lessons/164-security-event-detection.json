@@ -1,0 +1,185 @@
+{
+  "id": "web-application-security-lesson-164",
+  "slug": "security-event-detection",
+  "title": "Security Event Detection",
+  "sequence": 164,
+  "module_id": "web-application-security-module-22",
+  "module_slug": "security-logging-monitoring-and-incident-response",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional-practice",
+  "curriculum_tier": "core",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "web-application-security-lesson-163"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-163",
+  "next_lesson_id": "web-application-security-lesson-165",
+  "keywords": [
+    "security",
+    "event",
+    "detection",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 164,
+  "source_syllabus_title": "Security Event Detection",
+  "source_subtopics": [
+    {
+      "number": "164.1",
+      "title": "Baseline application behavior"
+    },
+    {
+      "number": "164.2",
+      "title": "Anomaly detection"
+    },
+    {
+      "number": "164.3",
+      "title": "Audit-log analysis"
+    },
+    {
+      "number": "164.4",
+      "title": "Joining events across services"
+    },
+    {
+      "number": "164.5",
+      "title": "Detection rules and escalation criteria"
+    }
+  ],
+  "subtopics": [
+    "Baseline application behavior",
+    "Anomaly detection",
+    "Audit-log analysis",
+    "Joining events across services",
+    "Detection rules and escalation criteria"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in Security Event Detection.",
+    "Choose an appropriate defensive control for Security Event Detection and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for Security Event Detection, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 22: Security Logging, Monitoring, and Incident Response. It builds practical understanding of Security Event Detection with the syllabus subtopics retained below.",
+    "why_it_matters": "Security Event Detection turns a security intention into evidence, an operational owner, and a repeatable control. Record useful security events with correlation context but without secrets, define alert/escalation and response steps, preserve necessary evidence, and verify recovery or remediation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Security Event Detection",
+        "asset_path": "diagrams/lesson-164-security-event-detection.svg",
+        "alt_text": "Four-stage visual model for Security Event Detection: Capture security event; Redact sensitive values; Correlate signals; Respond + retest.",
+        "caption": "Concept map for Security Event Detection. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Security Event Detection can be understood through this sequence: Capture security event → Redact sensitive values → Correlate signals → Respond + retest. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 164.1 Baseline application behavior; 164.2 Anomaly detection; 164.3 Audit-log analysis; 164.4 Joining events across services; 164.5 Detection rules and escalation criteria. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Record useful security events with correlation context but without secrets, define alert/escalation and response steps, preserve necessary evidence, and verify recovery or remediation."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "json",
+        "execution_mode": "static-validation",
+        "title": "Safe reference example: Security Event Detection",
+        "code": "{\n  \"event\": \"authorization_denied\",\n  \"request_id\": \"synthetic-req-001\",\n  \"actor_id\": \"test-user-7\",\n  \"resource_type\": \"invoice\",\n  \"outcome\": \"denied\"\n}",
+        "expected_output": "A structured security event provides correlation and outcome context without storing a password, session token, or raw sensitive payload.",
+        "run_instructions": "All values are synthetic. Avoid logging credentials, access tokens, payment data, or unnecessary personal information; apply retention and access controls to logs.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Record useful security events with correlation context but without secrets, define alert/escalation and response steps, preserve necessary evidence, and verify recovery or remediation. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “Security Event Detection”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for Security Event Detection in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-164-questions.json",
+    "recap": [
+      "Security Event Detection is a security boundary/control topic, not a standalone checklist item.",
+      "Record useful security events with correlation context but without secrets, define alert/escalation and response steps, preserve necessary evidence, and verify recovery or remediation.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "OWASP Web Security Testing Guide v4.2 (released/stable)",
+      "url": "https://owasp.org/www-project-web-security-testing-guide/v42/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authorized assessment methodology",
+        "manual testing",
+        "reporting and retesting"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

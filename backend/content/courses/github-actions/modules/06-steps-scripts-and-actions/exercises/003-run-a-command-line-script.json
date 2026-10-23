@@ -1,0 +1,63 @@
+{
+  "id": "github-actions-exercise-003",
+  "slug": "run-a-command-line-script",
+  "title": "Run a command-line script",
+  "type": "coding",
+  "lesson_id": "github-actions-lesson-042",
+  "module_id": "github-actions-module-06",
+  "difficulty": "easy",
+  "sequence": 3,
+  "prompt": "Execute a committed shell or Python script from a workflow.",
+  "objective": "Demonstrate the behavior of run a command-line script and capture verifiable evidence.",
+  "target_skills": [
+    "beginner",
+    "workflow YAML",
+    "validation",
+    "safe automation"
+  ],
+  "starter": {
+    "language": "yaml",
+    "code": "name: Run a repository script\non: workflow_dispatch\npermissions:\n  contents: read\njobs:\n  validate:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: Run validation script\n        run: python scripts/validate.py",
+    "execution_mode": "workflow-fragment"
+  },
+  "expected_output": "A reviewed workflow or design note satisfying: run:, python, scripts/. Verify behavior on a disposable repository where execution is required; a static sketch is not proof of a live deployment.",
+  "public_tests": [
+    {
+      "name": "Required evidence check",
+      "required_strings": [
+        "run:",
+        "python",
+        "scripts/"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Include or explain `run:`.",
+    "Include or explain `python`.",
+    "Include or explain `scripts/`.",
+    "Explain one validation result or limitation.",
+    "Do not include a real secret or use production resources."
+  ],
+  "hints": [
+    "First identify the trigger, input, and expected result.",
+    "Start with read-only permissions and a disposable branch or test environment.",
+    "Compare your result with the linked lesson and official documentation; distinguish a configuration sketch from a live integration."
+  ],
+  "solution": {
+    "answer": null,
+    "explanation": "The detailed reference solution is stored in a protected repository-only JSON file; it is not intended for a learner-facing response."
+  },
+  "solution_file": "../solutions/003-run-a-command-line-script-solution.json",
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "run:",
+      "python",
+      "scripts/"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus human review for workflow semantics and security boundaries.",
+  "retry_policy": "Allow retries; incorrect submissions do not award XP. The platform awards exercise XP only after server-verified successful completion and applies idempotency per activity.",
+  "status": "draft",
+  "status_note": "Source mapping: Section C: Practical Exercises; original learning task adapted to CodeLeaf structure. Starter example aligned with its linked lesson; review and replace any remaining repository-specific placeholders."
+}

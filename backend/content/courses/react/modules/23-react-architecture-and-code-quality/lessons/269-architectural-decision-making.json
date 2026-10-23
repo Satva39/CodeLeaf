@@ -1,0 +1,181 @@
+{
+  "id": "react-lesson-269",
+  "slug": "architectural-decision-making",
+  "title": "Architectural Decision-Making",
+  "sequence": 269,
+  "module_id": "react-module-23",
+  "module_slug": "react-architecture-and-code-quality",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "react-lesson-268"
+  ],
+  "previous_lesson_id": "react-lesson-268",
+  "next_lesson_id": "react-lesson-270",
+  "keywords": [
+    "Architectural Decision-Making",
+    "React Architecture and Code Quality",
+    "Choosing local or global state",
+    "Choosing routing and data libraries",
+    "Evaluating framework requirements",
+    "Documenting trade-offs",
+    "Scaling an application incrementally",
+    "routing"
+  ],
+  "source_syllabus_number": 269,
+  "subtopics": [
+    "Choosing local or global state",
+    "Choosing routing and data libraries",
+    "Evaluating framework requirements",
+    "Documenting trade-offs",
+    "Scaling an application incrementally"
+  ],
+  "learning_outcomes": [
+    "Explain how Architectural Decision-Making relates to React Architecture and Code Quality.",
+    "Apply Choosing local or global state in a small React or JavaScript example and describe the expected result.",
+    "Test one edge/failure case and identify a maintainable, accessible fix."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study Architectural Decision-Making as part of React Architecture and Code Quality. The syllabus topics are kept below, then connected to a small example you can inspect and adapt.",
+    "why_it_matters": "Choosing local or global state makes application location part of a navigable URL. Use real links for navigation, preserve back/forward behavior, and handle unknown routes and pending/error states.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Architectural Decision-Making: concept map",
+        "asset_path": "diagrams/lessons/lesson-269-architectural-decision-making.svg",
+        "alt_text": "Concept map for Architectural Decision-Making: Choosing local or global state, Choosing routing and data libraries, Evaluating framework requirements.",
+        "caption": "A visual scaffold for the idea; the code and verification steps below provide the practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Choosing local or global state makes application location part of a navigable URL. Use real links for navigation, preserve back/forward behavior, and handle unknown routes and pending/error states. Start with one responsibility at a time: identify the data, describe the expected interface, then decide which event, state update, request, or runtime boundary changes the result."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Choosing local or global state",
+            "text": "Choosing local or global state makes application location part of a navigable URL. Use real links for navigation, preserve back/forward behavior, and handle unknown routes and pending/error states."
+          },
+          {
+            "title": "Choosing routing and data libraries",
+            "text": "Choosing routing and data libraries makes application location part of a navigable URL. Use real links for navigation, preserve back/forward behavior, and handle unknown routes and pending/error states."
+          },
+          {
+            "title": "Evaluating framework requirements",
+            "text": "Evaluating framework requirements makes application location part of a navigable URL. Use real links for navigation, preserve back/forward behavior, and handle unknown routes and pending/error states."
+          },
+          {
+            "title": "Documenting trade-offs",
+            "text": "Documenting trade-offs makes application location part of a navigable URL. Use real links for navigation, preserve back/forward behavior, and handle unknown routes and pending/error states."
+          },
+          {
+            "title": "Scaling an application incrementally",
+            "text": "Scaling an application incrementally makes application location part of a navigable URL. Use real links for navigation, preserve back/forward behavior, and handle unknown routes and pending/error states."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "jsx",
+        "code": "import { Routes, Route } from \"react-router\";\n\n<Routes>\n  <Route path=\"/products/:productId\" element={<ProductPage />} />\n  <Route path=\"*\" element={<NotFound />} />\n</Routes>",
+        "expected_output": "The router matches a dynamic product URL and provides a fallback for unmatched paths.",
+        "run_instructions": "This is an inspectable teaching example, not an arbitrary-code runner inside CodeLeaf. Place JSX in a React/Vite project (or the relevant CSS/HTML/config file), run the project with its documented toolchain, and compare the visible behavior with the expected result. Server rendering and framework APIs require their stated runtime.",
+        "reset_steps": "Restore the original snippet, reset the component/data to its starting state, and repeat with a different input or an edge/failure case.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Use the code as a small experiment for Architectural Decision-Making. First predict the result, then run or inspect it in the required runtime. Change one input and explain why the output changed. If the topic depends on React version or framework support, confirm that the project uses a compatible version before interpreting a result."
+      },
+      {
+        "type": "callout",
+        "title": "Version and environment note",
+        "text": "This course assumes the React 19.3 documentation snapshot dated 2026-10-12. Core component, JSX, props, state, and event concepts apply broadly; modern APIs and server rendering must be checked against the stated React version and the framework/runtime in use."
+      }
+    ],
+    "task": "Create a minimal example demonstrating Architectural Decision-Making. Include the relevant subtopic “Choosing local or global state”, explain the expected UI/result, and verify one normal case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named concept rather than merely mentioning it.",
+      "The expected visible or logged result is documented and reproducible.",
+      "At least one boundary, empty, loading, or failure case is handled or explained.",
+      "The implementation remains accessible and does not introduce avoidable mutation, stale state, or insecure client-only trust."
+    ],
+    "hints": [
+      "Start with the smallest part of “Choosing local or global state” that can be observed independently.",
+      "Write down what should appear before changing the code; then change one input at a time.",
+      "Use the browser console, React Developer Tools, or the appropriate test/runtime to isolate a mismatch."
+    ],
+    "expected_output": "The router matches a dynamic product URL and provides a fallback for unmatched paths.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-269-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "The example handles only the happy path.",
+        "why": "Real UI receives empty values, delayed responses, and invalid input.",
+        "fix": "Add one explicit edge/failure case and document the expected message or state."
+      },
+      {
+        "problem": "The example stores redundant data or mutates an existing array/object.",
+        "why": "The displayed result can drift from the source data or React may not observe the intended change.",
+        "fix": "Derive values where possible and create a new value when updating state."
+      },
+      {
+        "problem": "A browser or framework capability is assumed to exist everywhere.",
+        "why": "Availability can depend on the host runtime, React version, and framework.",
+        "fix": "Check the official reference, declare the runtime/version, and provide a fallback when appropriate."
+      }
+    ],
+    "summary": [
+      "Architectural Decision-Making fits into the broader React Architecture and Code Quality workflow.",
+      "The central concept is Choosing local or global state; apply it with the smallest reproducible example.",
+      "Verify correctness with at least one normal input and one boundary or failure case."
+    ],
+    "references": [
+      "https://react.dev/learn",
+      "https://react.dev/reference/react",
+      "https://react.dev/blog/2026/09/09/react-19-3"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "React — Learn",
+      "url": "https://react.dev/learn",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "Architectural Decision-Making",
+        "Choosing local or global state",
+        "Choosing routing and data libraries"
+      ]
+    },
+    {
+      "title": "React Reference",
+      "url": "https://react.dev/reference/react",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "React APIs and behavior",
+        "Architectural Decision-Making"
+      ]
+    },
+    {
+      "title": "React 19.3 Release Notes",
+      "url": "https://react.dev/blog/2026/09/09/react-19-3",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "version-specific modern APIs and compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus and authored as an educational draft; technical/instructional review required before publication."
+}

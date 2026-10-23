@@ -1,0 +1,165 @@
+{
+  "id": "genai-lesson-190",
+  "slug": "observability-and-monitoring",
+  "title": "Observability and Monitoring",
+  "sequence": 190,
+  "module_id": "genai-module-21",
+  "module_slug": "production-deployment-performance-and-observability",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional-practice",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "genai-lesson-163"
+  ],
+  "previous_lesson_id": "genai-lesson-189",
+  "next_lesson_id": "genai-lesson-191",
+  "keywords": [
+    "Observability and Monitoring",
+    "Application logs",
+    "Metrics and distributed traces",
+    "Model request traces",
+    "Token usage and cost metrics",
+    "Retrieval and tool-execution observability",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 190,
+  "subtopics": [
+    "Application logs",
+    "Metrics and distributed traces",
+    "Model request traces",
+    "Token usage and cost metrics",
+    "Retrieval and tool-execution observability",
+    "Privacy-preserving diagnostics"
+  ],
+  "learning_outcomes": [
+    "Explain application logs and how it connects to observability and monitoring.",
+    "Apply metrics and distributed traces in the example and predict the output before running it.",
+    "Test one realistic edge case for observability and monitoring and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers observability and monitoring through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Design for production: deployment boundaries, throughput, latency, cost, monitoring, recovery, prompt/model versions, CI/CD, and ongoing maintenance.",
+    "why_it_matters": "Use application logs as a lens for understanding observability and monitoring. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Observability and Monitoring: concept map",
+        "asset_path": "diagrams/lessons/lesson-190-observability-and-monitoring.svg",
+        "alt_text": "Diagram for Observability and Monitoring: understand Application logs, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Application logs, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Use application logs as a lens for understanding observability and monitoring. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Application logs",
+            "text": "Use application logs as a lens for understanding observability and monitoring. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Metrics and distributed traces",
+            "text": "Use metrics and distributed traces to turn a vague quality claim into an observable criterion. Define a representative dataset, an expected outcome or rubric, a baseline, and the failure categories you will record; interpret aggregate scores alongside examples and affected groups."
+          },
+          {
+            "title": "Model request traces",
+            "text": "Model request traces belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation."
+          },
+          {
+            "title": "Token usage and cost metrics",
+            "text": "Use token usage and cost metrics to turn a vague quality claim into an observable criterion. Define a representative dataset, an expected outcome or rubric, a baseline, and the failure categories you will record; interpret aggregate scores alongside examples and affected groups."
+          },
+          {
+            "title": "Retrieval and tool-execution observability",
+            "text": "Retrieval and tool-execution observability concerns how content is represented, selected, or ranked for relevance. Keep the source text and metadata traceable, measure retrieval with labeled queries, and verify that similarity scores correspond to useful results rather than assuming nearby vectors prove factual correctness."
+          },
+          {
+            "title": "Privacy-preserving diagnostics",
+            "text": "Privacy-preserving diagnostics is a control problem as much as a model-behavior problem. Establish explicit boundaries in trusted application code, minimize data exposure, test realistic misuse and failure cases, and record who is responsible for reviewing residual risk. A prompt alone is not a security boundary."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Observability and Monitoring\nevents = [{\"status\": 200, \"latency_ms\": 120}, {\"status\": 500, \"latency_ms\": 430}, {\"status\": 200, \"latency_ms\": 150}]\nprint({\"request_count\": len(events), \"error_count\": sum(x[\"status\"] >= 400 for x in events), \"mean_latency_ms\": round(sum(x[\"latency_ms\"] for x in events)/len(events), 1)})",
+        "expected_output": "{'request_count': 3, 'error_count': 1, 'mean_latency_ms': 233.3}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice application logs within observability and monitoring: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'request_count': 3, 'error_count': 1, 'mean_latency_ms': 233.3}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-190-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Observability and Monitoring is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://developers.openai.com/api/docs/guides/text",
+      "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Text generation",
+      "url": "https://developers.openai.com/api/docs/guides/text",
+      "publisher": "OpenAI API documentation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "text generation API patterns"
+      ]
+    },
+    {
+      "title": "Design and develop a RAG solution",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide",
+      "publisher": "Microsoft Learn / Azure Architecture Center",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "RAG architecture"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

@@ -1,0 +1,160 @@
+{
+  "id": "genai-lesson-104",
+  "slug": "tool-calling-across-model-providers",
+  "title": "Tool Calling Across Model Providers",
+  "sequence": 104,
+  "module_id": "genai-module-12",
+  "module_slug": "structured-generation-tool-calling-and-external-functions",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-application-development",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "genai-lesson-099"
+  ],
+  "previous_lesson_id": "genai-lesson-103",
+  "next_lesson_id": "genai-lesson-105",
+  "keywords": [
+    "Tool Calling Across Model Providers",
+    "Provider-specific tool schemas",
+    "Tool-call response formats",
+    "Differences in supported behavior",
+    "Adapter layers and provider abstractions",
+    "Testing tool calls across models",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 104,
+  "subtopics": [
+    "Provider-specific tool schemas",
+    "Tool-call response formats",
+    "Differences in supported behavior",
+    "Adapter layers and provider abstractions",
+    "Testing tool calls across models"
+  ],
+  "learning_outcomes": [
+    "Explain provider-specific tool schemas and how it connects to tool calling across model providers.",
+    "Apply tool-call response formats in the example and predict the output before running it.",
+    "Test one realistic edge case for tool calling across model providers and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers tool calling across model providers through 5 syllabus subtopics preserved from the supplied Generative AI curriculum. Use schema-constrained outputs and tool calls as a controlled application protocol. A model request is a proposal, not proof that an external action is authorized or completed.",
+    "why_it_matters": "Provider-specific tool schemas describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Tool Calling Across Model Providers: concept map",
+        "asset_path": "diagrams/lessons/lesson-104-tool-calling-across-model-providers.svg",
+        "alt_text": "Diagram for Tool Calling Across Model Providers: understand Provider-specific tool schemas, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Provider-specific tool schemas, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Provider-specific tool schemas describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Provider-specific tool schemas",
+            "text": "Provider-specific tool schemas describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+          },
+          {
+            "title": "Tool-call response formats",
+            "text": "Tool-call response formats belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation."
+          },
+          {
+            "title": "Differences in supported behavior",
+            "text": "Use differences in supported behavior as a lens for understanding tool calling across model providers. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Adapter layers and provider abstractions",
+            "text": "Adapter layers and provider abstractions describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+          },
+          {
+            "title": "Testing tool calls across models",
+            "text": "Testing tool calls across models describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Tool Calling Across Model Providers\nproviders = {\"provider_a\": {\"tool_key\": \"name\"}, \"provider_b\": {\"tool_key\": \"type\"}}\ncanonical_tool = {\"name\": \"lookup_order\", \"arguments\": {\"order_id\": \"DEMO-123\"}}\nadapter_ready = all(\"tool_key\" in spec for spec in providers.values())\nprint({\"provider_adapters\": len(providers), \"canonical_schema\": canonical_tool[\"name\"], \"ready\": adapter_ready})",
+        "expected_output": "{'provider_adapters': 2, 'canonical_schema': 'lookup_order', 'ready': True}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice provider-specific tool schemas within tool calling across model providers: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'provider_adapters': 2, 'canonical_schema': 'lookup_order', 'ready': True}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-104-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Tool Calling Across Model Providers is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://developers.openai.com/api/docs/guides/structured-outputs",
+      "https://developers.openai.com/api/docs/guides/function-calling"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Structured model outputs",
+      "url": "https://developers.openai.com/api/docs/guides/structured-outputs",
+      "publisher": "OpenAI API documentation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "structured generation"
+      ]
+    },
+    {
+      "title": "Function calling",
+      "url": "https://developers.openai.com/api/docs/guides/function-calling",
+      "publisher": "OpenAI API documentation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tool calling"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

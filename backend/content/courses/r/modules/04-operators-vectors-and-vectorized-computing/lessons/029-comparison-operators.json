@@ -1,0 +1,183 @@
+{
+  "id": "r-lesson-029",
+  "slug": "comparison-operators",
+  "title": "Comparison Operators",
+  "sequence": 29,
+  "module_id": "r-module-04",
+  "module_slug": "operators-vectors-and-vectorized-computing",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "r-lesson-028"
+  ],
+  "previous_lesson_id": "r-lesson-028",
+  "next_lesson_id": "r-lesson-030",
+  "keywords": [
+    "comparison-operators",
+    "operators-vectors-and-vectorized-computing",
+    "equal-and-not-equal",
+    "greater-than-and-less-than",
+    "inclusive-comparisons",
+    "comparing-numbers-and-strings",
+    "handling-comparisons-involving-missing-values",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 29,
+  "subtopics": [
+    "Equal and Not Equal",
+    "Greater Than and Less Than",
+    "Inclusive Comparisons",
+    "Comparing Numbers and Strings",
+    "Handling Comparisons Involving Missing Values"
+  ],
+  "learning_outcomes": [
+    "Explain the role of comparison operators and identify its main inputs, outputs or constraints.",
+    "Apply equal and not equal in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Comparison Operators is part of Operators, Vectors, and Vectorized Computing. Start with equal and not equal and connect it to the worked example and expected result.",
+    "why_it_matters": "R works naturally with vectors, so indexing and vectorized operations can transform many values without a manual loop.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Comparison Operators",
+        "asset_path": "diagrams/module-04-overview.svg",
+        "alt_text": "Concept visual supporting lesson 29, Comparison Operators. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "R works naturally with vectors, so indexing and vectorized operations can transform many values without a manual loop. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Equal and Not Equal",
+            "text": "Explain equal and not equal in the context of comparison operators, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Greater Than and Less Than",
+            "text": "Explain greater than and less than in the context of comparison operators, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Inclusive Comparisons",
+            "text": "Explain inclusive comparisons in the context of comparison operators, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Comparing Numbers and Strings",
+            "text": "Explain comparing numbers and strings in the context of comparison operators, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Handling Comparisons Involving Missing Values",
+            "text": "For handling comparisons involving missing values, include a failing or boundary case and explain how it should be detected without silently losing information."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Predict the output length and selected positions, then test a value on the condition boundary. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Comparison Operators",
+        "language": "r",
+        "code": "# Lesson 29: Comparison Operators\nexample_values <- 3:6\nexample_values[example_values > 4]",
+        "expected_output": "[1] 5 6",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "The logical index keeps values above a visible threshold; check the boundary and result length. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For comparison operators, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-029-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply comparison operators to a small synthetic example. Start with equal and not equal, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the equal and not equal idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible comparison operators example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Equal and Not Equal” and identify the input and output before coding.",
+      "Inspect the type and shape of the result, then test one ordinary and one boundary input.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: R works naturally with vectors, so indexing and vectorized operations can transform many values without a manual loop.",
+      "Practice: Predict the output length and selected positions, then test a value on the condition boundary.",
+      "Source syllabus focus: Equal and Not Equal. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply comparison operators to a small synthetic example. Start with equal and not equal, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible comparison operators example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Equal and Not Equal” and identify the input and output before coding.",
+    "Inspect the type and shape of the result, then test one ordinary and one boundary input.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: R works naturally with vectors, so indexing and vectorized operations can transform many values without a manual loop.",
+    "Practice: Predict the output length and selected positions, then test a value on the condition boundary.",
+    "Source syllabus focus: Equal and Not Equal. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 4 — Operators, Vectors, and Vectorized Computing, lesson 29: Comparison Operators.",
+    "Official documentation: https://cran.r-project.org/doc/manuals/r-release/R-intro.html",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

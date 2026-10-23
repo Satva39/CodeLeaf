@@ -1,0 +1,187 @@
+{
+  "id": "web-application-security-lesson-006",
+  "slug": "legal-ethical-and-safe-security-testing",
+  "title": "Legal, Ethical, and Safe Security Testing",
+  "sequence": 6,
+  "module_id": "web-application-security-module-01",
+  "module_slug": "introduction-to-web-application-security",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core-foundations",
+  "curriculum_tier": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "web-application-security-lesson-005"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-005",
+  "next_lesson_id": "web-application-security-lesson-007",
+  "keywords": [
+    "legal",
+    "ethical",
+    "and",
+    "safe",
+    "security",
+    "testing",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 6,
+  "source_syllabus_title": "Legal, Ethical, and Safe Security Testing",
+  "source_subtopics": [
+    {
+      "number": "6.1",
+      "title": "Permission and defined testing scope"
+    },
+    {
+      "number": "6.2",
+      "title": "Rules of engagement"
+    },
+    {
+      "number": "6.3",
+      "title": "Responsible vulnerability disclosure"
+    },
+    {
+      "number": "6.4",
+      "title": "Protecting personal and confidential data"
+    },
+    {
+      "number": "6.5",
+      "title": "Using isolated labs instead of unauthorized targets"
+    }
+  ],
+  "subtopics": [
+    "Permission and defined testing scope",
+    "Rules of engagement",
+    "Responsible vulnerability disclosure",
+    "Protecting personal and confidential data",
+    "Using isolated labs instead of unauthorized targets"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in Legal, Ethical, and Safe Security Testing.",
+    "Choose an appropriate defensive control for Legal, Ethical, and Safe Security Testing and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for Legal, Ethical, and Safe Security Testing, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 1: Introduction to Web Application Security. It builds practical understanding of Legal, Ethical, and Safe Security Testing with the syllabus subtopics retained below.",
+    "why_it_matters": "Legal, Ethical, and Safe Security Testing gives you the mental model needed to recognize where a security promise begins and ends. Test only systems you own or have explicit written permission to assess; define scope, permitted techniques, data handling, and stop conditions before testing.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Legal, Ethical, and Safe Security Testing",
+        "asset_path": "diagrams/lesson-006-legal-ethical-and-safe-security-testing.svg",
+        "alt_text": "Four-stage visual model for Legal, Ethical, and Safe Security Testing: Define authorized scope; Form a test hypothesis; Record sanitized evidence; Retest the fix.",
+        "caption": "Concept map for Legal, Ethical, and Safe Security Testing. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Legal, Ethical, and Safe Security Testing can be understood through this sequence: Define authorized scope → Form a test hypothesis → Record sanitized evidence → Retest the fix. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 6.1 Permission and defined testing scope; 6.2 Rules of engagement; 6.3 Responsible vulnerability disclosure; 6.4 Protecting personal and confidential data; 6.5 Using isolated labs instead of unauthorized targets. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Test only systems you own or have explicit written permission to assess; define scope, permitted techniques, data handling, and stop conditions before testing."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "text",
+        "execution_mode": "human-review",
+        "title": "Safe reference example: Legal, Ethical, and Safe Security Testing",
+        "code": "Topic: Legal, Ethical, and Safe Security Testing\nReview artifact: define scope, assumptions, control owner, expected secure behavior, failure behavior, and a reproducible verification step.",
+        "expected_output": "A written review artifact names the control and the evidence needed to verify it.",
+        "run_instructions": "Use a local/owned application or explicitly authorized test target. Record only sanitized synthetic evidence; use human review for behavior that a static snippet cannot prove.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Test only systems you own or have explicit written permission to assess; define scope, permitted techniques, data handling, and stop conditions before testing. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “Legal, Ethical, and Safe Security Testing”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for Legal, Ethical, and Safe Security Testing in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "human-review",
+    "knowledge_check_file": "exams/question-files/lesson-006-questions.json",
+    "recap": [
+      "Legal, Ethical, and Safe Security Testing is a security boundary/control topic, not a standalone checklist item.",
+      "Test only systems you own or have explicit written permission to assess; define scope, permitted techniques, data handling, and stop conditions before testing.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "OWASP Top 10:2025",
+      "url": "https://owasp.org/www-project-top-ten/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "web application risk categories",
+        "OWASP A01-A10:2025"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

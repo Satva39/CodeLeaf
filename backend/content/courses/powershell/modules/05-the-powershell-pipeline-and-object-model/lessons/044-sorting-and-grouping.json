@@ -1,0 +1,163 @@
+{
+  "id": "powershell-lesson-044",
+  "slug": "sorting-and-grouping",
+  "title": "Sorting and Grouping",
+  "sequence": 44,
+  "module_id": "powershell-module-05",
+  "module_slug": "the-powershell-pipeline-and-object-model",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "powershell-lesson-043"
+  ],
+  "previous_lesson_id": "powershell-lesson-043",
+  "next_lesson_id": "powershell-lesson-045",
+  "keywords": [
+    "sorting",
+    "and",
+    "grouping",
+    "powershell",
+    "module-05"
+  ],
+  "source_syllabus_number": 44,
+  "subtopics": [
+    "Sort-Object",
+    "Ascending and descending order",
+    "Group-Object",
+    "Grouping objects by properties"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose of Sorting and Grouping and define its core vocabulary.",
+    "Apply sorting and grouping in a small PowerShell example and predict its result.",
+    "Identify one relevant edge case, version constraint, or troubleshooting step."
+  ],
+  "content": {
+    "intro": "This lesson covers Sorting and Grouping in the PowerShell learning path. It expands the supplied syllabus heading into an actionable draft with a visual, a worked example, and a short knowledge check.",
+    "why_it_matters": "PowerShell cmdlets pass objects through the pipeline. Filter early with `Where-Object`, select the properties you need, and sort or group records before exporting or formatting them. Native executables may instead emit text, so do not assume every pipeline has the same object semantics.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Lesson 44 visual map",
+        "asset_path": "diagrams/lesson-044-sorting-and-grouping.svg",
+        "alt_text": "Lesson 44 concept map for Sorting and Grouping: concept and purpose, a local example and result, followed by practice and verification.",
+        "caption": "Follow the concept → example → verification path for Sorting and Grouping."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Sorting and Grouping belongs to The PowerShell Pipeline and Object Model. Focus on the rule or workflow this lesson introduces, work through a small example, and explain the expected result and one boundary case."
+      },
+      {
+        "type": "paragraph",
+        "title": "Build understanding step by step",
+        "text": "Start with the syllabus concepts: Sort-Object; Ascending and descending order; Group-Object; Grouping objects by properties. Separate the input, the operation and the expected result. Use a disposable local workspace for file or system examples, and verify platform-specific behavior against the active runtime."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Sort-Object",
+            "text": "Sort-Object is one part of Sorting and Grouping. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Ascending and descending order",
+            "text": "Ascending and descending order is one part of Sorting and Grouping. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Group-Object",
+            "text": "Group-Object is one part of Sorting and Grouping. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Grouping objects by properties",
+            "text": "Grouping objects by properties is one part of Sorting and Grouping. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "powershell",
+        "execution_mode": "static-validation",
+        "code": "$records = @([pscustomobject]@{ Name = 'Mira'; Score = 92 }, [pscustomobject]@{ Name = 'Avi'; Score = 85 }, [pscustomobject]@{ Name = 'Noor'; Score = 67 })\n$records | Where-Object { $_.Score -ge 80 } | Sort-Object Score -Descending | Select-Object Name, Score",
+        "expected_output": "Two rows remain: Mira 92, Avi 85.",
+        "run_instructions": "Review this snippet as a static teaching example. In a local PowerShell 7.6 session, save a copy under your course workspace, run it manually, and compare the result with the stated expectation. CodeLeaf’s current course preview does not execute PowerShell. Adjust environment-dependent output to your machine.",
+        "troubleshooting": "Check command availability with Get-Command, inspect values with Get-Member, consult Get-Help -Full, and verify PowerShell version/platform before assuming identical output. Do not run examples that change system state without adapting and reviewing them.",
+        "reset_steps": "Restore the original snippet and use synthetic values. If you created test files, delete only those files within the dedicated practice folder after checking their paths."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety note",
+        "text": "The main path targets modern PowerShell 7.6 LTS. Windows PowerShell 5.1 compatibility is labeled separately. Some providers, admin cmdlets and APIs depend on OS, module version, permissions or tenant access; the examples are static references, not proof of execution."
+      }
+    ],
+    "task": "Try it yourself: transform structured objects while preserving their properties. Use synthetic data or a disposable practice folder, write down your predicted result, check it locally, and explain one boundary case.",
+    "task_acceptance_criteria": [
+      "Explain the central idea in Sorting and Grouping in your own words.",
+      "Verify the expected result using a local session or a documented manual check.",
+      "Describe one relevant edge case, limitation or troubleshooting step."
+    ],
+    "hints": [
+      "Predict the output before changing the example.",
+      "Change one input or condition at a time and compare the results.",
+      "Use Get-Help and official versioned documentation when behavior differs; do not treat a static preview as execution."
+    ],
+    "expected_output": "Two rows remain: Mira 92, Avi 85.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-044-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Getting Started with PowerShell",
+      "url": "https://learn.microsoft.com/en-us/powershell/scripting/learn/ps101/01-getting-started?view=powershell-7.6",
+      "publisher": "Microsoft Learn",
+      "supports": [
+        "first commands",
+        "help and discovery",
+        "interactive sessions"
+      ],
+      "checked_on": "2026-10-20",
+      "source_type": "official_documentation"
+    },
+    {
+      "title": "about_Pipelines",
+      "url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_pipelines?view=powershell-7.6",
+      "publisher": "Microsoft Learn",
+      "supports": [
+        "objects in pipelines",
+        "pipeline binding",
+        "filtering and selection"
+      ],
+      "checked_on": "2026-10-20",
+      "source_type": "official_documentation"
+    },
+    {
+      "title": "about_Objects",
+      "url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_objects?view=powershell-7.6",
+      "publisher": "Microsoft Learn",
+      "supports": [
+        "properties and methods",
+        "object inspection"
+      ],
+      "checked_on": "2026-10-20",
+      "source_type": "official_documentation"
+    },
+    {
+      "title": "PowerShell file-system and provider concepts",
+      "url": "https://learn.microsoft.com/en-us/powershell/scripting/learn/ps101/03-discovering-objects?view=powershell-7.6",
+      "publisher": "Microsoft Learn",
+      "supports": [
+        "providers",
+        "locations",
+        "filesystem objects"
+      ],
+      "checked_on": "2026-10-20",
+      "source_type": "official_documentation"
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson expanded from the numbered PowerShell PDF syllabus. Static examples, answers, version details and technical phrasing need subject-matter review before publication."
+}

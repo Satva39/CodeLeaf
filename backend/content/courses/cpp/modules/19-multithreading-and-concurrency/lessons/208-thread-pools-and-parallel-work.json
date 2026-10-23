@@ -1,0 +1,201 @@
+{
+  "id": "cpp-lesson-208",
+  "slug": "thread-pools-and-parallel-work",
+  "title": "Thread Pools and Parallel Work",
+  "sequence": 208,
+  "module_id": "cpp-module-19",
+  "module_slug": "multithreading-and-concurrency",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "specialized",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "cpp-lesson-207"
+  ],
+  "previous_lesson_id": "cpp-lesson-207",
+  "next_lesson_id": "cpp-lesson-209",
+  "keywords": [
+    "thread-pools-and-parallel-work",
+    "what-is-a-thread-pool",
+    "task-queues",
+    "work-distribution",
+    "load-balancing",
+    "parallel-algorithms",
+    "hardware-concurrency",
+    "cancellation-and-shutdown"
+  ],
+  "source_syllabus_number": 208,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "What Is a Thread Pool?",
+    "Task Queues",
+    "Work Distribution",
+    "Load Balancing",
+    "Parallel Algorithms",
+    "Hardware Concurrency",
+    "Cancellation and Shutdown"
+  ],
+  "learning_outcomes": [
+    "Describe when thread pools and parallel work is useful and what problem it does not solve.",
+    "Evaluate a small example against its stated constraints, standard version and implementation assumptions.",
+    "Select a test or tool that can provide evidence of correctness without treating one successful run as proof."
+  ],
+  "content": {
+    "intro": "Thread Pools and Parallel Work focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Thread Pools and Parallel Work matters because identify shared mutable data, establish a single synchronization rule and test cancellation and shutdown as deliberately as normal completion. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Thread Pools and Parallel Work: visual trace",
+        "asset_path": "diagrams/lessons/lesson-208.svg",
+        "alt_text": "Lesson 208 visual for Thread Pools and Parallel Work; concept: What Is a Thread Pool?; apply: Task Queues; verify: Work Distribution.",
+        "caption": "Original lesson-specific overview: understand what is a thread pool?, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Concurrent code shares execution time and may share state. Synchronization and lifetime must be designed explicitly; data races are correctness errors.\n\nThread Pools and Parallel Work focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nIdentify shared mutable data, establish a single synchronization rule and test cancellation and shutdown as deliberately as normal completion."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Thread Pools and Parallel Work",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <iostream>\n#include <queue>\n\nint main() {\n    std::queue<int> jobs;\n    jobs.push(10); jobs.push(20);\n    std::cout << jobs.front() << '\\n';\n    jobs.pop();\n    std::cout << jobs.front() << '\\n';\n}\n",
+        "expected_output": "10\n20",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "A queue is first-in, first-out; concurrent producer-consumer use also needs a correct synchronization protocol."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "What Is a Thread Pool?",
+            "text": "Concurrency lets tasks make progress during overlapping periods; safe shared access requires clear ownership and synchronization."
+          },
+          {
+            "title": "Task Queues",
+            "text": "Explain task queues in the context of Thread Pools and Parallel Work: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Work Distribution",
+            "text": "Explain work distribution in the context of Thread Pools and Parallel Work: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Load Balancing",
+            "text": "Explain load balancing in the context of Thread Pools and Parallel Work: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Parallel Algorithms",
+            "text": "Standard algorithms express common operations independently of container type and make preconditions, iterator ranges and complexity visible."
+          },
+          {
+            "title": "Hardware Concurrency",
+            "text": "Concurrency lets tasks make progress during overlapping periods; safe shared access requires clear ownership and synchronization."
+          },
+          {
+            "title": "Cancellation and Shutdown",
+            "text": "Explain cancellation and shutdown in the context of Thread Pools and Parallel Work: identify the rule, trace a minimal example, and check one boundary or failure case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate what is a thread pool?, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "This topic may depend on newer C++ language or library support; this example uses a C++20-compatible illustration. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-208-questions.json",
+    "task": "Create a small, independent example that demonstrates thread pools and parallel work. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example builds under a documented standard mode with warnings enabled.",
+      "The predicted and observed result are recorded; deviations are explained.",
+      "At least one boundary, invalid-input, lifetime or portability assumption is tested or documented."
+    ],
+    "hints": [
+      "Start with the smallest example that demonstrates what is a thread pool?.",
+      "Trace the relevant values and state the expected output before running the program.",
+      "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+    ],
+    "summary": [
+      "Thread Pools and Parallel Work is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying thread pools and parallel work.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation"
+  },
+  "task": "Create a small, independent example that demonstrates thread pools and parallel work. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+  "hints": [
+    "Start with the smallest example that demonstrates what is a thread pool?.",
+    "Trace the relevant values and state the expected output before running the program.",
+    "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+  ],
+  "expected_output": "10\n20",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Thread Pools and Parallel Work is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying thread pools and parallel work.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [
+    "../exercises/001-multithreaded-file-processor.json"
+  ],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 19, lesson 208: Thread Pools and Parallel Work.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

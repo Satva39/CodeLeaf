@@ -1,0 +1,140 @@
+{
+  "id": "scipy-project-004",
+  "slug": "signal-analysis-workbench",
+  "title": "Signal Analysis Workbench",
+  "sequence": 4,
+  "tier": "intermediate",
+  "objective": "Analyze sampled signals and reduce unwanted noise using appropriate signal-processing methods.",
+  "prerequisite_lesson_ids": [
+    "scipy-lesson-065",
+    "scipy-lesson-066",
+    "scipy-lesson-067"
+  ],
+  "recommended_module_range": [
+    9,
+    19
+  ],
+  "recommended_lesson_range": [
+    65,
+    127
+  ],
+  "skills": [
+    "scipy.fft",
+    "scipy.signal",
+    "input validation",
+    "numerical tests",
+    "reproducibility"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Load and validate signal samples.",
+      "acceptance_criteria": [
+        "Demonstrate: Load and validate signal samples.",
+        "Include a reproducible test or verification step.",
+        "State one assumption or limitation."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Inspect the frequency spectrum and power spectral density.",
+      "acceptance_criteria": [
+        "Demonstrate: Inspect the frequency spectrum and power spectral density.",
+        "Include a reproducible test or verification step.",
+        "State one assumption or limitation."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Select a filter and document the cutoff/design choices.",
+      "acceptance_criteria": [
+        "Demonstrate: Select a filter and document the cutoff/design choices.",
+        "Include a reproducible test or verification step.",
+        "State one assumption or limitation."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Detect peaks and compare raw and processed output.",
+      "acceptance_criteria": [
+        "Demonstrate: Detect peaks and compare raw and processed output.",
+        "Include a reproducible test or verification step.",
+        "State one assumption or limitation."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "purpose": "Setup, run instructions, scope, assumptions, and expected deliverables."
+    },
+    {
+      "path": "src/main.py",
+      "purpose": "Small runnable starting point for the analysis pipeline."
+    },
+    {
+      "path": "tests/test_analysis.py",
+      "purpose": "Tests for known results, boundaries, invalid values, and tolerance-based numeric checks."
+    }
+  ],
+  "required_features": [
+    "Load and validate signal samples.",
+    "Inspect the frequency spectrum and power spectral density.",
+    "Select a filter and document the cutoff/design choices.",
+    "Detect peaks and compare raw and processed output."
+  ],
+  "stretch_features": [
+    "Add an independent method and explain when the two methods disagree.",
+    "Add a synthetic edge-case dataset and automated regression tests.",
+    "Provide an optional labeled visualization while keeping calculations separate from presentation."
+  ],
+  "tests": [
+    {
+      "name": "Numerical correctness",
+      "steps": [
+        "Compare at least one result with a known synthetic answer or independent method.",
+        "Use scale-aware tolerances where floating-point approximation is expected."
+      ]
+    },
+    {
+      "name": "Boundaries and failure modes",
+      "steps": [
+        "Test empty, non-finite, malformed, or boundary inputs where relevant.",
+        "Do not report success when a solver or input validation step fails."
+      ]
+    },
+    {
+      "name": "Reproducibility",
+      "steps": [
+        "Run with documented dependencies and a fixed random seed if randomness is involved.",
+        "Record the SciPy version, units, assumptions, and method settings."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Mathematical/scientific correctness and appropriate method selection",
+      "points": 25
+    },
+    {
+      "criterion": "Numerical validation, error checks, and boundary handling",
+      "points": 20
+    },
+    {
+      "criterion": "Input validation and treatment of assumptions/uncertainty",
+      "points": 20
+    },
+    {
+      "criterion": "Testing, reproducibility, and dependency/version notes",
+      "points": 20
+    },
+    {
+      "criterion": "Documentation, presentation, and maintainable structure",
+      "points": 15
+    }
+  ],
+  "review_method": "Automated local tests plus human rubric review. The production API is not an arbitrary Python execution environment; submissions require an isolated runner or human review.",
+  "reference_solution_file": "projects/solutions/004-signal-analysis-workbench-solution.json",
+  "status": "draft",
+  "status_note": "Draft project brief derived from Section D of the supplied SciPy PDF; full implementation, tests, data assumptions, and rubric require human review before publication."
+}

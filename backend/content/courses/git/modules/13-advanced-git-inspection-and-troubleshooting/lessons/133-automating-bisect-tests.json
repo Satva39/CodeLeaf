@@ -1,0 +1,145 @@
+{
+  "id": "git-lesson-133",
+  "slug": "automating-bisect-tests",
+  "title": "Automating Bisect Tests",
+  "sequence": 133,
+  "module_id": "git-module-13",
+  "module_slug": "advanced-git-inspection-and-troubleshooting",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "primary_service": "Git version control",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "git-lesson-132"
+  ],
+  "previous_lesson_id": "git-lesson-132",
+  "next_lesson_id": "git-lesson-134",
+  "keywords": [
+    "git-automation-scripting-and-production-workflows",
+    "advanced-git-inspection-and-troubleshooting",
+    "git",
+    "using-git-bisect-run",
+    "designing-reliable-test-commands",
+    "handling-inconclusive-test-results",
+    "recording-the-result"
+  ],
+  "source_syllabus_number": 133,
+  "subtopics": [
+    "Using git bisect run",
+    "Designing reliable test commands",
+    "Handling inconclusive test results",
+    "Recording the result"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and boundaries of automating bisect tests.",
+    "Choose and interpret a Git command relevant to automating bisect tests using a disposable repository.",
+    "Verify the result with repository state or history and identify one safety limitation."
+  ],
+  "content": {
+    "intro": "This lesson introduces automating bisect tests as part of Advanced Git Inspection and Troubleshooting. It follows the supplied Git curriculum and adds an original explanation, an inspectable command example, troubleshooting notes, and a practice task.",
+    "why_it_matters": "A reproducible investigation starts with evidence, narrows the search space, changes one variable at a time, and records enough detail for another developer to repeat the result.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 13: Advanced Git Inspection and Troubleshooting",
+        "asset_path": "diagrams/module-13-overview.svg",
+        "alt_text": "Four-step view of Advanced Git Inspection and Troubleshooting, with key syllabus checkpoints and a verification reminder.",
+        "caption": "Original CodeLeaf diagram. Review labels as well as the explanatory text; color is not the only signal."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "**Core idea.** A reproducible investigation starts with evidence, narrows the search space, changes one variable at a time, and records enough detail for another developer to repeat the result.\n\nFor **Automating Bisect Tests**, keep the named subtopics in view: Using git bisect run; Designing reliable test commands; Handling inconclusive test results; Recording the result. Treat those as the scope of this lesson, then practise the smallest workflow that demonstrates the idea."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "**Before you run a command:** decide what state you are inspecting or changing, identify whether the effect is local or remote, and write down what evidence would count as success. Do not begin a bisect in the middle of another operation. Use a reproducible test and finish with git bisect reset."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered",
+        "items": [
+          "Using git bisect run",
+          "Designing reliable test commands",
+          "Handling inconclusive test results",
+          "Recording the result"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Command example: Automating Bisect Tests",
+        "language": "bash",
+        "code": "git bisect start\ngit bisect reset",
+        "expected_output": "Git enters a bisect session and the reset command returns to the original state after the example; a real search needs good/bad endpoints.",
+        "run_instructions": "Do not begin a bisect in the middle of another operation. Use a reproducible test and finish with git bisect reset.",
+        "reset_steps": "Use a disposable repository. If the exercise changes state, check git status and git log before and after; discard the practice directory only after confirming it contains no valuable work.",
+        "execution_mode": "human-review",
+        "limitations": "The CodeLeaf web lesson page does not execute arbitrary Git commands. Run commands locally in a disposable repository with a Git version appropriate to your task. Placeholder paths, branches, commit IDs and repository URLs must be replaced with values from that practice repository."
+      },
+      {
+        "type": "callout",
+        "title": "Safety and verification checkpoint",
+        "text": "Start with git status --short --branch. For destructive or history-rewriting operations, review the exact target, create a recovery reference when appropriate, and keep valuable work backed up. Never put credentials, access tokens or private keys in course submissions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-133-questions.json"
+  },
+  "task": "Start with a reproducible question, choose the relevant read-only history or content-inspection command, save the exact output, and write a short evidence-based conclusion including one limitation.",
+  "hints": [
+    "Start by reviewing: Using git bisect run.",
+    "Use a read-only inspection command before any operation that changes files, refs or remote state.",
+    "After the example, verify with git status --short --branch and/or git log --oneline --graph as appropriate."
+  ],
+  "expected_output": "Git enters a bisect session and the reset command returns to the original state after the example; a real search needs good/bad endpoints.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Running a state-changing command without confirming the target repository or branch.",
+      "why": "A command may affect the wrong working tree or move a reference that other work depends on.",
+      "fix": "Check git rev-parse --show-toplevel and git status --short --branch before proceeding."
+    },
+    {
+      "problem": "Assuming a command succeeded because no error was visible.",
+      "why": "Some Git commands are silent on success, and some expected actions are blocked by repository state or permissions.",
+      "fix": "Verify status, log, references, remote state or the named output explicitly."
+    },
+    {
+      "problem": "Using an example placeholder literally or applying a destructive example to valuable work.",
+      "why": "Paths, branch names and object IDs depend on the current repository; restore/reset/clean operations can discard work.",
+      "fix": "Substitute real practice values, use a disposable repository, and preview changes before proceeding."
+    }
+  ],
+  "summary": [
+    "Automating Bisect Tests is covered through these syllabus topics: Using git bisect run; Designing reliable test commands; Handling inconclusive test results; Recording the result.",
+    "Choose the command for the intended effect; understand whether it changes files, the index, local references, or remote state.",
+    "Verify the result, record unexpected output, and retain a recovery path for risky operations."
+  ],
+  "references": [
+    "references/reference-index.json",
+    "https://git-scm.com/docs",
+    "https://git-scm.com/book/en/v2"
+  ],
+  "sources": [
+    {
+      "title": "Git Reference Documentation",
+      "url": "https://git-scm.com/docs",
+      "publisher": "Git project",
+      "checked_on": "2026-10-15",
+      "source_type": "official-reference"
+    },
+    {
+      "title": "Pro Git Book, 2nd Edition",
+      "url": "https://git-scm.com/book/en/v2",
+      "publisher": "Git project / Pro Git",
+      "checked_on": "2026-10-15",
+      "source_type": "officially-hosted-book"
+    }
+  ],
+  "exercise_files": [],
+  "technical_review_date": "2026-10-15",
+  "status": "draft",
+  "status_note": "Generated from the supplied Git syllabus. Content and commands need editorial/technical review before publication."
+}

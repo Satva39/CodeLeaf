@@ -1,0 +1,153 @@
+{
+  "id": "kotlin-lesson-050",
+  "slug": "variable-length-arguments",
+  "title": "Variable-Length Arguments",
+  "sequence": 50,
+  "module_id": "kotlin-module-06",
+  "module_slug": "functions-and-parameters",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "kotlin-lesson-049"
+  ],
+  "previous_lesson_id": "kotlin-lesson-049",
+  "next_lesson_id": "kotlin-lesson-051",
+  "keywords": [
+    "variable-length-arguments",
+    "the-vararg-modifier",
+    "passing-arrays-with-the-spread",
+    "designing-variable-argument-ap"
+  ],
+  "source_syllabus_number": 50,
+  "subtopics": [
+    "The vararg Modifier",
+    "Passing Arrays with the Spread Operator",
+    "Designing Variable-Argument APIs"
+  ],
+  "learning_outcomes": [
+    "Explain the central rule or purpose of variable-length arguments using at least one correct term from the lesson.",
+    "Interpret or adapt a small Kotlin example that demonstrates variable-length arguments.",
+    "Identify one relevant edge case, debugging step, or version/platform constraint."
+  ],
+  "content": {
+    "intro": "In this lesson, you will learn **Variable-Length Arguments** as part of **Functions and Parameters**. Apply variable-length arguments by identifying the required behavior, the relevant Kotlin type/API, and the conditions under which the expected result can fail. Use the subtopics—The vararg Modifier, Passing Arrays with the Spread Operator, Designing Variable-Argument APIs—as a checklist: predict what the example will do, then verify it in a project configured for the target platform.",
+    "why_it_matters": "Functions, null safety, strings, and collections are the building blocks of most practical Kotlin code. Choosing the right operation reduces avoidable errors and makes behavior easier to test.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Concept visual",
+        "asset_path": "diagrams/lesson-050-variable-length-arguments.svg",
+        "alt_text": "Concept diagram for lesson 50, Variable-Length Arguments: connects The vararg Modifier with Passing Arrays with the Spread Operator and a practice/check step.",
+        "caption": "Lesson 50: Variable-Length Arguments. Use this concept map to connect the syllabus subtopics to the small example and test task."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Apply variable-length arguments by identifying the required behavior, the relevant Kotlin type/API, and the conditions under which the expected result can fail."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the vararg modifier. Then compare it with passing arrays with the spread operator. Identify the input, state, dependency, or branch that determines the result. The snippet is a static reference for CodeLeaf and is not executed in the lesson page."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the syllabus",
+        "items": [
+          {
+            "title": "The vararg Modifier",
+            "text": "The vararg Modifier is one part of variable-length arguments. Connect its definition to the example, identify the input/state it changes, and verify the expected behavior with a small test case."
+          },
+          {
+            "title": "Passing Arrays with the Spread Operator",
+            "text": "Passing Arrays with the Spread Operator is best learned by tracing a small collection before and after the operation. Check ordering, duplicate handling, empty inputs, and whether the API returns a new value or mutates a mutable receiver."
+          },
+          {
+            "title": "Designing Variable-Argument APIs",
+            "text": "Designing Variable-Argument APIs crosses a system boundary. Model success and failure, validate external data, apply timeout/retry rules deliberately, and keep credentials and database access out of presentation code."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "kotlin",
+        "execution_mode": "static-validation",
+        "code": "// Topic: Variable-Length Arguments\nfun main() {\n    val values = listOf(3, 5, 8)\n    println(values.filter { it > 4 })\n}",
+        "expected_output": "[5, 8]",
+        "run_instructions": "Save the snippet in a Kotlin/JVM console project and run the configured Gradle application task, or use the Kotlin Playground for examples that need no external dependencies.",
+        "reset_steps": "Restore the documented starting values, rerun the smallest test, and compare the result with the expected output. If behavior differs, check the compiler/plugin/runtime versions and the active target before changing more than one thing."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake to avoid",
+        "text": "Variable-Length Arguments removes the need to test boundary conditions or verify the chosen runtime/library version."
+      },
+      {
+        "type": "paragraph",
+        "title": "Troubleshooting and reset",
+        "text": "If the example fails, first confirm which runtime/project type the snippet requires. Read the first useful compiler or runtime message, check imports and declared dependencies, reduce the example to a minimal case, and rerun. For target-specific code, use the target toolchain rather than assuming a console or browser runner can execute it."
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          {
+            "title": "Explain",
+            "text": "Describe the main rule of variable-length arguments in your own words."
+          },
+          {
+            "title": "Apply",
+            "text": "Change one input or condition and predict the result before running it."
+          },
+          {
+            "title": "Verify",
+            "text": "Check one edge case and the official reference for the selected Kotlin/runtime version."
+          }
+        ]
+      }
+    ],
+    "task": "Try it yourself: create a small variation that demonstrates variable-length arguments. Write down your predicted result first, run it in the correct local project, then explain one boundary case involving the vararg modifier.",
+    "task_acceptance_criteria": [
+      "Explain variable-length arguments without copying the lesson wording.",
+      "Demonstrate the concept with a small code/configuration change and state the expected result.",
+      "Test one boundary case or explain a relevant platform/version limitation."
+    ],
+    "hints": [
+      "Begin with the first syllabus subtopic: The vararg Modifier. What input or state does it act on?",
+      "Change only one value, branch, declaration, or dependency at a time. Predict what should happen before running the code.",
+      "Compare your observed result with the expected output and the official reference; verify that you are using the required project type and dependency set."
+    ],
+    "expected_output": "[5, 8]",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-050-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Kotlin Documentation",
+      "url": "https://kotlinlang.org/docs/home.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Variable-Length Arguments",
+        "The vararg Modifier",
+        "Passing Arrays with the Spread Operator"
+      ]
+    },
+    {
+      "title": "Kotlin Language Features and Proposals",
+      "url": "https://kotlinlang.org/docs/kotlin-language-features-and-proposals.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "language feature stability",
+        "compiler version compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson derived from the numbered syllabus entry 50 in Kotlin.pdf. Review example compatibility and question alignment before publishing."
+}

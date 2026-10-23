@@ -1,0 +1,153 @@
+{
+  "id": "ruby-lesson-121",
+  "slug": "understanding-ruby-blocks",
+  "title": "Understanding Ruby Blocks",
+  "sequence": 121,
+  "module_id": "ruby-module-12",
+  "module_slug": "blocks-procs-lambdas-and-closures",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-foundations",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "ruby-lesson-120"
+  ],
+  "previous_lesson_id": "ruby-lesson-120",
+  "next_lesson_id": "ruby-lesson-122",
+  "keywords": [
+    "understanding-ruby-blocks",
+    "blocks-procs-lambdas-and-closures",
+    "ruby",
+    "what-a-block-represents",
+    "passing-behavior-to-methods",
+    "blocks-as-reusable-control-patterns"
+  ],
+  "source_syllabus_number": 121,
+  "subtopics": [
+    "What a block represents",
+    "Passing behavior to methods",
+    "Blocks as reusable control patterns"
+  ],
+  "learning_outcomes": [
+    "Explain the role of understanding ruby blocks in a Ruby program and name the key rule involved.",
+    "Apply understanding ruby blocks in a small example and predict its result before running it.",
+    "Identify one boundary or failure case related to blocks as reusable control patterns and verify the intended behavior."
+  ],
+  "content": {
+    "intro": "Learn Understanding Ruby Blocks through a visual model, a minimal Ruby example, and a practical check.",
+    "why_it_matters": "Understanding understanding ruby blocks helps you write code that is easier to explain, test, and maintain. It also helps separate Ruby language guarantees from runtime assumptions, dependency behavior, and application-specific rules.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Understanding Ruby Blocks",
+        "asset_path": "diagrams/lesson-121-understanding-ruby-blocks.svg",
+        "alt_text": "Three-stage concept diagram for Understanding Ruby Blocks.",
+        "caption": "Use this diagram to plan a small example, then verify exact behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Understanding Ruby Blocks helps you reason about what a block represents. In Ruby, prefer a small example whose inputs and expected result are easy to explain. This lesson connects the syllabus topic to practical code and highlights where assumptions or edge cases matter."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to think about it",
+        "text": "Begin by identifying the key rule: What a block represents. Then connect it to Passing behavior to methods. The remaining syllabus points—Blocks as reusable control patterns—are useful checks before applying this in a larger project."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to cover",
+        "items": [
+          {
+            "title": "What a block represents",
+            "text": "Explain how what a block represents affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Passing behavior to methods",
+            "text": "Explain how passing behavior to methods affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Blocks as reusable control patterns",
+            "text": "Explain how blocks as reusable control patterns affects the example, the public interface, or the behavior learners need to verify."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Understanding Ruby Blocks",
+        "language": "ruby",
+        "code": "def around\n  puts \"start\"\n  yield\n  puts \"finish\"\nend\naround { puts \"work\" }",
+        "expected_output": "start\nwork\nfinish",
+        "execution_mode": "server-runner",
+        "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+        "dependencies": "Ruby standard library",
+        "notes": "Local Ruby execution is required. CodeLeaf’s existing playground only previews HTML/CSS/JavaScript; do not run arbitrary Ruby inside the FastAPI process."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming the happy path is enough",
+            "text": "Test an empty value, a boundary value, and one invalid value before depending on the behavior."
+          },
+          {
+            "title": "Treating an example as a universal rule",
+            "text": "Check Ruby version, runtime implementation, and third-party library documentation when behavior is version-sensitive."
+          },
+          {
+            "title": "Mixing too many concerns",
+            "text": "Separate input parsing, domain behavior, and output so each piece is easier to test."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Run the example as written, compare it with the expected result, and explain why each line supports understanding ruby blocks. Next change one input or condition and predict the result before running it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second example for understanding ruby blocks using a different input. Add one edge case from the syllabus list (Blocks as reusable control patterns), state the expected behavior, and write a small test or manual check that would catch a regression."
+      },
+      {
+        "type": "paragraph",
+        "title": "Run, troubleshoot, and reset",
+        "text": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed. If the command fails, confirm `ruby --version`, inspect the full error message, and verify that required standard-library or gem dependencies are installed. Reset by removing temporary files created by your experiment and returning the code to the smallest reproducible example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain understanding ruby blocks, identify its place in blocks, procs, lambdas, and closures, run a focused example, and verify an important boundary. Revisit the linked exercise if this is a core topic; advanced runtime or framework examples remain draft until reviewed in a suitable environment."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-121-questions.json",
+    "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+    "reset_steps": [
+      "Restore the original minimal example before trying another variation.",
+      "Remove only temporary sample data created for the lesson.",
+      "Keep credentials and personal data out of logs, fixtures, and screenshots."
+    ],
+    "guided_example": "Predict the output, run the example, and explain the relationship between what a block represents and passing behavior to methods.",
+    "try_it_yourself": "Create one variation of understanding ruby blocks, test a normal input and one boundary input, and note any version or dependency assumptions.",
+    "progressive_hints": [
+      "Write down the input and output contract first.",
+      "Reduce the task to one relevant Ruby method or construct.",
+      "Add the boundary case and verify it independently."
+    ],
+    "accessibility_notes": "The diagram includes a text alternative and the lesson explains the flow in prose. Do not use color alone to infer the correct sequence.",
+    "execution_mode": "server-runner",
+    "execution_note": "CodeLeaf does not currently provide an isolated Ruby runner. Run Ruby examples locally; a production runner needs a separate sandbox with time, memory, filesystem, and network limits."
+  },
+  "exercise_files": [
+    "../exercises/026-ruby-dsl.json"
+  ],
+  "sources": [
+    "https://docs.ruby-lang.org/en/4.0/",
+    "https://www.ruby-lang.org/en/documentation/"
+  ],
+  "status": "draft",
+  "status_note": "Original lesson authored from the listed PDF syllabus topics; requires technical and editorial review before publication."
+}

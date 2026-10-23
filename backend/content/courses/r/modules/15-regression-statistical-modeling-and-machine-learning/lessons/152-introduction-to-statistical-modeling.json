@@ -1,0 +1,189 @@
+{
+  "id": "r-lesson-152",
+  "slug": "introduction-to-statistical-modeling",
+  "title": "Introduction to Statistical Modeling",
+  "sequence": 152,
+  "module_id": "r-module-15",
+  "module_slug": "regression-statistical-modeling-and-machine-learning",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "r-lesson-151"
+  ],
+  "previous_lesson_id": "r-lesson-151",
+  "next_lesson_id": "r-lesson-153",
+  "keywords": [
+    "introduction-to-statistical-modeling",
+    "regression-statistical-modeling-and-machine-learning",
+    "what-is-a-model",
+    "response-and-predictor-variables",
+    "model-assumptions",
+    "training-and-evaluation-data",
+    "explanation-vs-prediction",
+    "model-generalization-and-overfitting",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 152,
+  "subtopics": [
+    "What Is a Model?",
+    "Response and Predictor Variables",
+    "Model Assumptions",
+    "Training and Evaluation Data",
+    "Explanation vs. Prediction",
+    "Model Generalization and Overfitting"
+  ],
+  "learning_outcomes": [
+    "Explain the role of introduction to statistical modeling and identify its main inputs, outputs or constraints.",
+    "Apply what is a model? in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Introduction to Statistical Modeling is part of Regression, Statistical Modeling, and Machine Learning. Start with what is a model? and connect it to the worked example and expected result.",
+    "why_it_matters": "Modeling requires a clear target, a suitable baseline, leakage-aware evaluation and diagnostics that match the task.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Introduction to Statistical Modeling",
+        "asset_path": "diagrams/statistical-workflow.svg",
+        "alt_text": "Concept visual supporting lesson 152, Introduction to Statistical Modeling. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Modeling requires a clear target, a suitable baseline, leakage-aware evaluation and diagnostics that match the task. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "What Is a Model?",
+            "text": "For what is a model?, state the statistical question and assumptions first, then describe the estimate or diagnostic in context."
+          },
+          {
+            "title": "Response and Predictor Variables",
+            "text": "Explain response and predictor variables in the context of introduction to statistical modeling, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Model Assumptions",
+            "text": "For model assumptions, state the statistical question and assumptions first, then describe the estimate or diagnostic in context."
+          },
+          {
+            "title": "Training and Evaluation Data",
+            "text": "Explain training and evaluation data in the context of introduction to statistical modeling, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Explanation vs. Prediction",
+            "text": "Explain explanation vs. prediction in the context of introduction to statistical modeling, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Model Generalization and Overfitting",
+            "text": "For model generalization and overfitting, state the statistical question and assumptions first, then describe the estimate or diagnostic in context."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Identify the target and predictors, keep test data separate, and explain one failure mode or model limitation. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Introduction to Statistical Modeling",
+        "language": "r",
+        "code": "# Lesson 152: Introduction to Statistical Modeling\nmeasurements <- c(7, 9, 11)\nmean(measurements)",
+        "expected_output": "[1] 9",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "Treat this as a descriptive calculation; state the sample/design assumptions before making an inferential claim. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For introduction to statistical modeling, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-152-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply introduction to statistical modeling to a small synthetic example. Start with what is a model?, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the what is a model? idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible introduction to statistical modeling example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “What Is a Model?” and identify the input and output before coding.",
+      "Check labels, units, assumptions, diagnostics and uncertainty before interpreting the output.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Treating a p-value, coefficient or score as a complete conclusion.",
+        "why": "Study design, assumptions, effect size and uncertainty shape interpretation.",
+        "fix": "State the question, inspect diagnostics and report uncertainty and limitations."
+      },
+      {
+        "problem": "Using test data during feature selection or tuning.",
+        "why": "This leaks information and leads to an overly optimistic evaluation.",
+        "fix": "Separate training, validation and final test roles before modeling."
+      },
+      {
+        "problem": "Reporting a model without comparing it with a baseline.",
+        "why": "Complexity does not guarantee useful performance.",
+        "fix": "Evaluate an appropriate simple baseline with task-relevant metrics."
+      }
+    ],
+    "summary": [
+      "Key idea: Modeling requires a clear target, a suitable baseline, leakage-aware evaluation and diagnostics that match the task.",
+      "Practice: Identify the target and predictors, keep test data separate, and explain one failure mode or model limitation.",
+      "Source syllabus focus: What Is a Model?. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply introduction to statistical modeling to a small synthetic example. Start with what is a model?, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible introduction to statistical modeling example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “What Is a Model?” and identify the input and output before coding.",
+    "Check labels, units, assumptions, diagnostics and uncertainty before interpreting the output.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Treating a p-value, coefficient or score as a complete conclusion.",
+      "why": "Study design, assumptions, effect size and uncertainty shape interpretation.",
+      "fix": "State the question, inspect diagnostics and report uncertainty and limitations."
+    },
+    {
+      "problem": "Using test data during feature selection or tuning.",
+      "why": "This leaks information and leads to an overly optimistic evaluation.",
+      "fix": "Separate training, validation and final test roles before modeling."
+    },
+    {
+      "problem": "Reporting a model without comparing it with a baseline.",
+      "why": "Complexity does not guarantee useful performance.",
+      "fix": "Evaluate an appropriate simple baseline with task-relevant metrics."
+    }
+  ],
+  "summary": [
+    "Key idea: Modeling requires a clear target, a suitable baseline, leakage-aware evaluation and diagnostics that match the task.",
+    "Practice: Identify the target and predictors, keep test data separate, and explain one failure mode or model limitation.",
+    "Source syllabus focus: What Is a Model?. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 15 — Regression, Statistical Modeling, and Machine Learning, lesson 152: Introduction to Statistical Modeling.",
+    "Official documentation: https://cran.r-project.org/doc/manuals/r-release/R-intro.html",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

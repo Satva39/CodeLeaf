@@ -1,0 +1,198 @@
+{
+  "id": "go-lesson-029",
+  "slug": "zero-values",
+  "title": "Zero Values",
+  "sequence": 29,
+  "module_id": "go-module-04",
+  "module_slug": "variables-constants-and-data-types",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "go-lesson-028"
+  ],
+  "previous_lesson_id": "go-lesson-028",
+  "next_lesson_id": "go-lesson-030",
+  "keywords": [
+    "zero values",
+    "zero values for numeric types",
+    "zero values for booleans and strings",
+    "zero values for pointers and interfaces",
+    "zero values for maps slices and channels",
+    "designing useful zero value types",
+    "Go",
+    "Golang"
+  ],
+  "source_syllabus_number": 29,
+  "subtopics": [
+    "Zero values for numeric types",
+    "Zero values for booleans and strings",
+    "Zero values for pointers and interfaces",
+    "Zero values for maps, slices, and channels",
+    "Designing useful zero-value types"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and behavior of zero values.",
+    "Apply at least one lesson concept—zero values for numeric types—in a small Go example or workflow.",
+    "Predict a representative result, then test a boundary case and explain any difference."
+  ],
+  "exercise_files": [],
+  "content": {
+    "intro": "Zero Values gives you a rule for reading or writing Go programs. Go is statically typed and its syntax is intentionally regular; read the declarations and expressions from their types and scope, then predict what each statement changes. The Go specification is the authoritative reference for exact behavior.",
+    "why_it_matters": "Small language rules have a large effect: they determine whether a program compiles and whether edge cases behave as expected.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Types and zero values",
+        "asset_path": "diagrams/concept-02-types-and-zero-values.svg",
+        "alt_text": "A declared type determines legal operations and the default value when a variable is not explicitly initialized. Labeled phases: Declare type; Compiler checks; Zero value or initializer; Use value safely.",
+        "caption": "A declared type determines legal operations and the default value when a variable is not explicitly initialized."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Zero Values gives you a rule for reading or writing Go programs. Go is statically typed and its syntax is intentionally regular; read the declarations and expressions from their types and scope, then predict what each statement changes. The Go specification is the authoritative reference for exact behavior."
+      },
+      {
+        "type": "list",
+        "title": "Topics covered in this lesson",
+        "items": [
+          {
+            "title": "Zero values for numeric types",
+            "text": "Be able to explain zero values for numeric types, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Zero values for booleans and strings",
+            "text": "Be able to explain zero values for booleans and strings, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Zero values for pointers and interfaces",
+            "text": "Be able to explain zero values for pointers and interfaces, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Zero values for maps, slices, and channels",
+            "text": "Be able to explain zero values for maps, slices, and channels, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Designing useful zero-value types",
+            "text": "Be able to explain designing useful zero-value types, identify the inputs or program state it affects, and name one boundary case worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Zero Values",
+        "language": "go",
+        "code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    nums := []int{4, 1, 3}\n    nums = append(nums, 2)\n    fmt.Println(nums)\n    fmt.Println(\"len:\", len(nums), \"cap:\", cap(nums))\n}\n",
+        "expected_output": "[4 1 3 2]\nlen: 4 cap: (capacity is at least 4 and may vary)",
+        "run_mode": "server-runner",
+        "run_instructions": "Save as main.go and run `go run main.go`. Slice capacity may vary as the runtime grows the backing array."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through the example",
+        "text": "First, identify the input or initial state in the example for zero values. Next, trace the operation or contract that matters, and predict the result before running it. If the example depends on a version-specific feature, a driver, or an external service, follow the stated prerequisites rather than assuming it works in a browser preview."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to one subtopic—Zero values for numeric types—and add a second case that could fail or behave differently. Write down the expected result before testing."
+      }
+    ],
+    "task": "Create a small example connected to “Zero Values”. Use Zero values for numeric types as the starting point, predict the output, then add one invalid, empty, or boundary case and document its result.",
+    "task_acceptance_criteria": [
+      "The example demonstrates zero values for numeric types or a closely related concept.",
+      "Inputs, relevant state changes, and expected output are clear.",
+      "At least one boundary case is deliberately tested or documented.",
+      "Errors are handled honestly and no success state is reported when the operation fails."
+    ],
+    "hints": [
+      "Start from the simplest example related to zero values for numeric types.",
+      "Predict the result manually and annotate the value that changes at each step.",
+      "Run `gofmt` and the appropriate local `go run`, `go test`, `go vet`, or inspection command when prerequisites are available."
+    ],
+    "expected_output": "[4 1 3 2]\nlen: 4 cap: (capacity is at least 4 and may vary)",
+    "run_mode": "server-runner",
+    "knowledge_check_file": "exams/question-files/lesson-029-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the happy-path output proves all inputs are safe.",
+        "why": "Empty, malformed, boundary, or concurrent cases may follow different paths.",
+        "fix": "Add focused tests for a normal input and at least one relevant edge case."
+      },
+      {
+        "problem": "Ignoring returned errors or external-system status.",
+        "why": "Go APIs commonly report expected failures as explicit error values.",
+        "fix": "Check errors close to the operation, add useful context when propagating, and clean up resources."
+      },
+      {
+        "problem": "Using an API or syntax without checking the selected Go version.",
+        "why": "Language and standard-library capabilities can change between releases.",
+        "fix": "Record `go version`, inspect the `go` directive, and read official release notes for version-specific topics."
+      }
+    ],
+    "summary": [
+      "Zero Values provides a reusable rule or workflow for Go programs.",
+      "The subtopics to revisit are: Zero values for numeric types; Zero values for booleans and strings; Zero values for pointers and interfaces; Zero values for maps, slices, and channels; Designing useful zero-value types.",
+      "Prefer a small reproducible example, explicit errors, appropriate tests, and version-matched official documentation."
+    ],
+    "references": [
+      {
+        "title": "Go Documentation",
+        "url": "https://go.dev/doc/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "tutorials",
+          "language concepts",
+          "tooling",
+          "application development"
+        ]
+      },
+      {
+        "title": "The Go Programming Language Specification",
+        "url": "https://go.dev/ref/spec",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "syntax",
+          "types",
+          "control flow",
+          "interfaces"
+        ]
+      }
+    ],
+    "accessibility_note": "The diagram includes descriptive alt text and a text caption. Code examples are also described in prose; do not rely on color alone to understand a sequence.",
+    "execution_note": "Save as main.go and run `go run main.go`. Slice capacity may vary as the runtime grows the backing array. Examples that need a database driver, external service, isolated execution environment, or version-specific feature are labeled as static examples and should not be treated as already executed."
+  },
+  "sources": [
+    {
+      "title": "Go Documentation",
+      "url": "https://go.dev/doc/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tutorials",
+        "language concepts",
+        "tooling",
+        "application development"
+      ]
+    },
+    {
+      "title": "The Go Programming Language Specification",
+      "url": "https://go.dev/ref/spec",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "syntax",
+        "types",
+        "control flow",
+        "interfaces"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied Go.pdf syllabus mapping. Human review and local runtime verification are required before publication."
+}

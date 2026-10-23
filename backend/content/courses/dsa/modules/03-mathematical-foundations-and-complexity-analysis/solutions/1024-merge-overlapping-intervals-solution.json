@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-24",
+  "exercise_id": "dsa-exercise-pdf-24",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\ndef merge_intervals(intervals):\n    merged = []\n    for start, end in sorted(intervals):\n        if not merged or start > merged[-1][1]: merged.append([start, end])\n        else: merged[-1][1] = max(merged[-1][1], end)\n    return [tuple(pair) for pair in merged]\n\nassert merge_intervals([(1,3),(2,6),(8,10),(9,12)]) == [(1,6),(8,12)]\n```",
+  "explanation": "Sort intervals by start and merge when the next start is at or before the current end. O(n log n) time due to sorting.",
+  "tested_reference_code": "def merge_intervals(intervals):\n    merged = []\n    for start, end in sorted(intervals):\n        if not merged or start > merged[-1][1]: merged.append([start, end])\n        else: merged[-1][1] = max(merged[-1][1], end)\n    return [tuple(pair) for pair in merged]\n\nassert merge_intervals([(1,3),(2,6),(8,10),(9,12)]) == [(1,6),(8,12)]",
+  "language": "python"
+}

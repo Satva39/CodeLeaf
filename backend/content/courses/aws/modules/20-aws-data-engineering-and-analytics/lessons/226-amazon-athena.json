@@ -1,0 +1,146 @@
+{
+  "id": "aws-lesson-226",
+  "slug": "amazon-athena",
+  "title": "Amazon Athena",
+  "sequence": 226,
+  "module_id": "aws-module-20",
+  "module_slug": "aws-data-engineering-and-analytics",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "primary_service": "AWS analytics and data engineering",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "aws-lesson-225"
+  ],
+  "previous_lesson_id": "aws-lesson-225",
+  "next_lesson_id": "aws-lesson-227",
+  "keywords": [
+    "amazon-athena",
+    "aws-data-engineering-and-analytics",
+    "aws-analytics-and-data-engineering",
+    "serverless-sql-querying",
+    "querying-files-in-s3",
+    "partitions-and-query-optimization"
+  ],
+  "source_syllabus_number": 226,
+  "subtopics": [
+    "Serverless SQL querying",
+    "Querying files in S3",
+    "Partitions and query optimization",
+    "Scan costs and efficient data formats"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of amazon athena and its relationship to AWS Data Engineering and Analytics.",
+    "Interpret the example and identify at least one prerequisite or boundary relevant to amazon athena.",
+    "Propose a safe verification or troubleshooting step and record one security, reliability or cost consideration."
+  ],
+  "content": {
+    "intro": "In this lesson, you will learn amazon athena in the context of AWS Data Engineering and Analytics. You will connect the listed subtopics to a practical decision, inspect a small example, and define evidence that would confirm or disprove your assumptions.",
+    "why_it_matters": "Amazon Athena matters because it is one part of aws analytics and data engineering. Real workloads depend on explicit prerequisites, correct permissions, predictable behavior and a way to verify outcomes. Learning the decision points helps you distinguish a working demonstration from a safe and supportable design.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 20: AWS Data Engineering and Analytics",
+        "asset_path": "diagrams/module-20-overview.svg",
+        "alt_text": "Five-step overview for module 20, AWS Data Engineering and Analytics, followed by verification, least-privilege security, recovery, and cost-cleanup checks.",
+        "caption": "Module 20 learning sequence: understand the concept, make a controlled design/configuration, verify behavior, and document security/reliability/cost trade-offs."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "**Core idea.** Amazon Athena belongs to AWS Data Engineering and Analytics. Analytics pipelines need reliable ingestion, cataloged schemas, data-quality checks, governance, efficient queries, repeatable orchestration and explicit retention/cost decisions.\n\nThe PDF lists these subtopics: Serverless SQL querying; Querying files in S3; Partitions and query optimization; Scan costs and efficient data formats. Treat them as a connected workflow rather than a list to memorize. Start with the workload requirement, identify the AWS resource/control involved, and write down who owns configuration and operation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Practical reasoning",
+        "text": "**Apply it safely.** For amazon athena, name the prerequisites and the expected result before making a change. Prefer a read-only inspection or local/static example first. Then plan a normal case, a failure case, and a verification step. In a live account, require the account owner-approved sandbox, narrow permissions, spend visibility and cleanup plan. Do not put credentials in code or commit local configuration files."
+      },
+      {
+        "type": "list",
+        "title": "PDF subtopics to cover",
+        "items": [
+          {
+            "title": "Serverless SQL querying",
+            "text": "Document the data shape, access pattern, retention, permissions, recovery path and performance needs. Verify query or storage behavior with representative synthetic data."
+          },
+          {
+            "title": "Querying files in S3",
+            "text": "Document the data shape, access pattern, retention, permissions, recovery path and performance needs. Verify query or storage behavior with representative synthetic data."
+          },
+          {
+            "title": "Partitions and query optimization",
+            "text": "Document the data shape, access pattern, retention, permissions, recovery path and performance needs. Verify query or storage behavior with representative synthetic data."
+          },
+          {
+            "title": "Scan costs and efficient data formats",
+            "text": "Estimate the complete workload, including requests, storage, data transfer and dependent services. Compare the estimate with actual usage and alerts; an alert is not a hard spend cap."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Athena query",
+        "language": "sql",
+        "code": "SELECT event_type, count(*) AS event_count\nFROM analytics_events\nWHERE event_date >= DATE '2026-10-01'\nGROUP BY event_type\nORDER BY event_count DESC\nLIMIT 20;",
+        "expected_output": "A grouped result if the table/column schema matches. Athena scans can incur query charges; inspect estimated bytes/partitions.",
+        "run_instructions": "This block is an inspectable example, not an AWS action performed by CodeLeaf. Review the example as text and adapt it only after checking current official service documentation. Do not apply/deploy changes in a real account without account-owner approval, least-privilege permissions and a reviewed cost/cleanup plan.",
+        "reset_steps": "No AWS resource is created by this lesson example. If you independently run an approved lab, capture the starting state first, follow the lab-specific teardown instructions, check dependent resources and billing/resource inventories, and document anything retained.",
+        "execution_mode": "static-validation",
+        "limitations": "The CodeLeaf playground is an HTML/CSS/JavaScript preview and does not execute AWS APIs, shell commands, SQL or cloud deployments. Treat output as illustrative; live values depend on credentials, permissions, Region, service state and schema."
+      },
+      {
+        "type": "callout",
+        "title": "Security and cost checkpoint",
+        "text": "Use least privilege, keep Block Public Access/private defaults unless a justified reviewed requirement says otherwise, and document cost/cleanup before live changes."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-226-questions.json"
+  },
+  "task": "Create a one-page decision card for “Amazon Athena”. State the goal, prerequisites, the AWS resource or control involved, the expected result, one read-only/static verification step, one failure case, the relevant permission boundary, and cost/cleanup considerations. Do not create or alter billable resources unless the account owner has approved the lab.",
+  "hints": [
+    "Start from the exact subtopics in the lesson and define the desired state in your own words.",
+    "Prefer a read-only check or static artifact before a mutating command; record the identity/Region and required permissions.",
+    "Verify the expected result and a failure path using current official documentation; write down cost and cleanup implications."
+  ],
+  "expected_output": "A short reviewable decision card for Amazon Athena with prerequisites, evidence, a failure case, security implications and cost/cleanup notes.",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Treating one successful example as proof of production readiness.",
+      "why": "The example may not test permissions, regional/service prerequisites, retries, recovery, quotas or edge cases.",
+      "fix": "Write acceptance criteria, test a failure path, inspect logs/state and record the limits of the result."
+    },
+    {
+      "problem": "Changing a live resource before confirming its effect and cost.",
+      "why": "Cloud changes can expose data, break traffic or leave billable dependencies behind.",
+      "fix": "Start read-only, use an approved sandbox, review the change, tag ownership and verify cleanup."
+    },
+    {
+      "problem": "Copying broad permissions or credentials into source files.",
+      "why": "Broad permissions and leaked long-lived credentials increase the impact of mistakes.",
+      "fix": "Use scoped roles/temporary credentials, keep secrets in approved stores and review access boundaries."
+    }
+  ],
+  "summary": [
+    "Amazon Athena is taught as part of AWS Data Engineering and Analytics.",
+    "Analytics pipelines need reliable ingestion, cataloged schemas, data-quality checks, governance, efficient queries, repeatable orchestration and explicit retention/cost decisions.",
+    "Verify assumptions with official service documentation and evidence from the relevant AWS resource, logs or tests.",
+    "For live labs, confirm permissions and likely charges before acting, then verify cleanup."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [
+    "../exercises/019-data-analytics-pipeline.json"
+  ],
+  "sources": [
+    "PDF: AWS — Complete Learning Curriculum, Section B, Module 20: AWS Data Engineering and Analytics, lesson 226: Amazon Athena.",
+    "Official AWS documentation (AWS Glue User Guide, checked 2026-10-11): https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html — Data integration, Data Catalog and ETL pipelines.",
+    "Official AWS documentation (Amazon Athena User Guide, checked 2026-10-11): https://docs.aws.amazon.com/athena/latest/ug/ — SQL queries over data in Amazon S3 and query cost considerations."
+  ],
+  "technical_review_date": "2026-10-11",
+  "status": "draft",
+  "status_note": "Generated from the PDF syllabus and official reference index; must be technically reviewed and tested for the target AWS service/Region before publication."
+}

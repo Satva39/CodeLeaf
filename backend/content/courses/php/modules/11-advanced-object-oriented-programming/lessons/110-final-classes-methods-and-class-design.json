@@ -1,0 +1,189 @@
+{
+  "id": "php-lesson-110",
+  "slug": "final-classes-methods-and-class-design",
+  "title": "Final Classes, Methods, and Class Design",
+  "sequence": 110,
+  "module_id": "php-module-11",
+  "module_slug": "advanced-object-oriented-programming",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 11,
+  "prerequisites": [
+    "php-lesson-109"
+  ],
+  "previous_lesson_id": "php-lesson-109",
+  "next_lesson_id": "php-lesson-111",
+  "keywords": [
+    "final classes methods and class design",
+    "advanced object-oriented programming",
+    "final classes and methods",
+    "preventing unintended inheritance",
+    "designing extension points",
+    "balancing flexibility and simplicity",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 110,
+  "subtopics": [
+    "final classes and methods.",
+    "Preventing unintended inheritance.",
+    "Designing extension points.",
+    "Balancing flexibility and simplicity."
+  ],
+  "learning_outcomes": [
+    "Explain what final classes, methods, and class design contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: final classes and methods.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Advanced object design is about collaboration and stable contracts. Interfaces, composition, dependency injection, namespaces, and autoloading help change or test parts independently. In this lesson, focus on final classes and methods; then compare it with preventing unintended inheritance. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use final classes, methods, and class design when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 11 overview: Advanced Object-Oriented Programming",
+        "asset_path": "diagrams/module-11-overview.svg",
+        "alt_text": "Four-stage overview for module 11, Advanced Object-Oriented Programming, grouping lesson topics in order.",
+        "caption": "Use this overview to place final classes, methods, and class design in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Advanced object design is about collaboration and stable contracts. Interfaces, composition, dependency injection, namespaces, and autoloading help change or test parts independently. For final classes, methods, and class design, begin with final classes and methods. Also distinguish preventing unintended inheritance; designing extension points; balancing flexibility and simplicity. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "final classes and methods",
+            "text": "Know when to use final classes and methods, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Preventing unintended inheritance",
+            "text": "Know when to use preventing unintended inheritance, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Designing extension points",
+            "text": "Know when to use designing extension points, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Balancing flexibility and simplicity",
+            "text": "Know when to use balancing flexibility and simplicity, what input or program state it changes, and which boundary case is worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Final Classes, Methods, and Class Design",
+        "language": "php",
+        "code": "<?php\nfinal class Tax { public function amount(int $price): int { return intdiv($price, 10); } }\nfinal class Checkout { public function __construct(private Tax $tax) {} public function total(int $price): int { return $price + $this->tax->amount($price); } }\necho (new Checkout(new Tax()))->total(100) . PHP_EOL;",
+        "expected_output": "110",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for final classes, methods, and class design from top to bottom. Start by identifying final classes and methods, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for final classes, methods, and class design that demonstrates \"final classes and methods\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of final classes and methods.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "110",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-110-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Final Classes, Methods, and Class Design is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+    ],
+    "references": [
+      {
+        "title": "Classes and Objects",
+        "url": "https://www.php.net/manual/en/language.oop5.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "classes",
+          "interfaces",
+          "traits",
+          "inheritance",
+          "visibility"
+        ]
+      },
+      {
+        "title": "PSR-4 Autoloader",
+        "url": "https://www.php-fig.org/psr/psr-4/",
+        "publisher": "PHP-FIG",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "namespace-to-path mapping",
+          "autoload interoperability"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Classes and Objects",
+      "url": "https://www.php.net/manual/en/language.oop5.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "classes",
+        "interfaces",
+        "traits",
+        "inheritance",
+        "visibility"
+      ]
+    },
+    {
+      "title": "PSR-4 Autoloader",
+      "url": "https://www.php-fig.org/psr/psr-4/",
+      "publisher": "PHP-FIG",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "namespace-to-path mapping",
+        "autoload interoperability"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

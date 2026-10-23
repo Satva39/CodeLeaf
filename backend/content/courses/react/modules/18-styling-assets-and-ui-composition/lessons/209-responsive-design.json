@@ -1,0 +1,181 @@
+{
+  "id": "react-lesson-209",
+  "slug": "responsive-design",
+  "title": "Responsive Design",
+  "sequence": 209,
+  "module_id": "react-module-18",
+  "module_slug": "styling-assets-and-ui-composition",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "react-lesson-208"
+  ],
+  "previous_lesson_id": "react-lesson-208",
+  "next_lesson_id": "react-lesson-210",
+  "keywords": [
+    "Responsive Design",
+    "Styling, Assets, and UI Composition",
+    "Responsive layouts",
+    "Mobile-first styling",
+    "Responsive navigation",
+    "Flexible images and containers",
+    "Testing multiple viewport sizes",
+    "testing"
+  ],
+  "source_syllabus_number": 209,
+  "subtopics": [
+    "Responsive layouts",
+    "Mobile-first styling",
+    "Responsive navigation",
+    "Flexible images and containers",
+    "Testing multiple viewport sizes"
+  ],
+  "learning_outcomes": [
+    "Explain how Responsive Design relates to Styling, Assets, and UI Composition.",
+    "Apply Responsive layouts in a small React or JavaScript example and describe the expected result.",
+    "Test one edge/failure case and identify a maintainable, accessible fix."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study Responsive Design as part of Styling, Assets, and UI Composition. The syllabus topics are kept below, then connected to a small example you can inspect and adapt.",
+    "why_it_matters": "Responsive layouts verifies user-observable behavior rather than implementation details. Write repeatable assertions for normal, boundary, and failure states, and keep tests deterministic.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Responsive Design: concept map",
+        "asset_path": "diagrams/lessons/lesson-209-responsive-design.svg",
+        "alt_text": "Concept map for Responsive Design: Responsive layouts, Mobile-first styling, Responsive navigation.",
+        "caption": "A visual scaffold for the idea; the code and verification steps below provide the practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Responsive layouts verifies user-observable behavior rather than implementation details. Write repeatable assertions for normal, boundary, and failure states, and keep tests deterministic. Start with one responsibility at a time: identify the data, describe the expected interface, then decide which event, state update, request, or runtime boundary changes the result."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Responsive layouts",
+            "text": "Responsive layouts verifies user-observable behavior rather than implementation details. Write repeatable assertions for normal, boundary, and failure states, and keep tests deterministic."
+          },
+          {
+            "title": "Mobile-first styling",
+            "text": "Mobile-first styling verifies user-observable behavior rather than implementation details. Write repeatable assertions for normal, boundary, and failure states, and keep tests deterministic."
+          },
+          {
+            "title": "Responsive navigation",
+            "text": "Responsive navigation verifies user-observable behavior rather than implementation details. Write repeatable assertions for normal, boundary, and failure states, and keep tests deterministic."
+          },
+          {
+            "title": "Flexible images and containers",
+            "text": "Flexible images and containers verifies user-observable behavior rather than implementation details. Write repeatable assertions for normal, boundary, and failure states, and keep tests deterministic."
+          },
+          {
+            "title": "Testing multiple viewport sizes",
+            "text": "Testing multiple viewport sizes verifies user-observable behavior rather than implementation details. Write repeatable assertions for normal, boundary, and failure states, and keep tests deterministic."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "jsx",
+        "code": "import { render, screen } from \"@testing-library/react\";\nimport { expect, test } from \"vitest\";\nimport SaveButton from \"./SaveButton.jsx\";\n\ntest(\"exposes a Save button\", () => {\n  render(<SaveButton />);\n  expect(screen.getByRole(\"button\", { name: \"Save\" })).toBeTruthy();\n});",
+        "expected_output": "The test passes when the rendered interface exposes a button named Save.",
+        "run_instructions": "This is an inspectable teaching example, not an arbitrary-code runner inside CodeLeaf. Place JSX in a React/Vite project (or the relevant CSS/HTML/config file), run the project with its documented toolchain, and compare the visible behavior with the expected result. Server rendering and framework APIs require their stated runtime.",
+        "reset_steps": "Restore the original snippet, reset the component/data to its starting state, and repeat with a different input or an edge/failure case.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Use the code as a small experiment for Responsive Design. First predict the result, then run or inspect it in the required runtime. Change one input and explain why the output changed. If the topic depends on React version or framework support, confirm that the project uses a compatible version before interpreting a result."
+      },
+      {
+        "type": "callout",
+        "title": "Version and environment note",
+        "text": "This course assumes the React 19.3 documentation snapshot dated 2026-10-12. Core component, JSX, props, state, and event concepts apply broadly; modern APIs and server rendering must be checked against the stated React version and the framework/runtime in use."
+      }
+    ],
+    "task": "Create a minimal example demonstrating Responsive Design. Include the relevant subtopic “Responsive layouts”, explain the expected UI/result, and verify one normal case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named concept rather than merely mentioning it.",
+      "The expected visible or logged result is documented and reproducible.",
+      "At least one boundary, empty, loading, or failure case is handled or explained.",
+      "The implementation remains accessible and does not introduce avoidable mutation, stale state, or insecure client-only trust."
+    ],
+    "hints": [
+      "Start with the smallest part of “Responsive layouts” that can be observed independently.",
+      "Write down what should appear before changing the code; then change one input at a time.",
+      "Use the browser console, React Developer Tools, or the appropriate test/runtime to isolate a mismatch."
+    ],
+    "expected_output": "The test passes when the rendered interface exposes a button named Save.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-209-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "The example handles only the happy path.",
+        "why": "Real UI receives empty values, delayed responses, and invalid input.",
+        "fix": "Add one explicit edge/failure case and document the expected message or state."
+      },
+      {
+        "problem": "The example stores redundant data or mutates an existing array/object.",
+        "why": "The displayed result can drift from the source data or React may not observe the intended change.",
+        "fix": "Derive values where possible and create a new value when updating state."
+      },
+      {
+        "problem": "A browser or framework capability is assumed to exist everywhere.",
+        "why": "Availability can depend on the host runtime, React version, and framework.",
+        "fix": "Check the official reference, declare the runtime/version, and provide a fallback when appropriate."
+      }
+    ],
+    "summary": [
+      "Responsive Design fits into the broader Styling, Assets, and UI Composition workflow.",
+      "The central concept is Responsive layouts; apply it with the smallest reproducible example.",
+      "Verify correctness with at least one normal input and one boundary or failure case."
+    ],
+    "references": [
+      "https://react.dev/learn",
+      "https://react.dev/reference/react",
+      "https://react.dev/blog/2026/09/09/react-19-3"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "React — Learn",
+      "url": "https://react.dev/learn",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "Responsive Design",
+        "Responsive layouts",
+        "Mobile-first styling"
+      ]
+    },
+    {
+      "title": "React Reference",
+      "url": "https://react.dev/reference/react",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "React APIs and behavior",
+        "Responsive Design"
+      ]
+    },
+    {
+      "title": "React 19.3 Release Notes",
+      "url": "https://react.dev/blog/2026/09/09/react-19-3",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "version-specific modern APIs and compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus and authored as an educational draft; technical/instructional review required before publication."
+}

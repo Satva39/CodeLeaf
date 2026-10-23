@@ -1,0 +1,251 @@
+{
+  "id": "github-actions-lesson-102",
+  "slug": "creating-a-javascript-action",
+  "title": "Creating a JavaScript Action",
+  "sequence": 102,
+  "module_id": "github-actions-module-13",
+  "module_slug": "reusable-workflows-and-custom-actions",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "github-actions-lesson-101"
+  ],
+  "previous_lesson_id": "github-actions-lesson-101",
+  "next_lesson_id": "github-actions-lesson-103",
+  "keywords": [
+    "creating-a-javascript-action",
+    "reusable-workflows-and-custom-actions",
+    "action-project-structure",
+    "action-metadata",
+    "javascript-action-runtime-configuration",
+    "inputs-and-outputs",
+    "logging-and-error-handling",
+    "packaging-distributable-code",
+    "documenting-and-versioning-the-action"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of creating a javascript action and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to creating a javascript action.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on creating a javascript action. A JavaScript action packages Node-based logic with action metadata, validated inputs, outputs, logs, and failure handling. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "Creating a JavaScript Action matters because it affects correctness, security, maintainability, or operating cost. A JavaScript action packages Node-based logic with action metadata, validated inputs, outputs, logs, and failure handling. Reuse the right abstraction: reusable workflows compose jobs; composite actions bundle steps; JavaScript or container actions package executable behavior. Define inputs, outputs, permissions, and versions explicitly.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 13 visual map",
+        "asset_path": "diagrams/module-13-overview.svg",
+        "alt_text": "Ordered overview of module 13: Why Reuse Workflow Logic?; Reusable Workflows; Advanced Reusable Workflow Configuration; Composite Actions; Creating a JavaScript Action; Using the GitHub Actions Toolkit; Creating Docker Container Actions; Testing Custom Actions; Publishing and Maintaining Actions; Workflow Templates and YAML Reuse.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "A JavaScript action packages Node-based logic with action metadata, validated inputs, outputs, logs, and failure handling. Reuse the right abstraction: reusable workflows compose jobs; composite actions bundle steps; JavaScript or container actions package executable behavior. Define inputs, outputs, permissions, and versions explicitly. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "Action project structure",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Action metadata",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "JavaScript action runtime configuration",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Inputs and outputs",
+            "text": "Write one step output as `name=value` to `$GITHUB_OUTPUT`, then declare job outputs if a downstream job needs the value. Use `$GITHUB_ENV` for values needed by later steps in the same job."
+          },
+          {
+            "title": "Logging and error handling",
+            "text": "Start with the first failed step and its exit code, then inspect the event, conditions, permissions, tool versions, network, and runner state. Capture sanitized diagnostics and preserve evidence of the failure."
+          },
+          {
+            "title": "Packaging distributable code",
+            "text": "For packaging distributable code, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Documenting and versioning the action",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "# action.yml (metadata outline)\nname: Input validator\ndescription: Validate one non-empty value\ninputs:\n  value:\n    description: Value to validate\n    required: true\nruns:\n  using: node24\n  main: dist/index.js",
+        "expected_output": "The metadata declares a required input and an entry point. The action is incomplete until `dist/index.js` is built, packaged, tested, and compatible with the selected supported runtime.",
+        "run_instructions": "Use the current official metadata syntax and action runtime support table before publishing. Keep source, generated bundle, tests, and release documentation in the action repository.",
+        "reset_steps": "Restore the original snippet and remove temporary workflow changes. If you triggered a real run, inspect the run log before editing the file again.",
+        "execution_mode": "metadata-outline"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to creating a javascript action. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain creating a javascript action, read the example, and identify a way to validate it. The wider system goal remains: Package shared workflow logic behind clear input/output contracts and maintained versions."
+      }
+    ],
+    "task": "Apply creating a javascript action to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: A JavaScript action packages Node-based logic with action metadata, validated inputs, outputs, logs, and failure handling.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: A JavaScript action packages Node-based logic with action metadata, validated inputs, outputs, logs, and failure handling. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "A JavaScript action packages Node-based logic with action metadata, validated inputs, outputs, logs, and failure handling.",
+      "Reuse the right abstraction: reusable workflows compose jobs; composite actions bundle steps; JavaScript or container actions package executable behavior. Define inputs, outputs, permissions, and versions explicitly.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-102-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "metadata-outline",
+    "references": [
+      {
+        "title": "Reusing workflow configurations",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/reusing-workflow-configurations",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "reusable workflows",
+          "composite-action comparisons",
+          "YAML anchors and aliases"
+        ]
+      },
+      {
+        "title": "About custom actions",
+        "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/custom-actions",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "composite actions",
+          "JavaScript actions",
+          "Docker container actions",
+          "action types"
+        ]
+      },
+      {
+        "title": "Metadata syntax reference",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/metadata-syntax",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "action.yml",
+          "inputs",
+          "outputs",
+          "runs metadata"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [
+    "../exercises/022-build-a-javascript-action.json"
+  ],
+  "sources": [
+    {
+      "title": "Reusing workflow configurations",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/reusing-workflow-configurations",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "reusable workflows",
+        "composite-action comparisons",
+        "YAML anchors and aliases"
+      ]
+    },
+    {
+      "title": "About custom actions",
+      "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/custom-actions",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "composite actions",
+        "JavaScript actions",
+        "Docker container actions",
+        "action types"
+      ]
+    },
+    {
+      "title": "Metadata syntax reference",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/metadata-syntax",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "action.yml",
+        "inputs",
+        "outputs",
+        "runs metadata"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "102",
+    "module_title": "Reusable Workflows and Custom Actions",
+    "subtopics": [
+      "Action project structure",
+      "Action metadata",
+      "JavaScript action runtime configuration",
+      "Inputs and outputs",
+      "Logging and error handling",
+      "Packaging distributable code",
+      "Documenting and versioning the action"
+    ]
+  }
+}

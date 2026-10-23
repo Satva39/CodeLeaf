@@ -1,0 +1,149 @@
+{
+  "id": "css-project-08",
+  "slug": "responsive-game-interface",
+  "title": "Responsive Game Interface",
+  "sequence": 8,
+  "tier": "advanced",
+  "objective": "Build a polished browser-game visual interface with responsive board and player areas.",
+  "prerequisite_lesson_ids": [
+    "css-lesson-093",
+    "css-lesson-104",
+    "css-lesson-113",
+    "css-lesson-124",
+    "css-lesson-135",
+    "css-lesson-146",
+    "css-lesson-155",
+    "css-lesson-167"
+  ],
+  "recommended_module_range": [
+    10,
+    22
+  ],
+  "recommended_lesson_range": [
+    93,
+    230
+  ],
+  "skills": [
+    "CSS layout",
+    "visual hierarchy",
+    "responsive design",
+    "accessibility",
+    "maintainable stylesheets"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Game board and responsive card arrangement",
+      "acceptance_criteria": [
+        "Demonstrate game board and responsive card arrangement in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Score panel and player areas",
+      "acceptance_criteria": [
+        "Demonstrate score panel and player areas in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "State styling for selected/disabled controls",
+      "acceptance_criteria": [
+        "Demonstrate state styling for selected/disabled controls in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Responsive actions and controls",
+      "acceptance_criteria": [
+        "Demonstrate responsive actions and controls in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    },
+    {
+      "sequence": 5,
+      "title": "Keyboard focus and reduced-motion behavior",
+      "acceptance_criteria": [
+        "Demonstrate keyboard focus and reduced-motion behavior in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "index.html",
+      "language": "html",
+      "contents": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Responsive Game Interface</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n<main class=\"game-shell page-shell\"><header class=\"game-header\"><div><p class=\"eyebrow\">Tabletop / practice room</p><h1>Card table</h1><p>A static interface prototype for a browser game.</p></div><button class=\"button button-secondary\" type=\"button\">Game options</button></header><section class=\"scoreboard\" aria-label=\"Player scores\"><article><span>Player one</span><strong>24</strong><small>Your turn</small></article><article><span>Player two</span><strong>18</strong><small>Waiting</small></article><article><span>Round</span><strong>03</strong><small>2 cards played</small></article></section><section class=\"table-panel\" aria-label=\"Game board\"><div class=\"table-heading\"><h2>Your hand</h2><p>Choose a card to show selected styling</p></div><div class=\"game-board\"><button class=\"game-card\" type=\"button\" aria-pressed=\"false\"><span>7</span><strong>♠</strong><small>Seven of spades</small></button><button class=\"game-card\" type=\"button\" aria-pressed=\"true\"><span>Q</span><strong>♥</strong><small>Queen of hearts</small></button><button class=\"game-card\" type=\"button\" aria-pressed=\"false\"><span>3</span><strong>♣</strong><small>Three of clubs</small></button><button class=\"game-card\" type=\"button\" aria-pressed=\"false\"><span>A</span><strong>♦</strong><small>Ace of diamonds</small></button></div><p class=\"game-status\" role=\"status\">Selected: Queen of hearts · visual example only</p></section><nav class=\"game-actions\" aria-label=\"Game actions\"><button class=\"button\" type=\"button\">Play selected</button><button class=\"button button-secondary\" type=\"button\">Pass turn</button><button class=\"button button-quiet\" type=\"button\">Leave table</button></nav><p class=\"fine-print\">Buttons are illustrative; this project contains no game rules or multiplayer logic.</p></main>\n</body>\n</html>\n"
+    },
+    {
+      "path": "styles.css",
+      "language": "css",
+      "contents": "* { box-sizing: border-box; }\n:root { --color-text: #172554; --color-surface: #ffffff; --color-accent: #1d4ed8; --space: 1rem; --radius: 0.75rem; }\nbody { margin: 0; color: var(--color-text); background: #f8fafc; font-family: system-ui, sans-serif; line-height: 1.55; }\na { color: inherit; }\nbutton, input, select { font: inherit; }\n:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 3px; }\n.page-shell { width: min(calc(100% - 2rem), 74rem); margin-inline: auto; }\n.site-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space); padding: var(--space); }\n@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }\n"
+    }
+  ],
+  "required_features": [
+    "Game board and responsive card arrangement",
+    "Score panel and player areas",
+    "State styling for selected/disabled controls",
+    "Responsive actions and controls",
+    "Keyboard focus and reduced-motion behavior"
+  ],
+  "stretch_features": [
+    "Add a second theme using custom properties.",
+    "Test at 320 CSS pixels, 768 CSS pixels, and a wide desktop viewport.",
+    "Document browser support assumptions and any fallback for optional CSS features."
+  ],
+  "tests": [
+    {
+      "name": "Required CSS checks",
+      "mode": "human_review",
+      "criteria": [
+        "All listed required features are present and behave as described.",
+        "Inspect the stylesheet for invalid declarations and unintended overrides.",
+        "Check keyboard focus, responsive reflow, and reduced-motion handling where relevant."
+      ]
+    },
+    {
+      "name": "Responsive behavior",
+      "mode": "human_review",
+      "criteria": [
+        "No unintended horizontal overflow at narrow widths.",
+        "Layout remains coherent when text is longer than sample content."
+      ]
+    },
+    {
+      "name": "Maintainability",
+      "mode": "human_review",
+      "criteria": [
+        "Reusable tokens and component classes are used intentionally.",
+        "Known feature support limits and design choices are documented."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correctness and required features",
+      "points": 30
+    },
+    {
+      "criterion": "Responsive visual hierarchy and layout",
+      "points": 25
+    },
+    {
+      "criterion": "Accessibility and interaction states",
+      "points": 20
+    },
+    {
+      "criterion": "Maintainability, testing, and rationale",
+      "points": 25
+    }
+  ],
+  "rubric_total": 100,
+  "review_method": "Human-reviewed visual and accessibility evaluation supported by the listed checks; CSS string checks alone cannot prove rendered behavior.",
+  "reference_solution_file": "projects/solutions/008-responsive-game-interface-solution.json",
+  "status": "draft",
+  "status_note": "Draft brief and starter scaffold; complete the milestones and review before publication."
+}

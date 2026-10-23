@@ -1,0 +1,150 @@
+{
+  "id": "data-science-lesson-156",
+  "slug": "decision-trees",
+  "title": "Decision Trees",
+  "sequence": 156,
+  "module_id": "data-science-module-15",
+  "module_slug": "supervised-machine-learning",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "machine-learning",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "data-science-lesson-155"
+  ],
+  "previous_lesson_id": "data-science-lesson-155",
+  "next_lesson_id": "data-science-lesson-157",
+  "keywords": [
+    "decision-trees",
+    "tree-structure-and-splitting",
+    "gini-impurity-and-entropy",
+    "regression-trees",
+    "tree-depth-and-pruning",
+    "interpretability-and-overfitting"
+  ],
+  "source_syllabus_number": 156,
+  "subtopics": [
+    "Tree structure and splitting",
+    "Gini impurity and entropy",
+    "Regression trees",
+    "Tree depth and pruning",
+    "Interpretability and overfitting"
+  ],
+  "learning_outcomes": [
+    "Explain decision trees and accurately refer to at least two syllabus subtopics.",
+    "Apply the main idea of decision trees to a small example, trace, calculation, or scenario.",
+    "Identify one important assumption or failure mode and describe how to check it."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study decision trees in the context of supervised machine learning. You will connect the PDF subtopics to a small example and practice describing what the evidence does—and does not—support.",
+    "why_it_matters": "Decision Trees matters because it affects how data is collected, represented, analyzed, interpreted, or used in a decision. Check the task and assumptions before choosing a method.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual overview: Decision Trees",
+        "asset_path": "diagrams/lesson-156-overview.svg",
+        "alt_text": "Lesson 156: Decision Trees; a three-stage visual for understanding the topic, applying it to a small example, and validating assumptions.",
+        "caption": "Use the overview to connect decision trees to a concrete example and a responsible check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The central idea",
+        "text": "Supervised learning fits a mapping from labeled examples to predictions. Algorithm choice should follow data structure, decision costs, interpretability needs, and fair evaluation."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered",
+        "items": [
+          {
+            "title": "Tree structure and splitting",
+            "text": "Define tree structure and splitting in relation to decision trees; identify the input, output, assumptions, and who uses the result."
+          },
+          {
+            "title": "Gini impurity and entropy",
+            "text": "Work through gini impurity and entropy using a small, synthetic example before scaling up. State what the calculation or method returns and why that result is useful."
+          },
+          {
+            "title": "Regression trees",
+            "text": "Check the edge cases for regression trees: missing values, unusual ranges, different groups, time boundaries, or a changed input can affect the conclusion."
+          },
+          {
+            "title": "Tree depth and pruning",
+            "text": "Document the rule or choice for tree depth and pruning so another learner can reproduce the analysis and understand its limitations."
+          },
+          {
+            "title": "Interpretability and overfitting",
+            "text": "Define interpretability and overfitting in relation to decision trees; identify the input, output, assumptions, and who uses the result."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "1. Restate the question addressed by decision trees. 2. Identify the input data, intended output, and assumptions. 3. Predict what the small example should show before reading its output. 4. Change one input or assumption, compare the result, and document what remains uncertain."
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "execution_mode": "static-validation",
+        "code": "params = {\"max_depth\": 3, \"min_samples_leaf\": 5}\nprint(\"complexity controls:\", len(params))",
+        "expected_output": "complexity controls: 2",
+        "run_instructions": "For Python, copy the snippet into a local file and run with Python 3. This CodeLeaf block is static and does not execute inside the browser. For SQL, adapt the query to an approved local schema; the stated result is a conceptual query simulation, not a live database result.",
+        "reset_steps": "Restore the provided synthetic input, rerun or retrace the example, and change one value at a time. Do not use personal records, credentials, or data you are not authorized to access."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistakes and fixes",
+        "text": "Keep the question, data grain, units, and assumptions explicit. If a result differs, inspect the input and steps in order. Avoid turning an observed association into a causal claim, treating a sample as the population, or assuming a small demonstration guarantees production behavior. Hyperparameters affect model complexity; compare them on validation data, not the final test set."
+      },
+      {
+        "type": "callout",
+        "title": "Responsible interpretation",
+        "text": "This example is a teaching aid. It is static in the CodeLeaf lesson and is not executed in the browser. It uses small synthetic values; validate any real workflow in a separate, appropriate local environment and protect sensitive data."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap and next step",
+        "text": "Recap: Supervised learning fits a mapping from labeled examples to predictions. Algorithm choice should follow data structure, decision costs, interpretability needs, and fair evaluation. Next, connect this lesson to the linked prerequisite or following lesson. Record the method, input assumptions, observed result, and one limitation so another person can reproduce and review the work."
+      }
+    ],
+    "task": "Try it yourself: create a small synthetic example for decision trees. State a question, make a prediction, trace or run an appropriate calculation, then write one finding and one limitation.",
+    "task_acceptance_criteria": [
+      "Refer accurately to the topic and its syllabus subtopics.",
+      "Record a reproducible example or a complete manual trace with an expected result.",
+      "Document at least one assumption, limitation, data-quality issue, or evaluation check."
+    ],
+    "hints": [
+      "Write down the input, expected result, units, and assumptions first.",
+      "Change only one condition when testing a revised example.",
+      "Ask whether the data and method represent the real decision; do not infer causality or production readiness from a toy example."
+    ],
+    "expected_output": "complexity controls: 2",
+    "run_mode": "static-validation",
+    "troubleshooting": [
+      "Check input values, path assumptions, package versions, indentation, and units.",
+      "For SQL, use a local schema and read-only test data; this page does not provide a live database.",
+      "For package-dependent work, create an isolated environment and use the relevant official documentation."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-156-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "sklearn",
+      "title": "scikit-learn User Guide",
+      "url": "https://scikit-learn.org/stable/user_guide.html",
+      "publisher": "scikit-learn developers",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "preprocessing",
+        "machine learning",
+        "model evaluation"
+      ],
+      "source_type": "official documentation",
+      "notes": "Official source entry point. Verify current API signatures and version notes before implementation."
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft authored against Data Science.pdf lesson 156; preserves the source title/subtopics. Review technical accuracy, example behavior, and assessment wording before publication."
+}

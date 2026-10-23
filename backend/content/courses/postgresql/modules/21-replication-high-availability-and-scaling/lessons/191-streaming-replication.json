@@ -1,0 +1,149 @@
+{
+  "id": "postgresql-lesson-191",
+  "slug": "streaming-replication",
+  "title": "Streaming Replication",
+  "sequence": 191,
+  "module_id": "postgresql-module-21",
+  "module_slug": "replication-high-availability-and-scaling",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "postgresql-lesson-190"
+  ],
+  "previous_lesson_id": "postgresql-lesson-190",
+  "next_lesson_id": "postgresql-lesson-192",
+  "keywords": [
+    "streaming-replication",
+    "replication-high-availability-and-scaling",
+    "physical-replication-concepts",
+    "primary-server-configuration",
+    "standby-configuration",
+    "replication-connections"
+  ],
+  "source_syllabus_number": 191,
+  "subtopics": [
+    "Physical replication concepts",
+    "Primary-server configuration",
+    "Standby configuration",
+    "Replication connections",
+    "Monitoring replication health"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose and main terms of Streaming Replication.",
+    "Use or interpret an appropriate PostgreSQL example connected to physical replication concepts.",
+    "Identify one edge case and select a safe way to verify the expected result."
+  ],
+  "content": {
+    "intro": "This lesson focuses on Streaming Replication. Its primary job is to help you design replication and failover with explicit lag, WAL retention, consistency and capacity trade-offs. The listed PDF subtopics define the coverage expected here; work through them in order and connect each one to an example, edge case and checkable result.",
+    "why_it_matters": "This topic matters because PostgreSQL systems must preserve correct results as data grows and more sessions or services interact with it. Practicing streaming replication teaches you to make assumptions explicit, apply the right SQL or operational tool, and verify behavior instead of relying on a demonstration that only worked once.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Replication Topology",
+        "asset_path": "diagrams/replication-topology.svg",
+        "alt_text": "Primary server WAL changes ship to a standby; replay lag and failover require monitoring and rehearsal.",
+        "caption": "Visual aid for Streaming Replication. Use it alongside the subtopics and worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Keep the problem small: design replication and failover with explicit lag, WAL retention, consistency and capacity trade-offs. A PostgreSQL feature should be chosen for the semantics it provides, not just because it is available. Before executing a change, state the inputs, expected output and boundary conditions. The example below is intentionally small enough to inspect; it illustrates the idea but is not a substitute for a test against your schema and PostgreSQL version."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the attached curriculum",
+        "items": [
+          {
+            "title": "Physical replication concepts",
+            "text": "Track replay lag and WAL retention as well as the topology; do not claim high availability without a practiced failover."
+          },
+          {
+            "title": "Primary-server configuration",
+            "text": "Relate this point to streaming replication: define the expected behavior, one edge case, and a query or check that would provide evidence."
+          },
+          {
+            "title": "Standby configuration",
+            "text": "Track replay lag and WAL retention as well as the topology; do not claim high availability without a practiced failover."
+          },
+          {
+            "title": "Replication connections",
+            "text": "Track replay lag and WAL retention as well as the topology; do not claim high availability without a practiced failover."
+          },
+          {
+            "title": "Monitoring replication health",
+            "text": "Track replay lag and WAL retention as well as the topology; do not claim high availability without a practiced failover."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Streaming Replication",
+        "language": "sql",
+        "code": "SELECT pg_is_in_recovery() AS is_standby;",
+        "expected_output": "true on a recovery/standby server; false on a primary. This single result does not establish replication health.",
+        "safety_note": "A real replication lab requires an isolated network and authorized server access.",
+        "run_instructions": "Run independently on each configured PostgreSQL server.",
+        "reset_steps": "For a read-only SELECT or inspection command, no reset is needed. For DDL/DML, use a disposable database; capture the starting state, run the example, inspect the result, and ROLLBACK or drop the lab objects as appropriate. Do not use production data or credentials.",
+        "execution_mode": "query-simulation",
+        "limitations": "CodeLeaf currently previews HTML/CSS/JavaScript only; it does not execute PostgreSQL queries, shell commands or Python in the lesson page. Treat the sample as inspectable code unless you run it yourself in an approved isolated environment. Python examples require a separate isolated runner.",
+        "schema_assumptions": "Run independently on each configured PostgreSQL server."
+      },
+      {
+        "type": "callout",
+        "title": "Practical checkpoint",
+        "text": "Version note: PostgreSQL 18.6 is the primary reference. PostgreSQL 19 beta/development features are not assumed to be stable."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-191-questions.json"
+  },
+  "task": "Create a short practice artifact for “Streaming Replication”: explain its goal, show one example linked to “Physical replication concepts”, state the expected result, and include one edge/failure case and verification method. Use a disposable database or static artifact as appropriate.",
+  "hints": [
+    "Start with the listed subtopics, especially “Physical replication concepts”, and describe the expected behavior in your own words.",
+    "Run or inspect the smallest example that demonstrates the behavior; do not add unrelated features before it is verified.",
+    "When the result surprises you, capture the exact SQL/error, check version and permissions, and change one assumption at a time."
+  ],
+  "expected_output": "A reviewable note or query for Streaming Replication, with an explanation of “Physical replication concepts”, expected behavior, and a documented edge-case check.",
+  "run_mode": "query-simulation",
+  "common_mistakes": [
+    {
+      "problem": "Copying the example without checking its assumptions.",
+      "why": "Object names, data types, privileges, extensions and data distribution affect database behavior.",
+      "fix": "List schema/version assumptions and test with a tiny synthetic dataset first."
+    },
+    {
+      "problem": "Treating a single successful query as proof of production readiness.",
+      "why": "A happy-path result does not test invalid input, concurrent sessions, permissions, recovery or query performance.",
+      "fix": "Add one negative/edge case and record the evidence that confirms the expected behavior."
+    },
+    {
+      "problem": "Making a production change directly from a lesson.",
+      "why": "DDL, data updates, role changes and operational commands can affect data or availability.",
+      "fix": "Use an isolated lab, reviewed migration, least privilege, rollback/recovery plan and a second-person review for production."
+    }
+  ],
+  "summary": [
+    "Streaming Replication fits into the broader goal to design replication and failover with explicit lag, WAL retention, consistency and capacity trade-offs.",
+    "Use the curriculum subtopics as a completeness checklist: Physical replication concepts, Primary-server configuration, Standby configuration.",
+    "State the schema/version assumptions and verify one normal case plus an edge case before trusting the result."
+  ],
+  "sources": [
+    {
+      "title": "Replication and High Availability",
+      "url": "https://www.postgresql.org/docs/18/high-availability.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-15",
+      "supports": [
+        "Replication and High Availability; lesson 191 is a teaching adaptation and should be checked against this official reference."
+      ],
+      "source_type": "official documentation"
+    }
+  ],
+  "exercise_files": [
+    "../exercises/023-replication-lab.json"
+  ],
+  "status": "draft",
+  "status_note": "Draft teaching content generated from the full PostgreSQL.pdf syllabus. Examples and operational advice require technical review and PostgreSQL 18.6 test validation before publication."
+}

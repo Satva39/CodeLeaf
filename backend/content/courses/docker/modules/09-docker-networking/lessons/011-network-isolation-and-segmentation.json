@@ -1,0 +1,169 @@
+{
+  "id": "docker-lesson-096",
+  "slug": "network-isolation-and-segmentation",
+  "title": "Network Isolation and Segmentation",
+  "sequence": 96,
+  "module_id": "docker-module-09",
+  "module_slug": "docker-networking",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "docker-lesson-095"
+  ],
+  "previous_lesson_id": "docker-lesson-095",
+  "next_lesson_id": "docker-lesson-097",
+  "keywords": [
+    "network-isolation-and-segmentation",
+    "frontend-and-backend-networks",
+    "database-access-restrictions",
+    "service-exposure-boundaries",
+    "reducing-unnecessary-connectivity",
+    "network-design-for-multi-service-applications"
+  ],
+  "source_syllabus_number": 96,
+  "subtopics": [
+    "Frontend and backend networks",
+    "Database access restrictions",
+    "Service exposure boundaries",
+    "Reducing unnecessary connectivity",
+    "Network design for multi-service applications"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and key terms of network isolation and segmentation.",
+    "Choose and interpret a suitable Docker example connected to network isolation and segmentation.",
+    "Predict an expected result and verify it using observable evidence in a controlled environment."
+  ],
+  "content": {
+    "intro": "This lesson covers Network Isolation and Segmentation. You will connect the named subtopics from the supplied Docker curriculum to a small, observable example. Work through the visual first, then use the example to form a prediction and check it against the actual behavior.",
+    "why_it_matters": "A container network defines how services can discover and reach one another. User-defined bridge networks provide name-based discovery on one host; published ports expose a selected container port through the host, and overlay networking is for multi-host use such as Swarm. Restrict exposure to the services that need it. Learning network isolation and segmentation helps you make deployment behavior explicit and repeatable instead of relying on a command that happened to work on one machine.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Container network boundaries",
+        "asset_path": "diagrams/networking.svg",
+        "alt_text": "Container network boundaries",
+        "caption": "Network membership controls peer discovery; published ports define selected host exposure."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "A container network defines how services can discover and reach one another. User-defined bridge networks provide name-based discovery on one host; published ports expose a selected container port through the host, and overlay networking is for multi-host use such as Swarm. Restrict exposure to the services that need it."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the supplied curriculum",
+        "items": [
+          {
+            "title": "Frontend and backend networks",
+            "text": "A network creates a connectivity boundary. Inspect the network and its attached endpoints, and test from the source service rather than assuming host connectivity proves container connectivity."
+          },
+          {
+            "title": "Database access restrictions",
+            "text": "For database access restrictions, name the relevant Docker object, setting, or operational step; predict its effect; and capture evidence from a controlled test or inspection command. Relate the result back to network isolation and segmentation rather than assuming that a successful command proves the wider system is correct."
+          },
+          {
+            "title": "Service exposure boundaries",
+            "text": "For service exposure boundaries, name the relevant Docker object, setting, or operational step; predict its effect; and capture evidence from a controlled test or inspection command. Relate the result back to network isolation and segmentation rather than assuming that a successful command proves the wider system is correct."
+          },
+          {
+            "title": "Reducing unnecessary connectivity",
+            "text": "For reducing unnecessary connectivity, name the relevant Docker object, setting, or operational step; predict its effect; and capture evidence from a controlled test or inspection command. Relate the result back to network isolation and segmentation rather than assuming that a successful command proves the wider system is correct."
+          },
+          {
+            "title": "Network design for multi-service applications",
+            "text": "A network creates a connectivity boundary. Inspect the network and its attached endpoints, and test from the source service rather than assuming host connectivity proves container connectivity."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "Start with the supplied example for network isolation and segmentation. Before running it, state what you expect to happen. Compare the real output with that prediction, then change one variable or setting in a disposable lab to test the boundary of the idea. If a command is not supported on your operating system or installed Docker version, consult the linked official reference and record the actual version rather than guessing."
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Network Isolation and Segmentation",
+        "language": "shell",
+        "code": "docker network create codeleaf-lab\ndocker network inspect codeleaf-lab",
+        "expected_output": "The network is created and inspection reports its driver and configuration.",
+        "run_instructions": "Run in a local lab; a user-defined bridge is a common single-host starting point.",
+        "reset_steps": "Disconnect and remove only after test containers are removed: `docker network rm codeleaf-lab`.",
+        "execution_mode": "human-review",
+        "safety_note": "Run only against a local test Docker environment. Docker commands are not executed by the CodeLeaf lesson page.",
+        "limitations": "CodeLeaf currently does not execute Docker Engine, Docker Compose, build, networking, or host-administration commands from lesson pages. Use the example as inspectable material and run only in an approved local lab. Production services and arbitrary learner commands must never run inside the FastAPI web process.",
+        "schema_assumptions": "Confirm the installed Docker Engine, CLI, Compose, and Buildx versions and the target OS before using version- or platform-sensitive options."
+      },
+      {
+        "type": "callout",
+        "title": "Practical checkpoint",
+        "text": "Keep this lesson in draft while reviewing: Network Isolation and Segmentation. Capture the command/configuration, expected and actual result, one failure or edge case, and cleanup performed. This course does not award XP from content files; CodeLeaf backend rules remain authoritative."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-096-questions.json"
+  },
+  "task": "Apply network isolation and segmentation to a small local case. Record the configuration or command, expected result, observed result, one limitation/edge case, and how you verified the result.",
+  "hints": [
+    "Begin with read-only inspection commands and identify the active Docker context before any mutating action.",
+    "Use a disposable name, local test image, and synthetic data; change one thing at a time.",
+    "If the outcome differs, preserve the exact error and logs, check the official reference for your installed version, and document the verified fix."
+  ],
+  "expected_output": "The network is created and inspection reports its driver and configuration.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Assuming that a successful start means the application is ready.",
+      "why": "A container can start while its dependent service is unavailable or the application is failing after startup.",
+      "fix": "Inspect health/status and logs; add a meaningful health check or retry strategy where appropriate."
+    },
+    {
+      "problem": "Keeping required data only in the container writable layer.",
+      "why": "Replacing the container can discard that layer and its application state.",
+      "fix": "Select a named volume or an external storage system, then rehearse a restore."
+    },
+    {
+      "problem": "Copying a command without checking context, target, or permissions.",
+      "why": "Docker commands affect the active endpoint and can change host resources or publish services.",
+      "fix": "Check `docker context show`, use an isolated lab, make the smallest change, and verify the resulting state."
+    }
+  ],
+  "summary": [
+    "A container network defines how services can discover and reach one another. User-defined bridge networks provide name-based discovery on one host; published ports expose a selected container port through the host, and overlay networking is for multi-host use such as Swarm. Restrict exposure to the services that need it.",
+    "The attached PDF lists 5 subtopic(s) under this lesson; keep each one represented in the explanation and practical notes.",
+    "Docker execution mode in CodeLeaf is human-run/static validation only; do not interpret code display as evidence that a command was executed."
+  ],
+  "sources": [
+    {
+      "title": "Docker networking overview",
+      "url": "https://docs.docker.com/engine/network/",
+      "publisher": "Docker Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "container networks",
+        "network inspection",
+        "connectivity"
+      ]
+    },
+    {
+      "title": "Network drivers",
+      "url": "https://docs.docker.com/engine/network/drivers/",
+      "publisher": "Docker Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "bridge",
+        "host",
+        "overlay",
+        "macvlan",
+        "ipvlan",
+        "none"
+      ]
+    }
+  ],
+  "exercise_files": [
+    "../exercises/002-network-segmentation.json"
+  ],
+  "status": "draft",
+  "status_note": "Generated as a reviewable first draft from the full Docker syllabus. Commands and build snippets have not been executed in a Docker daemon during this generation run; review syntax and platform assumptions before publishing."
+}

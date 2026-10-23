@@ -1,0 +1,11 @@
+{
+  "id": "bash-exercise-solution-016",
+  "exercise_id": "bash-exercise-016",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": {
+    "language": "bash",
+    "code": "while getopts ':f:vh' opt; do\n  case $opt in f) file=$OPTARG ;; v) verbose=1 ;; h) printf 'Usage: tool [-v] [-f FILE]\\n'; exit 0 ;; :) printf 'missing option value\\n' >&2; exit 2 ;; \\?) printf 'invalid option\\n' >&2; exit 2 ;; esac\ndone"
+  },
+  "explanation": "Reference approach for Parse options with getopts. Adapt paths and dependencies to a disposable test environment, test errors as well as normal results, and review shell-specific behavior against the official Bash manual."
+}

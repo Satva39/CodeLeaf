@@ -1,0 +1,177 @@
+{
+  "id": "react-lesson-203",
+  "slug": "conditional-and-dynamic-styling",
+  "title": "Conditional and Dynamic Styling",
+  "sequence": 203,
+  "module_id": "react-module-18",
+  "module_slug": "styling-assets-and-ui-composition",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "react-lesson-202"
+  ],
+  "previous_lesson_id": "react-lesson-202",
+  "next_lesson_id": "react-lesson-204",
+  "keywords": [
+    "Conditional and Dynamic Styling",
+    "Styling, Assets, and UI Composition",
+    "Conditional class names",
+    "State-driven styling",
+    "Dynamic inline styles",
+    "Avoiding conflicting style conditions",
+    "state"
+  ],
+  "source_syllabus_number": 203,
+  "subtopics": [
+    "Conditional class names",
+    "State-driven styling",
+    "Dynamic inline styles",
+    "Avoiding conflicting style conditions"
+  ],
+  "learning_outcomes": [
+    "Explain how Conditional and Dynamic Styling relates to Styling, Assets, and UI Composition.",
+    "Apply Conditional class names in a small React or JavaScript example and describe the expected result.",
+    "Test one edge/failure case and identify a maintainable, accessible fix."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study Conditional and Dynamic Styling as part of Styling, Assets, and UI Composition. The syllabus topics are kept below, then connected to a small example you can inspect and adapt.",
+    "why_it_matters": "Conditional class names determines how changing information drives the UI. Update through the state setter with immutable replacements; use a functional updater when the next value depends on the previous one.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Conditional and Dynamic Styling: concept map",
+        "asset_path": "diagrams/lessons/lesson-203-conditional-and-dynamic-styling.svg",
+        "alt_text": "Concept map for Conditional and Dynamic Styling: Conditional class names, State-driven styling, Dynamic inline styles.",
+        "caption": "A visual scaffold for the idea; the code and verification steps below provide the practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Conditional class names determines how changing information drives the UI. Update through the state setter with immutable replacements; use a functional updater when the next value depends on the previous one. Start with one responsibility at a time: identify the data, describe the expected interface, then decide which event, state update, request, or runtime boundary changes the result."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Conditional class names",
+            "text": "Conditional class names determines how changing information drives the UI. Update through the state setter with immutable replacements; use a functional updater when the next value depends on the previous one."
+          },
+          {
+            "title": "State-driven styling",
+            "text": "State-driven styling determines how changing information drives the UI. Update through the state setter with immutable replacements; use a functional updater when the next value depends on the previous one."
+          },
+          {
+            "title": "Dynamic inline styles",
+            "text": "Dynamic inline styles determines how changing information drives the UI. Update through the state setter with immutable replacements; use a functional updater when the next value depends on the previous one."
+          },
+          {
+            "title": "Avoiding conflicting style conditions",
+            "text": "Avoiding conflicting style conditions determines how changing information drives the UI. Update through the state setter with immutable replacements; use a functional updater when the next value depends on the previous one."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "jsx",
+        "code": "const [count, setCount] = useState(0);\n\nreturn <button onClick={() => setCount(value => value + 1)}>Count: {count}</button>;",
+        "expected_output": "Each click queues an update based on the previous state, and React updates the rendered count.",
+        "run_instructions": "This is an inspectable teaching example, not an arbitrary-code runner inside CodeLeaf. Place JSX in a React/Vite project (or the relevant CSS/HTML/config file), run the project with its documented toolchain, and compare the visible behavior with the expected result. Server rendering and framework APIs require their stated runtime.",
+        "reset_steps": "Restore the original snippet, reset the component/data to its starting state, and repeat with a different input or an edge/failure case.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Use the code as a small experiment for Conditional and Dynamic Styling. First predict the result, then run or inspect it in the required runtime. Change one input and explain why the output changed. If the topic depends on React version or framework support, confirm that the project uses a compatible version before interpreting a result."
+      },
+      {
+        "type": "callout",
+        "title": "Version and environment note",
+        "text": "This course assumes the React 19.3 documentation snapshot dated 2026-10-12. Core component, JSX, props, state, and event concepts apply broadly; modern APIs and server rendering must be checked against the stated React version and the framework/runtime in use."
+      }
+    ],
+    "task": "Create a minimal example demonstrating Conditional and Dynamic Styling. Include the relevant subtopic “Conditional class names”, explain the expected UI/result, and verify one normal case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named concept rather than merely mentioning it.",
+      "The expected visible or logged result is documented and reproducible.",
+      "At least one boundary, empty, loading, or failure case is handled or explained.",
+      "The implementation remains accessible and does not introduce avoidable mutation, stale state, or insecure client-only trust."
+    ],
+    "hints": [
+      "Start with the smallest part of “Conditional class names” that can be observed independently.",
+      "Write down what should appear before changing the code; then change one input at a time.",
+      "Use the browser console, React Developer Tools, or the appropriate test/runtime to isolate a mismatch."
+    ],
+    "expected_output": "Each click queues an update based on the previous state, and React updates the rendered count.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-203-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "The example handles only the happy path.",
+        "why": "Real UI receives empty values, delayed responses, and invalid input.",
+        "fix": "Add one explicit edge/failure case and document the expected message or state."
+      },
+      {
+        "problem": "The example stores redundant data or mutates an existing array/object.",
+        "why": "The displayed result can drift from the source data or React may not observe the intended change.",
+        "fix": "Derive values where possible and create a new value when updating state."
+      },
+      {
+        "problem": "A browser or framework capability is assumed to exist everywhere.",
+        "why": "Availability can depend on the host runtime, React version, and framework.",
+        "fix": "Check the official reference, declare the runtime/version, and provide a fallback when appropriate."
+      }
+    ],
+    "summary": [
+      "Conditional and Dynamic Styling fits into the broader Styling, Assets, and UI Composition workflow.",
+      "The central concept is Conditional class names; apply it with the smallest reproducible example.",
+      "Verify correctness with at least one normal input and one boundary or failure case."
+    ],
+    "references": [
+      "https://react.dev/learn",
+      "https://react.dev/reference/react",
+      "https://react.dev/blog/2026/09/09/react-19-3"
+    ]
+  },
+  "exercise_files": [
+    "../exercises/006-theme-switcher.json"
+  ],
+  "sources": [
+    {
+      "title": "React — Learn",
+      "url": "https://react.dev/learn",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "Conditional and Dynamic Styling",
+        "Conditional class names",
+        "State-driven styling"
+      ]
+    },
+    {
+      "title": "React Reference",
+      "url": "https://react.dev/reference/react",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "React APIs and behavior",
+        "Conditional and Dynamic Styling"
+      ]
+    },
+    {
+      "title": "React 19.3 Release Notes",
+      "url": "https://react.dev/blog/2026/09/09/react-19-3",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "version-specific modern APIs and compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus and authored as an educational draft; technical/instructional review required before publication."
+}

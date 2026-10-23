@@ -1,0 +1,195 @@
+{
+  "id": "php-lesson-198",
+  "slug": "consuming-json-apis",
+  "title": "Consuming JSON APIs",
+  "sequence": 198,
+  "module_id": "php-module-20",
+  "module_slug": "apis-http-clients-and-integrations",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "php-lesson-197"
+  ],
+  "previous_lesson_id": "php-lesson-197",
+  "next_lesson_id": "php-lesson-199",
+  "keywords": [
+    "consuming json apis",
+    "apis, http clients, and integrations",
+    "request parameters",
+    "authorization headers",
+    "json request bodies",
+    "decoding responses",
+    "handling malformed or unexpected responses",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 198,
+  "subtopics": [
+    "Request parameters.",
+    "Authorization headers.",
+    "JSON request bodies.",
+    "Decoding responses.",
+    "Handling malformed or unexpected responses."
+  ],
+  "learning_outcomes": [
+    "Explain what consuming json apis contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: request parameters.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "API integrations cross a network boundary where responses can be slow, malformed, unauthorized, duplicated, or unavailable. Check status and content, set timeouts, and make retries and webhook processing safe to repeat. In this lesson, focus on request parameters; then compare it with authorization headers. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use consuming json apis when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 20 overview: APIs, HTTP Clients, and Integrations",
+        "asset_path": "diagrams/module-20-overview.svg",
+        "alt_text": "Four-stage overview for module 20, APIs, HTTP Clients, and Integrations, grouping lesson topics in order.",
+        "caption": "Use this overview to place consuming json apis in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "API integrations cross a network boundary where responses can be slow, malformed, unauthorized, duplicated, or unavailable. Check status and content, set timeouts, and make retries and webhook processing safe to repeat. For consuming json apis, begin with request parameters. Also distinguish authorization headers; json request bodies; decoding responses. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Request parameters",
+            "text": "Track where this value enters the request lifecycle and where it affects the response; client-provided data must be treated as untrusted."
+          },
+          {
+            "title": "Authorization headers",
+            "text": "Distinguish identity verification from resource permission, and test expiry, invalid credentials, and denied access as well as the success path."
+          },
+          {
+            "title": "JSON request bodies",
+            "text": "Track where this value enters the request lifecycle and where it affects the response; client-provided data must be treated as untrusted."
+          },
+          {
+            "title": "Decoding responses",
+            "text": "Track where this value enters the request lifecycle and where it affects the response; client-provided data must be treated as untrusted."
+          },
+          {
+            "title": "Handling malformed or unexpected responses",
+            "text": "Track where this value enters the request lifecycle and where it affects the response; client-provided data must be treated as untrusted."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Consuming JSON APIs",
+        "language": "php",
+        "code": "<?php\n$data = [\"topic\" => \"PHP\", \"active\" => true];\necho json_encode($data, JSON_THROW_ON_ERROR) . PHP_EOL;",
+        "expected_output": "{\"topic\":\"PHP\",\"active\":true}",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Set timeouts, validate remote responses, verify webhook authenticity, and make retries idempotent."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for consuming json apis from top to bottom. Start by identifying request parameters, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for consuming json apis that demonstrates \"request parameters\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of request parameters.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "{\"topic\":\"PHP\",\"active\":true}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-198-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Consuming JSON APIs is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Set timeouts, validate remote responses, verify webhook authenticity, and make retries idempotent."
+    ],
+    "references": [
+      {
+        "title": "cURL",
+        "url": "https://www.php.net/manual/en/book.curl.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "HTTP requests",
+          "timeouts",
+          "response status and errors"
+        ]
+      },
+      {
+        "title": "JSON",
+        "url": "https://www.php.net/manual/en/book.json.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "json_encode",
+          "json_decode",
+          "JSON errors"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [
+    "../exercises/018-external-api-client.json"
+  ],
+  "sources": [
+    {
+      "title": "cURL",
+      "url": "https://www.php.net/manual/en/book.curl.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "HTTP requests",
+        "timeouts",
+        "response status and errors"
+      ]
+    },
+    {
+      "title": "JSON",
+      "url": "https://www.php.net/manual/en/book.json.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "json_encode",
+        "json_decode",
+        "JSON errors"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-124",
+  "slug": "rdb-snapshotting",
+  "title": "RDB Snapshotting",
+  "sequence": 124,
+  "module_id": "redis-module-16",
+  "module_slug": "redis-persistence-backup-and-recovery",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-123"
+  ],
+  "previous_lesson_id": "redis-lesson-123",
+  "next_lesson_id": "redis-lesson-125",
+  "keywords": [
+    "rdb-snapshotting",
+    "point-in-time-snapshots",
+    "snapshot-scheduling",
+    "save-and-bgsave",
+    "rdb-files",
+    "snapshot-trade-offs",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 124,
+  "subtopics": [
+    "Point-in-time snapshots",
+    "Snapshot scheduling",
+    "SAVE and BGSAVE",
+    "RDB files",
+    "Snapshot trade-offs"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of RDB Snapshotting and distinguish it from a related Redis concept.",
+    "Apply or trace RDB Snapshotting in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for RDB Snapshotting and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores RDB Snapshotting in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "RDB Snapshotting is an operational design choice: state the workload’s durability, recovery, freshness, availability and capacity requirements before selecting settings.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: RDB Snapshotting",
+        "asset_path": "diagrams/lesson-124-rdb-snapshotting.svg",
+        "alt_text": "Concept diagram for RDB Snapshotting, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for RDB Snapshotting; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "RDB Snapshotting is an operational design choice: state the workload’s durability, recovery, freshness, availability and capacity requirements before selecting settings."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For RDB Snapshotting, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Point-in-time snapshots",
+            "text": "Connect Point-in-time snapshots to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Snapshot scheduling",
+            "text": "Connect Snapshot scheduling to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "SAVE and BGSAVE",
+            "text": "Connect SAVE and BGSAVE to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "RDB files",
+            "text": "Connect RDB files to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Snapshot trade-offs",
+            "text": "Connect Snapshot trade-offs to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: RDB Snapshotting",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "TYPE demo:key\nTTL demo:key\nSCAN 0 MATCH demo:* COUNT 20",
+        "expected_output": "Returns a type, remaining TTL (or -1/-2 where applicable), and a cursor/key page.",
+        "run_instructions": "SCAN COUNT is a hint; continue while the cursor is non-zero and do not assume one page is complete.",
+        "reset_steps": "Read-only inspection; no key is created.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of RDB Snapshotting. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain RDB Snapshotting in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in RDB Snapshotting.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "Returns a type, remaining TTL (or -1/-2 where applicable), and a cursor/key page.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-124-questions.json",
+    "recap": [
+      "RDB Snapshotting is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Redis persistence",
+      "url": "https://redis.io/docs/latest/management/persistence/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "RDB, AOF, combined persistence, backup and trade-offs"
+      ]
+    },
+    {
+      "title": "Redis commands reference",
+      "url": "https://redis.io/docs/latest/commands/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "command syntax, return values, complexity, compatibility and command history"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

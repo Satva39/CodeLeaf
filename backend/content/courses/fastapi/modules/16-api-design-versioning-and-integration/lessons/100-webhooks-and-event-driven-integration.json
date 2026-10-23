@@ -1,0 +1,154 @@
+{
+  "id": "fastapi-lesson-100",
+  "slug": "webhooks-and-event-driven-integration",
+  "title": "Webhooks and Event-Driven Integration",
+  "sequence": 100,
+  "module_id": "fastapi-module-16",
+  "module_slug": "api-design-versioning-and-integration",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "fastapi-lesson-099"
+  ],
+  "previous_lesson_id": "fastapi-lesson-099",
+  "next_lesson_id": "fastapi-lesson-101",
+  "keywords": [
+    "webhooks-and-event-driven-integration",
+    "api-design-versioning-and-integration",
+    "fastapi",
+    "python",
+    "api",
+    "webhook-request-handling",
+    "signature-verification",
+    "duplicate-event-handling"
+  ],
+  "source_syllabus_number": 100,
+  "subtopics": [
+    "Webhook request handling",
+    "Signature verification",
+    "Duplicate-event handling",
+    "Retry behavior",
+    "Idempotent event processing",
+    "Event-driven architecture basics"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of webhooks and event-driven integration in a FastAPI application.",
+    "Apply or interpret one example related to webhook request handling.",
+    "Identify one limitation or failure case and describe how to verify it."
+  ],
+  "content": {
+    "intro": "This lesson covers webhooks and event-driven integration within api design, versioning, and integration. Use the supplied syllabus topics as the coverage checklist, then connect them to the worked example and the verification task.",
+    "why_it_matters": "You will use webhooks and event-driven integration to build APIs whose contracts and behavior are understandable to both clients and maintainers. The practical aim is a small, well-defined behavior with explicit assumptions, a predictable result and a testable edge case.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Webhooks and Event-Driven Integration: concept map",
+        "asset_path": "diagrams/lesson-100-concept.svg",
+        "alt_text": "Four-step flow for Webhooks and Event-Driven Integration: Webhook request handling, Signature verification, Duplicate-event handling, Retry behavior",
+        "caption": "Visual-first overview before the worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Webhooks and Event-Driven Integration matters because it is part of api design, versioning, and integration. In practice, focus on a small, well-defined behavior with explicit assumptions, a predictable result and a testable edge case. A framework feature only helps when its assumptions match the application; keep input validation, business policy and side effects distinguishable."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus coverage",
+        "items": [
+          {
+            "title": "Webhook request handling",
+            "text": "Use webhook request handling as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Signature verification",
+            "text": "Use signature verification as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Duplicate-event handling",
+            "text": "Use duplicate-event handling as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Retry behavior",
+            "text": "Use retry behavior as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Idempotent event processing",
+            "text": "Use idempotent event processing as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Event-driven architecture basics",
+            "text": "Use event-driven architecture basics as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Webhooks and Event-Driven Integration",
+        "language": "python",
+        "code": "import httpx\n\nasync def fetch_status(url: str) -> int:\n    timeout = httpx.Timeout(5.0)\n    async with httpx.AsyncClient(timeout=timeout) as client:\n        response = await client.get(url)\n        response.raise_for_status()\n        return response.status_code",
+        "expected_output": "For a reachable URL, returns the HTTP status code; timeout or non-2xx errors raise an exception.",
+        "run_instructions": "Call only a trusted test endpoint; always configure timeouts and handle httpx exceptions.",
+        "reset_steps": "For read-only examples, no reset is needed. For any example that writes state, use a disposable local database/test fixture; record the starting state and clean up only lab data. Never use production credentials or real personal data.",
+        "execution_mode": "human-review",
+        "limitations": "This code is inspectable lesson material, not executed by CodeLeaf. Run it only in a local virtual environment or a separately isolated runner with resource/time/network limits. Security examples are sketches, not complete production authentication or authorization systems."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to cover “Webhook request handling”. Write down the expected success result and one invalid, missing, duplicate, timeout or permission-boundary case that matters for this topic."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-100-questions.json"
+  },
+  "task": "Create a small reviewable artifact for “Webhooks and Event-Driven Integration”: explain its goal, cover the listed subtopics, show an example with expected result, then include one edge case and how you would verify it.",
+  "hints": [
+    "Start with “Webhook request handling” and state the required inputs, output and assumptions.",
+    "Change one thing at a time; check the official reference and capture the actual response/error instead of guessing.",
+    "Include a negative/edge-case check and document which behavior remains untested."
+  ],
+  "expected_output": "A reviewable example or design note for Webhooks and Event-Driven Integration, covering the PDF subtopics, expected behavior and at least one verification check.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Copying a code fragment without checking its assumptions.",
+      "why": "Installed versions, imported types, application structure and external services affect behavior.",
+      "fix": "State assumptions; check the versioned official docs; run a minimal local test and add one failure case."
+    },
+    {
+      "problem": "Treating one happy-path response as proof of correctness.",
+      "why": "Invalid input, permissions, concurrency, timeouts and cleanup are not exercised by a single request.",
+      "fix": "Add focused normal and negative tests and record exact expected status/body."
+    },
+    {
+      "problem": "Running examples against production resources.",
+      "why": "Even short examples may mutate records, reveal data or affect availability.",
+      "fix": "Use synthetic inputs and a disposable environment; review security, cleanup and rollback before promotion."
+    }
+  ],
+  "summary": [
+    "Webhooks and Event-Driven Integration belongs to the broader goal of a small, well-defined behavior with explicit assumptions, a predictable result and a testable edge case.",
+    "Use the source subtopics as the completeness checklist and verify expected results rather than relying on intuition.",
+    "Examples in this course are illustrative until technically reviewed and executed on a supported local environment."
+  ],
+  "sources": [
+    {
+      "title": "FastAPI Tutorial - First Steps",
+      "url": "https://fastapi.tiangolo.com/tutorial/first-steps/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "application instance, path operations, development workflow"
+      ],
+      "source_type": "official documentation"
+    }
+  ],
+  "exercise_files": [
+    "../exercises/022-webhook-processor.json"
+  ],
+  "status": "draft",
+  "status_note": "Draft expansion from the numbered topics in FastAPI.pdf. Content structure, file references and SVGs are validated locally; code snippets and integration behavior still require technical review and targeted tests before publication."
+}

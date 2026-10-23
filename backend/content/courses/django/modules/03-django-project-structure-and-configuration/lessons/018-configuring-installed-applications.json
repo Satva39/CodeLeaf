@@ -1,0 +1,204 @@
+{
+  "id": "django-lesson-018",
+  "slug": "configuring-installed-applications",
+  "title": "Configuring Installed Applications",
+  "sequence": 18,
+  "module_id": "django-module-03",
+  "module_slug": "django-project-structure-and-configuration",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "optional-specialization",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "django-lesson-017"
+  ],
+  "previous_lesson_id": "django-lesson-017",
+  "next_lesson_id": "django-lesson-019",
+  "keywords": [
+    "configuring-installed-applications",
+    "django-project-structure-and-configuration",
+    "django",
+    "the-installed-apps-setting",
+    "djangos-built-in-applications",
+    "adding-local-applications",
+    "registering-third-party-packages",
+    "application-configuration-classes"
+  ],
+  "source_syllabus_number": 18,
+  "subtopics": [
+    "The INSTALLED_APPS setting",
+    "Django's built-in applications",
+    "Adding local applications",
+    "Registering third-party packages",
+    "Application configuration classes"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of configuring installed applications and at least two listed subtopics.",
+    "Interpret the configuring installed applications example and predict its expected result.",
+    "Choose a verification step and identify one version, security, data, or troubleshooting consideration."
+  ],
+  "content": {
+    "intro": "Learn configuring installed applications through a compact visual, an inspectable Django example, and a practical verification task.",
+    "why_it_matters": "Configuring Installed Applications matters because a Django project has to behave predictably across requests, database state, configuration, and deployments. Understanding this piece makes the surrounding application easier to test, maintain, and secure.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Visual guide: Configuring Installed Applications",
+        "asset_path": "diagrams/module-03-overview.svg",
+        "alt_text": "Overview visual for module 3, Django Project Structure and Configuration; use it as a roadmap for the lesson topic Configuring Installed Applications.",
+        "caption": "Use this visual to connect Configuring Installed Applications to the broader flow; it is an overview, not a substitute for the worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "This lesson examines configuring installed applications as part of django project structure and configuration. The objective is to understand the behavior, connect it to the listed subtopics, and verify it with a small example rather than relying on memorized syntax."
+      },
+      {
+        "type": "paragraph",
+        "title": "What to cover",
+        "text": "The source syllabus for this lesson names: The INSTALLED_APPS setting; Django's built-in applications; Adding local applications; Registering third-party packages; Application configuration classes. Keep these distinct concepts together: know what each item does, when it applies, and what assumption must be verified in your project."
+      },
+      {
+        "type": "list",
+        "title": "Lesson concepts and practical notes",
+        "items": [
+          {
+            "title": "The INSTALLED_APPS setting",
+            "text": "`INSTALLED_APPS` activates Django apps and their models, templates, admin registrations, and app configuration. Add the app config or package in accordance with its documentation."
+          },
+          {
+            "title": "Django's built-in applications",
+            "text": "For Django's built-in applications, identify the Django component responsible, the inputs and outputs it owns, and the boundary conditions that matter. Use the accompanying example as a starting point, verify it with the official versioned documentation, and record one test demonstrating expected behavior."
+          },
+          {
+            "title": "Adding local applications",
+            "text": "For Adding local applications, identify the Django component responsible, the inputs and outputs it owns, and the boundary conditions that matter. Use the accompanying example as a starting point, verify it with the official versioned documentation, and record one test demonstrating expected behavior."
+          },
+          {
+            "title": "Registering third-party packages",
+            "text": "For Registering third-party packages, identify the Django component responsible, the inputs and outputs it owns, and the boundary conditions that matter. Use the accompanying example as a starting point, verify it with the official versioned documentation, and record one test demonstrating expected behavior."
+          },
+          {
+            "title": "Application configuration classes",
+            "text": "Configuration for Application configuration classes should be explicit, environment-aware, and validated before serving requests. Record defaults and deploy-specific values, keep secrets outside committed content, and test the setting that changes behavior."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Configuring Installed Applications",
+        "language": "python",
+        "code": "INSTALLED_APPS = [\n    \"django.contrib.admin\",\n    \"django.contrib.auth\",\n    \"catalog.apps.CatalogConfig\",\n]",
+        "expected_output": "The app config class registers the local app in the configured project.",
+        "execution_mode": "static-validation",
+        "run_instructions": "Open a local project using the documented Django 6.1-compatible Python environment. If this snippet depends on model names, URL configuration, settings, or an optional package, add those prerequisites before running it. Otherwise inspect it as a static example. CodeLeaf browser preview does not execute Django/Python server code.",
+        "troubleshooting": "The local module path must match the actual app package; retain Django’s required built-in apps and middleware."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "First identify the input and the responsible Django component. Next trace how the example moves through “Configuring Installed Applications” and the related concept “The INSTALLED_APPS setting”. Predict the result before running or inspecting it. Finally compare the observed behavior with the expected result and the cited official documentation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Change one input or configuration choice related to The INSTALLED_APPS setting. Write down the expected outcome, test one normal case and one invalid or boundary case, then record what changed. Do not add real credentials or sensitive production data."
+      },
+      {
+        "type": "paragraph",
+        "title": "Common mistakes and fixes",
+        "text": "Common pitfalls include skipping a required configuration/import, copying a fragment without its model or URL context, trusting client input, or treating a development-only behavior as production-ready. Check the earliest failing assumption, consult the version-specific docs, and add a regression test for the failure you found."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to describe configuring installed applications, explain the listed topics, inspect the example, and choose an appropriate verification step. Keep the scope and version caveat visible when sharing your solution."
+      }
+    ],
+    "execution_mode": "static-validation",
+    "expected_result": "The app config class registers the local app in the configured project.",
+    "run_instructions": "Use an isolated local project and synthetic data. Follow the code block instructions; setup-dependent fragments must be integrated into the relevant app. Static examples can be reviewed without execution.",
+    "troubleshooting": [
+      "The local module path must match the actual app package; retain Django’s required built-in apps and middleware.",
+      "Confirm the active Python virtual environment, settings module, app registration, URL routing, dependencies, and database migrations before debugging application behavior."
+    ],
+    "reset_steps": "Reset only local practice data or recreate the disposable development database as documented for your project. Never delete production data or migration history to reset an exercise.",
+    "try_it_yourself": "Apply The INSTALLED_APPS setting to a small local example, then record a normal case, an invalid/boundary case, and the expected versus observed result.",
+    "progressive_hints": [
+      "Identify which Django component owns this behavior.",
+      "Trace a single request or object through the example before adding more features.",
+      "Use the relevant linked official documentation and a test for the failure case."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Copying a framework fragment without its imports, configuration, model, or URL context.",
+        "why": "The snippet may be incomplete when separated from a Django project.",
+        "fix": "Use the stated prerequisites and run the relevant management check or focused test."
+      },
+      {
+        "problem": "Trusting input or relying only on a happy-path example.",
+        "why": "Invalid values, unauthorized requests, or concurrent activity can violate assumptions.",
+        "fix": "Validate on the server and add a negative or boundary test."
+      },
+      {
+        "problem": "Treating the development sample as production-ready.",
+        "why": "Production hosting, secrets, storage, monitoring and resource limits differ from local use.",
+        "fix": "Follow the current deployment/security references and document untested areas."
+      }
+    ],
+    "recap": "Configuring Installed Applications connects The INSTALLED_APPS setting; Django's built-in applications; Adding local applications; Registering third-party packages; Application configuration classes. Verify behavior in your project and keep any version-specific assumption documented.",
+    "knowledge_check_file": "exams/question-files/lesson-018-questions.json",
+    "content_review_status": "draft",
+    "accessibility_notes": "Use descriptive headings, meaningful labels/alt text, keyboard-accessible interactions, and text explanations alongside the diagram. Never rely on color alone.",
+    "version_notes": "Examples target Django 6.1 concepts and must be checked against the installed supported patch release. Optional third-party integrations are labelled separately; snippets with dependencies are not claimed to have been executed.",
+    "source_syllabus_topics_reviewed": true,
+    "topic_explanations_count": 5,
+    "run_mode": "static-validation",
+    "task": "Apply The INSTALLED_APPS setting to a small local example, then record a normal case, an invalid/boundary case, and the expected versus observed result.",
+    "task_acceptance_criteria": [
+      "Record a predicted result before running or inspecting the example.",
+      "Include one normal case and one invalid or boundary case.",
+      "State the Python/Django version and verification method used."
+    ],
+    "hints": [
+      "Identify which Django component owns this behavior.",
+      "Trace a single request or object through the example before adding more features.",
+      "Use the relevant linked official documentation and a test for the failure case."
+    ],
+    "solution_notes": "Suggested approach: identify the responsible Django component, keep input validation and authorization at the server boundary where relevant, then verify configuring installed applications with a focused test. This is a learning hint, not a claim that code was executed.",
+    "summary": [
+      "Configuring Installed Applications is part of django project structure and configuration and should be understood alongside its listed subtopics.",
+      "The worked example is a starting point; review its prerequisites and version notes before local execution.",
+      "Verify the expected behavior with normal and failure cases and keep the result reproducible."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "django-install",
+      "title": "Installing Django",
+      "url": "https://docs.djangoproject.com/en/6.1/intro/install/",
+      "publisher": "Django Software Foundation",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Python versions",
+        "virtual environments",
+        "pip installation"
+      ]
+    },
+    {
+      "id": "django-tutorial",
+      "title": "Writing your first Django app",
+      "url": "https://docs.djangoproject.com/en/6.1/intro/tutorial01/",
+      "publisher": "Django Software Foundation",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "project setup",
+        "runserver",
+        "URL configuration"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Django curriculum; pending Django-specialist and instructional review before publication."
+}

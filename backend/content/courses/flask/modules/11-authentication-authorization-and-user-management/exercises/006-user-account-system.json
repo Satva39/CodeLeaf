@@ -1,0 +1,57 @@
+{
+  "id": "flask-exercise-006",
+  "slug": "user-account-system",
+  "title": "User Account System",
+  "type": "practical",
+  "lesson_id": "flask-lesson-118",
+  "module_id": "flask-module-11",
+  "difficulty": "intermediate",
+  "sequence": 1,
+  "prompt": "Implement a local demonstration of registration, password hashing, login/logout state, protected routes and tests for unauthenticated access. Use synthetic accounts only; do not collect real credentials.\n\nSubmission: provide the implementation or design, a relevant test, expected outputs, one failure/boundary case, and version/runtime notes. Flask server code is not executed inside the CodeLeaf browser preview; local verification or human review is required.",
+  "objective": "User Account System",
+  "target_skills": [
+    "password hashing",
+    "sessions",
+    "authentication",
+    "authorization",
+    "permission tests"
+  ],
+  "starter": {
+    "language": "python",
+    "content": "from werkzeug.security import generate_password_hash, check_password_hash\n\n# Add a user model and authentication workflows.",
+    "code": "from werkzeug.security import generate_password_hash, check_password_hash\n\n# Add a user model and authentication workflows."
+  },
+  "expected_output": "Passwords are stored as hashes; a signed-in session can access a protected page; anonymous and unauthorized requests are denied safely.",
+  "public_tests": [
+    {
+      "name": "Static concept smoke check",
+      "required_strings": [
+        "generate_password_hash",
+        "check_password_hash"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Passwords are stored as hashes; a signed-in session can access a protected page; anonymous and unauthorized requests are denied safely.",
+    "Document setup/run steps and mark whether verification was static, local, or human-reviewed.",
+    "Do not include private credentials or use real personal data.",
+    "Include a negative/boundary case and explain the expected status/result."
+  ],
+  "hints": [
+    "Never store plaintext passwords.",
+    "Authentication checks identity; authorization checks whether the identity can perform an action.",
+    "Test login, logout, expired/absent sessions, and attempts to access another user’s data."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "generate_password_hash",
+      "check_password_hash"
+    ]
+  },
+  "grading_method": "Static required-string smoke check plus human review of implementation correctness, tests, validation/security boundaries and reproducibility. The platform does not execute arbitrary Python/Flask code.",
+  "retry_policy": "Retries are allowed after reviewing feedback; the platform backend controls its uniform reward and idempotency rules.",
+  "solution_file": "../../../solutions/exercises/006-user-account-system-solution.json",
+  "status": "draft",
+  "status_note": "Practice assignment mapped to the supplied Flask PDF. Needs subject-matter review before publication."
+}

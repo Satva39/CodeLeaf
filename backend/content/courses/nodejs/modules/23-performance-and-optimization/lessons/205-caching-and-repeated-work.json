@@ -1,0 +1,160 @@
+{
+  "id": "nodejs-lesson-205",
+  "slug": "caching-and-repeated-work",
+  "title": "Caching and Repeated Work",
+  "sequence": 205,
+  "module_id": "nodejs-module-23",
+  "module_slug": "performance-and-optimization",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "nodejs-lesson-204"
+  ],
+  "previous_lesson_id": "nodejs-lesson-204",
+  "next_lesson_id": "nodejs-lesson-206",
+  "keywords": [
+    "Caching and Repeated Work",
+    "Cache keys",
+    "Cache expiration",
+    "Invalidation",
+    "Memory bounds",
+    "Node.js",
+    "JavaScript runtime"
+  ],
+  "source_syllabus_number": 205,
+  "subtopics": [
+    "Cache keys",
+    "Cache expiration",
+    "Invalidation",
+    "Memory bounds",
+    "Distributed-cache trade-offs"
+  ],
+  "learning_outcomes": [
+    "Describe Cache keys and explain how it relates to Caching and Repeated Work.",
+    "Demonstrate Cache expiration in a small Node.js example and predict the observable result.",
+    "Test a failure, boundary, lifecycle, or version-compatibility case involving Invalidation."
+  ],
+  "content": {
+    "intro": "Caching and Repeated Work is part of performance and optimization. This lesson connects Cache keys, Cache expiration, Invalidation to a concrete Node.js example. Focus on the behavior you can observe, the assumptions the API makes, and one failure or boundary case.",
+    "why_it_matters": "Performance work starts with a representative measurement and a profile, not with guesswork or isolated microbenchmarks. Record a baseline, repeat the workload, report runtime/version and variance, and compare correctness as well as speed.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Caching and Repeated Work: concept map",
+        "asset_path": "diagrams/lessons/lesson-205-caching-and-repeated-work.svg",
+        "alt_text": "Concept map for lesson 205: Caching and Repeated Work. It shows representative syllabus concepts in a Concept → Example → Verification sequence.",
+        "caption": "Read the three labeled cards from left to right; the lesson steps connect the concept to a practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Performance work starts with a representative measurement and a profile, not with guesswork or isolated microbenchmarks. Measure latency, throughput, event-loop delay, CPU, and memory under representative workloads before optimizing."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Cache keys",
+            "text": "For Cache keys, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Cache expiration",
+            "text": "For Cache expiration, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Invalidation",
+            "text": "For Invalidation, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Memory bounds",
+            "text": "For Memory bounds, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Distributed-cache trade-offs",
+            "text": "For Distributed-cache trade-offs, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "const memo = new Map();\nfunction square(n) { if (!memo.has(n)) memo.set(n, n * n); return memo.get(n); }\nconsole.log(square(6));",
+        "expected_output": "36; a cache needs a size/expiry and invalidation policy in long-running systems.",
+        "run_instructions": "Inspect this JavaScript in a local Node.js project. It is a static-validation teaching example: CodeLeaf does not run this arbitrary example in the API process. If it needs a package, file, server, database, or external service, provision that dependency in a separate local project and follow its official setup instructions. Run with `node example.mjs` when the example is self-contained, or adapt the required imports/inputs first.",
+        "reset_steps": "Restore the starting snippet and inputs. Repeat with one different valid value and one invalid, missing, empty, or failure input appropriate to the example.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Start with the code shown above. Predict the result before running it, then verify it against: true; the measured duration depends on the machine and runtime. Change one input or simulate one failure and describe how the behavior should change. Record a baseline, repeat the workload, report runtime/version and variance, and compare correctness as well as speed."
+      },
+      {
+        "type": "callout",
+        "title": "Runtime and safety note",
+        "text": "Teaching baseline: use a supported Node.js LTS release (Node.js 24 LTS as checked on 2026-10-13). The official releases page lists Node.js 26 as Current and Node.js 24/22 as LTS. Some advanced APIs, flags, permission behavior, embedded SQLite capabilities, module-loader hooks, and TypeScript integration are version-sensitive; verify the exact installed runtime. The Node.js 22 runtime available in the build-check environment is used only for syntax checks. This example is for learning and static validation, not for executing untrusted learner code inside CodeLeaf."
+      }
+    ],
+    "task": "Create or inspect a small Node.js example for Caching and Repeated Work. Include at least one listed subtopic, document the expected result, and verify a normal case plus a boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates a named lesson concept, rather than only mentioning the title.",
+      "Expected output or observable behavior is documented and reproducible.",
+      "At least one invalid, empty, timeout, resource, or failure case is handled or explained.",
+      "The solution does not put secrets in source code and does not execute untrusted code inside the production API process."
+    ],
+    "hints": [
+      "Start with Cache keys; identify the input, operation, and observable result.",
+      "Run the smallest relevant example in the selected Node.js release before adding frameworks or external services.",
+      "Test one failure or boundary case for Cache expiration, then explain why the outcome is expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Optimizing before measuring or treating a single benchmark run as a universal conclusion.",
+        "why": "The code may pass a simple demonstration yet fail with real inputs, resource limits, timing, or runtime differences.",
+        "fix": "Use reproducible workloads, profiler evidence, multiple runs, and regression thresholds."
+      },
+      {
+        "problem": "Copying a snippet without checking its runtime, dependencies, input assumptions, or cleanup behavior.",
+        "why": "Node.js APIs and surrounding ecosystem tools have explicit version, trust, and resource boundaries.",
+        "fix": "State the environment and dependency assumptions, then rerun the example from a clean starting state."
+      }
+    ],
+    "summary": [
+      "For Cache keys, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone.",
+      "This lesson covers: Cache keys, Cache expiration, Invalidation, Memory bounds.",
+      "Verify both normal and failure behavior, and document runtime, dependency, and resource assumptions."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-205-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Diagnostics",
+      "url": "https://nodejs.org/en/learn/diagnostics",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "debugging",
+        "performance diagnostics",
+        "memory analysis"
+      ]
+    },
+    {
+      "title": "Learn Node.js",
+      "url": "https://nodejs.org/learn",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "getting started",
+        "CLI",
+        "HTTP"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Source-derived syllabus; educational draft requiring technical/instructional review before publication."
+}

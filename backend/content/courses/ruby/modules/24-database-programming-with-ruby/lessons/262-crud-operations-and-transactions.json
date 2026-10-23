@@ -1,0 +1,155 @@
+{
+  "id": "ruby-lesson-262",
+  "slug": "crud-operations-and-transactions",
+  "title": "CRUD Operations and Transactions",
+  "sequence": 262,
+  "module_id": "ruby-module-24",
+  "module_slug": "database-programming-with-ruby",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "application-specialization",
+  "estimated_minutes": 14,
+  "prerequisites": [],
+  "previous_lesson_id": "ruby-lesson-261",
+  "next_lesson_id": "ruby-lesson-263",
+  "keywords": [
+    "crud-operations-and-transactions",
+    "database-programming-with-ruby",
+    "ruby",
+    "creating-and-reading-records",
+    "updating-and-deleting-data",
+    "transaction-boundaries",
+    "rollback-and-consistency"
+  ],
+  "source_syllabus_number": 262,
+  "subtopics": [
+    "Creating and reading records",
+    "Updating and deleting data",
+    "Transaction boundaries",
+    "Rollback and consistency"
+  ],
+  "learning_outcomes": [
+    "Explain the role of crud operations and transactions in a Ruby program and name the key rule involved.",
+    "Apply crud operations and transactions in a small example and predict its result before running it.",
+    "Identify one boundary or failure case related to rollback and consistency and verify the intended behavior."
+  ],
+  "content": {
+    "intro": "Learn CRUD Operations and Transactions through a visual model, a minimal Ruby example, and a practical check.",
+    "why_it_matters": "Understanding crud operations and transactions helps you write code that is easier to explain, test, and maintain. It also helps separate Ruby language guarantees from runtime assumptions, dependency behavior, and application-specific rules.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: CRUD Operations and Transactions",
+        "asset_path": "diagrams/lesson-262-crud-operations-and-transactions.svg",
+        "alt_text": "Three-stage concept diagram for CRUD Operations and Transactions.",
+        "caption": "Use this diagram to plan a small example, then verify exact behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "CRUD Operations and Transactions helps you reason about creating and reading records. In Ruby, prefer a small example whose inputs and expected result are easy to explain. This lesson connects the syllabus topic to practical code and highlights where assumptions or edge cases matter."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to think about it",
+        "text": "Begin by identifying the key rule: Creating and reading records. Then connect it to Updating and deleting data. The remaining syllabus points—Transaction boundaries, Rollback and consistency—are useful checks before applying this in a larger project."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to cover",
+        "items": [
+          {
+            "title": "Creating and reading records",
+            "text": "Explain how creating and reading records affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Updating and deleting data",
+            "text": "Explain how updating and deleting data affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Transaction boundaries",
+            "text": "Explain how transaction boundaries affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Rollback and consistency",
+            "text": "Explain how rollback and consistency affects the example, the public interface, or the behavior learners need to verify."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: CRUD Operations and Transactions",
+        "language": "ruby",
+        "code": "require \"sqlite3\"\ndb = SQLite3::Database.new(\":memory:\")\ndb.execute(\"CREATE TABLE stock (sku TEXT PRIMARY KEY, quantity INTEGER)\")\ndb.transaction { db.execute(\"INSERT INTO stock VALUES (?, ?)\", [\"PEN\", 3]) }\nputs db.get_first_value(\"SELECT quantity FROM stock WHERE sku = ?\", \"PEN\")\ndb.close",
+        "expected_output": "3",
+        "execution_mode": "server-runner",
+        "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+        "dependencies": "External gem required: sqlite3; run only in a local or isolated environment.",
+        "notes": "Local Ruby execution is required. CodeLeaf’s existing playground only previews HTML/CSS/JavaScript; do not run arbitrary Ruby inside the FastAPI process."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming the happy path is enough",
+            "text": "Test an empty value, a boundary value, and one invalid value before depending on the behavior."
+          },
+          {
+            "title": "Treating an example as a universal rule",
+            "text": "Check Ruby version, runtime implementation, and third-party library documentation when behavior is version-sensitive."
+          },
+          {
+            "title": "Mixing too many concerns",
+            "text": "Separate input parsing, domain behavior, and output so each piece is easier to test."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Run the example as written, compare it with the expected result, and explain why each line supports crud operations and transactions. Next change one input or condition and predict the result before running it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second example for crud operations and transactions using a different input. Add one edge case from the syllabus list (Rollback and consistency), state the expected behavior, and write a small test or manual check that would catch a regression."
+      },
+      {
+        "type": "paragraph",
+        "title": "Run, troubleshoot, and reset",
+        "text": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed. If the command fails, confirm `ruby --version`, inspect the full error message, and verify that required standard-library or gem dependencies are installed. Reset by removing temporary files created by your experiment and returning the code to the smallest reproducible example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain crud operations and transactions, identify its place in database programming with ruby, run a focused example, and verify an important boundary. Revisit the linked exercise if this is a core topic; advanced runtime or framework examples remain draft until reviewed in a suitable environment."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-262-questions.json",
+    "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+    "reset_steps": [
+      "Restore the original minimal example before trying another variation.",
+      "Remove only temporary sample data created for the lesson.",
+      "Keep credentials and personal data out of logs, fixtures, and screenshots."
+    ],
+    "guided_example": "Predict the output, run the example, and explain the relationship between creating and reading records and updating and deleting data.",
+    "try_it_yourself": "Create one variation of crud operations and transactions, test a normal input and one boundary input, and note any version or dependency assumptions.",
+    "progressive_hints": [
+      "Write down the input and output contract first.",
+      "Reduce the task to one relevant Ruby method or construct.",
+      "Add the boundary case and verify it independently."
+    ],
+    "accessibility_notes": "The diagram includes a text alternative and the lesson explains the flow in prose. Do not use color alone to infer the correct sequence.",
+    "execution_mode": "server-runner",
+    "execution_note": "CodeLeaf does not currently provide an isolated Ruby runner. Run Ruby examples locally; a production runner needs a separate sandbox with time, memory, filesystem, and network limits."
+  },
+  "exercise_files": [],
+  "sources": [
+    "https://docs.ruby-lang.org/en/4.0/",
+    "https://www.ruby-lang.org/en/documentation/"
+  ],
+  "status": "draft",
+  "status_note": "Original lesson authored from the listed PDF syllabus topics; requires technical and editorial review before publication."
+}

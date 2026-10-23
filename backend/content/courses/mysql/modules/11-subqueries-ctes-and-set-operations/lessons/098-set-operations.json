@@ -1,0 +1,192 @@
+{
+  "id": "mysql-lesson-098",
+  "slug": "set-operations",
+  "title": "Set Operations",
+  "sequence": 98,
+  "module_id": "mysql-module-11",
+  "module_slug": "subqueries-ctes-and-set-operations",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "mysql-lesson-097"
+  ],
+  "previous_lesson_id": "mysql-lesson-097",
+  "next_lesson_id": "mysql-lesson-099",
+  "keywords": [
+    "set-operations",
+    "subqueries-ctes-and-set-operations",
+    "mysql",
+    "database",
+    "union-and-union-all",
+    "intersect-and-except-where-supported-by-the-chosen-version",
+    "set-operation-ordering-and-type-compatibility"
+  ],
+  "source_syllabus_number": 98,
+  "source_module_number": 11,
+  "subtopics": [
+    "UNION and UNION ALL",
+    "INTERSECT and EXCEPT , where supported by the chosen version",
+    "Set-operation ordering and type compatibility"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of set operations in MySQL and when it is useful.",
+    "Interpret or adapt the supplied sql example and predict its expected behavior.",
+    "Verify one relevant boundary, safety requirement, or version-specific assumption."
+  ],
+  "content": {
+    "intro": "Learn set operations in the context of subqueries, ctes, and set operations. This lesson covers the supplied syllabus topic, demonstrates a representative MySQL example, and finishes with a verification task.",
+    "why_it_matters": "Subqueries, common table expressions, and set operations organize multi-step questions. Make the expected cardinality and type compatibility explicit, and ensure recursive queries have a termination condition.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Set Operations",
+        "asset_path": "diagrams/lesson-098-set-operations.svg",
+        "alt_text": "Concept flow for Set Operations: understand the MySQL concept, inspect the example, verify its behavior, and apply it safely.",
+        "caption": "Set Operations: connect the concept to a concrete example, verify the result, and apply it in a disposable lab."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Subqueries, common table expressions, and set operations organize multi-step questions. Make the expected cardinality and type compatibility explicit, and ensure recursive queries have a termination condition."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics to master",
+        "items": [
+          {
+            "title": "UNION and UNION ALL",
+            "text": "Build a small row set, predict row inclusion/order/cardinality, then test duplicate, NULL, tie, and boundary cases where applicable."
+          },
+          {
+            "title": "INTERSECT and EXCEPT , where supported by the chosen version",
+            "text": "Build a small row set, predict row inclusion/order/cardinality, then test duplicate, NULL, tie, and boundary cases where applicable."
+          },
+          {
+            "title": "Set-operation ordering and type compatibility",
+            "text": "Explain the role of Set-operation ordering and type compatibility, use a small example or inspection step, and record one limitation or boundary condition."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Apply the idea",
+        "text": "Solve the question with a small subquery or named query result, then compare its output with a second formulation. Write down the expected result before running the snippet. Compare actual output with the reference, then try one normal case and one edge case."
+      },
+      {
+        "type": "code",
+        "language": "sql",
+        "execution_mode": "static-validation",
+        "code": "SELECT 1 AS item_id UNION SELECT 2 UNION ALL SELECT 2;",
+        "expected_output": "UNION removes duplicates within its result; UNION ALL preserves duplicate rows. Result ordering is not guaranteed without ORDER BY.",
+        "run_instructions": "Run in a dedicated local MySQL lab using the stated MySQL release track. For schema-changing or administrative snippets, inspect every statement and use only a disposable schema; the in-page editor shows reference output and does not execute SQL.",
+        "reset_steps": "Remove only objects created for this lesson from the disposable schema/session, or restore the lab snapshot. Never run reset or destructive commands against production."
+      },
+      {
+        "type": "callout",
+        "title": "Version, security, and safety note",
+        "text": "Use MySQL 9.7 LTS documentation as the default stable-track reference; verify behavior against MySQL 26.7 documentation when relevant and label any MySQL 8.4-specific fact. Examples are static references, not executed by CodeLeaf. Run mutation, privilege, replication, backup, and recovery examples only in an isolated lab."
+      }
+    ],
+    "task": "Try it yourself: Solve the question with a small subquery or named query result, then compare its output with a second formulation. Submit the query, result or decision record, plus one edge case and one verification step.",
+    "task_acceptance_criteria": [
+      "Address the core behavior in set operations using a MySQL-specific example or a clear operational plan.",
+      "State the expected result and demonstrate how it would be verified in the selected environment.",
+      "Identify one relevant edge case, permissions boundary, operational risk, or version assumption."
+    ],
+    "hints": [
+      "Start by identifying the question that set operations needs to answer.",
+      "Reduce the example to the smallest meaningful row set or operational change, then write down the result you expect.",
+      "Check the applicable official manual and version note before treating the reference output as guaranteed."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming that a sample result proves the whole design is correct.",
+        "why": "Edge cases such as NULLs, duplicate matches, concurrency, privileges, or version differences may change behavior.",
+        "fix": "Add a targeted boundary case and record the server version, schema and expected result."
+      },
+      {
+        "problem": "Running a mutating or administrative example in the wrong environment.",
+        "why": "DDL, data changes, access grants, and recovery commands may have persistent impact.",
+        "fix": "Use a disposable lab, preview targets and permissions, and write a reset/recovery plan before executing."
+      }
+    ],
+    "summary": [
+      "Subqueries, common table expressions, and set operations organize multi-step questions. Make the expected cardinality and type compatibility explicit, and ensure recursive queries have a termination condition.",
+      "Use the PDF subtopics for set operations as a checklist, then validate behavior in the chosen MySQL version.",
+      "Keep the example, assumptions, expected output, and recovery steps together."
+    ],
+    "references": [
+      {
+        "title": "MySQL 9.7 Reference Manual",
+        "url": "https://dev.mysql.com/doc/refman/9.7/en/",
+        "publisher": "Oracle / MySQL",
+        "checked_on": "2026-10-12",
+        "supports": [
+          "core SQL syntax",
+          "data types",
+          "DDL and DML",
+          "query optimization",
+          "security",
+          "administration"
+        ]
+      },
+      {
+        "title": "MySQL SELECT Statement",
+        "url": "https://dev.mysql.com/doc/refman/9.7/en/select.html",
+        "publisher": "Oracle / MySQL",
+        "checked_on": "2026-10-12",
+        "supports": [
+          "SELECT",
+          "joins",
+          "filtering",
+          "sorting",
+          "grouping",
+          "CTEs",
+          "set operations"
+        ]
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-098-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "Draft authored from the supplied MySQL curriculum outline. Code samples require technical review and do not execute in the browser."
+  },
+  "exercise_files": [
+    "../exercises/098-set-operations-practice.json"
+  ],
+  "sources": [
+    {
+      "title": "MySQL 9.7 Reference Manual",
+      "url": "https://dev.mysql.com/doc/refman/9.7/en/",
+      "publisher": "Oracle / MySQL",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "core SQL syntax",
+        "data types",
+        "DDL and DML",
+        "query optimization",
+        "security",
+        "administration"
+      ]
+    },
+    {
+      "title": "MySQL SELECT Statement",
+      "url": "https://dev.mysql.com/doc/refman/9.7/en/select.html",
+      "publisher": "Oracle / MySQL",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "SELECT",
+        "joins",
+        "filtering",
+        "sorting",
+        "grouping",
+        "CTEs",
+        "set operations"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft: verify the lesson, example, expected output, references, and version notes before publishing."
+}

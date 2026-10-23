@@ -1,0 +1,134 @@
+{
+  "id": "github-actions-project-06",
+  "slug": "container-build-and-release-pipeline",
+  "title": "Container Build and Release Pipeline",
+  "sequence": 6,
+  "tier": "intermediate",
+  "objective": "Test an application, build its container image, publish it, and prepare a traceable release.",
+  "prerequisite_lesson_ids": [
+    "github-actions-lesson-078",
+    "github-actions-lesson-079",
+    "github-actions-lesson-134"
+  ],
+  "recommended_lesson_range": [
+    78,
+    134
+  ],
+  "skills": [
+    "Building Continuous Integration Pipelines",
+    "Packages, Containers, and Release Ecosystems",
+    "Performance, Reliability, and Cost Management",
+    "workflow YAML",
+    "CI/CD design",
+    "security review",
+    "testing and operations"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Test and build stages",
+      "acceptance_criteria": [
+        "Demonstrate test and build stages.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Image tags and metadata",
+      "acceptance_criteria": [
+        "Demonstrate image tags and metadata.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Registry authentication",
+      "acceptance_criteria": [
+        "Demonstrate registry authentication.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Release provenance evidence",
+      "acceptance_criteria": [
+        "Demonstrate release provenance evidence.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "contents": "# Container Build and Release Pipeline\n\nTest an application, build its container image, publish it, and prepare a traceable release.\n\n## Verification record\n\n- Trigger tested:\n- Checks that passed:\n- Failure path checked:\n- Permission review:\n- Remaining limitations:\n"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "language": "yaml",
+      "contents": "name: CI\non: [push, pull_request]\npermissions:\n  contents: read\njobs:\n  checks:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Repository check\n        run: test -f README.md\n"
+    }
+  ],
+  "required_features": [
+    "Test and build stages",
+    "Image tags and metadata",
+    "Registry authentication",
+    "Release provenance evidence"
+  ],
+  "stretch_features": [
+    "Add an explicit cancellation/timeout policy and test it.",
+    "Pin third-party action dependencies to verified immutable references per repository policy.",
+    "Add a troubleshooting guide with sanitized logs and a rollback or recovery plan."
+  ],
+  "tests": [
+    {
+      "name": "Required workflow evidence",
+      "mode": "human_review",
+      "criteria": [
+        "Workflow triggers match the documented intent.",
+        "Required jobs and checks actually run.",
+        "No production secret is exposed.",
+        "Permissions are limited to required operations.",
+        "Failure and recovery behavior is documented."
+      ]
+    },
+    {
+      "name": "Safe execution",
+      "mode": "human_review",
+      "criteria": [
+        "Validate in a disposable repository/environment.",
+        "Do not deploy real resources until configuration, access, and rollback are reviewed."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correct behavior and completion criteria",
+      "points": 30
+    },
+    {
+      "criterion": "Workflow design, clarity, and maintainability",
+      "points": 20
+    },
+    {
+      "criterion": "Permissions, credential handling, and trust boundaries",
+      "points": 25
+    },
+    {
+      "criterion": "Testing, failure handling, and traceable evidence",
+      "points": 15
+    },
+    {
+      "criterion": "Documentation and operational handover",
+      "points": 10
+    }
+  ],
+  "rubric_total": 100,
+  "review_method": "Human review against the rubric and recorded workflow-run evidence; local static checks do not replace a live GitHub Actions run.",
+  "reference_solution_file": "projects/solutions/006-container-build-and-release-pipeline-solution.json",
+  "status": "draft"
+}

@@ -1,0 +1,152 @@
+{
+  "id": "redis-lesson-054",
+  "slug": "retrieving-sorted-set-ranges",
+  "title": "Retrieving Sorted Set Ranges",
+  "sequence": 54,
+  "module_id": "redis-module-08",
+  "module_slug": "redis-sorted-sets-and-ranking-systems",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-053"
+  ],
+  "previous_lesson_id": "redis-lesson-053",
+  "next_lesson_id": "redis-lesson-055",
+  "keywords": [
+    "retrieving-sorted-set-ranges",
+    "zrange",
+    "zrangebyscore-as-a-legacy-command",
+    "score-based-and-rank-based-retrieval",
+    "reverse-ordering",
+    "zrank-and-zrevrank",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 54,
+  "subtopics": [
+    "ZRANGE",
+    "ZRANGEBYSCORE as a legacy command",
+    "Score-based and rank-based retrieval",
+    "Reverse ordering",
+    "ZRANK and ZREVRANK"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Retrieving Sorted Set Ranges and distinguish it from a related Redis concept.",
+    "Apply or trace Retrieving Sorted Set Ranges in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Retrieving Sorted Set Ranges and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Retrieving Sorted Set Ranges in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Retrieving Sorted Set Ranges helps implement rank members by score while handling updates, pagination, ties, and range semantics. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Retrieving Sorted Set Ranges",
+        "asset_path": "diagrams/lesson-054-retrieving-sorted-set-ranges.svg",
+        "alt_text": "Concept diagram for Retrieving Sorted Set Ranges, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Retrieving Sorted Set Ranges; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Retrieving Sorted Set Ranges helps implement rank members by score while handling updates, pagination, ties, and range semantics. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Retrieving Sorted Set Ranges, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "ZRANGE",
+            "text": "Connect ZRANGE to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "ZRANGEBYSCORE as a legacy command",
+            "text": "Connect ZRANGEBYSCORE as a legacy command to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Score-based and rank-based retrieval",
+            "text": "Connect Score-based and rank-based retrieval to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Reverse ordering",
+            "text": "Connect Reverse ordering to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "ZRANK and ZREVRANK",
+            "text": "Connect ZRANK and ZREVRANK to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Retrieving Sorted Set Ranges",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "SADD product:tags redis database cache\nSISMEMBER product:tags cache\nSMEMBERS product:tags",
+        "expected_output": "3\n1\n1) \"cache\" 2) \"database\" 3) \"redis\"",
+        "run_instructions": "Set members are unique and unordered; do not depend on SMEMBERS display ordering.",
+        "reset_steps": "DEL product:tags",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Retrieving Sorted Set Ranges. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Retrieving Sorted Set Ranges in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Retrieving Sorted Set Ranges.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "3\n1\n1) \"cache\" 2) \"database\" 3) \"redis\"",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-054-questions.json",
+    "recap": [
+      "Retrieving Sorted Set Ranges is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Redis data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "strings, hashes, lists, sets, sorted sets, streams, geospatial indexes, bitmaps, bitfields, JSON, arrays, time series, probabilistic structures, vector sets"
+      ]
+    },
+    {
+      "title": "Compare data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/compare-data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "data-type selection and use-case trade-offs"
+      ]
+    },
+    {
+      "title": "Redis commands reference",
+      "url": "https://redis.io/docs/latest/commands/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "command syntax, return values, complexity, compatibility and command history"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

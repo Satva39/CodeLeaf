@@ -1,0 +1,222 @@
+{
+  "id": "mongodb-lesson-057",
+  "slug": "advanced-query-expressions",
+  "title": "Advanced Query Expressions",
+  "sequence": 57,
+  "module_id": "mongodb-module-06",
+  "module_slug": "mongodb-query-language-mql",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "mongodb-lesson-056"
+  ],
+  "previous_lesson_id": "mongodb-lesson-056",
+  "next_lesson_id": "mongodb-lesson-058",
+  "keywords": [
+    "advanced",
+    "query",
+    "expressions",
+    "mongodb",
+    "database"
+  ],
+  "source_syllabus_number": 57,
+  "source_module_number": 6,
+  "subtopics": [
+    "$expr",
+    "Expressions involving two fields",
+    "Regular expressions",
+    "Query collation",
+    "Type-aware filtering and comparison"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and main trade-off of advanced query expressions.",
+    "Apply advanced query expressions to a small MongoDB data or operational scenario.",
+    "Verify the expected result, one edge case, and the relevant version/deployment assumption."
+  ],
+  "content": {
+    "intro": "Learn advanced query expressions as part of MongoDB Query Language (MQL). The lesson preserves the PDF subtopics, connects them to a practical MongoDB pattern, and ends with a verification task.",
+    "why_it_matters": "Advanced Query Expressions links the database to application behavior. Reuse official driver patterns, keep the client lifecycle and connection configuration explicit, parameterize user-driven inputs through driver APIs, and test timeout and error paths.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Advanced Query Expressions",
+        "asset_path": "diagrams/lesson-057-advanced-query-expressions.svg",
+        "alt_text": "Four-step learning diagram for Advanced Query Expressions: Define target; Write filter/operation; Inspect effect; Verify edge case.",
+        "caption": "Visual guide to Advanced Query Expressions: follow the concept, action, verification and application steps."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Advanced Query Expressions links the database to application behavior. Reuse official driver patterns, keep the client lifecycle and connection configuration explicit, parameterize user-driven inputs through driver APIs, and test timeout and error paths."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics to master",
+        "items": [
+          {
+            "title": "1. $expr",
+            "text": "Be able to explain or demonstrate $expr in the context of advanced query expressions, and document the relevant design or version assumption."
+          },
+          {
+            "title": "2. Expressions involving two fields",
+            "text": "Be able to explain or demonstrate expressions involving two fields in the context of advanced query expressions, and document the relevant design or version assumption."
+          },
+          {
+            "title": "3. Regular expressions",
+            "text": "Be able to explain or demonstrate regular expressions in the context of advanced query expressions, and document the relevant design or version assumption."
+          },
+          {
+            "title": "4. Query collation",
+            "text": "Be able to explain or demonstrate query collation in the context of advanced query expressions, and document the relevant design or version assumption."
+          },
+          {
+            "title": "5. Type-aware filtering and comparison",
+            "text": "Be able to explain or demonstrate type-aware filtering and comparison in the context of advanced query expressions, and document the relevant design or version assumption."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the behavior you want, identify the collection/document shape and access pattern involved, then select the smallest MongoDB operation that expresses the requirement. Run a read-only find with the same filter first and review the returned identifiers before mutating data."
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "execution_mode": "static-validation",
+        "code": "db.products.find({ price: { $gte: 10 }, active: true }).sort({ price: 1 }).limit(10);",
+        "expected_output": "The query filters active products by price and then returns the first ten in ascending price order.",
+        "run_instructions": "CodeLeaf displays this example as a reference and does not execute a MongoDB server or arbitrary driver code in the page. Run shell examples with mongosh, or driver examples in a separately configured Node.js/Python lab, against a disposable database. Verify installed server/driver versions and deployment feature availability first. Never place credentials in source files.",
+        "reset_steps": "Use a dedicated training database and synthetic fixtures. Remove only objects created by this lesson or recreate the disposable database after confirming the target; do not run destructive/reset commands against production."
+      },
+      {
+        "type": "callout",
+        "title": "Environment and safety note",
+        "text": "All examples are teaching references, not production-ready configuration. MongoDB Atlas-specific Search, Vector Search, monitoring, backup and automation features are marked as deployment-dependent. Server, driver, shell and managed-service capabilities differ; check the official documentation that matches your target."
+      }
+    ],
+    "task": "Try it yourself: Translate a business rule into an explicit MQL filter, predict which documents match, and test nested, array, type or boundary cases relevant to the operator. Submit your choice plus the expected result/evidence and one edge case.",
+    "task_acceptance_criteria": [
+      "Demonstrate the key idea in Advanced Query Expressions.",
+      "Predict the result and state how you would verify it.",
+      "Name one boundary, risk or version/deployment assumption."
+    ],
+    "hints": [
+      "First, explain what “Advanced Query Expressions” needs to accomplish in this scenario.",
+      "Write down the data shape, filter, expected output or operational evidence before running the example.",
+      "Test one normal case and one meaningful boundary/failure case; consult the matching official reference."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using a broad or incorrect filter",
+        "why": "A filter may match more documents than expected, especially when missing fields, arrays or implicit AND conditions are involved.",
+        "fix": "Run a read-only find with the same filter first and review the returned identifiers before mutating data."
+      },
+      {
+        "problem": "Assuming a static reference result proves the environment will behave identically.",
+        "why": "MongoDB server, shell, driver, managed service and permissions can affect the available behavior.",
+        "fix": "Record the target versions and privileges, run the smallest safe test, and keep expected and actual results side by side."
+      }
+    ],
+    "summary": [
+      "Advanced Query Expressions links the database to application behavior. Reuse official driver patterns, keep the client lifecycle and connection configuration explicit, parameterize user-driven inputs through driver APIs, and test timeout and error paths.",
+      "The supplied roadmap identifies these subtopics: $expr; Expressions involving two fields; Regular expressions; Query collation; Type-aware filtering and comparison.",
+      "Use a disposable practice environment, verify the result and keep operational assumptions explicit."
+    ],
+    "references": [
+      {
+        "title": "MongoDB Manual — Complete Documentation Index",
+        "url": "https://www.mongodb.com/docs/manual/contents/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "course-wide concepts",
+          "deployment and version navigation",
+          "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+        ]
+      },
+      {
+        "title": "MongoDB CRUD Operations",
+        "url": "https://www.mongodb.com/docs/manual/crud/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "insert",
+          "find",
+          "update",
+          "replace",
+          "delete",
+          "single-document atomicity"
+        ]
+      },
+      {
+        "title": "MongoDB Query Predicates",
+        "url": "https://www.mongodb.com/docs/manual/reference/operator/query/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "query operators",
+          "arrays",
+          "nested values",
+          "logical and comparison filters"
+        ]
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-057-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "MongoDB-specific examples are reference content. A separate isolated MongoDB server/driver runtime is required for execution; questions and solutions remain protected."
+  },
+  "exercise_files": [
+    "../exercises/057-advanced-query-expressions-practice.json"
+  ],
+  "sources": [
+    {
+      "title": "MongoDB Manual — Complete Documentation Index",
+      "url": "https://www.mongodb.com/docs/manual/contents/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "course-wide concepts",
+        "deployment and version navigation",
+        "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+      ]
+    },
+    {
+      "title": "MongoDB CRUD Operations",
+      "url": "https://www.mongodb.com/docs/manual/crud/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "insert",
+        "find",
+        "update",
+        "replace",
+        "delete",
+        "single-document atomicity"
+      ]
+    },
+    {
+      "title": "MongoDB Query Predicates",
+      "url": "https://www.mongodb.com/docs/manual/reference/operator/query/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "query operators",
+        "arrays",
+        "nested values",
+        "logical and comparison filters"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson authored from the supplied MongoDB syllabus and original instructional material. Review examples against the target MongoDB release/deployment before publication."
+}

@@ -1,0 +1,158 @@
+{
+  "id": "nodejs-lesson-068",
+  "slug": "file-system-streams",
+  "title": "File-System Streams",
+  "sequence": 68,
+  "module_id": "nodejs-module-08",
+  "module_slug": "file-system-operations",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "nodejs-lesson-067"
+  ],
+  "previous_lesson_id": "nodejs-lesson-067",
+  "next_lesson_id": "nodejs-lesson-069",
+  "keywords": [
+    "File-System Streams",
+    "Reading large files",
+    "Writing large files",
+    "Piping data",
+    "Memory-efficient processing",
+    "Node.js",
+    "JavaScript runtime"
+  ],
+  "source_syllabus_number": 68,
+  "subtopics": [
+    "Reading large files",
+    "Writing large files",
+    "Piping data",
+    "Memory-efficient processing",
+    "Stream failure handling"
+  ],
+  "learning_outcomes": [
+    "Describe Reading large files and explain how it relates to File-System Streams.",
+    "Demonstrate Writing large files in a small Node.js example and predict the observable result.",
+    "Test a failure, boundary, lifecycle, or version-compatibility case involving Piping data."
+  ],
+  "content": {
+    "intro": "File-System Streams is part of file system operations. This lesson connects Reading large files, Writing large files, Piping data to a concrete Node.js example. Focus on the behavior you can observe, the assumptions the API makes, and one failure or boundary case.",
+    "why_it_matters": "Specialized APIs extend Node.js for focused workloads, but availability, stability, interoperability, and platform support must be checked. Run a small compatibility check on each supported runtime and document unsupported configurations.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "File-System Streams: concept map",
+        "asset_path": "diagrams/lessons/lesson-068-file-system-streams.svg",
+        "alt_text": "Concept map for lesson 68: File-System Streams. It shows representative syllabus concepts in a Concept → Example → Verification sequence.",
+        "caption": "Read the three labeled cards from left to right; the lesson steps connect the concept to a practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Specialized APIs extend Node.js for focused workloads, but availability, stability, interoperability, and platform support must be checked. Check the API stability label, release history, platform support, and fallback options before adopting a specialized feature."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Reading large files",
+            "text": "For Reading large files, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Writing large files",
+            "text": "For Writing large files, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Piping data",
+            "text": "For Piping data, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Memory-efficient processing",
+            "text": "For Memory-efficient processing, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Stream failure handling",
+            "text": "Streams process data incrementally. Backpressure allows a slow consumer to regulate a faster producer instead of accumulating unbounded memory."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "import { createReadStream } from 'node:fs';\nfor await (const chunk of createReadStream('./large.txt', { encoding: 'utf8' })) console.log(chunk.length);",
+        "expected_output": "Each chunk length is logged incrementally rather than loading the entire file at once.",
+        "run_instructions": "Inspect this JavaScript in a local Node.js project. It is a static-validation teaching example: CodeLeaf does not run this arbitrary example in the API process. If it needs a package, file, server, database, or external service, provision that dependency in a separate local project and follow its official setup instructions. Run with `node example.mjs` when the example is self-contained, or adapt the required imports/inputs first.",
+        "reset_steps": "Restore the starting snippet and inputs. Repeat with one different valid value and one invalid, missing, empty, or failure input appropriate to the example.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Start with the code shown above. Predict the result before running it, then verify it against: Check API stability, runtime version, and platform support before adoption. Change one input or simulate one failure and describe how the behavior should change. Run a small compatibility check on each supported runtime and document unsupported configurations."
+      },
+      {
+        "type": "callout",
+        "title": "Runtime and safety note",
+        "text": "Teaching baseline: use a supported Node.js LTS release (Node.js 24 LTS as checked on 2026-10-13). The official releases page lists Node.js 26 as Current and Node.js 24/22 as LTS. Some advanced APIs, flags, permission behavior, embedded SQLite capabilities, module-loader hooks, and TypeScript integration are version-sensitive; verify the exact installed runtime. The Node.js 22 runtime available in the build-check environment is used only for syntax checks. This example is for learning and static validation, not for executing untrusted learner code inside CodeLeaf."
+      }
+    ],
+    "task": "Create or inspect a small Node.js example for File-System Streams. Include at least one listed subtopic, document the expected result, and verify a normal case plus a boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates a named lesson concept, rather than only mentioning the title.",
+      "Expected output or observable behavior is documented and reproducible.",
+      "At least one invalid, empty, timeout, resource, or failure case is handled or explained.",
+      "The solution does not put secrets in source code and does not execute untrusted code inside the production API process."
+    ],
+    "hints": [
+      "Start with Reading large files; identify the input, operation, and observable result.",
+      "Run the smallest relevant example in the selected Node.js release before adding frameworks or external services.",
+      "Test one failure or boundary case for Writing large files, then explain why the outcome is expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming a newer or experimental API is available in every supported Node.js line.",
+        "why": "The code may pass a simple demonstration yet fail with real inputs, resource limits, timing, or runtime differences.",
+        "fix": "Pin the minimum supported runtime, add a fallback when required, and monitor official release notes."
+      },
+      {
+        "problem": "Copying a snippet without checking its runtime, dependencies, input assumptions, or cleanup behavior.",
+        "why": "Node.js APIs and surrounding ecosystem tools have explicit version, trust, and resource boundaries.",
+        "fix": "State the environment and dependency assumptions, then rerun the example from a clean starting state."
+      }
+    ],
+    "summary": [
+      "For Reading large files, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone.",
+      "This lesson covers: Reading large files, Writing large files, Piping data, Memory-efficient processing.",
+      "Verify both normal and failure behavior, and document runtime, dependency, and resource assumptions."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-068-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Node.js API Reference",
+      "url": "https://nodejs.org/api/",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "core modules and runtime APIs; confirm version-specific stability labels"
+      ]
+    },
+    {
+      "title": "Node.js Releases and Release Schedule",
+      "url": "https://nodejs.org/en/about/previous-releases",
+      "publisher": "OpenJS Foundation / Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "supported release lines",
+        "LTS versus Current",
+        "version compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Source-derived syllabus; educational draft requiring technical/instructional review before publication."
+}

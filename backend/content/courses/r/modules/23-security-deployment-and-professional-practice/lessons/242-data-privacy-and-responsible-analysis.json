@@ -1,0 +1,189 @@
+{
+  "id": "r-lesson-242",
+  "slug": "data-privacy-and-responsible-analysis",
+  "title": "Data Privacy and Responsible Analysis",
+  "sequence": 242,
+  "module_id": "r-module-23",
+  "module_slug": "security-deployment-and-professional-practice",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional-practice",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "r-lesson-241"
+  ],
+  "previous_lesson_id": "r-lesson-241",
+  "next_lesson_id": "r-lesson-243",
+  "keywords": [
+    "data-privacy-and-responsible-analysis",
+    "security-deployment-and-professional-practice",
+    "personal-and-sensitive-data",
+    "anonymization-limitations",
+    "minimizing-unnecessary-data-collection",
+    "access-control",
+    "responsible-data-sharing",
+    "ethical-interpretation-of-results",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 242,
+  "subtopics": [
+    "Personal and Sensitive Data",
+    "Anonymization Limitations",
+    "Minimizing Unnecessary Data Collection",
+    "Access Control",
+    "Responsible Data Sharing",
+    "Ethical Interpretation of Results"
+  ],
+  "learning_outcomes": [
+    "Explain the role of data privacy and responsible analysis and identify its main inputs, outputs or constraints.",
+    "Apply personal and sensitive data in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Data Privacy and Responsible Analysis is part of Security, Deployment, and Professional Practice. Start with personal and sensitive data and connect it to the worked example and expected result.",
+    "why_it_matters": "Professional R work must protect data and secrets, record dependencies, validate outputs and include monitoring or recovery steps.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Data Privacy and Responsible Analysis",
+        "asset_path": "diagrams/module-23-overview.svg",
+        "alt_text": "Concept visual supporting lesson 242, Data Privacy and Responsible Analysis. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Professional R work must protect data and secrets, record dependencies, validate outputs and include monitoring or recovery steps. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Personal and Sensitive Data",
+            "text": "Explain personal and sensitive data in the context of data privacy and responsible analysis, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Anonymization Limitations",
+            "text": "Compare anonymization limitations using concrete trade-offs, assumptions and maintenance needs; state when each choice is appropriate."
+          },
+          {
+            "title": "Minimizing Unnecessary Data Collection",
+            "text": "Explain minimizing unnecessary data collection in the context of data privacy and responsible analysis, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Access Control",
+            "text": "Explain access control in the context of data privacy and responsible analysis, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Responsible Data Sharing",
+            "text": "Explain responsible data sharing in the context of data privacy and responsible analysis, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Ethical Interpretation of Results",
+            "text": "Explain ethical interpretation of results in the context of data privacy and responsible analysis, connect it to the example, and verify one expected result or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Use synthetic data, keep credentials out of source/logs, and write down the verification and rollback steps. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Data Privacy and Responsible Analysis",
+        "language": "r",
+        "code": "# Lesson 242: Data Privacy and Responsible Analysis\nrequired_inputs <- c(\"data.csv\", \"report.qmd\")\nall(nzchar(required_inputs))",
+        "expected_output": "[1] TRUE",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "This checks non-empty path strings, not file existence; a production workflow also needs permissions, provenance, monitoring and rollback. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For data privacy and responsible analysis, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-242-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply data privacy and responsible analysis to a small synthetic example. Start with personal and sensitive data, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the personal and sensitive data idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible data privacy and responsible analysis example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Personal and Sensitive Data” and identify the input and output before coding.",
+      "Use synthetic data and explicit validation; do not access production systems or expose credentials.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming external services always return valid data.",
+        "why": "Timeouts, authorization failures, rate limits and schema changes are normal failure cases.",
+        "fix": "Add timeouts, status/schema validation, least-privilege access and bounded retries."
+      },
+      {
+        "problem": "Embedding credentials or sensitive rows in examples or logs.",
+        "why": "Secrets and private data can leak through source control or diagnostic output.",
+        "fix": "Use environment-based secret handling and synthetic examples; redact logs."
+      },
+      {
+        "problem": "Leaving resources open after an error.",
+        "why": "Unclosed connections and files can leak resources or lock outputs.",
+        "fix": "Use reliable cleanup patterns and test both success and failure paths."
+      }
+    ],
+    "summary": [
+      "Key idea: Professional R work must protect data and secrets, record dependencies, validate outputs and include monitoring or recovery steps.",
+      "Practice: Use synthetic data, keep credentials out of source/logs, and write down the verification and rollback steps.",
+      "Source syllabus focus: Personal and Sensitive Data. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply data privacy and responsible analysis to a small synthetic example. Start with personal and sensitive data, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible data privacy and responsible analysis example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Personal and Sensitive Data” and identify the input and output before coding.",
+    "Use synthetic data and explicit validation; do not access production systems or expose credentials.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Assuming external services always return valid data.",
+      "why": "Timeouts, authorization failures, rate limits and schema changes are normal failure cases.",
+      "fix": "Add timeouts, status/schema validation, least-privilege access and bounded retries."
+    },
+    {
+      "problem": "Embedding credentials or sensitive rows in examples or logs.",
+      "why": "Secrets and private data can leak through source control or diagnostic output.",
+      "fix": "Use environment-based secret handling and synthetic examples; redact logs."
+    },
+    {
+      "problem": "Leaving resources open after an error.",
+      "why": "Unclosed connections and files can leak resources or lock outputs.",
+      "fix": "Use reliable cleanup patterns and test both success and failure paths."
+    }
+  ],
+  "summary": [
+    "Key idea: Professional R work must protect data and secrets, record dependencies, validate outputs and include monitoring or recovery steps.",
+    "Practice: Use synthetic data, keep credentials out of source/logs, and write down the verification and rollback steps.",
+    "Source syllabus focus: Personal and Sensitive Data. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 23 — Security, Deployment, and Professional Practice, lesson 242: Data Privacy and Responsible Analysis.",
+    "Official documentation: https://cran.r-project.org/doc/manuals/r-release/R-exts.html",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

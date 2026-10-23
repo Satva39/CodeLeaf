@@ -1,0 +1,186 @@
+{
+  "id": "docker-lesson-069",
+  "slug": "introduction-to-docker-buildx",
+  "title": "Introduction to Docker Buildx",
+  "sequence": 69,
+  "module_id": "docker-module-07",
+  "module_slug": "advanced-dockerfiles-buildkit-and-buildx",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "docker-lesson-068"
+  ],
+  "previous_lesson_id": "docker-lesson-068",
+  "next_lesson_id": "docker-lesson-070",
+  "keywords": [
+    "introduction-to-docker-buildx",
+    "buildx-commands",
+    "builders-and-builder-drivers",
+    "inspecting-builder-configuration",
+    "selecting-a-builder",
+    "bootstrapping-builders"
+  ],
+  "source_syllabus_number": 69,
+  "subtopics": [
+    "Buildx commands",
+    "Builders and builder drivers",
+    "Inspecting builder configuration",
+    "Selecting a builder",
+    "Bootstrapping builders"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and key terms of introduction to docker buildx.",
+    "Choose and interpret a suitable Docker example connected to introduction to docker buildx.",
+    "Predict an expected result and verify it using observable evidence in a controlled environment."
+  ],
+  "content": {
+    "intro": "This lesson covers Introduction to Docker Buildx. You will connect the named subtopics from the supplied Docker curriculum to a small, observable example. Work through the visual first, then use the example to form a prediction and check it against the actual behavior.",
+    "why_it_matters": "Docker packages an application with its runtime files and dependencies into an image, then starts isolated processes from that image. It improves repeatability, but it does not remove the need to design secure configuration, persistent storage, networking, and monitoring. Learning introduction to docker buildx helps you make deployment behavior explicit and repeatable instead of relying on a command that happened to work on one machine.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Overview roadmap for module 7, Advanced Dockerfiles, BuildKit, and Buildx.",
+        "asset_path": "diagrams/module-07-overview.svg",
+        "alt_text": "Overview roadmap for module 7, Advanced Dockerfiles, BuildKit, and Buildx.",
+        "caption": "Module roadmap showing the learning sequence for Advanced Dockerfiles, BuildKit, and Buildx; use it to connect the lesson topics and checkpoints."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Docker packages an application with its runtime files and dependencies into an image, then starts isolated processes from that image. It improves repeatability, but it does not remove the need to design secure configuration, persistent storage, networking, and monitoring."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the supplied curriculum",
+        "items": [
+          {
+            "title": "Buildx commands",
+            "text": "BuildKit/Buildx can improve parallel work and cache reuse. Confirm builder, target platform, and output mode so a successful build actually produces the artifact you intend."
+          },
+          {
+            "title": "Builders and builder drivers",
+            "text": "Automate the same validated commands that developers can run locally, keep build inputs explicit, and retain test results and release artifact identifiers."
+          },
+          {
+            "title": "Inspecting builder configuration",
+            "text": "Automate the same validated commands that developers can run locally, keep build inputs explicit, and retain test results and release artifact identifiers."
+          },
+          {
+            "title": "Selecting a builder",
+            "text": "Automate the same validated commands that developers can run locally, keep build inputs explicit, and retain test results and release artifact identifiers."
+          },
+          {
+            "title": "Bootstrapping builders",
+            "text": "Automate the same validated commands that developers can run locally, keep build inputs explicit, and retain test results and release artifact identifiers."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "Start with the supplied example for introduction to docker buildx. Before running it, state what you expect to happen. Compare the real output with that prediction, then change one variable or setting in a disposable lab to test the boundary of the idea. If a command is not supported on your operating system or installed Docker version, consult the linked official reference and record the actual version rather than guessing."
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Introduction to Docker Buildx",
+        "language": "shell",
+        "code": "docker build --progress=plain -t codeleaf-demo:local .\ndocker image inspect codeleaf-demo:local",
+        "expected_output": "The build output shows steps and cache decisions; inspection confirms the resulting local image metadata.",
+        "run_instructions": "Run from a folder with a valid Dockerfile and application files. Change the tag when it would collide with an existing lab image.",
+        "reset_steps": "Remove `codeleaf-demo:local` only if you created it for this exercise and no longer need it.",
+        "execution_mode": "human-review",
+        "safety_note": "Run only against a local test Docker environment. Docker commands are not executed by the CodeLeaf lesson page.",
+        "limitations": "CodeLeaf currently does not execute Docker Engine, Docker Compose, build, networking, or host-administration commands from lesson pages. Use the example as inspectable material and run only in an approved local lab. Production services and arbitrary learner commands must never run inside the FastAPI web process.",
+        "schema_assumptions": "Confirm the installed Docker Engine, CLI, Compose, and Buildx versions and the target OS before using version- or platform-sensitive options."
+      },
+      {
+        "type": "callout",
+        "title": "Practical checkpoint",
+        "text": "Keep this lesson in draft while reviewing: Introduction to Docker Buildx. Capture the command/configuration, expected and actual result, one failure or edge case, and cleanup performed. This course does not award XP from content files; CodeLeaf backend rules remain authoritative."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-069-questions.json"
+  },
+  "task": "Apply introduction to docker buildx to a small local case. Record the configuration or command, expected result, observed result, one limitation/edge case, and how you verified the result.",
+  "hints": [
+    "Begin with read-only inspection commands and identify the active Docker context before any mutating action.",
+    "Use a disposable name, local test image, and synthetic data; change one thing at a time.",
+    "If the outcome differs, preserve the exact error and logs, check the official reference for your installed version, and document the verified fix."
+  ],
+  "expected_output": "The build output shows steps and cache decisions; inspection confirms the resulting local image metadata.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Assuming that a successful start means the application is ready.",
+      "why": "A container can start while its dependent service is unavailable or the application is failing after startup.",
+      "fix": "Inspect health/status and logs; add a meaningful health check or retry strategy where appropriate."
+    },
+    {
+      "problem": "Keeping required data only in the container writable layer.",
+      "why": "Replacing the container can discard that layer and its application state.",
+      "fix": "Select a named volume or an external storage system, then rehearse a restore."
+    },
+    {
+      "problem": "Copying a command without checking context, target, or permissions.",
+      "why": "Docker commands affect the active endpoint and can change host resources or publish services.",
+      "fix": "Check `docker context show`, use an isolated lab, make the smallest change, and verify the resulting state."
+    }
+  ],
+  "summary": [
+    "Docker packages an application with its runtime files and dependencies into an image, then starts isolated processes from that image. It improves repeatability, but it does not remove the need to design secure configuration, persistent storage, networking, and monitoring.",
+    "The attached PDF lists 5 subtopic(s) under this lesson; keep each one represented in the explanation and practical notes.",
+    "Docker execution mode in CodeLeaf is human-run/static validation only; do not interpret code display as evidence that a command was executed."
+  ],
+  "sources": [
+    {
+      "title": "BuildKit",
+      "url": "https://docs.docker.com/build/buildkit/",
+      "publisher": "Docker Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "build graph",
+        "cache",
+        "concurrent build operations"
+      ]
+    },
+    {
+      "title": "Multi-platform builds",
+      "url": "https://docs.docker.com/build/building/multi-platform/",
+      "publisher": "Docker Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "Buildx",
+        "multi-platform builds",
+        "architecture variants"
+      ]
+    },
+    {
+      "title": "Build secrets",
+      "url": "https://docs.docker.com/build/building/secrets/",
+      "publisher": "Docker Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "BuildKit secret mounts",
+        "SSH mounts",
+        "credential handling"
+      ]
+    },
+    {
+      "title": "Build attestations",
+      "url": "https://docs.docker.com/build/metadata/attestations/",
+      "publisher": "Docker Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "SBOM",
+        "provenance",
+        "build metadata"
+      ]
+    }
+  ],
+  "exercise_files": [],
+  "status": "draft",
+  "status_note": "Generated as a reviewable first draft from the full Docker syllabus. Commands and build snippets have not been executed in a Docker daemon during this generation run; review syntax and platform assumptions before publishing."
+}

@@ -1,0 +1,193 @@
+{
+  "id": "php-lesson-246",
+  "slug": "concurrency-and-shared-state",
+  "title": "Concurrency and Shared State",
+  "sequence": 246,
+  "module_id": "php-module-24",
+  "module_slug": "performance-caching-and-runtime-efficiency",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 13,
+  "prerequisites": [
+    "php-lesson-245"
+  ],
+  "previous_lesson_id": "php-lesson-245",
+  "next_lesson_id": "php-lesson-247",
+  "keywords": [
+    "concurrency and shared state",
+    "performance, caching, and runtime efficiency",
+    "multiple requests executing concurrently",
+    "shared resources",
+    "race conditions",
+    "locks and atomic operations",
+    "managing consistency across workers",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 246,
+  "subtopics": [
+    "Multiple requests executing concurrently.",
+    "Shared resources.",
+    "Race conditions.",
+    "Locks and atomic operations.",
+    "Managing consistency across workers."
+  ],
+  "learning_outcomes": [
+    "Explain what concurrency and shared state contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: multiple requests executing concurrently.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Performance work starts with a measurable target and representative workload. Profile before changing code, compare the same conditions after a change, and consider memory, cache invalidation, and regression risk. In this lesson, focus on multiple requests executing concurrently; then compare it with shared resources. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use concurrency and shared state when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 24 overview: Performance, Caching, and Runtime Efficiency",
+        "asset_path": "diagrams/module-24-overview.svg",
+        "alt_text": "Four-stage overview for module 24, Performance, Caching, and Runtime Efficiency, grouping lesson topics in order.",
+        "caption": "Use this overview to place concurrency and shared state in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Performance work starts with a measurable target and representative workload. Profile before changing code, compare the same conditions after a change, and consider memory, cache invalidation, and regression risk. For concurrency and shared state, begin with multiple requests executing concurrently. Also distinguish shared resources; race conditions; locks and atomic operations. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Multiple requests executing concurrently",
+            "text": "Track where this value enters the request lifecycle and where it affects the response; client-provided data must be treated as untrusted."
+          },
+          {
+            "title": "Shared resources",
+            "text": "Know when to use shared resources, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Race conditions",
+            "text": "Know when to use race conditions, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Locks and atomic operations",
+            "text": "Know when to use locks and atomic operations, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Managing consistency across workers",
+            "text": "Know when to use managing consistency across workers, what input or program state it changes, and which boundary case is worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Concurrency and Shared State",
+        "language": "php",
+        "code": "<?php\n$attempt = 2; $maxAttempts = 3;\necho $attempt < $maxAttempts ? \"retry permitted\" : \"stop\";",
+        "expected_output": "retry permitted",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Measure a representative workload before optimization, then repeat the measurement and watch for regressions."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for concurrency and shared state from top to bottom. Start by identifying multiple requests executing concurrently, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for concurrency and shared state that demonstrates \"multiple requests executing concurrently\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of multiple requests executing concurrently.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "retry permitted",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-246-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Concurrency and Shared State is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Measure a representative workload before optimization, then repeat the measurement and watch for regressions."
+    ],
+    "references": [
+      {
+        "title": "PHP Manual",
+        "url": "https://www.php.net/manual/en/",
+        "publisher": "PHP Documentation Group",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "language syntax",
+          "built-in functions",
+          "runtime behavior",
+          "classes and objects"
+        ]
+      },
+      {
+        "title": "PHPUnit supported versions",
+        "url": "https://phpunit.de/supported-versions.html",
+        "publisher": "PHPUnit",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "PHPUnit version compatibility",
+          "support lifecycle"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "PHP Manual",
+      "url": "https://www.php.net/manual/en/",
+      "publisher": "PHP Documentation Group",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "language syntax",
+        "built-in functions",
+        "runtime behavior",
+        "classes and objects"
+      ]
+    },
+    {
+      "title": "PHPUnit supported versions",
+      "url": "https://phpunit.de/supported-versions.html",
+      "publisher": "PHPUnit",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "PHPUnit version compatibility",
+        "support lifecycle"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

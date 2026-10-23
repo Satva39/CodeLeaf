@@ -1,0 +1,17 @@
+{
+  "id": "c-exercise-solution-024",
+  "exercise_id": "c-exercise-024",
+  "title": "Count file lines reference solution",
+  "language": "c",
+  "answer": "#include <stdio.h>\nint main(int argc, char **argv) { if(argc!=2) return 2; FILE *f=fopen(argv[1],\"r\"); if(!f) return 1; unsigned long lines=0; int ch; while((ch=fgetc(f))!=EOF) if(ch=='\\n') ++lines; if(ferror(f)) { fclose(f); return 1; } if(fclose(f)==EOF) return 1; printf(\"%lu\\n\",lines); return 0; }",
+  "explanation": "This reference illustrates one possible implementation, not the only acceptable solution. Review integer range, input validation, ownership/lifetime, compiler warnings and target-platform assumptions as appropriate.",
+  "manual_validation_checklist": [
+    "Build with an explicit ISO C mode and warnings enabled.",
+    "Run ordinary, boundary and invalid/failure cases.",
+    "Review all return values and object lifetime.",
+    "Check whether the example relies on platform-specific behavior."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only answer; keep protected from the learner-facing API until the platform has an explicit authorized reveal policy."
+}

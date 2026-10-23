@@ -1,0 +1,189 @@
+{
+  "id": "pandas-lesson-189",
+  "slug": "understanding-common-pandas-errors",
+  "title": "Understanding Common Pandas Errors",
+  "sequence": 189,
+  "module_id": "pandas-module-23",
+  "module_slug": "debugging-testing-and-reliable-code",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "pandas-lesson-188"
+  ],
+  "previous_lesson_id": "pandas-lesson-188",
+  "next_lesson_id": "pandas-lesson-190",
+  "keywords": [
+    "understanding common pandas errors",
+    "keyerror",
+    "typeerror",
+    "valueerror",
+    "indexing errors",
+    "merge and alignment errors",
+    "parser and i/o errors",
+    "pandas",
+    "data analysis"
+  ],
+  "source_syllabus_number": 189,
+  "subtopics": [
+    "KeyError",
+    "TypeError",
+    "ValueError",
+    "Indexing errors",
+    "Merge and alignment errors",
+    "Parser and I/O errors"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of understanding common pandas errors and identify when the concept is useful.",
+    "Apply at least one method or decision from understanding common pandas errors to a small synthetic dataset.",
+    "Verify the result by checking relevant values, labels, row counts, dtypes, or assumptions."
+  ],
+  "content": {
+    "intro": "Learn understanding common pandas errors through a focused example and a checkable task. This lesson keeps the source syllabus subtopics visible and uses synthetic data so you can reproduce the behavior safely.",
+    "why_it_matters": "Reliable data work combines diagnosis, explicit assignment, equality checks, and tests that catch changes over time.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Understanding Common Pandas Errors",
+        "asset_path": "diagrams/lesson-189-understanding-common-pandas-errors.svg",
+        "alt_text": "Diagram for Understanding Common Pandas Errors: input or question → Pandas concept → result validation.",
+        "caption": "Visual guide to Understanding Common Pandas Errors; the next blocks explain the decisions and example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Reliable data work combines diagnosis, explicit assignment, equality checks, and tests that catch changes over time."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "This lesson focuses on **Understanding Common Pandas Errors**. Work through the listed subtopics (KeyError, TypeError, ValueError, Indexing errors) as decisions in one small data workflow: identify the input and its labels, choose the relevant Pandas operation, then inspect the output shape, values, and types. Do not assume the result is correct solely because the code ran."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "KeyError",
+            "text": "KeyError is one part of understanding common pandas errors. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "TypeError",
+            "text": "TypeError is one part of understanding common pandas errors. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "ValueError",
+            "text": "ValueError is one part of understanding common pandas errors. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Indexing errors",
+            "text": "Indexing errors is one part of understanding common pandas errors. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Merge and alignment errors",
+            "text": "Merge and alignment errors is one part of understanding common pandas errors. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Parser and I/O errors",
+            "text": "Parser and I/O errors is one part of understanding common pandas errors. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "import pandas as pd\n\ndf = pd.DataFrame({\"price\": [10, 20]})\ntry:\n    df[\"cost\"]\nexcept KeyError as exc:\n    print(\"Check the available column labels:\", df.columns.tolist())",
+        "expected_output": "Check the available column labels: ['price']",
+        "execution_mode": "static-validation",
+        "run_instructions": "Save the snippet as a .py file in a Python environment with Pandas installed, then run `python filename.py`. CodeLeaf’s current playground is a browser preview and does not execute Python; examples are shown in static-validation mode.",
+        "reset_steps": "The example uses synthetic, in-memory values and does not modify project files. Restart the Python process or recreate the DataFrame to reset its state."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to interpret the result",
+        "text": "Compare the result with the task’s intended meaning. Check whether row order, labels, missing values, inferred dtypes, and duplicate keys should be preserved or changed. When the result depends on a library version or optional dependency, test against the environment you plan to use."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          {
+            "title": "Change one input",
+            "text": "Use a tiny synthetic dataset to practise understanding common pandas errors and change one value, label, or edge case."
+          },
+          {
+            "title": "Verify the invariant",
+            "text": "State the expected row count, key uniqueness, output dtype, or numerical result before running your solution."
+          },
+          {
+            "title": "Explain a limitation",
+            "text": "Write one sentence identifying an assumption, a missing-data rule, a version concern, or a case where this operation is not suitable."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Common mistakes and fixes",
+        "text": "Avoid assuming inferred types are always correct, treating every repeated record as an error, or overlooking alignment by labels. Check the actual API documentation for the target version and assert the properties that matter to the task."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-189-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Pandas User Guide",
+      "url": "https://pandas.pydata.org/docs/user_guide/",
+      "publisher": "pandas project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Understanding Common Pandas Errors"
+      ]
+    },
+    {
+      "title": "Pandas API Reference",
+      "url": "https://pandas.pydata.org/docs/reference/index.html",
+      "publisher": "pandas project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Understanding Common Pandas Errors"
+      ]
+    }
+  ],
+  "run_mode": "static-validation",
+  "task": "Practise understanding common pandas errors with a small synthetic DataFrame. Keep the input, transformation, and expected result explicit.",
+  "task_acceptance_criteria": [
+    "The code uses an appropriate Pandas operation for the stated goal.",
+    "The result is checked for the expected values, labels, dtypes, row count, or alignment.",
+    "The solution documents a relevant edge case, assumption, or compatibility note."
+  ],
+  "hints": [
+    "Start by printing the relevant shape, labels, and dtypes.",
+    "Write down the expected result for a tiny example before applying the operation to larger data.",
+    "Use a small assertion or comparison to verify the outcome instead of relying only on visual inspection."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Trusting a result because the statement ran without raising an exception.",
+      "why": "A valid expression can still select the wrong rows, misalign labels, or use an unsuitable dtype.",
+      "fix": "Check the output shape, labels, dtypes, and at least one expected value."
+    },
+    {
+      "problem": "Using the operation without considering missing values or duplicate keys.",
+      "why": "Those records may change totals, group sizes, or join cardinality.",
+      "fix": "State the policy and test an example containing the relevant edge case."
+    }
+  ],
+  "summary": [
+    "Understanding Common Pandas Errors supports one clearly defined part of a repeatable data workflow.",
+    "Check labels, dtypes, missing values, and row counts where they affect the result.",
+    "Record assumptions and consult the official reference when version-specific behavior matters."
+  ],
+  "next_steps": [
+    "Review the next topic after understanding common pandas errors and compare how it builds on the same data model."
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached syllabus and official documentation links; subject-matter review and target-version execution are required before publication."
+}

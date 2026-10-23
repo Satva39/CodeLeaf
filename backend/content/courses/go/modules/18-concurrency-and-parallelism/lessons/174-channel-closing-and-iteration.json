@@ -1,0 +1,266 @@
+{
+  "id": "go-lesson-174",
+  "slug": "channel-closing-and-iteration",
+  "title": "Channel Closing and Iteration",
+  "sequence": 174,
+  "module_id": "go-module-18",
+  "module_slug": "concurrency-and-parallelism",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "go-lesson-173"
+  ],
+  "previous_lesson_id": "go-lesson-173",
+  "next_lesson_id": "go-lesson-175",
+  "keywords": [
+    "channel closing and iteration",
+    "closing channels",
+    "receiving from closed channels",
+    "iterating with range",
+    "channel ownership",
+    "avoiding sends to closed channels",
+    "Go",
+    "Golang"
+  ],
+  "source_syllabus_number": 174,
+  "subtopics": [
+    "Closing channels",
+    "Receiving from closed channels",
+    "Iterating with range",
+    "Channel ownership",
+    "Avoiding sends to closed channels"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and behavior of channel closing and iteration.",
+    "Apply at least one lesson concept—closing channels—in a small Go example or workflow.",
+    "Predict a representative result, then test a boundary case and explain any difference."
+  ],
+  "exercise_files": [],
+  "content": {
+    "intro": "Channel Closing and Iteration concerns safe coordination among goroutines. Identify the shared state, decide which goroutine owns each value, and choose channels or synchronization primitives intentionally. Bound concurrent work, propagate cancellation with context where appropriate, and test exercised paths with the race detector.",
+    "why_it_matters": "Concurrent code can fail only under particular schedules; explicit ownership, bounded work, cancellation, and race-aware tests improve reliability.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 18 overview: Concurrency and Parallelism",
+        "asset_path": "diagrams/module-18-overview.svg",
+        "alt_text": "Overview of Module 18, Concurrency and Parallelism; this lesson is lesson 174 in the ordered module sequence.",
+        "caption": "Use the module map to place “Channel Closing and Iteration” within the larger sequence, then return to the individual code and practice below."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Channel Closing and Iteration concerns safe coordination among goroutines. Identify the shared state, decide which goroutine owns each value, and choose channels or synchronization primitives intentionally. Bound concurrent work, propagate cancellation with context where appropriate, and test exercised paths with the race detector."
+      },
+      {
+        "type": "list",
+        "title": "Topics covered in this lesson",
+        "items": [
+          {
+            "title": "Closing channels",
+            "text": "Be able to explain closing channels, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Receiving from closed channels",
+            "text": "Be able to explain receiving from closed channels, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Iterating with range",
+            "text": "Be able to explain iterating with range, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Channel ownership",
+            "text": "Be able to explain channel ownership, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Avoiding sends to closed channels",
+            "text": "Be able to explain avoiding sends to closed channels, identify the inputs or program state it affects, and name one boundary case worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Channel Closing and Iteration",
+        "language": "go",
+        "code": "package main\n\nimport (\n    \"fmt\"\n)\n\nfunc main() {\n    result := make(chan int, 1)\n    go func() { result <- 6 * 7 }()\n    fmt.Println(<-result)\n}\n",
+        "expected_output": "42",
+        "run_mode": "server-runner",
+        "run_instructions": "Save as main.go and run `go run main.go`. A channel communicates the result; larger systems also need bounded work and cancellation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through the example",
+        "text": "First, identify the input or initial state in the example for channel closing and iteration. Next, trace the operation or contract that matters, and predict the result before running it. If the example depends on a version-specific feature, a driver, or an external service, follow the stated prerequisites rather than assuming it works in a browser preview."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to one subtopic—Closing channels—and add a second case that could fail or behave differently. Write down the expected result before testing."
+      }
+    ],
+    "task": "Create a small example connected to “Channel Closing and Iteration”. Use Closing channels as the starting point, predict the output, then add one invalid, empty, or boundary case and document its result.",
+    "task_acceptance_criteria": [
+      "The example demonstrates closing channels or a closely related concept.",
+      "Inputs, relevant state changes, and expected output are clear.",
+      "At least one boundary case is deliberately tested or documented.",
+      "Errors are handled honestly and no success state is reported when the operation fails."
+    ],
+    "hints": [
+      "Start from the simplest example related to closing channels.",
+      "Predict the result manually and annotate the value that changes at each step.",
+      "Run `gofmt` and the appropriate local `go run`, `go test`, `go vet`, or inspection command when prerequisites are available."
+    ],
+    "expected_output": "42",
+    "run_mode": "server-runner",
+    "knowledge_check_file": "exams/question-files/lesson-174-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the happy-path output proves all inputs are safe.",
+        "why": "Empty, malformed, boundary, or concurrent cases may follow different paths.",
+        "fix": "Add focused tests for a normal input and at least one relevant edge case."
+      },
+      {
+        "problem": "Ignoring returned errors or external-system status.",
+        "why": "Go APIs commonly report expected failures as explicit error values.",
+        "fix": "Check errors close to the operation, add useful context when propagating, and clean up resources."
+      },
+      {
+        "problem": "Using an API or syntax without checking the selected Go version.",
+        "why": "Language and standard-library capabilities can change between releases.",
+        "fix": "Record `go version`, inspect the `go` directive, and read official release notes for version-specific topics."
+      }
+    ],
+    "summary": [
+      "Channel Closing and Iteration provides a reusable rule or workflow for Go programs.",
+      "The subtopics to revisit are: Closing channels; Receiving from closed channels; Iterating with range; Channel ownership; Avoiding sends to closed channels.",
+      "Prefer a small reproducible example, explicit errors, appropriate tests, and version-matched official documentation."
+    ],
+    "references": [
+      {
+        "title": "Go Documentation",
+        "url": "https://go.dev/doc/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "tutorials",
+          "language concepts",
+          "tooling",
+          "application development"
+        ]
+      },
+      {
+        "title": "The Go Programming Language Specification",
+        "url": "https://go.dev/ref/spec",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "syntax",
+          "types",
+          "control flow",
+          "interfaces"
+        ]
+      },
+      {
+        "title": "The Go Memory Model",
+        "url": "https://go.dev/ref/mem",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "happens-before",
+          "synchronization",
+          "data races"
+        ]
+      },
+      {
+        "title": "Go Race Detector Article",
+        "url": "https://go.dev/doc/articles/race_detector",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "race detection",
+          "concurrent tests",
+          "runtime race reports"
+        ]
+      },
+      {
+        "title": "net/http Package",
+        "url": "https://pkg.go.dev/net/http",
+        "publisher": "Go standard library",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "HTTP clients",
+          "servers",
+          "handlers",
+          "timeouts"
+        ]
+      }
+    ],
+    "accessibility_note": "The diagram includes descriptive alt text and a text caption. Code examples are also described in prose; do not rely on color alone to understand a sequence.",
+    "execution_note": "Save as main.go and run `go run main.go`. A channel communicates the result; larger systems also need bounded work and cancellation. Examples that need a database driver, external service, isolated execution environment, or version-specific feature are labeled as static examples and should not be treated as already executed."
+  },
+  "sources": [
+    {
+      "title": "Go Documentation",
+      "url": "https://go.dev/doc/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tutorials",
+        "language concepts",
+        "tooling",
+        "application development"
+      ]
+    },
+    {
+      "title": "The Go Programming Language Specification",
+      "url": "https://go.dev/ref/spec",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "syntax",
+        "types",
+        "control flow",
+        "interfaces"
+      ]
+    },
+    {
+      "title": "The Go Memory Model",
+      "url": "https://go.dev/ref/mem",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "happens-before",
+        "synchronization",
+        "data races"
+      ]
+    },
+    {
+      "title": "Go Race Detector Article",
+      "url": "https://go.dev/doc/articles/race_detector",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "race detection",
+        "concurrent tests",
+        "runtime race reports"
+      ]
+    },
+    {
+      "title": "net/http Package",
+      "url": "https://pkg.go.dev/net/http",
+      "publisher": "Go standard library",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "HTTP clients",
+        "servers",
+        "handlers",
+        "timeouts"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied Go.pdf syllabus mapping. Human review and local runtime verification are required before publication."
+}

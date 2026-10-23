@@ -1,0 +1,149 @@
+{
+  "id": "lua-lesson-120",
+  "slug": "persistence-and-serialization",
+  "title": "Persistence and Serialization",
+  "sequence": 120,
+  "module_id": "lua-module-12",
+  "module_slug": "file-handling-and-operating-system-interaction",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "lua-lesson-119"
+  ],
+  "previous_lesson_id": "lua-lesson-119",
+  "next_lesson_id": "lua-lesson-121",
+  "keywords": [
+    "persistence-and-serialization",
+    "saving-and-restoring-application-state",
+    "format-selection-validation-and-versioned-data-files"
+  ],
+  "source_syllabus_number": 120,
+  "subtopics": [
+    "Saving and restoring application state",
+    "Format selection, validation, and versioned data files"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of persistence and Serialization and the key behavior described in this lesson.",
+    "Apply persistence and Serialization in a small Lua example and predict its result.",
+    "Identify a relevant edge case, version constraint, or host-runtime limitation for persistence and Serialization."
+  ],
+  "content": {
+    "intro": "File and process facilities can be platform-dependent and may be disabled by an embedding host. Check open/read/write results and reliably close resources; validate structured input rather than executing it as code.",
+    "why_it_matters": "File and process facilities can be platform-dependent and may be disabled by an embedding host. Check open/read/write results and reliably close resources; validate structured input rather than executing it as code. This concept appears in the supplied syllabus; keep the scope and assumptions visible in your implementation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual map: Persistence and Serialization",
+        "asset_path": "diagrams/lessons/lesson-120.svg",
+        "alt_text": "Concept map for Persistence and Serialization; understand the concept, inspect a Lua example, and verify behavior and edge cases.",
+        "caption": "Visual summary of Persistence and Serialization; use the three-step path while working through the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Persistence and Serialization is part of File Handling and Operating System Interaction. Start with the exact rule or capability, identify what the example assumes, and note what changes on another Lua version or in a host application."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core explanation",
+        "text": "File and process facilities can be platform-dependent and may be disabled by an embedding host. Check open/read/write results and reliably close resources; validate structured input rather than executing it as code."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics to cover",
+        "items": [
+          {
+            "title": "Saving and restoring application state",
+            "text": "Understand Saving and restoring application state; connect it to Persistence and Serialization, then state one useful example or boundary case."
+          },
+          {
+            "title": "Format selection, validation, and versioned data files",
+            "text": "Understand Format selection, validation, and versioned data files; connect it to Persistence and Serialization, then state one useful example or boundary case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through the example",
+        "text": "Read the small example, predict every output line, then run it locally with a compatible runtime. Uses a temporary file, not a project path; close resources even after failures. The host may restrict I/O libraries. Keep the smallest reproducible case if the observed behavior differs."
+      },
+      {
+        "type": "code",
+        "language": "lua",
+        "execution_mode": "static-validation",
+        "code": "local file = io.tmpfile()\nassert(file, \"could not create temporary file\")\nfile:write(\"Lua data\\n\")\nfile:seek(\"set\")\nprint(file:read(\"*l\"))\nfile:close()",
+        "expected_output": "Lua data",
+        "caption": "Static reference example for local verification; CodeLeaf does not execute this snippet unless a dedicated isolated runner is explicitly provided.",
+        "run_instructions": "Save the code in a local file with the correct language extension and test it using the runtime noted in the lesson. Uses a temporary file, not a project path; close resources even after failures. The host may restrict I/O libraries. Compare the exact output to the documented result.",
+        "reset_steps": "Restore the original snippet, remove generated test files if any, and repeat from a clean local test state."
+      },
+      {
+        "type": "callout",
+        "title": "Version, host, and safety note",
+        "text": "Uses a temporary file, not a project path; close resources even after failures. The host may restrict I/O libraries."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Mistake 1",
+            "text": "Confusing Persistence and Serialization with a similarly named feature in another language or runtime. Fix: follow the version-matched reference and test the smallest example."
+          },
+          {
+            "title": "Mistake 2",
+            "text": "Relying on an output order or environment capability that the language/host does not guarantee. Fix: document assumptions and make order/capabilities explicit."
+          },
+          {
+            "title": "Mistake 3",
+            "text": "Skipping a boundary test or failing to check error-return values. Fix: test invalid and boundary inputs and inspect failure values."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Recap and next step",
+        "text": "Recap: explain Persistence and Serialization without the example, predict its behavior, and name one limit. Next: Types of Lua Errors."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate “Persistence and Serialization” with a different input or boundary case. Predict the result before running it, record what you observe, and explain one limitation.",
+    "task_acceptance_criteria": [
+      "Explain the central behavior of Persistence and Serialization in your own words.",
+      "Verify the result using a supported local runtime or clearly state why the host/tooling prevents a full run.",
+      "Identify a boundary case or compatibility/security limit relevant to the lesson."
+    ],
+    "hints": [
+      "First identify the input, output, and any assumed runtime or host feature.",
+      "Reduce the problem to the smallest example that exposes the relevant rule.",
+      "Test one normal case and one boundary/failure case; inspect error output without leaking secrets."
+    ],
+    "expected_output": "Lua data",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-120-knowledge-check.json",
+    "references": [
+      {
+        "title": "Lua 5.5 Reference Manual",
+        "url": "https://www.lua.org/manual/5.5/",
+        "publisher": "Lua.org",
+        "checked_on": "2026-10-20"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    "references/reference-index.json"
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Lua curriculum; requires expert technical, grading, accessibility, and runtime review before publication.",
+  "common_mistakes": [
+    "Confusing Persistence and Serialization with a similarly named feature in another language or runtime.",
+    "Relying on an output order or environment capability that the language/host does not guarantee.",
+    "Skipping a boundary test or failing to check error-return values."
+  ],
+  "next_steps": [
+    "Continue with Types of Lua Errors."
+  ]
+}

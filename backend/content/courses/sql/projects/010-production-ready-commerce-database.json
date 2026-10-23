@@ -1,0 +1,157 @@
+{
+  "id": "sql-project-10",
+  "slug": "production-ready-commerce-database",
+  "title": "Production-Ready Commerce Database",
+  "sequence": 10,
+  "tier": "capstone",
+  "objective": "Design and validate a database that supports the essential data workflows of an online marketplace. Normalized tables for users, suppliers, products, variants, inventory, carts, orders, order items, payments, and delivery records. Primary keys, foreign keys, uniqueness, and validation constraints. Product search, filtering, joins, pagination, and supplier reporting. Order creation and inventory updates inside suitable transactions. Safe handling of concurrent stock changes and duplicate requests. Reporting for sales, supplier performance, inventory, and order status. Parameterized application queries and role-based access. Indexes justified by observed query patterns. Schema migrations, test scripts, sample data, execution-plan analysis, and database documentation.",
+  "prerequisite_lesson_ids": [
+    "sql-lesson-001",
+    "sql-lesson-008"
+  ],
+  "recommended_module_range": [
+    1,
+    24
+  ],
+  "recommended_lesson_range": [
+    1,
+    261
+  ],
+  "skills": [
+    "relational modeling",
+    "SQL querying",
+    "constraints and validation",
+    "testing and documentation"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Normalized tables for users, suppliers, products, variants, inventory, carts, orders, order items, p",
+      "acceptance_criteria": [
+        "Demonstrate normalized tables for users, suppliers, products, variants, inventory, carts, orders, order items, payments, and delivery records. with sample data.",
+        "Include a repeatable check and explain the expected result."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Primary keys, foreign keys, uniqueness, and validation constraints.",
+      "acceptance_criteria": [
+        "Demonstrate primary keys, foreign keys, uniqueness, and validation constraints. with sample data.",
+        "Include a repeatable check and explain the expected result."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Product search, filtering, joins, and deterministic pagination.",
+      "acceptance_criteria": [
+        "Demonstrate product search, filtering, joins, and deterministic pagination. with sample data.",
+        "Include a repeatable check and explain the expected result."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Order creation and inventory updates protected by suitable transaction boundaries.",
+      "acceptance_criteria": [
+        "Demonstrate order creation and inventory updates protected by suitable transaction boundaries. with sample data.",
+        "Include a repeatable check and explain the expected result."
+      ]
+    },
+    {
+      "sequence": 5,
+      "title": "Safe handling of concurrent stock changes and duplicate requests.",
+      "acceptance_criteria": [
+        "Demonstrate safe handling of concurrent stock changes and duplicate requests. with sample data.",
+        "Include a repeatable check and explain the expected result."
+      ]
+    },
+    {
+      "sequence": 6,
+      "title": "Reports for sales, supplier performance, inventory, and order status.",
+      "acceptance_criteria": [
+        "Demonstrate reports for sales, supplier performance, inventory, and order status. with sample data.",
+        "Include a repeatable check and explain the expected result."
+      ]
+    }
+  ],
+  "required_features": [
+    "Normalized tables for users, suppliers, products, variants, inventory, carts, orders, order items, payments, and delivery records.",
+    "Primary keys, foreign keys, uniqueness, and validation constraints.",
+    "Product search, filtering, joins, and deterministic pagination.",
+    "Order creation and inventory updates protected by suitable transaction boundaries.",
+    "Safe handling of concurrent stock changes and duplicate requests.",
+    "Reports for sales, supplier performance, inventory, and order status.",
+    "Parameterized application queries and least-privilege role design.",
+    "Evidence-based indexes, schema migrations, tests, and documented operations."
+  ],
+  "stretch_features": [
+    "Add a dialect compatibility note for PostgreSQL and one other engine.",
+    "Add boundary and negative tests, not only happy-path examples.",
+    "Capture EXPLAIN output and document one measured design trade-off."
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "contents": "# Production-Ready Commerce Database\n\nDesign and validate a database that supports the essential data workflows of an online marketplace. Normalized tables for users, suppliers, products, variants, inventory, carts, orders, order items, payments, and delivery records. Primary keys, foreign keys, uniqueness, and validation constraints. Product search, filtering, joins, pagination, and supplier reporting. Order creation and inventory updates inside suitable transactions. Safe handling of concurrent stock changes and duplicate requests. Reporting for sales, supplier performance, inventory, and order status. Parameterized application queries and role-based access. Indexes justified by observed query patterns. Schema migrations, test scripts, sample data, execution-plan analysis, and database documentation.\n\nUse a disposable PostgreSQL lab. See `datasets/README.md` for setup and safety notes.\n\n## Required deliverables\n\nER diagram, schema creation scripts, seed data, query library, analytical reports, constraint and transaction tests, benchmark results, security test results, and a deployment guide. performance, maintainability, and documented design decisions.\n"
+    },
+    {
+      "path": "schema.sql",
+      "language": "sql",
+      "contents": "-- Begin with a copy of datasets/postgresql-lab-setup.sql.\n-- Design project-specific tables here; never run destructive resets in a production database.\n"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Data integrity",
+      "mode": "human_review",
+      "criteria": [
+        "Schema constraints reject invalid values and missing relationships.",
+        "Test at least one duplicate/NULL/boundary condition where relevant."
+      ]
+    },
+    {
+      "name": "Query behavior",
+      "mode": "human_review",
+      "criteria": [
+        "Query outputs match the acceptance criteria on included synthetic data.",
+        "Join grain, NULL behavior, ordering, and ties are documented where relevant."
+      ]
+    },
+    {
+      "name": "Safety and reproducibility",
+      "mode": "human_review",
+      "criteria": [
+        "All data-changing tests use a disposable database or explicit rollback.",
+        "Setup, seed, reset, and verification steps are documented."
+      ]
+    }
+  ],
+  "deliverables": "ER diagram, schema creation scripts, seed data, query library, analytical reports, constraint and transaction tests, benchmark results, security test results, and a deployment guide. performance, maintainability, and documented design decisions.",
+  "rubric": [
+    {
+      "criterion": "Schema design and data integrity",
+      "points": 25
+    },
+    {
+      "criterion": "Correct queries and expected results",
+      "points": 25
+    },
+    {
+      "criterion": "Security, transaction safety, and edge cases",
+      "points": 20
+    },
+    {
+      "criterion": "Testing and reproducibility",
+      "points": 15
+    },
+    {
+      "criterion": "Documentation and design reasoning",
+      "points": 15
+    }
+  ],
+  "rubric_total": 100,
+  "review_method": "Human review supported by repeatable local PostgreSQL tests. The current course importer stores project briefs but does not implement automated project submission grading.",
+  "reference_solution_file": "projects/solutions/010-production-ready-commerce-database-reference.json",
+  "status": "draft",
+  "status_note": "Generated project brief based on Section D; requires task-specific QA and human-review rubric review before publication."
+}

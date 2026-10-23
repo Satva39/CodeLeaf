@@ -1,0 +1,249 @@
+{
+  "id": "github-actions-lesson-149",
+  "slug": "compliance-and-auditability",
+  "title": "Compliance and Auditability",
+  "sequence": 149,
+  "module_id": "github-actions-module-19",
+  "module_slug": "enterprise-governance-and-advanced-workflow-architecture",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "github-actions-lesson-148"
+  ],
+  "previous_lesson_id": "github-actions-lesson-148",
+  "next_lesson_id": "github-actions-lesson-150",
+  "keywords": [
+    "compliance-and-auditability",
+    "enterprise-governance-and-advanced-workflow-architecture",
+    "workflow-execution-records",
+    "deployment-history",
+    "permission-reviews",
+    "secret-management-processes",
+    "retention-and-evidence-requirements",
+    "documenting-automation-controls"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of compliance and auditability and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to compliance and auditability.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on compliance and auditability. Auditability depends on recorded approvals, workflow run history, source-to-artifact traceability, scoped credentials, and reviewable policy changes. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "Compliance and Auditability matters because it affects correctness, security, maintainability, or operating cost. Auditability depends on recorded approvals, workflow run history, source-to-artifact traceability, scoped credentials, and reviewable policy changes. Enterprise design requires consistent policy, explicit ownership, auditable privilege boundaries, reviewed shared workflows, controlled artifact promotion, and documented recovery.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 19 visual map",
+        "asset_path": "diagrams/module-19-overview.svg",
+        "alt_text": "Ordered overview of module 19: Organization-Level Actions Policies; Standardizing Workflows Across Teams; Advanced CI/CD Architecture Patterns; Secure Deployment Architecture; Change Detection and Selective Pipelines; Workflow Reuse at Scale; Reliable Release and Rollback Architecture; Compliance and Auditability.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Auditability depends on recorded approvals, workflow run history, source-to-artifact traceability, scoped credentials, and reviewable policy changes. Enterprise design requires consistent policy, explicit ownership, auditable privilege boundaries, reviewed shared workflows, controlled artifact promotion, and documented recovery. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "Workflow execution records",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Deployment history",
+            "text": "For deployment history, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Permission reviews",
+            "text": "Declare only the token scopes the job requires. A read-only job should not receive write access; verify permissions at workflow and job scope and review organization policy."
+          },
+          {
+            "title": "Secret-management processes",
+            "text": "Store credentials in the appropriate protected secret store, pass them only to the step that needs them, and never print or save them in logs, summaries, artifacts, or caches."
+          },
+          {
+            "title": "Retention and evidence requirements",
+            "text": "For retention and evidence requirements, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Documenting automation controls",
+            "text": "For documenting automation controls, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "name: Record deployment evidence\non: workflow_dispatch\npermissions:\n  contents: read\njobs:\n  record:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Write audit summary\n        run: |\n          {\n            echo \"## Run evidence\"\n            echo \"- Repository: $GITHUB_REPOSITORY\"\n            echo \"- Commit: $GITHUB_SHA\"\n            echo \"- Run ID: $GITHUB_RUN_ID\"\n          } >> \"$GITHUB_STEP_SUMMARY\"",
+        "expected_output": "The workflow summary records non-sensitive identifiers that can help correlate a run to source and its run history.",
+        "run_instructions": "Check that the summary contains only approved metadata and links to the run record.",
+        "reset_steps": "Do not place tokens, secrets, customer data, or unrestricted payloads in the audit summary.",
+        "execution_mode": "workflow-fragment"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to compliance and auditability. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain compliance and auditability, read the example, and identify a way to validate it. The wider system goal remains: Standardize workflow behavior across teams without hiding important security boundaries."
+      }
+    ],
+    "task": "Apply compliance and auditability to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: Auditability depends on recorded approvals, workflow run history, source-to-artifact traceability, scoped credentials, and reviewable policy changes.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: Auditability depends on recorded approvals, workflow run history, source-to-artifact traceability, scoped credentials, and reviewable policy changes. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "Auditability depends on recorded approvals, workflow run history, source-to-artifact traceability, scoped credentials, and reviewable policy changes.",
+      "Enterprise design requires consistent policy, explicit ownership, auditable privilege boundaries, reviewed shared workflows, controlled artifact promotion, and documented recovery.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-149-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "workflow-fragment",
+    "references": [
+      {
+        "title": "Secure use reference",
+        "url": "https://docs.github.com/en/actions/reference/security/secure-use",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "security_guidance",
+        "supports": [
+          "least privilege",
+          "third-party actions",
+          "full SHA pinning",
+          "untrusted input",
+          "privileged workflow triggers",
+          "cache security"
+        ]
+      },
+      {
+        "title": "Configuring and managing deployments",
+        "url": "https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "deployment environments",
+          "protection rules",
+          "approvals",
+          "concurrency",
+          "deployment history"
+        ]
+      },
+      {
+        "title": "Reusing workflow configurations",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/reusing-workflow-configurations",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "reusable workflows",
+          "composite-action comparisons",
+          "YAML anchors and aliases"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Secure use reference",
+      "url": "https://docs.github.com/en/actions/reference/security/secure-use",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "security_guidance",
+      "supports": [
+        "least privilege",
+        "third-party actions",
+        "full SHA pinning",
+        "untrusted input",
+        "privileged workflow triggers",
+        "cache security"
+      ]
+    },
+    {
+      "title": "Configuring and managing deployments",
+      "url": "https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "deployment environments",
+        "protection rules",
+        "approvals",
+        "concurrency",
+        "deployment history"
+      ]
+    },
+    {
+      "title": "Reusing workflow configurations",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/reusing-workflow-configurations",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "reusable workflows",
+        "composite-action comparisons",
+        "YAML anchors and aliases"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "149",
+    "module_title": "Enterprise Governance and Advanced Workflow Architecture",
+    "subtopics": [
+      "Workflow execution records",
+      "Deployment history",
+      "Permission reviews",
+      "Secret-management processes",
+      "Retention and evidence requirements",
+      "Documenting automation controls"
+    ]
+  }
+}

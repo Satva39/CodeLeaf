@@ -1,0 +1,20 @@
+{
+  "id": "pytorch-project-05-reference-solution",
+  "project_id": "pytorch-project-05",
+  "title": "Reference approach: Text Sentiment Classifier",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "approach": "Build Text Sentiment Classifier in small milestones. Implement: Document text cleaning and vocabulary; Implement tokenization, padding, and masks; Use embeddings and a sequence model; Evaluate by class and inspect errors; Provide a minimal prediction interface. Use synthetic data while developing, choose a documented dataset for the final experiment, and keep train/validation/test splits separate.",
+  "reference_snippets": [
+    {
+      "purpose": "Deterministic model smoke test",
+      "language": "python",
+      "code": "import torch\nfrom torch import nn\nmodel = nn.Sequential(nn.Linear(8, 16), nn.ReLU(), nn.Linear(16, 2)).eval()\nwith torch.inference_mode():\n    output = model(torch.zeros(1, 8))\nassert output.shape == (1, 2)\nprint(\"smoke test passed\")"
+    }
+  ],
+  "review_notes": [
+    "This is a protected teaching outline, not a claim that a trained artifact is included.",
+    "Benchmark the actual target hardware and report uncertainty.",
+    "Review data licensing, privacy, bias, and intended-use constraints."
+  ]
+}

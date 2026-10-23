@@ -1,0 +1,207 @@
+{
+  "id": "pytorch-lesson-074",
+  "slug": "building-and-comparing-model-variants",
+  "title": "Building and Comparing Model Variants",
+  "sequence": 74,
+  "module_id": "pytorch-module-09",
+  "module_slug": "neural-network-architecture-and-design",
+  "level": "Intermediate",
+  "difficulty": "intermediate",
+  "track": "core-modeling",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "pytorch-lesson-073"
+  ],
+  "previous_lesson_id": "pytorch-lesson-073",
+  "next_lesson_id": "pytorch-lesson-075",
+  "keywords": [
+    "building-and-comparing-model-variants",
+    "baseline-architecture",
+    "controlled-architectural-changes",
+    "parameter-and-compute-comparison",
+    "training-cost",
+    "evaluation-based-model-selection",
+    "pytorch",
+    "deep-learning"
+  ],
+  "learning_outcomes": [
+    "Explain the role of building and comparing model variants in a PyTorch workflow.",
+    "Apply a small example of building and comparing model variants and interpret the output.",
+    "Identify a relevant limitation, debugging check, or reproducibility concern."
+  ],
+  "content": {
+    "intro": "Building and Comparing Model Variants: An architecture specifies how layers transform inputs into representations and predictions. Depth, width, inductive bias, and parameter count affect capacity and compute. In this lesson, use a small example to make the inputs, outputs, and boundary conditions explicit.",
+    "why_it_matters": "Controlled architecture comparisons reveal whether model complexity improves useful generalization enough to justify its extra training and inference cost. For this lesson, focus on baseline architecture and the evidence you can collect from a controlled example.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 09 roadmap",
+        "asset_path": "diagrams/module-09-overview.svg",
+        "alt_text": "Overview diagram of the ordered lessons in module 9: Neural-Network Architecture and Design. This lesson is item 74 in the 164-lesson course.",
+        "caption": "Orientation map for Neural-Network Architecture and Design; use the list below to connect this lesson to related ideas."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Trace dimensions through each layer, select an output head that matches the task, and make one architecture change per experiment. The source topics for this lesson are: Baseline architecture, Controlled architectural changes, Parameter and compute comparison. Keep each topic connected to a checkable input/output behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "Read the example",
+        "text": "Use the printed output shape to confirm that layer dimensions compose correctly, then count trainable parameters before comparing variants. The example is a teaching-scale check, not evidence of a trained model score or a hardware-independent performance claim."
+      },
+      {
+        "type": "list",
+        "title": "Source-aligned topic checklist",
+        "items": [
+          {
+            "title": "Baseline architecture",
+            "text": "Connect this topic to the lesson workflow: Trace dimensions through each layer, select an output head that matches the task, and make one architecture change per experiment. Write down the expected behavior and test it on a small, inspectable input."
+          },
+          {
+            "title": "Controlled architectural changes",
+            "text": "Connect this topic to the lesson workflow: Trace dimensions through each layer, select an output head that matches the task, and make one architecture change per experiment. Write down the expected behavior and test it on a small, inspectable input."
+          },
+          {
+            "title": "Parameter and compute comparison",
+            "text": "Connect this topic to the lesson workflow: Trace dimensions through each layer, select an output head that matches the task, and make one architecture change per experiment. Write down the expected behavior and test it on a small, inspectable input."
+          },
+          {
+            "title": "Training cost",
+            "text": "Connect this topic to the lesson workflow: Trace dimensions through each layer, select an output head that matches the task, and make one architecture change per experiment. Write down the expected behavior and test it on a small, inspectable input."
+          },
+          {
+            "title": "Evaluation-based model selection",
+            "text": "Choose a metric that matches the task, compute it on the intended split, and inspect representative errors before interpreting one aggregate score."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Guided PyTorch example",
+        "language": "python",
+        "code": "import torch\nfrom torch import nn\nmodel = nn.Sequential(nn.Linear(4, 8), nn.ReLU(), nn.Linear(8, 2))\nprint(sum(p.numel() for p in model.parameters()))",
+        "expected_output": "58",
+        "run_instructions": "Save as example.py in a Python environment with a compatible PyTorch installation, then run `python example.py`. PyTorch snippets are not executed in the browser. For GPU- or package-specific snippets, install the matching supported dependencies first.",
+        "reset_steps": "Restore the code block, rerun it, and compare both the printed output and tensor metadata.",
+        "run_mode": "server-runner"
+      },
+      {
+        "type": "callout",
+        "title": "Version and execution note",
+        "text": "The code block is a local Python example, not a browser execution promise. CodeLeaf does not currently provide an isolated general-purpose Python runner; use a virtual environment. Installation commands, optional packages, hardware behavior, and rapidly evolving specialist APIs must be checked against the linked official documentation."
+      }
+    ],
+    "task": "Try it yourself: Create two MLP variants with different hidden widths, count parameters, and compare them using the same small synthetic dataset. Record the observed result and one limitation; do not report an unrun training or performance result as measured.",
+    "task_acceptance_criteria": [
+      "The experiment demonstrates at least one relevant aspect of building and comparing model variants.",
+      "Record the expected and observed result, including shape/dtype/device information when relevant.",
+      "Explain one common failure mode, compatibility limitation, or evaluation caveat."
+    ],
+    "hints": [
+      "Begin with the smallest working example for building and comparing model variants and keep input shapes explicit.",
+      "Change only one variable at a time; compare a tensor property, a printed value, or a test assertion.",
+      "Use the linked official reference for any hardware-specific, optional-package, or version-sensitive behavior."
+    ],
+    "expected_output": "58",
+    "troubleshooting": [
+      {
+        "symptom": "A tensor operation raises a shape, dtype, or device mismatch.",
+        "check": "Print .shape, .dtype, and .device for each input. Resolve the mismatch intentionally instead of changing dimensions blindly."
+      },
+      {
+        "symptom": "The example fails because an optional package or accelerator is unavailable.",
+        "check": "Check the installed PyTorch/package versions and device availability. Use the official installation selector and run the CPU-compatible path where appropriate."
+      },
+      {
+        "symptom": "The result differs across runs or machines.",
+        "check": "Fix the seed where useful, record versions and inputs, and document operations that remain nondeterministic or hardware dependent."
+      }
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Relying on assumptions instead of inspecting the data or output.",
+        "why": "Many ML failures come from incorrect shapes, labels, preprocessing, or execution mode rather than a syntax error.",
+        "fix": "Inspect representative inputs and add assertions for the expected shape, dtype, range, or behavior."
+      },
+      {
+        "problem": "Mixing training-time behavior with inference-time behavior.",
+        "why": "Dropout, normalization, gradient tracking, and optimizer updates can change how a model behaves.",
+        "fix": "Do not attribute performance differences to architecture if datasets, preprocessing, training time, or evaluation protocols also changed."
+      },
+      {
+        "problem": "Using a current or experimental API without recording its version assumptions.",
+        "why": "Hardware support and ecosystem APIs can change independently of the core package.",
+        "fix": "Pin compatible dependencies, record the environment, and test after upgrades."
+      }
+    ],
+    "summary": [
+      "Building and Comparing Model Variants belongs to the Neural-Network Architecture and Design learning path.",
+      "Practice baseline architecture, controlled architectural changes, parameter and compute comparison using the source-aligned checklist and read-example explanation.",
+      "Do not attribute performance differences to architecture if datasets, preprocessing, training time, or evaluation protocols also changed."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-074-questions.json",
+    "solution_notes": "The linked lesson knowledge-check answers and exercise reference solutions are kept in protected backend content files. A published endpoint must return learner-safe prompts only.",
+    "run_mode": "server-runner",
+    "execution_note": "Requires a local or separately isolated Python runner. Do not execute learner-supplied Python inside the FastAPI process or the production web container.",
+    "references": [
+      {
+        "title": "PyTorch API Documentation",
+        "url": "https://docs.pytorch.org/docs/stable/",
+        "publisher": "PyTorch",
+        "checked_on": "2026-10-20",
+        "supports": [
+          "tensor operations",
+          "torch.nn",
+          "autograd",
+          "testing",
+          "serialization"
+        ]
+      },
+      {
+        "title": "Learn the Basics",
+        "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro.html",
+        "publisher": "PyTorch Tutorials",
+        "checked_on": "2026-10-20",
+        "supports": [
+          "tensors",
+          "datasets and data loaders",
+          "transforms",
+          "models",
+          "autograd"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "PyTorch API Documentation",
+      "url": "https://docs.pytorch.org/docs/stable/",
+      "publisher": "PyTorch",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "tensor operations",
+        "torch.nn",
+        "autograd",
+        "testing",
+        "serialization"
+      ]
+    },
+    {
+      "title": "Learn the Basics",
+      "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro.html",
+      "publisher": "PyTorch Tutorials",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "tensors",
+        "datasets and data loaders",
+        "transforms",
+        "models",
+        "autograd"
+      ]
+    }
+  ],
+  "status": "draft"
+}

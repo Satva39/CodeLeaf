@@ -1,0 +1,255 @@
+{
+  "id": "github-actions-lesson-042",
+  "slug": "running-scripts-from-repository-files",
+  "title": "Running Scripts from Repository Files",
+  "sequence": 42,
+  "module_id": "github-actions-module-06",
+  "module_slug": "steps-scripts-and-actions",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "github-actions-lesson-041"
+  ],
+  "previous_lesson_id": "github-actions-lesson-041",
+  "next_lesson_id": "github-actions-lesson-043",
+  "keywords": [
+    "running-scripts-from-repository-files",
+    "steps-scripts-and-actions",
+    "invoking-shell-scripts",
+    "running-python-scripts",
+    "running-node-js-scripts",
+    "passing-arguments-to-scripts",
+    "setting-permissions-on-executable-files",
+    "avoiding-fragile-inline-commands"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of running scripts from repository files and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to running scripts from repository files.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on running scripts from repository files. Committed scripts keep complex automation testable and reviewable; invoke them with explicit arguments, handle exit codes, and set executable permissions where needed. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "Running Scripts from Repository Files matters because it affects correctness, security, maintainability, or operating cost. Committed scripts keep complex automation testable and reviewable; invoke them with explicit arguments, handle exit codes, and set executable permissions where needed. `run` executes shell commands while `uses` invokes an action. Keep steps small, name them clearly, validate inputs, and review third-party action code and permissions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 6 visual map",
+        "asset_path": "diagrams/module-06-overview.svg",
+        "alt_text": "Ordered overview of module 6: Understanding the run and uses Keywords; Working with Checkout Actions; Using Existing Actions; Configuring Action Inputs; Understanding Action Outputs; Running Scripts from Repository Files; Writing Maintainable Workflow Steps.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Committed scripts keep complex automation testable and reviewable; invoke them with explicit arguments, handle exit codes, and set executable permissions where needed. `run` executes shell commands while `uses` invokes an action. Keep steps small, name them clearly, validate inputs, and review third-party action code and permissions. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "Invoking shell scripts",
+            "text": "For invoking shell scripts, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Running Python scripts",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Running Node.js scripts",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Passing arguments to scripts",
+            "text": "For passing arguments to scripts, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Setting permissions on executable files",
+            "text": "Declare only the token scopes the job requires. A read-only job should not receive write access; verify permissions at workflow and job scope and review organization policy."
+          },
+          {
+            "title": "Avoiding fragile inline commands",
+            "text": "For avoiding fragile inline commands, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "name: Run a repository script\non: workflow_dispatch\npermissions:\n  contents: read\njobs:\n  validate:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: Run validation script\n        run: python scripts/validate.py",
+        "expected_output": "The runner checks out the repository and runs `scripts/validate.py`; it succeeds only when the script exits with status zero.",
+        "run_instructions": "Use a script that actually exists in the repository and ensure required runtimes/dependencies are installed first.",
+        "reset_steps": "Remove or revert the workflow after validating the repository script.",
+        "execution_mode": "workflow-fragment"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to running scripts from repository files. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain running scripts from repository files, read the example, and identify a way to validate it. The wider system goal remains: Decide when to run a shell command, invoke an action, or move logic into a repository script."
+      }
+    ],
+    "task": "Apply running scripts from repository files to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: Committed scripts keep complex automation testable and reviewable; invoke them with explicit arguments, handle exit codes, and set executable permissions where needed.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: Committed scripts keep complex automation testable and reviewable; invoke them with explicit arguments, handle exit codes, and set executable permissions where needed. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "Committed scripts keep complex automation testable and reviewable; invoke them with explicit arguments, handle exit codes, and set executable permissions where needed.",
+      "`run` executes shell commands while `uses` invokes an action. Keep steps small, name them clearly, validate inputs, and review third-party action code and permissions.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-042-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "workflow-fragment",
+    "references": [
+      {
+        "title": "Workflow syntax for GitHub Actions",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "workflow files",
+          "jobs",
+          "steps",
+          "permissions",
+          "defaults",
+          "concurrency",
+          "matrix",
+          "environments"
+        ]
+      },
+      {
+        "title": "About custom actions",
+        "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/custom-actions",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "composite actions",
+          "JavaScript actions",
+          "Docker container actions",
+          "action types"
+        ]
+      },
+      {
+        "title": "Metadata syntax reference",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/metadata-syntax",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "action.yml",
+          "inputs",
+          "outputs",
+          "runs metadata"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [
+    "../exercises/003-run-a-command-line-script.json"
+  ],
+  "sources": [
+    {
+      "title": "Workflow syntax for GitHub Actions",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "workflow files",
+        "jobs",
+        "steps",
+        "permissions",
+        "defaults",
+        "concurrency",
+        "matrix",
+        "environments"
+      ]
+    },
+    {
+      "title": "About custom actions",
+      "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/custom-actions",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "composite actions",
+        "JavaScript actions",
+        "Docker container actions",
+        "action types"
+      ]
+    },
+    {
+      "title": "Metadata syntax reference",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/metadata-syntax",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "action.yml",
+        "inputs",
+        "outputs",
+        "runs metadata"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "42",
+    "module_title": "Steps, Scripts, and Actions",
+    "subtopics": [
+      "Invoking shell scripts",
+      "Running Python scripts",
+      "Running Node.js scripts",
+      "Passing arguments to scripts",
+      "Setting permissions on executable files",
+      "Avoiding fragile inline commands"
+    ]
+  }
+}

@@ -1,0 +1,181 @@
+{
+  "id": "react-lesson-113",
+  "slug": "file-inputs-and-upload-interfaces",
+  "title": "File Inputs and Upload Interfaces",
+  "sequence": 113,
+  "module_id": "react-module-10",
+  "module_slug": "forms-and-user-input",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "react-lesson-112"
+  ],
+  "previous_lesson_id": "react-lesson-112",
+  "next_lesson_id": "react-lesson-114",
+  "keywords": [
+    "File Inputs and Upload Interfaces",
+    "Forms and User Input",
+    "Selecting files",
+    "File metadata",
+    "File size and type checks",
+    "Upload progress",
+    "Previewing permitted file formats",
+    "forms"
+  ],
+  "source_syllabus_number": 113,
+  "subtopics": [
+    "Selecting files",
+    "File metadata",
+    "File size and type checks",
+    "Upload progress",
+    "Previewing permitted file formats"
+  ],
+  "learning_outcomes": [
+    "Explain how File Inputs and Upload Interfaces relates to Forms and User Input.",
+    "Apply Selecting files in a small React or JavaScript example and describe the expected result.",
+    "Test one edge/failure case and identify a maintainable, accessible fix."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study File Inputs and Upload Interfaces as part of Forms and User Input. The syllabus topics are kept below, then connected to a small example you can inspect and adapt.",
+    "why_it_matters": "Selecting files makes input understandable and recoverable. Associate labels with controls, validate at a clear boundary, preserve entered data on failure, and announce useful errors.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "File Inputs and Upload Interfaces: concept map",
+        "asset_path": "diagrams/lessons/lesson-113-file-inputs-and-upload-interfaces.svg",
+        "alt_text": "Concept map for File Inputs and Upload Interfaces: Selecting files, File metadata, File size and type checks.",
+        "caption": "A visual scaffold for the idea; the code and verification steps below provide the practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Selecting files makes input understandable and recoverable. Associate labels with controls, validate at a clear boundary, preserve entered data on failure, and announce useful errors. Start with one responsibility at a time: identify the data, describe the expected interface, then decide which event, state update, request, or runtime boundary changes the result."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Selecting files",
+            "text": "Selecting files makes input understandable and recoverable. Associate labels with controls, validate at a clear boundary, preserve entered data on failure, and announce useful errors."
+          },
+          {
+            "title": "File metadata",
+            "text": "File metadata makes input understandable and recoverable. Associate labels with controls, validate at a clear boundary, preserve entered data on failure, and announce useful errors."
+          },
+          {
+            "title": "File size and type checks",
+            "text": "File size and type checks makes input understandable and recoverable. Associate labels with controls, validate at a clear boundary, preserve entered data on failure, and announce useful errors."
+          },
+          {
+            "title": "Upload progress",
+            "text": "Upload progress makes input understandable and recoverable. Associate labels with controls, validate at a clear boundary, preserve entered data on failure, and announce useful errors."
+          },
+          {
+            "title": "Previewing permitted file formats",
+            "text": "Previewing permitted file formats makes input understandable and recoverable. Associate labels with controls, validate at a clear boundary, preserve entered data on failure, and announce useful errors."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "jsx",
+        "code": "function EmailField({ email, setEmail }) {\n  return (\n    <label>Email address\n      <input type=\"email\" value={email} onChange={event => setEmail(event.target.value)} required />\n    </label>\n  );\n}",
+        "expected_output": "The control is labeled, controlled by state, and uses native required/email semantics.",
+        "run_instructions": "This is an inspectable teaching example, not an arbitrary-code runner inside CodeLeaf. Place JSX in a React/Vite project (or the relevant CSS/HTML/config file), run the project with its documented toolchain, and compare the visible behavior with the expected result. Server rendering and framework APIs require their stated runtime.",
+        "reset_steps": "Restore the original snippet, reset the component/data to its starting state, and repeat with a different input or an edge/failure case.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Use the code as a small experiment for File Inputs and Upload Interfaces. First predict the result, then run or inspect it in the required runtime. Change one input and explain why the output changed. If the topic depends on React version or framework support, confirm that the project uses a compatible version before interpreting a result."
+      },
+      {
+        "type": "callout",
+        "title": "Version and environment note",
+        "text": "This course assumes the React 19.3 documentation snapshot dated 2026-10-12. Core component, JSX, props, state, and event concepts apply broadly; modern APIs and server rendering must be checked against the stated React version and the framework/runtime in use."
+      }
+    ],
+    "task": "Create a minimal example demonstrating File Inputs and Upload Interfaces. Include the relevant subtopic “Selecting files”, explain the expected UI/result, and verify one normal case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named concept rather than merely mentioning it.",
+      "The expected visible or logged result is documented and reproducible.",
+      "At least one boundary, empty, loading, or failure case is handled or explained.",
+      "The implementation remains accessible and does not introduce avoidable mutation, stale state, or insecure client-only trust."
+    ],
+    "hints": [
+      "Start with the smallest part of “Selecting files” that can be observed independently.",
+      "Write down what should appear before changing the code; then change one input at a time.",
+      "Use the browser console, React Developer Tools, or the appropriate test/runtime to isolate a mismatch."
+    ],
+    "expected_output": "The control is labeled, controlled by state, and uses native required/email semantics.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-113-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "The example handles only the happy path.",
+        "why": "Real UI receives empty values, delayed responses, and invalid input.",
+        "fix": "Add one explicit edge/failure case and document the expected message or state."
+      },
+      {
+        "problem": "The example stores redundant data or mutates an existing array/object.",
+        "why": "The displayed result can drift from the source data or React may not observe the intended change.",
+        "fix": "Derive values where possible and create a new value when updating state."
+      },
+      {
+        "problem": "A browser or framework capability is assumed to exist everywhere.",
+        "why": "Availability can depend on the host runtime, React version, and framework.",
+        "fix": "Check the official reference, declare the runtime/version, and provide a fallback when appropriate."
+      }
+    ],
+    "summary": [
+      "File Inputs and Upload Interfaces fits into the broader Forms and User Input workflow.",
+      "The central concept is Selecting files; apply it with the smallest reproducible example.",
+      "Verify correctness with at least one normal input and one boundary or failure case."
+    ],
+    "references": [
+      "https://react.dev/learn",
+      "https://react.dev/reference/react",
+      "https://react.dev/blog/2026/09/09/react-19-3"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "React — Learn",
+      "url": "https://react.dev/learn",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "File Inputs and Upload Interfaces",
+        "Selecting files",
+        "File metadata"
+      ]
+    },
+    {
+      "title": "React Reference",
+      "url": "https://react.dev/reference/react",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "React APIs and behavior",
+        "File Inputs and Upload Interfaces"
+      ]
+    },
+    {
+      "title": "React 19.3 Release Notes",
+      "url": "https://react.dev/blog/2026/09/09/react-19-3",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "version-specific modern APIs and compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus and authored as an educational draft; technical/instructional review required before publication."
+}

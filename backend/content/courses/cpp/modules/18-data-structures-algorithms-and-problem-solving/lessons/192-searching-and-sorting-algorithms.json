@@ -1,0 +1,209 @@
+{
+  "id": "cpp-lesson-192",
+  "slug": "searching-and-sorting-algorithms",
+  "title": "Searching and Sorting Algorithms",
+  "sequence": 192,
+  "module_id": "cpp-module-18",
+  "module_slug": "data-structures-algorithms-and-problem-solving",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "specialized",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "cpp-lesson-191"
+  ],
+  "previous_lesson_id": "cpp-lesson-191",
+  "next_lesson_id": "cpp-lesson-193",
+  "keywords": [
+    "searching-and-sorting-algorithms",
+    "linear-search",
+    "binary-search",
+    "bubble-sort",
+    "selection-sort",
+    "insertion-sort",
+    "merge-sort",
+    "quick-sort"
+  ],
+  "source_syllabus_number": 192,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Linear Search",
+    "Binary Search",
+    "Bubble Sort",
+    "Selection Sort",
+    "Insertion Sort",
+    "Merge Sort",
+    "Quick Sort",
+    "Heap Sort",
+    "Comparing Hand-Written and Standard Algorithms"
+  ],
+  "learning_outcomes": [
+    "Describe when searching and sorting algorithms is useful and what problem it does not solve.",
+    "Evaluate a small example against its stated constraints, standard version and implementation assumptions.",
+    "Select a test or tool that can provide evidence of correctness without treating one successful run as proof."
+  ],
+  "content": {
+    "intro": "Searching and Sorting Algorithms focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Searching and Sorting Algorithms matters because identify the input constraints, choose a representation, trace a small case and explain the algorithm’s time and space complexity. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Searching and Sorting Algorithms: visual trace",
+        "asset_path": "diagrams/lessons/lesson-192.svg",
+        "alt_text": "Lesson 192 visual for Searching and Sorting Algorithms; concept: Linear Search; apply: Binary Search; verify: Bubble Sort.",
+        "caption": "Original lesson-specific overview: understand linear search, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Data structures and algorithms are choices with invariants and complexity trade-offs. Correctness proofs and edge cases should precede micro-optimization.\n\nSearching and Sorting Algorithms focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nIdentify the input constraints, choose a representation, trace a small case and explain the algorithm’s time and space complexity."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Searching and Sorting Algorithms",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <algorithm>\n#include <iostream>\n#include <vector>\n\nint main() {\n    std::vector<int> values{7, 2, 5};\n    std::sort(values.begin(), values.end());\n    const bool found = std::binary_search(values.begin(), values.end(), 5);\n    std::cout << values.front() << \", found=\" << std::boolalpha << found << '\\n';\n}\n",
+        "expected_output": "2, found=true",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "binary_search requires the range to be sorted according to the same ordering used by the search."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Linear Search",
+            "text": "Explain linear search in the context of Searching and Sorting Algorithms: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Binary Search",
+            "text": "Explain binary search in the context of Searching and Sorting Algorithms: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Bubble Sort",
+            "text": "Explain bubble sort in the context of Searching and Sorting Algorithms: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Selection Sort",
+            "text": "Explain selection sort in the context of Searching and Sorting Algorithms: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Insertion Sort",
+            "text": "Explain insertion sort in the context of Searching and Sorting Algorithms: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Merge Sort",
+            "text": "Explain merge sort in the context of Searching and Sorting Algorithms: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Quick Sort",
+            "text": "Explain quick sort in the context of Searching and Sorting Algorithms: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Heap Sort",
+            "text": "Explain heap sort in the context of Searching and Sorting Algorithms: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Comparing Hand-Written and Standard Algorithms",
+            "text": "Standard algorithms express common operations independently of container type and make preconditions, iterator ranges and complexity visible."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate linear search, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "This topic may depend on newer C++ language or library support; this example uses a C++20-compatible illustration. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-192-questions.json",
+    "task": "Create a small, independent example that demonstrates searching and sorting algorithms. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example builds under a documented standard mode with warnings enabled.",
+      "The predicted and observed result are recorded; deviations are explained.",
+      "At least one boundary, invalid-input, lifetime or portability assumption is tested or documented."
+    ],
+    "hints": [
+      "Start with the smallest example that demonstrates linear search.",
+      "Trace the relevant values and state the expected output before running the program.",
+      "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+    ],
+    "summary": [
+      "Searching and Sorting Algorithms is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying searching and sorting algorithms.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation"
+  },
+  "task": "Create a small, independent example that demonstrates searching and sorting algorithms. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+  "hints": [
+    "Start with the smallest example that demonstrates linear search.",
+    "Trace the relevant values and state the expected output before running the program.",
+    "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+  ],
+  "expected_output": "2, found=true",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Searching and Sorting Algorithms is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying searching and sorting algorithms.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 18, lesson 192: Searching and Sorting Algorithms.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

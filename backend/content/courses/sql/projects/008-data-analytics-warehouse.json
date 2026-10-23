@@ -1,0 +1,110 @@
+{
+  "id": "sql-project-08",
+  "slug": "data-analytics-warehouse",
+  "title": "Data Analytics Warehouse",
+  "sequence": 8,
+  "tier": "advanced",
+  "objective": "Convert operational sales data into a reporting-oriented model.",
+  "prerequisite_lesson_ids": [
+    "sql-lesson-130",
+    "sql-lesson-137"
+  ],
+  "recommended_module_range": [
+    13,
+    24
+  ],
+  "recommended_lesson_range": [
+    130,
+    261
+  ],
+  "skills": [
+    "relational modeling",
+    "SQL querying",
+    "constraints and validation",
+    "testing and documentation"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Fact and dimension tables, staging tables, transformation queries, monthly reporting, window functio",
+      "acceptance_criteria": [
+        "Demonstrate fact and dimension tables, staging tables, transformation queries, monthly reporting, window functions, data reconciliation, and materialized summaries where supported with sample data.",
+        "Include a repeatable check and explain the expected result."
+      ]
+    }
+  ],
+  "required_features": [
+    "Fact and dimension tables, staging tables, transformation queries, monthly reporting, window functions, data reconciliation, and materialized summaries where supported"
+  ],
+  "stretch_features": [
+    "Add a dialect compatibility note for PostgreSQL and one other engine.",
+    "Add boundary and negative tests, not only happy-path examples.",
+    "Capture EXPLAIN output and document one measured design trade-off."
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "contents": "# Data Analytics Warehouse\n\nConvert operational sales data into a reporting-oriented model.\n\nUse a disposable PostgreSQL lab. See `datasets/README.md` for setup and safety notes.\n\n## Required deliverables\n\nER diagram or schema notes, schema scripts, synthetic seed data, query library, validation checklist, and README.\n"
+    },
+    {
+      "path": "schema.sql",
+      "language": "sql",
+      "contents": "-- Begin with a copy of datasets/postgresql-lab-setup.sql.\n-- Design project-specific tables here; never run destructive resets in a production database.\n"
+    }
+  ],
+  "tests": [
+    {
+      "name": "Data integrity",
+      "mode": "human_review",
+      "criteria": [
+        "Schema constraints reject invalid values and missing relationships.",
+        "Test at least one duplicate/NULL/boundary condition where relevant."
+      ]
+    },
+    {
+      "name": "Query behavior",
+      "mode": "human_review",
+      "criteria": [
+        "Query outputs match the acceptance criteria on included synthetic data.",
+        "Join grain, NULL behavior, ordering, and ties are documented where relevant."
+      ]
+    },
+    {
+      "name": "Safety and reproducibility",
+      "mode": "human_review",
+      "criteria": [
+        "All data-changing tests use a disposable database or explicit rollback.",
+        "Setup, seed, reset, and verification steps are documented."
+      ]
+    }
+  ],
+  "deliverables": "ER diagram or schema notes, schema scripts, synthetic seed data, query library, validation checklist, and README.",
+  "rubric": [
+    {
+      "criterion": "Schema design and data integrity",
+      "points": 25
+    },
+    {
+      "criterion": "Correct queries and expected results",
+      "points": 25
+    },
+    {
+      "criterion": "Security, transaction safety, and edge cases",
+      "points": 20
+    },
+    {
+      "criterion": "Testing and reproducibility",
+      "points": 15
+    },
+    {
+      "criterion": "Documentation and design reasoning",
+      "points": 15
+    }
+  ],
+  "rubric_total": 100,
+  "review_method": "Human review supported by repeatable local PostgreSQL tests. The current course importer stores project briefs but does not implement automated project submission grading.",
+  "reference_solution_file": "projects/solutions/008-data-analytics-warehouse-reference.json",
+  "status": "draft",
+  "status_note": "Generated project brief based on Section D; requires task-specific QA and human-review rubric review before publication."
+}

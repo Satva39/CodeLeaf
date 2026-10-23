@@ -1,0 +1,207 @@
+{
+  "id": "vue-lesson-136",
+  "slug": "vue-server-side-rendering-fundamentals",
+  "title": "Vue Server-Side Rendering Fundamentals",
+  "sequence": 136,
+  "module_id": "vue-module-19",
+  "module_slug": "server-side-rendering-nuxt-and-deployment",
+  "level": "professional",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [],
+  "previous_lesson_id": "vue-lesson-135",
+  "next_lesson_id": "vue-lesson-137",
+  "keywords": [
+    "Vue Server-Side Rendering Fundamentals",
+    "Server-Side Rendering, Nuxt, and Deployment",
+    "Server-rendering Vue components",
+    "Server and client execution environments",
+    "Hydrating rendered HTML",
+    "Managing server and client entry points",
+    "SSR limitations and trade-offs",
+    "Vue 3",
+    "Composition API"
+  ],
+  "source_syllabus_number": 136,
+  "subtopics": [
+    "Server-rendering Vue components",
+    "Server and client execution environments",
+    "Hydrating rendered HTML",
+    "Managing server and client entry points",
+    "SSR limitations and trade-offs"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Vue Server-Side Rendering Fundamentals in a Vue 3 application.",
+    "Apply at least one of the syllabus subtopics in a small, inspectable example.",
+    "Verify one expected behavior and identify a relevant edge case."
+  ],
+  "content": {
+    "intro": "This lesson studies Vue Server-Side Rendering Fundamentals within Server-Side Rendering, Nuxt, and Deployment. The source PDF subtopics are preserved below and connected to an original working-style example.",
+    "why_it_matters": "Rendering choices affect initial content, hydration, deployment complexity, caching, security, and the availability of browser-only APIs.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Vue Server-Side Rendering Fundamentals: Server rendering and hydration",
+        "asset_path": "diagrams/lessons/lesson-136-vue-server-side-rendering-fundamentals.svg",
+        "alt_text": "Server rendering and hydration diagram for lesson 136: Vue Server-Side Rendering Fundamentals. Render deterministic HTML for this request → Send markup without shared mutable user state → Attach events to matching initial output",
+        "caption": "Rendering flow: server output and client hydration must agree, and per-request state must remain isolated."
+      },
+      {
+        "type": "paragraph",
+        "title": "The idea in context",
+        "text": "Vue rendering may be client-side, server-rendered, or pre-rendered; Nuxt provides an opinionated application framework for SSR/SSG use cases. This lesson focuses on Vue Server-Side Rendering Fundamentals. Start by naming the state, component, browser behavior, or deployment boundary involved; then predict what should change and test the smallest example."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Server-rendering Vue components",
+            "text": "For Server-rendering Vue components, document what data enters the component, which events leave it, and where shared content or behavior belongs. Keep props one-way, emit changes rather than mutating parent-owned values, and add slots only when a real composition point is needed."
+          },
+          {
+            "title": "Server and client execution environments",
+            "text": "For Server and client execution environments, decide which code runs during build, on the server, and in the browser. Keep output deterministic during hydration, isolate state per server request, keep secrets server-only, and test the actual production build rather than relying only on the dev server."
+          },
+          {
+            "title": "Hydrating rendered HTML",
+            "text": "For Hydrating rendered HTML, connect the term to a visible behavior in a small Vue 3 example. State what input or reactive dependency changes, predict the UI result, and verify the prediction with a normal case plus a boundary case."
+          },
+          {
+            "title": "Managing server and client entry points",
+            "text": "For Managing server and client entry points, trace the path from the entry point to the root component, then identify the configuration or tool responsible for compiling and serving it. Use the official create-vue/Vite workflow for a fresh Vue 3 project and keep dependency versions reproducible."
+          },
+          {
+            "title": "SSR limitations and trade-offs",
+            "text": "For SSR limitations and trade-offs, decide which code runs during build, on the server, and in the browser. Keep output deterministic during hydration, isolate state per server request, keep secrets server-only, and test the actual production build rather than relying only on the dev server."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "// Universal code must not assume `window` exists during SSR.\nimport { onMounted, ref } from 'vue'\nconst width = ref(null)\nonMounted(() => { width.value = window.innerWidth })",
+        "expected_output": "The viewport width is read only in the browser after mount, avoiding a server-side reference to window.",
+        "run_instructions": "Use the snippet in a Vue SFC. Test server and browser behavior separately; if rendered state depends on time/randomness, ensure hydration output is deterministic.",
+        "reset_steps": "Restore the initial values or original code, reload the development app/test, and repeat once with a boundary or failure case. Remove temporary logs and test data before committing.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Work through Vue Server-Side Rendering Fundamentals with a predict–change–verify loop. First state the expected UI or console output. Change only the relevant input/state value, then observe the result. Compare it with the expected output in the code block; if it differs, check the exact file, runtime/version, browser Console, and network response before widening the investigation."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Extend the example to include “Server and client execution environments”. Keep the same behavior for the ordinary input, then try an empty, invalid, repeated, or failure condition that makes sense for the example. Record the expected result before testing."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming behavior instead of checking it",
+            "text": "Write down the expected result and reproduce the issue in the smallest possible example; inspect the browser Console and the exact reactive value or request."
+          },
+          {
+            "title": "Ignoring an edge case",
+            "text": "Try empty input, a missing item, repeated interaction, a failed request, or unmounting while work is pending; handle the case explicitly."
+          },
+          {
+            "title": "Putting every responsibility in one component",
+            "text": "Separate display, reusable logic, API service, and shared state when that boundary makes the behavior easier to test and explain."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "Remember: Vue rendering may be client-side, server-rendered, or pre-rendered; Nuxt provides an opinionated application framework for SSR/SSG use cases. For Vue Server-Side Rendering Fundamentals, keep the example small, verify the rendered or logged result, and consult the official references when behavior depends on a specific Vue or ecosystem version."
+      },
+      {
+        "type": "callout",
+        "title": "Accessibility, version, and runtime notes",
+        "text": "Use semantic HTML, readable labels, keyboard-operable controls, and visible errors where the example interacts with users. Vue examples are intended for Vue 3.x with create-vue/Vite unless a legacy or specialist lesson explicitly says otherwise. This CodeLeaf playground does not execute arbitrary Vue code; the snippets are labeled for static validation and should be run in a separate local project."
+      }
+    ],
+    "task": "Create a small example for “Vue Server-Side Rendering Fundamentals” that applies “Server-rendering Vue components”, predicts the expected result, and verifies a relevant boundary case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named Vue concept rather than only mentioning it.",
+      "The expected output or observable behavior is written down and can be checked locally.",
+      "At least one boundary, loading, invalid-input, or failure case is tested or explicitly reasoned about.",
+      "The example uses semantic/accessible interaction patterns and does not treat frontend state as authoritative security."
+    ],
+    "hints": [
+      "Start with the smallest observable part of “Server-rendering Vue components”.",
+      "Predict the output before changing one input at a time.",
+      "Use the browser Console, Vue DevTools, or the appropriate test runner to isolate a mismatch."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "The example only covers the happy path.",
+        "why": "Real interfaces receive empty values, delayed responses, invalid input, and failed requests.",
+        "fix": "Add one realistic edge/failure case and state its expected behavior."
+      },
+      {
+        "problem": "The code assumes an API or feature exists in every runtime.",
+        "why": "Tool and API support depends on Vue, the build tool, or the chosen SSR/test framework.",
+        "fix": "Check the linked official reference and record the runtime/version assumption."
+      }
+    ],
+    "summary": [
+      "Vue Server-Side Rendering Fundamentals belongs to the broader area Server-Side Rendering, Nuxt, and Deployment.",
+      "The main concept to practice is Server-rendering Vue components.",
+      "Verify a normal result and one meaningful boundary case before using the pattern in a production feature."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-136-questions.json",
+    "references": [
+      "https://vuejs.org/guide/scaling-up/ssr.html",
+      "https://nuxt.com/docs/getting-started/introduction",
+      "https://vite.dev/guide/"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Vue Server-Side Rendering Guide",
+      "url": "https://vuejs.org/guide/scaling-up/ssr.html",
+      "publisher": "Vue.js core team",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Vue Server-Side Rendering Fundamentals",
+        "Server-rendering Vue components",
+        "Server and client execution environments",
+        "Hydrating rendered HTML"
+      ]
+    },
+    {
+      "title": "Nuxt Documentation",
+      "url": "https://nuxt.com/docs/getting-started/introduction",
+      "publisher": "Nuxt team",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Vue Server-Side Rendering Fundamentals",
+        "Server-rendering Vue components",
+        "Server and client execution environments",
+        "Hydrating rendered HTML"
+      ]
+    },
+    {
+      "title": "Vite Guide",
+      "url": "https://vite.dev/guide/",
+      "publisher": "Vite team",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Vue Server-Side Rendering Fundamentals",
+        "Server-rendering Vue components",
+        "Server and client execution environments",
+        "Hydrating rendered HTML"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Authored as a syllabus-complete educational draft. Technical and instructional review required before publication."
+}

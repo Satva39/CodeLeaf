@@ -1,0 +1,58 @@
+{
+  "id": "typescript-exercise-029",
+  "slug": "package-publishing",
+  "title": "Package Publishing",
+  "sequence": 29,
+  "lesson_id": "typescript-lesson-188",
+  "lesson_slug": "188-publishing-typescript-libraries",
+  "module_id": "typescript-module-20",
+  "type": "coding",
+  "difficulty": "advanced",
+  "status": "draft",
+  "prompt": "Prepare a small public library with declaration output and consumer verification.",
+  "starter": {
+    "code": "// TODO: define an exported function and a tsconfig declaration output\n// TODO: verify a clean consumer can import the package entry point\n",
+    "language": "typescript",
+    "file_name": "package-publishing.ts",
+    "execution_mode": "static-validation"
+  },
+  "public_tests": [
+    {
+      "name": "Required type contract",
+      "description": "Review that the submission contains the required declarations and preserves the stated input/output relationship.",
+      "mode": "static-token-check",
+      "required_strings": [
+        "export function",
+        "\"declaration\": true",
+        "\"exports\""
+      ]
+    },
+    {
+      "name": "Runtime and boundary review",
+      "description": "Explain one failure case and add a real runtime check when data crosses an external trust boundary.",
+      "mode": "human-review"
+    }
+  ],
+  "acceptance_criteria": [
+    "The package contains runtime JavaScript, declaration files, correct entry points, and a tested consumer path.",
+    "Submit code with the required type declarations and add an explanation or test for one meaningful boundary/failure case.",
+    "Do not claim that the code has been executed by the CodeLeaf browser playground."
+  ],
+  "hints": [
+    "Verify package.json exports, module format, generated files, and the supported TypeScript range.",
+    "TypeScript checks assignability but does not validate external data at runtime.",
+    "Use the local TypeScript compiler and an appropriate test runner to verify behavior; the course grader checks only the documented text markers."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "export function",
+      "\"declaration\": true",
+      "\"exports\""
+    ]
+  },
+  "grading_method": "Server-side static token check for the required declarations plus human review of runtime tests. This is not a TypeScript compiler or arbitrary-code runner.",
+  "retry_policy": "Unlimited practice retries; platform XP is awarded once only after a correct server-side grade.",
+  "solution_file": "solutions/029-package-publishing-solution.json",
+  "status_note": "Draft until exercise instructions, starter, and static grader are reviewed. No course-authored XP override is used."
+}

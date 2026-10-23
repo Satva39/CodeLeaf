@@ -1,0 +1,177 @@
+{
+  "id": "fastapi-lesson-037",
+  "slug": "error-handling-strategy",
+  "title": "Error Handling Strategy",
+  "sequence": 37,
+  "module_id": "fastapi-module-06",
+  "module_slug": "responses-errors-and-validation",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "fastapi-lesson-036"
+  ],
+  "previous_lesson_id": "fastapi-lesson-036",
+  "next_lesson_id": "fastapi-lesson-038",
+  "keywords": [
+    "error-handling-strategy",
+    "responses-errors-and-validation",
+    "fastapi",
+    "python",
+    "api",
+    "client-errors-versus-server-errors",
+    "mapping-domain-errors-to-http-responses",
+    "avoiding-sensitive-error-details"
+  ],
+  "source_syllabus_number": 37,
+  "subtopics": [
+    "Client errors versus server errors",
+    "Mapping domain errors to HTTP responses",
+    "Avoiding sensitive error details",
+    "Logging unexpected exceptions",
+    "Designing actionable API error messages"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of error handling strategy in a FastAPI application.",
+    "Apply or interpret one example related to client errors versus server errors.",
+    "Identify one limitation or failure case and describe how to verify it."
+  ],
+  "content": {
+    "intro": "This lesson covers error handling strategy within responses, errors, and validation. Use the supplied syllabus topics as the coverage checklist, then connect them to the worked example and the verification task.",
+    "why_it_matters": "You will use error handling strategy to build APIs whose contracts and behavior are understandable to both clients and maintainers. The practical aim is repeatable checks, explicit expected outcomes, negative cases and actionable diagnostics.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Error Handling Strategy: concept map",
+        "asset_path": "diagrams/lesson-037-concept.svg",
+        "alt_text": "Four-step flow for Error Handling Strategy: Client errors versus server errors, Mapping domain errors to HTTP responses, Avoiding sensitive error details, Logging unexpected exceptions",
+        "caption": "Visual-first overview before the worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Error Handling Strategy matters because it is part of responses, errors, and validation. In practice, focus on repeatable checks, explicit expected outcomes, negative cases and actionable diagnostics. A framework feature only helps when its assumptions match the application; keep input validation, business policy and side effects distinguishable."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus coverage",
+        "items": [
+          {
+            "title": "Client errors versus server errors",
+            "text": "Use client errors versus server errors to make behavior observable and repeatable. Specify one normal case, one invalid or missing-input case, and the expected status or diagnostic. A passing happy path alone is not enough evidence."
+          },
+          {
+            "title": "Mapping domain errors to HTTP responses",
+            "text": "Use mapping domain errors to http responses to make behavior observable and repeatable. Specify one normal case, one invalid or missing-input case, and the expected status or diagnostic. A passing happy path alone is not enough evidence."
+          },
+          {
+            "title": "Avoiding sensitive error details",
+            "text": "Use avoiding sensitive error details to make behavior observable and repeatable. Specify one normal case, one invalid or missing-input case, and the expected status or diagnostic. A passing happy path alone is not enough evidence."
+          },
+          {
+            "title": "Logging unexpected exceptions",
+            "text": "Use logging unexpected exceptions to make behavior observable and repeatable. Specify one normal case, one invalid or missing-input case, and the expected status or diagnostic. A passing happy path alone is not enough evidence."
+          },
+          {
+            "title": "Designing actionable API error messages",
+            "text": "Use designing actionable api error messages to make behavior observable and repeatable. Specify one normal case, one invalid or missing-input case, and the expected status or diagnostic. A passing happy path alone is not enough evidence."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Error Handling Strategy",
+        "language": "python",
+        "code": "from fastapi import FastAPI, HTTPException\n\napp = FastAPI()\n\n@app.get(\"/items/{item_id}\")\ndef read_item(item_id: int):\n    if item_id < 1:\n        raise HTTPException(status_code=404, detail=\"Item not found\")\n    return {\"item_id\": item_id}",
+        "expected_output": "GET /items/4 returns {\"item_id\":4}; GET /items/0 returns HTTP 404.",
+        "run_instructions": "Try one existing-style ID and the documented missing-resource case.",
+        "reset_steps": "For read-only examples, no reset is needed. For any example that writes state, use a disposable local database/test fixture; record the starting state and clean up only lab data. Never use production credentials or real personal data.",
+        "execution_mode": "human-review",
+        "limitations": "This code is inspectable lesson material, not executed by CodeLeaf. Run it only in a local virtual environment or a separately isolated runner with resource/time/network limits. Security examples are sketches, not complete production authentication or authorization systems."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to cover “Client errors versus server errors”. Write down the expected success result and one invalid, missing, duplicate, timeout or permission-boundary case that matters for this topic."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-037-questions.json"
+  },
+  "task": "Create a small reviewable artifact for “Error Handling Strategy”: explain its goal, cover the listed subtopics, show an example with expected result, then include one edge case and how you would verify it.",
+  "hints": [
+    "Start with “Client errors versus server errors” and state the required inputs, output and assumptions.",
+    "Change one thing at a time; check the official reference and capture the actual response/error instead of guessing.",
+    "Include a negative/edge-case check and document which behavior remains untested."
+  ],
+  "expected_output": "A reviewable example or design note for Error Handling Strategy, covering the PDF subtopics, expected behavior and at least one verification check.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Copying a code fragment without checking its assumptions.",
+      "why": "Installed versions, imported types, application structure and external services affect behavior.",
+      "fix": "State assumptions; check the versioned official docs; run a minimal local test and add one failure case."
+    },
+    {
+      "problem": "Treating one happy-path response as proof of correctness.",
+      "why": "Invalid input, permissions, concurrency, timeouts and cleanup are not exercised by a single request.",
+      "fix": "Add focused normal and negative tests and record exact expected status/body."
+    },
+    {
+      "problem": "Running examples against production resources.",
+      "why": "Even short examples may mutate records, reveal data or affect availability.",
+      "fix": "Use synthetic inputs and a disposable environment; review security, cleanup and rollback before promotion."
+    }
+  ],
+  "summary": [
+    "Error Handling Strategy belongs to the broader goal of repeatable checks, explicit expected outcomes, negative cases and actionable diagnostics.",
+    "Use the source subtopics as the completeness checklist and verify expected results rather than relying on intuition.",
+    "Examples in this course are illustrative until technically reviewed and executed on a supported local environment."
+  ],
+  "sources": [
+    {
+      "title": "FastAPI Tutorial - First Steps",
+      "url": "https://fastapi.tiangolo.com/tutorial/first-steps/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "application instance, path operations, development workflow"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Tutorial - Request Body",
+      "url": "https://fastapi.tiangolo.com/tutorial/body/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "Pydantic request models and validation"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Tutorial - Response Model",
+      "url": "https://fastapi.tiangolo.com/tutorial/response-model/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "response filtering and output contracts"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Tutorial - First Steps",
+      "url": "https://fastapi.tiangolo.com/tutorial/first-steps/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "application instance, path operations, development workflow"
+      ],
+      "source_type": "official documentation"
+    }
+  ],
+  "exercise_files": [],
+  "status": "draft",
+  "status_note": "Draft expansion from the numbered topics in FastAPI.pdf. Content structure, file references and SVGs are validated locally; code snippets and integration behavior still require technical review and targeted tests before publication."
+}

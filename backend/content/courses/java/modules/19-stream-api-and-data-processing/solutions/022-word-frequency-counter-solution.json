@@ -1,0 +1,32 @@
+{
+  "id": "java-exercise-solution-022",
+  "exercise_id": "java-exercise-022",
+  "title": "Word Frequency Counter reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "language": "java",
+  "answer": "import java.util.LinkedHashMap;\nimport java.util.Locale;\nimport java.util.Map;\n\npublic class Main {\n    public static void main(String[] args) {\n        String text = \"Java maps make Java data easier\";\n        Map<String, Integer> frequency = new LinkedHashMap<>();\n        for (String word : text.toLowerCase(Locale.ROOT).split(\"[^\\\\p{Alnum}]+\")) {\n            if (!word.isBlank()) frequency.merge(word, 1, Integer::sum);\n        }\n        System.out.println(frequency);\n    }\n}",
+  "explanation": "Normalize case before counting and use `merge` to increment an existing key or create a new one. Define punctuation and Unicode tokenization for the target language.",
+  "hidden_tests": [
+    {
+      "case": "normal case",
+      "input_or_setup": "Use the deterministic sample data or representative valid input described in the exercise.",
+      "expected_behavior": "{java=2, maps=1, make=1, data=1, easier=1}",
+      "purpose": "Verify the main behavior and the output contract."
+    },
+    {
+      "case": "boundary case",
+      "input_or_setup": "Test empty, zero, minimum/maximum, duplicate, or end-of-range input as appropriate to the exercise.",
+      "expected_behavior": "The result matches the documented boundary rule and does not silently corrupt state.",
+      "purpose": "Check a boundary or invariant."
+    },
+    {
+      "case": "invalid or failure case",
+      "input_or_setup": "Provide malformed input or simulate a missing file, unavailable endpoint, missing configuration, or database failure where relevant.",
+      "expected_behavior": "The operation fails clearly or returns a safe result; resources are released and secrets are not printed.",
+      "purpose": "Check explicit error behavior and cleanup."
+    }
+  ],
+  "review_notes": "Repository-only reference material. Keep it out of public API responses and frontend bundles. The platform grader is only a required-token smoke check; complete task-specific execution tests in an isolated Java runner before publication.",
+  "sample_expected_result": "{java=2, maps=1, make=1, data=1, easier=1}"
+}

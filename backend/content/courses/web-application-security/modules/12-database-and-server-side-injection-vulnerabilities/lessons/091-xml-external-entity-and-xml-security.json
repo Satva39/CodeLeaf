@@ -1,0 +1,181 @@
+{
+  "id": "web-application-security-lesson-091",
+  "slug": "xml-external-entity-and-xml-security",
+  "title": "XML External Entity and XML Security",
+  "sequence": 91,
+  "module_id": "web-application-security-module-12",
+  "module_slug": "database-and-server-side-injection-vulnerabilities",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-security",
+  "curriculum_tier": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "web-application-security-lesson-090"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-090",
+  "next_lesson_id": "web-application-security-lesson-092",
+  "keywords": [
+    "xml",
+    "external",
+    "entity",
+    "and",
+    "security",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 91,
+  "source_syllabus_title": "XML External Entity and XML Security",
+  "source_subtopics": [
+    {
+      "number": "91.1",
+      "title": "XML parsing and document type declarations"
+    },
+    {
+      "number": "91.2",
+      "title": "External entity processing risks"
+    },
+    {
+      "number": "91.3",
+      "title": "File and network access implications"
+    },
+    {
+      "number": "91.4",
+      "title": "Secure parser configurations"
+    },
+    {
+      "number": "91.5",
+      "title": "XML schema and data validation"
+    },
+    {
+      "number": "91.6",
+      "title": "Safer alternatives for data interchange"
+    }
+  ],
+  "subtopics": [
+    "XML parsing and document type declarations",
+    "External entity processing risks",
+    "File and network access implications",
+    "Secure parser configurations",
+    "XML schema and data validation",
+    "Safer alternatives for data interchange"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in XML External Entity and XML Security.",
+    "Choose an appropriate defensive control for XML External Entity and XML Security and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for XML External Entity and XML Security, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 12: Database and Server-Side Injection Vulnerabilities. It builds practical understanding of XML External Entity and XML Security with the syllabus subtopics retained below.",
+    "why_it_matters": "XML External Entity and XML Security addresses how untrusted data or requests cross a boundary and may influence application behavior. The safe fix should address the root cause and remain testable. Treat external input and identity claims as untrusted until validated, enforce the control on the server, and cover expected and denied behavior with regression tests.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: XML External Entity and XML Security",
+        "asset_path": "diagrams/lesson-091-xml-external-entity-and-xml-security.svg",
+        "alt_text": "Four-stage visual model for XML External Entity and XML Security: Receive untrusted data; Keep data separate; Validate safe interface; Regression test.",
+        "caption": "Concept map for XML External Entity and XML Security. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "XML External Entity and XML Security can be understood through this sequence: Receive untrusted data → Keep data separate → Validate safe interface → Regression test. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 91.1 XML parsing and document type declarations; 91.2 External entity processing risks; 91.3 File and network access implications; 91.4 Secure parser configurations; 91.5 XML schema and data validation; 91.6 Safer alternatives for data interchange. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Treat external input and identity claims as untrusted until validated, enforce the control on the server, and cover expected and denied behavior with regression tests."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "text",
+        "execution_mode": "human-review",
+        "title": "Safe reference example: XML External Entity and XML Security",
+        "code": "XML parser hardening checklist:\n- Disable external entity and unsafe DTD processing.\n- Do not fetch entities from files or network locations.\n- Enforce document size and nesting limits.\n- Validate the resulting data against an expected schema.",
+        "expected_output": "Untrusted XML is parsed without granting the document implicit file or network access.",
+        "run_instructions": "Parser flags differ by library. Confirm the exact secure configuration in the parser’s official documentation and test it locally.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Treat external input and identity claims as untrusted until validated, enforce the control on the server, and cover expected and denied behavior with regression tests. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “XML External Entity and XML Security”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for XML External Entity and XML Security in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "human-review",
+    "knowledge_check_file": "exams/question-files/lesson-091-questions.json",
+    "recap": [
+      "XML External Entity and XML Security is a security boundary/control topic, not a standalone checklist item.",
+      "Treat external input and identity claims as untrusted until validated, enforce the control on the server, and cover expected and denied behavior with regression tests.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

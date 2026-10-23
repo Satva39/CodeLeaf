@@ -1,0 +1,8 @@
+{
+  "id": "expressjs-exercise-solution-004",
+  "exercise_id": "expressjs-exercise-004",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference approach for Query Playground:\n\nimport express from 'express';\nconst app = express();\napp.get('/api/tasks', (req, res) => {\n  const rawPage = Number(req.query.page ?? 1);\n  const page = Number.isInteger(rawPage) && rawPage > 0 ? rawPage : 1;\n  const q = typeof req.query.q === 'string' ? req.query.q.trim() : '';\n  res.json({ page, q, items: [] });\n});\napp.listen(3000);\n\nReview the prompt's acceptance criteria. This is a teaching fragment; integrate it into a complete app, install listed external packages, and run it locally with a supported Node.js LTS release.\n\nRequired markers checked by the current CodeLeaf static grader: req.query, res.status.",
+  "explanation": "The grader for Query Playground checks required strings only. It does not execute arbitrary JavaScript, validate runtime semantics, or prove security. A reviewer should test normal input, invalid input, route order, error propagation, and cleanup where relevant."
+}

@@ -1,0 +1,265 @@
+{
+  "id": "github-actions-lesson-023",
+  "slug": "push-events",
+  "title": "Push Events",
+  "sequence": 23,
+  "module_id": "github-actions-module-04",
+  "module_slug": "events-and-workflow-triggers",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "github-actions-lesson-022"
+  ],
+  "previous_lesson_id": "github-actions-lesson-022",
+  "next_lesson_id": "github-actions-lesson-024",
+  "keywords": [
+    "push-events",
+    "events-and-workflow-triggers",
+    "running-workflows-after-pushes",
+    "branch-filters",
+    "tag-filters",
+    "path-filters",
+    "combining-filters",
+    "handling-changes-to-important-branches"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of push events and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to push events.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on push events. Push triggers may be filtered by branches, tags, and paths; review combined filters carefully so necessary validation does not get skipped. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "Push Events matters because it affects correctness, security, maintainability, or operating cost. Push triggers may be filtered by branches, tags, and paths; review combined filters carefully so necessary validation does not get skipped. Choose triggers deliberately. Event type, branch/tag filters, path filters, activity types, and token-trigger behavior determine when automation runs.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 4 visual map",
+        "asset_path": "diagrams/module-04-overview.svg",
+        "alt_text": "Ordered overview of module 4: Understanding Workflow Events; Push Events; Pull Request Events; Manual Workflow Execution; Scheduled Workflows; Repository and Workflow Events; Advanced Trigger Configuration; Triggering and Skipping Workflows Safely.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Push triggers may be filtered by branches, tags, and paths; review combined filters carefully so necessary validation does not get skipped. Choose triggers deliberately. Event type, branch/tag filters, path filters, activity types, and token-trigger behavior determine when automation runs. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "Running workflows after pushes",
+            "text": "Match the event to the intended lifecycle, then test positive and negative branch/path/activity cases. Event payloads may be attacker-controlled, and scheduled jobs use UTC rather than a guaranteed exact start time."
+          },
+          {
+            "title": "Branch filters",
+            "text": "Use filters to reduce unnecessary runs only when skipped work is genuinely unrelated. Include shared dependencies and test the changed and unchanged path cases so required checks are not bypassed."
+          },
+          {
+            "title": "Tag filters",
+            "text": "Use filters to reduce unnecessary runs only when skipped work is genuinely unrelated. Include shared dependencies and test the changed and unchanged path cases so required checks are not bypassed."
+          },
+          {
+            "title": "Path filters",
+            "text": "Use filters to reduce unnecessary runs only when skipped work is genuinely unrelated. Include shared dependencies and test the changed and unchanged path cases so required checks are not bypassed."
+          },
+          {
+            "title": "Combining filters",
+            "text": "For combining filters, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Handling changes to important branches",
+            "text": "Use filters to reduce unnecessary runs only when skipped work is genuinely unrelated. Include shared dependencies and test the changed and unchanged path cases so required checks are not bypassed."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "name: Scoped push validation\non:\n  push:\n    branches: [main]\n    paths:\n      - \"src/**\"\n      - \"tests/**\"\npermissions:\n  contents: read\njobs:\n  validate:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: echo \"Replace with checks for src and tests\"",
+        "expected_output": "Changes under `src/` or `tests/` on `main` can start the workflow; changes outside those paths do not match this push filter.",
+        "run_instructions": "Create a test commit inside and outside the configured paths and compare whether a run is scheduled.",
+        "reset_steps": "Revert the test commits and review that the filter does not skip any shared dependency checks.",
+        "execution_mode": "workflow-fragment"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to push events. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain push events, read the example, and identify a way to validate it. The wider system goal remains: Choose triggers and filters that run the right validation at the right time without exposing privileged jobs."
+      }
+    ],
+    "task": "Apply push events to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: Push triggers may be filtered by branches, tags, and paths; review combined filters carefully so necessary validation does not get skipped.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: Push triggers may be filtered by branches, tags, and paths; review combined filters carefully so necessary validation does not get skipped. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "Push triggers may be filtered by branches, tags, and paths; review combined filters carefully so necessary validation does not get skipped.",
+      "Choose triggers deliberately. Event type, branch/tag filters, path filters, activity types, and token-trigger behavior determine when automation runs.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-023-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "workflow-fragment",
+    "references": [
+      {
+        "title": "Events that trigger workflows",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "push",
+          "pull_request",
+          "workflow_dispatch",
+          "schedule",
+          "workflow_run",
+          "workflow_call",
+          "repository_dispatch"
+        ]
+      },
+      {
+        "title": "Workflow syntax for GitHub Actions",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "workflow files",
+          "jobs",
+          "steps",
+          "permissions",
+          "defaults",
+          "concurrency",
+          "matrix",
+          "environments"
+        ]
+      },
+      {
+        "title": "Secure use reference",
+        "url": "https://docs.github.com/en/actions/reference/security/secure-use",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "security_guidance",
+        "supports": [
+          "least privilege",
+          "third-party actions",
+          "full SHA pinning",
+          "untrusted input",
+          "privileged workflow triggers",
+          "cache security"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [
+    "../exercises/004-filter-workflow-events.json"
+  ],
+  "sources": [
+    {
+      "title": "Events that trigger workflows",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "push",
+        "pull_request",
+        "workflow_dispatch",
+        "schedule",
+        "workflow_run",
+        "workflow_call",
+        "repository_dispatch"
+      ]
+    },
+    {
+      "title": "Workflow syntax for GitHub Actions",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "workflow files",
+        "jobs",
+        "steps",
+        "permissions",
+        "defaults",
+        "concurrency",
+        "matrix",
+        "environments"
+      ]
+    },
+    {
+      "title": "Secure use reference",
+      "url": "https://docs.github.com/en/actions/reference/security/secure-use",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "security_guidance",
+      "supports": [
+        "least privilege",
+        "third-party actions",
+        "full SHA pinning",
+        "untrusted input",
+        "privileged workflow triggers",
+        "cache security"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "23",
+    "module_title": "Events and Workflow Triggers",
+    "subtopics": [
+      "Running workflows after pushes",
+      "Branch filters",
+      "Tag filters",
+      "Path filters",
+      "Combining filters",
+      "Handling changes to important branches"
+    ]
+  }
+}

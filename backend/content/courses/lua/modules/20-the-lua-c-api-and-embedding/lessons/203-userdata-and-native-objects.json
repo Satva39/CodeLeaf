@@ -1,0 +1,149 @@
+{
+  "id": "lua-lesson-203",
+  "slug": "userdata-and-native-objects",
+  "title": "Userdata and Native Objects",
+  "sequence": 203,
+  "module_id": "lua-module-20",
+  "module_slug": "the-lua-c-api-and-embedding",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "lua-lesson-202"
+  ],
+  "previous_lesson_id": "lua-lesson-202",
+  "next_lesson_id": "lua-lesson-204",
+  "keywords": [
+    "userdata-and-native-objects",
+    "full-userdata-and-native-resource-wrappers",
+    "metatables-for-native-types"
+  ],
+  "source_syllabus_number": 203,
+  "subtopics": [
+    "Full userdata and native resource wrappers",
+    "Metatables for native types"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of userdata and Native Objects and the key behavior described in this lesson.",
+    "Apply userdata and Native Objects in a small Lua example and predict its result.",
+    "Identify a relevant edge case, version constraint, or host-runtime limitation for userdata and Native Objects."
+  ],
+  "content": {
+    "intro": "The C API communicates with Lua through a `lua_State` and stack. Carefully track stack indexes and return counts, check arguments, handle errors across the C boundary, and build against the intended Lua headers and library.",
+    "why_it_matters": "The C API communicates with Lua through a `lua_State` and stack. Carefully track stack indexes and return counts, check arguments, handle errors across the C boundary, and build against the intended Lua headers and library. This concept appears in the supplied syllabus; keep the scope and assumptions visible in your implementation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual map: Userdata and Native Objects",
+        "asset_path": "diagrams/lessons/lesson-203.svg",
+        "alt_text": "Concept map for Userdata and Native Objects; understand the concept, inspect a Lua example, and verify behavior and edge cases.",
+        "caption": "Visual summary of Userdata and Native Objects; use the three-step path while working through the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Userdata and Native Objects is part of The Lua C API and Embedding. Start with the exact rule or capability, identify what the example assumes, and note what changes on another Lua version or in a host application."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core explanation",
+        "text": "The C API communicates with Lua through a `lua_State` and stack. Carefully track stack indexes and return counts, check arguments, handle errors across the C boundary, and build against the intended Lua headers and library."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics to cover",
+        "items": [
+          {
+            "title": "Full userdata and native resource wrappers",
+            "text": "Understand Full userdata and native resource wrappers; connect it to Userdata and Native Objects, then state one useful example or boundary case."
+          },
+          {
+            "title": "Metatables for native types",
+            "text": "Understand Metatables for native types; connect it to Userdata and Native Objects, then state one useful example or boundary case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through the example",
+        "text": "Read the small example, predict every output line, then run it locally with a compatible runtime. Static C API reference only; compile against the exact target Lua headers/library and review the return status and error stack. No C compiler or Lua development headers were tested in this run. Keep the smallest reproducible case if the observed behavior differs."
+      },
+      {
+        "type": "code",
+        "language": "c",
+        "execution_mode": "static-validation",
+        "code": "#include <lua.h>\n#include <lauxlib.h>\n#include <lualib.h>\n\n/* Minimal state lifecycle pattern; handle errors in production code. */\nlua_State *L = luaL_newstate();\nif (L != NULL) {\n    luaL_openlibs(L);\n    int status = luaL_dostring(L, \"print(\\\"Hello from Lua\\\")\");\n    (void)status;\n    lua_close(L);\n}",
+        "expected_output": "Hello from Lua",
+        "caption": "Static reference example for local verification; CodeLeaf does not execute this snippet unless a dedicated isolated runner is explicitly provided.",
+        "run_instructions": "Save the code in a local file with the correct language extension and test it using the runtime noted in the lesson. Static C API reference only; compile against the exact target Lua headers/library and review the return status and error stack. No C compiler or Lua development headers were tested in this run. Compare the exact output to the documented result.",
+        "reset_steps": "Restore the original snippet, remove generated test files if any, and repeat from a clean local test state."
+      },
+      {
+        "type": "callout",
+        "title": "Version, host, and safety note",
+        "text": "Static C API reference only; compile against the exact target Lua headers/library and review the return status and error stack. No C compiler or Lua development headers were tested in this run."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Mistake 1",
+            "text": "Confusing Userdata and Native Objects with a similarly named feature in another language or runtime. Fix: follow the version-matched reference and test the smallest example."
+          },
+          {
+            "title": "Mistake 2",
+            "text": "Relying on an output order or environment capability that the language/host does not guarantee. Fix: document assumptions and make order/capabilities explicit."
+          },
+          {
+            "title": "Mistake 3",
+            "text": "Skipping a boundary test or failing to check error-return values. Fix: test invalid and boundary inputs and inspect failure values."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Recap and next step",
+        "text": "Recap: explain Userdata and Native Objects without the example, predict its behavior, and name one limit. Next: Managing Errors Across the C Boundary."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate “Userdata and Native Objects” with a different input or boundary case. Predict the result before running it, record what you observe, and explain one limitation.",
+    "task_acceptance_criteria": [
+      "Explain the central behavior of Userdata and Native Objects in your own words.",
+      "Verify the result using a supported local runtime or clearly state why the host/tooling prevents a full run.",
+      "Identify a boundary case or compatibility/security limit relevant to the lesson."
+    ],
+    "hints": [
+      "First identify the input, output, and any assumed runtime or host feature.",
+      "Reduce the problem to the smallest example that exposes the relevant rule.",
+      "Test one normal case and one boundary/failure case; inspect error output without leaking secrets."
+    ],
+    "expected_output": "Hello from Lua",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-203-knowledge-check.json",
+    "references": [
+      {
+        "title": "Lua 5.5 Reference Manual",
+        "url": "https://www.lua.org/manual/5.5/",
+        "publisher": "Lua.org",
+        "checked_on": "2026-10-20"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    "references/reference-index.json"
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Lua curriculum; requires expert technical, grading, accessibility, and runtime review before publication.",
+  "common_mistakes": [
+    "Confusing Userdata and Native Objects with a similarly named feature in another language or runtime.",
+    "Relying on an output order or environment capability that the language/host does not guarantee.",
+    "Skipping a boundary test or failing to check error-return values."
+  ],
+  "next_steps": [
+    "Continue with Managing Errors Across the C Boundary."
+  ]
+}

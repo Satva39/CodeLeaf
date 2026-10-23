@@ -1,0 +1,193 @@
+{
+  "id": "linux-lesson-106",
+  "slug": "network-diagnostics",
+  "title": "Network Diagnostics",
+  "sequence": 106,
+  "module_id": "linux-module-12",
+  "module_slug": "linux-networking-fundamentals",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "linux-lesson-105"
+  ],
+  "previous_lesson_id": "linux-lesson-105",
+  "next_lesson_id": "linux-lesson-107",
+  "keywords": [
+    "network",
+    "diagnostics",
+    "curl",
+    "wget",
+    "nc where installed",
+    "connection timeouts and refused connections"
+  ],
+  "source_syllabus_number": 106,
+  "subtopics": [
+    "curl",
+    "wget",
+    "nc where installed",
+    "Connection timeouts and refused connections",
+    "Testing DNS, routing, and application layers separately"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Network Diagnostics and identify key concepts from the supplied syllabus.",
+    "Use an appropriate read-only check or controlled example to demonstrate network diagnostics.",
+    "Describe one common failure mode, safety consideration, or platform/version difference relevant to this topic."
+  ],
+  "content": {
+    "intro": "This lesson introduces network diagnostics as part of linux networking fundamentals. Begin with an observation you can safely repeat, then explain what the result tells you and what it does not prove.",
+    "why_it_matters": "Diagnose networking layer by layer, from interface and address through route, DNS, socket, and application.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual: Network Diagnostics",
+        "asset_path": "diagrams/module-12-overview.svg",
+        "alt_text": "Module roadmap for Linux Networking Fundamentals, listing 12 lessons from 100 through 111 in curriculum order.",
+        "caption": "Visual aid for Network Diagnostics. Use it to orient the example, then return to the lesson text for caveats and distribution differences."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Network troubleshooting is most efficient when it proceeds layer by layer: interface, address, route, name resolution, socket, then application."
+      },
+      {
+        "type": "list",
+        "title": "What the syllabus covers",
+        "items": [
+          {
+            "title": "curl",
+            "text": "curl: Identify the concept’s role in the workflow, choose a read-only inspection first, and record the version or distribution details that could change the result."
+          },
+          {
+            "title": "wget",
+            "text": "wget: Identify the concept’s role in the workflow, choose a read-only inspection first, and record the version or distribution details that could change the result."
+          },
+          {
+            "title": "nc where installed",
+            "text": "nc where installed: Use the tool appropriate to the distribution, inspect proposed changes first, and note the package/runtime version that determines behavior."
+          },
+          {
+            "title": "Connection timeouts and refused connections",
+            "text": "Connection timeouts and refused connections: Try a small reproducible command with quoted inputs, inspect standard output and error separately, and check the exit status as well as the printed text."
+          },
+          {
+            "title": "Testing DNS, routing, and application layers separately",
+            "text": "Testing DNS, routing, and application layers separately: Test one network layer at a time and capture the exact command result; configuration names and tools vary by distribution and installed packages."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "bash",
+        "execution_mode": "manual-terminal; requires a local Linux environment or disposable VM; no isolated Linux runner is provided by CodeLeaf",
+        "code": "curl --version | head -n 1",
+        "expected_output": "The installed curl version, if curl is available.",
+        "run_instructions": "Use a Linux machine, WSL environment, or disposable virtual machine. Check the command with its local manual page before adapting it. The in-page example shows reference output only; it does not execute Bash/Linux commands on the CodeLeaf server. Commands and output formats may vary by distribution and installed utility version.",
+        "reset_steps": "These example commands are read-only or print-only. Exit the terminal when finished; if you adapt the task to create files, use a disposable practice folder and remove only the test files you deliberately created.",
+        "example_review_note": "Topic-specific draft example authored for Linux course. Output is environment-dependent where stated; review on the target distribution before publishing."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "First, state what you expect from the example. Run it in the intended environment, capture standard output and any error message, and inspect the exit status where meaningful. Then connect the observation to this lesson: Network Diagnostics. Do not infer more than the evidence supports."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake",
+        "text": "A common mistake is to assume network diagnostics behaves identically on every distribution, kernel, utility version, and administrative policy. Verify the installed tool and consult the matching manual before using the procedure elsewhere."
+      },
+      {
+        "type": "callout",
+        "title": "Safety and compatibility",
+        "text": "The sample data is synthetic and the pipeline does not read private logs. For commands that edit files, manage services, change network/firewall state, partition disks, change permissions recursively, or alter boot settings, use an isolated VM, take a snapshot/backup, review the exact target, and prepare a recovery path before acting."
+      },
+      {
+        "type": "paragraph",
+        "title": "Troubleshooting and reset",
+        "text": "If the command is missing, check whether the required package is installed and which distribution you are using. If access is denied, do not immediately escalate to root; confirm the target path, identity, and required permission. If the result differs, capture the command, output, version, and environment so the issue can be reproduced."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "Remember the core relationship: Network troubleshooting is most efficient when it proceeds layer by layer: interface, address, route, name resolution, socket, then application. The goal is to explain the observed result, test a boundary case, and record a limitation rather than memorize a command in isolation."
+      }
+    ],
+    "task": "In an isolated Linux lab, investigate network diagnostics. Use the guided example as a starting point, record the output/status, and test one boundary, failure, or distribution-specific case. Explain what you learned without changing a production system.",
+    "task_acceptance_criteria": [
+      "The practical step is aligned to this lesson and uses synthetic inputs or a disposable environment.",
+      "The submission records expected and observed behavior, including an exit status or error when relevant.",
+      "One boundary case, failure path, or version/distribution difference is tested and explained.",
+      "Any potentially destructive command is previewed and kept out of production; the result can be reproduced."
+    ],
+    "hints": [
+      "Start with read-only inspection and use the manual page for the installed command.",
+      "Change one variable at a time and preserve the exact output/error.",
+      "Record the distribution, kernel/utility version, privileges, and any assumptions that affect the result."
+    ],
+    "recap": [
+      "Network troubleshooting is most efficient when it proceeds layer by layer: interface, address, route, name resolution, socket, then application.",
+      "Use evidence rather than assumptions; make platform differences explicit.",
+      "Protect credentials and data, and plan how to reverse state-changing operations."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-106-questions.json"
+  },
+  "exercise_files": [
+    "../exercises/106-network-diagnostics-practice.json",
+    "../exercises/section-c-i11-diagnose-a-network-service.json"
+  ],
+  "sources": [
+    {
+      "id": "ubuntu-server",
+      "title": "Ubuntu Server documentation",
+      "url": "https://documentation.ubuntu.com/server/",
+      "publisher": "Canonical / Ubuntu",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "installation",
+        "networking",
+        "storage",
+        "package management",
+        "SSH",
+        "server administration"
+      ],
+      "source_type": "official distribution documentation",
+      "notes": "Distribution-specific procedures should not be assumed to apply unchanged to Fedora, Arch, Alpine, openSUSE, or other systems."
+    },
+    {
+      "id": "nftables-manual",
+      "title": "nftables manual",
+      "url": "https://www.netfilter.org/projects/nftables/manpage.html",
+      "publisher": "Netfilter Project",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "packet filtering",
+        "firewall policy",
+        "network security"
+      ],
+      "source_type": "official project manual",
+      "notes": "Firewall changes can interrupt access. Use a console or isolated VM, inspect rules, and have a rollback path."
+    },
+    {
+      "id": "linux-man-pages",
+      "title": "Linux man-pages project",
+      "url": "https://man7.org/linux/man-pages/",
+      "publisher": "Linux man-pages project",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "commands",
+        "system calls",
+        "files",
+        "permissions",
+        "processes",
+        "networking",
+        "administration"
+      ],
+      "source_type": "technical reference manuals",
+      "notes": "Consult the manual page shipped with the target distribution when behavior or installed versions differ."
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson mapped directly to Linux.pdf Section B lesson 106. Review the command example and assessment before publication."
+}

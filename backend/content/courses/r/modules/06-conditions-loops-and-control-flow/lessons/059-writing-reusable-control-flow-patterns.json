@@ -1,0 +1,183 @@
+{
+  "id": "r-lesson-059",
+  "slug": "writing-reusable-control-flow-patterns",
+  "title": "Writing Reusable Control-Flow Patterns",
+  "sequence": 59,
+  "module_id": "r-module-06",
+  "module_slug": "conditions-loops-and-control-flow",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "r-lesson-058"
+  ],
+  "previous_lesson_id": "r-lesson-058",
+  "next_lesson_id": "r-lesson-060",
+  "keywords": [
+    "writing-reusable-control-flow-patterns",
+    "conditions-loops-and-control-flow",
+    "validation-before-processing",
+    "processing-collections",
+    "accumulating-results",
+    "early-returns-and-exit-conditions",
+    "implementing-simple-algorithms",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 59,
+  "subtopics": [
+    "Validation Before Processing",
+    "Processing Collections",
+    "Accumulating Results",
+    "Early Returns and Exit Conditions",
+    "Implementing Simple Algorithms"
+  ],
+  "learning_outcomes": [
+    "Explain the role of writing reusable control-flow patterns and identify its main inputs, outputs or constraints.",
+    "Apply validation before processing in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Writing Reusable Control-Flow Patterns is part of Conditions, Loops, and Control Flow. Start with validation before processing and connect it to the worked example and expected result.",
+    "why_it_matters": "Writing Reusable Control-Flow Patterns is one step in Conditions, Loops, and Control Flow; branches select paths; loops repeat work. Guard clauses and well-defined exit conditions prevent fragile logic.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Writing Reusable Control-Flow Patterns",
+        "asset_path": "diagrams/module-06-overview.svg",
+        "alt_text": "Concept visual supporting lesson 59, Writing Reusable Control-Flow Patterns. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Writing Reusable Control-Flow Patterns is one step in Conditions, Loops, and Control Flow; branches select paths; loops repeat work. Guard clauses and well-defined exit conditions prevent fragile logic. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Validation Before Processing",
+            "text": "Turn validation before processing into a check with a clear condition, expected result and an example that should fail."
+          },
+          {
+            "title": "Processing Collections",
+            "text": "Explain processing collections in the context of writing reusable control-flow patterns, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Accumulating Results",
+            "text": "Explain accumulating results in the context of writing reusable control-flow patterns, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Early Returns and Exit Conditions",
+            "text": "Use early returns and exit conditions to make input, output and scope explicit, then test both a typical call and one edge case."
+          },
+          {
+            "title": "Implementing Simple Algorithms",
+            "text": "Explain implementing simple algorithms in the context of writing reusable control-flow patterns, connect it to the example, and verify one expected result or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Test typical, boundary, empty, and missing inputs. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Writing Reusable Control-Flow Patterns",
+        "language": "r",
+        "code": "all(c(2, 3, 4) > 0)",
+        "expected_output": "[1] TRUE",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "Validation expressions can make preconditions explicit. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For writing reusable control-flow patterns, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-059-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply writing reusable control-flow patterns to a small synthetic example. Start with validation before processing, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the validation before processing idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible writing reusable control-flow patterns example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Validation Before Processing” and identify the input and output before coding.",
+      "Inspect the type and shape of the result, then test one ordinary and one boundary input.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: Writing Reusable Control-Flow Patterns is one step in Conditions, Loops, and Control Flow; branches select paths; loops repeat work. Guard clauses and well-defined exit conditions prevent fragile logic.",
+      "Practice: Test typical, boundary, empty, and missing inputs.",
+      "Source syllabus focus: Validation Before Processing. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply writing reusable control-flow patterns to a small synthetic example. Start with validation before processing, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible writing reusable control-flow patterns example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Validation Before Processing” and identify the input and output before coding.",
+    "Inspect the type and shape of the result, then test one ordinary and one boundary input.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: Writing Reusable Control-Flow Patterns is one step in Conditions, Loops, and Control Flow; branches select paths; loops repeat work. Guard clauses and well-defined exit conditions prevent fragile logic.",
+    "Practice: Test typical, boundary, empty, and missing inputs.",
+    "Source syllabus focus: Validation Before Processing. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 6 — Conditions, Loops, and Control Flow, lesson 59: Writing Reusable Control-Flow Patterns.",
+    "Official documentation: https://cran.r-project.org/doc/manuals/r-release/R-intro.html",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

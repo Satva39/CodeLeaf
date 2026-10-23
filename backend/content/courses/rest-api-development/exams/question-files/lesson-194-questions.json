@@ -1,0 +1,49 @@
+{
+  "id": "rest-api-development-knowledge-check-194",
+  "lesson_id": "rest-api-development-lesson-194",
+  "lesson_slug": "timeouts-and-failure-budgets",
+  "title": "Knowledge check: Timeouts and Failure Budgets",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "questions": [
+    {
+      "id": "rest-api-development-q-194-01",
+      "type": "single_choice",
+      "prompt": "What is a safe retry policy for a rate-limited or failing dependency?",
+      "options": [
+        "Use finite timeouts, bounded retries with backoff/jitter, and retry only when the operation semantics permit it.",
+        "Retry immediately forever until the request succeeds.",
+        "Retry every state-changing request regardless of idempotency.",
+        "Ignore Retry-After and increase concurrent attempts after each failure."
+      ],
+      "answer_key": "Use finite timeouts, bounded retries with backoff/jitter, and retry only when the operation semantics permit it.",
+      "explanation": "Use finite timeouts, bounded retries with backoff/jitter, and retry only when the operation semantics permit it. This is especially relevant to “Timeouts and Failure Budgets” because the API contract must remain explicit and reviewable."
+    },
+    {
+      "id": "rest-api-development-q-194-02",
+      "type": "single_choice",
+      "prompt": "For the lesson “Timeouts and Failure Budgets”, which check provides the strongest practical evidence?",
+      "options": [
+        "Rely on a code review comment without running any representative check.",
+        "Run one happy-path call and skip invalid, denied, and failure scenarios.",
+        "Test against production records so the exercise cannot be repeated safely.",
+        "Simulate persistent failure and confirm timeouts, retry limits, and rate-limit signals work."
+      ],
+      "answer_key": "Simulate persistent failure and confirm timeouts, retry limits, and rate-limit signals work.",
+      "explanation": "A useful check is repeatable, tied to an observable contract, and includes an important negative or boundary scenario."
+    },
+    {
+      "id": "rest-api-development-q-194-03",
+      "type": "single_choice",
+      "prompt": "Which review warning is most relevant to “Timeouts and Failure Budgets”?",
+      "options": [
+        "A representative test can reproduce the result.",
+        "The API avoids exposing internal secrets and personal data.",
+        "Retries are unbounded, timeouts absent, or rate limits are not observable.",
+        "The expected behavior and relevant failure cases are documented."
+      ],
+      "answer_key": "Retries are unbounded, timeouts absent, or rate limits are not observable.",
+      "explanation": "This finding weakens a core API guarantee and should be treated as a design or release issue, not only a style concern."
+    }
+  ]
+}

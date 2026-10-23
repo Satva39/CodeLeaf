@@ -1,0 +1,228 @@
+{
+    "id": "html-lesson-125",
+    "slug": "html-validation",
+    "title": "HTML Validation",
+    "sequence": 125,
+    "module_id": "html-module-23",
+    "module_slug": "validation-debugging-and-testing",
+    "level": "advanced",
+    "difficulty": "advanced",
+    "track": "advanced-core",
+    "estimated_minutes": 13,
+    "prerequisites": [
+        "html-lesson-124"
+    ],
+    "previous_lesson_id": "html-lesson-124",
+    "next_lesson_id": "html-lesson-126",
+    "keywords": [
+        "validation",
+        "debugging",
+        "testing",
+        "checks",
+        "syntax",
+        "errors",
+        "semantic",
+        "problems",
+        "checker",
+        "interpreting",
+        "messages",
+        "fixing"
+    ],
+    "learning_outcomes": [
+        "Explain the purpose of html validation in a browser document.",
+        "Apply at least one relevant rule from this lesson to a small HTML example.",
+        "Check the result using browser inspection, a validator, or an accessibility checklist."
+    ],
+    "content": {
+        "intro": "A validator reports standards-related markup problems that can be easy to miss by sight. Use its diagnostics as a repeatable part of authoring and review.",
+        "why_it_matters": "Professional pages need to load efficiently, validate cleanly, adapt to different contexts, and remain understandable to other developers.",
+        "content_blocks": [
+            {
+                "type": "diagram",
+                "format": "svg",
+                "title": "HTML quality loop",
+                "asset_path": "diagrams/validation-workflow.svg",
+                "alt_text": "A clean automated report is useful evidence but does not prove the whole experience is accessible.",
+                "caption": "Use this visual as a quick map; the sections below explain the decisions in more detail."
+            },
+            {
+                "type": "paragraph",
+                "title": "Why this matters",
+                "text": "Professional pages need to load efficiently, validate cleanly, adapt to different contexts, and remain understandable to other developers."
+            },
+            {
+                "type": "paragraph",
+                "title": "Core idea",
+                "text": "Form controls need meaningful labels and names, clear instructions, and constraints that match the data. Treat browser validation as feedback for users, not proof that submitted data is trustworthy."
+            },
+            {
+                "type": "list",
+                "title": "Concepts covered in this lesson",
+                "items": [
+                    {
+                        "title": "What HTML validation checks",
+                        "text": "Form controls need meaningful labels and names, clear instructions, and constraints that match the data. Treat browser validation as feedback for users, not proof that submitted data is trustworthy."
+                    },
+                    {
+                        "title": "Syntax errors versus semantic problems",
+                        "text": "Use a repeatable loop: reproduce the issue, inspect the source and rendered DOM, read validator or console output, fix one cause, then retest the expected behavior."
+                    },
+                    {
+                        "title": "Using the Nu HTML Checker",
+                        "text": "Using the Nu HTML Checker is one of the decisions covered by HTML Validation. Decide what the markup is meant to communicate, choose the native HTML structure that expresses that meaning, and verify the result in a browser or a relevant validation checklist. Avoid using an element or attribute just because its default appearance seems convenient."
+                    },
+                    {
+                        "title": "Interpreting validation messages",
+                        "text": "Form controls need meaningful labels and names, clear instructions, and constraints that match the data. Treat browser validation as feedback for users, not proof that submitted data is trustworthy."
+                    },
+                    {
+                        "title": "Fixing invalid nesting and attributes",
+                        "text": "Fixing invalid nesting and attributes is one of the decisions covered by HTML Validation. Decide what the markup is meant to communicate, choose the native HTML structure that expresses that meaning, and verify the result in a browser or a relevant validation checklist. Avoid using an element or attribute just because its default appearance seems convenient."
+                    },
+                    {
+                        "title": "Validating individual pages and full websites",
+                        "text": "Validating individual pages and full websites is one of the decisions covered by HTML Validation. Decide what the markup is meant to communicate, choose the native HTML structure that expresses that meaning, and verify the result in a browser or a relevant validation checklist. Avoid using an element or attribute just because its default appearance seems convenient."
+                    }
+                ]
+            },
+            {
+                "type": "code",
+                "language": "html",
+                "code": "<form action=\"/feedback\" method=\"post\">\n  <label for=\"email\">Email address</label>\n  <input id=\"email\" name=\"email\" type=\"email\" required autocomplete=\"email\">\n  <label for=\"message\">Message</label>\n  <textarea id=\"message\" name=\"message\" rows=\"4\" required></textarea>\n  <button type=\"submit\">Send feedback</button>\n</form>",
+                "expected_output": "The browser checks required fields and email syntax. A real submission also needs a server endpoint that validates the data.",
+                "run_instructions": "Save the snippet in an .html file and open it in a modern browser. Inspect the result, then run an HTML validator if the lesson concerns syntax or structure. Example paths are illustrative; provide the referenced files or adjust paths before evaluating media/resource behavior.",
+                "reset_steps": "Restore the snippet in this lesson file or paste it into a fresh index.html file, then repeat the check."
+            },
+            {
+                "type": "callout",
+                "title": "Keep in mind",
+                "text": "Prefer the native semantic element that communicates intent. Do not choose markup solely for its default visual style."
+            }
+        ],
+        "task": "Create a small HTML example that demonstrates html validation. Keep the markup minimal, give every element a clear purpose, and inspect the rendered result.",
+        "task_acceptance_criteria": [
+            "Use the relevant concept from HTML Validation.",
+            "Keep IDs unique and use valid nesting.",
+            "Check the result in a browser and record one finding."
+        ],
+        "hints": [
+            "Start with the smallest valid example for html validation.",
+            "Add one element or attribute at a time, then check the result.",
+            "Compare the source and rendered DOM if the behavior surprises you."
+        ],
+        "expected_output": "The browser checks required fields and email syntax. A real submission also needs a server endpoint that validates the data.",
+        "troubleshooting": [
+            {
+                "symptom": "The expected content does not appear.",
+                "check": "Confirm the file was saved with an .html extension and inspect its path and nesting."
+            },
+            {
+                "symptom": "A resource does not load.",
+                "check": "Check the resolved URL and confirm the referenced file or external resource exists and allows the request."
+            },
+            {
+                "symptom": "The page looks correct but the markup may be invalid.",
+                "check": "Run the Nu Html Checker and follow its first relevant diagnostic, then validate again."
+            }
+        ],
+        "common_mistakes": [
+            {
+                "problem": "Choosing markup for appearance alone",
+                "why": "The default appearance is not the element’s main meaning and can make navigation or maintenance harder.",
+                "fix": "Choose the element that matches the content purpose, then use CSS for presentation."
+            },
+            {
+                "problem": "Assuming a browser’s recovery means the source is valid",
+                "why": "Browsers often recover from malformed markup, which can hide defects and produce unexpected document structure.",
+                "fix": "Inspect the rendered DOM and run a validator against the original source."
+            },
+            {
+                "problem": "Testing only the happy path",
+                "why": "Missing files, narrow viewports, keyboard access, invalid input, or other states can expose defects.",
+                "fix": "Check the expected state plus one realistic edge case and an accessibility path."
+            }
+        ],
+        "summary": [
+            "HTML Validation is about expressing document structure or behavior intentionally.",
+            "Validating individual pages and full websites is one of the decisions covered by HTML Validation. Decide what the markup is meant to communicate, choose the native HTML structure that expresses that meaning, and verify the result in a browser or a relevant validation checklist. Avoid using an element or attribute just because its default appearance seems convenient.",
+            "Verify both markup and behavior; do not infer correctness from appearance alone."
+        ],
+        "knowledge_check_file": "exams/question-files/lesson-125-questions.json",
+        "solution_notes": "Use the related exercise solution only after making a first attempt. Explanatory hints are for guided practice; exercise answer keys are stored separately in the content repository.",
+        "run_mode": "browser-preview",
+        "references": [
+            {
+                "title": "HTML Living Standard",
+                "url": "https://html.spec.whatwg.org/",
+                "publisher": "WHATWG",
+                "checked_on": "2026-10-10",
+                "supports": [
+                    "document structure",
+                    "elements and attributes",
+                    "forms",
+                    "embedded content",
+                    "interactive elements",
+                    "browser parsing",
+                    "obsolete features"
+                ]
+            },
+            {
+                "title": "HTML: HyperText Markup Language",
+                "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+                "publisher": "MDN Web Docs",
+                "checked_on": "2026-10-10",
+                "supports": [
+                    "HTML overview and authoring guides"
+                ]
+            },
+            {
+                "title": "Nu Html Checker",
+                "url": "https://validator.w3.org/nu/",
+                "publisher": "W3C validator service",
+                "checked_on": "2026-10-10",
+                "supports": [
+                    "HTML validation and markup diagnostics"
+                ]
+            }
+        ]
+    },
+    "exercise_files": [
+        "../exercises/026-html-standards-audit.json"
+    ],
+    "sources": [
+        {
+            "title": "HTML Living Standard",
+            "url": "https://html.spec.whatwg.org/",
+            "publisher": "WHATWG",
+            "checked_on": "2026-10-10",
+            "supports": [
+                "document structure",
+                "elements and attributes",
+                "forms",
+                "embedded content",
+                "interactive elements",
+                "browser parsing",
+                "obsolete features"
+            ]
+        },
+        {
+            "title": "HTML: HyperText Markup Language",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+            "publisher": "MDN Web Docs",
+            "checked_on": "2026-10-10",
+            "supports": [
+                "HTML overview and authoring guides"
+            ]
+        },
+        {
+            "title": "Nu Html Checker",
+            "url": "https://validator.w3.org/nu/",
+            "publisher": "W3C validator service",
+            "checked_on": "2026-10-10",
+            "supports": [
+                "HTML validation and markup diagnostics"
+            ]
+        }
+    ],
+    "status": "draft"
+}

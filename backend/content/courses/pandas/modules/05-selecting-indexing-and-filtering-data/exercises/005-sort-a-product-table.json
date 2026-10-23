@@ -1,0 +1,67 @@
+{
+  "id": "pandas-exercise-05",
+  "slug": "sort-a-product-table",
+  "title": "Sort a Product Table",
+  "sequence": 5,
+  "lesson_id": "pandas-lesson-041",
+  "lesson_slug": "sorting-and-ranking",
+  "module_id": "pandas-module-05",
+  "difficulty": "beginner",
+  "type": "code",
+  "prompt": "Sort products by price, rating, and name.",
+  "scenario": "Use the synthetic data described below to practise s, o, r, t, i, n, g,  , a, n, d,  , r, a, n, k, i, n, g. Do not assume the input is correct without validating it.",
+  "skills": "Sorting and ranking",
+  "starter": {
+    "language": "python",
+    "code": "import pandas as pd\n\ndf = pd.DataFrame({\"product\": [\"Tea\", \"Coffee\", \"Juice\", \"Water\"], \"price\": [12, 35, 18, 8], \"rating\": [4.5, 4.2, 4.0, 3.8]})\n\nsorted_products = df.sort_values([\"price\", \"product\"], ascending=[False, True])\nprint(sorted_products[[\"product\", \"price\"]])",
+    "dataset_note": "Use small synthetic in-memory data; do not place private or real customer data in exercises."
+  },
+  "input_schema": {
+    "description": "Create or use a synthetic DataFrame with only the columns needed for this exercise.",
+    "validation": [
+      "Document expected columns and data types.",
+      "State how missing values or duplicates should be treated."
+    ]
+  },
+  "expected_output": [
+    "Sort by multiple columns and specify each direction.",
+    "Handle ties deterministically with a secondary sort key.",
+    "Verify the sorted result without losing meaningful identifiers."
+  ],
+  "public_tests": [
+    {
+      "name": "normal-case",
+      "description": "The solution returns the required columns and correctly computes the stated result."
+    },
+    {
+      "name": "edge-case",
+      "description": "The solution documents behavior for a missing value, duplicate key, empty input, invalid value, or other relevant edge case."
+    }
+  ],
+  "hints": [
+    "Write down the expected result before coding.",
+    "Use Pandas operations that preserve labels unless position-based behavior is intended.",
+    "Add a small assertion for the most important property."
+  ],
+  "acceptance_criteria": [
+    "Sort by multiple columns and specify each direction.",
+    "Handle ties deterministically with a secondary sort key.",
+    "Verify the sorted result without losing meaningful identifiers."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "s"
+    ],
+    "case_sensitive": false,
+    "note": "The generic short-response grader is only an initial scaffold; a reviewed isolated Python grader is required for automatic execution of arbitrary learner code."
+  },
+  "solution_file": "solutions/005-sort-a-product-table-solution.json",
+  "solution": {},
+  "retry_policy": {
+    "max_attempts": null,
+    "allow_retry_after_feedback": true
+  },
+  "status": "draft",
+  "status_note": "Review prompt, starter, rubric, and server-side grading before publication."
+}

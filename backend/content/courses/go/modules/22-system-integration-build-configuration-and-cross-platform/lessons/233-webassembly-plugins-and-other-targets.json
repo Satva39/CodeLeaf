@@ -1,0 +1,271 @@
+{
+  "id": "go-lesson-233",
+  "slug": "webassembly-plugins-and-other-targets",
+  "title": "WebAssembly, Plugins, and Other Targets",
+  "sequence": 233,
+  "module_id": "go-module-22",
+  "module_slug": "system-integration-build-configuration-and-cross-platform",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "elective",
+  "estimated_minutes": 23,
+  "prerequisites": [
+    "go-lesson-232"
+  ],
+  "previous_lesson_id": "go-lesson-232",
+  "next_lesson_id": "go-lesson-234",
+  "keywords": [
+    "webassembly plugins and other targets",
+    "go and webassembly",
+    "browser and server side webassembly use cases",
+    "shared libraries and native integration",
+    "the go plugin mechanism and its limitations",
+    "evaluating alternative deployment architectures",
+    "Go",
+    "Golang"
+  ],
+  "source_syllabus_number": 233,
+  "subtopics": [
+    "Go and WebAssembly",
+    "Browser and server-side WebAssembly use cases",
+    "Shared libraries and native integration",
+    "The Go plugin mechanism and its limitations",
+    "Evaluating alternative deployment architectures"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and behavior of webassembly, plugins, and other targets.",
+    "Apply at least one lesson concept—go and webassembly—in a small Go example or workflow.",
+    "Predict a representative result, then test a boundary case and explain any difference."
+  ],
+  "exercise_files": [],
+  "content": {
+    "intro": "WebAssembly, Plugins, and Other Targets is an advanced engineering topic. Establish a baseline, observe the actual runtime behavior, change one relevant factor, and compare results. Mark architecture-specific or experimental features clearly; isolate them behind small boundaries with documented fallbacks.",
+    "why_it_matters": "Optimization and systems integration are most effective when driven by evidence and explicit portability constraints, not by assumptions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 22 overview: System Integration, Build Configuration, and Cross-Platform",
+        "asset_path": "diagrams/module-22-overview.svg",
+        "alt_text": "Overview of Module 22, System Integration, Build Configuration, and Cross-Platform; this lesson is lesson 233 in the ordered module sequence.",
+        "caption": "Use the module map to place “WebAssembly, Plugins, and Other Targets” within the larger sequence, then return to the individual code and practice below."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "WebAssembly, Plugins, and Other Targets is an advanced engineering topic. Establish a baseline, observe the actual runtime behavior, change one relevant factor, and compare results. Mark architecture-specific or experimental features clearly; isolate them behind small boundaries with documented fallbacks."
+      },
+      {
+        "type": "list",
+        "title": "Topics covered in this lesson",
+        "items": [
+          {
+            "title": "Go and WebAssembly",
+            "text": "Be able to explain go and webassembly, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Browser and server-side WebAssembly use cases",
+            "text": "Be able to explain browser and server-side webassembly use cases, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Shared libraries and native integration",
+            "text": "Be able to explain shared libraries and native integration, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "The Go plugin mechanism and its limitations",
+            "text": "Be able to explain the go plugin mechanism and its limitations, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Evaluating alternative deployment architectures",
+            "text": "Be able to explain evaluating alternative deployment architectures, identify the inputs or program state it affects, and name one boundary case worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: WebAssembly, Plugins, and Other Targets",
+        "language": "go",
+        "code": "package main\n\nimport (\n    \"fmt\"\n    \"net/http\"\n    \"net/http/httptest\"\n    \"strings\"\n)\n\nfunc main() {\n    handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { fmt.Fprintln(w, \"ok\") })\n    req := httptest.NewRequest(http.MethodGet, \"/health\", nil)\n    rec := httptest.NewRecorder()\n    handler.ServeHTTP(rec, req)\n    fmt.Println(rec.Code, strings.TrimSpace(rec.Body.String()))\n}\n",
+        "expected_output": "200 ok",
+        "run_mode": "server-runner",
+        "run_instructions": "Save as main.go and run `go run main.go`. httptest avoids opening a network port for this isolated handler example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through the example",
+        "text": "First, identify the input or initial state in the example for webassembly, plugins, and other targets. Next, trace the operation or contract that matters, and predict the result before running it. If the example depends on a version-specific feature, a driver, or an external service, follow the stated prerequisites rather than assuming it works in a browser preview."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to one subtopic—Go and WebAssembly—and add a second case that could fail or behave differently. Write down the expected result before testing."
+      },
+      {
+        "type": "callout",
+        "title": "Scope and compatibility",
+        "text": "Optional or version-sensitive material: consult the version-matched official release notes, isolate the implementation, and verify target/runtime assumptions. Experimental features are not stable API commitments."
+      }
+    ],
+    "task": "Create a small example connected to “WebAssembly, Plugins, and Other Targets”. Use Go and WebAssembly as the starting point, predict the output, then add one invalid, empty, or boundary case and document its result.",
+    "task_acceptance_criteria": [
+      "The example demonstrates go and webassembly or a closely related concept.",
+      "Inputs, relevant state changes, and expected output are clear.",
+      "At least one boundary case is deliberately tested or documented.",
+      "Errors are handled honestly and no success state is reported when the operation fails."
+    ],
+    "hints": [
+      "Start from the simplest example related to go and webassembly.",
+      "Predict the result manually and annotate the value that changes at each step.",
+      "Run `gofmt` and the appropriate local `go run`, `go test`, `go vet`, or inspection command when prerequisites are available."
+    ],
+    "expected_output": "200 ok",
+    "run_mode": "server-runner",
+    "knowledge_check_file": "exams/question-files/lesson-233-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the happy-path output proves all inputs are safe.",
+        "why": "Empty, malformed, boundary, or concurrent cases may follow different paths.",
+        "fix": "Add focused tests for a normal input and at least one relevant edge case."
+      },
+      {
+        "problem": "Ignoring returned errors or external-system status.",
+        "why": "Go APIs commonly report expected failures as explicit error values.",
+        "fix": "Check errors close to the operation, add useful context when propagating, and clean up resources."
+      },
+      {
+        "problem": "Using an API or syntax without checking the selected Go version.",
+        "why": "Language and standard-library capabilities can change between releases.",
+        "fix": "Record `go version`, inspect the `go` directive, and read official release notes for version-specific topics."
+      }
+    ],
+    "summary": [
+      "WebAssembly, Plugins, and Other Targets provides a reusable rule or workflow for Go programs.",
+      "The subtopics to revisit are: Go and WebAssembly; Browser and server-side WebAssembly use cases; Shared libraries and native integration; The Go plugin mechanism and its limitations; Evaluating alternative deployment architectures.",
+      "Prefer a small reproducible example, explicit errors, appropriate tests, and version-matched official documentation."
+    ],
+    "references": [
+      {
+        "title": "Go Documentation",
+        "url": "https://go.dev/doc/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "tutorials",
+          "language concepts",
+          "tooling",
+          "application development"
+        ]
+      },
+      {
+        "title": "The Go Programming Language Specification",
+        "url": "https://go.dev/ref/spec",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "syntax",
+          "types",
+          "control flow",
+          "interfaces"
+        ]
+      },
+      {
+        "title": "Go Build Constraints",
+        "url": "https://go.dev/cmd/go/#hdr-Build_constraints",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "build tags",
+          "platform-specific files",
+          "portability"
+        ]
+      },
+      {
+        "title": "Go Command Reference",
+        "url": "https://go.dev/cmd/go/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "go run",
+          "go build",
+          "go test",
+          "go vet"
+        ]
+      },
+      {
+        "title": "Go Release History",
+        "url": "https://go.dev/doc/devel/release",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "version compatibility",
+          "security releases",
+          "latest supported patch releases"
+        ]
+      }
+    ],
+    "accessibility_note": "The diagram includes descriptive alt text and a text caption. Code examples are also described in prose; do not rely on color alone to understand a sequence.",
+    "execution_note": "Save as main.go and run `go run main.go`. httptest avoids opening a network port for this isolated handler example. Examples that need a database driver, external service, isolated execution environment, or version-specific feature are labeled as static examples and should not be treated as already executed."
+  },
+  "sources": [
+    {
+      "title": "Go Documentation",
+      "url": "https://go.dev/doc/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tutorials",
+        "language concepts",
+        "tooling",
+        "application development"
+      ]
+    },
+    {
+      "title": "The Go Programming Language Specification",
+      "url": "https://go.dev/ref/spec",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "syntax",
+        "types",
+        "control flow",
+        "interfaces"
+      ]
+    },
+    {
+      "title": "Go Build Constraints",
+      "url": "https://go.dev/cmd/go/#hdr-Build_constraints",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "build tags",
+        "platform-specific files",
+        "portability"
+      ]
+    },
+    {
+      "title": "Go Command Reference",
+      "url": "https://go.dev/cmd/go/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "go run",
+        "go build",
+        "go test",
+        "go vet"
+      ]
+    },
+    {
+      "title": "Go Release History",
+      "url": "https://go.dev/doc/devel/release",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "version compatibility",
+        "security releases",
+        "latest supported patch releases"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied Go.pdf syllabus mapping. Human review and local runtime verification are required before publication."
+}

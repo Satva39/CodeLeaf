@@ -1,0 +1,56 @@
+{
+  "id": "django-exercise-004",
+  "slug": "make-a-validated-contact-form",
+  "title": "Make a Validated Contact Form",
+  "type": "practical",
+  "lesson_id": "django-lesson-105",
+  "module_id": "django-module-11",
+  "difficulty": "beginner",
+  "sequence": 4,
+  "prompt": "Validate required fields and email format, show errors accessibly, and process valid submissions without trusting client-side validation alone.\n\nSubmission: a small reviewable artifact, relevant tests, expected outputs, one failure/boundary case, and version/environment notes. Use synthetic data. Django/Python server code is not executed by CodeLeaf browser preview; local or human review is required.",
+  "objective": "Make a Validated Contact Form",
+  "target_skills": [
+    "Build a Django Form with required fields and sensible length bounds.",
+    "Handle GET and POST correctly and render field errors/labels.",
+    "Test valid and invalid server-side submissions."
+  ],
+  "starter": {
+    "language": "text",
+    "content": "from django import forms\n\nclass ContactForm(forms.Form):\n    name = forms.CharField(max_length=80)\n    email = forms.EmailField()\n    message = forms.CharField(widget=forms.Textarea)",
+    "code": "from django import forms\n\nclass ContactForm(forms.Form):\n    name = forms.CharField(max_length=80)\n    email = forms.EmailField()\n    message = forms.CharField(widget=forms.Textarea)"
+  },
+  "expected_output": "Test empty name and malformed email as well as one valid submission.",
+  "public_tests": [
+    {
+      "name": "Required-concept smoke check",
+      "required_strings": [
+        "forms.Form",
+        "is_valid()"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Invalid email is rejected.",
+    "A valid submission follows a deliberate success path.",
+    "The page displays associated labels and validation errors.",
+    "State whether verification was local, static, or human-reviewed.",
+    "Do not claim a build/deployment or external integration was tested unless it was actually run."
+  ],
+  "hints": [
+    "Bind with request.POST on POST.",
+    "Call `is_valid()` before reading `cleaned_data`.",
+    "Retain CSRF protection and an accessible error summary."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "forms.Form",
+      "is_valid()"
+    ]
+  },
+  "grading_method": "Required-string smoke check plus human review of technical correctness, tests, safe handling, expected result and reproducibility. This does not execute arbitrary Python/Django code.",
+  "retry_policy": "Retries are allowed after reviewing feedback; the platform backend owns its uniform XP/idempotency rules.",
+  "solution_file": "../solutions/004-make-a-validated-contact-form-solution.json",
+  "status": "draft",
+  "status_note": "Practical exercise from Section C of the supplied Django curriculum; content and grading need review before publication."
+}

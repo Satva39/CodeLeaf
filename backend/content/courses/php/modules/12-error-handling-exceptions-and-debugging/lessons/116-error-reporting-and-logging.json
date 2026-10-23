@@ -1,0 +1,199 @@
+{
+  "id": "php-lesson-116",
+  "slug": "error-reporting-and-logging",
+  "title": "Error Reporting and Logging",
+  "sequence": 116,
+  "module_id": "php-module-12",
+  "module_slug": "error-handling-exceptions-and-debugging",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 11,
+  "prerequisites": [
+    "php-lesson-115"
+  ],
+  "previous_lesson_id": "php-lesson-115",
+  "next_lesson_id": "php-lesson-117",
+  "keywords": [
+    "error reporting and logging",
+    "error handling, exceptions, and debugging",
+    "error_reporting()",
+    "display_errors",
+    "log_errors",
+    "application log levels",
+    "differences between development and production error handling",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 116,
+  "subtopics": [
+    "error_reporting().",
+    "display_errors.",
+    "log_errors.",
+    "Application log levels.",
+    "Differences between development and production error handling."
+  ],
+  "learning_outcomes": [
+    "Explain what error reporting and logging contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: error_reporting().",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Failures need an explicit policy. Exceptions should propagate to a layer that can handle them, while logs preserve useful diagnostics without exposing internal details to users. In this lesson, focus on error_reporting(); then compare it with display_errors. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use error reporting and logging when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 12 overview: Error Handling, Exceptions, and Debugging",
+        "asset_path": "diagrams/module-12-overview.svg",
+        "alt_text": "Four-stage overview for module 12, Error Handling, Exceptions, and Debugging, grouping lesson topics in order.",
+        "caption": "Use this overview to place error reporting and logging in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Failures need an explicit policy. Exceptions should propagate to a layer that can handle them, while logs preserve useful diagnostics without exposing internal details to users. For error reporting and logging, begin with error_reporting(). Also distinguish display_errors; log_errors; application log levels. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "error_reporting()",
+            "text": "Know when to use error_reporting(), what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "display_errors",
+            "text": "Know when to use display_errors, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "log_errors",
+            "text": "Know when to use log_errors, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Application log levels",
+            "text": "Know when to use application log levels, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Differences between development and production error handling",
+            "text": "Know when to use differences between development and production error handling, what input or program state it changes, and which boundary case is worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Error Reporting and Logging",
+        "language": "php",
+        "code": "<?php\nfunction requirePositive(int $value): int { if ($value <= 0) { throw new InvalidArgumentException(\"Value must be positive\"); } return $value; }\ntry { echo requirePositive(3) . PHP_EOL; } catch (InvalidArgumentException $error) { echo \"Invalid\" . PHP_EOL; }",
+        "expected_output": "3",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for error reporting and logging from top to bottom. Start by identifying error_reporting(), write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for error reporting and logging that demonstrates \"error_reporting()\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of error_reporting().",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "3",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-116-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Error Reporting and Logging is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+    ],
+    "references": [
+      {
+        "title": "Exceptions",
+        "url": "https://www.php.net/manual/en/language.exceptions.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "throw",
+          "try",
+          "catch",
+          "finally",
+          "exception design"
+        ]
+      },
+      {
+        "title": "PHP security",
+        "url": "https://www.php.net/manual/en/security.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "security model",
+          "filesystem security",
+          "database security",
+          "session security"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Exceptions",
+      "url": "https://www.php.net/manual/en/language.exceptions.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "throw",
+        "try",
+        "catch",
+        "finally",
+        "exception design"
+      ]
+    },
+    {
+      "title": "PHP security",
+      "url": "https://www.php.net/manual/en/security.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "security model",
+        "filesystem security",
+        "database security",
+        "session security"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

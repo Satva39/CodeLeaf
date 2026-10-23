@@ -1,0 +1,167 @@
+{
+  "id": "fastapi-lesson-122",
+  "slug": "operational-incident-handling",
+  "title": "Operational Incident Handling",
+  "sequence": 122,
+  "module_id": "fastapi-module-19",
+  "module_slug": "observability-and-operations",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "fastapi-lesson-121"
+  ],
+  "previous_lesson_id": "fastapi-lesson-121",
+  "next_lesson_id": "fastapi-lesson-123",
+  "keywords": [
+    "operational-incident-handling",
+    "observability-and-operations",
+    "fastapi",
+    "python",
+    "api",
+    "diagnosing-a-failed-deployment",
+    "investigating-elevated-error-rates",
+    "identifying-resource-exhaustion"
+  ],
+  "source_syllabus_number": 122,
+  "subtopics": [
+    "Diagnosing a failed deployment",
+    "Investigating elevated error rates",
+    "Identifying resource exhaustion",
+    "Reviewing logs and traces",
+    "Incident documentation and prevention"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of operational incident handling in a FastAPI application.",
+    "Apply or interpret one example related to diagnosing a failed deployment.",
+    "Identify one limitation or failure case and describe how to verify it."
+  ],
+  "content": {
+    "intro": "This lesson covers operational incident handling within observability and operations. Use the supplied syllabus topics as the coverage checklist, then connect them to the worked example and the verification task.",
+    "why_it_matters": "You will use operational incident handling to build APIs whose contracts and behavior are understandable to both clients and maintainers. The practical aim is a small, well-defined behavior with explicit assumptions, a predictable result and a testable edge case.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Operational Incident Handling: concept map",
+        "asset_path": "diagrams/lesson-122-concept.svg",
+        "alt_text": "Four-step flow for Operational Incident Handling: Diagnosing a failed deployment, Investigating elevated error rates, Identifying resource exhaustion, Reviewing logs and traces",
+        "caption": "Visual-first overview before the worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Operational Incident Handling matters because it is part of observability and operations. In practice, focus on a small, well-defined behavior with explicit assumptions, a predictable result and a testable edge case. A framework feature only helps when its assumptions match the application; keep input validation, business policy and side effects distinguishable."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus coverage",
+        "items": [
+          {
+            "title": "Diagnosing a failed deployment",
+            "text": "For diagnosing a failed deployment, collect measurable evidence from a local or staging environment. Keep configuration environment-specific, avoid logging secrets, establish a rollback path, and do not claim performance or availability without measurements."
+          },
+          {
+            "title": "Investigating elevated error rates",
+            "text": "Use investigating elevated error rates to make behavior observable and repeatable. Specify one normal case, one invalid or missing-input case, and the expected status or diagnostic. A passing happy path alone is not enough evidence."
+          },
+          {
+            "title": "Identifying resource exhaustion",
+            "text": "Use identifying resource exhaustion as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Reviewing logs and traces",
+            "text": "For reviewing logs and traces, collect measurable evidence from a local or staging environment. Keep configuration environment-specific, avoid logging secrets, establish a rollback path, and do not claim performance or availability without measurements."
+          },
+          {
+            "title": "Incident documentation and prevention",
+            "text": "Use incident documentation and prevention as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Operational Incident Handling",
+        "language": "python",
+        "code": "from fastapi import FastAPI, HTTPException\n\napp = FastAPI()\n\n@app.get(\"/items/{item_id}\")\ndef read_item(item_id: int):\n    if item_id < 1:\n        raise HTTPException(status_code=404, detail=\"Item not found\")\n    return {\"item_id\": item_id}",
+        "expected_output": "GET /items/4 returns {\"item_id\":4}; GET /items/0 returns HTTP 404.",
+        "run_instructions": "Try one existing-style ID and the documented missing-resource case.",
+        "reset_steps": "For read-only examples, no reset is needed. For any example that writes state, use a disposable local database/test fixture; record the starting state and clean up only lab data. Never use production credentials or real personal data.",
+        "execution_mode": "human-review",
+        "limitations": "This code is inspectable lesson material, not executed by CodeLeaf. Run it only in a local virtual environment or a separately isolated runner with resource/time/network limits. Security examples are sketches, not complete production authentication or authorization systems."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to cover “Diagnosing a failed deployment”. Write down the expected success result and one invalid, missing, duplicate, timeout or permission-boundary case that matters for this topic."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-122-questions.json"
+  },
+  "task": "Create a small reviewable artifact for “Operational Incident Handling”: explain its goal, cover the listed subtopics, show an example with expected result, then include one edge case and how you would verify it.",
+  "hints": [
+    "Start with “Diagnosing a failed deployment” and state the required inputs, output and assumptions.",
+    "Change one thing at a time; check the official reference and capture the actual response/error instead of guessing.",
+    "Include a negative/edge-case check and document which behavior remains untested."
+  ],
+  "expected_output": "A reviewable example or design note for Operational Incident Handling, covering the PDF subtopics, expected behavior and at least one verification check.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Copying a code fragment without checking its assumptions.",
+      "why": "Installed versions, imported types, application structure and external services affect behavior.",
+      "fix": "State assumptions; check the versioned official docs; run a minimal local test and add one failure case."
+    },
+    {
+      "problem": "Treating one happy-path response as proof of correctness.",
+      "why": "Invalid input, permissions, concurrency, timeouts and cleanup are not exercised by a single request.",
+      "fix": "Add focused normal and negative tests and record exact expected status/body."
+    },
+    {
+      "problem": "Running examples against production resources.",
+      "why": "Even short examples may mutate records, reveal data or affect availability.",
+      "fix": "Use synthetic inputs and a disposable environment; review security, cleanup and rollback before promotion."
+    }
+  ],
+  "summary": [
+    "Operational Incident Handling belongs to the broader goal of a small, well-defined behavior with explicit assumptions, a predictable result and a testable edge case.",
+    "Use the source subtopics as the completeness checklist and verify expected results rather than relying on intuition.",
+    "Examples in this course are illustrative until technically reviewed and executed on a supported local environment."
+  ],
+  "sources": [
+    {
+      "title": "pytest Documentation",
+      "url": "https://docs.pytest.org/en/stable/",
+      "publisher": "pytest team",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "automated tests and assertions"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "OWASP API Security Top 10",
+      "url": "https://owasp.org/API-Security/",
+      "publisher": "OWASP",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "API security threats and authorization review"
+      ],
+      "source_type": "official security guidance"
+    },
+    {
+      "title": "Python asyncio",
+      "url": "https://docs.python.org/3/library/asyncio.html",
+      "publisher": "Python Software Foundation",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "asyncio event loop and concurrency primitives"
+      ],
+      "source_type": "official documentation"
+    }
+  ],
+  "exercise_files": [],
+  "status": "draft",
+  "status_note": "Draft expansion from the numbered topics in FastAPI.pdf. Content structure, file references and SVGs are validated locally; code snippets and integration behavior still require technical review and targeted tests before publication."
+}

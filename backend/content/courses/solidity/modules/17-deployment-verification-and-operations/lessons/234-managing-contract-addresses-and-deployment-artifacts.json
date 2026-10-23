@@ -1,0 +1,126 @@
+{
+  "id": "solidity-lesson-234",
+  "slug": "managing-contract-addresses-and-deployment-artifacts",
+  "title": "Managing Contract Addresses and Deployment Artifacts",
+  "sequence": 234,
+  "module_id": "solidity-module-17",
+  "module_slug": "deployment-verification-and-operations",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "solidity-lesson-233"
+  ],
+  "previous_lesson_id": "solidity-lesson-233",
+  "next_lesson_id": "solidity-lesson-235",
+  "keywords": [
+    "managing",
+    "contract",
+    "addresses",
+    "and",
+    "deployment",
+    "artifacts",
+    "solidity",
+    "smart-contracts"
+  ],
+  "source_syllabus_number": 234,
+  "subtopics": [
+    "Managing Contract Addresses and Deployment Artifacts"
+  ],
+  "learning_outcomes": [
+    "Explain Managing Contract Addresses and Deployment Artifacts and relate it to the contract execution model.",
+    "Analyze or implement a small Solidity example involving Managing Contract Addresses and Deployment Artifacts.",
+    "Test at least one normal case and one edge, failure, security, or version-compatibility case."
+  ],
+  "content": {
+    "intro": "This lesson turns the syllabus topic “Managing Contract Addresses and Deployment Artifacts” into a small, inspectable example. You will work from an expected behavior, run a local check, and record the assumptions behind the result.",
+    "why_it_matters": "Deployment and interaction depend on the selected chain, RPC endpoint, wallet/account, compiled bytecode, and transaction context. Confirm the network and chain ID, test locally or on a test network first, and never put private keys or API credentials in source files.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 17 roadmap",
+        "asset_path": "diagrams/module-17-overview.svg",
+        "alt_text": "A two-column ordered roadmap for Module 17: Deployment, Verification, and Operations; it lists all 14 source-syllabus lesson topics by number.",
+        "caption": "Use this map to locate “Managing Contract Addresses and Deployment Artifacts” within the ordered module."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Deployment is a transaction to a specific chain and costs gas. Keep secrets out of source control, reproduce compiler settings, verify source, and start with local/test networks."
+      },
+      {
+        "type": "paragraph",
+        "title": "Focus: Managing Contract Addresses and Deployment Artifacts",
+        "text": "Deployment and interaction depend on the selected chain, RPC endpoint, wallet/account, compiled bytecode, and transaction context. Confirm the network and chain ID, test locally or on a test network first, and never put private keys or API credentials in source files."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus points to keep in view",
+        "items": [
+          {
+            "title": "Managing Contract Addresses and Deployment Artifacts",
+            "text": "For this lesson, explain the term in your own words, identify where it affects contract behavior, and note one assumption or edge case to test."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "1. Predict how the example should behave in relation to Managing Contract Addresses and Deployment Artifacts. 2. Compile it with the pinned compiler and inspect warnings. 3. Test one normal case and one boundary or failure case in a local EVM. 4. Record what the result demonstrates and what it does not establish about production safety."
+      },
+      {
+        "type": "code",
+        "language": "solidity",
+        "execution_mode": "static-validation",
+        "code": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.37;\n\ncontract AddressExample {\n    address public owner;\n    constructor() { owner = msg.sender; }\n    function isOwner() external view returns (bool) { return msg.sender == owner; }\n}\n",
+        "expected_output": "The constructor stores the deploying account as owner; isOwner() is true only for that caller.",
+        "run_instructions": "Paste the snippet into a local Remix VM workspace or a project with compiler 0.8.37, compile it, and test read/state-changing calls locally. Use only a local VM or test network; no mainnet deployment is required. CodeLeaf does not execute Solidity in the browser preview.",
+        "reset_steps": "Reset the local VM or restart the test fixture, redeploy the example, and repeat the same tests. Restore the original compiler, optimizer, and EVM-target settings before comparing results. Never add keys or other secrets to source files."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistakes and fixes",
+        "text": "A snippet that compiles is not automatically correct or secure. Check the selected compiler version, read every warning, assert preconditions, test reverting and edge cases, and inspect external-call assumptions. If a tool or opcode is unsupported, verify the compiler release and target-chain support instead of weakening checks."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Extend the small example to demonstrate Managing Contract Addresses and Deployment Artifacts. Write down the expected result before running it, add a normal test and a failure/boundary test, then note one design trade-off or security concern."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap and next step",
+        "text": "Recap: Managing Contract Addresses and Deployment Artifacts should be understood alongside the module principle: Deployment is a transaction to a specific chain and costs gas. Keep secrets out of source control, reproduce compiler settings, verify source, and start with local/test networks. Continue to the next lesson only after you can explain the behavior, reproduce the result locally, and state the important limitations."
+      }
+    ],
+    "task": "Create a small local-only example that demonstrates Managing Contract Addresses and Deployment Artifacts. Define a normal case and a boundary/failure case, predict the result, test both, and explain one limitation. Do not deploy this teaching exercise with real funds.",
+    "task_acceptance_criteria": [
+      "State the expected behavior before testing and describe the observed result.",
+      "Include a repeatable test or manual trace covering a boundary or failure case.",
+      "Document one assumption, security concern, or version constraint rather than claiming production readiness."
+    ],
+    "hints": [
+      "Start with the simplest behavior related to Managing Contract Addresses and Deployment Artifacts and make the input and expected result explicit.",
+      "Change one condition or input at a time and rerun the same test to isolate the effect.",
+      "Read compiler warnings and error details; do not treat deployment success as a security review."
+    ],
+    "expected_output": "The constructor stores the deploying account as owner; isOwner() is true only for that caller.",
+    "run_mode": "static-validation",
+    "troubleshooting": [
+      "Confirm that the compiler version is 0.8.37 and that build settings are recorded.",
+      "For a revert, inspect the precondition and test both allowed and denied inputs.",
+      "For external calls or network-specific features, confirm the local chain's behavior and the target-network assumptions."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-234-questions.json",
+    "accessibility_note": "The accompanying SVG includes a text alternative and caption. Code examples use labeled snippets and do not rely on color to convey meaning."
+  },
+  "exercise_files": [],
+  "sources": [
+    "ethereum-deploy-docs",
+    "solidity-compiler-docs"
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Solidity course blueprint; review the full technical example and question key before publication."
+}

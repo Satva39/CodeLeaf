@@ -1,0 +1,189 @@
+{
+  "id": "r-lesson-241",
+  "slug": "security-fundamentals-for-r-projects",
+  "title": "Security Fundamentals for R Projects",
+  "sequence": 241,
+  "module_id": "r-module-23",
+  "module_slug": "security-deployment-and-professional-practice",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional-practice",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "r-lesson-240"
+  ],
+  "previous_lesson_id": "r-lesson-240",
+  "next_lesson_id": "r-lesson-242",
+  "keywords": [
+    "security-fundamentals-for-r-projects",
+    "security-deployment-and-professional-practice",
+    "managing-secrets-and-api-tokens",
+    "protecting-database-credentials",
+    "safe-file-and-network-operations",
+    "validating-external-inputs",
+    "handling-untrusted-serialized-data",
+    "dependency-and-supply-chain-awareness",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 241,
+  "subtopics": [
+    "Managing Secrets and API Tokens",
+    "Protecting Database Credentials",
+    "Safe File and Network Operations",
+    "Validating External Inputs",
+    "Handling Untrusted Serialized Data",
+    "Dependency and Supply-Chain Awareness"
+  ],
+  "learning_outcomes": [
+    "Explain the role of security fundamentals for r projects and identify its main inputs, outputs or constraints.",
+    "Apply managing secrets and api tokens in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Security Fundamentals for R Projects is part of Security, Deployment, and Professional Practice. Start with managing secrets and api tokens and connect it to the worked example and expected result.",
+    "why_it_matters": "Treat imported data, API responses, serialized objects and credentials as potentially sensitive inputs.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Security Fundamentals for R Projects",
+        "asset_path": "diagrams/module-23-overview.svg",
+        "alt_text": "Concept visual supporting lesson 241, Security Fundamentals for R Projects. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Treat imported data, API responses, serialized objects and credentials as potentially sensitive inputs. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Managing Secrets and API Tokens",
+            "text": "For managing secrets and api tokens, describe the trust boundary, input checks, failure handling and cleanup; keep credentials and real private data out of examples."
+          },
+          {
+            "title": "Protecting Database Credentials",
+            "text": "For protecting database credentials, describe the trust boundary, input checks, failure handling and cleanup; keep credentials and real private data out of examples."
+          },
+          {
+            "title": "Safe File and Network Operations",
+            "text": "For safe file and network operations, describe the trust boundary, input checks, failure handling and cleanup; keep credentials and real private data out of examples."
+          },
+          {
+            "title": "Validating External Inputs",
+            "text": "Explain validating external inputs in the context of security fundamentals for r projects, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Handling Untrusted Serialized Data",
+            "text": "Explain handling untrusted serialized data in the context of security fundamentals for r projects, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Dependency and Supply-Chain Awareness",
+            "text": "Explain dependency and supply-chain awareness in the context of security fundamentals for r projects, connect it to the example, and verify one expected result or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Identify where secrets belong, how to avoid logging them and what the least-privilege boundary is. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Security Fundamentals for R Projects",
+        "language": "r",
+        "code": "# Lesson 241: Security Fundamentals for R Projects\nrequired_inputs <- c(\"data.csv\", \"report.qmd\")\nall(nzchar(required_inputs))",
+        "expected_output": "[1] TRUE",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "This checks non-empty path strings, not file existence; a production workflow also needs permissions, provenance, monitoring and rollback. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For security fundamentals for r projects, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-241-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply security fundamentals for r projects to a small synthetic example. Start with managing secrets and api tokens, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the managing secrets and api tokens idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible security fundamentals for r projects example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Managing Secrets and API Tokens” and identify the input and output before coding.",
+      "Use synthetic data and explicit validation; do not access production systems or expose credentials.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming external services always return valid data.",
+        "why": "Timeouts, authorization failures, rate limits and schema changes are normal failure cases.",
+        "fix": "Add timeouts, status/schema validation, least-privilege access and bounded retries."
+      },
+      {
+        "problem": "Embedding credentials or sensitive rows in examples or logs.",
+        "why": "Secrets and private data can leak through source control or diagnostic output.",
+        "fix": "Use environment-based secret handling and synthetic examples; redact logs."
+      },
+      {
+        "problem": "Leaving resources open after an error.",
+        "why": "Unclosed connections and files can leak resources or lock outputs.",
+        "fix": "Use reliable cleanup patterns and test both success and failure paths."
+      }
+    ],
+    "summary": [
+      "Key idea: Treat imported data, API responses, serialized objects and credentials as potentially sensitive inputs.",
+      "Practice: Identify where secrets belong, how to avoid logging them and what the least-privilege boundary is.",
+      "Source syllabus focus: Managing Secrets and API Tokens. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply security fundamentals for r projects to a small synthetic example. Start with managing secrets and api tokens, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible security fundamentals for r projects example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Managing Secrets and API Tokens” and identify the input and output before coding.",
+    "Use synthetic data and explicit validation; do not access production systems or expose credentials.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Assuming external services always return valid data.",
+      "why": "Timeouts, authorization failures, rate limits and schema changes are normal failure cases.",
+      "fix": "Add timeouts, status/schema validation, least-privilege access and bounded retries."
+    },
+    {
+      "problem": "Embedding credentials or sensitive rows in examples or logs.",
+      "why": "Secrets and private data can leak through source control or diagnostic output.",
+      "fix": "Use environment-based secret handling and synthetic examples; redact logs."
+    },
+    {
+      "problem": "Leaving resources open after an error.",
+      "why": "Unclosed connections and files can leak resources or lock outputs.",
+      "fix": "Use reliable cleanup patterns and test both success and failure paths."
+    }
+  ],
+  "summary": [
+    "Key idea: Treat imported data, API responses, serialized objects and credentials as potentially sensitive inputs.",
+    "Practice: Identify where secrets belong, how to avoid logging them and what the least-privilege boundary is.",
+    "Source syllabus focus: Managing Secrets and API Tokens. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 23 — Security, Deployment, and Professional Practice, lesson 241: Security Fundamentals for R Projects.",
+    "Official documentation: https://cran.r-project.org/doc/manuals/r-release/R-exts.html",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

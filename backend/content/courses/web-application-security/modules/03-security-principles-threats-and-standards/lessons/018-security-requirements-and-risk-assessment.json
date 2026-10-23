@@ -1,0 +1,191 @@
+{
+  "id": "web-application-security-lesson-018",
+  "slug": "security-requirements-and-risk-assessment",
+  "title": "Security Requirements and Risk Assessment",
+  "sequence": 18,
+  "module_id": "web-application-security-module-03",
+  "module_slug": "security-principles-threats-and-standards",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core-foundations",
+  "curriculum_tier": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "web-application-security-lesson-017"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-017",
+  "next_lesson_id": "web-application-security-lesson-019",
+  "keywords": [
+    "security",
+    "requirements",
+    "and",
+    "risk",
+    "assessment",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 18,
+  "source_syllabus_title": "Security Requirements and Risk Assessment",
+  "source_subtopics": [
+    {
+      "number": "18.1",
+      "title": "Functional versus security requirements"
+    },
+    {
+      "number": "18.2",
+      "title": "Security acceptance criteria"
+    },
+    {
+      "number": "18.3",
+      "title": "Data classification and asset valuation"
+    },
+    {
+      "number": "18.4",
+      "title": "Risk registers"
+    },
+    {
+      "number": "18.5",
+      "title": "Security control selection"
+    },
+    {
+      "number": "18.6",
+      "title": "Residual risk and risk acceptance"
+    }
+  ],
+  "subtopics": [
+    "Functional versus security requirements",
+    "Security acceptance criteria",
+    "Data classification and asset valuation",
+    "Risk registers",
+    "Security control selection",
+    "Residual risk and risk acceptance"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in Security Requirements and Risk Assessment.",
+    "Choose an appropriate defensive control for Security Requirements and Risk Assessment and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for Security Requirements and Risk Assessment, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 3: Security Principles, Threats, and Standards. It builds practical understanding of Security Requirements and Risk Assessment with the syllabus subtopics retained below.",
+    "why_it_matters": "Security Requirements and Risk Assessment gives you the mental model needed to recognize where a security promise begins and ends. Identify assets, actors, entry points, data flows, and trust boundaries; prioritize realistic threats and record mitigations as testable requirements.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Security Requirements and Risk Assessment",
+        "asset_path": "diagrams/lesson-018-security-requirements-and-risk-assessment.svg",
+        "alt_text": "Four-stage visual model for Security Requirements and Risk Assessment: List assets + actors; Map trust boundary; Prioritize threat; Verify mitigation.",
+        "caption": "Concept map for Security Requirements and Risk Assessment. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Security Requirements and Risk Assessment can be understood through this sequence: List assets + actors → Map trust boundary → Prioritize threat → Verify mitigation. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 18.1 Functional versus security requirements; 18.2 Security acceptance criteria; 18.3 Data classification and asset valuation; 18.4 Risk registers; 18.5 Security control selection; 18.6 Residual risk and risk acceptance. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Identify assets, actors, entry points, data flows, and trust boundaries; prioritize realistic threats and record mitigations as testable requirements."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "json",
+        "execution_mode": "static-validation",
+        "title": "Safe reference example: Security Requirements and Risk Assessment",
+        "code": "{\n  \"asset\": \"private_profile_data\",\n  \"entry_point\": \"GET /api/profile\",\n  \"trust_boundary\": \"browser_to_api\",\n  \"threat\": \"unauthorized_record_access\",\n  \"control\": \"server_side_owner_check\",\n  \"verification\": \"test_two_separate_accounts\"\n}",
+        "expected_output": "A threat record connects an asset and entry point to a control with an observable test.",
+        "run_instructions": "Use synthetic data and test accounts. Revisit assumptions when the data flow, roles, or integrated services change.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Identify assets, actors, entry points, data flows, and trust boundaries; prioritize realistic threats and record mitigations as testable requirements. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “Security Requirements and Risk Assessment”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for Security Requirements and Risk Assessment in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-018-questions.json",
+    "recap": [
+      "Security Requirements and Risk Assessment is a security boundary/control topic, not a standalone checklist item.",
+      "Identify assets, actors, entry points, data flows, and trust boundaries; prioritize realistic threats and record mitigations as testable requirements.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "OWASP Top 10:2025",
+      "url": "https://owasp.org/www-project-top-ten/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "web application risk categories",
+        "OWASP A01-A10:2025"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

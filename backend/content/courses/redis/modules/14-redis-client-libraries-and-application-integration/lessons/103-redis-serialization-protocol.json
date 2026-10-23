@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-103",
+  "slug": "redis-serialization-protocol",
+  "title": "Redis Serialization Protocol",
+  "sequence": 103,
+  "module_id": "redis-module-14",
+  "module_slug": "redis-client-libraries-and-application-integration",
+  "level": "beginner to advanced",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-102"
+  ],
+  "previous_lesson_id": "redis-lesson-102",
+  "next_lesson_id": "redis-lesson-104",
+  "keywords": [
+    "redis-serialization-protocol",
+    "resp2",
+    "resp3",
+    "command-and-response-framing",
+    "response-type-differences",
+    "protocol-compatibility",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 103,
+  "subtopics": [
+    "RESP2",
+    "RESP3",
+    "Command and response framing",
+    "Response type differences",
+    "Protocol compatibility"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Redis Serialization Protocol and distinguish it from a related Redis concept.",
+    "Apply or trace Redis Serialization Protocol in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Redis Serialization Protocol and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Redis Serialization Protocol in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Redis Serialization Protocol helps implement use supported client libraries with secure configuration, connection reuse, and controlled retries. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Redis Serialization Protocol",
+        "asset_path": "diagrams/lesson-103-redis-serialization-protocol.svg",
+        "alt_text": "Concept diagram for Redis Serialization Protocol, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Redis Serialization Protocol; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Redis Serialization Protocol helps implement use supported client libraries with secure configuration, connection reuse, and controlled retries. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Redis Serialization Protocol, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "RESP2",
+            "text": "Connect RESP2 to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "RESP3",
+            "text": "Connect RESP3 to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Command and response framing",
+            "text": "Connect Command and response framing to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Response type differences",
+            "text": "Connect Response type differences to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Protocol compatibility",
+            "text": "Connect Protocol compatibility to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Redis Serialization Protocol",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "TYPE demo:key\nTTL demo:key\nSCAN 0 MATCH demo:* COUNT 20",
+        "expected_output": "Returns a type, remaining TTL (or -1/-2 where applicable), and a cursor/key page.",
+        "run_instructions": "SCAN COUNT is a hint; continue while the cursor is non-zero and do not assume one page is complete.",
+        "reset_steps": "Read-only inspection; no key is created.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Redis Serialization Protocol. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Redis Serialization Protocol in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Redis Serialization Protocol.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "Returns a type, remaining TTL (or -1/-2 where applicable), and a cursor/key page.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-103-questions.json",
+    "recap": [
+      "Redis Serialization Protocol is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Connect with Redis client libraries",
+      "url": "https://redis.io/docs/latest/connect/clients/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "supported client libraries, protocols and integrations"
+      ]
+    },
+    {
+      "title": "Connect to Redis with redis-py",
+      "url": "https://redis.io/docs/latest/develop/clients/redis-py/connect/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "Python connection configuration and TLS examples"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

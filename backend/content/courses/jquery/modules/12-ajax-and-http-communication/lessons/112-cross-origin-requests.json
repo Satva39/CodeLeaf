@@ -1,0 +1,169 @@
+{
+  "id": "jquery-lesson-112",
+  "slug": "cross-origin-requests",
+  "title": "Cross-Origin Requests",
+  "sequence": 112,
+  "module_id": "jquery-module-12",
+  "module_slug": "ajax-and-http-communication",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "jquery-lesson-111"
+  ],
+  "previous_lesson_id": "jquery-lesson-111",
+  "next_lesson_id": "jquery-lesson-113",
+  "keywords": [
+    "cross-origin requests",
+    "jquery",
+    "javascript",
+    "ajax and http communication",
+    "same-origin policy",
+    "cors fundamentals",
+    "server-side cors configuration",
+    "credentialed requests"
+  ],
+  "source_syllabus_number": 112,
+  "subtopics": [
+    "Same-origin policy",
+    "CORS fundamentals",
+    "Server-side CORS configuration",
+    "Credentialed requests",
+    "Why a frontend library cannot independently override browser security restrictions"
+  ],
+  "learning_outcomes": [
+    "Explain the role of cross-origin requests in a jQuery application.",
+    "Apply same-origin policy in a small example and describe its expected result.",
+    "Verify cors fundamentals with an explicit test or browser observation."
+  ],
+  "exercise_files": [
+    "../exercises/112-cross-origin-requests.json"
+  ],
+  "sources": [
+    {
+      "title": "MDN: CORS",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-12",
+      "source_type": "platform_security_reference",
+      "supports": [
+        "Browser cross-origin request rules",
+        "Server CORS configuration"
+      ]
+    },
+    {
+      "title": "jQuery.ajax() API",
+      "url": "https://api.jquery.com/jQuery.ajax/",
+      "publisher": "jQuery API documentation",
+      "checked_on": "2026-10-12",
+      "source_type": "official_api_reference",
+      "supports": [
+        "AJAX options",
+        "Success and error callbacks",
+        "Request lifecycle"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the attached syllabus and official references; requires lesson-by-lesson technical review, local execution, accessibility checks, and editorial approval.",
+  "content": {
+    "intro": "In this lesson, you will work through cross-origin requests with a focused jQuery example. The subtopics below preserve the supplied curriculum coverage and connect the API idea to a small browser interface.",
+    "why_it_matters": "This topic is useful because it turns same-origin policy into a repeatable implementation choice. AJAX sends HTTP requests without requiring a full-page navigation. Treat network errors, HTTP failures, CORS policy, authentication, timeouts, and malformed response data as distinct cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 12 overview",
+        "asset_path": "diagrams/module-12-overview.svg",
+        "alt_text": "Overview of AJAX and HTTP Communication, illustrating the sequence from understanding the concept to implementing and checking it.",
+        "caption": "Use this module map to place cross-origin requests within the wider learning path."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "AJAX sends HTTP requests without requiring a full-page navigation. Treat network errors, HTTP failures, CORS policy, authentication, timeouts, and malformed response data as distinct cases."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the supplied syllabus",
+        "items": [
+          "Same-origin policy",
+          "CORS fundamentals",
+          "Server-side CORS configuration",
+          "Credentialed requests",
+          "Why a frontend library cannot independently override browser security restrictions"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "$.ajax({ url: \"https://api.example.test/items\", method: \"GET\", dataType: \"json\" })\n  .done(renderItems)\n  .fail(showRequestError);",
+        "expected_output": "The browser permits the cross-origin response only if the API server sends suitable CORS headers. The example domain is intentionally non-routable.",
+        "run_instructions": "Use a local HTML page with jQuery 4.0.0 loaded before app.js for JavaScript snippets. HTML and package-manager snippets can be checked as configuration examples. Run the interaction in browser DevTools, inspect the DOM/Network panel, and compare actual behavior with the expected result. Do not submit learner code to the production API for arbitrary execution.",
+        "reset_steps": "Restore the original markup and code, clear console/network filters, reload the local page, and repeat the same interaction. For a request example, return the mock endpoint to its original response before retrying."
+      },
+      {
+        "type": "callout",
+        "title": "Guided example",
+        "text": "Start with a known DOM structure, apply the pattern for cross-origin requests, and test one normal case plus one edge case. Keep selectors scoped to the intended component and verify the real browser result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Implement a request scenario for cross-origin requests against a local or mock endpoint. Demonstrate loading, empty, success, HTTP failure, and network-failure behavior as applicable."
+      }
+    ],
+    "task": "Implement a request scenario for cross-origin requests against a local or mock endpoint. Demonstrate loading, empty, success, HTTP failure, and network-failure behavior as applicable.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates cross-origin requests using a current, documented approach.",
+      "The learner records the expected and actual behavior and checks at least one edge case.",
+      "The example preserves semantic HTML and does not render untrusted data as HTML.",
+      "The test setup and any runtime limitation are documented honestly."
+    ],
+    "hints": [
+      "First identify which DOM nodes and runtime state are involved in cross-origin requests.",
+      "Make one small change, inspect the resulting element or request, and compare it with the expected result.",
+      "If the result differs, check the selector, script order, browser console, event target, and relevant API documentation before adding more code."
+    ],
+    "expected_output": "The browser permits the cross-origin response only if the API server sends suitable CORS headers. The example domain is intentionally non-routable.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-112-questions.json",
+    "common_mistakes": [
+      "Assuming a selector matched an element without checking the collection length.",
+      "Confusing jQuery collections with native DOM elements or live properties with markup attributes.",
+      "Using .html() with untrusted data or assuming client-side validation enforces server rules.",
+      "Treating a demo snippet as production-ready without testing failure and accessibility states."
+    ],
+    "summary": [
+      "Cross-Origin Requests is one part of the ajax and http communication workflow.",
+      "AJAX sends HTTP requests without requiring a full-page navigation. Treat network errors, HTTP failures, CORS policy, authentication, timeouts, and malformed response data as distinct cases.",
+      "Use the official API or upgrade guide for version-specific behavior and verify an example locally before relying on it."
+    ],
+    "references": [
+      {
+        "title": "MDN: CORS",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS",
+        "publisher": "MDN Web Docs",
+        "checked_on": "2026-10-12",
+        "source_type": "platform_security_reference",
+        "supports": [
+          "Browser cross-origin request rules",
+          "Server CORS configuration"
+        ]
+      },
+      {
+        "title": "jQuery.ajax() API",
+        "url": "https://api.jquery.com/jQuery.ajax/",
+        "publisher": "jQuery API documentation",
+        "checked_on": "2026-10-12",
+        "source_type": "official_api_reference",
+        "supports": [
+          "AJAX options",
+          "Success and error callbacks",
+          "Request lifecycle"
+        ]
+      }
+    ]
+  }
+}

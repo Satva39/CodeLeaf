@@ -1,0 +1,63 @@
+{
+  "id": "github-actions-exercise-046",
+  "slug": "advanced-release-engineering-practice",
+  "title": "Advanced Release Engineering practice",
+  "type": "coding",
+  "lesson_id": "github-actions-lesson-168",
+  "module_id": "github-actions-module-22",
+  "difficulty": "easy",
+  "sequence": 46,
+  "prompt": "Write a release-train checklist with candidate validation, version compatibility, changelog generation, and rollback ownership.",
+  "objective": "Demonstrate the behavior of advanced release engineering practice and capture verifiable evidence.",
+  "target_skills": [
+    "optional",
+    "workflow YAML",
+    "validation",
+    "safe automation"
+  ],
+  "starter": {
+    "language": "yaml",
+    "code": "name: Prepare tagged release\non:\n  push:\n    tags: [\"v*.*.*\"]\npermissions:\n  contents: write\njobs:\n  release:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: Create release notes from tag\n        env:\n          GH_TOKEN: ${{ github.token }}\n        run: gh release create \"$GITHUB_REF_NAME\" --generate-notes",
+    "execution_mode": "workflow-fragment"
+  },
+  "expected_output": "A reviewed workflow or design note satisfying: version, changelog, rollback. Verify behavior on a disposable repository where execution is required; a static sketch is not proof of a live deployment.",
+  "public_tests": [
+    {
+      "name": "Required evidence check",
+      "required_strings": [
+        "version",
+        "changelog",
+        "rollback"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Include or explain `version`.",
+    "Include or explain `changelog`.",
+    "Include or explain `rollback`.",
+    "Explain one validation result or limitation.",
+    "Do not include a real secret or use production resources."
+  ],
+  "hints": [
+    "First identify the trigger, input, and expected result.",
+    "Start with read-only permissions and a disposable branch or test environment.",
+    "Compare your result with the linked lesson and official documentation; distinguish a configuration sketch from a live integration."
+  ],
+  "solution": {
+    "answer": null,
+    "explanation": "The detailed reference solution is stored in a protected repository-only JSON file; it is not intended for a learner-facing response."
+  },
+  "solution_file": "../solutions/046-advanced-release-engineering-practice-solution.json",
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "version",
+      "changelog",
+      "rollback"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus human review for workflow semantics and security boundaries.",
+  "retry_policy": "Allow retries; incorrect submissions do not award XP. The platform awards exercise XP only after server-verified successful completion and applies idempotency per activity.",
+  "status": "draft",
+  "status_note": "Source mapping: Section E: Optional specialist tracks; original learning task adapted to CodeLeaf structure. Starter example aligned with its linked lesson; review and replace any remaining repository-specific placeholders."
+}

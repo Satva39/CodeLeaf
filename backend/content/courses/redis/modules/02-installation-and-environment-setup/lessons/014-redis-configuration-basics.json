@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-014",
+  "slug": "redis-configuration-basics",
+  "title": "Redis Configuration Basics",
+  "sequence": 14,
+  "module_id": "redis-module-02",
+  "module_slug": "installation-and-environment-setup",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core-redis",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "redis-lesson-013"
+  ],
+  "previous_lesson_id": "redis-lesson-013",
+  "next_lesson_id": "redis-lesson-015",
+  "keywords": [
+    "redis-configuration-basics",
+    "the-redis-configuration-file",
+    "ports-and-network-interfaces",
+    "working-directory-and-file-paths",
+    "log-levels",
+    "runtime-configuration-vs-startup-configuration",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 14,
+  "subtopics": [
+    "The Redis configuration file",
+    "Ports and network interfaces",
+    "Working directory and file paths",
+    "Log levels",
+    "Runtime configuration vs startup configuration"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Redis Configuration Basics and distinguish it from a related Redis concept.",
+    "Apply or trace Redis Configuration Basics in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Redis Configuration Basics and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Redis Configuration Basics in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Redis Configuration Basics helps implement create a predictable local environment and prove that the server, client, and configuration agree. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Redis Configuration Basics",
+        "asset_path": "diagrams/lesson-014-redis-configuration-basics.svg",
+        "alt_text": "Concept diagram for Redis Configuration Basics, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Redis Configuration Basics; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Redis Configuration Basics helps implement create a predictable local environment and prove that the server, client, and configuration agree. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Redis Configuration Basics, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "The Redis configuration file",
+            "text": "Connect The Redis configuration file to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Ports and network interfaces",
+            "text": "Connect Ports and network interfaces to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Working directory and file paths",
+            "text": "Connect Working directory and file paths to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Log levels",
+            "text": "Connect Log levels to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Runtime configuration vs startup configuration",
+            "text": "Connect Runtime configuration vs startup configuration to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Redis Configuration Basics",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "INFO server\nINFO clients\nINFO memory",
+        "expected_output": "Returns selected server, client and memory sections.",
+        "run_instructions": "Some administrative commands require elevated ACL permissions. Avoid CONFIG SET on shared/production systems during exercises.",
+        "reset_steps": "Read-only inspection.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Redis Configuration Basics. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Redis Configuration Basics in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Redis Configuration Basics.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "Returns selected server, client and memory sections.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-014-questions.json",
+    "recap": [
+      "Redis Configuration Basics is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Install Redis Open Source",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "install and development environment choices"
+      ]
+    },
+    {
+      "title": "Redis commands reference",
+      "url": "https://redis.io/docs/latest/commands/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "command syntax, return values, complexity, compatibility and command history"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

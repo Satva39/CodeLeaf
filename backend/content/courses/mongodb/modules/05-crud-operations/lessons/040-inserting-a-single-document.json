@@ -1,0 +1,218 @@
+{
+  "id": "mongodb-lesson-040",
+  "slug": "inserting-a-single-document",
+  "title": "Inserting a Single Document",
+  "sequence": 40,
+  "module_id": "mongodb-module-05",
+  "module_slug": "crud-operations",
+  "level": "beginner",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "mongodb-lesson-039"
+  ],
+  "previous_lesson_id": "mongodb-lesson-039",
+  "next_lesson_id": "mongodb-lesson-041",
+  "keywords": [
+    "inserting",
+    "single",
+    "document",
+    "mongodb",
+    "database"
+  ],
+  "source_syllabus_number": 40,
+  "source_module_number": 5,
+  "subtopics": [
+    "insertOne()",
+    "Automatic identifier generation",
+    "Insert results",
+    "Handling duplicate identifiers"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and main trade-off of inserting a single document.",
+    "Apply inserting a single document to a small MongoDB data or operational scenario.",
+    "Verify the expected result, one edge case, and the relevant version/deployment assumption."
+  ],
+  "content": {
+    "intro": "Learn inserting a single document as part of CRUD Operations. The lesson preserves the PDF subtopics, connects them to a practical MongoDB pattern, and ends with a verification task.",
+    "why_it_matters": "Inserting a Single Document is a query or write-building block. Construct a narrow filter, predict the documents that should match, choose only the fields needed, and verify matched or modified counts before relying on a mutation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Inserting a Single Document",
+        "asset_path": "diagrams/lesson-040-inserting-a-single-document.svg",
+        "alt_text": "Four-step learning diagram for Inserting a Single Document: Define target; Write filter/operation; Inspect effect; Verify edge case.",
+        "caption": "Visual guide to Inserting a Single Document: follow the concept, action, verification and application steps."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Inserting a Single Document is a query or write-building block. Construct a narrow filter, predict the documents that should match, choose only the fields needed, and verify matched or modified counts before relying on a mutation."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics to master",
+        "items": [
+          {
+            "title": "1. insertOne()",
+            "text": "Be able to explain or demonstrate insertOne() in the context of inserting a single document, and document the relevant design or version assumption."
+          },
+          {
+            "title": "2. Automatic identifier generation",
+            "text": "Be able to explain or demonstrate automatic identifier generation in the context of inserting a single document, and document the relevant design or version assumption."
+          },
+          {
+            "title": "3. Insert results",
+            "text": "Be able to explain or demonstrate insert results in the context of inserting a single document, and document the relevant design or version assumption."
+          },
+          {
+            "title": "4. Handling duplicate identifiers",
+            "text": "Be able to explain or demonstrate handling duplicate identifiers in the context of inserting a single document, and document the relevant design or version assumption."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the behavior you want, identify the collection/document shape and access pattern involved, then select the smallest MongoDB operation that expresses the requirement. Run a read-only find with the same filter first and review the returned identifiers before mutating data."
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "execution_mode": "static-validation",
+        "code": "db.products.insertOne({ sku: \"P-101\", name: \"Notebook\", price: 4.50 });",
+        "expected_output": "The result contains an insertedId for the newly inserted document.",
+        "run_instructions": "CodeLeaf displays this example as a reference and does not execute a MongoDB server or arbitrary driver code in the page. Run shell examples with mongosh, or driver examples in a separately configured Node.js/Python lab, against a disposable database. Verify installed server/driver versions and deployment feature availability first. Never place credentials in source files.",
+        "reset_steps": "Use a dedicated training database and synthetic fixtures. Remove only objects created by this lesson or recreate the disposable database after confirming the target; do not run destructive/reset commands against production."
+      },
+      {
+        "type": "callout",
+        "title": "Environment and safety note",
+        "text": "All examples are teaching references, not production-ready configuration. MongoDB Atlas-specific Search, Vector Search, monitoring, backup and automation features are marked as deployment-dependent. Server, driver, shell and managed-service capabilities differ; check the official documentation that matches your target."
+      }
+    ],
+    "task": "Try it yourself: Run the matching CRUD operation only in a disposable training collection, inspect its result counts, and read the document back to verify the intended change. Submit your choice plus the expected result/evidence and one edge case.",
+    "task_acceptance_criteria": [
+      "Demonstrate the key idea in Inserting a Single Document.",
+      "Predict the result and state how you would verify it.",
+      "Name one boundary, risk or version/deployment assumption."
+    ],
+    "hints": [
+      "First, explain what “Inserting a Single Document” needs to accomplish in this scenario.",
+      "Write down the data shape, filter, expected output or operational evidence before running the example.",
+      "Test one normal case and one meaningful boundary/failure case; consult the matching official reference."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using a broad or incorrect filter",
+        "why": "A filter may match more documents than expected, especially when missing fields, arrays or implicit AND conditions are involved.",
+        "fix": "Run a read-only find with the same filter first and review the returned identifiers before mutating data."
+      },
+      {
+        "problem": "Assuming a static reference result proves the environment will behave identically.",
+        "why": "MongoDB server, shell, driver, managed service and permissions can affect the available behavior.",
+        "fix": "Record the target versions and privileges, run the smallest safe test, and keep expected and actual results side by side."
+      }
+    ],
+    "summary": [
+      "Inserting a Single Document is a query or write-building block. Construct a narrow filter, predict the documents that should match, choose only the fields needed, and verify matched or modified counts before relying on a mutation.",
+      "The supplied roadmap identifies these subtopics: insertOne(); Automatic identifier generation; Insert results; Handling duplicate identifiers.",
+      "Use a disposable practice environment, verify the result and keep operational assumptions explicit."
+    ],
+    "references": [
+      {
+        "title": "MongoDB Manual — Complete Documentation Index",
+        "url": "https://www.mongodb.com/docs/manual/contents/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "course-wide concepts",
+          "deployment and version navigation",
+          "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+        ]
+      },
+      {
+        "title": "MongoDB CRUD Operations",
+        "url": "https://www.mongodb.com/docs/manual/crud/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "insert",
+          "find",
+          "update",
+          "replace",
+          "delete",
+          "single-document atomicity"
+        ]
+      },
+      {
+        "title": "MongoDB Query Predicates",
+        "url": "https://www.mongodb.com/docs/manual/reference/operator/query/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "query operators",
+          "arrays",
+          "nested values",
+          "logical and comparison filters"
+        ]
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-040-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "MongoDB-specific examples are reference content. A separate isolated MongoDB server/driver runtime is required for execution; questions and solutions remain protected."
+  },
+  "exercise_files": [
+    "../exercises/040-inserting-a-single-document-practice.json",
+    "../exercises/practical-02-inserting-a-single-document.json"
+  ],
+  "sources": [
+    {
+      "title": "MongoDB Manual — Complete Documentation Index",
+      "url": "https://www.mongodb.com/docs/manual/contents/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "course-wide concepts",
+        "deployment and version navigation",
+        "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+      ]
+    },
+    {
+      "title": "MongoDB CRUD Operations",
+      "url": "https://www.mongodb.com/docs/manual/crud/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "insert",
+        "find",
+        "update",
+        "replace",
+        "delete",
+        "single-document atomicity"
+      ]
+    },
+    {
+      "title": "MongoDB Query Predicates",
+      "url": "https://www.mongodb.com/docs/manual/reference/operator/query/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "query operators",
+        "arrays",
+        "nested values",
+        "logical and comparison filters"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson authored from the supplied MongoDB syllabus and original instructional material. Review examples against the target MongoDB release/deployment before publication."
+}

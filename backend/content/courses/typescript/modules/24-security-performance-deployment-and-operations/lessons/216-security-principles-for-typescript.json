@@ -1,0 +1,138 @@
+{
+  "id": "typescript-lesson-216",
+  "slug": "216-security-principles-for-typescript",
+  "title": "Security Principles for TypeScript",
+  "sequence": 216,
+  "module_id": "typescript-module-24",
+  "module_slug": "security-performance-deployment-and-operations",
+  "level": "professional",
+  "difficulty": "professional",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "typescript-lesson-215"
+  ],
+  "previous_lesson_id": "typescript-lesson-215",
+  "next_lesson_id": "typescript-lesson-217",
+  "keywords": [
+    "security-principles-for-typescript",
+    "security-performance-deployment-and-operations",
+    "type-safety-versus-runtime-security",
+    "trust-boundaries",
+    "secure-handling-of-external-data"
+  ],
+  "source_syllabus_number": 216,
+  "subtopics": [
+    "Type safety versus runtime security",
+    "Trust boundaries",
+    "Secure handling of external data"
+  ],
+  "learning_outcomes": [
+    "Explain type safety versus runtime security in the context of security principles for typescript.",
+    "Apply the lesson concept in a small TypeScript example and describe what the compiler can check.",
+    "Identify one limitation or failure case and choose an appropriate runtime check or test when needed."
+  ],
+  "content": {
+    "intro": "Learn security principles for typescript through a compact mental model, syllabus-aligned subtopics, a worked example and a practical task. The goal is not to memorize syntax but to know what the type contract guarantees and what evidence is still needed.",
+    "why_it_matters": "Security, reliability, performance, and migration are system properties. Compile-time checks are one layer; combine them with runtime validation, dependency controls, testing, observability, and a rollback plan.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Security Principles for TypeScript concept map",
+        "asset_path": "diagrams/lessons/216-security-principles-for-typescript.svg",
+        "alt_text": "Lesson 216: Security Principles for TypeScript. Understand the concept, model its contract, and verify expected behavior.",
+        "caption": "Concept map for Security Principles for TypeScript; use the numbered stages rather than relying on color."
+      },
+      {
+        "type": "paragraph",
+        "title": "Mental model",
+        "text": "**Security Principles for TypeScript.** This lesson belongs to **Security, Performance, Deployment, and Operations**. Start by identifying the problem that security principles for typescript solves. In TypeScript, separate three questions: what values your program intends to accept, what the compiler can prove from the code, and what must still be checked while the program runs. The last category matters whenever data comes from a user, file, API, storage layer, or an untyped JavaScript dependency."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics and how to use them",
+        "items": [
+          {
+            "title": "Type safety versus runtime security",
+            "text": "For type safety versus runtime security, treat incoming values as untrusted until runtime checks establish the required shape. A TypeScript annotation does not validate network, file, database, storage, or user-provided data by itself."
+          },
+          {
+            "title": "Trust boundaries",
+            "text": "For trust boundaries, connect the concept to a small concrete example, state the assumption it relies on, and verify the result with a compiler diagnostic or a runtime test as appropriate."
+          },
+          {
+            "title": "Secure handling of external data",
+            "text": "For secure handling of external data, treat incoming values as untrusted until runtime checks establish the required shape. A TypeScript annotation does not validate network, file, database, storage, or user-provided data by itself."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Security Principles for TypeScript",
+        "language": "typescript",
+        "code": "const raw: unknown = JSON.parse('{\"role\":\"member\"}');\nif (typeof raw === \"object\" && raw !== null && \"role\" in raw && raw.role === \"member\") {\n  console.log(\"Known member role\");\n}",
+        "expected_output": "Runtime output for the example value: Known member role. For authorization, validate the complete claims and verify them on the server; never trust a client role field alone.",
+        "run_instructions": "This course displays TypeScript examples as static teaching text. The CodeLeaf web playground currently previews HTML/CSS/JavaScript only; TypeScript is not compiled or executed in the browser preview. For actual compiler feedback, create a local project with a pinned TypeScript version and run `npx tsc --noEmit`. For snippets requiring a browser, Node.js, React/JSX or a test runner, use the matching environment and dependencies.",
+        "reset_steps": "The lesson example does not modify files or remote systems. If you run it locally, use a disposable project directory, keep package versions recorded, and remove only the generated output you created.",
+        "execution_mode": "static-validation",
+        "limitations": "Static lesson example only. The browser preview is not a TypeScript compiler and does not execute backend, Node.js, React/TSX, test-runner, network or filesystem examples."
+      },
+      {
+        "type": "callout",
+        "title": "Compile-time versus runtime",
+        "text": "Type annotations and most type declarations are erased when TypeScript emits JavaScript. They do not validate external JSON, authorize a user, sanitize HTML, or prevent runtime failures by themselves. Validate trust-boundary inputs and test the behavior."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-216-knowledge-check.json",
+    "task": "Create a small TypeScript example for “Security Principles for TypeScript”. Demonstrate type safety versus runtime security, explain your assumption, and include one check that shows the expected behavior. Do not treat a type annotation as runtime validation for external input.",
+    "task_acceptance_criteria": [
+      "The example demonstrates at least one syllabus subtopic named in this lesson.",
+      "The type contract is explicit enough that another learner can explain what it accepts and rejects.",
+      "The learner records a failure case and distinguishes compile-time checks from runtime validation."
+    ],
+    "hints": [
+      "Start with the syllabus item “Type safety versus runtime security” and define the smallest example that demonstrates it.",
+      "Ask which part is checked by TypeScript and which part depends on runtime data, the environment or a test.",
+      "For external input, start with unknown and validate the required shape before using a domain type."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Treating a successful type check as a runtime guarantee.",
+        "why": "Type annotations do not generally validate data after JavaScript starts running.",
+        "fix": "Add runtime checks for external input and tests for meaningful failure cases."
+      },
+      {
+        "problem": "Using any or an assertion to silence a useful diagnostic.",
+        "why": "That can hide the exact mismatch the type system would otherwise report.",
+        "fix": "Prefer a more precise type or unknown plus narrowing; use assertions only when a verified invariant justifies them."
+      },
+      {
+        "problem": "Copying a compiler setting or runtime example without checking the project environment.",
+        "why": "Module resolution, DOM/Node globals, JSX and tool behavior depend on the configured versions and environment.",
+        "fix": "Pin the toolchain, match tsconfig to the runtime/bundler, and run the actual project's typecheck and tests."
+      }
+    ],
+    "summary": [
+      "Security Principles for TypeScript is taught through the subtopics listed in the source syllabus: Type safety versus runtime security, Trust boundaries, Secure handling of external data.",
+      "Prefer precise contracts and use compiler diagnostics as evidence, not as a replacement for runtime tests.",
+      "Validate untrusted data and describe environment/version assumptions explicitly."
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation",
+    "solution_notes": "The lesson provides progressive hints, not a hidden single correct implementation. Compare your example against the stated learning outcomes and acceptance criteria."
+  },
+  "exercise_files": [
+    "../exercises/028-secure-api-boundary.json"
+  ],
+  "sources": [
+    "PDF: Complete TypeScript Curriculum — Beginner to Professional, Section B, topic 216.",
+    "TypeScript Handbook — https://www.typescriptlang.org/docs/handbook/intro.html",
+    "OWASP Top 10 — https://owasp.org/www-project-top-ten/"
+  ],
+  "technical_review_date": "2026-10-14",
+  "status": "draft",
+  "status_note": "Generated as a complete curriculum draft from the PDF syllabus; review all technical examples against the configured compiler/runtime before publication."
+}

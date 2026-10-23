@@ -1,0 +1,217 @@
+{
+  "id": "mongodb-lesson-236",
+  "slug": "migrating-from-relational-databases",
+  "title": "Migrating from Relational Databases",
+  "sequence": 236,
+  "module_id": "mongodb-module-23",
+  "module_slug": "data-import-migration-and-integration",
+  "level": "professional",
+  "difficulty": "advanced",
+  "track": "core-professional",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "mongodb-lesson-235"
+  ],
+  "previous_lesson_id": "mongodb-lesson-235",
+  "next_lesson_id": "mongodb-lesson-237",
+  "keywords": [
+    "migrating",
+    "from",
+    "relational",
+    "databases",
+    "mongodb",
+    "database"
+  ],
+  "source_syllabus_number": 236,
+  "source_module_number": 23,
+  "subtopics": [
+    "Tables to collections",
+    "Rows to documents",
+    "Relationship mapping",
+    "Normalization versus denormalization",
+    "Validating migrated relationships"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and main trade-off of migrating from relational databases.",
+    "Apply migrating from relational databases to a small MongoDB data or operational scenario.",
+    "Verify the expected result, one edge case, and the relevant version/deployment assumption."
+  ],
+  "content": {
+    "intro": "Learn migrating from relational databases as part of Data Import, Migration and Integration. The lesson preserves the PDF subtopics, connects them to a practical MongoDB pattern, and ends with a verification task.",
+    "why_it_matters": "Migrating from Relational Databases introduces the MongoDB document model and its surrounding tools. Understand the relevant vocabulary, identify which component owns each responsibility, and practice in a repeatable environment before expanding to production concerns.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Migrating from Relational Databases",
+        "asset_path": "diagrams/lesson-236-migrating-from-relational-databases.svg",
+        "alt_text": "Four-step learning diagram for Migrating from Relational Databases: Map source fields; Normalize types; Load repeatably; Reconcile target.",
+        "caption": "Visual guide to Migrating from Relational Databases: follow the concept, action, verification and application steps."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Migrating from Relational Databases introduces the MongoDB document model and its surrounding tools. Understand the relevant vocabulary, identify which component owns each responsibility, and practice in a repeatable environment before expanding to production concerns."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics to master",
+        "items": [
+          {
+            "title": "1. Tables to collections",
+            "text": "Be able to explain or demonstrate tables to collections in the context of migrating from relational databases, and document the relevant design or version assumption."
+          },
+          {
+            "title": "2. Rows to documents",
+            "text": "Be able to explain or demonstrate rows to documents in the context of migrating from relational databases, and document the relevant design or version assumption."
+          },
+          {
+            "title": "3. Relationship mapping",
+            "text": "Be able to explain or demonstrate relationship mapping in the context of migrating from relational databases, and document the relevant design or version assumption."
+          },
+          {
+            "title": "4. Normalization versus denormalization",
+            "text": "Be able to explain or demonstrate normalization versus denormalization in the context of migrating from relational databases, and document the relevant design or version assumption."
+          },
+          {
+            "title": "5. Validating migrated relationships",
+            "text": "Be able to explain or demonstrate validating migrated relationships in the context of migrating from relational databases, and document the relevant design or version assumption."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the behavior you want, identify the collection/document shape and access pattern involved, then select the smallest MongoDB operation that expresses the requirement. Add a failure test, protect secrets, and state the expected retry or recovery behavior."
+      },
+      {
+        "type": "code",
+        "language": "text",
+        "execution_mode": "static-validation",
+        "code": "// Migration review checklist\n// 1. Map fields and BSON types. 2. Define duplicate handling.\n// 3. Reconcile source/target counts and sampled records. 4. Test rollback.",
+        "expected_output": "A migration has an explicit mapping, reconciliation evidence and a rollback or restart plan.",
+        "run_instructions": "CodeLeaf displays this example as a reference and does not execute a MongoDB server or arbitrary driver code in the page. Run shell examples with mongosh, or driver examples in a separately configured Node.js/Python lab, against a disposable database. Verify installed server/driver versions and deployment feature availability first. Never place credentials in source files.",
+        "reset_steps": "Use a dedicated training database and synthetic fixtures. Remove only objects created by this lesson or recreate the disposable database after confirming the target; do not run destructive/reset commands against production."
+      },
+      {
+        "type": "callout",
+        "title": "Environment and safety note",
+        "text": "All examples are teaching references, not production-ready configuration. MongoDB Atlas-specific Search, Vector Search, monitoring, backup and automation features are marked as deployment-dependent. Server, driver, shell and managed-service capabilities differ; check the official documentation that matches your target."
+      }
+    ],
+    "task": "Try it yourself: Define source-to-target field mappings and type conversions, import synthetic data into a fresh target, reconcile counts and duplicates, and document restart/rollback behavior. Submit your choice plus the expected result/evidence and one edge case.",
+    "task_acceptance_criteria": [
+      "Demonstrate the key idea in Migrating from Relational Databases.",
+      "Predict the result and state how you would verify it.",
+      "Name one boundary, risk or version/deployment assumption."
+    ],
+    "hints": [
+      "First, explain what “Migrating from Relational Databases” needs to accomplish in this scenario.",
+      "Write down the data shape, filter, expected output or operational evidence before running the example.",
+      "Test one normal case and one meaningful boundary/failure case; consult the matching official reference."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Validating only the happy path",
+        "why": "Connection failures, malformed data, duplicates, partial failures and configuration mistakes are common integration risks.",
+        "fix": "Add a failure test, protect secrets, and state the expected retry or recovery behavior."
+      },
+      {
+        "problem": "Assuming a static reference result proves the environment will behave identically.",
+        "why": "MongoDB server, shell, driver, managed service and permissions can affect the available behavior.",
+        "fix": "Record the target versions and privileges, run the smallest safe test, and keep expected and actual results side by side."
+      }
+    ],
+    "summary": [
+      "Migrating from Relational Databases introduces the MongoDB document model and its surrounding tools. Understand the relevant vocabulary, identify which component owns each responsibility, and practice in a repeatable environment before expanding to production concerns.",
+      "The supplied roadmap identifies these subtopics: Tables to collections; Rows to documents; Relationship mapping; Normalization versus denormalization; Validating migrated relationships.",
+      "Use a disposable practice environment, verify the result and keep operational assumptions explicit."
+    ],
+    "references": [
+      {
+        "title": "MongoDB Manual — Complete Documentation Index",
+        "url": "https://www.mongodb.com/docs/manual/contents/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "course-wide concepts",
+          "deployment and version navigation",
+          "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+        ]
+      },
+      {
+        "title": "mongoimport",
+        "url": "https://www.mongodb.com/docs/database-tools/mongoimport/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "JSON and CSV data import"
+        ]
+      },
+      {
+        "title": "MongoDB CRUD Operations",
+        "url": "https://www.mongodb.com/docs/manual/crud/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "insert",
+          "find",
+          "update",
+          "replace",
+          "delete",
+          "single-document atomicity"
+        ]
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-236-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "MongoDB-specific examples are reference content. A separate isolated MongoDB server/driver runtime is required for execution; questions and solutions remain protected."
+  },
+  "exercise_files": [
+    "../exercises/236-migrating-from-relational-databases-practice.json"
+  ],
+  "sources": [
+    {
+      "title": "MongoDB Manual — Complete Documentation Index",
+      "url": "https://www.mongodb.com/docs/manual/contents/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "course-wide concepts",
+        "deployment and version navigation",
+        "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+      ]
+    },
+    {
+      "title": "mongoimport",
+      "url": "https://www.mongodb.com/docs/database-tools/mongoimport/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "JSON and CSV data import"
+      ]
+    },
+    {
+      "title": "MongoDB CRUD Operations",
+      "url": "https://www.mongodb.com/docs/manual/crud/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "insert",
+        "find",
+        "update",
+        "replace",
+        "delete",
+        "single-document atomicity"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson authored from the supplied MongoDB syllabus and original instructional material. Review examples against the target MongoDB release/deployment before publication."
+}

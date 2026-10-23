@@ -1,0 +1,165 @@
+{
+  "id": "genai-lesson-112",
+  "slug": "embedding-model-management",
+  "title": "Embedding Model Management",
+  "sequence": 112,
+  "module_id": "genai-module-13",
+  "module_slug": "embeddings-semantic-search-and-vector-databases",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-application-development",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "genai-lesson-106"
+  ],
+  "previous_lesson_id": "genai-lesson-111",
+  "next_lesson_id": "genai-lesson-113",
+  "keywords": [
+    "Embedding Model Management",
+    "Comparing embedding models",
+    "Query and document encoding conventions",
+    "Embedding versioning",
+    "Rebuilding vector indexes",
+    "Migration between embedding models",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 112,
+  "subtopics": [
+    "Comparing embedding models",
+    "Query and document encoding conventions",
+    "Embedding versioning",
+    "Rebuilding vector indexes",
+    "Migration between embedding models",
+    "Monitoring retrieval quality over time"
+  ],
+  "learning_outcomes": [
+    "Explain comparing embedding models and how it connects to embedding model management.",
+    "Apply query and document encoding conventions in the example and predict the output before running it.",
+    "Test one realistic edge case for embedding model management and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers embedding model management through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Represent content as embeddings and build semantic or hybrid retrieval. Evaluate ranking with representative queries and preserve permissions through retrieval.",
+    "why_it_matters": "Comparing embedding models concerns how content is represented, selected, or ranked for relevance. Keep the source text and metadata traceable, measure retrieval with labeled queries, and verify that similarity scores correspond to useful results rather than assuming nearby vectors prove factual correctness.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Embedding Model Management: concept map",
+        "asset_path": "diagrams/lessons/lesson-112-embedding-model-management.svg",
+        "alt_text": "Diagram for Embedding Model Management: understand Comparing embedding models, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Comparing embedding models, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Comparing embedding models concerns how content is represented, selected, or ranked for relevance. Keep the source text and metadata traceable, measure retrieval with labeled queries, and verify that similarity scores correspond to useful results rather than assuming nearby vectors prove factual correctness."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Comparing embedding models",
+            "text": "Comparing embedding models concerns how content is represented, selected, or ranked for relevance. Keep the source text and metadata traceable, measure retrieval with labeled queries, and verify that similarity scores correspond to useful results rather than assuming nearby vectors prove factual correctness."
+          },
+          {
+            "title": "Query and document encoding conventions",
+            "text": "Query and document encoding conventions addresses how information is prepared, described, versioned, or governed. Validate the input, keep source and access metadata, handle duplicates and missing values deliberately, and test the downstream effect of a data change rather than treating the data pipeline as invisible plumbing."
+          },
+          {
+            "title": "Embedding versioning",
+            "text": "Embedding versioning concerns how content is represented, selected, or ranked for relevance. Keep the source text and metadata traceable, measure retrieval with labeled queries, and verify that similarity scores correspond to useful results rather than assuming nearby vectors prove factual correctness."
+          },
+          {
+            "title": "Rebuilding vector indexes",
+            "text": "Rebuilding vector indexes concerns how content is represented, selected, or ranked for relevance. Keep the source text and metadata traceable, measure retrieval with labeled queries, and verify that similarity scores correspond to useful results rather than assuming nearby vectors prove factual correctness."
+          },
+          {
+            "title": "Migration between embedding models",
+            "text": "Migration between embedding models concerns how content is represented, selected, or ranked for relevance. Keep the source text and metadata traceable, measure retrieval with labeled queries, and verify that similarity scores correspond to useful results rather than assuming nearby vectors prove factual correctness."
+          },
+          {
+            "title": "Monitoring retrieval quality over time",
+            "text": "Monitoring retrieval quality over time concerns how content is represented, selected, or ranked for relevance. Keep the source text and metadata traceable, measure retrieval with labeled queries, and verify that similarity scores correspond to useful results rather than assuming nearby vectors prove factual correctness."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Embedding Model Management\nindex = {\"embedding_model\": \"embed-v1\", \"dimensions\": 768, \"records\": 1200}\nnew_model = {\"embedding_model\": \"embed-v2\", \"dimensions\": 1024}\nrequires_reindex = index[\"embedding_model\"] != new_model[\"embedding_model\"] or index[\"dimensions\"] != new_model[\"dimensions\"]\nprint({\"requires_reindex\": requires_reindex})",
+        "expected_output": "{'requires_reindex': True}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice comparing embedding models within embedding model management: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'requires_reindex': True}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-112-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Embedding Model Management is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://developers.openai.com/api/docs/guides/embeddings",
+      "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Vector embeddings",
+      "url": "https://developers.openai.com/api/docs/guides/embeddings",
+      "publisher": "OpenAI API documentation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "embeddings"
+      ]
+    },
+    {
+      "title": "Design and develop a RAG solution",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide",
+      "publisher": "Microsoft Learn / Azure Architecture Center",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "RAG architecture"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

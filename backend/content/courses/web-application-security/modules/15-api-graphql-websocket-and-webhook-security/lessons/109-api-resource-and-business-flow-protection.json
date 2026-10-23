@@ -1,0 +1,193 @@
+{
+  "id": "web-application-security-lesson-109",
+  "slug": "api-resource-and-business-flow-protection",
+  "title": "API Resource and Business-Flow Protection",
+  "sequence": 109,
+  "module_id": "web-application-security-module-15",
+  "module_slug": "api-graphql-websocket-and-webhook-security",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced-security",
+  "curriculum_tier": "advanced",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "web-application-security-lesson-108"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-108",
+  "next_lesson_id": "web-application-security-lesson-110",
+  "keywords": [
+    "api",
+    "resource",
+    "and",
+    "business",
+    "flow",
+    "protection",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 109,
+  "source_syllabus_title": "API Resource and Business-Flow Protection",
+  "source_subtopics": [
+    {
+      "number": "109.1",
+      "title": "Request-size and execution limits"
+    },
+    {
+      "number": "109.2",
+      "title": "Resource consumption and cost controls"
+    },
+    {
+      "number": "109.3",
+      "title": "Limits for search, export, and batch operations"
+    },
+    {
+      "number": "109.4",
+      "title": "Protecting sensitive business workflows"
+    },
+    {
+      "number": "109.5",
+      "title": "Abuse prevention beyond request rate limits"
+    },
+    {
+      "number": "109.6",
+      "title": "Monitoring abnormal API usage"
+    }
+  ],
+  "subtopics": [
+    "Request-size and execution limits",
+    "Resource consumption and cost controls",
+    "Limits for search, export, and batch operations",
+    "Protecting sensitive business workflows",
+    "Abuse prevention beyond request rate limits",
+    "Monitoring abnormal API usage"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in API Resource and Business-Flow Protection.",
+    "Choose an appropriate defensive control for API Resource and Business-Flow Protection and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for API Resource and Business-Flow Protection, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 15: API, GraphQL, WebSocket, and Webhook Security. It builds practical understanding of API Resource and Business-Flow Protection with the syllabus subtopics retained below.",
+    "why_it_matters": "API Resource and Business-Flow Protection addresses how untrusted data or requests cross a boundary and may influence application behavior. The safe fix should address the root cause and remain testable. Enforce business invariants on the server inside atomic transactions or with database constraints, and test duplicates, retries, concurrency, and invalid state transitions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: API Resource and Business-Flow Protection",
+        "asset_path": "diagrams/lesson-109-api-resource-and-business-flow-protection.svg",
+        "alt_text": "Four-stage visual model for API Resource and Business-Flow Protection: Define operation; Authenticate request; Authorize object + field; Bound load + audit.",
+        "caption": "Concept map for API Resource and Business-Flow Protection. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "API Resource and Business-Flow Protection can be understood through this sequence: Define operation → Authenticate request → Authorize object + field → Bound load + audit. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 109.1 Request-size and execution limits; 109.2 Resource consumption and cost controls; 109.3 Limits for search, export, and batch operations; 109.4 Protecting sensitive business workflows; 109.5 Abuse prevention beyond request rate limits; 109.6 Monitoring abnormal API usage. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Enforce business invariants on the server inside atomic transactions or with database constraints, and test duplicates, retries, concurrency, and invalid state transitions."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "json",
+        "execution_mode": "static-validation",
+        "title": "Safe reference example: API Resource and Business-Flow Protection",
+        "code": "{\n  \"operation\": \"read_profile\",\n  \"authenticated\": true,\n  \"authorize_object\": true,\n  \"authorize_fields\": true,\n  \"rate_limited\": true\n}",
+        "expected_output": "The API review checks identity, object permissions, field permissions, and resource limits independently.",
+        "run_instructions": "This is a test-case record, not a complete API implementation. Add explicit positive and negative assertions to an isolated test suite.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Enforce business invariants on the server inside atomic transactions or with database constraints, and test duplicates, retries, concurrency, and invalid state transitions. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “API Resource and Business-Flow Protection”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for API Resource and Business-Flow Protection in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-109-questions.json",
+    "recap": [
+      "API Resource and Business-Flow Protection is a security boundary/control topic, not a standalone checklist item.",
+      "Enforce business invariants on the server inside atomic transactions or with database constraints, and test duplicates, retries, concurrency, and invalid state transitions.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "OWASP API Security Top 10:2023",
+      "url": "https://api-security.owasp.org/editions/2023/en/0x11-t10/",
+      "publisher": "OWASP API Security Project",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "BOLA",
+        "authentication",
+        "property authorization"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

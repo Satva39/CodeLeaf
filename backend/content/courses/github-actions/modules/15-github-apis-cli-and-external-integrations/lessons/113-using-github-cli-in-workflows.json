@@ -1,0 +1,259 @@
+{
+  "id": "github-actions-lesson-113",
+  "slug": "using-github-cli-in-workflows",
+  "title": "Using GitHub CLI in Workflows",
+  "sequence": 113,
+  "module_id": "github-actions-module-15",
+  "module_slug": "github-apis-cli-and-external-integrations",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "github-actions-lesson-112"
+  ],
+  "previous_lesson_id": "github-actions-lesson-112",
+  "next_lesson_id": "github-actions-lesson-114",
+  "keywords": [
+    "using-github-cli-in-workflows",
+    "github-apis-cli-and-external-integrations",
+    "the-gh-command",
+    "authentication-in-workflows",
+    "creating-issues-and-pull-requests",
+    "viewing-workflow-runs",
+    "managing-releases",
+    "working-with-structured-command-output"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of using github cli in workflows and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to using github cli in workflows.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on using github cli in workflows. GitHub CLI (`gh`) can automate issues, pull requests, runs, and releases when authenticated with a scoped workflow token. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "Using GitHub CLI in Workflows matters because it affects correctness, security, maintainability, or operating cost. GitHub CLI (`gh`) can automate issues, pull requests, runs, and releases when authenticated with a scoped workflow token. External integrations need explicit authentication, narrow permissions, input validation, rate-limit handling, deduplication, and safe reporting that does not leak credentials or payloads.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 15 visual map",
+        "asset_path": "diagrams/module-15-overview.svg",
+        "alt_text": "Ordered overview of module 15: Using GitHub CLI in Workflows; GitHub REST API Automation; GitHub GraphQL API Automation; GitHub App Authentication; External Webhooks and Event Integration; Notifications and Reporting; Third-Party Service Integrations.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "GitHub CLI (`gh`) can automate issues, pull requests, runs, and releases when authenticated with a scoped workflow token. External integrations need explicit authentication, narrow permissions, input validation, rate-limit handling, deduplication, and safe reporting that does not leak credentials or payloads. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "The gh command",
+            "text": "Use a scoped token, validate request inputs and event payloads, check HTTP/error status, handle pagination and rate limits, and avoid logging credentials or unneeded private response data."
+          },
+          {
+            "title": "Authentication in workflows",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Creating issues and pull requests",
+            "text": "Match the event to the intended lifecycle, then test positive and negative branch/path/activity cases. Event payloads may be attacker-controlled, and scheduled jobs use UTC rather than a guaranteed exact start time."
+          },
+          {
+            "title": "Viewing workflow runs",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Managing releases",
+            "text": "Match the event to the intended lifecycle, then test positive and negative branch/path/activity cases. Event payloads may be attacker-controlled, and scheduled jobs use UTC rather than a guaranteed exact start time."
+          },
+          {
+            "title": "Working with structured command output",
+            "text": "Write one step output as `name=value` to `$GITHUB_OUTPUT`, then declare job outputs if a downstream job needs the value. Use `$GITHUB_ENV` for values needed by later steps in the same job."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "bash",
+        "code": "# Example: read a repository field through GitHub CLI\ngh api repos/$GITHUB_REPOSITORY --jq '.full_name' ",
+        "expected_output": "With the CLI authenticated and the token permitted, the command prints the repository full name as a single value.",
+        "run_instructions": "Run inside a workflow with `GH_TOKEN: ${{ github.token }}` in the step environment and the narrowest required `permissions`. Never print the token.",
+        "reset_steps": "Restore the original snippet and remove temporary workflow changes. If you triggered a real run, inspect the run log before editing the file again.",
+        "execution_mode": "runner-command"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to using github cli in workflows. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain using github cli in workflows, read the example, and identify a way to validate it. The wider system goal remains: Use GitHub APIs and CLI integration with explicit authentication, bounded permissions, and handled failures."
+      }
+    ],
+    "task": "Apply using github cli in workflows to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: GitHub CLI (`gh`) can automate issues, pull requests, runs, and releases when authenticated with a scoped workflow token.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: GitHub CLI (`gh`) can automate issues, pull requests, runs, and releases when authenticated with a scoped workflow token. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "GitHub CLI (`gh`) can automate issues, pull requests, runs, and releases when authenticated with a scoped workflow token.",
+      "External integrations need explicit authentication, narrow permissions, input validation, rate-limit handling, deduplication, and safe reporting that does not leak credentials or payloads.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-113-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "runner-command",
+    "references": [
+      {
+        "title": "GitHub CLI manual",
+        "url": "https://cli.github.com/manual/",
+        "publisher": "GitHub CLI",
+        "checked_on": "2026-10-20",
+        "source_type": "official_manual",
+        "supports": [
+          "gh commands",
+          "authentication",
+          "API automation",
+          "structured output"
+        ]
+      },
+      {
+        "title": "Contexts reference",
+        "url": "https://docs.github.com/en/actions/reference/contexts-reference",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "github",
+          "env",
+          "vars",
+          "secrets",
+          "runner",
+          "job",
+          "steps",
+          "needs",
+          "matrix",
+          "inputs contexts"
+        ]
+      },
+      {
+        "title": "Evaluate expressions in workflows and actions",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/expressions",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "expression syntax",
+          "operators",
+          "functions",
+          "status checks",
+          "change detection"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "GitHub CLI manual",
+      "url": "https://cli.github.com/manual/",
+      "publisher": "GitHub CLI",
+      "checked_on": "2026-10-20",
+      "source_type": "official_manual",
+      "supports": [
+        "gh commands",
+        "authentication",
+        "API automation",
+        "structured output"
+      ]
+    },
+    {
+      "title": "Contexts reference",
+      "url": "https://docs.github.com/en/actions/reference/contexts-reference",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "github",
+        "env",
+        "vars",
+        "secrets",
+        "runner",
+        "job",
+        "steps",
+        "needs",
+        "matrix",
+        "inputs contexts"
+      ]
+    },
+    {
+      "title": "Evaluate expressions in workflows and actions",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/expressions",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "expression syntax",
+        "operators",
+        "functions",
+        "status checks",
+        "change detection"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "113",
+    "module_title": "GitHub APIs, CLI, and External Integrations",
+    "subtopics": [
+      "The gh command",
+      "Authentication in workflows",
+      "Creating issues and pull requests",
+      "Viewing workflow runs",
+      "Managing releases",
+      "Working with structured command output"
+    ]
+  }
+}

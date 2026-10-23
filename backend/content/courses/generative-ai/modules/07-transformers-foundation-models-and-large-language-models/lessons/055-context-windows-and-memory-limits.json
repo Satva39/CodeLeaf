@@ -1,0 +1,166 @@
+{
+  "id": "genai-lesson-055",
+  "slug": "context-windows-and-memory-limits",
+  "title": "Context Windows and Memory Limits",
+  "sequence": 55,
+  "module_id": "genai-module-07",
+  "module_slug": "transformers-foundation-models-and-large-language-models",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-foundations",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "genai-lesson-044",
+    "genai-lesson-054"
+  ],
+  "previous_lesson_id": "genai-lesson-054",
+  "next_lesson_id": "genai-lesson-056",
+  "keywords": [
+    "Context Windows and Memory Limits",
+    "Context windows and token budgets",
+    "Input, output, and total token constraints",
+    "Truncation and context loss",
+    "Long-context techniques",
+    "Attention cost and memory trade-offs",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 55,
+  "subtopics": [
+    "Context windows and token budgets",
+    "Input, output, and total token constraints",
+    "Truncation and context loss",
+    "Long-context techniques",
+    "Attention cost and memory trade-offs",
+    "Managing conversation history"
+  ],
+  "learning_outcomes": [
+    "Explain context windows and token budgets and how it connects to context windows and memory limits.",
+    "Apply input, output, and total token constraints in the example and predict the output before running it.",
+    "Test one realistic edge case for context windows and memory limits and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers context windows and memory limits through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Follow the transformer data path and understand context limits, decoding, model size, and why benchmark results do not automatically predict an application's performance.",
+    "why_it_matters": "Treat context windows and token budgets as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Context Windows and Memory Limits: concept map",
+        "asset_path": "diagrams/lessons/lesson-055-context-windows-and-memory-limits.svg",
+        "alt_text": "Diagram for Context Windows and Memory Limits: understand Context windows and token budgets, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Context windows and token budgets, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Treat context windows and token budgets as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Context windows and token budgets",
+            "text": "Treat context windows and token budgets as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs."
+          },
+          {
+            "title": "Input, output, and total token constraints",
+            "text": "Input, output, and total token constraints is part of the representation and generation mechanism. Follow the information flow from input representation to model computation to output selection, then distinguish the architecture's capabilities from limits caused by data, context, decoding choices, or compute."
+          },
+          {
+            "title": "Truncation and context loss",
+            "text": "Treat truncation and context loss as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs."
+          },
+          {
+            "title": "Long-context techniques",
+            "text": "Treat long-context techniques as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs."
+          },
+          {
+            "title": "Attention cost and memory trade-offs",
+            "text": "Attention cost and memory trade-offs is part of the representation and generation mechanism. Follow the information flow from input representation to model computation to output selection, then distinguish the architecture's capabilities from limits caused by data, context, decoding choices, or compute."
+          },
+          {
+            "title": "Managing conversation history",
+            "text": "Use managing conversation history as a lens for understanding context windows and memory limits. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Context Windows and Memory Limits\ntokens = list(range(1, 13))\ncontext_limit = 8\nkept = tokens[-context_limit:]\nprint({\"input_tokens\": len(tokens), \"kept_tokens\": len(kept), \"first_kept_token\": kept[0]})",
+        "expected_output": "{'input_tokens': 12, 'kept_tokens': 8, 'first_kept_token': 5}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice context windows and token budgets within context windows and memory limits: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'input_tokens': 12, 'kept_tokens': 8, 'first_kept_token': 5}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-055-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Context Windows and Memory Limits is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://huggingface.co/learn/llm-course/en/chapter1/1",
+      "https://developers.google.com/machine-learning/crash-course/"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Hugging Face LLM Course",
+      "url": "https://huggingface.co/learn/llm-course/en/chapter1/1",
+      "publisher": "Hugging Face",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tokenization"
+      ]
+    },
+    {
+      "title": "Machine Learning Crash Course",
+      "url": "https://developers.google.com/machine-learning/crash-course/",
+      "publisher": "Google for Developers",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "AI and machine learning foundations"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

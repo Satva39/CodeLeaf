@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-39",
+  "exercise_id": "dsa-exercise-pdf-39",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\nfrom collections import Counter\n\ndef unique_permutations(values):\n    counts=Counter(values); path=[]; result=[]\n    def visit():\n        if len(path) == len(values): result.append(tuple(path)); return\n        for value in counts:\n            if counts[value] == 0: continue\n            counts[value]-=1; path.append(value); visit(); path.pop(); counts[value]+=1\n    visit(); return result\n\nassert set(unique_permutations([1,1,2])) == {(1,1,2),(1,2,1),(2,1,1)}\n```",
+  "explanation": "A frequency counter avoids duplicate branches for repeated values. Time is proportional to the number of explored permutations; output storage can be factorial.",
+  "tested_reference_code": "from collections import Counter\n\ndef unique_permutations(values):\n    counts=Counter(values); path=[]; result=[]\n    def visit():\n        if len(path) == len(values): result.append(tuple(path)); return\n        for value in counts:\n            if counts[value] == 0: continue\n            counts[value]-=1; path.append(value); visit(); path.pop(); counts[value]+=1\n    visit(); return result\n\nassert set(unique_permutations([1,1,2])) == {(1,1,2),(1,2,1),(2,1,1)}",
+  "language": "python"
+}

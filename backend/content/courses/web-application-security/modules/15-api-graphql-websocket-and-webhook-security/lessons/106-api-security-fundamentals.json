@@ -1,0 +1,190 @@
+{
+  "id": "web-application-security-lesson-106",
+  "slug": "api-security-fundamentals",
+  "title": "API Security Fundamentals",
+  "sequence": 106,
+  "module_id": "web-application-security-module-15",
+  "module_slug": "api-graphql-websocket-and-webhook-security",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced-security",
+  "curriculum_tier": "advanced",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "web-application-security-lesson-105"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-105",
+  "next_lesson_id": "web-application-security-lesson-107",
+  "keywords": [
+    "api",
+    "security",
+    "fundamentals",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 106,
+  "source_syllabus_title": "API Security Fundamentals",
+  "source_subtopics": [
+    {
+      "number": "106.1",
+      "title": "API resources, operations, and trust boundaries"
+    },
+    {
+      "number": "106.2",
+      "title": "REST endpoints and HTTP methods"
+    },
+    {
+      "number": "106.3",
+      "title": "API schemas and versioning"
+    },
+    {
+      "number": "106.4",
+      "title": "Authentication versus API keys"
+    },
+    {
+      "number": "106.5",
+      "title": "Rate limits and API quotas"
+    },
+    {
+      "number": "106.6",
+      "title": "Public, internal, and partner APIs"
+    }
+  ],
+  "subtopics": [
+    "API resources, operations, and trust boundaries",
+    "REST endpoints and HTTP methods",
+    "API schemas and versioning",
+    "Authentication versus API keys",
+    "Rate limits and API quotas",
+    "Public, internal, and partner APIs"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in API Security Fundamentals.",
+    "Choose an appropriate defensive control for API Security Fundamentals and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for API Security Fundamentals, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 15: API, GraphQL, WebSocket, and Webhook Security. It builds practical understanding of API Security Fundamentals with the syllabus subtopics retained below.",
+    "why_it_matters": "API Security Fundamentals addresses how untrusted data or requests cross a boundary and may influence application behavior. The safe fix should address the root cause and remain testable. Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: API Security Fundamentals",
+        "asset_path": "diagrams/lesson-106-api-security-fundamentals.svg",
+        "alt_text": "Four-stage visual model for API Security Fundamentals: Define operation; Authenticate request; Authorize object + field; Bound load + audit.",
+        "caption": "Concept map for API Security Fundamentals. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "API Security Fundamentals can be understood through this sequence: Define operation → Authenticate request → Authorize object + field → Bound load + audit. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 106.1 API resources, operations, and trust boundaries; 106.2 REST endpoints and HTTP methods; 106.3 API schemas and versioning; 106.4 Authentication versus API keys; 106.5 Rate limits and API quotas; 106.6 Public, internal, and partner APIs. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "json",
+        "execution_mode": "static-validation",
+        "title": "Safe reference example: API Security Fundamentals",
+        "code": "{\n  \"operation\": \"read_profile\",\n  \"authenticated\": true,\n  \"authorize_object\": true,\n  \"authorize_fields\": true,\n  \"rate_limited\": true\n}",
+        "expected_output": "The API review checks identity, object permissions, field permissions, and resource limits independently.",
+        "run_instructions": "This is a test-case record, not a complete API implementation. Add explicit positive and negative assertions to an isolated test suite.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “API Security Fundamentals”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for API Security Fundamentals in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-106-questions.json",
+    "recap": [
+      "API Security Fundamentals is a security boundary/control topic, not a standalone checklist item.",
+      "Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "OWASP API Security Top 10:2023",
+      "url": "https://api-security.owasp.org/editions/2023/en/0x11-t10/",
+      "publisher": "OWASP API Security Project",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "BOLA",
+        "authentication",
+        "property authorization"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

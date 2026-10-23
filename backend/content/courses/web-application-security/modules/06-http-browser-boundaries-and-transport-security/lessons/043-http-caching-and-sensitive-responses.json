@@ -1,0 +1,187 @@
+{
+  "id": "web-application-security-lesson-043",
+  "slug": "http-caching-and-sensitive-responses",
+  "title": "HTTP Caching and Sensitive Responses",
+  "sequence": 43,
+  "module_id": "web-application-security-module-06",
+  "module_slug": "http-browser-boundaries-and-transport-security",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core-foundations",
+  "curriculum_tier": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "web-application-security-lesson-042"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-042",
+  "next_lesson_id": "web-application-security-lesson-044",
+  "keywords": [
+    "http",
+    "caching",
+    "and",
+    "sensitive",
+    "responses",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 43,
+  "source_syllabus_title": "HTTP Caching and Sensitive Responses",
+  "source_subtopics": [
+    {
+      "number": "43.1",
+      "title": "Browser and intermediary caches"
+    },
+    {
+      "number": "43.2",
+      "title": "Cache-Control directives"
+    },
+    {
+      "number": "43.3",
+      "title": "Caching authenticated content"
+    },
+    {
+      "number": "43.4",
+      "title": "Personalized responses and shared caches"
+    },
+    {
+      "number": "43.5",
+      "title": "Preventing sensitive information from leaking through caching"
+    }
+  ],
+  "subtopics": [
+    "Browser and intermediary caches",
+    "Cache-Control directives",
+    "Caching authenticated content",
+    "Personalized responses and shared caches",
+    "Preventing sensitive information from leaking through caching"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in HTTP Caching and Sensitive Responses.",
+    "Choose an appropriate defensive control for HTTP Caching and Sensitive Responses and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for HTTP Caching and Sensitive Responses, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 6: HTTP, Browser Boundaries, and Transport Security. It builds practical understanding of HTTP Caching and Sensitive Responses with the syllabus subtopics retained below.",
+    "why_it_matters": "HTTP Caching and Sensitive Responses helps you observe a real boundary instead of assuming that browser, proxy, transport, and server behavior are interchangeable. Use standards-based browser/transport controls that fit the deployment, test their effects in a staging environment, and never assume a header replaces correct server-side access checks.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: HTTP Caching and Sensitive Responses",
+        "asset_path": "diagrams/lesson-043-http-caching-and-sensitive-responses.svg",
+        "alt_text": "Four-stage visual model for HTTP Caching and Sensitive Responses: Inspect request/response; Identify boundary mismatch; Apply narrow control; Test deployment behavior.",
+        "caption": "Concept map for HTTP Caching and Sensitive Responses. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "HTTP Caching and Sensitive Responses can be understood through this sequence: Inspect request/response → Identify boundary mismatch → Apply narrow control → Test deployment behavior. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 43.1 Browser and intermediary caches; 43.2 Cache-Control directives; 43.3 Caching authenticated content; 43.4 Personalized responses and shared caches; 43.5 Preventing sensitive information from leaking through caching. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Use standards-based browser/transport controls that fit the deployment, test their effects in a staging environment, and never assume a header replaces correct server-side access checks."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "http",
+        "execution_mode": "static-validation",
+        "title": "Safe reference example: HTTP Caching and Sensitive Responses",
+        "code": "GET /api/profile HTTP/1.1\nHost: app.example.test\nAccept: application/json\n\nHTTP/1.1 200 OK\nContent-Type: application/json\nCache-Control: no-store",
+        "expected_output": "The response declares JSON content and asks caches not to retain this personalized response.",
+        "run_instructions": "This is a schematic transcript for a local test app. Confirm actual headers in the browser network panel or an authorized HTTP client.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Use standards-based browser/transport controls that fit the deployment, test their effects in a staging environment, and never assume a header replaces correct server-side access checks. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “HTTP Caching and Sensitive Responses”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for HTTP Caching and Sensitive Responses in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-043-questions.json",
+    "recap": [
+      "HTTP Caching and Sensitive Responses is a security boundary/control topic, not a standalone checklist item.",
+      "Use standards-based browser/transport controls that fit the deployment, test their effects in a staging environment, and never assume a header replaces correct server-side access checks.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "MDN Web Security",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "same-origin policy",
+        "browser security boundaries",
+        "web security features"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

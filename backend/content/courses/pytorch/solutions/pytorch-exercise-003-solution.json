@@ -1,0 +1,16 @@
+{
+  "id": "pytorch-exercise-003-reference-solution",
+  "exercise_id": "pytorch-exercise-003",
+  "title": "Reference approach: Shape Manipulator",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Implement shape manipulator in a small isolated script. Required implementation evidence includes: reshape, torch.cat, torch.split. Use a reproducible seed, report observed output, and explain relevant edge cases.",
+  "explanation": "This exercise consolidates the topic from lesson 026. The list of required strings is only a minimal static signal; inspect numerical correctness, error handling, and test outcomes manually.",
+  "example_code": "import torch\nx = torch.arange(12).reshape(3, 4); flat = x.flatten(); parts = torch.split(flat, 6)\njoined = torch.cat(parts); print(x.shape, flat.shape, torch.equal(joined, flat))",
+  "reference_code": "import torch\nx = torch.arange(12).reshape(3, 4); flat = x.flatten(); parts = torch.split(flat, 6)\njoined = torch.cat(parts); print(x.shape, flat.shape, torch.equal(joined, flat))",
+  "review_notes": [
+    "Do not treat source-string grading as proof that numerical behavior is correct.",
+    "Run in a supported local environment or isolated runner.",
+    "Keep input data synthetic unless a dataset has an appropriate license and documented provenance."
+  ]
+}

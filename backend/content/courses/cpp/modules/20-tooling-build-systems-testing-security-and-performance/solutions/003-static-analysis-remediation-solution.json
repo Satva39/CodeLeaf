@@ -1,0 +1,18 @@
+{
+  "id": "cpp-exercise-solution-039",
+  "exercise_id": "cpp-exercise-039",
+  "title": "Static analysis remediation reference solution notes",
+  "language": "cpp",
+  "answer": "#include <array>\n#include <iostream>\nint sum(const std::array<int, 4>& values) {\n    int total = 0;\n    for (int value : values) total += value;\n    return total;\n}\nint main() { const std::array<int, 4> values{1, 2, 3, 4}; std::cout << sum(values) << '\\n'; }\n",
+  "explanation": "10",
+  "manual_validation_checklist": [
+    "Compile locally with C++20 and -Wall -Wextra -Wpedantic (add the external library named in the solution when applicable).",
+    "Test normal inputs and at least one boundary/failure case named in the exercise prompt.",
+    "Check integer range, object lifetime, resource cleanup and error handling where relevant.",
+    "Prefer bounded container interfaces and clear loops. Run static analysis on realistic targets and fix warnings rather than suppressing them without investigation.",
+    "Keep this solution in repository-only protected content; do not include it in learner API responses."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only reference notes; replace with a reviewed implementation and test suite before publishing the exercise."
+}

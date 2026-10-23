@@ -1,0 +1,144 @@
+{
+  "id": "aws-lesson-044",
+  "slug": "introduction-to-amazon-vpc",
+  "title": "Introduction to Amazon VPC",
+  "sequence": 44,
+  "module_id": "aws-module-05",
+  "module_slug": "aws-networking-and-amazon-vpc",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "primary_service": "Amazon VPC and network reachability",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "aws-lesson-043"
+  ],
+  "previous_lesson_id": "aws-lesson-043",
+  "next_lesson_id": "aws-lesson-045",
+  "keywords": [
+    "introduction-to-amazon-vpc",
+    "aws-networking-and-amazon-vpc",
+    "amazon-vpc-and-network-reachability",
+    "what-a-virtual-private-cloud-is",
+    "vpc-address-ranges",
+    "default-and-custom-vpcs"
+  ],
+  "source_syllabus_number": 44,
+  "subtopics": [
+    "What a Virtual Private Cloud is",
+    "VPC address ranges",
+    "Default and custom VPCs",
+    "VPC planning"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of introduction to amazon vpc and its relationship to AWS Networking and Amazon VPC.",
+    "Interpret the example and identify at least one prerequisite or boundary relevant to introduction to amazon vpc.",
+    "Propose a safe verification or troubleshooting step and record one security, reliability or cost consideration."
+  ],
+  "content": {
+    "intro": "In this lesson, you will learn introduction to amazon vpc in the context of AWS Networking and Amazon VPC. You will connect the listed subtopics to a practical decision, inspect a small example, and define evidence that would confirm or disprove your assumptions.",
+    "why_it_matters": "Introduction to Amazon VPC matters because it is one part of amazon vpc and network reachability. Real workloads depend on explicit prerequisites, correct permissions, predictable behavior and a way to verify outcomes. Learning the decision points helps you distinguish a working demonstration from a safe and supportable design.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "VPC routing and network controls",
+        "asset_path": "diagrams/vpc-subnet-routing.svg",
+        "alt_text": "Reachability combines subnet routing, a route target, addressability, security groups, network ACLs and service-specific controls.",
+        "caption": "A route alone does not prove reachability; all relevant network and identity controls matter."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "**Core idea.** Introduction to Amazon VPC belongs to AWS Networking and Amazon VPC. VPC reachability is an end-to-end result of address ranges, subnet associations, routes, gateways, security groups, network ACLs and service endpoints—not just one firewall rule.\n\nThe PDF lists these subtopics: What a Virtual Private Cloud is; VPC address ranges; Default and custom VPCs; VPC planning. Treat them as a connected workflow rather than a list to memorize. Start with the workload requirement, identify the AWS resource/control involved, and write down who owns configuration and operation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Practical reasoning",
+        "text": "**Apply it safely.** For introduction to amazon vpc, name the prerequisites and the expected result before making a change. Prefer a read-only inspection or local/static example first. Then plan a normal case, a failure case, and a verification step. In a live account, require the account owner-approved sandbox, narrow permissions, spend visibility and cleanup plan. Do not put credentials in code or commit local configuration files."
+      },
+      {
+        "type": "list",
+        "title": "PDF subtopics to cover",
+        "items": [
+          {
+            "title": "What a Virtual Private Cloud is",
+            "text": "Identify the AWS resource or design decision involved, the permissions and prerequisites it needs, and the evidence that shows it is configured as intended."
+          },
+          {
+            "title": "VPC address ranges",
+            "text": "Compare the available option with the workload requirement; record the operational, security, availability and cost trade-offs rather than assuming one option is always best."
+          },
+          {
+            "title": "Default and custom VPCs",
+            "text": "Write a verification step and a failure case. For hands-on work, start with read-only inspection and use an approved sandbox before changing cloud resources."
+          },
+          {
+            "title": "VPC planning",
+            "text": "Record ownership, dependencies and teardown/recovery behavior so the design can be operated safely after the first successful test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Inspect route tables: Introduction to Amazon VPC",
+        "language": "bash",
+        "code": "# Read-only example related to: Introduction to Amazon VPC\naws ec2 describe-route-tables --query \"RouteTables[].[RouteTableId,VpcId,Associations[0].SubnetId]\" --output json",
+        "expected_output": "JSON metadata for route tables; reachability still depends on complete routes and filtering controls.",
+        "run_instructions": "This block is an inspectable example, not an AWS action performed by CodeLeaf. For the read-only CLI command, first configure the named profile through an approved credential provider, verify identity, replace example identifiers when required and inspect current official CLI documentation. Do not apply/deploy changes in a real account without account-owner approval, least-privilege permissions and a reviewed cost/cleanup plan.",
+        "reset_steps": "No AWS resource is created by this lesson example. If you independently run an approved lab, capture the starting state first, follow the lab-specific teardown instructions, check dependent resources and billing/resource inventories, and document anything retained.",
+        "execution_mode": "static-validation",
+        "limitations": "The CodeLeaf playground is an HTML/CSS/JavaScript preview and does not execute AWS APIs, shell commands, SQL or cloud deployments. Treat output as illustrative; live values depend on credentials, permissions, Region, service state and schema."
+      },
+      {
+        "type": "callout",
+        "title": "Security and cost checkpoint",
+        "text": "Use least privilege, keep Block Public Access/private defaults unless a justified reviewed requirement says otherwise, and document cost/cleanup before live changes."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-044-questions.json"
+  },
+  "task": "Create a one-page decision card for “Introduction to Amazon VPC”. State the goal, prerequisites, the AWS resource or control involved, the expected result, one read-only/static verification step, one failure case, the relevant permission boundary, and cost/cleanup considerations. Do not create or alter billable resources unless the account owner has approved the lab.",
+  "hints": [
+    "Start from the exact subtopics in the lesson and define the desired state in your own words.",
+    "Prefer a read-only check or static artifact before a mutating command; record the identity/Region and required permissions.",
+    "Verify the expected result and a failure path using current official documentation; write down cost and cleanup implications."
+  ],
+  "expected_output": "A short reviewable decision card for Introduction to Amazon VPC with prerequisites, evidence, a failure case, security implications and cost/cleanup notes.",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Treating one successful example as proof of production readiness.",
+      "why": "The example may not test permissions, regional/service prerequisites, retries, recovery, quotas or edge cases.",
+      "fix": "Write acceptance criteria, test a failure path, inspect logs/state and record the limits of the result."
+    },
+    {
+      "problem": "Changing a live resource before confirming its effect and cost.",
+      "why": "Cloud changes can expose data, break traffic or leave billable dependencies behind.",
+      "fix": "Start read-only, use an approved sandbox, review the change, tag ownership and verify cleanup."
+    },
+    {
+      "problem": "Copying broad permissions or credentials into source files.",
+      "why": "Broad permissions and leaked long-lived credentials increase the impact of mistakes.",
+      "fix": "Use scoped roles/temporary credentials, keep secrets in approved stores and review access boundaries."
+    }
+  ],
+  "summary": [
+    "Introduction to Amazon VPC is taught as part of AWS Networking and Amazon VPC.",
+    "VPC reachability is an end-to-end result of address ranges, subnet associations, routes, gateways, security groups, network ACLs and service endpoints—not just one firewall rule.",
+    "Verify assumptions with official service documentation and evidence from the relevant AWS resource, logs or tests.",
+    "For live labs, confirm permissions and likely charges before acting, then verify cleanup."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: AWS — Complete Learning Curriculum, Section B, Module 5: AWS Networking and Amazon VPC, lesson 44: Introduction to Amazon VPC.",
+    "Official AWS documentation (Amazon VPC User Guide, checked 2026-10-11): https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html — VPCs, subnets, routing, gateways, and network boundaries.",
+    "Official AWS documentation (VPC subnet route tables, checked 2026-10-11): https://docs.aws.amazon.com/vpc/latest/userguide/subnet-route-tables.html — Route-table associations, destinations and targets."
+  ],
+  "technical_review_date": "2026-10-11",
+  "status": "draft",
+  "status_note": "Generated from the PDF syllabus and official reference index; must be technically reviewed and tested for the target AWS service/Region before publication."
+}

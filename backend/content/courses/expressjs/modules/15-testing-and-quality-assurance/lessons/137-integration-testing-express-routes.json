@@ -1,0 +1,183 @@
+{
+  "id": "expressjs-lesson-137",
+  "slug": "integration-testing-express-routes",
+  "title": "Integration Testing Express Routes",
+  "sequence": 137,
+  "module_id": "expressjs-module-15",
+  "module_slug": "testing-and-quality-assurance",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "expressjs-lesson-136"
+  ],
+  "previous_lesson_id": "expressjs-lesson-136",
+  "next_lesson_id": "expressjs-lesson-138",
+  "keywords": [
+    "integration-testing-express-routes",
+    "testing-and-quality-assurance",
+    "making-requests-to-the-application",
+    "checking-status-codes-and-response-bodies",
+    "testing-headers",
+    "testing-request-parsing",
+    "verifying-middleware-behavior"
+  ],
+  "source_syllabus_number": 137,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Making requests to the application",
+    "Checking status codes and response bodies",
+    "Testing headers",
+    "Testing request parsing",
+    "Verifying middleware behavior"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and terminology of Integration Testing Express Routes.",
+    "Apply or interpret one Express.js 5 pattern related to making requests to the application.",
+    "Identify a meaningful edge case and choose a repeatable local test for it."
+  ],
+  "execution_mode": "server-runner",
+  "status": "draft",
+  "content": {
+    "intro": "In this lesson, you will learn integration testing express routes and connect the named syllabus points to a small Express.js example. The course baseline is Express 5.x on a supported Node.js LTS release; the page shows reference output, not execution of Node.js code.",
+    "why_it_matters": "Integration Testing Express Routes matters because it helps keep the request/response contract explicit and the application maintainable as inputs, users and dependencies become less predictable. Evidence over assumptions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Concept map: Integration Testing Express Routes",
+        "asset_path": "diagrams/lesson-137-visual.svg",
+        "alt_text": "A conceptual three-stage flow for Integration Testing Express Routes: context or input, the Express.js concept, and verification of expected behavior with an edge case.",
+        "caption": "Use this visual to connect making requests to the application to integration testing express routes; the final step is to verify both normal and boundary behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Integration Testing Express Routes is part of testing and quality assurance. Tests should exercise success paths, invalid inputs, permissions, boundary conditions, and dependency failures. Keep external side effects isolated and run repeatable checks in CI before deployment. For this topic, make the observable behavior explicit, then check what happens when an input is missing, malformed, unauthorized, or a dependency fails (choose the relevant cases for this lesson)."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the attached syllabus",
+        "items": [
+          {
+            "title": "Making requests to the application",
+            "text": "Connect this syllabus point to Integration Testing Express Routes: state the expected behavior, identify a realistic edge case, and choose a test or observation that proves the behavior instead of relying on assumptions."
+          },
+          {
+            "title": "Checking status codes and response bodies",
+            "text": "Choose a status code and method that match the operation result. Semantics matter to clients and retries; never report success when work failed or remains incomplete."
+          },
+          {
+            "title": "Testing headers",
+            "text": "Make behavior reproducible with assertions for a normal case, invalid input, boundary values and errors. Mock external side effects in unit tests and keep separate integration checks for real boundaries."
+          },
+          {
+            "title": "Testing request parsing",
+            "text": "Make behavior reproducible with assertions for a normal case, invalid input, boundary values and errors. Mock external side effects in unit tests and keep separate integration checks for real boundaries."
+          },
+          {
+            "title": "Verifying middleware behavior",
+            "text": "Middleware runs in registered order. Each function must end the response, call next() to continue, or forward an error; avoid accidentally doing more than one of these."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Read the example carefully",
+        "text": "A useful way to study integration testing express routes is to start from the first syllabus point — making requests to the application — and follow it through a small request or application example. Keep Express's built-in behavior separate from optional packages and your own application policy."
+      },
+      {
+        "type": "code",
+        "title": "Worked example (reference only)",
+        "language": "javascript",
+        "code": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport express from 'express';\nimport request from 'supertest';\nconst app = express();\napp.get('/health', (_req, res) => res.status(200).json({ status: 'ok' }));\ntest('health endpoint returns an explicit success response', async () => {\n  const response = await request(app).get('/health');\n  assert.equal(response.status, 200);\n  assert.deepEqual(response.body, { status: 'ok' });\n});",
+        "expected_output": "Run the file with Node.js’s built-in test runner after installing Supertest: the test asserts both status and response shape.",
+        "notes": "Add negative tests and isolate external services. This example does not bind a network port; Supertest exercises the Express app directly."
+      },
+      {
+        "type": "callout",
+        "title": "Safety / production rule",
+        "text": "Module rule — Tests should exercise success paths, invalid inputs, permissions, boundary conditions, and dependency failures. Keep external side effects isolated and run repeatable checks in CI before deployment."
+      }
+    ],
+    "expected_output": "Run the file with Node.js’s built-in test runner after installing Supertest: the test asserts both status and response shape.",
+    "task": "Try it yourself: adapt the worked example to demonstrate integration testing express routes. Write down the exact request or command, expected status/body, one boundary case, and how you would reset the local lab. CodeLeaf does not execute Express code in this lesson page; run Node.js server examples locally.",
+    "task_acceptance_criteria": [
+      "The example has a clear local run or inspection path and the required dependencies are named.",
+      "A normal request and a malformed/edge/failure request have documented expected outcomes.",
+      "No credentials, production data, or claim of successful runtime execution is included."
+    ],
+    "hints": [
+      "Hint 1: identify which part of integration testing express routes is supplied by Express and which part belongs to your own application or another package.",
+      "Hint 2: check the official Express 5 guide/API reference and isolate the smallest example that proves one behavior.",
+      "Hint 3: verify a success case, a boundary case and the expected status/response; restart from a clean state before repeating."
+    ],
+    "solution_notes": "Suggested approach: Tests should exercise success paths, invalid inputs, permissions, boundary conditions, and dependency failures. Keep external side effects isolated and run repeatable checks in CI before deployment. The sample is a focused reference fragment. Review all dependency, schema, proxy and runtime assumptions before using it in an application.",
+    "common_mistakes": [
+      {
+        "problem": "Copying an example without checking its assumptions",
+        "why": "A fragment may omit route setup, middleware order, external packages, database schema or production configuration.",
+        "fix": "State the runtime/dependency assumptions, run the focused example locally, and test a success path plus one failure path."
+      },
+      {
+        "problem": "Treating all request values as trusted",
+        "why": "Parameters, query values, body properties, files and upstream responses can be missing or malicious.",
+        "fix": "Validate schema, type and bounds at the boundary; keep authorization and database constraints as separate checks."
+      },
+      {
+        "problem": "Assuming the demo output means the server executed",
+        "why": "The course page shows reference output for Node.js/Express code; it is not an isolated Node runtime.",
+        "fix": "Run the example locally with the documented Node.js version and record actual command/output and test results."
+      }
+    ],
+    "summary": [
+      "Explain the central idea behind integration testing express routes.",
+      "Connect the relevant subtopics to the request/response or application boundary.",
+      "Verify one normal outcome and one edge/error case with repeatable evidence."
+    ],
+    "run_mode": "static-validation",
+    "execution_mode": "server-runner",
+    "run_instructions": [
+      "Open a terminal in the lesson lab directory.",
+      "Install dependencies for the sample if required; use a supported Node.js LTS release.",
+      "Run the documented file with node, send the stated request with curl or an API client, and compare the actual status/body with the reference."
+    ],
+    "reset_steps": [
+      "Stop the local process with Ctrl+C.",
+      "Clear only temporary/synthetic records or files created by the lab.",
+      "Restart the server before repeating the example."
+    ],
+    "troubleshooting": [
+      "If node reports a module-syntax error, check package.json module type or use the matching CommonJS syntax.",
+      "If a package cannot be resolved, install the named dependency in the local lab and verify the lockfile.",
+      "If output differs, verify middleware order, the request path/method, environment variables and the expected runtime version."
+    ],
+    "accessibility_notes": "The lesson diagram has an explicit title, description and textual labels; color is supplementary and not the only way to distinguish stages.",
+    "version_notes": "Express 5.x teaching baseline. Check the official migration guide before applying these examples to Express 4 projects.",
+    "knowledge_check_file": "exams/question-files/lesson-137-questions.json"
+  },
+  "sources": [
+    {
+      "title": "Node.js test runner",
+      "url": "https://nodejs.org/api/test.html",
+      "publisher": "OpenJS Foundation / Node.js",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "Built-in test runner for unit/integration test organization in supported Node.js releases."
+      ]
+    },
+    {
+      "title": "Error handling (5.x)",
+      "url": "https://expressjs.com/en/5x/guide/error-handling.html",
+      "publisher": "OpenJS Foundation / Express.js",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "Error middleware signature, forwarding errors, rejected promises and headers-sent behavior."
+      ]
+    }
+  ],
+  "exercise_files": [
+    "../exercises/020-automated-api-tests.json"
+  ]
+}

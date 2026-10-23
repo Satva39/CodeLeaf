@@ -1,0 +1,142 @@
+{
+  "id": "powershell-lesson-179",
+  "slug": "dependency-and-supply-chain-management",
+  "title": "Dependency and Supply-Chain Management",
+  "sequence": 179,
+  "module_id": "powershell-module-16",
+  "module_slug": "modules-packages-and-the-powershell-ecosystem",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "powershell-lesson-178"
+  ],
+  "previous_lesson_id": "powershell-lesson-178",
+  "next_lesson_id": "powershell-lesson-180",
+  "keywords": [
+    "dependency",
+    "and",
+    "supply",
+    "chain",
+    "management",
+    "powershell",
+    "module-16"
+  ],
+  "source_syllabus_number": 179,
+  "subtopics": [
+    "Reviewing module provenance",
+    "Pinning or constraining dependency versions",
+    "Checking package changes",
+    "Documenting supported environments"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose of Dependency and Supply-Chain Management and define its core vocabulary.",
+    "Apply dependency and supply-chain management in a small PowerShell example and predict its result.",
+    "Identify one relevant edge case, version constraint, or troubleshooting step."
+  ],
+  "content": {
+    "intro": "This lesson covers Dependency and Supply-Chain Management in the PowerShell learning path. It expands the supplied syllabus heading into an actionable draft with a visual, a worked example, and a short knowledge check.",
+    "why_it_matters": "Modules make functions discoverable, versioned and reusable. Keep public functions separate from private helpers, declare supported versions and dependencies, review package provenance, and prefer current resource-management guidance while documenting legacy PowerShellGet workflows separately.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Lesson 179 visual map",
+        "asset_path": "diagrams/lesson-179-dependency-and-supply-chain-management.svg",
+        "alt_text": "Lesson 179 concept map for Dependency and Supply-Chain Management: concept and purpose, a local example and result, followed by practice and verification.",
+        "caption": "Follow the concept → example → verification path for Dependency and Supply-Chain Management."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Dependency and Supply-Chain Management belongs to Modules, Packages, and the PowerShell Ecosystem. Focus on the rule or workflow this lesson introduces, work through a small example, and explain the expected result and one boundary case."
+      },
+      {
+        "type": "paragraph",
+        "title": "Build understanding step by step",
+        "text": "Start with the syllabus concepts: Reviewing module provenance; Pinning or constraining dependency versions; Checking package changes; Documenting supported environments. Separate the input, the operation and the expected result. Use a disposable local workspace for file or system examples, and verify platform-specific behavior against the active runtime."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Reviewing module provenance",
+            "text": "Reviewing module provenance is one part of Dependency and Supply-Chain Management. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Pinning or constraining dependency versions",
+            "text": "Pinning or constraining dependency versions is one part of Dependency and Supply-Chain Management. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Checking package changes",
+            "text": "Checking package changes is one part of Dependency and Supply-Chain Management. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Documenting supported environments",
+            "text": "Documenting supported environments is one part of Dependency and Supply-Chain Management. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "powershell",
+        "execution_mode": "static-validation",
+        "code": "Get-Module | Select-Object -First 5 Name, Version",
+        "expected_output": "A sample of modules currently loaded into the session.",
+        "run_instructions": "Review this snippet as a static teaching example. In a local PowerShell 7.6 session, save a copy under your course workspace, run it manually, and compare the result with the stated expectation. CodeLeaf’s current course preview does not execute PowerShell. Adjust environment-dependent output to your machine.",
+        "troubleshooting": "Check command availability with Get-Command, inspect values with Get-Member, consult Get-Help -Full, and verify PowerShell version/platform before assuming identical output. Do not run examples that change system state without adapting and reviewing them.",
+        "reset_steps": "Restore the original snippet and use synthetic values. If you created test files, delete only those files within the dedicated practice folder after checking their paths."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety note",
+        "text": "The main path targets modern PowerShell 7.6 LTS. Windows PowerShell 5.1 compatibility is labeled separately. Some providers, admin cmdlets and APIs depend on OS, module version, permissions or tenant access; the examples are static references, not proof of execution."
+      }
+    ],
+    "task": "Try it yourself: apply the concept to a small reproducible automation task. Use synthetic data or a disposable practice folder, write down your predicted result, check it locally, and explain one boundary case.",
+    "task_acceptance_criteria": [
+      "Explain the central idea in Dependency and Supply-Chain Management in your own words.",
+      "Verify the expected result using a local session or a documented manual check.",
+      "Describe one relevant edge case, limitation or troubleshooting step."
+    ],
+    "hints": [
+      "Predict the output before changing the example.",
+      "Change one input or condition at a time and compare the results.",
+      "Use Get-Help and official versioned documentation when behavior differs; do not treat a static preview as execution."
+    ],
+    "expected_output": "A sample of modules currently loaded into the session.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-179-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "How to write a PowerShell module",
+      "url": "https://learn.microsoft.com/en-us/powershell/scripting/developer/module/how-to-write-a-powershell-module",
+      "publisher": "Microsoft Learn",
+      "supports": [
+        "script modules",
+        "exports",
+        "module structure"
+      ],
+      "checked_on": "2026-10-20",
+      "source_type": "official_documentation"
+    },
+    {
+      "title": "PowerShell utility modules and retirement notes",
+      "url": "https://learn.microsoft.com/en-us/powershell/utility-modules/overview",
+      "publisher": "Microsoft Learn",
+      "supports": [
+        "utility modules",
+        "PSResourceGet context",
+        "SecretManagement and SecretStore retirement notice"
+      ],
+      "checked_on": "2026-10-20",
+      "source_type": "official_documentation"
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson expanded from the numbered PowerShell PDF syllabus. Static examples, answers, version details and technical phrasing need subject-matter review before publication."
+}

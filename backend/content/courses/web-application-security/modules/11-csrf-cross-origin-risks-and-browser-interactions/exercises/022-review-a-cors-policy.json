@@ -1,0 +1,61 @@
+{
+  "id": "web-application-security-exercise-022",
+  "slug": "review-a-cors-policy",
+  "title": "Review a CORS Policy",
+  "type": "short_answer",
+  "lesson_id": "web-application-security-lesson-080",
+  "module_id": "web-application-security-module-11",
+  "difficulty": "intermediate",
+  "sequence": 22,
+  "prompt": "Build an origin/method/header matrix for the real frontend origins of a test app, including credentialed and preflight requests.",
+  "objective": "Apply Advanced CORS Configuration through a safe, repeatable defensive review or test.",
+  "target_skills": [
+    "security reasoning",
+    "control selection",
+    "negative testing",
+    "sanitized evidence"
+  ],
+  "starter": {
+    "format": "markdown",
+    "template": "## Scope and assumptions\n- Local/owned/authorized system:\n- Asset and trust boundary:\n\n## Expected secure behavior\n\n## Test cases (include one denied/failure case)\n\n## Evidence and result\n\n## Root cause and remediation\n\n## Regression test\n"
+  },
+  "expected_output": "A least-privilege policy and checks for disallowed origins and unauthorized API operations.",
+  "public_tests": [
+    {
+      "name": "Required evidence terms (static check only)",
+      "required_strings": [
+        "exact origin allowlist",
+        "preflight",
+        "credentials",
+        "server-side authorization"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Uses synthetic data and remains inside an owned, local, or explicitly authorized test scope.",
+    "States the expected secure behavior and a relevant negative/failure case.",
+    "Includes sanitized, reproducible evidence and a root-cause-oriented remediation.",
+    "Adds a regression test or a concrete verification step.",
+    "Separates observations from confirmed findings and calls out the static grader’s limitations."
+  ],
+  "hints": [
+    "Avoid arbitrary origin reflection.",
+    "CORS success must not grant access to another user’s data.",
+    "Keep credentials, session values, private data, and unrelated host details out of the submission.",
+    "The current static grader checks required terms only; a qualified human must review security correctness before the exercise is published."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "exact origin allowlist",
+      "preflight",
+      "credentials",
+      "server-side authorization"
+    ]
+  },
+  "grading_method": "Static required-term smoke check only. This does not validate real system behavior, prove a vulnerability, or establish exploitability. Human review plus local/isolated tests are required before publication.",
+  "retry_policy": "Allow retries. Completion and rewards remain governed by platform backend rules; this file defines no per-exercise reward override.",
+  "solution_file": "../../../solutions/exercises/web-application-security-exercise-022-solution.json",
+  "status": "draft",
+  "status_note": "Draft practice item from the attached PDF Section C or a clearly labeled course extension; do not publish without human review of prompt, rubric, grading limitations, and fix correctness."
+}

@@ -1,0 +1,190 @@
+{
+  "id": "sql-lesson-111",
+  "slug": "offset-and-navigation-functions",
+  "title": "Offset and Navigation Functions",
+  "sequence": 111,
+  "module_id": "sql-module-11",
+  "module_slug": "common-table-expressions-and-window-functions",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "sql-lesson-110"
+  ],
+  "previous_lesson_id": "sql-lesson-110",
+  "next_lesson_id": "sql-lesson-112",
+  "keywords": [
+    "offset and navigation functions",
+    "lag",
+    "lead",
+    "first value",
+    "last value",
+    "nth value where supported"
+  ],
+  "source_syllabus_number": 111,
+  "source_module_number": 11,
+  "subtopics": [
+    "LAG",
+    "LEAD",
+    "FIRST_VALUE",
+    "LAST_VALUE",
+    "NTH_VALUE where supported",
+    "Comparing current and neighboring rows"
+  ],
+  "subtopic_source_numbers": [
+    "111.1",
+    "111.2",
+    "111.3",
+    "111.4",
+    "111.5",
+    "111.6"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and key terms of offset and navigation functions.",
+    "Apply lag in a small PostgreSQL-oriented example or design decision.",
+    "Validate the result against the expected behavior and identify one portability, safety, or edge-case consideration."
+  ],
+  "content": {
+    "intro": "Learn offset and navigation functions through a short explanation, a concept diagram, and a PostgreSQL-oriented example. Focus on the reason for the query or design decision before memorizing syntax.",
+    "why_it_matters": "Offset and Navigation Functions matters because database behavior becomes more reliable when the intended row meaning, data shape, and edge cases are explicit. This lesson follows the SQL curriculum's listed subtopics and calls out PostgreSQL-specific behavior when it matters.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Offset and Navigation Functions",
+        "asset_path": "diagrams/lesson-111-offset-and-navigation-functions.svg",
+        "alt_text": "Original SQL concept diagram for Offset and Navigation Functions; shows four steps based on the lesson subtopics.",
+        "caption": "Use this four-step visual to connect the question, the relevant SQL idea, its application, and a verification check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "The practical goal of offset and navigation functions is to produce a result set whose meaning is clear. Confirm which rows enter the query, how values are transformed or combined, and whether NULLs, duplicates, ties, or one-to-many relationships change the output."
+      },
+      {
+        "type": "paragraph",
+        "title": "Apply the idea",
+        "text": "Start with the subtopics: LAG, LEAD, FIRST_VALUE, LAST_VALUE. Define the result you expect, run or inspect the small example in your own disposable PostgreSQL lab, and change one assumption at a time. The embedded lesson editor is a demonstration shell: the current project shows the sample expected output and does not execute arbitrary SQL on the server."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics to master",
+        "items": [
+          {
+            "title": "LAG",
+            "text": "LAG helps you structure complex queries with CTEs, recursion, and window functions; choose an approach that keeps logic testable and output rows meaningful. Start with a concrete example, state the expected result, and verify the behavior before extending the query or design."
+          },
+          {
+            "title": "LEAD",
+            "text": "LEAD helps you structure complex queries with CTEs, recursion, and window functions; choose an approach that keeps logic testable and output rows meaningful. Start with a concrete example, state the expected result, and verify the behavior before extending the query or design."
+          },
+          {
+            "title": "FIRST_VALUE",
+            "text": "FIRST_VALUE helps you structure complex queries with CTEs, recursion, and window functions; choose an approach that keeps logic testable and output rows meaningful. Start with a concrete example, state the expected result, and verify the behavior before extending the query or design."
+          },
+          {
+            "title": "LAST_VALUE",
+            "text": "LAST_VALUE helps you structure complex queries with CTEs, recursion, and window functions; choose an approach that keeps logic testable and output rows meaningful. Start with a concrete example, state the expected result, and verify the behavior before extending the query or design."
+          },
+          {
+            "title": "NTH_VALUE where supported",
+            "text": "NTH_VALUE where supported helps you structure complex queries with CTEs, recursion, and window functions; choose an approach that keeps logic testable and output rows meaningful. Start with a concrete example, state the expected result, and verify the behavior before extending the query or design."
+          },
+          {
+            "title": "Comparing current and neighboring rows",
+            "text": "Comparing current and neighboring rows helps you structure complex queries with CTEs, recursion, and window functions; choose an approach that keeps logic testable and output rows meaningful. Start with a concrete example, state the expected result, and verify the behavior before extending the query or design."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "sql",
+        "execution_mode": "static-validation",
+        "code": "CREATE OR REPLACE FUNCTION add_tax(amount numeric, rate numeric)\nRETURNS numeric\nLANGUAGE sql\nIMMUTABLE\nAS $$\n  SELECT amount * (1 + rate);\n$$;\n\nSELECT add_tax(100.00, 0.18) AS total_with_tax;",
+        "expected_output": "The function returns 118.00 for an amount of 100.00 at an 18% rate. The example is illustrative; monetary rounding policy should be specified by the application.",
+        "run_instructions": "Run in a disposable local PostgreSQL database such as codeleaf_sql_lab after loading datasets/postgresql-lab-setup.sql. Do not use production credentials or a production database. Some specialist examples require optional extensions or a specific PostgreSQL version, as stated in the lesson. The CodeLeaf lesson Run button in this scaffold only previews the documented expected output; it is not a SQL execution service.",
+        "reset_steps": "For queries, restore the original text and compare results. For statements that change data, use the transaction and rollback shown in the example, or recreate the disposable lab from the included setup instructions. Do not reset production data."
+      },
+      {
+        "type": "callout",
+        "title": "Remember",
+        "text": "SQL correctness depends on data shape, constraints, NULL behavior, row counts, and the target database dialect—not just whether a statement parses."
+      }
+    ],
+    "task": "Try it yourself: demonstrate offset and navigation functions using the sample schema. State what each returned row represents, test one edge case related to the lesson, and record the result.",
+    "task_acceptance_criteria": [
+      "The query or design example matches the lesson's intended behavior.",
+      "The expected row grain and relevant NULL, duplicate, boundary, or permission behavior are explained.",
+      "The test is performed only in the local disposable lab, or clearly marked as a static inspection when a real runner is unavailable."
+    ],
+    "hints": [
+      "Begin with the subtopic lag and write down the result you expect.",
+      "Use the smallest valid example; verify table and column names before adding complexity.",
+      "Inspect one edge case: missing values, duplicate matches, tied sort values, a constraint violation, or an engine-specific syntax difference."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming a query is correct because it returns some rows.",
+        "why": "A result can omit valid records, multiply joined rows, mishandle NULLs, or rely on a non-deterministic order.",
+        "fix": "Check the expected row grain, add targeted edge cases, and use a stable tie-breaker whenever order or pagination matters."
+      },
+      {
+        "problem": "Copying PostgreSQL syntax into another SQL engine without checking support.",
+        "why": "PostgreSQL, MySQL, SQLite, SQL Server, and Oracle differ in types, functions, row limits, procedural features, and transaction behavior.",
+        "fix": "Label the target engine/version and verify the relevant official reference before adapting the query."
+      },
+      {
+        "problem": "Testing with production data or credentials.",
+        "why": "Practice statements can change rows or expose sensitive information if run against the wrong connection.",
+        "fix": "Use a dedicated disposable lab, check current_database() and current_user, and review all changes before committing."
+      }
+    ],
+    "summary": [
+      "Offset and Navigation Functions is about making the database behavior and the expected result explicit.",
+      "Use the provided subtopics as a review checklist and validate a small test case.",
+      "Keep vendor-specific syntax, access assumptions, and production-safety boundaries visible."
+    ],
+    "references": [
+      {
+        "title": "WITH Queries (Common Table Expressions)",
+        "url": "https://www.postgresql.org/docs/current/queries-with.html"
+      },
+      {
+        "title": "Window Functions Tutorial",
+        "url": "https://www.postgresql.org/docs/current/tutorial-window.html"
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-111-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "Generated draft content. Review the query and expected output against the selected PostgreSQL version before publication."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "WITH Queries (Common Table Expressions)",
+      "url": "https://www.postgresql.org/docs/current/queries-with.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "CTEs",
+        "recursive queries",
+        "data-modifying CTEs"
+      ]
+    },
+    {
+      "title": "Window Functions Tutorial",
+      "url": "https://www.postgresql.org/docs/current/tutorial-window.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "window functions",
+        "partitioning",
+        "ranking",
+        "running calculations"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached SQL curriculum outline and official references; requires technical/editorial review before publication."
+}

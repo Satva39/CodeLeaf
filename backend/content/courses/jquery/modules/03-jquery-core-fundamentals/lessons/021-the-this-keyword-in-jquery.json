@@ -1,0 +1,199 @@
+{
+  "id": "jquery-lesson-021",
+  "slug": "the-this-keyword-in-jquery",
+  "title": "The this Keyword in jQuery",
+  "sequence": 21,
+  "module_id": "jquery-module-03",
+  "module_slug": "jquery-core-fundamentals",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "jquery-lesson-020"
+  ],
+  "previous_lesson_id": "jquery-lesson-020",
+  "next_lesson_id": "jquery-lesson-022",
+  "keywords": [
+    "the this keyword in jquery",
+    "jquery",
+    "javascript",
+    "jquery core fundamentals",
+    "native event-handler this",
+    "using $(this) inside event callbacks",
+    "difference between dom elements and jquery objects",
+    "context differences in callbacks"
+  ],
+  "source_syllabus_number": 21,
+  "subtopics": [
+    "Native event-handler this",
+    "Using $(this) inside event callbacks",
+    "Difference between DOM elements and jQuery objects",
+    "Context differences in callbacks",
+    "When to use a captured variable instead"
+  ],
+  "learning_outcomes": [
+    "Explain the role of the this keyword in jquery in a jQuery application.",
+    "Apply native event-handler this in a small example and describe its expected result.",
+    "Verify using $(this) inside event callbacks with an explicit test or browser observation."
+  ],
+  "exercise_files": [
+    "../exercises/021-the-this-keyword-in-jquery.json"
+  ],
+  "sources": [
+    {
+      "title": "jQuery API Documentation",
+      "url": "https://api.jquery.com/",
+      "publisher": "jQuery project",
+      "checked_on": "2026-10-12",
+      "source_type": "official_api_reference",
+      "supports": [
+        "Supported jQuery Core APIs",
+        "Method signatures and return values"
+      ]
+    },
+    {
+      "title": ".ready() API",
+      "url": "https://api.jquery.com/ready/",
+      "publisher": "jQuery API documentation",
+      "checked_on": "2026-10-12",
+      "source_type": "official_api_reference",
+      "supports": [
+        "DOM readiness",
+        "Preferred ready-handler form"
+      ]
+    },
+    {
+      "title": "jQuery Learning Center",
+      "url": "https://learn.jquery.com/",
+      "publisher": "jQuery project",
+      "checked_on": "2026-10-12",
+      "source_type": "official_learning_resource",
+      "supports": [
+        "Concept explanations",
+        "Events",
+        "Effects",
+        "AJAX",
+        "Plugins",
+        "Performance",
+        "Code organization"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the attached syllabus and official references; requires lesson-by-lesson technical review, local execution, accessibility checks, and editorial approval.",
+  "content": {
+    "intro": "In this lesson, you will work through the this keyword in jquery with a focused jQuery example. The subtopics below preserve the supplied curriculum coverage and connect the API idea to a small browser interface.",
+    "why_it_matters": "This topic is useful because it turns native event-handler this into a repeatable implementation choice. The jQuery function returns a jQuery collection for selections and accepts a callback for DOM-ready execution. A collection is not the same thing as a single native DOM element.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 3 overview",
+        "asset_path": "diagrams/module-03-overview.svg",
+        "alt_text": "Overview of jQuery Core Fundamentals, illustrating the sequence from understanding the concept to implementing and checking it.",
+        "caption": "Use this module map to place the this keyword in jquery within the wider learning path."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "The jQuery function returns a jQuery collection for selections and accepts a callback for DOM-ready execution. A collection is not the same thing as a single native DOM element."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the supplied syllabus",
+        "items": [
+          "Native event-handler this",
+          "Using $(this) inside event callbacks",
+          "Difference between DOM elements and jQuery objects",
+          "Context differences in callbacks",
+          "When to use a captured variable instead"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "$(\"#status\").text(\"Ready\");",
+        "expected_output": "The status text changes to Ready when this example is run on a page with #status and jQuery loaded.",
+        "run_instructions": "Use a local HTML page with jQuery 4.0.0 loaded before app.js for JavaScript snippets. HTML and package-manager snippets can be checked as configuration examples. Run the interaction in browser DevTools, inspect the DOM/Network panel, and compare actual behavior with the expected result. Do not submit learner code to the production API for arbitrary execution.",
+        "reset_steps": "Restore the original markup and code, clear console/network filters, reload the local page, and repeat the same interaction. For a request example, return the mock endpoint to its original response before retrying."
+      },
+      {
+        "type": "callout",
+        "title": "Guided example",
+        "text": "Start with a known DOM structure, apply the pattern for the this keyword in jquery, and test one normal case plus one edge case. Keep selectors scoped to the intended component and verify the real browser result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Use the jQuery function or collection behavior related to the this keyword in jquery on at least two DOM elements. Log the result and explain whether the method returns a collection or a value."
+      }
+    ],
+    "task": "Use the jQuery function or collection behavior related to the this keyword in jquery on at least two DOM elements. Log the result and explain whether the method returns a collection or a value.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates the this keyword in jquery using a current, documented approach.",
+      "The learner records the expected and actual behavior and checks at least one edge case.",
+      "The example preserves semantic HTML and does not render untrusted data as HTML.",
+      "The test setup and any runtime limitation are documented honestly."
+    ],
+    "hints": [
+      "First identify which DOM nodes and runtime state are involved in the this keyword in jquery.",
+      "Make one small change, inspect the resulting element or request, and compare it with the expected result.",
+      "If the result differs, check the selector, script order, browser console, event target, and relevant API documentation before adding more code."
+    ],
+    "expected_output": "The status text changes to Ready when this example is run on a page with #status and jQuery loaded.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-021-questions.json",
+    "common_mistakes": [
+      "Assuming a selector matched an element without checking the collection length.",
+      "Confusing jQuery collections with native DOM elements or live properties with markup attributes.",
+      "Using .html() with untrusted data or assuming client-side validation enforces server rules.",
+      "Treating a demo snippet as production-ready without testing failure and accessibility states."
+    ],
+    "summary": [
+      "The this Keyword in jQuery is one part of the jquery core fundamentals workflow.",
+      "The jQuery function returns a jQuery collection for selections and accepts a callback for DOM-ready execution. A collection is not the same thing as a single native DOM element.",
+      "Use the official API or upgrade guide for version-specific behavior and verify an example locally before relying on it."
+    ],
+    "references": [
+      {
+        "title": "jQuery API Documentation",
+        "url": "https://api.jquery.com/",
+        "publisher": "jQuery project",
+        "checked_on": "2026-10-12",
+        "source_type": "official_api_reference",
+        "supports": [
+          "Supported jQuery Core APIs",
+          "Method signatures and return values"
+        ]
+      },
+      {
+        "title": ".ready() API",
+        "url": "https://api.jquery.com/ready/",
+        "publisher": "jQuery API documentation",
+        "checked_on": "2026-10-12",
+        "source_type": "official_api_reference",
+        "supports": [
+          "DOM readiness",
+          "Preferred ready-handler form"
+        ]
+      },
+      {
+        "title": "jQuery Learning Center",
+        "url": "https://learn.jquery.com/",
+        "publisher": "jQuery project",
+        "checked_on": "2026-10-12",
+        "source_type": "official_learning_resource",
+        "supports": [
+          "Concept explanations",
+          "Events",
+          "Effects",
+          "AJAX",
+          "Plugins",
+          "Performance",
+          "Code organization"
+        ]
+      }
+    ]
+  }
+}

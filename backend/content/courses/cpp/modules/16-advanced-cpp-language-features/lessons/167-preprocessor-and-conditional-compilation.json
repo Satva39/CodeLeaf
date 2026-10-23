@@ -1,0 +1,205 @@
+{
+  "id": "cpp-lesson-167",
+  "slug": "preprocessor-and-conditional-compilation",
+  "title": "Preprocessor and Conditional Compilation",
+  "sequence": 167,
+  "module_id": "cpp-module-16",
+  "module_slug": "advanced-cpp-language-features",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 19,
+  "prerequisites": [
+    "cpp-lesson-166"
+  ],
+  "previous_lesson_id": "cpp-lesson-166",
+  "next_lesson_id": "cpp-lesson-168",
+  "keywords": [
+    "preprocessor-and-conditional-compilation",
+    "macro-definitions",
+    "function-like-macros",
+    "macro-parameters",
+    "stringification-and-token-pasting",
+    "conditional-compilation",
+    "compiler-and-platform-macros",
+    "macro-side-effects-and-risks"
+  ],
+  "source_syllabus_number": 167,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Macro Definitions",
+    "Function-Like Macros",
+    "Macro Parameters",
+    "Stringification and Token Pasting",
+    "Conditional Compilation",
+    "Compiler and Platform Macros",
+    "Macro Side Effects and Risks",
+    "Prefer Language Features Over Macros Where Appropriate"
+  ],
+  "learning_outcomes": [
+    "Describe when preprocessor and conditional compilation is useful and what problem it does not solve.",
+    "Evaluate a small example against its stated constraints, standard version and implementation assumptions.",
+    "Select a test or tool that can provide evidence of correctness without treating one successful run as proof."
+  ],
+  "content": {
+    "intro": "Preprocessor and Conditional Compilation focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Preprocessor and Conditional Compilation matters because use a feature only when its purpose is clear and confirm the compiler plus standard-library implementation support it. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Preprocessor and Conditional Compilation: visual trace",
+        "asset_path": "diagrams/lessons/lesson-167.svg",
+        "alt_text": "Lesson 167 visual for Preprocessor and Conditional Compilation; concept: Macro Definitions; apply: Function-Like Macros; verify: Macro Parameters.",
+        "caption": "Original lesson-specific overview: understand macro definitions, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Advanced language features solve specialized problems but can increase build and reasoning complexity. Version labels and small experiments are essential.\n\nPreprocessor and Conditional Compilation focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nUse a feature only when its purpose is clear and confirm the compiler plus standard-library implementation support it."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Preprocessor and Conditional Compilation",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <iostream>\n\n#define CODELEAF_DEMO 1\nint main() {\n#if CODELEAF_DEMO\n    std::cout << \"demo enabled\\n\";\n#else\n    std::cout << \"demo disabled\\n\";\n#endif\n}\n",
+        "expected_output": "demo enabled",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "Preprocessor conditions decide which source text is compiled. Avoid macros for ordinary constants and functions when typed C++ constructs can do the job."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Macro Definitions",
+            "text": "Explain macro definitions in the context of Preprocessor and Conditional Compilation: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Function-Like Macros",
+            "text": "Explain function-like macros in the context of Preprocessor and Conditional Compilation: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Macro Parameters",
+            "text": "Explain macro parameters in the context of Preprocessor and Conditional Compilation: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Stringification and Token Pasting",
+            "text": "Explain stringification and token pasting in the context of Preprocessor and Conditional Compilation: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Conditional Compilation",
+            "text": "Compilation analyzes and translates a translation unit, reporting errors and warnings according to the language mode and flags."
+          },
+          {
+            "title": "Compiler and Platform Macros",
+            "text": "A compiler translates source according to a selected language mode and target; diagnostics and supported features vary by toolchain version."
+          },
+          {
+            "title": "Macro Side Effects and Risks",
+            "text": "Identify how macro side effects and risks can fail, what diagnostic evidence to collect, and which validation or design choice reduces the risk."
+          },
+          {
+            "title": "Prefer Language Features Over Macros Where Appropriate",
+            "text": "Explain prefer language features over macros where appropriate in the context of Preprocessor and Conditional Compilation: identify the rule, trace a minimal example, and check one boundary or failure case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate macro definitions, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "This topic may depend on newer C++ language or library support; this example uses a C++20-compatible illustration. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-167-questions.json",
+    "task": "Extend the example for Preprocessor and Conditional Compilation with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+    "task_acceptance_criteria": [
+      "The code compiles in the documented standard mode with warnings enabled.",
+      "The predicted output matches the actual result for the added case.",
+      "One relevant boundary, lifetime, portability or error case is tested or documented."
+    ],
+    "hints": [
+      "Start by isolating the central rule from Preprocessor and Conditional Compilation.",
+      "Trace values or object lifetimes before changing the program.",
+      "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+    ],
+    "summary": [
+      "Preprocessor and Conditional Compilation is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying preprocessor and conditional compilation.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "demo enabled"
+  },
+  "task": "Extend the example for Preprocessor and Conditional Compilation with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+  "hints": [
+    "Start by isolating the central rule from Preprocessor and Conditional Compilation.",
+    "Trace values or object lifetimes before changing the program.",
+    "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+  ],
+  "expected_output": "demo enabled",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Preprocessor and Conditional Compilation is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying preprocessor and conditional compilation.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 16, lesson 167: Preprocessor and Conditional Compilation.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

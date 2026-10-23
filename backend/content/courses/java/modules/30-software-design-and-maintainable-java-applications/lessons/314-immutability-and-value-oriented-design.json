@@ -1,0 +1,190 @@
+{
+  "id": "java-lesson-314",
+  "slug": "immutability-and-value-oriented-design",
+  "title": "Immutability and Value-Oriented Design",
+  "sequence": 314,
+  "module_id": "java-module-30",
+  "module_slug": "software-design-and-maintainable-java-applications",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional",
+  "estimated_minutes": 13,
+  "prerequisites": [],
+  "previous_lesson_id": "java-lesson-313",
+  "next_lesson_id": "java-lesson-315",
+  "keywords": [
+    "immutability",
+    "and",
+    "value-oriented",
+    "design",
+    "immutable",
+    "classes",
+    "defensive",
+    "copying",
+    "records",
+    "value-centric",
+    "types",
+    "safe"
+  ],
+  "source_syllabus_number": 314,
+  "subtopics": [
+    "Immutable classes",
+    "Defensive copying",
+    "Records as value-centric types",
+    "Safe sharing",
+    "Trade-offs in mutable and immutable models"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of immutability and value-oriented design and identify when it is appropriate in a Java program.",
+    "Apply at least one of the lesson topics—immutable classes—in a small, readable example.",
+    "Identify one failure, compatibility, security, or resource-management concern and describe a safe response."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study immutability and value-oriented design with a short explanation, an original visual map, a Java example, and a check you can perform yourself. Focus on the relationship between the rule and the behavior rather than memorizing isolated syntax.",
+    "why_it_matters": "This concept matters because it helps you keep a Java codebase understandable as its responsibilities and collaborators grow. In this lesson, focus on immutable classes and use a minimal example to check what the rule actually guarantees.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Immutability and Value-Oriented Design: concept map",
+        "asset_path": "diagrams/lesson-314.svg",
+        "alt_text": "Four-stage diagram for Immutability and Value-Oriented Design: Immutable classes; Defensive copying; Records as value-centric types; Safe sharing.",
+        "caption": "Visual summary of Immutability and Value-Oriented Design; use it as a map while reading the explanation and testing the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "A class defines state and behavior; an object is an instance. Encapsulation protects invariants by keeping mutable state private and validating updates through a small public API. The important habit is to make the assumptions explicit and use the code example as a small experiment."
+      },
+      {
+        "type": "paragraph",
+        "title": "How the pieces fit",
+        "text": "Connect immutable classes with defensive copying before choosing an implementation. The example is a small, observable case; extend it by changing one input and checking a boundary, invalid value, or compatibility limit where relevant."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Immutable classes",
+            "text": "A class defines state and behavior; an object is an instance. Encapsulation protects invariants by keeping mutable state private and validating updates through a small public API."
+          },
+          {
+            "title": "Defensive copying",
+            "text": "Maintainable design makes responsibilities, contracts, and dependency direction clear. Prefer cohesive components and focused interfaces, applying patterns and SOLID principles when they solve a real problem. Apply that reasoning specifically to defensive copying and confirm the result with the example or a targeted test."
+          },
+          {
+            "title": "Records as value-centric types",
+            "text": "Modern Java features can make data modeling and branching clearer. Check the release baseline for each feature and keep preview-only syntax out of the stable core examples."
+          },
+          {
+            "title": "Safe sharing",
+            "text": "Maintainable design makes responsibilities, contracts, and dependency direction clear. Prefer cohesive components and focused interfaces, applying patterns and SOLID principles when they solve a real problem. Apply that reasoning specifically to safe sharing and confirm the result with the example or a targeted test."
+          },
+          {
+            "title": "Trade-offs in mutable and immutable models",
+            "text": "Maintainable design makes responsibilities, contracts, and dependency direction clear. Prefer cohesive components and focused interfaces, applying patterns and SOLID principles when they solve a real problem. Apply that reasoning specifically to trade-offs in mutable and immutable models and confirm the result with the example or a targeted test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "java",
+        "code": "public class Main {\nrecord Point(int x, int y) {}\n    public static void main(String[] args) {\n        Point point = new Point(4, 5);\n        System.out.println(point);\n    }\n}\n",
+        "expected_output": "Point[x=4, y=5]",
+        "run_instructions": "Prefer immutable value-oriented models where identity and ongoing mutation are not required. For ordinary Java SE examples, use JDK 25, save a complete class as Main.java, and run `javac Main.java` followed by `java Main`. CodeLeaf does not execute Java in the browser; use a local JDK for these examples. Preview-only and configuration-file examples have their own version or filename notes.",
+        "reset_steps": "Restore the original example, remove any temporary output files it created, and rerun the baseline case. Do not leave credentials, generated private data, or large test files in the project directory."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Keep one clear hypothesis per experiment. Check the version, read the error message, test boundaries, and record what evidence supports your conclusion."
+      }
+    ],
+    "task": "Try it yourself: apply immutability and value-oriented design to a small project artifact. Record the trade-off, one verification step, and a rollback or recovery path where relevant.",
+    "task_acceptance_criteria": [
+      "The example demonstrates at least one listed topic from Immutability and Value-Oriented Design.",
+      "The learner states the expected result before running or inspecting the example.",
+      "At least one boundary, failure, compatibility, or maintainability consideration is documented where relevant."
+    ],
+    "hints": [
+      "Start by identifying the contract or rule behind immutable classes.",
+      "Reduce the example to the smallest input that makes the behavior visible.",
+      "Test one boundary or failure case and compare the result with the expected behavior."
+    ],
+    "expected_output": "Point[x=4, y=5]",
+    "run_mode": "server-runner",
+    "execution_notes": "Java requires a JDK or a separate isolated server runner. No Java sandbox is bundled with this content; never execute learner code inside the FastAPI process or public production container.",
+    "knowledge_check_file": "exams/question-files/lesson-314-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Applying the rule from memory without checking its exact contract.",
+        "why": "Small differences in type, scope, API version, or input shape can change the result.",
+        "fix": "Inspect the relevant official API/language documentation and build a minimal reproducer."
+      },
+      {
+        "problem": "Testing only a single happy path.",
+        "why": "Boundary values and failures often reveal assumptions hidden by the simplest example.",
+        "fix": "Add an empty, boundary, or invalid case and state the expected behavior before running it."
+      },
+      {
+        "problem": "Changing several things between runs.",
+        "why": "It becomes difficult to identify the actual cause of a different result.",
+        "fix": "Change one factor at a time and keep a short record of observed behavior."
+      }
+    ],
+    "summary": [
+      "Immutability and Value-Oriented Design is best understood by connecting its contract to a small observable example.",
+      "Key syllabus points: Immutable classes, Defensive copying, Records as value-centric types.",
+      "Use official versioned documentation and tests to confirm assumptions before relying on behavior in a larger application."
+    ],
+    "references": [
+      {
+        "title": "Learn Java",
+        "url": "https://dev.java/learn/"
+      },
+      {
+        "title": "Java SE 25 API Specification",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Learn Java",
+      "url": "https://dev.java/learn/",
+      "publisher": "Oracle / dev.java",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "getting started",
+        "language basics",
+        "object-oriented programming",
+        "generics",
+        "lambdas",
+        "collections",
+        "streams",
+        "modules",
+        "JVM tools",
+        "security"
+      ]
+    },
+    {
+      "title": "Java SE 25 API Specification",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "standard-library types and methods",
+        "API contracts",
+        "java.base",
+        "java.sql",
+        "java.net.http",
+        "java.nio.file",
+        "java.util.concurrent"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Java curriculum outline and current official references; requires Java subject-matter review and local verification before publication."
+}

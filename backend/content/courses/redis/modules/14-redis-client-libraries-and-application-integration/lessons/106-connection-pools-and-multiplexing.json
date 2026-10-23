@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-106",
+  "slug": "connection-pools-and-multiplexing",
+  "title": "Connection Pools and Multiplexing",
+  "sequence": 106,
+  "module_id": "redis-module-14",
+  "module_slug": "redis-client-libraries-and-application-integration",
+  "level": "beginner to advanced",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-105"
+  ],
+  "previous_lesson_id": "redis-lesson-105",
+  "next_lesson_id": "redis-lesson-107",
+  "keywords": [
+    "connection-pools-and-multiplexing",
+    "why-connection-reuse-matters",
+    "connection-pools",
+    "multiplexed-connections",
+    "pool-sizing",
+    "handling-connection-exhaustion",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 106,
+  "subtopics": [
+    "Why connection reuse matters",
+    "Connection pools",
+    "Multiplexed connections",
+    "Pool sizing",
+    "Handling connection exhaustion"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Connection Pools and Multiplexing and distinguish it from a related Redis concept.",
+    "Apply or trace Connection Pools and Multiplexing in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Connection Pools and Multiplexing and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Connection Pools and Multiplexing in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Connection Pools and Multiplexing helps implement use supported client libraries with secure configuration, connection reuse, and controlled retries. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Connection Pools and Multiplexing",
+        "asset_path": "diagrams/lesson-106-connection-pools-and-multiplexing.svg",
+        "alt_text": "Concept diagram for Connection Pools and Multiplexing, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Connection Pools and Multiplexing; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Connection Pools and Multiplexing helps implement use supported client libraries with secure configuration, connection reuse, and controlled retries. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Connection Pools and Multiplexing, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Why connection reuse matters",
+            "text": "Connect Why connection reuse matters to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Connection pools",
+            "text": "Connect Connection pools to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Multiplexed connections",
+            "text": "Connect Multiplexed connections to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Pool sizing",
+            "text": "Connect Pool sizing to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Handling connection exhaustion",
+            "text": "Connect Handling connection exhaustion to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Connection Pools and Multiplexing",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "MULTI\nSET demo:txn status ready\nINCR demo:txn:count\nEXEC",
+        "expected_output": "OK\nQUEUED\nQUEUED\n1) OK 2) (integer) 1",
+        "run_instructions": "This illustrates command grouping. Redis transactions do not offer relational-style rollback for runtime command errors; handle those explicitly.",
+        "reset_steps": "DEL demo:txn demo:txn:count",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Connection Pools and Multiplexing. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Connection Pools and Multiplexing in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Connection Pools and Multiplexing.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "OK\nQUEUED\nQUEUED\n1) OK 2) (integer) 1",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-106-questions.json",
+    "recap": [
+      "Connection Pools and Multiplexing is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Connect with Redis client libraries",
+      "url": "https://redis.io/docs/latest/connect/clients/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "supported client libraries, protocols and integrations"
+      ]
+    },
+    {
+      "title": "Connect to Redis with redis-py",
+      "url": "https://redis.io/docs/latest/develop/clients/redis-py/connect/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "Python connection configuration and TLS examples"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

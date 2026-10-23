@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-53",
+  "exercise_id": "dsa-exercise-pdf-53",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\ndef simulate_dynamic_array_appends(n):\n    capacity=1; size=0; copied=0; allocated=1\n    for _ in range(n):\n        if size==capacity:\n            copied += size; capacity *= 2; allocated += capacity\n        size += 1\n    return {\"n\":n,\"resize_copies\":copied,\"final_capacity\":capacity,\"allocated_slots_total\":allocated}\n\nresult=simulate_dynamic_array_appends(1000)\nassert result[\"resize_copies\"] < 2000\n# Doubling copies a geometric series: total resize-copy work is O(n),\n# so append has O(1) amortized cost despite occasional O(n) resizing.\n```",
+  "explanation": "Geometric resizing bounds total copied elements by a geometric series, so n appends move O(n) elements total and O(1) amortized copies per append.",
+  "tested_reference_code": "def simulate_dynamic_array_appends(n):\n    capacity=1; size=0; copied=0; allocated=1\n    for _ in range(n):\n        if size==capacity:\n            copied += size; capacity *= 2; allocated += capacity\n        size += 1\n    return {\"n\":n,\"resize_copies\":copied,\"final_capacity\":capacity,\"allocated_slots_total\":allocated}\n\nresult=simulate_dynamic_array_appends(1000)\nassert result[\"resize_copies\"] < 2000\n# Doubling copies a geometric series: total resize-copy work is O(n),\n# so append has O(1) amortized cost despite occasional O(n) resizing.",
+  "language": "python"
+}

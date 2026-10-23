@@ -1,0 +1,206 @@
+{
+  "id": "java-lesson-228",
+  "slug": "the-java-http-client-api",
+  "title": "The Java HTTP Client API",
+  "sequence": 228,
+  "module_id": "java-module-22",
+  "module_slug": "networking-and-web-communication",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 11,
+  "prerequisites": [],
+  "previous_lesson_id": "java-lesson-227",
+  "next_lesson_id": "java-lesson-229",
+  "keywords": [
+    "the",
+    "java",
+    "http",
+    "client",
+    "api",
+    "httpclient",
+    "httprequest",
+    "httpresponse",
+    "timeouts",
+    "redirects",
+    "synchronous",
+    "asynchronous"
+  ],
+  "source_syllabus_number": 228,
+  "subtopics": [
+    "HttpClient",
+    "HttpRequest",
+    "HttpResponse",
+    "Timeouts and redirects",
+    "Synchronous and asynchronous requests"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of the java http client api and identify when it is appropriate in a Java program.",
+    "Apply at least one of the lesson topics—httpclient—in a small, readable example.",
+    "Identify one failure, compatibility, security, or resource-management concern and describe a safe response."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study the java http client api with a short explanation, an original visual map, a Java example, and a check you can perform yourself. Focus on the relationship between the rule and the behavior rather than memorizing isolated syntax.",
+    "why_it_matters": "This concept matters because it helps you build network-facing code that handles timeouts, untrusted responses, and partial failure. In this lesson, focus on httpclient and use a minimal example to check what the rule actually guarantees.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "The Java HTTP Client API: concept map",
+        "asset_path": "diagrams/lesson-228.svg",
+        "alt_text": "Four-stage diagram for The Java HTTP Client API: HttpClient; HttpRequest; HttpResponse; Timeouts and redirects.",
+        "caption": "Visual summary of The Java HTTP Client API; use it as a map while reading the explanation and testing the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Network calls can fail or stall even when request code is correct. Use the standard HTTP client, validate destinations and responses, configure timeouts, and apply bounded retries only where safe. The important habit is to make the assumptions explicit and use the code example as a small experiment."
+      },
+      {
+        "type": "paragraph",
+        "title": "How the pieces fit",
+        "text": "Connect httpclient with httprequest before choosing an implementation. The example is a small, observable case; extend it by changing one input and checking a boundary, invalid value, or compatibility limit where relevant."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "HttpClient",
+            "text": "Network calls can fail or stall even when request code is correct. Use the standard HTTP client, validate destinations and responses, configure timeouts, and apply bounded retries only where safe."
+          },
+          {
+            "title": "HttpRequest",
+            "text": "Network calls can fail or stall even when request code is correct. Use the standard HTTP client, validate destinations and responses, configure timeouts, and apply bounded retries only where safe."
+          },
+          {
+            "title": "HttpResponse",
+            "text": "Network calls can fail or stall even when request code is correct. Use the standard HTTP client, validate destinations and responses, configure timeouts, and apply bounded retries only where safe."
+          },
+          {
+            "title": "Timeouts and redirects",
+            "text": "Use the standard library type that matches the data: java.time for dates and zones, BigDecimal for exact decimal arithmetic, and locale-aware APIs for user-facing text and numbers."
+          },
+          {
+            "title": "Synchronous and asynchronous requests",
+            "text": "Concurrency introduces shared-state ordering and cancellation concerns. Prefer task abstractions and immutable data where possible, coordinate access explicitly, and always define shutdown, timeout, and failure behavior."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "java",
+        "code": "import java.net.URI;\npublic class Main {\n    public static void main(String[] args) {\n        URI endpoint = URI.create(\"https://example.com/api/items\");\n        System.out.println(endpoint.getHost());\n    }\n}\n",
+        "expected_output": "example.com (the example parses a URI and does not make a network request).",
+        "run_instructions": "Validate request construction and response handling separately from actual network execution. For ordinary Java SE examples, use JDK 25, save a complete class as Main.java, and run `javac Main.java` followed by `java Main`. CodeLeaf does not execute Java in the browser; use a local JDK for these examples. Preview-only and configuration-file examples have their own version or filename notes.",
+        "reset_steps": "Restore the original example, remove any temporary output files it created, and rerun the baseline case. Do not leave credentials, generated private data, or large test files in the project directory."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Keep one clear hypothesis per experiment. Check the version, read the error message, test boundaries, and record what evidence supports your conclusion."
+      }
+    ],
+    "task": "Try it yourself: extend the example for the java http client api to validate input and report a useful failure state. Keep network activity optional and use explicit timeouts before making a real request.",
+    "task_acceptance_criteria": [
+      "The example demonstrates at least one listed topic from The Java HTTP Client API.",
+      "The learner states the expected result before running or inspecting the example.",
+      "At least one boundary, failure, compatibility, or maintainability consideration is documented where relevant."
+    ],
+    "hints": [
+      "Start by identifying the contract or rule behind httpclient.",
+      "Reduce the example to the smallest input that makes the behavior visible.",
+      "Test one boundary or failure case and compare the result with the expected behavior."
+    ],
+    "expected_output": "example.com (the example parses a URI and does not make a network request).",
+    "run_mode": "server-runner",
+    "execution_notes": "Java requires a JDK or a separate isolated server runner. No Java sandbox is bundled with this content; never execute learner code inside the FastAPI process or public production container.",
+    "knowledge_check_file": "exams/question-files/lesson-228-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Applying the rule from memory without checking its exact contract.",
+        "why": "Small differences in type, scope, API version, or input shape can change the result.",
+        "fix": "Inspect the relevant official API/language documentation and build a minimal reproducer."
+      },
+      {
+        "problem": "Testing only a single happy path.",
+        "why": "Boundary values and failures often reveal assumptions hidden by the simplest example.",
+        "fix": "Add an empty, boundary, or invalid case and state the expected behavior before running it."
+      },
+      {
+        "problem": "Changing several things between runs.",
+        "why": "It becomes difficult to identify the actual cause of a different result.",
+        "fix": "Change one factor at a time and keep a short record of observed behavior."
+      }
+    ],
+    "summary": [
+      "The Java HTTP Client API is best understood by connecting its contract to a small observable example.",
+      "Key syllabus points: HttpClient, HttpRequest, HttpResponse.",
+      "Use official versioned documentation and tests to confirm assumptions before relying on behavior in a larger application."
+    ],
+    "references": [
+      {
+        "title": "Learn Java",
+        "url": "https://dev.java/learn/"
+      },
+      {
+        "title": "Java SE 25 API Specification",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html"
+      },
+      {
+        "title": "Java HTTP Client API",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/api/java.net.http/module-summary.html"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Learn Java",
+      "url": "https://dev.java/learn/",
+      "publisher": "Oracle / dev.java",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "getting started",
+        "language basics",
+        "object-oriented programming",
+        "generics",
+        "lambdas",
+        "collections",
+        "streams",
+        "modules",
+        "JVM tools",
+        "security"
+      ]
+    },
+    {
+      "title": "Java SE 25 API Specification",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "standard-library types and methods",
+        "API contracts",
+        "java.base",
+        "java.sql",
+        "java.net.http",
+        "java.nio.file",
+        "java.util.concurrent"
+      ]
+    },
+    {
+      "title": "Java HTTP Client API",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/api/java.net.http/module-summary.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "HttpClient",
+        "HttpRequest",
+        "HttpResponse",
+        "asynchronous requests"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Java curriculum outline and current official references; requires Java subject-matter review and local verification before publication."
+}

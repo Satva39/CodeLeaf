@@ -1,0 +1,190 @@
+{
+  "id": "json-yaml-lesson-087",
+  "slug": "yaml-dates-and-timestamps",
+  "title": "YAML Dates and Timestamps",
+  "sequence": 87,
+  "module_id": "json-yaml-module-09",
+  "module_slug": "yaml-values-typing-and-scalar-semantics",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "json-yaml-lesson-086"
+  ],
+  "previous_lesson_id": "json-yaml-lesson-086",
+  "next_lesson_id": "json-yaml-lesson-088",
+  "keywords": [
+    "yaml-dates-and-timestamps",
+    "date-like-scalars-timestamp-like-scalars-quoted-dates-parser-specific-native-types-time-zone-interpretation",
+    "maintaining-cross-language-consistency-choosing-explicit-string-representations-when-interoperability-requires-them"
+  ],
+  "source_syllabus_number": 87,
+  "subtopics": [
+    "Date-like scalars. Timestamp-like scalars. Quoted dates. Parser-specific native types. Time-zone interpretation.",
+    "Maintaining cross-language consistency. Choosing explicit string representations when interoperability requires them."
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of yaml dates and timestamps and identify at least one related syllabus concept.",
+    "Interpret the example for yaml dates and timestamps and describe its expected result.",
+    "Choose a relevant syntax, type, compatibility, security, or troubleshooting check for the example."
+  ],
+  "content": {
+    "intro": "This lesson focuses on yaml dates and timestamps and connects the PDF syllabus topics to a small, inspectable example. Work from the intended data model, write down the expected result, then verify syntax and semantics with the target tool.",
+    "why_it_matters": "YAML Dates and Timestamps matters because structured-data files sit between people, tools, services, and deployment systems. A clear contract and repeatable checks make the result easier to maintain and safer to consume.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "YAML Dates and Timestamps: visual explanation",
+        "asset_path": "diagrams/lessons/lesson-087-yaml-dates-and-timestamps.svg",
+        "alt_text": "YAML Dates and Timestamps: Date-like scalars. Timestamp-like scalars. Quoted dates. Parser-specific native types. Time-zone interpretation. leads to Resolve YAML structure, then Constructed values.",
+        "caption": "Use this concept flow to predict the result for YAML Dates and Timestamps before you test the snippet."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "YAML scalar style and schema influence how text is resolved into values. Quote strings that resemble booleans, numbers, dates, or null when string interpretation is intended; parser versions and schemas can affect the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "What you will cover",
+        "text": "This lesson explicitly addresses: Date-like scalars. Timestamp-like scalars. Quoted dates. Parser-specific native types. Time-zone interpretation.; Maintaining cross-language consistency. Choosing explicit string representations when interoperability requires them.. Treat each as part of a workflow: define what the data should mean, represent it consistently, and test how the chosen implementation interprets it."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: YAML Dates and Timestamps",
+        "language": "yaml",
+        "code": "event_date: \"2026-10-20\"\ncreated_at: \"2026-10-20T09:00:00Z\"\n# Quote these values if the application contract treats them as strings.",
+        "expected_output": "YAML timestamp resolution varies by schema/parser. Quoted ISO 8601 strings are a safer portable contract when the application expects text rather than a runtime date object.",
+        "run_instructions": "Save as example.yaml and validate it with the exact parser/linter used by the target application. For Python experiments, use an isolated environment and safe loading for untrusted content. Do not assume every parser resolves ambiguous scalars identically.",
+        "reset_steps": "Restore the starting fixture before each test. Change one field, indentation level, parser option, or schema constraint at a time, then compare the result with the prediction.",
+        "execution_mode": "static-validation",
+        "limitations": "This snippet is a reference/example, not evidence that the CodeLeaf browser executes JSON/YAML parsing, shell commands, or Python. Validate locally with a named parser or tool before relying on it."
+      },
+      {
+        "type": "list",
+        "title": "A reliable working sequence",
+        "items": [
+          {
+            "title": "1. State the contract",
+            "text": "Write down the expected root type, required fields, scalar types, and any compatibility assumptions."
+          },
+          {
+            "title": "2. Validate before use",
+            "text": "Parse the document and run the applicable schema or policy checks; syntax success alone is not full correctness."
+          },
+          {
+            "title": "3. Test a boundary",
+            "text": "Include at least one missing, malformed, ambiguous, or unexpected input and record the desired behavior."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety checkpoint",
+        "text": "Indentation and scalar interpretation are part of the data model. Quote ambiguous strings, use consistent spaces, and test with the parser/schema that the target application actually uses. Confirm implementation-specific behavior against the target parser, tool version, and standards documentation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second synthetic fixture for “Date-like scalars. Timestamp-like scalars. Quoted dates. Parser-specific native types. Time-zone interpretation.”. Predict the parsed types/result, change one relevant detail, and record whether the target tool behaved as expected. Include one invalid or boundary case."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-087-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating readable text as proof of correctness.",
+        "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+        "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+      },
+      {
+        "problem": "Assuming every parser interprets the feature identically.",
+        "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+        "fix": "Record the exact parser/version and test the target environment."
+      },
+      {
+        "problem": "Testing only a happy path.",
+        "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+        "fix": "Keep valid, invalid, and boundary fixtures in version control."
+      }
+    ],
+    "task": "Prepare a brief, reviewable demonstration of YAML Dates and Timestamps. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+    "task_acceptance_criteria": [
+      "The artifact clearly demonstrates Date-like scalars. Timestamp-like scalars. Quoted dates. Parser-specific native types. Time-zone interpretation..",
+      "Expected behavior is written before verification.",
+      "One invalid or boundary case is documented.",
+      "The relevant format, parser/version, and any security or interoperability limits are recorded."
+    ],
+    "hints": [
+      "Start with the smallest valid example that demonstrates Date-like scalars. Timestamp-like scalars. Quoted dates. Parser-specific native types. Time-zone interpretation..",
+      "Change one thing at a time and compare parsed values, not only visual formatting.",
+      "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+    ],
+    "summary": [
+      "YAML Dates and Timestamps fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+      "Topics retained from the source PDF include Date-like scalars. Timestamp-like scalars. Quoted dates. Parser-specific native types. Time-zone interpretation.; Maintaining cross-language consistency. Choosing explicit string representations when interoperability requires them..",
+      "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "YAML timestamp resolution varies by schema/parser. Quoted ISO 8601 strings are a safer portable contract when the application expects text rather than a runtime date object."
+  },
+  "task": "Prepare a brief, reviewable demonstration of YAML Dates and Timestamps. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+  "task_acceptance_criteria": [
+    "The artifact clearly demonstrates Date-like scalars. Timestamp-like scalars. Quoted dates. Parser-specific native types. Time-zone interpretation..",
+    "Expected behavior is written before verification.",
+    "One invalid or boundary case is documented.",
+    "The relevant format, parser/version, and any security or interoperability limits are recorded."
+  ],
+  "hints": [
+    "Start with the smallest valid example that demonstrates Date-like scalars. Timestamp-like scalars. Quoted dates. Parser-specific native types. Time-zone interpretation..",
+    "Change one thing at a time and compare parsed values, not only visual formatting.",
+    "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+  ],
+  "summary": [
+    "YAML Dates and Timestamps fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+    "Topics retained from the source PDF include Date-like scalars. Timestamp-like scalars. Quoted dates. Parser-specific native types. Time-zone interpretation.; Maintaining cross-language consistency. Choosing explicit string representations when interoperability requires them..",
+    "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+  ],
+  "run_mode": "static-validation",
+  "expected_output": "YAML timestamp resolution varies by schema/parser. Quoted ISO 8601 strings are a safer portable contract when the application expects text rather than a runtime date object.",
+  "common_mistakes": [
+    {
+      "problem": "Treating readable text as proof of correctness.",
+      "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+      "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+    },
+    {
+      "problem": "Assuming every parser interprets the feature identically.",
+      "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+      "fix": "Record the exact parser/version and test the target environment."
+    },
+    {
+      "problem": "Testing only a happy path.",
+      "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+      "fix": "Keep valid, invalid, and boundary fixtures in version control."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "id": "json-yaml-ref-yaml122",
+      "title": "YAML Ain’t Markup Language (YAML) Version 1.2.2 Specification",
+      "url": "https://yaml.org/spec/1.2.2/",
+      "publisher": "YAML Language Development Team",
+      "checked_on": "2026-10-20"
+    },
+    {
+      "id": "json-yaml-ref-pyyaml",
+      "title": "PyYAML Documentation",
+      "url": "https://pyyaml.org/wiki/PyYAMLDocumentation",
+      "publisher": "PyYAML project",
+      "checked_on": "2026-10-20"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Generated from the attached JSON and YAML syllabus; requires technical review and target-tool validation before publication.",
+  "exercise_files": []
+}

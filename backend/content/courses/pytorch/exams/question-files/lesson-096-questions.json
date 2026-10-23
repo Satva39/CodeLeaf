@@ -1,0 +1,50 @@
+{
+  "id": "pytorch-lesson-096-knowledge-check",
+  "lesson_id": "pytorch-lesson-096",
+  "lesson_slug": "attention-and-transformer-implementation",
+  "title": "Attention and Transformer Implementation knowledge check",
+  "question_count": 3,
+  "questions": [
+    {
+      "id": "pytorch-q-096-01",
+      "type": "single_choice",
+      "prompt": "Which statement best describes “Scaled dot-product attention” in this lesson?",
+      "options": [
+        "Trace token IDs, sequence length, padding/causal masks, and prediction targets so the model only uses information available for the task.",
+        "This topic removes the need to validate inputs or inspect model outputs.",
+        "This topic guarantees identical results across all devices and package versions.",
+        "This topic makes every serialized checkpoint safe to load from an unknown source."
+      ],
+      "answer_key": "Trace token IDs, sequence length, padding/causal masks, and prediction targets so the model only uses information available for the task.",
+      "explanation": "Scaled dot-product attention: Trace token IDs, sequence length, padding/causal masks, and prediction targets so the model only uses information available for the task."
+    },
+    {
+      "id": "pytorch-q-096-02",
+      "type": "single_choice",
+      "prompt": "Before relying on “Multi-head attention”, what should a learner verify?",
+      "options": [
+        "Assume all tensor dimensions and devices are interchangeable without checking them.",
+        "Use the held-out test split repeatedly to tune the model and report that score as unbiased.",
+        "Skip recording package versions because they cannot affect API or device behavior.",
+        "verify token/target alignment, padding indices, attention masks, and causal masking where future tokens must be hidden."
+      ],
+      "answer_key": "verify token/target alignment, padding indices, attention masks, and causal masking where future tokens must be hidden.",
+      "explanation": "This lesson recommends the following check: verify token/target alignment, padding indices, attention masks, and causal masking where future tokens must be hidden."
+    },
+    {
+      "id": "pytorch-q-096-03",
+      "type": "single_choice",
+      "prompt": "Which pitfall matters when applying “Encoder blocks”?",
+      "options": [
+        "Treat successful imports as proof that the full model and evaluation pipeline are correct.",
+        "Catch every exception and silently replace failed results with zeros.",
+        "Do not let a language model attend to future target tokens during autoregressive training or evaluation.",
+        "Change several unrelated settings at once and infer which change fixed the result."
+      ],
+      "answer_key": "Do not let a language model attend to future target tokens during autoregressive training or evaluation.",
+      "explanation": "This topic-specific caution is important: Do not let a language model attend to future target tokens during autoregressive training or evaluation."
+    }
+  ],
+  "status": "draft",
+  "visibility": "protected_content_repository_only"
+}

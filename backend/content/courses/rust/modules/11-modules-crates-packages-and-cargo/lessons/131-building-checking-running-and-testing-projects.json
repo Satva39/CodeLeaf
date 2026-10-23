@@ -1,0 +1,146 @@
+{
+  "id": "rust-lesson-131",
+  "slug": "building-checking-running-and-testing-projects",
+  "title": "Building, Checking, Running, and Testing Projects",
+  "sequence": 131,
+  "module_id": "rust-module-11",
+  "module_slug": "modules-crates-packages-and-cargo",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-language",
+  "estimated_minutes": 11,
+  "prerequisites": [
+    "rust-lesson-130"
+  ],
+  "previous_lesson_id": "rust-lesson-130",
+  "next_lesson_id": "rust-lesson-132",
+  "keywords": [
+    "and",
+    "building",
+    "checking",
+    "projects",
+    "repeatable-quality-checks-and-feedback",
+    "running",
+    "rust",
+    "testing"
+  ],
+  "source_syllabus_number": 131,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the main purpose of Building, Checking, Running, and Testing Projects and distinguish it from a closely related Rust concept.",
+    "Apply or trace Building, Checking, Running, and Testing Projects in a small Rust example, using the module guidance and stated toolchain assumptions.",
+    "Identify one relevant edge case or failure mode for Building, Checking, Running, and Testing Projects and select a suitable verification step."
+  ],
+  "content": {
+    "intro": "This lesson covers Building, Checking, Running, and Testing Projects. It sits in Module 11, Modules, Crates, Packages, and Cargo, and builds toward a practical Rust mental model rather than memorizing a term in isolation.",
+    "why_it_matters": "Building, Checking, Running, and Testing Projects matters when you work with repeatable quality checks and feedback. Understanding the rule helps you predict compiler or runtime behavior, document assumptions, and choose a safer implementation when inputs or system conditions change.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Building, Checking, Running, and Testing Projects",
+        "asset_path": "diagrams/lesson-131-building-checking-running-and-testing-projects.svg",
+        "alt_text": "Concept diagram for Building, Checking, Running, and Testing Projects: repeatable quality checks and feedback; inputs flow through a rule to an outcome, followed by a verification step.",
+        "caption": "Visual model for Building, Checking, Running, and Testing Projects. The diagram is a learning aid; use the prose and examples for exact conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Reliable code uses tests and diagnostics to make assumptions visible. Unit tests isolate behavior, integration tests exercise public boundaries, and documentation tests keep example code checked alongside the API."
+      },
+      {
+        "type": "paragraph",
+        "title": "A reliable way to reason about it",
+        "text": "For Building, Checking, Running, and Testing Projects, write down the inputs, the guarantee you expect, and the boundary where that guarantee stops. Work through a minimal example first; then deliberately test one edge case. Cargo.toml declares a package and dependency intent; Cargo.lock records a resolved graph for reproducible application builds. Keep module visibility deliberate."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Building, Checking, Running, and Testing Projects",
+            "text": "Reliable code uses tests and diagnostics to make assumptions visible. Unit tests isolate behavior, integration tests exercise public boundaries, and documentation tests keep example code checked alongside the API."
+          },
+          {
+            "title": "Inputs and guarantees",
+            "text": "Identify the value, type, state, tool, or external system involved in Building, Checking, Running, and Testing Projects. Separate what Rust checks at compile time from what still needs validation or a test."
+          },
+          {
+            "title": "Boundary case",
+            "text": "Try an empty, missing, invalid, unusually large, or concurrently accessed input when that boundary applies to Building, Checking, Running, and Testing Projects. Record what should happen and how you can verify it."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "rust",
+        "execution_mode": "static-validation",
+        "code": "fn add(a: i32, b: i32) -> i32 { a + b }\n\n#[cfg(test)]\nmod tests {\n    use super::add;\n\n    #[test]\n    fn adds_two_numbers() {\n        assert_eq!(add(2, 3), 5);\n    }\n}\n\nfn main() {\n    println!(\"{}\", add(2, 3));\n}",
+        "expected_output": "Running the binary prints 5; cargo test also discovers the unit test.",
+        "run_instructions": "Save as src/main.rs in a Cargo binary. Run cargo run and cargo test; adapt the test shape to the real behavior under review.",
+        "reset_steps": "Return the sample to its original form, run the documented command again, and compare the result. If a dependency, target, runtime, database, or hardware device is required, configure that separately before treating the result as verified."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not assume Building, Checking, Running, and Testing Projects guarantees more than it actually does. Reduce a failure to a small reproducer, read the full compiler diagnostic or error value, consult the matching official reference, and change one assumption at a time."
+      },
+      {
+        "type": "callout",
+        "title": "Toolchain and execution boundary",
+        "text": "Course examples are static reference snippets, not executed inside CodeLeaf. Most standard-library examples can be tried in a Rust 2024 Cargo project; specialized networking, database, async, procedural-macro, embedded, and WebAssembly scenarios require the toolchain and dependencies described in their lessons."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate Building, Checking, Running, and Testing Projects. Predict the result before you run it, then explain one normal case and one relevant boundary case in your own words.",
+    "task_acceptance_criteria": [
+      "Explain the purpose of Building, Checking, Running, and Testing Projects using a concrete example.",
+      "Verify the example using an appropriate local command, targeted test, or documented manual check.",
+      "Describe one edge case, failure mode, version assumption, or limitation that matters for this topic."
+    ],
+    "hints": [
+      "Start by identifying the inputs and guarantee involved in Building, Checking, Running, and Testing Projects.",
+      "Use the smallest example that isolates one rule; avoid changing multiple variables at once.",
+      "Check the matching official reference if compiler behavior, a library API, or toolchain support differs from your expectation."
+    ],
+    "expected_output": "Running the binary prints 5; cargo test also discovers the unit test.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-131-questions.json",
+    "recap": [
+      "Building, Checking, Running, and Testing Projects supports repeatable quality checks and feedback.",
+      "Predict and verify behavior with small examples.",
+      "Keep library and target-specific assumptions explicit."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "The Cargo Book",
+      "url": "https://doc.rust-lang.org/cargo/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "packages and crates",
+        "Cargo.toml",
+        "Cargo.lock",
+        "dependencies",
+        "workspaces",
+        "build profiles",
+        "testing",
+        "publishing"
+      ]
+    },
+    {
+      "title": "The Rust Edition Guide",
+      "url": "https://doc.rust-lang.org/edition-guide/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "2015, 2018, 2021, and 2024 editions",
+        "edition migration",
+        "edition-sensitive syntax"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Rust.pdf; review explanation, code behavior, version notes, and assessment quality before publication."
+}

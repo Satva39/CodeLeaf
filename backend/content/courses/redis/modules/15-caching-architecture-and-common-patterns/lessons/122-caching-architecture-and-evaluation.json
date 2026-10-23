@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-122",
+  "slug": "caching-architecture-and-evaluation",
+  "title": "Caching Architecture and Evaluation",
+  "sequence": 122,
+  "module_id": "redis-module-15",
+  "module_slug": "caching-architecture-and-common-patterns",
+  "level": "intermediate to advanced",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-121"
+  ],
+  "previous_lesson_id": "redis-lesson-121",
+  "next_lesson_id": "redis-lesson-123",
+  "keywords": [
+    "caching-architecture-and-evaluation",
+    "cache-key-design",
+    "source-of-truth-selection",
+    "stale-data-tolerance",
+    "cache-warming",
+    "measuring-hit-ratio-and-real-latency-improvements",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 122,
+  "subtopics": [
+    "Cache key design",
+    "Source-of-truth selection",
+    "Stale data tolerance",
+    "Cache warming",
+    "Measuring hit ratio and real latency improvements"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Caching Architecture and Evaluation and distinguish it from a related Redis concept.",
+    "Apply or trace Caching Architecture and Evaluation in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Caching Architecture and Evaluation and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Caching Architecture and Evaluation in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Caching Architecture and Evaluation helps implement build a cache policy that states its source of truth, expiration, invalidation, and stale-data tolerance. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Caching Architecture and Evaluation",
+        "asset_path": "diagrams/lesson-122-caching-architecture-and-evaluation.svg",
+        "alt_text": "Concept diagram for Caching Architecture and Evaluation, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Caching Architecture and Evaluation; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Caching Architecture and Evaluation helps implement build a cache policy that states its source of truth, expiration, invalidation, and stale-data tolerance. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Caching Architecture and Evaluation, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Cache key design",
+            "text": "Connect Cache key design to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Source-of-truth selection",
+            "text": "Connect Source-of-truth selection to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Stale data tolerance",
+            "text": "Connect Stale data tolerance to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Cache warming",
+            "text": "Connect Cache warming to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Measuring hit ratio and real latency improvements",
+            "text": "Connect Measuring hit ratio and real latency improvements to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Caching Architecture and Evaluation",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "EVAL \"return redis.call('PING')\" 0",
+        "expected_output": "\"PONG\"",
+        "run_instructions": "Keep scripts/functions bounded and validate all application-controlled inputs; production deployments may restrict programmability commands.",
+        "reset_steps": "No key is written.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Caching Architecture and Evaluation. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Caching Architecture and Evaluation in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Caching Architecture and Evaluation.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "\"PONG\"",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-122-questions.json",
+    "recap": [
+      "Caching Architecture and Evaluation is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Using Redis commands",
+      "url": "https://redis.io/docs/latest/develop/use/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "keys, command usage, transactions, pipelining and round-trip reduction"
+      ]
+    },
+    {
+      "title": "Redis data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "strings, hashes, lists, sets, sorted sets, streams, geospatial indexes, bitmaps, bitfields, JSON, arrays, time series, probabilistic structures, vector sets"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

@@ -1,0 +1,16 @@
+{
+  "id": "pytorch-exercise-025-reference-solution",
+  "exercise_id": "pytorch-exercise-025",
+  "title": "Reference approach: Distributed Training",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Implement distributed training in a small isolated script. Required implementation evidence includes: DistributedDataParallel, init_process_group, destroy_process_group. Use a reproducible seed, report observed output, and explain relevant edge cases.",
+  "explanation": "This exercise consolidates the topic from lesson 135. The list of required strings is only a minimal static signal; inspect numerical correctness, error handling, and test outcomes manually.",
+  "example_code": "# Launch with torchrun --standalone --nproc_per_node=2 train_ddp.py in a multi-process file.\nimport torch.distributed as dist\n# Initialize using the environment supplied by torchrun, wrap the model in DistributedDataParallel,\n# use DistributedSampler, and destroy the process group in a finally block.\nprint('Use torchrun; this sketch must be completed in a dedicated multi-process script.')",
+  "reference_code": "# Launch with torchrun --standalone --nproc_per_node=2 train_ddp.py in a multi-process file.\nimport torch.distributed as dist\n# Initialize using the environment supplied by torchrun, wrap the model in DistributedDataParallel,\n# use DistributedSampler, and destroy the process group in a finally block.\nprint('Use torchrun; this sketch must be completed in a dedicated multi-process script.')",
+  "review_notes": [
+    "Do not treat source-string grading as proof that numerical behavior is correct.",
+    "Run in a supported local environment or isolated runner.",
+    "Keep input data synthetic unless a dataset has an appropriate license and documented provenance."
+  ]
+}

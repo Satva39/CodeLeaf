@@ -1,0 +1,179 @@
+{
+  "id": "numpy-lesson-048",
+  "slug": "transposing-arrays",
+  "title": "Transposing Arrays",
+  "sequence": 48,
+  "module_id": "numpy-module-06",
+  "module_slug": "reshaping-and-manipulating-arrays",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 8,
+  "prerequisites": [
+    "numpy-lesson-047"
+  ],
+  "previous_lesson_id": "numpy-lesson-047",
+  "next_lesson_id": "numpy-lesson-049",
+  "keywords": [
+    "transposing arrays",
+    "reshaping and manipulating arrays",
+    "The .T  attribute",
+    "np.transpose()",
+    "Reordering dimensions",
+    "Transposition in matrix operations",
+    "NumPy",
+    "ndarray"
+  ],
+  "source_syllabus_number": 48,
+  "subtopics": [
+    "The .T  attribute",
+    "np.transpose()",
+    "Reordering dimensions",
+    "Transposition in matrix operations"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of transposing arrays and name one situation where it is useful.",
+    "Apply the .t  attribute to a small NumPy example and inspect the resulting values, shape, or dtype.",
+    "Identify one important limitation, boundary case, or validation check for transposing arrays."
+  ],
+  "content": {
+    "intro": "This lesson develops topic 48 of the supplied curriculum: **Transposing Arrays**. The main starting point is **The .T  attribute**. You will connect the idea to a small, synthetic example, then use the result to reason about shape, dtype, accuracy, or memory as appropriate.",
+    "why_it_matters": "Shape manipulation makes data fit downstream operations, but it must preserve element counts or intentionally change them through joining/splitting. Always check the resulting shape.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Transposing Arrays",
+        "asset_path": "diagrams/lesson-048-transposing-arrays.svg",
+        "alt_text": "Teaching visual for lesson 48, Transposing Arrays. It illustrates Input array, then Reshape / join / split, leading to Check element count.",
+        "caption": "Visual model for Transposing Arrays. Synthetic conceptual diagram; inspect shape, dtype, and assumptions as relevant."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Treat **Transposing Arrays** as an explicit step in an array workflow. This lesson centers on **The .T  attribute** and the source syllabus's related subtopics. Before trusting a result, identify the input shape and dtype, perform the smallest useful operation, and inspect the output. The example uses synthetic data so you can change one value and observe what changes."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics from the supplied curriculum",
+        "items": [
+          "The .T  attribute",
+          "np.transpose()",
+          "Reordering dimensions",
+          "Transposition in matrix operations"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "import numpy as np\n\na = np.array([[1, 2, 3], [4, 5, 6]])\nprint(a.T.shape)\nprint(a.T)",
+        "expected_output": "Observed output in the available validation environment (Python 3.13.5, NumPy 2.3.5):\n(3, 2)\n[[1 4]\n [2 5]\n [3 6]]",
+        "execution_mode": "static-validation",
+        "run_instructions": "Save this snippet as a .py file inside the intended Python environment, then run `python filename.py`. Install NumPy in that same environment first. This learning page displays the sample; it does not execute arbitrary Python on the web server.",
+        "reset_steps": "For examples that create files, use a temporary working directory and remove its outputs after reviewing them. The memory-map example already uses a temporary directory."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "Start with the stated input and the core operation. The code example demonstrates a minimal path through transposing arrays; inspect the output before scaling it to a larger dataset."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          "Transform a small array into a second shape or combine it with another array. Predict and then verify the output shape.",
+          "Change one input value or parameter and predict the output before running the example.",
+          "Record one edge case and explain how your code should respond."
+        ]
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          "Topic 48: Transposing Arrays.",
+          "Core focus: The .T  attribute.",
+          "Check the official reference when signatures or version-specific behavior matter."
+        ]
+      }
+    ],
+    "expected_output": "Observed output in the available validation environment (Python 3.13.5, NumPy 2.3.5):\n(3, 2)\n[[1 4]\n [2 5]\n [3 6]]",
+    "run_instructions": "Run Python examples locally in the same environment where NumPy is installed; no embedded server-side Python execution is assumed.",
+    "reset_steps": "Use temporary paths for file-writing experiments. Restore modified arrays by recreating the example input. No platform progress or rewards are created by viewing the lesson.",
+    "hints": [
+      "First identify the input values and their shape/dtype.",
+      "Run the smallest complete example and compare the actual output with the expected behavior.",
+      "Change one variable at a time; if the result differs, inspect shape, dtype, finite values, and version-specific behavior before changing the algorithm."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-048-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Reshaping to an impossible shape",
+        "why": "The total number of elements must match unless dimensions are inferred consistently.",
+        "fix": "Check `array.size` before reshaping."
+      },
+      {
+        "problem": "Mixing stack and concatenate",
+        "why": "Stack adds an axis; concatenate joins along an existing axis.",
+        "fix": "Compare the desired output shape before choosing the function."
+      }
+    ],
+    "summary": [
+      "Topic 48 covers transposing arrays and the subtopics listed in the curriculum.",
+      "Check the element count and resulting shape after array manipulation.",
+      "Examples and assessments are draft and require subject-matter review before publication."
+    ],
+    "references": [
+      {
+        "title": "NumPy fundamentals",
+        "url": "https://numpy.org/doc/stable/user/basics.html",
+        "publisher": "NumPy project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "Transposing Arrays",
+          "The .T  attribute",
+          "np.transpose()"
+        ]
+      },
+      {
+        "title": "Array creation",
+        "url": "https://numpy.org/doc/stable/user/basics.creation.html",
+        "publisher": "NumPy project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "Transposing Arrays",
+          "The .T  attribute",
+          "np.transpose()"
+        ]
+      }
+    ],
+    "accessibility_notes": "Every visual has descriptive SVG title/description and adjacent text explaining the concept. The diagram does not rely on color alone; text labels state each stage.",
+    "version_notes": "Written against the NumPy 2.5 stable documentation checked 2026-10-13. Example outputs that were executed were observed in an available NumPy 2.3.5 environment; release-specific formatting or pseudorandom streams may vary."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "NumPy fundamentals",
+      "url": "https://numpy.org/doc/stable/user/basics.html",
+      "publisher": "NumPy project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Transposing Arrays",
+        "The .T  attribute",
+        "np.transpose()"
+      ]
+    },
+    {
+      "title": "Array creation",
+      "url": "https://numpy.org/doc/stable/user/basics.creation.html",
+      "publisher": "NumPy project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Transposing Arrays",
+        "The .T  attribute",
+        "np.transpose()"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the supplied syllabus with original explanations and examples. Subject-matter review, learner testing, and publication approval are still required."
+}

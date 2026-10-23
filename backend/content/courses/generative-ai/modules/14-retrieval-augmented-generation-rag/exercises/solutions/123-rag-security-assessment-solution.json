@@ -1,0 +1,47 @@
+{
+  "id": "genai-exercise-solution-123",
+  "exercise_id": "genai-exercise-123",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": {
+    "objective": "RAG security assessment",
+    "implementation_plan": [
+      "Create separate synthetic tenants and documents; document the expected access policy before testing.",
+      "Add a retrieved passage that contains instruction-like text attempting to override system/application policy; treat it strictly as untrusted data.",
+      "Test incorrect, missing, forged, and cross-tenant citations in the final answer.",
+      "Verify access filters run inside the retrieval/data-access layer before context is assembled.",
+      "Capture every failure with a safe trace; never use real private records or authorize destructive actions during tests."
+    ],
+    "reference_test_cases": [
+      {
+        "case": "Cross-tenant request",
+        "input": "User A asks a question whose best matching record belongs to User B",
+        "expected": "User B record is never returned to the caller."
+      },
+      {
+        "case": "Malicious document",
+        "input": "Retrieved content requests secret export or policy override",
+        "expected": "No tool executes based only on retrieved instructions."
+      },
+      {
+        "case": "Forged citation",
+        "input": "Generated answer cites a nonexistent source ID",
+        "expected": "Citation validator rejects or flags the answer."
+      }
+    ],
+    "recommended_metrics": [
+      "Cross-tenant leakage count (target zero)",
+      "Unauthorized tool action count (target zero)",
+      "Citation validity rate",
+      "Prompt-injection regression outcomes"
+    ],
+    "expected_artifacts": [
+      "Threat model",
+      "Synthetic adversarial fixture set",
+      "Mitigation and regression report"
+    ],
+    "review_gate": "Do not publish until a reviewer inspects the actual submitted implementation/results and confirms the acceptance criteria; outline completion alone is not completion."
+  },
+  "explanation": "Reference solution outline for RAG security assessment. It specifies a defensible implementation path, representative tests, and evaluation evidence. It is not a universally executable implementation: provider APIs, deployment environments, permissions, and available hardware vary. Use synthetic/test data, mock external services first, and keep credentials server-side. The exercise's current contains_all grader only checks required keywords and is a preliminary scaffold check, not a correctness/security evaluator; human review is required.",
+  "solution_quality_note": "Design outline only; no solution implementation was run in this build."
+}

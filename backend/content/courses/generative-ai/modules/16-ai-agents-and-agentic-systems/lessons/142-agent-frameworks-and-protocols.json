@@ -1,0 +1,175 @@
+{
+  "id": "genai-lesson-142",
+  "slug": "agent-frameworks-and-protocols",
+  "title": "Agent Frameworks and Protocols",
+  "sequence": 142,
+  "module_id": "genai-module-16",
+  "module_slug": "ai-agents-and-agentic-systems",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced-specialization",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "genai-lesson-134"
+  ],
+  "previous_lesson_id": "genai-lesson-141",
+  "next_lesson_id": "genai-lesson-143",
+  "keywords": [
+    "Agent Frameworks and Protocols",
+    "Framework-independent agent design",
+    "Agent development frameworks",
+    "Workflow and graph orchestration",
+    "Tool interoperability",
+    "Model Context Protocol concepts",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 142,
+  "subtopics": [
+    "Framework-independent agent design",
+    "Agent development frameworks",
+    "Workflow and graph orchestration",
+    "Tool interoperability",
+    "Model Context Protocol concepts",
+    "Protocol permissions and compatibility"
+  ],
+  "learning_outcomes": [
+    "Explain framework-independent agent design and how it connects to agent frameworks and protocols.",
+    "Apply agent development frameworks in the example and predict the output before running it.",
+    "Test one realistic edge case for agent frameworks and protocols and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers agent frameworks and protocols through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Treat agentic systems as bounded loops over plans, state, tools, observations, and stopping conditions. Prefer deterministic workflows when they meet the need more reliably.",
+    "why_it_matters": "Framework-independent agent design describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Agent Frameworks and Protocols: concept map",
+        "asset_path": "diagrams/lessons/lesson-142-agent-frameworks-and-protocols.svg",
+        "alt_text": "Diagram for Agent Frameworks and Protocols: understand Framework-independent agent design, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Framework-independent agent design, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Framework-independent agent design describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Framework-independent agent design",
+            "text": "Framework-independent agent design describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+          },
+          {
+            "title": "Agent development frameworks",
+            "text": "Agent development frameworks describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+          },
+          {
+            "title": "Workflow and graph orchestration",
+            "text": "Workflow and graph orchestration describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+          },
+          {
+            "title": "Tool interoperability",
+            "text": "Tool interoperability describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+          },
+          {
+            "title": "Model Context Protocol concepts",
+            "text": "Treat model context protocol concepts as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs."
+          },
+          {
+            "title": "Protocol permissions and compatibility",
+            "text": "Protocol permissions and compatibility is a control problem as much as a model-behavior problem. Establish explicit boundaries in trusted application code, minimize data exposure, test realistic misuse and failure cases, and record who is responsible for reviewing residual risk. A prompt alone is not a security boundary."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Agent Frameworks and Protocols\ncanonical_tool = {\"name\": \"search_docs\", \"arguments\": {\"query\": \"reset policy\"}}\nadapters = [\"framework adapter\", \"provider adapter\", \"protocol adapter\"]\nprint({\"tool_contract\": canonical_tool[\"name\"], \"adapter_layers\": len(adapters)})",
+        "expected_output": "{'tool_contract': 'search_docs', 'adapter_layers': 3}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice framework-independent agent design within agent frameworks and protocols: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'tool_contract': 'search_docs', 'adapter_layers': 3}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-142-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Agent Frameworks and Protocols is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://huggingface.co/learn/agents-course/en/unit0/introduction",
+      "https://developers.openai.com/api/docs/guides/function-calling",
+      "https://modelcontextprotocol.io/specification/2026-07-28"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Hugging Face AI Agents Course",
+      "url": "https://huggingface.co/learn/agents-course/en/unit0/introduction",
+      "publisher": "Hugging Face",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "agent fundamentals"
+      ]
+    },
+    {
+      "title": "Function calling",
+      "url": "https://developers.openai.com/api/docs/guides/function-calling",
+      "publisher": "OpenAI API documentation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tool calling"
+      ]
+    },
+    {
+      "title": "Model Context Protocol specification",
+      "url": "https://modelcontextprotocol.io/specification/2026-07-28",
+      "publisher": "Model Context Protocol",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "external tools and resources"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

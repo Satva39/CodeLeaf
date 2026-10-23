@@ -1,0 +1,189 @@
+{
+  "id": "web-application-security-lesson-044",
+  "slug": "cookies-and-browser-state-security",
+  "title": "Cookies and Browser State Security",
+  "sequence": 44,
+  "module_id": "web-application-security-module-06",
+  "module_slug": "http-browser-boundaries-and-transport-security",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core-foundations",
+  "curriculum_tier": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "web-application-security-lesson-043"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-043",
+  "next_lesson_id": "web-application-security-lesson-045",
+  "keywords": [
+    "cookies",
+    "and",
+    "browser",
+    "state",
+    "security",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 44,
+  "source_syllabus_title": "Cookies and Browser State Security",
+  "source_subtopics": [
+    {
+      "number": "44.1",
+      "title": "Cookie scope and lifetime"
+    },
+    {
+      "number": "44.2",
+      "title": "Secure, HttpOnly, and SameSite attributes"
+    },
+    {
+      "number": "44.3",
+      "title": "Host-bound cookie prefixes"
+    },
+    {
+      "number": "44.4",
+      "title": "Cookie domain and path considerations"
+    },
+    {
+      "number": "44.5",
+      "title": "Browser storage versus server-managed state"
+    }
+  ],
+  "subtopics": [
+    "Cookie scope and lifetime",
+    "Secure, HttpOnly, and SameSite attributes",
+    "Host-bound cookie prefixes",
+    "Cookie domain and path considerations",
+    "Browser storage versus server-managed state"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in Cookies and Browser State Security.",
+    "Choose an appropriate defensive control for Cookies and Browser State Security and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for Cookies and Browser State Security, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 6: HTTP, Browser Boundaries, and Transport Security. It builds practical understanding of Cookies and Browser State Security with the syllabus subtopics retained below.",
+    "why_it_matters": "Cookies and Browser State Security helps you observe a real boundary instead of assuming that browser, proxy, transport, and server behavior are interchangeable. Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Cookies and Browser State Security",
+        "asset_path": "diagrams/lesson-044-cookies-and-browser-state-security.svg",
+        "alt_text": "Four-stage visual model for Cookies and Browser State Security: Establish identity; Protect credential; Manage token/session; Test expiry + recovery.",
+        "caption": "Concept map for Cookies and Browser State Security. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Cookies and Browser State Security can be understood through this sequence: Establish identity → Protect credential → Manage token/session → Test expiry + recovery. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 44.1 Cookie scope and lifetime; 44.2 Secure, HttpOnly, and SameSite attributes; 44.3 Host-bound cookie prefixes; 44.4 Cookie domain and path considerations; 44.5 Browser storage versus server-managed state. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "execution_mode": "static-validation",
+        "title": "Safe reference example: Cookies and Browser State Security",
+        "code": "response.set_cookie(\n    key=\"session\",\n    value=cryptographically_random_session_id,\n    httponly=True,\n    secure=True,\n    samesite=\"lax\",\n    max_age=1800,\n)",
+        "expected_output": "Sets an HttpOnly, Secure, SameSite=Lax cookie with a 30-minute maximum age. Use HTTPS and server-side expiration/revocation as well.",
+        "run_instructions": "FastAPI/Starlette response example; `cryptographically_random_session_id` is a placeholder for a generated opaque session ID, not a literal secret.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “Cookies and Browser State Security”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for Cookies and Browser State Security in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-044-questions.json",
+    "recap": [
+      "Cookies and Browser State Security is a security boundary/control topic, not a standalone checklist item.",
+      "Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [
+    "../exercises/003-inspect-session-cookies.json"
+  ],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "MDN Web Security",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "same-origin policy",
+        "browser security boundaries",
+        "web security features"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

@@ -1,0 +1,190 @@
+{
+  "id": "json-yaml-lesson-102",
+  "slug": "yaml-formatting-and-canonical-conventions",
+  "title": "YAML Formatting and Canonical Conventions",
+  "sequence": 102,
+  "module_id": "json-yaml-module-10",
+  "module_slug": "advanced-yaml-structures",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "json-yaml-lesson-101"
+  ],
+  "previous_lesson_id": "json-yaml-lesson-101",
+  "next_lesson_id": "json-yaml-lesson-103",
+  "keywords": [
+    "yaml-formatting-and-canonical-conventions",
+    "indentation-conventions-quote-conventions-key-ordering-conventions-line-length-blank-lines-consistent-scalar-styles",
+    "formatting-tools-and-repository-standards"
+  ],
+  "source_syllabus_number": 102,
+  "subtopics": [
+    "Indentation conventions. Quote conventions. Key ordering conventions. Line length. Blank lines. Consistent scalar styles.",
+    "Formatting tools and repository standards."
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of yaml formatting and canonical conventions and identify at least one related syllabus concept.",
+    "Interpret the example for yaml formatting and canonical conventions and describe its expected result.",
+    "Choose a relevant syntax, type, compatibility, security, or troubleshooting check for the example."
+  ],
+  "content": {
+    "intro": "This lesson focuses on yaml formatting and canonical conventions and connects the PDF syllabus topics to a small, inspectable example. Work from the intended data model, write down the expected result, then verify syntax and semantics with the target tool.",
+    "why_it_matters": "YAML Formatting and Canonical Conventions matters because structured-data files sit between people, tools, services, and deployment systems. A clear contract and repeatable checks make the result easier to maintain and safer to consume.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "YAML Formatting and Canonical Conventions: visual explanation",
+        "asset_path": "diagrams/lessons/lesson-102-yaml-formatting-and-canonical-conventions.svg",
+        "alt_text": "YAML Formatting and Canonical Conventions: Indentation conventions. Quote conventions. Key ordering conventions. Line length. Blank lines. Consistent scalar styles. leads to Resolve YAML structure, then Constructed values.",
+        "caption": "Use this concept flow to predict the result for YAML Formatting and Canonical Conventions before you test the snippet."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Advanced YAML features include nested collections, anchors, aliases, tagged values, and multi-document streams. Simpler structures are usually more portable; merge-key conventions and tag constructors may be implementation-specific."
+      },
+      {
+        "type": "paragraph",
+        "title": "What you will cover",
+        "text": "This lesson explicitly addresses: Indentation conventions. Quote conventions. Key ordering conventions. Line length. Blank lines. Consistent scalar styles.; Formatting tools and repository standards.. Treat each as part of a workflow: define what the data should mean, represent it consistently, and test how the chosen implementation interprets it."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: YAML Formatting and Canonical Conventions",
+        "language": "yaml",
+        "code": "app:\n  enabled: true\n  name: Field Notes\nfeatures:\n  - search\n  - export",
+        "expected_output": "Consistent indentation, key ordering, quoting, and line endings improve diffs even when YAML representation semantics are unchanged.",
+        "run_instructions": "Save as example.yaml and validate it with the exact parser/linter used by the target application. For Python experiments, use an isolated environment and safe loading for untrusted content. Do not assume every parser resolves ambiguous scalars identically.",
+        "reset_steps": "Restore the starting fixture before each test. Change one field, indentation level, parser option, or schema constraint at a time, then compare the result with the prediction.",
+        "execution_mode": "static-validation",
+        "limitations": "This snippet is a reference/example, not evidence that the CodeLeaf browser executes JSON/YAML parsing, shell commands, or Python. Validate locally with a named parser or tool before relying on it."
+      },
+      {
+        "type": "list",
+        "title": "A reliable working sequence",
+        "items": [
+          {
+            "title": "1. State the contract",
+            "text": "Write down the expected root type, required fields, scalar types, and any compatibility assumptions."
+          },
+          {
+            "title": "2. Validate before use",
+            "text": "Parse the document and run the applicable schema or policy checks; syntax success alone is not full correctness."
+          },
+          {
+            "title": "3. Test a boundary",
+            "text": "Include at least one missing, malformed, ambiguous, or unexpected input and record the desired behavior."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety checkpoint",
+        "text": "Indentation and scalar interpretation are part of the data model. Quote ambiguous strings, use consistent spaces, and test with the parser/schema that the target application actually uses. Confirm implementation-specific behavior against the target parser, tool version, and standards documentation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second synthetic fixture for “Indentation conventions. Quote conventions. Key ordering conventions. Line length. Blank lines. Consistent scalar styles.”. Predict the parsed types/result, change one relevant detail, and record whether the target tool behaved as expected. Include one invalid or boundary case."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-102-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating readable text as proof of correctness.",
+        "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+        "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+      },
+      {
+        "problem": "Assuming every parser interprets the feature identically.",
+        "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+        "fix": "Record the exact parser/version and test the target environment."
+      },
+      {
+        "problem": "Testing only a happy path.",
+        "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+        "fix": "Keep valid, invalid, and boundary fixtures in version control."
+      }
+    ],
+    "task": "Prepare a brief, reviewable demonstration of YAML Formatting and Canonical Conventions. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+    "task_acceptance_criteria": [
+      "The artifact clearly demonstrates Indentation conventions. Quote conventions. Key ordering conventions. Line length. Blank lines. Consistent scalar styles..",
+      "Expected behavior is written before verification.",
+      "One invalid or boundary case is documented.",
+      "The relevant format, parser/version, and any security or interoperability limits are recorded."
+    ],
+    "hints": [
+      "Start with the smallest valid example that demonstrates Indentation conventions. Quote conventions. Key ordering conventions. Line length. Blank lines. Consistent scalar styles..",
+      "Change one thing at a time and compare parsed values, not only visual formatting.",
+      "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+    ],
+    "summary": [
+      "YAML Formatting and Canonical Conventions fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+      "Topics retained from the source PDF include Indentation conventions. Quote conventions. Key ordering conventions. Line length. Blank lines. Consistent scalar styles.; Formatting tools and repository standards..",
+      "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "Consistent indentation, key ordering, quoting, and line endings improve diffs even when YAML representation semantics are unchanged."
+  },
+  "task": "Prepare a brief, reviewable demonstration of YAML Formatting and Canonical Conventions. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+  "task_acceptance_criteria": [
+    "The artifact clearly demonstrates Indentation conventions. Quote conventions. Key ordering conventions. Line length. Blank lines. Consistent scalar styles..",
+    "Expected behavior is written before verification.",
+    "One invalid or boundary case is documented.",
+    "The relevant format, parser/version, and any security or interoperability limits are recorded."
+  ],
+  "hints": [
+    "Start with the smallest valid example that demonstrates Indentation conventions. Quote conventions. Key ordering conventions. Line length. Blank lines. Consistent scalar styles..",
+    "Change one thing at a time and compare parsed values, not only visual formatting.",
+    "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+  ],
+  "summary": [
+    "YAML Formatting and Canonical Conventions fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+    "Topics retained from the source PDF include Indentation conventions. Quote conventions. Key ordering conventions. Line length. Blank lines. Consistent scalar styles.; Formatting tools and repository standards..",
+    "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+  ],
+  "run_mode": "static-validation",
+  "expected_output": "Consistent indentation, key ordering, quoting, and line endings improve diffs even when YAML representation semantics are unchanged.",
+  "common_mistakes": [
+    {
+      "problem": "Treating readable text as proof of correctness.",
+      "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+      "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+    },
+    {
+      "problem": "Assuming every parser interprets the feature identically.",
+      "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+      "fix": "Record the exact parser/version and test the target environment."
+    },
+    {
+      "problem": "Testing only a happy path.",
+      "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+      "fix": "Keep valid, invalid, and boundary fixtures in version control."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "id": "json-yaml-ref-yaml122",
+      "title": "YAML Ain’t Markup Language (YAML) Version 1.2.2 Specification",
+      "url": "https://yaml.org/spec/1.2.2/",
+      "publisher": "YAML Language Development Team",
+      "checked_on": "2026-10-20"
+    },
+    {
+      "id": "json-yaml-ref-pyyaml",
+      "title": "PyYAML Documentation",
+      "url": "https://pyyaml.org/wiki/PyYAMLDocumentation",
+      "publisher": "PyYAML project",
+      "checked_on": "2026-10-20"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Generated from the attached JSON and YAML syllabus; requires technical review and target-tool validation before publication.",
+  "exercise_files": []
+}

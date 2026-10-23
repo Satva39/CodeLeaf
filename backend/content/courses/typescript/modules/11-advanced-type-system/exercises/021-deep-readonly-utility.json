@@ -1,0 +1,58 @@
+{
+  "id": "typescript-exercise-021",
+  "slug": "deep-readonly-utility",
+  "title": "Deep Readonly Utility",
+  "sequence": 21,
+  "lesson_id": "typescript-lesson-105",
+  "lesson_slug": "105-recursive-conditional-and-mapped-types",
+  "module_id": "typescript-module-11",
+  "type": "coding",
+  "difficulty": "advanced",
+  "status": "draft",
+  "prompt": "Design a recursive readonly type and reason about nested arrays and objects.",
+  "starter": {
+    "code": "// TODO: define DeepReadonly<T> recursively\n// TODO: handle arrays/tuples and nested objects\n",
+    "language": "typescript",
+    "file_name": "deep-readonly-utility.ts",
+    "execution_mode": "static-validation"
+  },
+  "public_tests": [
+    {
+      "name": "Required type contract",
+      "description": "Review that the submission contains the required declarations and preserves the stated input/output relationship.",
+      "mode": "static-token-check",
+      "required_strings": [
+        "type DeepReadonly<T>",
+        "readonly [K in keyof T]",
+        "readonly unknown[]"
+      ]
+    },
+    {
+      "name": "Runtime and boundary review",
+      "description": "Explain one failure case and add a real runtime check when data crosses an external trust boundary.",
+      "mode": "human-review"
+    }
+  ],
+  "acceptance_criteria": [
+    "Nested properties are marked readonly at compile time; this does not deeply freeze runtime objects.",
+    "Submit code with the required type declarations and add an explanation or test for one meaningful boundary/failure case.",
+    "Do not claim that the code has been executed by the CodeLeaf browser playground."
+  ],
+  "hints": [
+    "Define how function types, maps/sets, tuples, and recursion depth should behave before generalizing.",
+    "TypeScript checks assignability but does not validate external data at runtime.",
+    "Use the local TypeScript compiler and an appropriate test runner to verify behavior; the course grader checks only the documented text markers."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "type DeepReadonly<T>",
+      "readonly [K in keyof T]",
+      "readonly unknown[]"
+    ]
+  },
+  "grading_method": "Server-side static token check for the required declarations plus human review of runtime tests. This is not a TypeScript compiler or arbitrary-code runner.",
+  "retry_policy": "Unlimited practice retries; platform XP is awarded once only after a correct server-side grade.",
+  "solution_file": "solutions/021-deep-readonly-utility-solution.json",
+  "status_note": "Draft until exercise instructions, starter, and static grader are reviewed. No course-authored XP override is used."
+}

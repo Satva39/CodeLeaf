@@ -1,0 +1,198 @@
+{
+  "id": "mysql-lesson-088",
+  "slug": "join-conditions-and-duplicate-rows",
+  "title": "Join Conditions and Duplicate Rows",
+  "sequence": 88,
+  "module_id": "mysql-module-10",
+  "module_slug": "working-with-table-relationships-and-joins",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "mysql-lesson-087"
+  ],
+  "previous_lesson_id": "mysql-lesson-087",
+  "next_lesson_id": "mysql-lesson-089",
+  "keywords": [
+    "join-conditions-and-duplicate-rows",
+    "working-with-table-relationships-and-joins",
+    "mysql",
+    "database",
+    "on-versus-using",
+    "join-filtering",
+    "nulls-in-outer-joins",
+    "understanding-join-cardinality"
+  ],
+  "source_syllabus_number": 88,
+  "source_module_number": 10,
+  "subtopics": [
+    "ON versus USING",
+    "Join filtering",
+    "NULLs in outer joins",
+    "Understanding join cardinality"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of join conditions and duplicate rows in MySQL and when it is useful.",
+    "Interpret or adapt the supplied sql example and predict its expected behavior.",
+    "Verify one relevant boundary, safety requirement, or version-specific assumption."
+  ],
+  "content": {
+    "intro": "Learn join conditions and duplicate rows in the context of working with table relationships and joins. This lesson covers the supplied syllabus topic, demonstrates a representative MySQL example, and finishes with a verification task.",
+    "why_it_matters": "Data-changing statements should target the intended rows and preserve integrity. Use an explicit column list, a narrowly tested predicate, transactions where applicable, and a SELECT preview before destructive changes.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Join Conditions and Duplicate Rows",
+        "asset_path": "diagrams/lesson-088-join-conditions-and-duplicate-rows.svg",
+        "alt_text": "Concept flow for Join Conditions and Duplicate Rows: understand the MySQL concept, inspect the example, verify its behavior, and apply it safely.",
+        "caption": "Join Conditions and Duplicate Rows: connect the concept to a concrete example, verify the result, and apply it in a disposable lab."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Data-changing statements should target the intended rows and preserve integrity. Use an explicit column list, a narrowly tested predicate, transactions where applicable, and a SELECT preview before destructive changes."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics to master",
+        "items": [
+          {
+            "title": "ON versus USING",
+            "text": "Explain the role of ON versus USING, use a small example or inspection step, and record one limitation or boundary condition."
+          },
+          {
+            "title": "Join filtering",
+            "text": "Build a small row set, predict row inclusion/order/cardinality, then test duplicate, NULL, tie, and boundary cases where applicable."
+          },
+          {
+            "title": "NULLs in outer joins",
+            "text": "Build a small row set, predict row inclusion/order/cardinality, then test duplicate, NULL, tie, and boundary cases where applicable."
+          },
+          {
+            "title": "Understanding join cardinality",
+            "text": "Evaluate how this access-path decision changes rows read, ordering, storage and write cost; confirm behavior with EXPLAIN and workload evidence."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Apply the idea",
+        "text": "Join two synthetic related tables, count the result rows, and explain what happens when one side has no match. Write down the expected result before running the snippet. Compare actual output with the reference, then try one normal case and one edge case."
+      },
+      {
+        "type": "code",
+        "language": "sql",
+        "execution_mode": "static-validation",
+        "code": "WITH customers AS (SELECT 1 AS customer_id, 'Ari' AS customer_name UNION ALL SELECT 2, 'Mina'), orders AS (SELECT 101 AS order_id, 1 AS customer_id, 40 AS total_amount UNION ALL SELECT 102, 1, 25) SELECT c.customer_name, o.order_id, o.total_amount FROM customers AS c LEFT JOIN orders AS o ON o.customer_id = c.customer_id ORDER BY c.customer_id, o.order_id;",
+        "expected_output": "Three result rows: Ari has two orders; Mina appears once with NULL order fields because LEFT JOIN preserves her customer row.",
+        "run_instructions": "Run in a dedicated local MySQL lab using the stated MySQL release track. For schema-changing or administrative snippets, inspect every statement and use only a disposable schema; the in-page editor shows reference output and does not execute SQL.",
+        "reset_steps": "Remove only objects created for this lesson from the disposable schema/session, or restore the lab snapshot. Never run reset or destructive commands against production."
+      },
+      {
+        "type": "callout",
+        "title": "Version, security, and safety note",
+        "text": "Use MySQL 9.7 LTS documentation as the default stable-track reference; verify behavior against MySQL 26.7 documentation when relevant and label any MySQL 8.4-specific fact. Examples are static references, not executed by CodeLeaf. Run mutation, privilege, replication, backup, and recovery examples only in an isolated lab."
+      }
+    ],
+    "task": "Try it yourself: Join two synthetic related tables, count the result rows, and explain what happens when one side has no match. Submit the query, result or decision record, plus one edge case and one verification step.",
+    "task_acceptance_criteria": [
+      "Address the core behavior in join conditions and duplicate rows using a MySQL-specific example or a clear operational plan.",
+      "State the expected result and demonstrate how it would be verified in the selected environment.",
+      "Identify one relevant edge case, permissions boundary, operational risk, or version assumption."
+    ],
+    "hints": [
+      "Start by identifying the question that join conditions and duplicate rows needs to answer.",
+      "Reduce the example to the smallest meaningful row set or operational change, then write down the result you expect.",
+      "Check the applicable official manual and version note before treating the reference output as guaranteed."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming that a sample result proves the whole design is correct.",
+        "why": "Edge cases such as NULLs, duplicate matches, concurrency, privileges, or version differences may change behavior.",
+        "fix": "Add a targeted boundary case and record the server version, schema and expected result."
+      },
+      {
+        "problem": "Running a mutating or administrative example in the wrong environment.",
+        "why": "DDL, data changes, access grants, and recovery commands may have persistent impact.",
+        "fix": "Use a disposable lab, preview targets and permissions, and write a reset/recovery plan before executing."
+      }
+    ],
+    "summary": [
+      "Data-changing statements should target the intended rows and preserve integrity. Use an explicit column list, a narrowly tested predicate, transactions where applicable, and a SELECT preview before destructive changes.",
+      "Use the PDF subtopics for join conditions and duplicate rows as a checklist, then validate behavior in the chosen MySQL version.",
+      "Keep the example, assumptions, expected output, and recovery steps together."
+    ],
+    "references": [
+      {
+        "title": "MySQL 9.7 Reference Manual",
+        "url": "https://dev.mysql.com/doc/refman/9.7/en/",
+        "publisher": "Oracle / MySQL",
+        "checked_on": "2026-10-12",
+        "supports": [
+          "core SQL syntax",
+          "data types",
+          "DDL and DML",
+          "query optimization",
+          "security",
+          "administration"
+        ]
+      },
+      {
+        "title": "MySQL SELECT Statement",
+        "url": "https://dev.mysql.com/doc/refman/9.7/en/select.html",
+        "publisher": "Oracle / MySQL",
+        "checked_on": "2026-10-12",
+        "supports": [
+          "SELECT",
+          "joins",
+          "filtering",
+          "sorting",
+          "grouping",
+          "CTEs",
+          "set operations"
+        ]
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-088-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "Draft authored from the supplied MySQL curriculum outline. Code samples require technical review and do not execute in the browser."
+  },
+  "exercise_files": [
+    "../exercises/088-join-conditions-and-duplicate-rows-practice.json"
+  ],
+  "sources": [
+    {
+      "title": "MySQL 9.7 Reference Manual",
+      "url": "https://dev.mysql.com/doc/refman/9.7/en/",
+      "publisher": "Oracle / MySQL",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "core SQL syntax",
+        "data types",
+        "DDL and DML",
+        "query optimization",
+        "security",
+        "administration"
+      ]
+    },
+    {
+      "title": "MySQL SELECT Statement",
+      "url": "https://dev.mysql.com/doc/refman/9.7/en/select.html",
+      "publisher": "Oracle / MySQL",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "SELECT",
+        "joins",
+        "filtering",
+        "sorting",
+        "grouping",
+        "CTEs",
+        "set operations"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft: verify the lesson, example, expected output, references, and version notes before publishing."
+}

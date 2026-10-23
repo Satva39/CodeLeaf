@@ -1,0 +1,203 @@
+{
+  "id": "jquery-lesson-181",
+  "slug": "legacy-utility-apis",
+  "title": "Legacy Utility APIs",
+  "sequence": 181,
+  "module_id": "jquery-module-21",
+  "module_slug": "version-compatibility-and-legacy-migration",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "legacy",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "jquery-lesson-180"
+  ],
+  "previous_lesson_id": "jquery-lesson-180",
+  "next_lesson_id": "jquery-lesson-182",
+  "keywords": [
+    "legacy utility apis",
+    "jquery",
+    "javascript",
+    "version compatibility and legacy migration",
+    "historical .size()",
+    "deprecated type-checking helpers",
+    "deprecated string utilities",
+    "replacing obsolete utilities with native javascript"
+  ],
+  "source_syllabus_number": 181,
+  "subtopics": [
+    "Historical .size()",
+    "Deprecated type-checking helpers",
+    "Deprecated string utilities",
+    "Replacing obsolete utilities with native JavaScript",
+    "Searching for removed method calls"
+  ],
+  "learning_outcomes": [
+    "Explain the role of legacy utility apis in a jQuery application.",
+    "Apply historical .size() in a small example and describe its expected result.",
+    "Verify deprecated type-checking helpers with an explicit test or browser observation."
+  ],
+  "exercise_files": [
+    "../exercises/181-legacy-utility-apis.json"
+  ],
+  "sources": [
+    {
+      "title": "jQuery Core 4.0 Upgrade Guide",
+      "url": "https://jquery.com/upgrade-guide/4.0/",
+      "publisher": "jQuery project",
+      "checked_on": "2026-10-12",
+      "source_type": "official_upgrade_guide",
+      "supports": [
+        "Breaking changes",
+        "Removed APIs",
+        "AJAX security behavior",
+        "Migration decisions"
+      ]
+    },
+    {
+      "title": "jQuery 4.0.0 release notes",
+      "url": "https://blog.jquery.com/2026/01/17/jquery-4-0-0/",
+      "publisher": "Official jQuery Blog",
+      "checked_on": "2026-10-12",
+      "source_type": "official_release_notes",
+      "supports": [
+        "jQuery 4.0.0 release",
+        "Removed APIs",
+        "Browser support",
+        "Slim build scope",
+        "ES module and build notes"
+      ]
+    },
+    {
+      "title": "Download jQuery",
+      "url": "https://jquery.com/download/",
+      "publisher": "jQuery project",
+      "checked_on": "2026-10-12",
+      "source_type": "official_release_page",
+      "supports": [
+        "Current stable version",
+        "Full and slim builds",
+        "Compressed and development builds",
+        "CDN and npm distribution"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the attached syllabus and official references; requires lesson-by-lesson technical review, local execution, accessibility checks, and editorial approval.",
+  "content": {
+    "intro": "This lesson covers legacy utility apis from a maintenance perspective. Examples prioritize current jQuery 4 behavior; older patterns are shown only to recognize and replace them.",
+    "why_it_matters": "This topic is useful because it turns historical .size() into a repeatable implementation choice. Compatibility work begins with the official upgrade guide, a dependency inventory, tests, and a controlled migration plan. Do not teach removed APIs as current jQuery 4 functionality.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 21 overview",
+        "asset_path": "diagrams/module-21-overview.svg",
+        "alt_text": "Overview of Version Compatibility and Legacy Migration, illustrating the sequence from understanding the concept to implementing and checking it.",
+        "caption": "Use this module map to place legacy utility apis within the wider learning path."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Compatibility work begins with the official upgrade guide, a dependency inventory, tests, and a controlled migration plan. Do not teach removed APIs as current jQuery 4 functionality."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the supplied syllabus",
+        "items": [
+          "Historical .size()",
+          "Deprecated type-checking helpers",
+          "Deprecated string utilities",
+          "Replacing obsolete utilities with native JavaScript",
+          "Searching for removed method calls"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "// jQuery 4 replacements for removed utilities:\nconst trimmed = String(value ?? \"\").trim();\nconst isArray = Array.isArray(value);\nconst parsed = JSON.parse(jsonText);",
+        "expected_output": "Uses built-in JavaScript alternatives for helpers removed in jQuery 4. Validate JSON and handle parsing exceptions where necessary.",
+        "run_instructions": "Use a local HTML page with jQuery 4.0.0 loaded before app.js for JavaScript snippets. HTML and package-manager snippets can be checked as configuration examples. Run the interaction in browser DevTools, inspect the DOM/Network panel, and compare actual behavior with the expected result. Do not submit learner code to the production API for arbitrary execution.",
+        "reset_steps": "Restore the original markup and code, clear console/network filters, reload the local page, and repeat the same interaction. For a request example, return the mock endpoint to its original response before retrying."
+      },
+      {
+        "type": "callout",
+        "title": "Guided example",
+        "text": "Start with a known DOM structure, apply the pattern for legacy utility apis, and test one normal case plus one edge case. Keep selectors scoped to the intended component and verify the real browser result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Review a legacy snippet involving legacy utility apis. Compare it with the official jQuery 4 upgrade guide, replace removed/deprecated behavior where required, and run regression tests."
+      }
+    ],
+    "task": "Review a legacy snippet involving legacy utility apis. Compare it with the official jQuery 4 upgrade guide, replace removed/deprecated behavior where required, and run regression tests.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates legacy utility apis using a current, documented approach.",
+      "The learner records the expected and actual behavior and checks at least one edge case.",
+      "The example preserves semantic HTML and does not render untrusted data as HTML.",
+      "The test setup and any runtime limitation are documented honestly."
+    ],
+    "hints": [
+      "First identify which DOM nodes and runtime state are involved in legacy utility apis.",
+      "Make one small change, inspect the resulting element or request, and compare it with the expected result.",
+      "If the result differs, check the selector, script order, browser console, event target, and relevant API documentation before adding more code."
+    ],
+    "expected_output": "Uses built-in JavaScript alternatives for helpers removed in jQuery 4. Validate JSON and handle parsing exceptions where necessary.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-181-questions.json",
+    "common_mistakes": [
+      "Assuming a selector matched an element without checking the collection length.",
+      "Confusing jQuery collections with native DOM elements or live properties with markup attributes.",
+      "Using .html() with untrusted data or assuming client-side validation enforces server rules.",
+      "Treating a demo snippet as production-ready without testing failure and accessibility states."
+    ],
+    "summary": [
+      "Legacy Utility APIs is one part of the version compatibility and legacy migration workflow.",
+      "Compatibility work begins with the official upgrade guide, a dependency inventory, tests, and a controlled migration plan. Do not teach removed APIs as current jQuery 4 functionality.",
+      "Use the official API or upgrade guide for version-specific behavior and verify an example locally before relying on it."
+    ],
+    "references": [
+      {
+        "title": "jQuery Core 4.0 Upgrade Guide",
+        "url": "https://jquery.com/upgrade-guide/4.0/",
+        "publisher": "jQuery project",
+        "checked_on": "2026-10-12",
+        "source_type": "official_upgrade_guide",
+        "supports": [
+          "Breaking changes",
+          "Removed APIs",
+          "AJAX security behavior",
+          "Migration decisions"
+        ]
+      },
+      {
+        "title": "jQuery 4.0.0 release notes",
+        "url": "https://blog.jquery.com/2026/01/17/jquery-4-0-0/",
+        "publisher": "Official jQuery Blog",
+        "checked_on": "2026-10-12",
+        "source_type": "official_release_notes",
+        "supports": [
+          "jQuery 4.0.0 release",
+          "Removed APIs",
+          "Browser support",
+          "Slim build scope",
+          "ES module and build notes"
+        ]
+      },
+      {
+        "title": "Download jQuery",
+        "url": "https://jquery.com/download/",
+        "publisher": "jQuery project",
+        "checked_on": "2026-10-12",
+        "source_type": "official_release_page",
+        "supports": [
+          "Current stable version",
+          "Full and slim builds",
+          "Compressed and development builds",
+          "CDN and npm distribution"
+        ]
+      }
+    ]
+  }
+}

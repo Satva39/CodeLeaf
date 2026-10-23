@@ -1,0 +1,56 @@
+{
+  "id": "r-exercise-018",
+  "slug": "analyze-sales-by-product-and-region",
+  "title": "Analyze sales by product and region",
+  "type": "short_answer",
+  "lesson_id": "r-lesson-109",
+  "module_id": "r-module-11",
+  "sequence": 18,
+  "difficulty": "intermediate",
+  "prompt": "Aggregate synthetic sales by product and region and compare totals with the source rows.",
+  "objective": "Practice grouping, aggregation, joins with explicit acceptance criteria and a reproducible result.",
+  "target_skills": [
+    "Grouping",
+    "aggregation",
+    "joins"
+  ],
+  "starter": {
+    "language": "r",
+    "source_code": "sales <- data.frame(product = c(\"pen\", \"book\", \"pen\"), region = c(\"E\", \"E\", \"W\"), amount = c(3, 8, 4))\naggregate(amount ~ product + region, sales, sum)",
+    "mode": "static-validation"
+  },
+  "expected_output": "Reconcile grouped totals to the input and inspect missing grouping keys.",
+  "public_tests": [
+    {
+      "name": "Includes core concept",
+      "description": "The submission demonstrates aggregate(."
+    },
+    {
+      "name": "Includes validation or outcome",
+      "description": "The submission also demonstrates product + region."
+    }
+  ],
+  "acceptance_criteria": [
+    "The submission addresses the task and all required core concepts.",
+    "Expected behavior and an edge case are described and checked.",
+    "Input assumptions, missing-value handling and output shape are documented where relevant.",
+    "Code is readable, uses appropriate R constructs and avoids destructive/external side effects.",
+    "Any result derived from statistics includes assumptions and relevant limitations."
+  ],
+  "hints": [
+    "Identify the input, output and key R concept: Grouping, aggregation, joins.",
+    "Reconcile grouped totals to the input and inspect missing grouping keys.",
+    "Test a normal case, a boundary/failure case, and verify the output independently."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "aggregate(",
+      "product + region"
+    ]
+  },
+  "grading_method": "Draft/static token check only. The current platform grader can check whether the submitted text contains these strings, but it cannot execute R or prove program correctness. Keep unpublished and use human review or a separately isolated R runner before enabling XP-bearing completion.",
+  "retry_policy": "Allow learner retries in a reviewed course policy; this content file does not override platform retry or XP policy.",
+  "solution_file": "../solutions/018-analyze-sales-by-product-and-region-solution.json",
+  "status": "draft"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "expressjs-exercise-solution-015",
+  "exercise_id": "expressjs-exercise-015",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference approach for Authentication System:\n\nimport bcrypt from 'bcrypt';\n\n// Registration: store the hash, never the password.\nconst passwordHash = await bcrypt.hash(password, 12);\n\n// Login: verify the submitted password against the stored hash.\nconst valid = await bcrypt.compare(submittedPassword, passwordHash);\nif (!valid) {\n  // Return a generic invalid-credentials response.\n}\n\nReview the prompt's acceptance criteria. This is a teaching fragment; integrate it into a complete app, install listed external packages, and run it locally with a supported Node.js LTS release.\n\nRequired markers checked by the current CodeLeaf static grader: bcrypt.hash, bcrypt.compare.",
+  "explanation": "The grader for Authentication System checks required strings only. It does not execute arbitrary JavaScript, validate runtime semantics, or prove security. A reviewer should test normal input, invalid input, route order, error propagation, and cleanup where relevant."
+}

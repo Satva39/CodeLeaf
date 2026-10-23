@@ -1,0 +1,154 @@
+{
+  "id": "rust-lesson-085",
+  "slug": "iterating-over-arrays-slices-and-vectors",
+  "title": "Iterating Over Arrays, Slices, and Vectors",
+  "sequence": 85,
+  "module_id": "rust-module-08",
+  "module_slug": "collections-strings-and-data-handling",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-foundations",
+  "estimated_minutes": 11,
+  "prerequisites": [
+    "rust-lesson-084"
+  ],
+  "previous_lesson_id": "rust-lesson-084",
+  "next_lesson_id": "rust-lesson-086",
+  "keywords": [
+    "and",
+    "arrays",
+    "iterating",
+    "over",
+    "rust",
+    "slices",
+    "value-ownership-and-reference-validity",
+    "vectors"
+  ],
+  "source_syllabus_number": 85,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the main purpose of Iterating Over Arrays, Slices, and Vectors and distinguish it from a closely related Rust concept.",
+    "Apply or trace Iterating Over Arrays, Slices, and Vectors in a small Rust example, using the module guidance and stated toolchain assumptions.",
+    "Identify one relevant edge case or failure mode for Iterating Over Arrays, Slices, and Vectors and select a suitable verification step."
+  ],
+  "content": {
+    "intro": "This lesson covers Iterating Over Arrays, Slices, and Vectors. It sits in Module 8, Collections, Strings, and Data Handling, and builds toward a practical Rust mental model rather than memorizing a term in isolation.",
+    "why_it_matters": "Iterating Over Arrays, Slices, and Vectors matters when you work with value ownership and reference validity. Understanding the rule helps you predict compiler or runtime behavior, document assumptions, and choose a safer implementation when inputs or system conditions change.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Iterating Over Arrays, Slices, and Vectors",
+        "asset_path": "diagrams/lesson-085-iterating-over-arrays-slices-and-vectors.svg",
+        "alt_text": "Concept diagram for Iterating Over Arrays, Slices, and Vectors: value ownership and reference validity; inputs flow through a rule to an outcome, followed by a verification step.",
+        "caption": "Visual model for Iterating Over Arrays, Slices, and Vectors. The diagram is a learning aid; use the prose and examples for exact conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Choose a collection based on the shape of the data and the operations needed. Arrays have a fixed length, Vec grows as needed, slices borrow a view, and maps associate keys with values."
+      },
+      {
+        "type": "paragraph",
+        "title": "A reliable way to reason about it",
+        "text": "For Iterating Over Arrays, Slices, and Vectors, write down the inputs, the guarantee you expect, and the boundary where that guarantee stops. Work through a minimal example first; then deliberately test one edge case. A string is UTF-8 text; do not treat its byte indices as arbitrary character positions. Choose collection types by access patterns and ownership needs."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Iterating Over Arrays, Slices, and Vectors",
+            "text": "Choose a collection based on the shape of the data and the operations needed. Arrays have a fixed length, Vec grows as needed, slices borrow a view, and maps associate keys with values."
+          },
+          {
+            "title": "Inputs and guarantees",
+            "text": "Identify the value, type, state, tool, or external system involved in Iterating Over Arrays, Slices, and Vectors. Separate what Rust checks at compile time from what still needs validation or a test."
+          },
+          {
+            "title": "Boundary case",
+            "text": "Try an empty, missing, invalid, unusually large, or concurrently accessed input when that boundary applies to Iterating Over Arrays, Slices, and Vectors. Record what should happen and how you can verify it."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "rust",
+        "execution_mode": "static-validation",
+        "code": "fn main() {\n    let text = String::from(\"rust-language\");\n    let prefix = &text[..4];\n    println!(\"{prefix}\");\n}",
+        "expected_output": "rust",
+        "run_instructions": "This slice is safe because the shown prefix is ASCII. For arbitrary UTF-8 text, avoid indexing at an unverified byte offset; use char iteration or checked boundaries.",
+        "reset_steps": "Return the sample to its original form, run the documented command again, and compare the result. If a dependency, target, runtime, database, or hardware device is required, configure that separately before treating the result as verified."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not assume Iterating Over Arrays, Slices, and Vectors guarantees more than it actually does. Reduce a failure to a small reproducer, read the full compiler diagnostic or error value, consult the matching official reference, and change one assumption at a time."
+      },
+      {
+        "type": "callout",
+        "title": "Toolchain and execution boundary",
+        "text": "Course examples are static reference snippets, not executed inside CodeLeaf. Most standard-library examples can be tried in a Rust 2024 Cargo project; specialized networking, database, async, procedural-macro, embedded, and WebAssembly scenarios require the toolchain and dependencies described in their lessons."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate Iterating Over Arrays, Slices, and Vectors. Predict the result before you run it, then explain one normal case and one relevant boundary case in your own words.",
+    "task_acceptance_criteria": [
+      "Explain the purpose of Iterating Over Arrays, Slices, and Vectors using a concrete example.",
+      "Verify the example using an appropriate local command, targeted test, or documented manual check.",
+      "Describe one edge case, failure mode, version assumption, or limitation that matters for this topic."
+    ],
+    "hints": [
+      "Start by identifying the inputs and guarantee involved in Iterating Over Arrays, Slices, and Vectors.",
+      "Use the smallest example that isolates one rule; avoid changing multiple variables at once.",
+      "Check the matching official reference if compiler behavior, a library API, or toolchain support differs from your expectation."
+    ],
+    "expected_output": "rust",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-085-questions.json",
+    "recap": [
+      "Iterating Over Arrays, Slices, and Vectors supports value ownership and reference validity.",
+      "Predict and verify behavior with small examples.",
+      "Keep library and target-specific assumptions explicit."
+    ]
+  },
+  "exercise_files": [
+    "../exercises/005-find-minimum-maximum-and-average-in-a-list.json"
+  ],
+  "sources": [
+    {
+      "title": "The Rust Programming Language (The Rust Book)",
+      "url": "https://doc.rust-lang.org/stable/book/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "learning sequence",
+        "syntax",
+        "ownership",
+        "structs and enums",
+        "collections",
+        "generics",
+        "error handling",
+        "modules",
+        "lifetimes",
+        "threads",
+        "testing"
+      ]
+    },
+    {
+      "title": "Rust Standard Library Documentation",
+      "url": "https://doc.rust-lang.org/std/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "standard library APIs",
+        "collections",
+        "I/O",
+        "threads",
+        "smart pointers",
+        "filesystem"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Rust.pdf; review explanation, code behavior, version notes, and assessment quality before publication."
+}

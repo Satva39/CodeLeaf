@@ -1,0 +1,190 @@
+{
+  "id": "json-yaml-lesson-118",
+  "slug": "round-trip-conversion",
+  "title": "Round-Trip Conversion",
+  "sequence": 118,
+  "module_id": "json-yaml-module-12",
+  "module_slug": "json-and-yaml-comparison-and-interoperability",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "json-yaml-lesson-117"
+  ],
+  "previous_lesson_id": "json-yaml-lesson-117",
+  "next_lesson_id": "json-yaml-lesson-119",
+  "keywords": [
+    "round-trip-conversion",
+    "json-to-yaml-to-json-workflows-yaml-to-json-to-yaml-workflows-semantic-equality-formatting-changes",
+    "type-preservation-key-ordering-assumptions-limits-of-round-trip-fidelity"
+  ],
+  "source_syllabus_number": 118,
+  "subtopics": [
+    "JSON-to-YAML-to-JSON workflows. YAML-to-JSON-to-YAML workflows. Semantic equality. Formatting changes.",
+    "Type preservation. Key-ordering assumptions. Limits of round-trip fidelity."
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of round-trip conversion and identify at least one related syllabus concept.",
+    "Interpret the example for round-trip conversion and describe its expected result.",
+    "Choose a relevant syntax, type, compatibility, security, or troubleshooting check for the example."
+  ],
+  "content": {
+    "intro": "This lesson focuses on round-trip conversion and connects the PDF syllabus topics to a small, inspectable example. Work from the intended data model, write down the expected result, then verify syntax and semantics with the target tool.",
+    "why_it_matters": "Round-Trip Conversion matters because structured-data files sit between people, tools, services, and deployment systems. A clear contract and repeatable checks make the result easier to maintain and safer to consume.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Round-Trip Conversion: visual explanation",
+        "asset_path": "diagrams/lessons/lesson-118-round-trip-conversion.svg",
+        "alt_text": "Round-Trip Conversion: JSON-to-YAML-to-JSON workflows. YAML-to-JSON-to-YAML workflows. Semantic equality. Formatting changes. leads to Interpret / validate, then Expected structure.",
+        "caption": "Use this concept flow to predict the result for Round-Trip Conversion before you test the snippet."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "JSON and YAML can often represent equivalent mappings, sequences, and scalar values, but conversion can change types, omit comments, expose duplicate keys, or alter formatting. Compare parsed values and document what the target tools preserve."
+      },
+      {
+        "type": "paragraph",
+        "title": "What you will cover",
+        "text": "This lesson explicitly addresses: JSON-to-YAML-to-JSON workflows. YAML-to-JSON-to-YAML workflows. Semantic equality. Formatting changes.; Type preservation. Key-ordering assumptions. Limits of round-trip fidelity.. Treat each as part of a workflow: define what the data should mean, represent it consistently, and test how the chosen implementation interprets it."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Round-Trip Conversion",
+        "language": "text",
+        "code": "YAML input → parse → internal data model → JSON output\n\nRound-trip questions:\n- Did every scalar keep its intended type?\n- Were comments/presentation lost?\n- Did aliases or tags need special handling?\n- Did duplicate keys produce a warning or silent overwrite?",
+        "expected_output": "A successful round-trip should be defined by the values and metadata the project promises to preserve; textual equality is usually not the goal.",
+        "run_instructions": "Inspect the example and compare it against the lesson concepts. This code block is static-validation: CodeLeaf does not execute arbitrary data parsers or commands in the standard browser preview.",
+        "reset_steps": "Restore the starting fixture before each test. Change one field, indentation level, parser option, or schema constraint at a time, then compare the result with the prediction.",
+        "execution_mode": "static-validation",
+        "limitations": "This snippet is a reference/example, not evidence that the CodeLeaf browser executes JSON/YAML parsing, shell commands, or Python. Validate locally with a named parser or tool before relying on it."
+      },
+      {
+        "type": "list",
+        "title": "A reliable working sequence",
+        "items": [
+          {
+            "title": "1. State the contract",
+            "text": "Write down the expected root type, required fields, scalar types, and any compatibility assumptions."
+          },
+          {
+            "title": "2. Validate before use",
+            "text": "Parse the document and run the applicable schema or policy checks; syntax success alone is not full correctness."
+          },
+          {
+            "title": "3. Test a boundary",
+            "text": "Include at least one missing, malformed, ambiguous, or unexpected input and record the desired behavior."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety checkpoint",
+        "text": "Do not judge a conversion only by how the text looks. Parse both documents, compare values and types, and record features that cannot be represented on both sides. Confirm implementation-specific behavior against the target parser, tool version, and standards documentation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second synthetic fixture for “JSON-to-YAML-to-JSON workflows. YAML-to-JSON-to-YAML workflows. Semantic equality. Formatting changes.”. Predict the parsed types/result, change one relevant detail, and record whether the target tool behaved as expected. Include one invalid or boundary case."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-118-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating readable text as proof of correctness.",
+        "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+        "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+      },
+      {
+        "problem": "Assuming every parser interprets the feature identically.",
+        "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+        "fix": "Record the exact parser/version and test the target environment."
+      },
+      {
+        "problem": "Testing only a happy path.",
+        "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+        "fix": "Keep valid, invalid, and boundary fixtures in version control."
+      }
+    ],
+    "task": "Prepare a brief, reviewable demonstration of Round-Trip Conversion. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+    "task_acceptance_criteria": [
+      "The artifact clearly demonstrates JSON-to-YAML-to-JSON workflows. YAML-to-JSON-to-YAML workflows. Semantic equality. Formatting changes..",
+      "Expected behavior is written before verification.",
+      "One invalid or boundary case is documented.",
+      "The relevant format, parser/version, and any security or interoperability limits are recorded."
+    ],
+    "hints": [
+      "Start with the smallest valid example that demonstrates JSON-to-YAML-to-JSON workflows. YAML-to-JSON-to-YAML workflows. Semantic equality. Formatting changes..",
+      "Change one thing at a time and compare parsed values, not only visual formatting.",
+      "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+    ],
+    "summary": [
+      "Round-Trip Conversion fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+      "Topics retained from the source PDF include JSON-to-YAML-to-JSON workflows. YAML-to-JSON-to-YAML workflows. Semantic equality. Formatting changes.; Type preservation. Key-ordering assumptions. Limits of round-trip fidelity..",
+      "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "A successful round-trip should be defined by the values and metadata the project promises to preserve; textual equality is usually not the goal."
+  },
+  "task": "Prepare a brief, reviewable demonstration of Round-Trip Conversion. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+  "task_acceptance_criteria": [
+    "The artifact clearly demonstrates JSON-to-YAML-to-JSON workflows. YAML-to-JSON-to-YAML workflows. Semantic equality. Formatting changes..",
+    "Expected behavior is written before verification.",
+    "One invalid or boundary case is documented.",
+    "The relevant format, parser/version, and any security or interoperability limits are recorded."
+  ],
+  "hints": [
+    "Start with the smallest valid example that demonstrates JSON-to-YAML-to-JSON workflows. YAML-to-JSON-to-YAML workflows. Semantic equality. Formatting changes..",
+    "Change one thing at a time and compare parsed values, not only visual formatting.",
+    "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+  ],
+  "summary": [
+    "Round-Trip Conversion fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+    "Topics retained from the source PDF include JSON-to-YAML-to-JSON workflows. YAML-to-JSON-to-YAML workflows. Semantic equality. Formatting changes.; Type preservation. Key-ordering assumptions. Limits of round-trip fidelity..",
+    "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+  ],
+  "run_mode": "static-validation",
+  "expected_output": "A successful round-trip should be defined by the values and metadata the project promises to preserve; textual equality is usually not the goal.",
+  "common_mistakes": [
+    {
+      "problem": "Treating readable text as proof of correctness.",
+      "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+      "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+    },
+    {
+      "problem": "Assuming every parser interprets the feature identically.",
+      "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+      "fix": "Record the exact parser/version and test the target environment."
+    },
+    {
+      "problem": "Testing only a happy path.",
+      "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+      "fix": "Keep valid, invalid, and boundary fixtures in version control."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "id": "json-yaml-ref-rfc8259",
+      "title": "RFC 8259 — The JavaScript Object Notation (JSON) Data Interchange Format",
+      "url": "https://www.rfc-editor.org/rfc/rfc8259",
+      "publisher": "IETF / RFC Editor",
+      "checked_on": "2026-10-20"
+    },
+    {
+      "id": "json-yaml-ref-yaml122",
+      "title": "YAML Ain’t Markup Language (YAML) Version 1.2.2 Specification",
+      "url": "https://yaml.org/spec/1.2.2/",
+      "publisher": "YAML Language Development Team",
+      "checked_on": "2026-10-20"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Generated from the attached JSON and YAML syllabus; requires technical review and target-tool validation before publication.",
+  "exercise_files": []
+}

@@ -1,0 +1,165 @@
+{
+  "id": "genai-lesson-095",
+  "slug": "building-a-backend-for-ai-applications",
+  "title": "Building a Backend for AI Applications",
+  "sequence": 95,
+  "module_id": "genai-module-11",
+  "module_slug": "generative-ai-apis-and-application-integration",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-application-development",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "genai-lesson-090"
+  ],
+  "previous_lesson_id": "genai-lesson-094",
+  "next_lesson_id": "genai-lesson-096",
+  "keywords": [
+    "Building a Backend for AI Applications",
+    "API routes and request validation",
+    "Business logic and model-service separation",
+    "Asynchronous processing",
+    "Authentication and authorization",
+    "Usage metering and quotas",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 95,
+  "subtopics": [
+    "API routes and request validation",
+    "Business logic and model-service separation",
+    "Asynchronous processing",
+    "Authentication and authorization",
+    "Usage metering and quotas",
+    "Protecting application secrets"
+  ],
+  "learning_outcomes": [
+    "Explain api routes and request validation and how it connects to building a backend for ai applications.",
+    "Apply business logic and model-service separation in the example and predict the output before running it.",
+    "Test one realistic edge case for building a backend for ai applications and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers building a backend for ai applications through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Build API integrations with server-side secrets, input validation, safe retries, cancellation, observability, and budget controls. Model-provider payloads are not interchangeable by default.",
+    "why_it_matters": "API routes and request validation belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Building a Backend for AI Applications: concept map",
+        "asset_path": "diagrams/lessons/lesson-095-building-a-backend-for-ai-applications.svg",
+        "alt_text": "Diagram for Building a Backend for AI Applications: understand API routes and request validation, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand API routes and request validation, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "API routes and request validation belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "API routes and request validation",
+            "text": "API routes and request validation belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation."
+          },
+          {
+            "title": "Business logic and model-service separation",
+            "text": "Use business logic and model-service separation as a lens for understanding building a backend for ai applications. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Asynchronous processing",
+            "text": "Use asynchronous processing as a lens for understanding building a backend for ai applications. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Authentication and authorization",
+            "text": "Authentication and authorization is a control problem as much as a model-behavior problem. Establish explicit boundaries in trusted application code, minimize data exposure, test realistic misuse and failure cases, and record who is responsible for reviewing residual risk. A prompt alone is not a security boundary."
+          },
+          {
+            "title": "Usage metering and quotas",
+            "text": "Usage metering and quotas belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation."
+          },
+          {
+            "title": "Protecting application secrets",
+            "text": "Use protecting application secrets as a lens for understanding building a backend for ai applications. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Building a Backend for AI Applications\ndef validate(payload):\n    return isinstance(payload.get(\"input\"), str) and 0 < len(payload[\"input\"]) <= 2000\nprint({\"valid\": validate({\"input\": \"hello\"}), \"rejects_empty\": not validate({\"input\": \"\"})})",
+        "expected_output": "{'valid': True, 'rejects_empty': True}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice api routes and request validation within building a backend for ai applications: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'valid': True, 'rejects_empty': True}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-095-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Building a Backend for AI Applications is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://developers.openai.com/api/docs/guides/text",
+      "https://docs.python.org/3/tutorial/"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Text generation",
+      "url": "https://developers.openai.com/api/docs/guides/text",
+      "publisher": "OpenAI API documentation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "text generation API patterns"
+      ]
+    },
+    {
+      "title": "The Python Tutorial",
+      "url": "https://docs.python.org/3/tutorial/",
+      "publisher": "Python Software Foundation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Python fundamentals"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

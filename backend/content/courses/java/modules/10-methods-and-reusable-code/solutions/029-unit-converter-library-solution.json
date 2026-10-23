@@ -1,0 +1,32 @@
+{
+  "id": "java-exercise-solution-029",
+  "exercise_id": "java-exercise-029",
+  "title": "Unit Converter Library reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "language": "java",
+  "answer": "public class Main {\n    public static double milesToKilometers(double miles) {\n        if (!Double.isFinite(miles) || miles < 0) throw new IllegalArgumentException(\"Miles must be finite and non-negative\");\n        return miles * 1.609344;\n    }\n    public static double kilometersToMiles(double kilometers) {\n        if (!Double.isFinite(kilometers) || kilometers < 0) throw new IllegalArgumentException(\"Kilometers must be finite and non-negative\");\n        return kilometers / 1.609344;\n    }\n    public static void main(String[] args) {\n        System.out.printf(\"%.3f km%n\", milesToKilometers(10));\n    }\n}",
+  "explanation": "Keep conversion functions separate from console I/O so they can be tested directly. The factor shown is exact for the defined international mile conversion.",
+  "hidden_tests": [
+    {
+      "case": "normal case",
+      "input_or_setup": "Use the deterministic sample data or representative valid input described in the exercise.",
+      "expected_behavior": "16.093 km",
+      "purpose": "Verify the main behavior and the output contract."
+    },
+    {
+      "case": "boundary case",
+      "input_or_setup": "Test empty, zero, minimum/maximum, duplicate, or end-of-range input as appropriate to the exercise.",
+      "expected_behavior": "The result matches the documented boundary rule and does not silently corrupt state.",
+      "purpose": "Check a boundary or invariant."
+    },
+    {
+      "case": "invalid or failure case",
+      "input_or_setup": "Provide malformed input or simulate a missing file, unavailable endpoint, missing configuration, or database failure where relevant.",
+      "expected_behavior": "The operation fails clearly or returns a safe result; resources are released and secrets are not printed.",
+      "purpose": "Check explicit error behavior and cleanup."
+    }
+  ],
+  "review_notes": "Repository-only reference material. Keep it out of public API responses and frontend bundles. The platform grader is only a required-token smoke check; complete task-specific execution tests in an isolated Java runner before publication.",
+  "sample_expected_result": "16.093 km"
+}

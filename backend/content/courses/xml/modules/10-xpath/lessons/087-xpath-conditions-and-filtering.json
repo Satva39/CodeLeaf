@@ -1,0 +1,177 @@
+{
+  "id": "xml-lesson-087",
+  "slug": "xpath-conditions-and-filtering",
+  "title": "XPath Conditions and Filtering",
+  "sequence": 87,
+  "module_id": "xml-module-10",
+  "module_slug": "xpath",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "xml-lesson-086"
+  ],
+  "previous_lesson_id": "xml-lesson-086",
+  "next_lesson_id": "xml-lesson-088",
+  "keywords": [
+    "xpath-conditions-and-filtering",
+    "xpath",
+    "and-and-or",
+    "equality-and-inequality",
+    "attribute-based-filtering",
+    "combining-predicates",
+    "handling-missing-values"
+  ],
+  "source_syllabus_number": 87,
+  "subtopics": [
+    "and and or",
+    "Equality and inequality",
+    "Attribute-based filtering",
+    "Combining predicates",
+    "Handling missing values"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose of xpath conditions and filtering and explain at least one listed subtopic.",
+    "Interpret the example related to xpath conditions and filtering and predict its expected result.",
+    "Identify one validation, compatibility, security, or troubleshooting consideration relevant to the example."
+  ],
+  "content": {
+    "intro": "In this lesson, you will explore xpath conditions and filtering within XPath. You will connect its syllabus topics to an inspectable example, check the expected result, and note tool/version limits.",
+    "why_it_matters": "XPath Conditions and Filtering matters because XML workflows rely on explicit structure and predictable processing. The lesson helps you reason about and and or, avoid a common misunderstanding, and make a result reproducible for another developer.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "XPath Conditions and Filtering: concept map",
+        "asset_path": "diagrams/lessons/lesson-087-xpath-conditions-and-filtering.svg",
+        "alt_text": "Concept flow covering and and or, Equality and inequality, Attribute-based filtering, Combining predicates.",
+        "caption": "The visual introduces xpath conditions and filtering; inspect the worked example and then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "XPath selects nodes and values from a data model. A location path is built from steps; predicates filter candidate nodes. Prefixes in a query must be bound by the host query context, even when the XML uses a different prefix for the same namespace URI."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the subtopics",
+        "text": "This lesson explicitly covers: and and or; Equality and inequality; Attribute-based filtering; Combining predicates; Handling missing values. Treat these as connected parts of one workflow: define the structure, make the relevant assumptions explicit, and verify a result with a small known input."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: XPath Conditions and Filtering",
+        "language": "xpath",
+        "code": "/catalog/product[price > 10]/name",
+        "expected_output": "On a catalog containing products with numeric price child elements, this XPath selects the names of products whose price is greater than 10.",
+        "run_instructions": "Inspect this example as text. Run it only in a processor that supports the shown language/version; the standard CodeLeaf playground previews HTML/CSS/JavaScript only and does not execute XML, XSD, XPath, XSLT, XQuery, Python, or SQL. Start with a small expression, compare it with the expected set of nodes, and then add one predicate at a time. XPath 1.0 and XPath 2.0/3.1 differ in data model and expression features, so record the processor and supported version.",
+        "reset_steps": "Restore the sample to its exact starting state before each experiment. Change one element, attribute, expression, or constraint at a time, then compare the result with the expected behavior.",
+        "execution_mode": "query-simulation",
+        "limitations": "XPath version support and namespace-prefix registration depend on the selected host application or query processor."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety checkpoint",
+        "text": "Record the exact processor and version: specification support is not universal, especially for XSD 1.1, XPath 2.0/3.1, XQuery, and XSLT 2.0/3.0."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a small synthetic example that demonstrates “and and or”. Then add one boundary case involving “Equality and inequality”. Write down what should happen before testing, and record the exact output or processor message afterward."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-087-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming a document is correct because it looks readable.",
+        "why": "Visual appearance does not prove well-formedness, schema validity, correct namespace handling, or application-level meaning.",
+        "fix": "Parse and validate the document with the intended processor, then assert its meaning using a focused test."
+      },
+      {
+        "problem": "Mixing specification features with processor support.",
+        "why": "A standard may define features that a specific runtime does not implement.",
+        "fix": "Record the version and feature support; test with the actual target processor."
+      },
+      {
+        "problem": "Testing only one happy-path example.",
+        "why": "Missing values, wrong types, namespace differences, or boundary inputs can expose failures.",
+        "fix": "Add a valid case, an invalid case, and an edge case to the verification notes."
+      }
+    ],
+    "task": "Build a short demonstration of xpath conditions and filtering using synthetic data. Include the concept “and and or”, a known expected result, and a short note explaining one edge case.",
+    "task_acceptance_criteria": [
+      "The artifact clearly demonstrates and and or.",
+      "The expected result is written before verification.",
+      "One invalid or boundary case is documented.",
+      "Processor/version assumptions and relevant security limits are recorded."
+    ],
+    "hints": [
+      "Start with the exact definition or construct associated with and and or.",
+      "Keep the example minimal and change one thing at a time.",
+      "Compare the observed result with the expected behavior and consult the linked specification if they differ."
+    ],
+    "summary": [
+      "XPath Conditions and Filtering contributes to the larger XML workflow of creating, checking, querying, transforming, or maintaining structured documents.",
+      "The listed syllabus concepts include and and or, Equality and inequality, Attribute-based filtering.",
+      "A reproducible XML example includes the input, processor/version assumptions, expected result, and a meaningful failure case."
+    ],
+    "run_mode": "query-simulation",
+    "expected_output": "On a catalog containing products with numeric price child elements, this XPath selects the names of products whose price is greater than 10."
+  },
+  "task": "Build a short demonstration of xpath conditions and filtering using synthetic data. Include the concept “and and or”, a known expected result, and a short note explaining one edge case.",
+  "task_acceptance_criteria": [
+    "The artifact clearly demonstrates and and or.",
+    "The expected result is written before verification.",
+    "One invalid or boundary case is documented.",
+    "Processor/version assumptions and relevant security limits are recorded."
+  ],
+  "hints": [
+    "Start with the exact definition or construct associated with and and or.",
+    "Keep the example minimal and change one thing at a time.",
+    "Compare the observed result with the expected behavior and consult the linked specification if they differ."
+  ],
+  "summary": [
+    "XPath Conditions and Filtering contributes to the larger XML workflow of creating, checking, querying, transforming, or maintaining structured documents.",
+    "The listed syllabus concepts include and and or, Equality and inequality, Attribute-based filtering.",
+    "A reproducible XML example includes the input, processor/version assumptions, expected result, and a meaningful failure case."
+  ],
+  "run_mode": "query-simulation",
+  "expected_output": "On a catalog containing products with numeric price child elements, this XPath selects the names of products whose price is greater than 10.",
+  "common_mistakes": [
+    {
+      "problem": "Assuming a document is correct because it looks readable.",
+      "why": "Visual appearance does not prove well-formedness, schema validity, correct namespace handling, or application-level meaning.",
+      "fix": "Parse and validate the document with the intended processor, then assert its meaning using a focused test."
+    },
+    {
+      "problem": "Mixing specification features with processor support.",
+      "why": "A standard may define features that a specific runtime does not implement.",
+      "fix": "Record the version and feature support; test with the actual target processor."
+    },
+    {
+      "problem": "Testing only one happy-path example.",
+      "why": "Missing values, wrong types, namespace differences, or boundary inputs can expose failures.",
+      "fix": "Add a valid case, an invalid case, and an edge case to the verification notes."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "title": "XML Path Language (XPath) 3.1",
+      "url": "https://www.w3.org/TR/xpath-31/",
+      "publisher": "W3C",
+      "checked_on": "2026-10-12"
+    },
+    {
+      "title": "Namespaces in XML 1.0, Third Edition",
+      "url": "https://www.w3.org/TR/xml-names/",
+      "publisher": "W3C",
+      "checked_on": "2026-10-12"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Generated from the attached XML syllabus; requires technical review and validation in the target XML processor before publication.",
+  "exercise_files": []
+}

@@ -1,0 +1,13 @@
+{
+  "id": "github-actions-exercise-solution-020",
+  "exercise_id": "github-actions-exercise-020",
+  "title": "Use OIDC authentication reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": {
+    "approach": "A complete response for use oidc authentication should include: id-token: write, permissions:, environment:.",
+    "example": "jobs:\n  deploy:\n    permissions:\n      contents: read\n      id-token: write\n    environment: staging\n    runs-on: ubuntu-latest\n    steps:\n      - name: Request cloud identity\n        run: echo \"Configure the provider-specific OIDC login action here\"",
+    "verification": "The job has the token permission needed to request an OIDC token and is associated with the staging environment. Provider login is intentionally not fabricated."
+  },
+  "explanation": "Reason about the trigger, permission boundary, expected observable result, and failure path for use oidc authentication. Before adding cloud authentication, configure the cloud trust policy to limit issuer, audience, repository, ref or environment subject claims; then use the provider’s official login action. Adapt action references and runtime details against the official docs checked on 2026-10-20."
+}

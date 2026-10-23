@@ -1,0 +1,49 @@
+{
+  "id": "rest-api-development-knowledge-check-127",
+  "lesson_id": "rest-api-development-lesson-127",
+  "lesson_slug": "object-property-authorization-and-mass-assignment",
+  "title": "Knowledge check: Object Property Authorization and Mass Assignment",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "questions": [
+    {
+      "id": "rest-api-development-q-127-01",
+      "type": "single_choice",
+      "prompt": "Which server-side control best mitigates broken object-level authorization?",
+      "options": [
+        "Use unguessable record IDs instead of authorization checks.",
+        "Check object access only on the list route and assume detail routes inherit it.",
+        "Expose all object properties and let the client hide the restricted fields.",
+        "Check ownership or policy for every operation using the authenticated identity, not an owner ID trusted from the request."
+      ],
+      "answer_key": "Check ownership or policy for every operation using the authenticated identity, not an owner ID trusted from the request.",
+      "explanation": "Check ownership or policy for every operation using the authenticated identity, not an owner ID trusted from the request. This is especially relevant to “Object Property Authorization and Mass Assignment” because the API contract must remain explicit and reviewable."
+    },
+    {
+      "id": "rest-api-development-q-127-02",
+      "type": "single_choice",
+      "prompt": "For the lesson “Object Property Authorization and Mass Assignment”, which check provides the strongest practical evidence?",
+      "options": [
+        "Run one happy-path call and skip invalid, denied, and failure scenarios.",
+        "Test against production records so the exercise cannot be repeated safely.",
+        "Attempt access across two synthetic owners or tenants and require server-side denial.",
+        "Rely on a code review comment without running any representative check."
+      ],
+      "answer_key": "Attempt access across two synthetic owners or tenants and require server-side denial.",
+      "explanation": "A useful check is repeatable, tied to an observable contract, and includes an important negative or boundary scenario."
+    },
+    {
+      "id": "rest-api-development-q-127-03",
+      "type": "single_choice",
+      "prompt": "Which review warning is most relevant to “Object Property Authorization and Mass Assignment”?",
+      "options": [
+        "The API avoids exposing internal secrets and personal data.",
+        "Access relies on guessable/unguessable IDs or frontend hiding rather than server authorization.",
+        "The expected behavior and relevant failure cases are documented.",
+        "A representative test can reproduce the result."
+      ],
+      "answer_key": "Access relies on guessable/unguessable IDs or frontend hiding rather than server authorization.",
+      "explanation": "This finding weakens a core API guarantee and should be treated as a design or release issue, not only a style concern."
+    }
+  ]
+}

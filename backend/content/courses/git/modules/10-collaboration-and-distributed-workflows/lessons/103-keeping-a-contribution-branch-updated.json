@@ -1,0 +1,145 @@
+{
+  "id": "git-lesson-103",
+  "slug": "keeping-a-contribution-branch-updated",
+  "title": "Keeping a Contribution Branch Updated",
+  "sequence": 103,
+  "module_id": "git-module-10",
+  "module_slug": "collaboration-and-distributed-workflows",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "primary_service": "Git version control",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "git-lesson-102"
+  ],
+  "previous_lesson_id": "git-lesson-102",
+  "next_lesson_id": "git-lesson-104",
+  "keywords": [
+    "git-automation-scripting-and-production-workflows",
+    "collaboration-and-distributed-workflows",
+    "git",
+    "fetching-upstream-changes",
+    "merging-or-rebasing-onto-the-latest-base",
+    "resolving-conflicts",
+    "rechecking-the-result-before-submission"
+  ],
+  "source_syllabus_number": 103,
+  "subtopics": [
+    "Fetching upstream changes",
+    "Merging or rebasing onto the latest base",
+    "Resolving conflicts",
+    "Rechecking the result before submission"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and boundaries of keeping a contribution branch updated.",
+    "Choose and interpret a Git command relevant to keeping a contribution branch updated using a disposable repository.",
+    "Verify the result with repository state or history and identify one safety limitation."
+  ],
+  "content": {
+    "intro": "This lesson introduces keeping a contribution branch updated as part of Collaboration and Distributed Workflows. It follows the supplied Git curriculum and adds an original explanation, an inspectable command example, troubleshooting notes, and a practice task.",
+    "why_it_matters": "Updating a contribution branch starts by fetching the upstream references and reviewing divergence. Choose merge or rebase according to team policy, then resolve conflicts and rerun checks before updating the proposal.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 10: Collaboration and Distributed Workflows",
+        "asset_path": "diagrams/module-10-overview.svg",
+        "alt_text": "Four-step view of Collaboration and Distributed Workflows, with key syllabus checkpoints and a verification reminder.",
+        "caption": "Original CodeLeaf diagram. Review labels as well as the explanatory text; color is not the only signal."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "**Core idea.** Updating a contribution branch starts by fetching the upstream references and reviewing divergence. Choose merge or rebase according to team policy, then resolve conflicts and rerun checks before updating the proposal.\n\nFor **Keeping a Contribution Branch Updated**, keep the named subtopics in view: Fetching upstream changes; Merging or rebasing onto the latest base; Resolving conflicts; Rechecking the result before submission. Treat those as the scope of this lesson, then practise the smallest workflow that demonstrates the idea."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "**Before you run a command:** decide what state you are inspecting or changing, identify whether the effect is local or remote, and write down what evidence would count as success. Inspect the difference before choosing merge or rebase. Rebase only the intended private contribution branch; resolve and verify conflicts before submitting again."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered",
+        "items": [
+          "Fetching upstream changes",
+          "Merging or rebasing onto the latest base",
+          "Resolving conflicts",
+          "Rechecking the result before submission"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Command example: Keeping a Contribution Branch Updated",
+        "language": "bash",
+        "code": "git fetch upstream\ngit log --oneline --left-right HEAD...upstream/main",
+        "expected_output": "The upstream remote-tracking refs update; the log compares local HEAD with upstream/main when that ref exists.",
+        "run_instructions": "Inspect the difference before choosing merge or rebase. Rebase only the intended private contribution branch; resolve and verify conflicts before submitting again.",
+        "reset_steps": "Use a disposable repository. If the exercise changes state, check git status and git log before and after; discard the practice directory only after confirming it contains no valuable work.",
+        "execution_mode": "human-review",
+        "limitations": "The CodeLeaf web lesson page does not execute arbitrary Git commands. Run commands locally in a disposable repository with a Git version appropriate to your task. Placeholder paths, branches, commit IDs and repository URLs must be replaced with values from that practice repository."
+      },
+      {
+        "type": "callout",
+        "title": "Safety and verification checkpoint",
+        "text": "Start with git status --short --branch. For destructive or history-rewriting operations, review the exact target, create a recovery reference when appropriate, and keep valuable work backed up. Never put credentials, access tokens or private keys in course submissions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-103-questions.json"
+  },
+  "task": "Create or use two clearly named branches in a disposable repository. Make one small change on each, inspect the commit graph, perform the relevant integration step, then verify the final files and history.",
+  "hints": [
+    "Start by reviewing: Fetching upstream changes.",
+    "Use a read-only inspection command before any operation that changes files, refs or remote state.",
+    "After the example, verify with git status --short --branch and/or git log --oneline --graph as appropriate."
+  ],
+  "expected_output": "The upstream remote-tracking refs update; the log compares local HEAD with upstream/main when that ref exists.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Running a state-changing command without confirming the target repository or branch.",
+      "why": "A command may affect the wrong working tree or move a reference that other work depends on.",
+      "fix": "Check git rev-parse --show-toplevel and git status --short --branch before proceeding."
+    },
+    {
+      "problem": "Assuming a command succeeded because no error was visible.",
+      "why": "Some Git commands are silent on success, and some expected actions are blocked by repository state or permissions.",
+      "fix": "Verify status, log, references, remote state or the named output explicitly."
+    },
+    {
+      "problem": "Using an example placeholder literally or applying a destructive example to valuable work.",
+      "why": "Paths, branch names and object IDs depend on the current repository; restore/reset/clean operations can discard work.",
+      "fix": "Substitute real practice values, use a disposable repository, and preview changes before proceeding."
+    }
+  ],
+  "summary": [
+    "Keeping a Contribution Branch Updated is covered through these syllabus topics: Fetching upstream changes; Merging or rebasing onto the latest base; Resolving conflicts; Rechecking the result before submission.",
+    "Choose the command for the intended effect; understand whether it changes files, the index, local references, or remote state.",
+    "Verify the result, record unexpected output, and retain a recovery path for risky operations."
+  ],
+  "references": [
+    "references/reference-index.json",
+    "https://git-scm.com/docs",
+    "https://git-scm.com/book/en/v2"
+  ],
+  "sources": [
+    {
+      "title": "Git Reference Documentation",
+      "url": "https://git-scm.com/docs",
+      "publisher": "Git project",
+      "checked_on": "2026-10-15",
+      "source_type": "official-reference"
+    },
+    {
+      "title": "Pro Git Book, 2nd Edition",
+      "url": "https://git-scm.com/book/en/v2",
+      "publisher": "Git project / Pro Git",
+      "checked_on": "2026-10-15",
+      "source_type": "officially-hosted-book"
+    }
+  ],
+  "exercise_files": [],
+  "technical_review_date": "2026-10-15",
+  "status": "draft",
+  "status_note": "Generated from the supplied Git syllabus. Content and commands need editorial/technical review before publication."
+}

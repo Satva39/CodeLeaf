@@ -1,0 +1,57 @@
+{
+  "id": "css-exercise-023",
+  "slug": "legacy-css-refactoring",
+  "title": "Legacy CSS Refactoring",
+  "type": "coding",
+  "lesson_id": "css-lesson-215",
+  "module_id": "css-module-21",
+  "difficulty": "advanced",
+  "sequence": 23,
+  "prompt": "Refactor a brittle stylesheet with deep selectors and scattered overrides. Prefer component classes, remove unnecessary specificity, and leave a documented migration note for the legacy rule.",
+  "objective": "Demonstrate CSS architecture, specificity, maintainability in a small stylesheet and explain the behavior.",
+  "target_skills": [
+    "CSS architecture",
+    "specificity",
+    "maintainability"
+  ],
+  "starter": {
+    "language": "css",
+    "code": "@layer base, components, utilities;\n.component { /* replace deep descendant selectors */ }\n"
+  },
+  "expected_output": "A stylesheet that meets the acceptance criteria for Legacy CSS Refactoring and passes manual browser checks.",
+  "public_tests": [
+    {
+      "name": "Required CSS evidence",
+      "required_strings": [
+        ".component",
+        "@layer",
+        "var("
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Include `.component` where appropriate.",
+    "Include `@layer` where appropriate.",
+    "Include `var(` where appropriate.",
+    "Test the interface at a narrow and wide viewport where relevant.",
+    "Record one explanation of why the CSS produces the observed result."
+  ],
+  "hints": [
+    "Identify the smallest selector that needs to change.",
+    "Add one property or state at a time, then inspect the result.",
+    "Use browser developer tools and an official reference to resolve unexpected behavior."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      ".component",
+      "@layer",
+      "var("
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus human review. This does not prove that a rendered page is visually or accessibly correct.",
+  "retry_policy": "Allow retries. Only a correct server-side check may complete the activity; XP is controlled by CodeLeaf backend rules and is not configured in this file.",
+  "status": "draft",
+  "status_note": "Draft until the starter, expected behavior, browser compatibility, and manual review rubric are verified.",
+  "solution_file": "../solutions/023-legacy-css-refactoring-solution.json"
+}

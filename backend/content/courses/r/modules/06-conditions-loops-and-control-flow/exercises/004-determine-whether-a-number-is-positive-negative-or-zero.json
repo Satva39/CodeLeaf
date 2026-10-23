@@ -1,0 +1,54 @@
+{
+  "id": "r-exercise-004",
+  "slug": "determine-whether-a-number-is-positive-negative-or-zero",
+  "title": "Determine whether a number is positive, negative, or zero",
+  "type": "short_answer",
+  "lesson_id": "r-lesson-050",
+  "module_id": "r-module-06",
+  "sequence": 4,
+  "difficulty": "beginner",
+  "prompt": "Write a function that classifies a single finite numeric input. Decide how to handle NA and non-numeric values.",
+  "objective": "Practice conditional statements with explicit acceptance criteria and a reproducible result.",
+  "target_skills": [
+    "Conditional statements"
+  ],
+  "starter": {
+    "language": "r",
+    "source_code": "classify_number <- function(x) {\n  if (length(x) != 1 || is.na(x) || !is.finite(x)) stop(\"Provide one finite number\")\n  if (x > 0) \"positive\" else if (x < 0) \"negative\" else \"zero\"\n}",
+    "mode": "static-validation"
+  },
+  "expected_output": "Test positive, negative, zero, NA and vector input.",
+  "public_tests": [
+    {
+      "name": "Includes core concept",
+      "description": "The submission demonstrates is.na."
+    },
+    {
+      "name": "Includes validation or outcome",
+      "description": "The submission also demonstrates positive."
+    }
+  ],
+  "acceptance_criteria": [
+    "The submission addresses the task and all required core concepts.",
+    "Expected behavior and an edge case are described and checked.",
+    "Input assumptions, missing-value handling and output shape are documented where relevant.",
+    "Code is readable, uses appropriate R constructs and avoids destructive/external side effects.",
+    "Any result derived from statistics includes assumptions and relevant limitations."
+  ],
+  "hints": [
+    "Identify the input, output and key R concept: Conditional statements.",
+    "Test positive, negative, zero, NA and vector input.",
+    "Test a normal case, a boundary/failure case, and verify the output independently."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "is.na",
+      "positive"
+    ]
+  },
+  "grading_method": "Draft/static token check only. The current platform grader can check whether the submitted text contains these strings, but it cannot execute R or prove program correctness. Keep unpublished and use human review or a separately isolated R runner before enabling XP-bearing completion.",
+  "retry_policy": "Allow learner retries in a reviewed course policy; this content file does not override platform retry or XP policy.",
+  "solution_file": "../solutions/004-determine-whether-a-number-is-positive-negative-or-zero-solution.json",
+  "status": "draft"
+}

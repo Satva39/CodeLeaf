@@ -1,0 +1,16 @@
+{
+  "id": "pytorch-exercise-020-reference-solution",
+  "exercise_id": "pytorch-exercise-020",
+  "title": "Reference approach: Test Suite",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Implement test suite in a small isolated script. Required implementation evidence includes: torch.testing.assert_close, assert, pytest. Use a reproducible seed, report observed output, and explain relevant edge cases.",
+  "explanation": "This exercise consolidates the topic from lesson 150. The list of required strings is only a minimal static signal; inspect numerical correctness, error handling, and test outcomes manually.",
+  "example_code": "import torch\nfrom torch import nn\nmodel=nn.Linear(3,2); y=model(torch.zeros(4,3)); assert y.shape==(4,2); torch.testing.assert_close(y, torch.zeros(4,3) @ model.weight.T + model.bias); print('shape and numerical tests passed')",
+  "reference_code": "import torch\nfrom torch import nn\nmodel=nn.Linear(3,2); y=model(torch.zeros(4,3)); assert y.shape==(4,2); torch.testing.assert_close(y, torch.zeros(4,3) @ model.weight.T + model.bias); print('shape and numerical tests passed')",
+  "review_notes": [
+    "Do not treat source-string grading as proof that numerical behavior is correct.",
+    "Run in a supported local environment or isolated runner.",
+    "Keep input data synthetic unless a dataset has an appropriate license and documented provenance."
+  ]
+}

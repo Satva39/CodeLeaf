@@ -1,0 +1,144 @@
+{
+  "id": "aws-lesson-103",
+  "slug": "introduction-to-amazon-rds",
+  "title": "Introduction to Amazon RDS",
+  "sequence": 103,
+  "module_id": "aws-module-10",
+  "module_slug": "aws-database-services",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "primary_service": "AWS relational and NoSQL databases",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "aws-lesson-102"
+  ],
+  "previous_lesson_id": "aws-lesson-102",
+  "next_lesson_id": "aws-lesson-104",
+  "keywords": [
+    "introduction-to-amazon-rds",
+    "aws-database-services",
+    "aws-relational-and-nosql-databases",
+    "managed-relational-database-concepts",
+    "supported-database-engines",
+    "database-instances-and-storage"
+  ],
+  "source_syllabus_number": 103,
+  "subtopics": [
+    "Managed relational database concepts",
+    "Supported database engines",
+    "Database instances and storage",
+    "Database parameter and option groups"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of introduction to amazon rds and its relationship to AWS Database Services.",
+    "Interpret the example and identify at least one prerequisite or boundary relevant to introduction to amazon rds.",
+    "Propose a safe verification or troubleshooting step and record one security, reliability or cost consideration."
+  ],
+  "content": {
+    "intro": "In this lesson, you will learn introduction to amazon rds in the context of AWS Database Services. You will connect the listed subtopics to a practical decision, inspect a small example, and define evidence that would confirm or disprove your assumptions.",
+    "why_it_matters": "Introduction to Amazon RDS matters because it is one part of aws relational and nosql databases. Real workloads depend on explicit prerequisites, correct permissions, predictable behavior and a way to verify outcomes. Learning the decision points helps you distinguish a working demonstration from a safe and supportable design.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 10: AWS Database Services",
+        "asset_path": "diagrams/module-10-overview.svg",
+        "alt_text": "Five-step overview for module 10, AWS Database Services, followed by verification, least-privilege security, recovery, and cost-cleanup checks.",
+        "caption": "Module 10 learning sequence: understand the concept, make a controlled design/configuration, verify behavior, and document security/reliability/cost trade-offs."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "**Core idea.** Introduction to Amazon RDS belongs to AWS Database Services. Pick databases from the access pattern, consistency, query needs, data shape, operational skill and recovery requirements; avoid making a database public to solve a connectivity problem.\n\nThe PDF lists these subtopics: Managed relational database concepts; Supported database engines; Database instances and storage; Database parameter and option groups. Treat them as a connected workflow rather than a list to memorize. Start with the workload requirement, identify the AWS resource/control involved, and write down who owns configuration and operation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Practical reasoning",
+        "text": "**Apply it safely.** For introduction to amazon rds, name the prerequisites and the expected result before making a change. Prefer a read-only inspection or local/static example first. Then plan a normal case, a failure case, and a verification step. In a live account, require the account owner-approved sandbox, narrow permissions, spend visibility and cleanup plan. Do not put credentials in code or commit local configuration files."
+      },
+      {
+        "type": "list",
+        "title": "PDF subtopics to cover",
+        "items": [
+          {
+            "title": "Managed relational database concepts",
+            "text": "Document the data shape, access pattern, retention, permissions, recovery path and performance needs. Verify query or storage behavior with representative synthetic data."
+          },
+          {
+            "title": "Supported database engines",
+            "text": "Trace the path from source to destination through address ranges, routing, gateways and filtering controls. Verify both forward and return paths; one successful configuration screen is not proof of reachability."
+          },
+          {
+            "title": "Database instances and storage",
+            "text": "Document the data shape, access pattern, retention, permissions, recovery path and performance needs. Verify query or storage behavior with representative synthetic data."
+          },
+          {
+            "title": "Database parameter and option groups",
+            "text": "Document the data shape, access pattern, retention, permissions, recovery path and performance needs. Verify query or storage behavior with representative synthetic data."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Inspect a DynamoDB table: Introduction to Amazon RDS",
+        "language": "bash",
+        "code": "# Read-only example related to: Introduction to Amazon RDS\naws dynamodb describe-table --table-name example-table --query \"Table.[TableName,TableStatus,ItemCount]\"",
+        "expected_output": "Table metadata for an existing table when the caller is authorized.",
+        "run_instructions": "This block is an inspectable example, not an AWS action performed by CodeLeaf. For the read-only CLI command, first configure the named profile through an approved credential provider, verify identity, replace example identifiers when required and inspect current official CLI documentation. Do not apply/deploy changes in a real account without account-owner approval, least-privilege permissions and a reviewed cost/cleanup plan.",
+        "reset_steps": "No AWS resource is created by this lesson example. If you independently run an approved lab, capture the starting state first, follow the lab-specific teardown instructions, check dependent resources and billing/resource inventories, and document anything retained.",
+        "execution_mode": "static-validation",
+        "limitations": "The CodeLeaf playground is an HTML/CSS/JavaScript preview and does not execute AWS APIs, shell commands, SQL or cloud deployments. Treat output as illustrative; live values depend on credentials, permissions, Region, service state and schema."
+      },
+      {
+        "type": "callout",
+        "title": "Security and cost checkpoint",
+        "text": "Use least privilege, keep Block Public Access/private defaults unless a justified reviewed requirement says otherwise, and document cost/cleanup before live changes."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-103-questions.json"
+  },
+  "task": "Create a one-page decision card for “Introduction to Amazon RDS”. State the goal, prerequisites, the AWS resource or control involved, the expected result, one read-only/static verification step, one failure case, the relevant permission boundary, and cost/cleanup considerations. Do not create or alter billable resources unless the account owner has approved the lab.",
+  "hints": [
+    "Start from the exact subtopics in the lesson and define the desired state in your own words.",
+    "Prefer a read-only check or static artifact before a mutating command; record the identity/Region and required permissions.",
+    "Verify the expected result and a failure path using current official documentation; write down cost and cleanup implications."
+  ],
+  "expected_output": "A short reviewable decision card for Introduction to Amazon RDS with prerequisites, evidence, a failure case, security implications and cost/cleanup notes.",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Treating one successful example as proof of production readiness.",
+      "why": "The example may not test permissions, regional/service prerequisites, retries, recovery, quotas or edge cases.",
+      "fix": "Write acceptance criteria, test a failure path, inspect logs/state and record the limits of the result."
+    },
+    {
+      "problem": "Changing a live resource before confirming its effect and cost.",
+      "why": "Cloud changes can expose data, break traffic or leave billable dependencies behind.",
+      "fix": "Start read-only, use an approved sandbox, review the change, tag ownership and verify cleanup."
+    },
+    {
+      "problem": "Copying broad permissions or credentials into source files.",
+      "why": "Broad permissions and leaked long-lived credentials increase the impact of mistakes.",
+      "fix": "Use scoped roles/temporary credentials, keep secrets in approved stores and review access boundaries."
+    }
+  ],
+  "summary": [
+    "Introduction to Amazon RDS is taught as part of AWS Database Services.",
+    "Pick databases from the access pattern, consistency, query needs, data shape, operational skill and recovery requirements; avoid making a database public to solve a connectivity problem.",
+    "Verify assumptions with official service documentation and evidence from the relevant AWS resource, logs or tests.",
+    "For live labs, confirm permissions and likely charges before acting, then verify cleanup."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: AWS — Complete Learning Curriculum, Section B, Module 10: AWS Database Services, lesson 103: Introduction to Amazon RDS.",
+    "Official AWS documentation (Amazon RDS User Guide, checked 2026-10-11): https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/ — Managed relational database concepts, operations, availability and recovery.",
+    "Official AWS documentation (Amazon DynamoDB Documentation, checked 2026-10-11): https://docs.aws.amazon.com/dynamodb/ — NoSQL tables, access patterns, APIs and capacity concepts."
+  ],
+  "technical_review_date": "2026-10-11",
+  "status": "draft",
+  "status_note": "Generated from the PDF syllabus and official reference index; must be technically reviewed and tested for the target AWS service/Region before publication."
+}

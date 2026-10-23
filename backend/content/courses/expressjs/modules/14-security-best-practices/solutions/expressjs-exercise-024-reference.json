@@ -1,0 +1,8 @@
+{
+  "id": "expressjs-exercise-solution-024",
+  "exercise_id": "expressjs-exercise-024",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference approach for API Rate Limiting:\n\nimport rateLimit from 'express-rate-limit';\nconst loginLimiter = rateLimit({\n  windowMs: 15 * 60 * 1000,\n  limit: 10,\n  standardHeaders: 'draft-8',\n  legacyHeaders: false\n});\napp.use('/api/login', loginLimiter);\n\nReview the prompt's acceptance criteria. This is a teaching fragment; integrate it into a complete app, install listed external packages, and run it locally with a supported Node.js LTS release.\n\nRequired markers checked by the current CodeLeaf static grader: rateLimit, windowMs, limit.",
+  "explanation": "The grader for API Rate Limiting checks required strings only. It does not execute arbitrary JavaScript, validate runtime semantics, or prove security. A reviewer should test normal input, invalid input, route order, error propagation, and cleanup where relevant."
+}

@@ -1,0 +1,56 @@
+{
+  "id": "r-exercise-034",
+  "slug": "profile-a-slow-program-and-improve-its-runtime",
+  "title": "Profile a slow program and improve its runtime",
+  "type": "short_answer",
+  "lesson_id": "r-lesson-227",
+  "module_id": "r-module-21",
+  "sequence": 34,
+  "difficulty": "advanced",
+  "prompt": "Propose a repeatable benchmark, identify a measured bottleneck, and show an equivalent vectorized alternative.",
+  "objective": "Practice profiling, benchmarking, vectorization with explicit acceptance criteria and a reproducible result.",
+  "target_skills": [
+    "Profiling",
+    "benchmarking",
+    "vectorization"
+  ],
+  "starter": {
+    "language": "r",
+    "source_code": "# Timing sketch\nx <- seq_len(10000)\nsystem.time(sum(x * x))\n# Use profvis or Rprof after establishing a reproducible slow case.",
+    "mode": "static-validation"
+  },
+  "expected_output": "Use identical data/results for comparisons and do not call noisy microbenchmarks proof of production performance.",
+  "public_tests": [
+    {
+      "name": "Includes core concept",
+      "description": "The submission demonstrates system.time."
+    },
+    {
+      "name": "Includes validation or outcome",
+      "description": "The submission also demonstrates reproducible."
+    }
+  ],
+  "acceptance_criteria": [
+    "The submission addresses the task and all required core concepts.",
+    "Expected behavior and an edge case are described and checked.",
+    "Input assumptions, missing-value handling and output shape are documented where relevant.",
+    "Code is readable, uses appropriate R constructs and avoids destructive/external side effects.",
+    "Any result derived from statistics includes assumptions and relevant limitations."
+  ],
+  "hints": [
+    "Identify the input, output and key R concept: Profiling, benchmarking, vectorization.",
+    "Use identical data/results for comparisons and do not call noisy microbenchmarks proof of production performance.",
+    "Test a normal case, a boundary/failure case, and verify the output independently."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "system.time",
+      "reproducible"
+    ]
+  },
+  "grading_method": "Draft/static token check only. The current platform grader can check whether the submitted text contains these strings, but it cannot execute R or prove program correctness. Keep unpublished and use human review or a separately isolated R runner before enabling XP-bearing completion.",
+  "retry_policy": "Allow learner retries in a reviewed course policy; this content file does not override platform retry or XP policy.",
+  "solution_file": "../solutions/034-profile-a-slow-program-and-improve-its-runtime-solution.json",
+  "status": "draft"
+}

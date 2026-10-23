@@ -1,0 +1,13 @@
+{
+  "id": "github-actions-exercise-solution-008",
+  "exercise_id": "github-actions-exercise-008",
+  "title": "Upload an artifact reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": {
+    "approach": "A complete response for upload an artifact should include: upload-artifact, report.txt, name:.",
+    "example": "steps:\n  - name: Create report\n    run: |\n      mkdir -p output\n      printf 'validation=passed\\n' > output/report.txt\n  - name: Upload report\n    uses: actions/upload-artifact@v4\n    with:\n      name: validation-report\n      path: output/report.txt\n      retention-days: 7",
+    "verification": "The run produces a `validation-report` artifact containing `output/report.txt` with a seven-day retention period."
+  },
+  "explanation": "Reason about the trigger, permission boundary, expected observable result, and failure path for upload an artifact. Use this in a workflow that can run on a test branch. Never include credentials, environment dumps, or sensitive test data in the report. Adapt action references and runtime details against the official docs checked on 2026-10-20."
+}

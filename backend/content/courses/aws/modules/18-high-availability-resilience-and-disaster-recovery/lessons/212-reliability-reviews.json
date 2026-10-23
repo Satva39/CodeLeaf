@@ -1,0 +1,144 @@
+{
+  "id": "aws-lesson-212",
+  "slug": "reliability-reviews",
+  "title": "Reliability Reviews",
+  "sequence": 212,
+  "module_id": "aws-module-18",
+  "module_slug": "high-availability-resilience-and-disaster-recovery",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "primary_service": "Availability, resilience and recovery",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "aws-lesson-211"
+  ],
+  "previous_lesson_id": "aws-lesson-211",
+  "next_lesson_id": "aws-lesson-213",
+  "keywords": [
+    "reliability-reviews",
+    "high-availability-resilience-and-disaster-recovery",
+    "availability-resilience-and-recovery",
+    "identifying-single-points-of-failure",
+    "measuring-availability",
+    "evaluating-dependency-risk"
+  ],
+  "source_syllabus_number": 212,
+  "subtopics": [
+    "Identifying single points of failure",
+    "Measuring availability",
+    "Evaluating dependency risk",
+    "Documenting reliability improvements"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of reliability reviews and its relationship to High Availability, Resilience, and Disaster Recovery.",
+    "Interpret the example and identify at least one prerequisite or boundary relevant to reliability reviews.",
+    "Propose a safe verification or troubleshooting step and record one security, reliability or cost consideration."
+  ],
+  "content": {
+    "intro": "In this lesson, you will learn reliability reviews in the context of High Availability, Resilience, and Disaster Recovery. You will connect the listed subtopics to a practical decision, inspect a small example, and define evidence that would confirm or disprove your assumptions.",
+    "why_it_matters": "Reliability Reviews matters because it is one part of availability, resilience and recovery. Real workloads depend on explicit prerequisites, correct permissions, predictable behavior and a way to verify outcomes. Learning the decision points helps you distinguish a working demonstration from a safe and supportable design.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 18: High Availability, Resilience, and Disaster Recovery",
+        "asset_path": "diagrams/module-18-overview.svg",
+        "alt_text": "Five-step overview for module 18, High Availability, Resilience, and Disaster Recovery, followed by verification, least-privilege security, recovery, and cost-cleanup checks.",
+        "caption": "Module 18 learning sequence: understand the concept, make a controlled design/configuration, verify behavior, and document security/reliability/cost trade-offs."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "**Core idea.** Reliability Reviews belongs to High Availability, Resilience, and Disaster Recovery. Resilience begins with business recovery objectives and tested failure assumptions. Backups matter only when restore procedures and application consistency have been verified.\n\nThe PDF lists these subtopics: Identifying single points of failure; Measuring availability; Evaluating dependency risk; Documenting reliability improvements. Treat them as a connected workflow rather than a list to memorize. Start with the workload requirement, identify the AWS resource/control involved, and write down who owns configuration and operation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Practical reasoning",
+        "text": "**Apply it safely.** For reliability reviews, name the prerequisites and the expected result before making a change. Prefer a read-only inspection or local/static example first. Then plan a normal case, a failure case, and a verification step. In a live account, require the account owner-approved sandbox, narrow permissions, spend visibility and cleanup plan. Do not put credentials in code or commit local configuration files."
+      },
+      {
+        "type": "list",
+        "title": "PDF subtopics to cover",
+        "items": [
+          {
+            "title": "Identifying single points of failure",
+            "text": "Define the failure scenario and recovery objective, then test detection, recovery, data consistency and rollback. Treat recovery evidence as a deliverable, not an assumption."
+          },
+          {
+            "title": "Measuring availability",
+            "text": "Define the failure scenario and recovery objective, then test detection, recovery, data consistency and rollback. Treat recovery evidence as a deliverable, not an assumption."
+          },
+          {
+            "title": "Evaluating dependency risk",
+            "text": "Write a verification step and a failure case. For hands-on work, start with read-only inspection and use an approved sandbox before changing cloud resources."
+          },
+          {
+            "title": "Documenting reliability improvements",
+            "text": "Record ownership, dependencies and teardown/recovery behavior so the design can be operated safely after the first successful test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Recovery objective example: Reliability Reviews",
+        "language": "json",
+        "code": "{\n  \"workload\": \"demo-orders\",\n  \"rto_minutes\": 60,\n  \"rpo_minutes\": 15,\n  \"restore_test_required\": true,\n  \"last_test_evidence\": \"not yet recorded\"\n}",
+        "expected_output": "A recovery decision record with target objectives; values must come from business needs, not defaults.",
+        "run_instructions": "This block is an inspectable example, not an AWS action performed by CodeLeaf. Review the example as text and adapt it only after checking current official service documentation. Do not apply/deploy changes in a real account without account-owner approval, least-privilege permissions and a reviewed cost/cleanup plan.",
+        "reset_steps": "No AWS resource is created by this lesson example. If you independently run an approved lab, capture the starting state first, follow the lab-specific teardown instructions, check dependent resources and billing/resource inventories, and document anything retained.",
+        "execution_mode": "static-validation",
+        "limitations": "The CodeLeaf playground is an HTML/CSS/JavaScript preview and does not execute AWS APIs, shell commands, SQL or cloud deployments. Treat output as illustrative; live values depend on credentials, permissions, Region, service state and schema."
+      },
+      {
+        "type": "callout",
+        "title": "Security and cost checkpoint",
+        "text": "Use least privilege, keep Block Public Access/private defaults unless a justified reviewed requirement says otherwise, and document cost/cleanup before live changes."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-212-questions.json"
+  },
+  "task": "Create a one-page decision card for “Reliability Reviews”. State the goal, prerequisites, the AWS resource or control involved, the expected result, one read-only/static verification step, one failure case, the relevant permission boundary, and cost/cleanup considerations. Do not create or alter billable resources unless the account owner has approved the lab.",
+  "hints": [
+    "Start from the exact subtopics in the lesson and define the desired state in your own words.",
+    "Prefer a read-only check or static artifact before a mutating command; record the identity/Region and required permissions.",
+    "Verify the expected result and a failure path using current official documentation; write down cost and cleanup implications."
+  ],
+  "expected_output": "A short reviewable decision card for Reliability Reviews with prerequisites, evidence, a failure case, security implications and cost/cleanup notes.",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Treating one successful example as proof of production readiness.",
+      "why": "The example may not test permissions, regional/service prerequisites, retries, recovery, quotas or edge cases.",
+      "fix": "Write acceptance criteria, test a failure path, inspect logs/state and record the limits of the result."
+    },
+    {
+      "problem": "Changing a live resource before confirming its effect and cost.",
+      "why": "Cloud changes can expose data, break traffic or leave billable dependencies behind.",
+      "fix": "Start read-only, use an approved sandbox, review the change, tag ownership and verify cleanup."
+    },
+    {
+      "problem": "Copying broad permissions or credentials into source files.",
+      "why": "Broad permissions and leaked long-lived credentials increase the impact of mistakes.",
+      "fix": "Use scoped roles/temporary credentials, keep secrets in approved stores and review access boundaries."
+    }
+  ],
+  "summary": [
+    "Reliability Reviews is taught as part of High Availability, Resilience, and Disaster Recovery.",
+    "Resilience begins with business recovery objectives and tested failure assumptions. Backups matter only when restore procedures and application consistency have been verified.",
+    "Verify assumptions with official service documentation and evidence from the relevant AWS resource, logs or tests.",
+    "For live labs, confirm permissions and likely charges before acting, then verify cleanup."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: AWS — Complete Learning Curriculum, Section B, Module 18: High Availability, Resilience, and Disaster Recovery, lesson 212: Reliability Reviews.",
+    "Official AWS documentation (AWS Backup Developer Guide, checked 2026-10-11): https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html — Centralized backup plans, data protection and backup monitoring.",
+    "Official AWS documentation (AWS Well-Architected Framework: six pillars, checked 2026-10-11): https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html — Operational excellence, security, reliability, performance efficiency, cost optimization and sustainability."
+  ],
+  "technical_review_date": "2026-10-11",
+  "status": "draft",
+  "status_note": "Generated from the PDF syllabus and official reference index; must be technically reviewed and tested for the target AWS service/Region before publication."
+}

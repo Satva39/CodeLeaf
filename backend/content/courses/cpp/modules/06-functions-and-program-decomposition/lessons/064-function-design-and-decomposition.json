@@ -1,0 +1,193 @@
+{
+  "id": "cpp-lesson-064",
+  "slug": "function-design-and-decomposition",
+  "title": "Function Design and Decomposition",
+  "sequence": 64,
+  "module_id": "cpp-module-06",
+  "module_slug": "functions-and-program-decomposition",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "cpp-lesson-063"
+  ],
+  "previous_lesson_id": "cpp-lesson-063",
+  "next_lesson_id": "cpp-lesson-065",
+  "keywords": [
+    "function-design-and-decomposition",
+    "single-responsibility-functions",
+    "choosing-good-function-names",
+    "reducing-repeated-code",
+    "preconditions-and-postconditions",
+    "pure-functions-and-side-effects",
+    "designing-reusable-interfaces"
+  ],
+  "source_syllabus_number": 64,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Single-Responsibility Functions",
+    "Choosing Good Function Names",
+    "Reducing Repeated Code",
+    "Preconditions and Postconditions",
+    "Pure Functions and Side Effects",
+    "Designing Reusable Interfaces"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and core rule of function design and decomposition using at least one example.",
+    "Trace or adapt a minimal C++ example related to function design and decomposition and state its expected result.",
+    "Identify one precondition, error case, lifetime issue, portability assumption or version constraint relevant to the topic."
+  ],
+  "content": {
+    "intro": "Function Design and Decomposition focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Function Design and Decomposition matters because keep each function focused, state its contract, avoid returning references to local objects and add a small test for each behavior. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Function Design and Decomposition: visual trace",
+        "asset_path": "diagrams/lessons/lesson-064.svg",
+        "alt_text": "Lesson 64 visual for Function Design and Decomposition; concept: Single-Responsibility Functions; apply: Choosing Good Function Names; verify: Reducing Repeated Code.",
+        "caption": "Original lesson-specific overview: understand single-responsibility functions, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Functions name a unit of behavior and make interfaces visible. Parameter passing, return types and lifetime rules decide how data is shared and who owns the result.\n\nFunction Design and Decomposition focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nKeep each function focused, state its contract, avoid returning references to local objects and add a small test for each behavior."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Function Design and Decomposition",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <iostream>\n\nint main() {\n    constexpr int first = 6;\n    constexpr int second = 7;\n    const int result = first * second;\n    std::cout << \"Function Design and Decomposition: \" << result << '\\n';\n}\n",
+        "expected_output": "Function Design and Decomposition: 42",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "The minimal program keeps the input state and result visible. Extend it with the topic-specific edge case and test the assumption stated in the lesson."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Single-Responsibility Functions",
+            "text": "Explain single-responsibility functions in the context of Function Design and Decomposition: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Choosing Good Function Names",
+            "text": "Compare the alternatives in Choosing Good Function Names by their semantics, constraints and trade-offs; use the simpler option that satisfies the real requirement."
+          },
+          {
+            "title": "Reducing Repeated Code",
+            "text": "Explain reducing repeated code in the context of Function Design and Decomposition: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Preconditions and Postconditions",
+            "text": "Explain preconditions and postconditions in the context of Function Design and Decomposition: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Pure Functions and Side Effects",
+            "text": "Explain pure functions and side effects in the context of Function Design and Decomposition: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Designing Reusable Interfaces",
+            "text": "Use designing reusable interfaces as a design decision: state the contract, explain the trade-off, and keep the implementation maintainable and testable."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate single-responsibility functions, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "Use standard C++ rather than compiler-specific behavior unless the lesson explicitly labels the dependency. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-064-questions.json",
+    "task": "Create a small, independent example that demonstrates function design and decomposition. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example builds under a documented standard mode with warnings enabled.",
+      "The predicted and observed result are recorded; deviations are explained.",
+      "At least one boundary, invalid-input, lifetime or portability assumption is tested or documented."
+    ],
+    "hints": [
+      "Start with the smallest example that demonstrates single-responsibility functions.",
+      "Trace the relevant values and state the expected output before running the program.",
+      "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+    ],
+    "summary": [
+      "Function Design and Decomposition is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying function design and decomposition.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation"
+  },
+  "task": "Create a small, independent example that demonstrates function design and decomposition. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+  "hints": [
+    "Start with the smallest example that demonstrates single-responsibility functions.",
+    "Trace the relevant values and state the expected output before running the program.",
+    "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+  ],
+  "expected_output": "Function Design and Decomposition: 42",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Function Design and Decomposition is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying function design and decomposition.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 6, lesson 64: Function Design and Decomposition.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

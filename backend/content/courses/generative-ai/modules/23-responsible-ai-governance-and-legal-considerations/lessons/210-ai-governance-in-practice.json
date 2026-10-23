@@ -1,0 +1,166 @@
+{
+  "id": "genai-lesson-210",
+  "slug": "ai-governance-in-practice",
+  "title": "AI Governance in Practice",
+  "sequence": 210,
+  "module_id": "genai-module-23",
+  "module_slug": "responsible-ai-governance-and-legal-considerations",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional-practice",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "genai-lesson-204",
+    "genai-lesson-205"
+  ],
+  "previous_lesson_id": "genai-lesson-209",
+  "next_lesson_id": "genai-lesson-211",
+  "keywords": [
+    "AI Governance in Practice",
+    "Establishing an AI system inventory",
+    "Assigning ownership and responsibilities",
+    "Defining approval and release processes",
+    "Maintaining model and prompt records",
+    "Documenting incidents and corrective actions",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 210,
+  "subtopics": [
+    "Establishing an AI system inventory",
+    "Assigning ownership and responsibilities",
+    "Defining approval and release processes",
+    "Maintaining model and prompt records",
+    "Documenting incidents and corrective actions",
+    "Periodic governance reviews"
+  ],
+  "learning_outcomes": [
+    "Explain establishing an ai system inventory and how it connects to ai governance in practice.",
+    "Apply assigning ownership and responsibilities in the example and predict the output before running it.",
+    "Test one realistic edge case for ai governance in practice and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers ai governance in practice through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Document risk decisions, policy boundaries, stakeholder impact, licensing, applicable law, and governance ownership; legal requirements depend on jurisdiction and use case.",
+    "why_it_matters": "Use establishing an ai system inventory as a lens for understanding ai governance in practice. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "AI Governance in Practice: concept map",
+        "asset_path": "diagrams/lessons/lesson-210-ai-governance-in-practice.svg",
+        "alt_text": "Diagram for AI Governance in Practice: understand Establishing an AI system inventory, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Establishing an AI system inventory, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Use establishing an ai system inventory as a lens for understanding ai governance in practice. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Establishing an AI system inventory",
+            "text": "Use establishing an ai system inventory as a lens for understanding ai governance in practice. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Assigning ownership and responsibilities",
+            "text": "Use assigning ownership and responsibilities as a lens for understanding ai governance in practice. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Defining approval and release processes",
+            "text": "Use defining approval and release processes as a lens for understanding ai governance in practice. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Maintaining model and prompt records",
+            "text": "Treat maintaining model and prompt records as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs."
+          },
+          {
+            "title": "Documenting incidents and corrective actions",
+            "text": "Documenting incidents and corrective actions describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+          },
+          {
+            "title": "Periodic governance reviews",
+            "text": "Periodic governance reviews is a control problem as much as a model-behavior problem. Establish explicit boundaries in trusted application code, minimize data exposure, test realistic misuse and failure cases, and record who is responsible for reviewing residual risk. A prompt alone is not a security boundary."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: AI Governance in Practice\ninventory = [{\"system\": \"FAQ RAG\", \"owner\": \"support\", \"risk_tier\": \"medium\"}, {\"system\": \"draft writer\", \"owner\": \"marketing\", \"risk_tier\": \"low\"}]\nprint({\"systems_in_inventory\": len(inventory), \"owner_coverage\": all(bool(x[\"owner\"]) for x in inventory)})",
+        "expected_output": "{'systems_in_inventory': 2, 'owner_coverage': True}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice establishing an ai system inventory within ai governance in practice: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'systems_in_inventory': 2, 'owner_coverage': True}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-210-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "AI Governance in Practice is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://www.nist.gov/itl/ai-risk-management-framework",
+      "https://genai.owasp.org/initiative/owasp-top-10-for-llm-and-genai/"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "AI Risk Management Framework",
+      "url": "https://www.nist.gov/itl/ai-risk-management-framework",
+      "publisher": "National Institute of Standards and Technology",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "risk management"
+      ]
+    },
+    {
+      "title": "OWASP Top 10 for LLM and GenAI",
+      "url": "https://genai.owasp.org/initiative/owasp-top-10-for-llm-and-genai/",
+      "publisher": "OWASP GenAI Security Project",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "prompt injection"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

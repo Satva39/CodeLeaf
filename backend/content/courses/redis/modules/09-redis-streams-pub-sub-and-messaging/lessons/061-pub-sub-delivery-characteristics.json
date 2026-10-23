@@ -1,0 +1,152 @@
+{
+  "id": "redis-lesson-061",
+  "slug": "pub-sub-delivery-characteristics",
+  "title": "Pub/Sub Delivery Characteristics",
+  "sequence": 61,
+  "module_id": "redis-module-09",
+  "module_slug": "redis-streams-pub-sub-and-messaging",
+  "level": "intermediate to advanced",
+  "difficulty": "intermediate",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-060"
+  ],
+  "previous_lesson_id": "redis-lesson-060",
+  "next_lesson_id": "redis-lesson-062",
+  "keywords": [
+    "pub-sub-delivery-characteristics",
+    "online-subscriber-requirements",
+    "message-delivery-limitations",
+    "reconnection-behavior",
+    "why-ordinary-pub-sub-is-not-a-durable-message-queue",
+    "choosing-pub-sub-for-notifications-and-live-updates",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 61,
+  "subtopics": [
+    "Online subscriber requirements",
+    "Message delivery limitations",
+    "Reconnection behavior",
+    "Why ordinary Pub/Sub is not a durable message queue",
+    "Choosing Pub/Sub for notifications and live updates"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Pub/Sub Delivery Characteristics and distinguish it from a related Redis concept.",
+    "Apply or trace Pub/Sub Delivery Characteristics in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Pub/Sub Delivery Characteristics and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Pub/Sub Delivery Characteristics in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Pub/Sub Delivery Characteristics helps implement choose between best-effort broadcast and recoverable event processing. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Pub/Sub Delivery Characteristics",
+        "asset_path": "diagrams/lesson-061-pub-sub-delivery-characteristics.svg",
+        "alt_text": "Concept diagram for Pub/Sub Delivery Characteristics, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Pub/Sub Delivery Characteristics; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Pub/Sub Delivery Characteristics helps implement choose between best-effort broadcast and recoverable event processing. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Pub/Sub Delivery Characteristics, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Online subscriber requirements",
+            "text": "Connect Online subscriber requirements to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Message delivery limitations",
+            "text": "Connect Message delivery limitations to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Reconnection behavior",
+            "text": "Connect Reconnection behavior to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Why ordinary Pub/Sub is not a durable message queue",
+            "text": "Connect Why ordinary Pub/Sub is not a durable message queue to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Choosing Pub/Sub for notifications and live updates",
+            "text": "Connect Choosing Pub/Sub for notifications and live updates to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Pub/Sub Delivery Characteristics",
+        "language": "redis-cli (two terminals)",
+        "execution_mode": "static-validation",
+        "code": "SUBSCRIBE demo:notifications\n# In a second terminal:\nPUBLISH demo:notifications \"refresh\"",
+        "expected_output": "First terminal receives the published message while subscribed.",
+        "run_instructions": "Pub/Sub is best-effort broadcast to online subscribers, not a durable queue. Run the commands in two local terminals.",
+        "reset_steps": "Unsubscribe in the first terminal; no durable record is stored.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Pub/Sub Delivery Characteristics. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Pub/Sub Delivery Characteristics in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Pub/Sub Delivery Characteristics.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "First terminal receives the published message while subscribed.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-061-questions.json",
+    "recap": [
+      "Pub/Sub Delivery Characteristics is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Redis data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "strings, hashes, lists, sets, sorted sets, streams, geospatial indexes, bitmaps, bitfields, JSON, arrays, time series, probabilistic structures, vector sets"
+      ]
+    },
+    {
+      "title": "Compare data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/compare-data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "data-type selection and use-case trade-offs"
+      ]
+    },
+    {
+      "title": "Redis commands reference",
+      "url": "https://redis.io/docs/latest/commands/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "command syntax, return values, complexity, compatibility and command history"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

@@ -1,0 +1,63 @@
+{
+  "id": "github-actions-exercise-012",
+  "slug": "pass-data-between-jobs",
+  "title": "Pass data between jobs",
+  "type": "coding",
+  "lesson_id": "github-actions-lesson-063",
+  "module_id": "github-actions-module-09",
+  "difficulty": "medium",
+  "sequence": 12,
+  "prompt": "Generate a version string in one job and consume it in another using job outputs.",
+  "objective": "Demonstrate the behavior of pass data between jobs and capture verifiable evidence.",
+  "target_skills": [
+    "intermediate",
+    "workflow YAML",
+    "validation",
+    "safe automation"
+  ],
+  "starter": {
+    "language": "yaml",
+    "code": "name: Pass a small value between jobs\non: workflow_dispatch\npermissions:\n  contents: read\njobs:\n  prepare:\n    runs-on: ubuntu-latest\n    outputs:\n      label: ${{ steps.make.outputs.label }}\n    steps:\n      - id: make\n        run: echo \"label=demo-${GITHUB_RUN_NUMBER}\" >> \"$GITHUB_OUTPUT\"\n  consume:\n    needs: prepare\n    runs-on: ubuntu-latest\n    steps:\n      - env:\n          LABEL: ${{ needs.prepare.outputs.label }}\n        run: echo \"Received label=$LABEL\"",
+    "execution_mode": "workflow-fragment"
+  },
+  "expected_output": "A reviewed workflow or design note satisfying: GITHUB_OUTPUT, outputs:, needs:. Verify behavior on a disposable repository where execution is required; a static sketch is not proof of a live deployment.",
+  "public_tests": [
+    {
+      "name": "Required evidence check",
+      "required_strings": [
+        "GITHUB_OUTPUT",
+        "outputs:",
+        "needs:"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Include or explain `GITHUB_OUTPUT`.",
+    "Include or explain `outputs:`.",
+    "Include or explain `needs:`.",
+    "Explain one validation result or limitation.",
+    "Do not include a real secret or use production resources."
+  ],
+  "hints": [
+    "First identify the trigger, input, and expected result.",
+    "Start with read-only permissions and a disposable branch or test environment.",
+    "Compare your result with the linked lesson and official documentation; distinguish a configuration sketch from a live integration."
+  ],
+  "solution": {
+    "answer": null,
+    "explanation": "The detailed reference solution is stored in a protected repository-only JSON file; it is not intended for a learner-facing response."
+  },
+  "solution_file": "../solutions/012-pass-data-between-jobs-solution.json",
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "GITHUB_OUTPUT",
+      "outputs:",
+      "needs:"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus human review for workflow semantics and security boundaries.",
+  "retry_policy": "Allow retries; incorrect submissions do not award XP. The platform awards exercise XP only after server-verified successful completion and applies idempotency per activity.",
+  "status": "draft",
+  "status_note": "Source mapping: Section C: Practical Exercises; original learning task adapted to CodeLeaf structure. Starter example aligned with its linked lesson; review and replace any remaining repository-specific placeholders."
+}

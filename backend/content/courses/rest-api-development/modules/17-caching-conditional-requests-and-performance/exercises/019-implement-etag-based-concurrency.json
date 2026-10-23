@@ -1,0 +1,55 @@
+{
+  "id": "rest-api-development-exercise-019",
+  "slug": "implement-etag-based-concurrency",
+  "title": "Implement ETag-based concurrency",
+  "type": "coding",
+  "lesson_id": "rest-api-development-lesson-161",
+  "module_id": "rest-api-development-module-17",
+  "difficulty": "intermediate",
+  "sequence": 19,
+  "prompt": "Reject a resource update when the client sends a stale If-Match validator.",
+  "objective": "Practice the lesson concept from Lesson 161: Optimistic Concurrency Control.",
+  "target_skills": [
+    "Optimistic Concurrency Control",
+    "API contract reasoning",
+    "verification and negative-case testing"
+  ],
+  "starter": {
+    "language": "text",
+    "code": "# Implement ETag-based concurrency\n# Complete the task described in the prompt.\n"
+  },
+  "expected_output": "Compare the submitted validator to current state and return a precondition failure for stale writes.",
+  "public_tests": [
+    {
+      "name": "required acceptance evidence",
+      "required_strings": [
+        "ETag",
+        "If-Match",
+        "412"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Compare the submitted validator to current state and return a precondition failure for stale writes.",
+    "Include the required evidence in the submitted answer or example.",
+    "State one negative case and how the API should respond."
+  ],
+  "hints": [
+    "List the required inputs, outputs, and failure cases before writing the solution.",
+    "Use the lesson diagram and official references to confirm the API semantics.",
+    "Check that the example is safe, bounded, and testable; do not execute arbitrary code in the API process."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "ETag",
+      "If-Match",
+      "412"
+    ]
+  },
+  "grading_method": "Server-side static required-string check followed by human review of technical correctness and behavior. The API does not execute learner-supplied code.",
+  "retry_policy": "Allow retries; incorrect submissions do not award XP. Platform-defined XP is awarded once only after a successful completion.",
+  "solution_file": "../solutions/019-implement-etag-based-concurrency-solution.json",
+  "status": "draft",
+  "status_note": "Unreviewed exercise draft; validate acceptance strings and intended grading before publishing."
+}

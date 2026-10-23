@@ -1,0 +1,259 @@
+{
+  "id": "github-actions-lesson-161",
+  "slug": "documenting-and-handing-over-automation",
+  "title": "Documenting and Handing Over Automation",
+  "sequence": 161,
+  "module_id": "github-actions-module-21",
+  "module_slug": "capstone-preparation-and-professional-workflow-design",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "github-actions-lesson-160"
+  ],
+  "previous_lesson_id": "github-actions-lesson-160",
+  "next_lesson_id": "github-actions-lesson-162",
+  "keywords": [
+    "documenting-and-handing-over-automation",
+    "capstone-preparation-and-professional-workflow-design",
+    "workflow-architecture-diagrams",
+    "setup-and-configuration-instructions",
+    "required-secrets-and-permissions-documentation",
+    "troubleshooting-runbooks",
+    "ownership-and-maintenance-procedures",
+    "release-and-incident-procedures"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of documenting and handing over automation and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to documenting and handing over automation.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on documenting and handing over automation. A useful handover includes workflow purpose, trigger conditions, required variables/secrets by name only, action ownership, runbooks, dashboards, and rollback instructions. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "Documenting and Handing Over Automation matters because it affects correctness, security, maintainability, or operating cost. A useful handover includes workflow purpose, trigger conditions, required variables/secrets by name only, action ownership, runbooks, dashboards, and rollback instructions. A professional pipeline is evidenced, not merely diagrammed: document decisions, prove success and selected failure paths, trace artifacts to commits, and review security and recovery.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 21 visual map",
+        "asset_path": "diagrams/module-21-overview.svg",
+        "alt_text": "Ordered overview of module 21: Planning a Production-Ready Pipeline; Designing a Workflow Repository; Validating and Testing Workflow Changes; Reviewing a Pipeline Before Production; Documenting and Handing Over Automation; Professional GitHub Actions Portfolio.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "A useful handover includes workflow purpose, trigger conditions, required variables/secrets by name only, action ownership, runbooks, dashboards, and rollback instructions. A professional pipeline is evidenced, not merely diagrammed: document decisions, prove success and selected failure paths, trace artifacts to commits, and review security and recovery. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "Workflow architecture diagrams",
+            "text": "Choose runner labels and access boundaries that match the workload. Self-hosted machines need patching, network segmentation, secret protection, and cleanup; keep untrusted contributions away from privileged persistent runners."
+          },
+          {
+            "title": "Setup and configuration instructions",
+            "text": "For setup and configuration instructions, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Required secrets and permissions documentation",
+            "text": "Declare only the token scopes the job requires. A read-only job should not receive write access; verify permissions at workflow and job scope and review organization policy."
+          },
+          {
+            "title": "Troubleshooting runbooks",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Ownership and maintenance procedures",
+            "text": "Record ownership, approval boundaries, version/pin choices, permission policy, and release evidence so another maintainer can explain and audit the automation."
+          },
+          {
+            "title": "Release and incident procedures",
+            "text": "Match the event to the intended lifecycle, then test positive and negative branch/path/activity cases. Event payloads may be attacker-controlled, and scheduled jobs use UTC rather than a guaranteed exact start time."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "name: Workflow handover summary\non: workflow_dispatch\npermissions:\n  contents: read\njobs:\n  handover:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Summarize revision and owner\n        run: |\n          {\n            echo \"## Workflow handover\"\n            echo \"- Repository: $GITHUB_REPOSITORY\"\n            echo \"- Source commit: $GITHUB_SHA\"\n            echo \"- Runbook: document required settings and recovery steps\"\n          } >> \"$GITHUB_STEP_SUMMARY\"",
+        "expected_output": "The summary gives maintainers a source revision and a reminder to document configuration ownership and recovery steps.",
+        "run_instructions": "Compare this summary with a human-reviewed runbook before handover.",
+        "reset_steps": "List secret names and owners in the runbook, never actual secret values.",
+        "execution_mode": "workflow-fragment"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to documenting and handing over automation. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain documenting and handing over automation, read the example, and identify a way to validate it. The wider system goal remains: Plan, validate, document, and present a production-ready automation system."
+      }
+    ],
+    "task": "Apply documenting and handing over automation to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: A useful handover includes workflow purpose, trigger conditions, required variables/secrets by name only, action ownership, runbooks, dashboards, and rollback instructions.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: A useful handover includes workflow purpose, trigger conditions, required variables/secrets by name only, action ownership, runbooks, dashboards, and rollback instructions. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "A useful handover includes workflow purpose, trigger conditions, required variables/secrets by name only, action ownership, runbooks, dashboards, and rollback instructions.",
+      "A professional pipeline is evidenced, not merely diagrammed: document decisions, prove success and selected failure paths, trace artifacts to commits, and review security and recovery.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-161-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "workflow-fragment",
+    "references": [
+      {
+        "title": "Workflow syntax for GitHub Actions",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "workflow files",
+          "jobs",
+          "steps",
+          "permissions",
+          "defaults",
+          "concurrency",
+          "matrix",
+          "environments"
+        ]
+      },
+      {
+        "title": "Secure use reference",
+        "url": "https://docs.github.com/en/actions/reference/security/secure-use",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "security_guidance",
+        "supports": [
+          "least privilege",
+          "third-party actions",
+          "full SHA pinning",
+          "untrusted input",
+          "privileged workflow triggers",
+          "cache security"
+        ]
+      },
+      {
+        "title": "Configuring and managing deployments",
+        "url": "https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "deployment environments",
+          "protection rules",
+          "approvals",
+          "concurrency",
+          "deployment history"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Workflow syntax for GitHub Actions",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "workflow files",
+        "jobs",
+        "steps",
+        "permissions",
+        "defaults",
+        "concurrency",
+        "matrix",
+        "environments"
+      ]
+    },
+    {
+      "title": "Secure use reference",
+      "url": "https://docs.github.com/en/actions/reference/security/secure-use",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "security_guidance",
+      "supports": [
+        "least privilege",
+        "third-party actions",
+        "full SHA pinning",
+        "untrusted input",
+        "privileged workflow triggers",
+        "cache security"
+      ]
+    },
+    {
+      "title": "Configuring and managing deployments",
+      "url": "https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "deployment environments",
+        "protection rules",
+        "approvals",
+        "concurrency",
+        "deployment history"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "161",
+    "module_title": "Capstone Preparation and Professional Workflow Design",
+    "subtopics": [
+      "Workflow architecture diagrams",
+      "Setup and configuration instructions",
+      "Required secrets and permissions documentation",
+      "Troubleshooting runbooks",
+      "Ownership and maintenance procedures",
+      "Release and incident procedures"
+    ]
+  }
+}

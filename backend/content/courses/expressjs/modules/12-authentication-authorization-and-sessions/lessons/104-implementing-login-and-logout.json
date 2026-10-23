@@ -1,0 +1,183 @@
+{
+  "id": "expressjs-lesson-104",
+  "slug": "implementing-login-and-logout",
+  "title": "Implementing Login and Logout",
+  "sequence": 104,
+  "module_id": "expressjs-module-12",
+  "module_slug": "authentication-authorization-and-sessions",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "expressjs-lesson-103"
+  ],
+  "previous_lesson_id": "expressjs-lesson-103",
+  "next_lesson_id": "expressjs-lesson-105",
+  "keywords": [
+    "implementing-login-and-logout",
+    "authentication-authorization-and-sessions",
+    "credential-verification",
+    "establishing-an-authenticated-state",
+    "invalid-login-responses",
+    "logout-behavior",
+    "session-invalidation-and-token-revocation-considerations"
+  ],
+  "source_syllabus_number": 104,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Credential verification",
+    "Establishing an authenticated state",
+    "Invalid login responses",
+    "Logout behavior",
+    "Session invalidation and token revocation considerations"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and terminology of Implementing Login and Logout.",
+    "Apply or interpret one Express.js 5 pattern related to credential verification.",
+    "Identify a meaningful edge case and choose a repeatable local test for it."
+  ],
+  "execution_mode": "server-runner",
+  "status": "draft",
+  "content": {
+    "intro": "In this lesson, you will learn implementing login and logout and connect the named syllabus points to a small Express.js example. The course baseline is Express 5.x on a supported Node.js LTS release; the page shows reference output, not execution of Node.js code.",
+    "why_it_matters": "Implementing Login and Logout matters because it helps keep the request/response contract explicit and the application maintainable as inputs, users and dependencies become less predictable. Identity plus server-side permission checks.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Concept map: Implementing Login and Logout",
+        "asset_path": "diagrams/lesson-104-visual.svg",
+        "alt_text": "A conceptual three-stage flow for Implementing Login and Logout: context or input, the Express.js concept, and verification of expected behavior with an edge case.",
+        "caption": "Use this visual to connect credential verification to implementing login and logout; the final step is to verify both normal and boundary behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Implementing Login and Logout is part of authentication, authorization, and sessions. Authentication answers who is making a request; authorization answers what that identity may do. Hash passwords with established libraries, enforce access on the server, and design sessions/tokens for expiration and revocation. For this topic, make the observable behavior explicit, then check what happens when an input is missing, malformed, unauthorized, or a dependency fails (choose the relevant cases for this lesson)."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the attached syllabus",
+        "items": [
+          {
+            "title": "Credential verification",
+            "text": "Authentication verifies an identity. Store password hashes with an established password-hashing library, rate-limit sensitive endpoints, and never log or return credentials."
+          },
+          {
+            "title": "Establishing an authenticated state",
+            "text": "Connect this syllabus point to Implementing Login and Logout: state the expected behavior, identify a realistic edge case, and choose a test or observation that proves the behavior instead of relying on assumptions."
+          },
+          {
+            "title": "Invalid login responses",
+            "text": "Authentication verifies an identity. Store password hashes with an established password-hashing library, rate-limit sensitive endpoints, and never log or return credentials."
+          },
+          {
+            "title": "Logout behavior",
+            "text": "Authentication verifies an identity. Store password hashes with an established password-hashing library, rate-limit sensitive endpoints, and never log or return credentials."
+          },
+          {
+            "title": "Session invalidation and token revocation considerations",
+            "text": "Choose one coherent identity flow, verify credentials/tokens at the server, set expiration and revocation behavior, and configure cookies/tokens for the actual deployment threat model."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Read the example carefully",
+        "text": "A useful way to study implementing login and logout is to start from the first syllabus point — credential verification — and follow it through a small request or application example. Keep Express's built-in behavior separate from optional packages and your own application policy."
+      },
+      {
+        "type": "code",
+        "title": "Worked example (reference only)",
+        "language": "javascript",
+        "code": "import bcrypt from 'bcrypt';\n\n// Registration: store the hash, never the password.\nconst passwordHash = await bcrypt.hash(password, 12);\n\n// Login: verify the submitted password against the stored hash.\nconst valid = await bcrypt.compare(submittedPassword, passwordHash);\nif (!valid) {\n  // Return a generic invalid-credentials response.\n}",
+        "expected_output": "Registration stores a password hash. Login compares the submitted password with the stored hash; the actual account/session flow remains application-specific.",
+        "notes": "Use a maintained password-hashing library and apply rate limits. This fragment needs to be inside an async function and requires the bcrypt package."
+      },
+      {
+        "type": "callout",
+        "title": "Safety / production rule",
+        "text": "Module rule — Authentication answers who is making a request; authorization answers what that identity may do. Hash passwords with established libraries, enforce access on the server, and design sessions/tokens for expiration and revocation."
+      }
+    ],
+    "expected_output": "Registration stores a password hash. Login compares the submitted password with the stored hash; the actual account/session flow remains application-specific.",
+    "task": "Try it yourself: adapt the worked example to demonstrate implementing login and logout. Write down the exact request or command, expected status/body, one boundary case, and how you would reset the local lab. CodeLeaf does not execute Express code in this lesson page; run Node.js server examples locally.",
+    "task_acceptance_criteria": [
+      "The example has a clear local run or inspection path and the required dependencies are named.",
+      "A normal request and a malformed/edge/failure request have documented expected outcomes.",
+      "No credentials, production data, or claim of successful runtime execution is included."
+    ],
+    "hints": [
+      "Hint 1: identify which part of implementing login and logout is supplied by Express and which part belongs to your own application or another package.",
+      "Hint 2: check the official Express 5 guide/API reference and isolate the smallest example that proves one behavior.",
+      "Hint 3: verify a success case, a boundary case and the expected status/response; restart from a clean state before repeating."
+    ],
+    "solution_notes": "Suggested approach: Authentication answers who is making a request; authorization answers what that identity may do. Hash passwords with established libraries, enforce access on the server, and design sessions/tokens for expiration and revocation. The sample is a focused reference fragment. Review all dependency, schema, proxy and runtime assumptions before using it in an application.",
+    "common_mistakes": [
+      {
+        "problem": "Copying an example without checking its assumptions",
+        "why": "A fragment may omit route setup, middleware order, external packages, database schema or production configuration.",
+        "fix": "State the runtime/dependency assumptions, run the focused example locally, and test a success path plus one failure path."
+      },
+      {
+        "problem": "Treating all request values as trusted",
+        "why": "Parameters, query values, body properties, files and upstream responses can be missing or malicious.",
+        "fix": "Validate schema, type and bounds at the boundary; keep authorization and database constraints as separate checks."
+      },
+      {
+        "problem": "Assuming the demo output means the server executed",
+        "why": "The course page shows reference output for Node.js/Express code; it is not an isolated Node runtime.",
+        "fix": "Run the example locally with the documented Node.js version and record actual command/output and test results."
+      }
+    ],
+    "summary": [
+      "Explain the central idea behind implementing login and logout.",
+      "Connect the relevant subtopics to the request/response or application boundary.",
+      "Verify one normal outcome and one edge/error case with repeatable evidence."
+    ],
+    "run_mode": "static-validation",
+    "execution_mode": "server-runner",
+    "run_instructions": [
+      "Open a terminal in the lesson lab directory.",
+      "Install dependencies for the sample if required; use a supported Node.js LTS release.",
+      "Run the documented file with node, send the stated request with curl or an API client, and compare the actual status/body with the reference."
+    ],
+    "reset_steps": [
+      "Stop the local process with Ctrl+C.",
+      "Clear only temporary/synthetic records or files created by the lab.",
+      "Restart the server before repeating the example."
+    ],
+    "troubleshooting": [
+      "If node reports a module-syntax error, check package.json module type or use the matching CommonJS syntax.",
+      "If a package cannot be resolved, install the named dependency in the local lab and verify the lockfile.",
+      "If output differs, verify middleware order, the request path/method, environment variables and the expected runtime version."
+    ],
+    "accessibility_notes": "The lesson diagram has an explicit title, description and textual labels; color is supplementary and not the only way to distinguish stages.",
+    "version_notes": "Express 5.x teaching baseline. Check the official migration guide before applying these examples to Express 4 projects.",
+    "knowledge_check_file": "exams/question-files/lesson-104-questions.json"
+  },
+  "sources": [
+    {
+      "title": "Express.js security best practices",
+      "url": "https://expressjs.com/en/advanced/best-practice-security.html",
+      "publisher": "OpenJS Foundation / Express.js",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "TLS, secure cookies, dependency hygiene, Helmet, input validation and production security."
+      ]
+    },
+    {
+      "title": "Express.js API reference",
+      "url": "https://expressjs.com/en/5x/api.html",
+      "publisher": "OpenJS Foundation / Express.js",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "Application, request, response, Router, built-in middleware APIs and current signatures."
+      ]
+    }
+  ],
+  "exercise_files": [
+    "../exercises/015-authentication-system.json"
+  ]
+}

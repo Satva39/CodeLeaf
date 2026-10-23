@@ -1,0 +1,198 @@
+{
+  "id": "go-lesson-033",
+  "slug": "type-sizes-and-numeric-limits",
+  "title": "Type Sizes and Numeric Limits",
+  "sequence": 33,
+  "module_id": "go-module-04",
+  "module_slug": "variables-constants-and-data-types",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "go-lesson-032"
+  ],
+  "previous_lesson_id": "go-lesson-032",
+  "next_lesson_id": "go-lesson-034",
+  "keywords": [
+    "type sizes and numeric limits",
+    "fixed width and architecture dependent integers",
+    "signed and unsigned ranges",
+    "integer overflow behavior",
+    "floating point precision",
+    "safe numeric calculations",
+    "Go",
+    "Golang"
+  ],
+  "source_syllabus_number": 33,
+  "subtopics": [
+    "Fixed-width and architecture-dependent integers",
+    "Signed and unsigned ranges",
+    "Integer overflow behavior",
+    "Floating-point precision",
+    "Safe numeric calculations"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and behavior of type sizes and numeric limits.",
+    "Apply at least one lesson concept—fixed-width and architecture-dependent integers—in a small Go example or workflow.",
+    "Predict a representative result, then test a boundary case and explain any difference."
+  ],
+  "exercise_files": [],
+  "content": {
+    "intro": "Type Sizes and Numeric Limits gives you a rule for reading or writing Go programs. Go is statically typed and its syntax is intentionally regular; read the declarations and expressions from their types and scope, then predict what each statement changes. The Go specification is the authoritative reference for exact behavior.",
+    "why_it_matters": "Small language rules have a large effect: they determine whether a program compiles and whether edge cases behave as expected.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 4 overview: Variables, Constants, and Data Types",
+        "asset_path": "diagrams/module-04-overview.svg",
+        "alt_text": "Overview of Module 4, Variables, Constants, and Data Types; this lesson is lesson 33 in the ordered module sequence.",
+        "caption": "Use the module map to place “Type Sizes and Numeric Limits” within the larger sequence, then return to the individual code and practice below."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Type Sizes and Numeric Limits gives you a rule for reading or writing Go programs. Go is statically typed and its syntax is intentionally regular; read the declarations and expressions from their types and scope, then predict what each statement changes. The Go specification is the authoritative reference for exact behavior."
+      },
+      {
+        "type": "list",
+        "title": "Topics covered in this lesson",
+        "items": [
+          {
+            "title": "Fixed-width and architecture-dependent integers",
+            "text": "Be able to explain fixed-width and architecture-dependent integers, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Signed and unsigned ranges",
+            "text": "Be able to explain signed and unsigned ranges, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Integer overflow behavior",
+            "text": "Be able to explain integer overflow behavior, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Floating-point precision",
+            "text": "Be able to explain floating-point precision, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Safe numeric calculations",
+            "text": "Be able to explain safe numeric calculations, identify the inputs or program state it affects, and name one boundary case worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Type Sizes and Numeric Limits",
+        "language": "bash",
+        "code": "// Production readiness sequence\n// gofmt -w .\n// go test ./...\n// go vet ./...\n// govulncheck ./...\n// Build a versioned artifact, deploy gradually, verify health signals, and keep a rollback plan.\n",
+        "expected_output": "Formatting, tests, static analysis, vulnerability review, and artifact verification complete before release.",
+        "run_mode": "static-validation",
+        "run_instructions": "Run commands from the project root. Install govulncheck as documented by the Go security guide when it is not present."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through the example",
+        "text": "First, identify the input or initial state in the example for type sizes and numeric limits. Next, trace the operation or contract that matters, and predict the result before running it. If the example depends on a version-specific feature, a driver, or an external service, follow the stated prerequisites rather than assuming it works in a browser preview."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to one subtopic—Fixed-width and architecture-dependent integers—and add a second case that could fail or behave differently. Write down the expected result before testing."
+      }
+    ],
+    "task": "Create a small example connected to “Type Sizes and Numeric Limits”. Use Fixed-width and architecture-dependent integers as the starting point, predict the output, then add one invalid, empty, or boundary case and document its result.",
+    "task_acceptance_criteria": [
+      "The example demonstrates fixed-width and architecture-dependent integers or a closely related concept.",
+      "Inputs, relevant state changes, and expected output are clear.",
+      "At least one boundary case is deliberately tested or documented.",
+      "Errors are handled honestly and no success state is reported when the operation fails."
+    ],
+    "hints": [
+      "Start from the simplest example related to fixed-width and architecture-dependent integers.",
+      "Predict the result manually and annotate the value that changes at each step.",
+      "Run `gofmt` and the appropriate local `go run`, `go test`, `go vet`, or inspection command when prerequisites are available."
+    ],
+    "expected_output": "Formatting, tests, static analysis, vulnerability review, and artifact verification complete before release.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-033-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the happy-path output proves all inputs are safe.",
+        "why": "Empty, malformed, boundary, or concurrent cases may follow different paths.",
+        "fix": "Add focused tests for a normal input and at least one relevant edge case."
+      },
+      {
+        "problem": "Ignoring returned errors or external-system status.",
+        "why": "Go APIs commonly report expected failures as explicit error values.",
+        "fix": "Check errors close to the operation, add useful context when propagating, and clean up resources."
+      },
+      {
+        "problem": "Using an API or syntax without checking the selected Go version.",
+        "why": "Language and standard-library capabilities can change between releases.",
+        "fix": "Record `go version`, inspect the `go` directive, and read official release notes for version-specific topics."
+      }
+    ],
+    "summary": [
+      "Type Sizes and Numeric Limits provides a reusable rule or workflow for Go programs.",
+      "The subtopics to revisit are: Fixed-width and architecture-dependent integers; Signed and unsigned ranges; Integer overflow behavior; Floating-point precision; Safe numeric calculations.",
+      "Prefer a small reproducible example, explicit errors, appropriate tests, and version-matched official documentation."
+    ],
+    "references": [
+      {
+        "title": "Go Documentation",
+        "url": "https://go.dev/doc/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "tutorials",
+          "language concepts",
+          "tooling",
+          "application development"
+        ]
+      },
+      {
+        "title": "The Go Programming Language Specification",
+        "url": "https://go.dev/ref/spec",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "syntax",
+          "types",
+          "control flow",
+          "interfaces"
+        ]
+      }
+    ],
+    "accessibility_note": "The diagram includes descriptive alt text and a text caption. Code examples are also described in prose; do not rely on color alone to understand a sequence.",
+    "execution_note": "Run commands from the project root. Install govulncheck as documented by the Go security guide when it is not present. Examples that need a database driver, external service, isolated execution environment, or version-specific feature are labeled as static examples and should not be treated as already executed."
+  },
+  "sources": [
+    {
+      "title": "Go Documentation",
+      "url": "https://go.dev/doc/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tutorials",
+        "language concepts",
+        "tooling",
+        "application development"
+      ]
+    },
+    {
+      "title": "The Go Programming Language Specification",
+      "url": "https://go.dev/ref/spec",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "syntax",
+        "types",
+        "control flow",
+        "interfaces"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied Go.pdf syllabus mapping. Human review and local runtime verification are required before publication."
+}

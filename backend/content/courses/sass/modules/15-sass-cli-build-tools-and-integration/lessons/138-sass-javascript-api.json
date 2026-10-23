@@ -1,0 +1,170 @@
+{
+  "sequence": 138,
+  "title": "Sass JavaScript API",
+  "slug": "sass-javascript-api",
+  "id": "sass-lesson-138",
+  "module_id": "sass-module-15",
+  "module_slug": "sass-cli-build-tools-and-integration",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 12,
+  "status": "draft",
+  "prerequisites": [
+    "sass-lesson-137"
+  ],
+  "previous_lesson_id": "sass-lesson-137",
+  "next_lesson_id": "sass-lesson-139",
+  "keywords": [
+    "sass-javascript-api",
+    "understanding-the-sass-package",
+    "synchronous-compilation",
+    "asynchronous-compilation",
+    "compilation-options",
+    "custom-importers-and-function-integration",
+    "choosing-the-appropriate-api-entrypoint"
+  ],
+  "source_syllabus_number": 138,
+  "learning_outcomes": [
+    "Explain sass javascript api and connect it to at least two of its syllabus subtopics.",
+    "Apply sass javascript api in a small SCSS example and predict the resulting CSS or compiler behavior.",
+    "Inspect the output, diagnose one plausible mistake, and state a relevant limitation or best practice."
+  ],
+  "exercise_files": [],
+  "content": {
+    "intro": "This lesson turns **Sass JavaScript API** into a practical, inspectable step. You will connect understanding the sass package with synchronous compilation, then check what Dart Sass emits instead of relying on the SCSS source alone.",
+    "why_it_matters": "Treat the toolchain as a repeatable pipeline: keep editable SCSS as input, let Dart Sass compile an explicit entrypoint, and inspect the generated CSS or map. Separate local setup problems from errors in the stylesheet itself.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual map: Sass JavaScript API",
+        "asset_path": "diagrams/lessons/lesson-138.svg",
+        "alt_text": "Three-step diagram for Sass JavaScript API: understand the concept, apply it to understanding the sass package, and verify the result.",
+        "caption": "Use this visual as a check sequence for sass javascript api: understand, apply, and verify."
+      },
+      {
+        "type": "paragraph",
+        "title": "The mental model",
+        "text": "A reliable workflow gives every teammate the same command and an observable output. Commit source and scripts; decide deliberately whether generated CSS and source maps belong in the repository or are build artifacts."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics in this lesson",
+        "items": [
+          {
+            "title": "Understanding the Sass package",
+            "text": "For understanding the sass package, identify the relevant source rule, predict the intended result, and check the emitted CSS against that expectation."
+          },
+          {
+            "title": "Synchronous compilation",
+            "text": "Trace the source rule to its emitted CSS and inspect the output file. Treat the browser-facing CSS, not the SCSS source, as the final artifact."
+          },
+          {
+            "title": "Asynchronous compilation",
+            "text": "Trace the source rule to its emitted CSS and inspect the output file. Treat the browser-facing CSS, not the SCSS source, as the final artifact."
+          },
+          {
+            "title": "Compilation options",
+            "text": "Trace the source rule to its emitted CSS and inspect the output file. Treat the browser-facing CSS, not the SCSS source, as the final artifact."
+          },
+          {
+            "title": "Custom importers and function integration",
+            "text": "A Sass function should return a value that can be used in an expression. Keep side effects out of its purpose and report missing or invalid input clearly."
+          },
+          {
+            "title": "Choosing the appropriate API entrypoint",
+            "text": "For choosing the appropriate api entrypoint, identify the relevant source rule, predict the intended result, and check the emitted CSS against that expectation."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "1. Start with the smallest source file that demonstrates sass javascript api. 2. State what should change and what should stay the same. 3. Compile the entrypoint with Dart Sass, or use the stated command if this lesson is about the toolchain. 4. Compare the resulting CSS or diagnostic with the expected result, then change one input and repeat."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Sass JavaScript API",
+        "language": "javascript",
+        "language_label": "JavaScript",
+        "code": "import * as sass from \"sass\";\n\nconst result = sass.compile(\"src/main.scss\");\nconsole.log(result.css);",
+        "expected_output": "compile() returns a CompileResult; its css property contains the generated stylesheet.",
+        "run_mode": "static-validation",
+        "execution_note": "This course example is a Sass/SCSS or tooling example. CodeLeaf’s current in-browser playground previews HTML/CSS/JavaScript only; compile Sass locally with Dart Sass. Do not treat the browser preview as a Sass compiler."
+      },
+      {
+        "type": "callout",
+        "title": "Modern Sass note",
+        "text": "Use Dart Sass for new work. Prefer @use / @forward and namespaced sass: built-in modules. Sass compiles to CSS; browser-native CSS features still run in the browser."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Use the command or build configuration shown for sass javascript api in a tiny local project. Record the command you ran, the file it created or diagnostic it produced, and one way you verified the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Common mistake to avoid",
+        "text": "Do not edit generated CSS when you intend to change source behavior. Edit the SCSS entrypoint or its module, compile again, and compare the generated output."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-138-questions.json"
+  },
+  "task": "Use the command or build configuration shown for sass javascript api in a tiny local project. Record the command you ran, the file it created or diagnostic it produced, and one way you verified the result.",
+  "task_acceptance_criteria": [
+    "The example includes the intended Sass construct and a clear input.",
+    "The expected output or tool result is documented and consistent with the source.",
+    "The work is reproducible and includes one limitation, test, or troubleshooting note."
+  ],
+  "hints": [
+    "Reduce the example to one source file and one entrypoint before adding more abstractions.",
+    "Read the first compiler diagnostic and confirm you are editing the Sass source, not only generated CSS.",
+    "Compile and inspect the emitted CSS; compare exact selectors, values, and at-rules with your expectation."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Assuming SCSS runs directly in the browser.",
+      "why": "Browsers consume CSS, not Sass syntax.",
+      "fix": "Compile with Dart Sass and load the resulting .css file in the HTML page."
+    },
+    {
+      "problem": "Trusting source readability without inspecting generated output.",
+      "why": "Nesting, mixins, loops, and extension can emit unexpected selectors or more CSS than intended.",
+      "fix": "Compile a small example and inspect the CSS output or browser computed styles."
+    }
+  ],
+  "summary": [
+    "Sass JavaScript API is useful when it solves the specific organization or reuse problem described in this lesson.",
+    "Keep compile-time Sass behavior distinct from browser-time CSS behavior.",
+    "Validate both source intent and generated CSS before relying on the pattern in a larger project."
+  ],
+  "sources": [
+    {
+      "title": "Sass documentation",
+      "url": "https://sass-lang.com/documentation/",
+      "publisher": "Sass",
+      "supports": [
+        "Reference for lesson 138: Sass JavaScript API"
+      ]
+    },
+    {
+      "title": "Dart Sass command-line interface",
+      "url": "https://sass-lang.com/documentation/cli/dart-sass/",
+      "publisher": "Sass",
+      "supports": [
+        "Reference for lesson 138: Sass JavaScript API"
+      ]
+    },
+    {
+      "title": "Sass JavaScript API",
+      "url": "https://sass-lang.com/documentation/js-api/",
+      "publisher": "Sass",
+      "supports": [
+        "Reference for lesson 138: Sass JavaScript API"
+      ]
+    }
+  ],
+  "run_mode": "static-validation",
+  "status_note": "Draft lesson generated from the attached Sass.pdf curriculum and aligned to modern Dart Sass documentation; subject-matter and compiled-example review is required before publishing.",
+  "exercise_ids": []
+}

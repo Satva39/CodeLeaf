@@ -1,0 +1,165 @@
+{
+  "id": "genai-lesson-173",
+  "slug": "secure-ai-agents",
+  "title": "Secure AI Agents",
+  "sequence": 173,
+  "module_id": "genai-module-19",
+  "module_slug": "security-privacy-and-safety-in-generative-ai",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional-practice",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "genai-lesson-144"
+  ],
+  "previous_lesson_id": "genai-lesson-172",
+  "next_lesson_id": "genai-lesson-174",
+  "keywords": [
+    "Secure AI Agents",
+    "Principle of least privilege",
+    "Sandboxing and execution boundaries",
+    "Tool authorization",
+    "Human approval before consequential actions",
+    "Protection of secrets and credentials",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 173,
+  "subtopics": [
+    "Principle of least privilege",
+    "Sandboxing and execution boundaries",
+    "Tool authorization",
+    "Human approval before consequential actions",
+    "Protection of secrets and credentials",
+    "Agent activity auditing"
+  ],
+  "learning_outcomes": [
+    "Explain principle of least privilege and how it connects to secure ai agents.",
+    "Apply sandboxing and execution boundaries in the example and predict the output before running it.",
+    "Test one realistic edge case for secure ai agents and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers secure ai agents through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Defend the entire system—not just the prompt—against injection, data leakage, unsafe outputs, unauthorized actions, and supply-chain risks.",
+    "why_it_matters": "Use principle of least privilege as a lens for understanding secure ai agents. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Secure AI Agents: concept map",
+        "asset_path": "diagrams/lessons/lesson-173-secure-ai-agents.svg",
+        "alt_text": "Diagram for Secure AI Agents: understand Principle of least privilege, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Principle of least privilege, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Use principle of least privilege as a lens for understanding secure ai agents. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Principle of least privilege",
+            "text": "Use principle of least privilege as a lens for understanding secure ai agents. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Sandboxing and execution boundaries",
+            "text": "Use sandboxing and execution boundaries as a lens for understanding secure ai agents. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Tool authorization",
+            "text": "Tool authorization is a control problem as much as a model-behavior problem. Establish explicit boundaries in trusted application code, minimize data exposure, test realistic misuse and failure cases, and record who is responsible for reviewing residual risk. A prompt alone is not a security boundary."
+          },
+          {
+            "title": "Human approval before consequential actions",
+            "text": "Human approval before consequential actions describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+          },
+          {
+            "title": "Protection of secrets and credentials",
+            "text": "Use protection of secrets and credentials as a lens for understanding secure ai agents. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Agent activity auditing",
+            "text": "Agent activity auditing describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Secure AI Agents\ntools = {\"lookup_public_status\": {\"read_only\": True}, \"issue_refund\": {\"read_only\": False}}\nrequested = \"lookup_public_status\"\nprint({\"allowed_in_read_only_mode\": tools.get(requested, {}).get(\"read_only\", False)})",
+        "expected_output": "{'allowed_in_read_only_mode': True}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice principle of least privilege within secure ai agents: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'allowed_in_read_only_mode': True}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-173-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Secure AI Agents is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://genai.owasp.org/initiative/owasp-top-10-for-llm-and-genai/",
+      "https://www.nist.gov/itl/ai-risk-management-framework"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Top 10 for LLM and GenAI",
+      "url": "https://genai.owasp.org/initiative/owasp-top-10-for-llm-and-genai/",
+      "publisher": "OWASP GenAI Security Project",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "prompt injection"
+      ]
+    },
+    {
+      "title": "AI Risk Management Framework",
+      "url": "https://www.nist.gov/itl/ai-risk-management-framework",
+      "publisher": "National Institute of Standards and Technology",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "risk management"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

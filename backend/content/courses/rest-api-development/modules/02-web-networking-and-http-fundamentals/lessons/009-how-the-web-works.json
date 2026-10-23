@@ -1,0 +1,150 @@
+{
+  "id": "rest-api-development-lesson-009",
+  "slug": "how-the-web-works",
+  "title": "How the Web Works",
+  "sequence": 9,
+  "module_id": "rest-api-development-module-02",
+  "module_slug": "web-networking-and-http-fundamentals",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "foundations",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "rest-api-development-lesson-008"
+  ],
+  "previous_lesson_id": "rest-api-development-lesson-008",
+  "next_lesson_id": "rest-api-development-lesson-010",
+  "keywords": [
+    "rest-api-development",
+    "how-the-web-works",
+    "web-networking-and-http-fundamentals",
+    "clients-servers-and-internet-communication",
+    "request-response-interaction"
+  ],
+  "source_syllabus_number": 9,
+  "subtopics": [
+    "Clients, servers, and internet communication",
+    "Request-response interaction",
+    "Domain names, DNS, and IP addresses",
+    "Ports, connections, and network endpoints"
+  ],
+  "learning_outcomes": [
+    "Explain how how the web works affects an API contract or implementation.",
+    "Apply the key ideas from clients, servers, and internet communication to a concrete API example.",
+    "Identify one failure, security, or compatibility risk and describe how to verify it."
+  ],
+  "content": {
+    "intro": "This lesson focuses on how the web works in web networking and http fundamentals. You will connect clients, servers, and internet communication to a concrete API contract decision, inspect a small example, and decide what evidence proves the behavior is correct.",
+    "why_it_matters": "How the Web Works matters because API consumers depend on predictable behavior even when clients, servers, networks, and stored data evolve independently. Applying clients, servers, and internet communication deliberately reduces ambiguity, makes failures easier to diagnose, and gives tests a clear expectation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Lesson 9 concept map",
+        "asset_path": "diagrams/lesson-009-concept-map.svg",
+        "alt_text": "Lesson 9: Clients, servers, and internet communication → Request-response interaction → Domain names, DNS, and IP addresses → Ports, connections, and network endpoints.",
+        "caption": "Follow the 4 syllabus topics in order, then inspect the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "HTTP is the application-layer request/response protocol; message semantics live in methods, status codes, and headers. In this lesson, treat “How the Web Works” as a design or implementation decision: name the expected behavior, identify its boundary, and verify it with a representative request or test."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          "Clients, servers, and internet communication",
+          "Request-response interaction",
+          "Domain names, DNS, and IP addresses",
+          "Ports, connections, and network endpoints",
+          "Contract: accepted inputs and promised outputs"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Inspect the pattern: How the Web Works",
+        "language": "http",
+        "execution_mode": "static-validation",
+        "code": "GET /v1/tasks?limit=20 HTTP/1.1\nHost: api.example.test\nAccept: application/json\n\nHTTP/1.1 200 OK\nContent-Type: application/json\nCache-Control: no-store\n\n{\"items\": [], \"limit\": 20}",
+        "expected_output": "The example shows a request target and headers followed by a response status, metadata, and JSON representation. example.test is illustrative and is not a live service."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walkthrough",
+        "text": "Start with “Clients, servers, and internet communication”; it establishes the vocabulary for this topic. Next, compare it with “Request-response interaction” and “Ports, connections, and network endpoints”. In a real API, write down the observable behavior first, then test one normal request and one invalid or unauthorized request. Keep resource state, caller identity, and internal implementation details separate."
+      },
+      {
+        "type": "callout",
+        "title": "Professional review check",
+        "text": "Inspect the complete request and response before diagnosing an API failure. The worked snippet is intentionally inspectable, not an executable hosted API. Replace example.test and placeholder identifiers with local test data only when you implement the lesson project."
+      }
+    ],
+    "task": "Create a small design note or request/response example demonstrating how the web works. Use the subtopics above to explain the intended behavior, the main edge case, and the evidence you would use to verify it.",
+    "task_acceptance_criteria": [
+      "Explain the role of “Clients, servers, and internet communication” in this API topic.",
+      "Provide a concrete resource, request, response, schema, test, or operational example as appropriate.",
+      "Identify one failure/security/compatibility edge case and a test or check for it."
+    ],
+    "expected_output": "A reviewable example for How the Web Works with a clear expected behavior and at least one verifiable edge case.",
+    "run_instructions": "Execution mode: static-validation. This lesson example is a protocol, schema, SQL, or code fragment for inspection; it is not submitted to a production server and CodeLeaf does not execute arbitrary learner code. Validate JSON/YAML with a local linter or run the relevant HTTP request against the isolated service you implement for a project. Do not send illustrative example.test requests to a real service.",
+    "reset_steps": "Use a disposable local database or test fixture for implementation work. Restore seed data between runs; never point exercises at production customer data or live payment endpoints.",
+    "troubleshooting": [
+      "Check the exact HTTP method, path, status, header, media type, and payload before changing implementation code.",
+      "Separate a transport failure from an application validation failure, authorization denial, and dependency/database failure.",
+      "Confirm the example and its client tooling version are compatible; consult the linked standard or official guidance when behavior is ambiguous."
+    ],
+    "common_mistakes": [
+      "Treating how the web works as an implementation detail rather than a documented behavior.",
+      "Testing only the happy path and ignoring malformed, unauthorized, conflicting, duplicate, or dependency-failure cases.",
+      "Publishing an example without checking version assumptions, sensitive-data exposure, and the expected output."
+    ],
+    "summary": [
+      "HTTP is the application-layer request/response protocol; message semantics live in methods, status codes, and headers. In this lesson, treat “How the Web Works” as a design or implementation decision: name the expected behavior, identify its boundary, and verify it with a representative request or test.",
+      "Next, connect this idea to Lesson 10: Understanding URLs and URIs."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-009-questions.json",
+    "solution_notes": "Knowledge-check answer keys and explanations remain in repository-side question files. The public lesson API strips this file reference and serves only prompts/options from the protected endpoint.",
+    "references": [
+      {
+        "title": "RFC 9110 — HTTP Semantics",
+        "url": "https://www.rfc-editor.org/rfc/rfc9110.html"
+      },
+      {
+        "title": "RFC 3986 — Uniform Resource Identifier (URI): Generic Syntax",
+        "url": "https://www.rfc-editor.org/rfc/rfc3986.html"
+      }
+    ],
+    "run_mode": "static-validation"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "RFC 9110 — HTTP Semantics",
+      "url": "https://www.rfc-editor.org/rfc/rfc9110.html",
+      "publisher": "IETF / RFC Editor",
+      "checked_on": "2026-10-19",
+      "source_type": "Internet Standard",
+      "supports": [
+        "HTTP methods and status codes",
+        "representations",
+        "content negotiation",
+        "conditional requests"
+      ]
+    },
+    {
+      "title": "RFC 3986 — Uniform Resource Identifier (URI): Generic Syntax",
+      "url": "https://www.rfc-editor.org/rfc/rfc3986.html",
+      "publisher": "IETF / RFC Editor",
+      "checked_on": "2026-10-19",
+      "source_type": "Internet Standard",
+      "supports": [
+        "URI syntax",
+        "reserved characters",
+        "percent encoding"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Unreviewed educational draft based on the attached REST API syllabus; verify the technical framing, worked example, and assessment before publication."
+}

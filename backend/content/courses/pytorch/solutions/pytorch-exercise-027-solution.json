@@ -1,0 +1,16 @@
+{
+  "id": "pytorch-exercise-027-reference-solution",
+  "exercise_id": "pytorch-exercise-027",
+  "title": "Reference approach: Gradient Analysis",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Implement gradient analysis in a small isolated script. Required implementation evidence includes: torch.autograd.grad, torch.isfinite, .grad. Use a reproducible seed, report observed output, and explain relevant edge cases.",
+  "explanation": "This exercise consolidates the topic from lesson 038. The list of required strings is only a minimal static signal; inspect numerical correctness, error handling, and test outcomes manually.",
+  "example_code": "import torch\nx=torch.tensor(2.,requires_grad=True); y=x**3; g=torch.autograd.grad(y,x)[0]; print(g.item(), bool(torch.isfinite(g)))\nz=torch.tensor(float('nan')); print(bool(torch.isfinite(z)))",
+  "reference_code": "import torch\nx=torch.tensor(2.,requires_grad=True); y=x**3; g=torch.autograd.grad(y,x)[0]; print(g.item(), bool(torch.isfinite(g)))\nz=torch.tensor(float('nan')); print(bool(torch.isfinite(z)))",
+  "review_notes": [
+    "Do not treat source-string grading as proof that numerical behavior is correct.",
+    "Run in a supported local environment or isolated runner.",
+    "Keep input data synthetic unless a dataset has an appropriate license and documented provenance."
+  ]
+}

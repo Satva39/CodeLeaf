@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-25",
+  "exercise_id": "dsa-exercise-pdf-25",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\ndef next_greater(values):\n    answer = [-1] * len(values); stack = []\n    for i, value in enumerate(values):\n        while stack and values[stack[-1]] < value: answer[stack.pop()] = value\n        stack.append(i)\n    return answer\n\nassert next_greater([2, 1, 2, 4, 3]) == [4, 2, 4, -1, -1]\n```",
+  "explanation": "A monotonic stack resolves earlier indexes when a larger value arrives. Each index enters/leaves once, giving O(n) time and space.",
+  "tested_reference_code": "def next_greater(values):\n    answer = [-1] * len(values); stack = []\n    for i, value in enumerate(values):\n        while stack and values[stack[-1]] < value: answer[stack.pop()] = value\n        stack.append(i)\n    return answer\n\nassert next_greater([2, 1, 2, 4, 3]) == [4, 2, 4, -1, -1]",
+  "language": "python"
+}

@@ -1,0 +1,209 @@
+{
+  "id": "web-application-security-lesson-019",
+  "slug": "owasp-top-10-2025",
+  "title": "OWASP Top 10:2025",
+  "sequence": 19,
+  "module_id": "web-application-security-module-03",
+  "module_slug": "security-principles-threats-and-standards",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core-foundations",
+  "curriculum_tier": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "web-application-security-lesson-018"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-018",
+  "next_lesson_id": "web-application-security-lesson-020",
+  "keywords": [
+    "owasp",
+    "top",
+    "2025",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 19,
+  "source_syllabus_title": "OWASP Top 10:2025",
+  "source_subtopics": [
+    {
+      "number": "19.1",
+      "title": "A01:2025 — Broken Access Control"
+    },
+    {
+      "number": "19.2",
+      "title": "A02:2025 — Security Misconfiguration"
+    },
+    {
+      "number": "19.3",
+      "title": "A03:2025 — Software Supply Chain Failures"
+    },
+    {
+      "number": "19.4",
+      "title": "A04:2025 — Cryptographic Failures"
+    },
+    {
+      "number": "19.5",
+      "title": "A05:2025 — Injection"
+    },
+    {
+      "number": "19.6",
+      "title": "A06:2025 — Insecure Design"
+    },
+    {
+      "number": "19.7",
+      "title": "A07:2025 — Authentication Failures"
+    },
+    {
+      "number": "19.8",
+      "title": "A08:2025 — Software or Data Integrity Failures"
+    },
+    {
+      "number": "19.9",
+      "title": "A09:2025 — Security Logging and Alerting Failures"
+    },
+    {
+      "number": "19.10",
+      "title": "A10:2025 — Mishandling of Exceptional Conditions"
+    }
+  ],
+  "subtopics": [
+    "A01:2025 — Broken Access Control",
+    "A02:2025 — Security Misconfiguration",
+    "A03:2025 — Software Supply Chain Failures",
+    "A04:2025 — Cryptographic Failures",
+    "A05:2025 — Injection",
+    "A06:2025 — Insecure Design",
+    "A07:2025 — Authentication Failures",
+    "A08:2025 — Software or Data Integrity Failures",
+    "A09:2025 — Security Logging and Alerting Failures",
+    "A10:2025 — Mishandling of Exceptional Conditions"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in OWASP Top 10:2025.",
+    "Choose an appropriate defensive control for OWASP Top 10:2025 and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for OWASP Top 10:2025, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 3: Security Principles, Threats, and Standards. It builds practical understanding of OWASP Top 10:2025 with the syllabus subtopics retained below.",
+    "why_it_matters": "OWASP Top 10:2025 gives you the mental model needed to recognize where a security promise begins and ends. Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: OWASP Top 10:2025",
+        "asset_path": "diagrams/lesson-019-owasp-top-10-2025.svg",
+        "alt_text": "Four-stage visual model for OWASP Top 10:2025: Name the asset; Identify trust boundary; Choose a principle; Verify with evidence.",
+        "caption": "Concept map for OWASP Top 10:2025. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "OWASP Top 10:2025 can be understood through this sequence: Name the asset → Identify trust boundary → Choose a principle → Verify with evidence. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 19.1 A01:2025 — Broken Access Control; 19.2 A02:2025 — Security Misconfiguration; 19.3 A03:2025 — Software Supply Chain Failures; 19.4 A04:2025 — Cryptographic Failures; 19.5 A05:2025 — Injection; 19.6 A06:2025 — Insecure Design; 19.7 A07:2025 — Authentication Failures; 19.8 A08:2025 — Software or Data Integrity Failures; 19.9 A09:2025 — Security Logging and Alerting Failures; 19.10 A10:2025 — Mishandling of Exceptional Conditions. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "text",
+        "execution_mode": "human-review",
+        "title": "Safe reference example: OWASP Top 10:2025",
+        "code": "Topic: OWASP Top 10:2025\nReview artifact: define scope, assumptions, control owner, expected secure behavior, failure behavior, and a reproducible verification step.",
+        "expected_output": "A written review artifact names the control and the evidence needed to verify it.",
+        "run_instructions": "Use a local/owned application or explicitly authorized test target. Record only sanitized synthetic evidence; use human review for behavior that a static snippet cannot prove.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “OWASP Top 10:2025”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for OWASP Top 10:2025 in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "human-review",
+    "knowledge_check_file": "exams/question-files/lesson-019-questions.json",
+    "recap": [
+      "OWASP Top 10:2025 is a security boundary/control topic, not a standalone checklist item.",
+      "Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "OWASP Top 10:2025",
+      "url": "https://owasp.org/www-project-top-ten/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "web application risk categories",
+        "OWASP A01-A10:2025"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

@@ -1,0 +1,13 @@
+{
+  "id": "github-actions-exercise-solution-002",
+  "exercise_id": "github-actions-exercise-002",
+  "title": "Validate repository files reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": {
+    "approach": "A complete response for validate repository files should include: test -f, README.md, exit 1.",
+    "example": "steps:\n  - name: Check required file\n    run: |\n      if test -f README.md; then\n        echo \"README exists\"\n      else\n        echo \"README.md is missing\" >&2\n        exit 1\n      fi",
+    "verification": "A push or pull request starts one job. The job passes when `README.md` exists in the checked-out workspace; add checkout before this step if the snippet is used as a complete workflow."
+  },
+  "explanation": "Reason about the trigger, permission boundary, expected observable result, and failure path for validate repository files. Use `.github/workflows/` and validate indentation. Add a checkout step before filesystem checks in a real workflow. Adapt action references and runtime details against the official docs checked on 2026-10-20."
+}

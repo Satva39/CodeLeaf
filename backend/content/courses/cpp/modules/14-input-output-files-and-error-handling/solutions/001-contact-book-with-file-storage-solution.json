@@ -1,0 +1,18 @@
+{
+  "id": "cpp-exercise-solution-019",
+  "exercise_id": "cpp-exercise-019",
+  "title": "Contact book with file storage reference solution notes",
+  "language": "cpp",
+  "answer": "#include <fstream>\n#include <iostream>\n#include <string>\nstruct Contact { std::string name; std::string phone; };\nint main() {\n    const Contact contact{\"Mira\", \"0000000000\"};\n    { std::ofstream out(\"contacts.txt\"); if (!out) { std::cerr << \"cannot write contacts.txt\\n\"; return 1; }\n      out << contact.name << '\\t' << contact.phone << '\\n'; }\n    std::ifstream in(\"contacts.txt\");\n    std::string name, phone;\n    if (std::getline(in, name, '\\t') && std::getline(in, phone)) std::cout << name << ':' << phone << '\\n';\n}\n",
+  "explanation": "Mira:0000000000",
+  "manual_validation_checklist": [
+    "Compile locally with C++20 and -Wall -Wextra -Wpedantic (add the external library named in the solution when applicable).",
+    "Test normal inputs and at least one boundary/failure case named in the exercise prompt.",
+    "Check integer range, object lifetime, resource cleanup and error handling where relevant.",
+    "Check open/write/read failures and define escaping if fields can contain separators. The example uses synthetic data and a small local file.",
+    "Keep this solution in repository-only protected content; do not include it in learner API responses."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only reference notes; replace with a reviewed implementation and test suite before publishing the exercise."
+}

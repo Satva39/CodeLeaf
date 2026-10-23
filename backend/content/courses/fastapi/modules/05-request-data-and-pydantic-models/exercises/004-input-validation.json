@@ -1,0 +1,56 @@
+{
+  "id": "fastapi-exercise-004",
+  "slug": "input-validation",
+  "title": "Input validation",
+  "type": "practical",
+  "lesson_id": "fastapi-lesson-029",
+  "module_id": "fastapi-module-05",
+  "difficulty": "beginner",
+  "sequence": 4,
+  "prompt": "Reject invalid prices, quantities, and text lengths.",
+  "objective": "Input validation",
+  "target_skills": [
+    "Input validation",
+    "FastAPI request/response design",
+    "testing and safe verification"
+  ],
+  "starter": {
+    "language": "python",
+    "content": "price: float = Field(gt=0)\nquantity: int = Field(ge=1, le=500)"
+  },
+  "expected_output": "Invalid inputs return a validation error; valid values pass constraints.",
+  "public_tests": [
+    {
+      "name": "Required concepts in submitted artifact",
+      "required_strings": [
+        "Field",
+        "gt=0",
+        "ge=1"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Address the exercise task: Reject invalid prices, quantities, and text lengths.",
+    "State prerequisites and expected behavior; include one success case and one invalid/edge case.",
+    "Use synthetic data and a disposable local environment; do not include production credentials.",
+    "Explain what was actually tested and identify any untested runtime/security assumption."
+  ],
+  "hints": [
+    "Read the linked lesson and identify the smallest endpoint/model/dependency needed.",
+    "Write a test for the expected result before adding optional features.",
+    "Static keyword checks do not execute Python; confirm runtime correctness with pytest or appropriate local tests."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "Field",
+      "gt=0",
+      "ge=1"
+    ]
+  },
+  "grading_method": "Server-side static required-string check plus human review; CodeLeaf does not execute arbitrary learner Python. This draft exercise must not be treated as proof of runtime correctness.",
+  "retry_policy": "Retries permitted after feedback; completion is recorded idempotently by CodeLeaf. Platform-wide XP rules apply; no course-authored reward override.",
+  "solution_file": "solutions/004-input-validation-solution.json",
+  "status": "draft",
+  "status_note": "Original task based on the corresponding FastAPI.pdf Section C exercise. The file has not been promoted to published and the example still requires technical/runtimes tests."
+}

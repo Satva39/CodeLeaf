@@ -1,0 +1,199 @@
+{
+  "id": "r-lesson-086",
+  "slug": "regular-expressions",
+  "title": "Regular Expressions",
+  "sequence": 86,
+  "module_id": "r-module-09",
+  "module_slug": "strings-regular-expressions-and-text-processing",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "r-lesson-085"
+  ],
+  "previous_lesson_id": "r-lesson-085",
+  "next_lesson_id": "r-lesson-087",
+  "keywords": [
+    "regular-expressions",
+    "strings-regular-expressions-and-text-processing",
+    "regex-fundamentals",
+    "literal-characters-and-metacharacters",
+    "character-classes",
+    "anchors-and-word-boundaries",
+    "quantifiers-and-alternation",
+    "capture-groups",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 86,
+  "subtopics": [
+    "Regex Fundamentals",
+    "Literal Characters and Metacharacters",
+    "Character Classes",
+    "Anchors and Word Boundaries",
+    "Quantifiers and Alternation",
+    "Capture Groups",
+    "Lookarounds Where Supported",
+    "Escaping and Regex Debugging"
+  ],
+  "learning_outcomes": [
+    "Explain the role of regular expressions and identify its main inputs, outputs or constraints.",
+    "Apply regex fundamentals in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Regular Expressions is part of Strings, Regular Expressions, and Text Processing. Start with regex fundamentals and connect it to the worked example and expected result.",
+    "why_it_matters": "A regular expression describes a pattern; literal characters often need escaping.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Regular Expressions",
+        "asset_path": "diagrams/module-09-overview.svg",
+        "alt_text": "Concept visual supporting lesson 86, Regular Expressions. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "A regular expression describes a pattern; literal characters often need escaping. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Regex Fundamentals",
+            "text": "Explain regex fundamentals in the context of regular expressions, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Literal Characters and Metacharacters",
+            "text": "Explain literal characters and metacharacters in the context of regular expressions, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Character Classes",
+            "text": "Explain character classes in the context of regular expressions, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Anchors and Word Boundaries",
+            "text": "Explain anchors and word boundaries in the context of regular expressions, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Quantifiers and Alternation",
+            "text": "Explain quantifiers and alternation in the context of regular expressions, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Capture Groups",
+            "text": "Explain capture groups in the context of regular expressions, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Lookarounds Where Supported",
+            "text": "Explain lookarounds where supported in the context of regular expressions, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Escaping and Regex Debugging",
+            "text": "Turn escaping and regex debugging into a check with a clear condition, expected result and an example that should fail."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Test a pattern against matching and non-matching strings before using it on a full dataset. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Regular Expressions",
+        "language": "r",
+        "code": "# Lesson 86: Regular Expressions\nclean_text <- trimws(tolower(\"  R-topic-86  \"))\nclean_text",
+        "expected_output": "[1] \"r-topic-86\"",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "Check matching and non-matching text, whitespace, missing strings and encoding assumptions. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For regular expressions, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-086-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply regular expressions to a small synthetic example. Start with regex fundamentals, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the regex fundamentals idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible regular expressions example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Regex Fundamentals” and identify the input and output before coding.",
+      "Inspect the type and shape of the result, then test one ordinary and one boundary input.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: A regular expression describes a pattern; literal characters often need escaping.",
+      "Practice: Test a pattern against matching and non-matching strings before using it on a full dataset.",
+      "Source syllabus focus: Regex Fundamentals. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply regular expressions to a small synthetic example. Start with regex fundamentals, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible regular expressions example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Regex Fundamentals” and identify the input and output before coding.",
+    "Inspect the type and shape of the result, then test one ordinary and one boundary input.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: A regular expression describes a pattern; literal characters often need escaping.",
+    "Practice: Test a pattern against matching and non-matching strings before using it on a full dataset.",
+    "Source syllabus focus: Regex Fundamentals. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 9 — Strings, Regular Expressions, and Text Processing, lesson 86: Regular Expressions.",
+    "Official documentation: https://stringr.tidyverse.org/",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

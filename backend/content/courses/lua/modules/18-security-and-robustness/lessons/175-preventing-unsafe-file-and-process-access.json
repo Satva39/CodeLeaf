@@ -1,0 +1,149 @@
+{
+  "id": "lua-lesson-175",
+  "slug": "preventing-unsafe-file-and-process-access",
+  "title": "Preventing Unsafe File and Process Access",
+  "sequence": 175,
+  "module_id": "lua-module-18",
+  "module_slug": "security-and-robustness",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "lua-lesson-174"
+  ],
+  "previous_lesson_id": "lua-lesson-174",
+  "next_lesson_id": "lua-lesson-176",
+  "keywords": [
+    "preventing-unsafe-file-and-process-access",
+    "controlling-filesystem-capabilities",
+    "restricting-process-execution-and-sensitive-environment-access"
+  ],
+  "source_syllabus_number": 175,
+  "subtopics": [
+    "Controlling filesystem capabilities",
+    "Restricting process execution and sensitive environment access"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of preventing Unsafe File and Process Access and the key behavior described in this lesson.",
+    "Apply preventing Unsafe File and Process Access in a small Lua example and predict its result.",
+    "Identify a relevant edge case, version constraint, or host-runtime limitation for preventing Unsafe File and Process Access."
+  ],
+  "content": {
+    "intro": "Treat externally supplied scripts, configuration, paths, and serialized data as untrusted inputs. A restricted global table alone is not a secure sandbox; isolate untrusted work and enforce limits outside the Lua process.",
+    "why_it_matters": "Treat externally supplied scripts, configuration, paths, and serialized data as untrusted inputs. A restricted global table alone is not a secure sandbox; isolate untrusted work and enforce limits outside the Lua process. This concept appears in the supplied syllabus; keep the scope and assumptions visible in your implementation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual map: Preventing Unsafe File and Process Access",
+        "asset_path": "diagrams/lessons/lesson-175.svg",
+        "alt_text": "Concept map for Preventing Unsafe File and Process Access; understand the concept, inspect a Lua example, and verify behavior and edge cases.",
+        "caption": "Visual summary of Preventing Unsafe File and Process Access; use the three-step path while working through the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Preventing Unsafe File and Process Access is part of Security and Robustness. Start with the exact rule or capability, identify what the example assumes, and note what changes on another Lua version or in a host application."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core explanation",
+        "text": "Treat externally supplied scripts, configuration, paths, and serialized data as untrusted inputs. A restricted global table alone is not a secure sandbox; isolate untrusted work and enforce limits outside the Lua process."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics to cover",
+        "items": [
+          {
+            "title": "Controlling filesystem capabilities",
+            "text": "Understand Controlling filesystem capabilities; connect it to Preventing Unsafe File and Process Access, then state one useful example or boundary case."
+          },
+          {
+            "title": "Restricting process execution and sensitive environment access",
+            "text": "Understand Restricting process execution and sensitive environment access; connect it to Preventing Unsafe File and Process Access, then state one useful example or boundary case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through the example",
+        "text": "Read the small example, predict every output line, then run it locally with a compatible runtime. Uses a temporary file, not a project path; close resources even after failures. The host may restrict I/O libraries. Keep the smallest reproducible case if the observed behavior differs."
+      },
+      {
+        "type": "code",
+        "language": "lua",
+        "execution_mode": "static-validation",
+        "code": "local file = io.tmpfile()\nassert(file, \"could not create temporary file\")\nfile:write(\"Lua data\\n\")\nfile:seek(\"set\")\nprint(file:read(\"*l\"))\nfile:close()",
+        "expected_output": "Lua data",
+        "caption": "Static reference example for local verification; CodeLeaf does not execute this snippet unless a dedicated isolated runner is explicitly provided.",
+        "run_instructions": "Save the code in a local file with the correct language extension and test it using the runtime noted in the lesson. Uses a temporary file, not a project path; close resources even after failures. The host may restrict I/O libraries. Compare the exact output to the documented result.",
+        "reset_steps": "Restore the original snippet, remove generated test files if any, and repeat from a clean local test state."
+      },
+      {
+        "type": "callout",
+        "title": "Version, host, and safety note",
+        "text": "Uses a temporary file, not a project path; close resources even after failures. The host may restrict I/O libraries."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Mistake 1",
+            "text": "Confusing Preventing Unsafe File and Process Access with a similarly named feature in another language or runtime. Fix: follow the version-matched reference and test the smallest example."
+          },
+          {
+            "title": "Mistake 2",
+            "text": "Relying on an output order or environment capability that the language/host does not guarantee. Fix: document assumptions and make order/capabilities explicit."
+          },
+          {
+            "title": "Mistake 3",
+            "text": "Skipping a boundary test or failing to check error-return values. Fix: test invalid and boundary inputs and inspect failure values."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Recap and next step",
+        "text": "Recap: explain Preventing Unsafe File and Process Access without the example, predict its behavior, and name one limit. Next: Input Validation."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate “Preventing Unsafe File and Process Access” with a different input or boundary case. Predict the result before running it, record what you observe, and explain one limitation.",
+    "task_acceptance_criteria": [
+      "Explain the central behavior of Preventing Unsafe File and Process Access in your own words.",
+      "Verify the result using a supported local runtime or clearly state why the host/tooling prevents a full run.",
+      "Identify a boundary case or compatibility/security limit relevant to the lesson."
+    ],
+    "hints": [
+      "First identify the input, output, and any assumed runtime or host feature.",
+      "Reduce the problem to the smallest example that exposes the relevant rule.",
+      "Test one normal case and one boundary/failure case; inspect error output without leaking secrets."
+    ],
+    "expected_output": "Lua data",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-175-knowledge-check.json",
+    "references": [
+      {
+        "title": "Lua 5.5 Reference Manual",
+        "url": "https://www.lua.org/manual/5.5/",
+        "publisher": "Lua.org",
+        "checked_on": "2026-10-20"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    "references/reference-index.json"
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Lua curriculum; requires expert technical, grading, accessibility, and runtime review before publication.",
+  "common_mistakes": [
+    "Confusing Preventing Unsafe File and Process Access with a similarly named feature in another language or runtime.",
+    "Relying on an output order or environment capability that the language/host does not guarantee.",
+    "Skipping a boundary test or failing to check error-return values."
+  ],
+  "next_steps": [
+    "Continue with Input Validation."
+  ]
+}

@@ -1,0 +1,177 @@
+{
+  "id": "jquery-lesson-132",
+  "slug": "encapsulating-jquery-behavior",
+  "title": "Encapsulating jQuery Behavior",
+  "sequence": 132,
+  "module_id": "jquery-module-15",
+  "module_slug": "code-organization-and-reusable-patterns",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "jquery-lesson-131"
+  ],
+  "previous_lesson_id": "jquery-lesson-131",
+  "next_lesson_id": "jquery-lesson-133",
+  "keywords": [
+    "encapsulating jquery behavior",
+    "jquery",
+    "javascript",
+    "code organization and reusable patterns",
+    "immediately invoked function expressions (iifes)",
+    "passing jquery into a private scope",
+    "protecting the $ alias",
+    "creating self-contained modules"
+  ],
+  "source_syllabus_number": 132,
+  "subtopics": [
+    "Immediately invoked function expressions (IIFEs)",
+    "Passing jQuery into a private scope",
+    "Protecting the $ alias",
+    "Creating self-contained modules",
+    "Defining predictable initialization functions"
+  ],
+  "learning_outcomes": [
+    "Explain the role of encapsulating jquery behavior in a jQuery application.",
+    "Apply immediately invoked function expressions (iifes) in a small example and describe its expected result.",
+    "Verify passing jquery into a private scope with an explicit test or browser observation."
+  ],
+  "exercise_files": [
+    "../exercises/132-encapsulating-jquery-behavior.json"
+  ],
+  "sources": [
+    {
+      "title": "jQuery API Documentation",
+      "url": "https://api.jquery.com/",
+      "publisher": "jQuery project",
+      "checked_on": "2026-10-12",
+      "source_type": "official_api_reference",
+      "supports": [
+        "Supported jQuery Core APIs",
+        "Method signatures and return values"
+      ]
+    },
+    {
+      "title": "jQuery Learning Center",
+      "url": "https://learn.jquery.com/",
+      "publisher": "jQuery project",
+      "checked_on": "2026-10-12",
+      "source_type": "official_learning_resource",
+      "supports": [
+        "Concept explanations",
+        "Events",
+        "Effects",
+        "AJAX",
+        "Plugins",
+        "Performance",
+        "Code organization"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the attached syllabus and official references; requires lesson-by-lesson technical review, local execution, accessibility checks, and editorial approval.",
+  "content": {
+    "intro": "In this lesson, you will work through encapsulating jquery behavior with a focused jQuery example. The subtopics below preserve the supplied curriculum coverage and connect the API idea to a small browser interface.",
+    "why_it_matters": "This topic is useful because it turns immediately invoked function expressions (iifes) into a repeatable implementation choice. Use small functions, scoped state, explicit initialization, and cleanup to prevent global namespace pollution and duplicate event handlers.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 15 overview",
+        "asset_path": "diagrams/module-15-overview.svg",
+        "alt_text": "Overview of Code Organization and Reusable Patterns, illustrating the sequence from understanding the concept to implementing and checking it.",
+        "caption": "Use this module map to place encapsulating jquery behavior within the wider learning path."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Use small functions, scoped state, explicit initialization, and cleanup to prevent global namespace pollution and duplicate event handlers."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the supplied syllabus",
+        "items": [
+          "Immediately invoked function expressions (IIFEs)",
+          "Passing jQuery into a private scope",
+          "Protecting the $ alias",
+          "Creating self-contained modules",
+          "Defining predictable initialization functions"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "function setStatus($target, message) {\n  $target.text(message).toggleClass(\"is-empty\", !message);\n}\nsetStatus($(\"#status\"), \"Ready\");",
+        "expected_output": "A small helper updates text and state class in one place.",
+        "run_instructions": "Use a local HTML page with jQuery 4.0.0 loaded before app.js for JavaScript snippets. HTML and package-manager snippets can be checked as configuration examples. Run the interaction in browser DevTools, inspect the DOM/Network panel, and compare actual behavior with the expected result. Do not submit learner code to the production API for arbitrary execution.",
+        "reset_steps": "Restore the original markup and code, clear console/network filters, reload the local page, and repeat the same interaction. For a request example, return the mock endpoint to its original response before retrying."
+      },
+      {
+        "type": "callout",
+        "title": "Guided example",
+        "text": "Start with a known DOM structure, apply the pattern for encapsulating jquery behavior, and test one normal case plus one edge case. Keep selectors scoped to the intended component and verify the real browser result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Refactor an existing snippet around encapsulating jquery behavior into a named function with explicit inputs. Mount it twice and prove that repeated setup does not duplicate behavior."
+      }
+    ],
+    "task": "Refactor an existing snippet around encapsulating jquery behavior into a named function with explicit inputs. Mount it twice and prove that repeated setup does not duplicate behavior.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates encapsulating jquery behavior using a current, documented approach.",
+      "The learner records the expected and actual behavior and checks at least one edge case.",
+      "The example preserves semantic HTML and does not render untrusted data as HTML.",
+      "The test setup and any runtime limitation are documented honestly."
+    ],
+    "hints": [
+      "First identify which DOM nodes and runtime state are involved in encapsulating jquery behavior.",
+      "Make one small change, inspect the resulting element or request, and compare it with the expected result.",
+      "If the result differs, check the selector, script order, browser console, event target, and relevant API documentation before adding more code."
+    ],
+    "expected_output": "A small helper updates text and state class in one place.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-132-questions.json",
+    "common_mistakes": [
+      "Assuming a selector matched an element without checking the collection length.",
+      "Confusing jQuery collections with native DOM elements or live properties with markup attributes.",
+      "Using .html() with untrusted data or assuming client-side validation enforces server rules.",
+      "Treating a demo snippet as production-ready without testing failure and accessibility states."
+    ],
+    "summary": [
+      "Encapsulating jQuery Behavior is one part of the code organization and reusable patterns workflow.",
+      "Use small functions, scoped state, explicit initialization, and cleanup to prevent global namespace pollution and duplicate event handlers.",
+      "Use the official API or upgrade guide for version-specific behavior and verify an example locally before relying on it."
+    ],
+    "references": [
+      {
+        "title": "jQuery API Documentation",
+        "url": "https://api.jquery.com/",
+        "publisher": "jQuery project",
+        "checked_on": "2026-10-12",
+        "source_type": "official_api_reference",
+        "supports": [
+          "Supported jQuery Core APIs",
+          "Method signatures and return values"
+        ]
+      },
+      {
+        "title": "jQuery Learning Center",
+        "url": "https://learn.jquery.com/",
+        "publisher": "jQuery project",
+        "checked_on": "2026-10-12",
+        "source_type": "official_learning_resource",
+        "supports": [
+          "Concept explanations",
+          "Events",
+          "Effects",
+          "AJAX",
+          "Plugins",
+          "Performance",
+          "Code organization"
+        ]
+      }
+    ]
+  }
+}

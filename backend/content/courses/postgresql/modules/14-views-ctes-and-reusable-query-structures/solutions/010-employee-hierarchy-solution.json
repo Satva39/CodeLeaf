@@ -1,0 +1,8 @@
+{
+  "id": "postgresql-exercise-solution-010",
+  "exercise_id": "postgresql-exercise-010",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference approach for Employee Hierarchy:\n\nWITH RECURSIVE org AS (SELECT id, manager_id, name, 0 AS depth FROM employees WHERE manager_id IS NULL UNION ALL SELECT e.id, e.manager_id, e.name, org.depth + 1 FROM employees e JOIN org ON e.manager_id = org.id) SELECT * FROM org ORDER BY depth, id;\n\nReview requirements:\n- State all schema assumptions and prerequisites.\n- Use deterministic ordering when comparing query outputs.\n- Include a verification query and a realistic failure case.\n- Avoid using production data or credentials.\n- Record limitations; a static keyword grader does not prove runtime correctness.",
+  "explanation": "The reference approach for Employee Hierarchy is guidance rather than a universal production implementation. Review the schema, concurrency model, privileges and current PostgreSQL 18.6 documentation. The public static grader only checks required strings; a reviewer must assess correctness and evidence."
+}

@@ -1,0 +1,164 @@
+{
+  "id": "nextjs-lesson-185",
+  "slug": "proxy-limitations-and-security",
+  "title": "Proxy Limitations and Security",
+  "sequence": 185,
+  "module_id": "nextjs-module-17",
+  "module_slug": "request-processing-proxy-and-configuration",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "nextjs-lesson-184"
+  ],
+  "previous_lesson_id": "nextjs-lesson-184",
+  "next_lesson_id": "nextjs-lesson-186",
+  "keywords": [
+    "Proxy Limitations and Security",
+    "Keeping Proxy logic fast",
+    "Avoiding slow data fetching",
+    "Why Proxy is not complete authorization",
+    "Rechecking permissions in protected operations",
+    "Next.js",
+    "JavaScript",
+    "App Router"
+  ],
+  "source_syllabus_number": 185,
+  "subtopics": [
+    "Keeping Proxy logic fast",
+    "Avoiding slow data fetching",
+    "Why Proxy is not complete authorization",
+    "Rechecking permissions in protected operations"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and boundaries of Proxy Limitations and Security in the context of Request Processing, Proxy, and Configuration.",
+    "Apply Keeping Proxy logic fast in a minimal JavaScript/JSX or configuration example and describe its expected result.",
+    "Verify the example with one relevant edge or failure case and identify version/runtime assumptions."
+  ],
+  "content": {
+    "intro": "This lesson develops Proxy Limitations and Security in the supplied Next.js curriculum. The list below preserves its named syllabus subtopics and ties them to a small example you can inspect and adapt.",
+    "why_it_matters": "Request-time code runs at a network boundary before rendering. In Next.js 16 the convention is Proxy; use it selectively, not as a substitute for authorization. In practice, keeping Proxy logic fast should be understood well enough to explain the expected behavior and how it can fail.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Proxy Limitations and Security: concept map",
+        "asset_path": "diagrams/lessons/lesson-185-proxy-limitations-and-security.svg",
+        "alt_text": "Lesson 185: Proxy Limitations and Security: a four-step visual flow showing Keeping Proxy logic fast, Avoiding slow data fetching, Why Proxy is not complete authorization, Rechecking permissions in protected operations.",
+        "caption": "Concept map for Proxy Limitations and Security in Request Processing, Proxy, and Configuration; understand the idea, inspect its convention, practice, and verify. The numbered steps communicate order independently of color."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Request-time code runs at a network boundary before rendering. In Next.js 16 the convention is Proxy; use it selectively, not as a substitute for authorization. “Proxy Limitations and Security” is part of the lesson model for Proxy Limitations and Security. Describe its role, use the framework convention that applies to the selected Next.js version, and confirm the result with a focused example."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Keeping Proxy logic fast",
+            "text": "“Keeping Proxy logic fast” is part of the lesson model for Proxy Limitations and Security. Describe its role, use the framework convention that applies to the selected Next.js version, and confirm the result with a focused example."
+          },
+          {
+            "title": "Avoiding slow data fetching",
+            "text": "For avoiding slow data fetching, make input/output shape explicit, handle non-success responses, and keep credentials in trusted server code."
+          },
+          {
+            "title": "Why Proxy is not complete authorization",
+            "text": "For why proxy is not complete authorization, identify the trusted boundary and enforce checks server-side for every sensitive operation."
+          },
+          {
+            "title": "Rechecking permissions in protected operations",
+            "text": "For rechecking permissions in protected operations, identify the trusted boundary and enforce checks server-side for every sensitive operation."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "filename": "app/example.js",
+        "code": "// proxy.js — Next.js 16 convention\nimport { NextResponse } from 'next/server';\n\nexport function proxy(request) {\n  if (request.nextUrl.pathname === '/old') {\n    return NextResponse.redirect(new URL('/new', request.url));\n  }\n  return NextResponse.next();\n}\n\nexport const config = { matcher: ['/old'] };",
+        "expected_output": "A request for /old redirects to /new. In Next.js 16, the file convention is proxy.js; legacy middleware.js is covered only for older releases.",
+        "run_instructions": "This is an inspectable example, not an arbitrary-code runner inside CodeLeaf. Start from a separate JavaScript App Router project created with `npx create-next-app@latest my-next-app --js --app`, put the snippet in the named or relevant file, and run `npm run dev`. Examples that call application-owned helpers, databases, authentication, or third-party APIs require those dependencies and appropriate environment variables. Use `npm run build` to validate a production build after adapting it.",
+        "reset_steps": "Restore the original snippet, reset the example data and request state, then rerun the same normal case and one empty, invalid, slow, denied, or failed case as relevant. Remove any test records and use non-production credentials.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Work through “Proxy Limitations and Security” by predicting the result before running the example. Identify which file convention or API creates the behavior, then vary one relevant input such as a route parameter, form value, request result, or viewport. Record the actual outcome and compare it with the expected result above."
+      },
+      {
+        "type": "callout",
+        "title": "Version and environment note",
+        "text": "This JavaScript-first course uses the Next.js 16 documentation snapshot checked on 2026-10-18. Version note: in Next.js 16 the `middleware` convention is deprecated and renamed to `proxy`. The Pages Router/Middleware details belong in the legacy track only. TypeScript is an optional parallel skill, not a requirement for these examples. Confirm any experimental or configuration-dependent API in the exact version installed in your learning project."
+      }
+    ],
+    "task": "Create or inspect a minimal example for “Proxy Limitations and Security”. Include the syllabus concept “Keeping Proxy logic fast”, state its expected output, and verify one normal and one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named concept rather than only mentioning it.",
+      "Expected output and the project/runtime needed to reproduce it are documented.",
+      "At least one boundary, empty, loading, denied, or failure case is tested or explicitly reasoned about.",
+      "Secrets and trusted server operations stay on the server; UI behavior remains semantic and accessible where relevant."
+    ],
+    "hints": [
+      "Start with the smallest observable part of “Keeping Proxy logic fast”.",
+      "Predict the output, change one input at a time, and compare the result with your expectation.",
+      "If results differ, check the route/file convention, current Next.js and Node.js versions, server logs, and whether the behavior is cache-dependent."
+    ],
+    "expected_output": "A request for /old redirects to /new. In Next.js 16, the file convention is proxy.js; legacy middleware.js is covered only for older releases.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-185-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating a development preview as proof that the production application is correct.",
+        "why": "Caching, environment configuration, deployment constraints, and error handling can differ between development and production.",
+        "fix": "Run the relevant targeted tests and a production build, then verify the deployed/runtime-specific behavior."
+      },
+      {
+        "problem": "Relying on client-only checks for sensitive data or mutations.",
+        "why": "Requests can be sent without using the visible UI.",
+        "fix": "Authenticate, authorize, validate inputs, and check resource ownership inside the trusted server operation."
+      },
+      {
+        "problem": "Assuming a Next.js behavior is universal across releases.",
+        "why": "Rendering, caching, config, and request processing APIs evolve between versions.",
+        "fix": "Name the target release and check its matching official docs before publishing or upgrading the example."
+      }
+    ],
+    "summary": [
+      "Proxy Limitations and Security fits into Request Processing, Proxy, and Configuration and should be explained with the vocabulary in the syllabus subtopics.",
+      "Keep the implementation minimal, make its runtime boundary explicit, and document its expected output.",
+      "Verify at least one relevant edge/failure case before treating the example as correct."
+    ],
+    "references": [
+      "https://nextjs.org/docs/app/api-reference/file-conventions/proxy",
+      "https://nextjs.org/docs/app/api-reference/config/next-config-js"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Proxy Convention",
+      "url": "https://nextjs.org/docs/app/api-reference/file-conventions/proxy",
+      "publisher": "Vercel / Next.js documentation team",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "Next.js 16 proxy behavior and migration from middleware"
+      ]
+    },
+    {
+      "title": "next.config.js",
+      "url": "https://nextjs.org/docs/app/api-reference/config/next-config-js",
+      "publisher": "Vercel / Next.js documentation team",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "configuration options and version behavior"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Authored from the supplied syllabus and current official documentation links; instructor and technical review are required before publication."
+}

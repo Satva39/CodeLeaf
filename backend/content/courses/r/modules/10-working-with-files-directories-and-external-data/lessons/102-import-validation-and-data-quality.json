@@ -1,0 +1,189 @@
+{
+  "id": "r-lesson-102",
+  "slug": "import-validation-and-data-quality",
+  "title": "Import Validation and Data Quality",
+  "sequence": 102,
+  "module_id": "r-module-10",
+  "module_slug": "working-with-files-directories-and-external-data",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "r-lesson-101"
+  ],
+  "previous_lesson_id": "r-lesson-101",
+  "next_lesson_id": "r-lesson-103",
+  "keywords": [
+    "import-validation-and-data-quality",
+    "working-with-files-directories-and-external-data",
+    "detecting-incorrect-column-types",
+    "verifying-row-counts",
+    "checking-required-columns",
+    "detecting-duplicate-records",
+    "validating-data-ranges",
+    "logging-data-import-warnings",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 102,
+  "subtopics": [
+    "Detecting Incorrect Column Types",
+    "Verifying Row Counts",
+    "Checking Required Columns",
+    "Detecting Duplicate Records",
+    "Validating Data Ranges",
+    "Logging Data-Import Warnings"
+  ],
+  "learning_outcomes": [
+    "Explain the role of import validation and data quality and identify its main inputs, outputs or constraints.",
+    "Apply detecting incorrect column types in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Import Validation and Data Quality is part of Working with Files, Directories, and External Data. Start with detecting incorrect column types and connect it to the worked example and expected result.",
+    "why_it_matters": "Successful parsing does not guarantee semantic validity; validate schema, ranges, keys and counts.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Import Validation and Data Quality",
+        "asset_path": "diagrams/data-cleaning-before-after.svg",
+        "alt_text": "Concept visual supporting lesson 102, Import Validation and Data Quality. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Successful parsing does not guarantee semantic validity; validate schema, ranges, keys and counts. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Detecting Incorrect Column Types",
+            "text": "Explain detecting incorrect column types in the context of import validation and data quality, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Verifying Row Counts",
+            "text": "Explain verifying row counts in the context of import validation and data quality, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Checking Required Columns",
+            "text": "Explain checking required columns in the context of import validation and data quality, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Detecting Duplicate Records",
+            "text": "For detecting duplicate records, include a failing or boundary case and explain how it should be detected without silently losing information."
+          },
+          {
+            "title": "Validating Data Ranges",
+            "text": "Explain validating data ranges in the context of import validation and data quality, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Logging Data-Import Warnings",
+            "text": "For logging data-import warnings, include a failing or boundary case and explain how it should be detected without silently losing information."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Define two invariants and check them before accepting an imported table. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Import Validation and Data Quality",
+        "language": "r",
+        "code": "# Lesson 102: Import Validation and Data Quality\nexample_rows <- read.csv(text = \"item,quantity\\npen,6\\nbook,7\")\nsum(example_rows$quantity)",
+        "expected_output": "[1] 13",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "This example uses in-memory text rather than reading or overwriting a real file; validate schemas on real imports. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For import validation and data quality, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-102-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply import validation and data quality to a small synthetic example. Start with detecting incorrect column types, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the detecting incorrect column types idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible import validation and data quality example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Detecting Incorrect Column Types” and identify the input and output before coding.",
+      "Check file existence, column types, row counts, keys and missing-value counts.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: Successful parsing does not guarantee semantic validity; validate schema, ranges, keys and counts.",
+      "Practice: Define two invariants and check them before accepting an imported table.",
+      "Source syllabus focus: Detecting Incorrect Column Types. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply import validation and data quality to a small synthetic example. Start with detecting incorrect column types, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible import validation and data quality example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Detecting Incorrect Column Types” and identify the input and output before coding.",
+    "Check file existence, column types, row counts, keys and missing-value counts.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: Successful parsing does not guarantee semantic validity; validate schema, ranges, keys and counts.",
+    "Practice: Define two invariants and check them before accepting an imported table.",
+    "Source syllabus focus: Detecting Incorrect Column Types. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 10 — Working with Files, Directories, and External Data, lesson 102: Import Validation and Data Quality.",
+    "Official documentation: https://cran.r-project.org/doc/manuals/r-release/R-data.html",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

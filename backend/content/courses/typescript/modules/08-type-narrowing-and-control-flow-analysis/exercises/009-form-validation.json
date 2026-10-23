@@ -1,0 +1,58 @@
+{
+  "id": "typescript-exercise-009",
+  "slug": "form-validation",
+  "title": "Form Validation",
+  "sequence": 9,
+  "lesson_id": "typescript-lesson-069",
+  "lesson_slug": "069-user-defined-type-guards",
+  "module_id": "typescript-module-08",
+  "type": "coding",
+  "difficulty": "beginner",
+  "status": "draft",
+  "prompt": "Write a reusable type guard that verifies an input is a non-empty string.",
+  "starter": {
+    "code": "// TODO: implement function isNonEmptyString(value: unknown): value is string\n// TODO: verify typeof value and trimmed length\n",
+    "language": "typescript",
+    "file_name": "form-validation.ts",
+    "execution_mode": "static-validation"
+  },
+  "public_tests": [
+    {
+      "name": "Required type contract",
+      "description": "Review that the submission contains the required declarations and preserves the stated input/output relationship.",
+      "mode": "static-token-check",
+      "required_strings": [
+        "function isNonEmptyString(value: unknown): value is string",
+        "typeof value === \"string\"",
+        "value.trim().length > 0"
+      ]
+    },
+    {
+      "name": "Runtime and boundary review",
+      "description": "Explain one failure case and add a real runtime check when data crosses an external trust boundary.",
+      "mode": "human-review"
+    }
+  ],
+  "acceptance_criteria": [
+    "Only a string containing non-whitespace text passes the guard.",
+    "Submit code with the required type declarations and add an explanation or test for one meaningful boundary/failure case.",
+    "Do not claim that the code has been executed by the CodeLeaf browser playground."
+  ],
+  "hints": [
+    "Accept unknown at the boundary and narrow only after a real runtime check.",
+    "TypeScript checks assignability but does not validate external data at runtime.",
+    "Use the local TypeScript compiler and an appropriate test runner to verify behavior; the course grader checks only the documented text markers."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "function isNonEmptyString(value: unknown): value is string",
+      "typeof value === \"string\"",
+      "value.trim().length > 0"
+    ]
+  },
+  "grading_method": "Server-side static token check for the required declarations plus human review of runtime tests. This is not a TypeScript compiler or arbitrary-code runner.",
+  "retry_policy": "Unlimited practice retries; platform XP is awarded once only after a correct server-side grade.",
+  "solution_file": "solutions/009-form-validation-solution.json",
+  "status_note": "Draft until exercise instructions, starter, and static grader are reviewed. No course-authored XP override is used."
+}

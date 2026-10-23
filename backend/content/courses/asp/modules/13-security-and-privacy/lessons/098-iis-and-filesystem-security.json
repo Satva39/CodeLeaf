@@ -1,0 +1,210 @@
+{
+  "id": "asp-lesson-098",
+  "slug": "iis-and-filesystem-security",
+  "title": "IIS and Filesystem Security",
+  "sequence": 98,
+  "module_id": "asp-module-13",
+  "module_slug": "security-and-privacy",
+  "level": "Advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "asp-lesson-097"
+  ],
+  "previous_lesson_id": "asp-lesson-097",
+  "next_lesson_id": "asp-lesson-099",
+  "keywords": [
+    "iis-and-filesystem-security",
+    "least-privilege-application-identities",
+    "database-credentials-and-permissions",
+    "restricting-writable-directories",
+    "protecting-configuration-and-include-files"
+  ],
+  "source_syllabus_number": 98,
+  "subtopics": [
+    "Least-privilege application identities",
+    "Database credentials and permissions",
+    "Restricting writable directories",
+    "Protecting configuration and include files",
+    "Path traversal risks",
+    "Upload directory isolation",
+    "Preventing exposure of source and log files"
+  ],
+  "learning_outcomes": [
+    "Explain the role of iis and filesystem security in a Classic ASP application.",
+    "Identify and describe at least two syllabus subtopics: Least-privilege application identities and Database credentials and permissions.",
+    "Inspect a minimal example and define a reproducible normal-case and failure-case test."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study iis and filesystem security as part of Classic ASP development and legacy maintenance. The lesson follows the attached ASP curriculum topic 98 and uses the syllabus subtopics as the coverage checklist.",
+    "why_it_matters": "IIS and Filesystem Security matters because Classic ASP behavior crosses a server-side scripting engine, IIS configuration, request/response boundaries, and often COM or ADO dependencies. A small, explicit test helps distinguish intended behavior from runtime-specific behavior.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "IIS and Filesystem Security: concept map",
+        "asset_path": "diagrams/lessons/lesson-098-iis-and-filesystem-security.svg",
+        "alt_text": "Concept map for IIS and Filesystem Security; steps include Least-privilege application identities, Database credentials and permissions, Protecting configuration and include files, Preventing exposure of source and log files.",
+        "caption": "The visual introduces the idea; use the subtopic list and inspectable example to verify each step."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Classic ASP security depends on server-side controls, safe data handling, and IIS/Windows configuration—not on hiding a button or filtering a string. For 'IIS and Filesystem Security', use parameterized SQL, context-aware output encoding, CSRF protections for state-changing authenticated requests, secure session handling, least privilege, and safe generic errors. Review legacy code in an authorized test copy and do not test against systems without permission."
+      },
+      {
+        "type": "paragraph",
+        "title": "Syllabus coverage",
+        "text": "The lesson explicitly covers: Least-privilege application identities; Database credentials and permissions; Restricting writable directories; Protecting configuration and include files; Path traversal risks; Upload directory isolation; Preventing exposure of source and log files. Treat these subtopics as connected requirements. For each one, be able to define the concept, identify where it appears in a Classic ASP application, and name one test or diagnostic that would verify it."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: IIS and Filesystem Security",
+        "language": "text",
+        "code": "Filesystem least-privilege review:\n- app-pool identity: read/execute application code only\n- upload/data folder: narrowly scoped write permission\n- secrets/logs: restricted, outside public root\n- directory browsing: disabled unless explicitly needed\n- no arbitrary user-controlled include/path",
+        "expected_output": "Separate read/execute access from write access and keep protected storage outside public web paths.",
+        "run_instructions": "Audit effective NTFS ACLs and IIS identities; do not grant broad Everyone/Users write permission as a troubleshooting shortcut. The standard CodeLeaf browser playground previews HTML/CSS/JavaScript only; it does not execute Classic ASP, VBScript, ADO, IIS commands, PowerShell, or SQL. This block is therefore marked for static inspection unless you run it in the clearly identified local tool.",
+        "reset_steps": "Restore the original sample and test data. Change one condition, input, provider setting, or runtime option at a time, then compare observed behavior with the expected result.",
+        "execution_mode": "static-validation",
+        "limitations": "Not executed during course generation. Classic ASP examples require a configured Windows/IIS environment with the matching ASP scripting engine and any required COM/ADO providers. Provider-specific and IIS-version-specific behavior must be verified locally."
+      },
+      {
+        "type": "callout",
+        "title": "Runtime and safety checkpoint",
+        "text": "Use an authorized local copy and benign synthetic data. Verify the expected denial/error path as well as the permitted path; never expose real secrets in examples or logs. The source syllabus treats Classic ASP as a legacy maintenance technology, not as ASP.NET or a default choice for new web projects."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided workflow",
+        "text": "1. Start with a minimal local example of iis and filesystem security. 2. Trace its inputs, state changes, dependencies, and output. 3. Test a normal case, a missing/malformed case, and one permission/provider/runtime failure. 4. Write down the exact expected and observed result before changing another variable."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a small, reviewable demonstration of iis and filesystem security using synthetic data. Include at least one of these syllabus concepts: Least-privilege application identities. State the expected result first, then add one invalid or boundary case and explain how your program should behave."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-098-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating legacy runtime behavior as universal.",
+        "why": "IIS versions, Windows lifecycle, COM registration/bitness, and ADO providers can change behavior.",
+        "fix": "Write down the actual server/provider versions and validate on a disposable test site."
+      },
+      {
+        "problem": "Testing only a successful path.",
+        "why": "Empty input, missing records, expired sessions, permissions, timeouts, and malformed data reveal different failure modes.",
+        "fix": "Add normal, negative, and boundary cases with expected outcomes."
+      },
+      {
+        "problem": "Exposing internal details while debugging.",
+        "why": "Detailed errors can reveal paths, SQL text, configuration, and component information.",
+        "fix": "Keep diagnostics in restricted server-side logs and return a generic message with a reference ID."
+      }
+    ]
+  },
+  "task": "Build a short demonstration of iis and filesystem security using synthetic data. Demonstrate “Least-privilege application identities”, state the expected result, and document one edge/failure case.",
+  "task_acceptance_criteria": [
+    "The artifact demonstrates Least-privilege application identities.",
+    "Expected result is written before verification.",
+    "At least one invalid or boundary case is documented.",
+    "Runtime/provider/version assumptions and security limits are recorded."
+  ],
+  "hints": [
+    "Start with the smallest example for least-privilege application identities.",
+    "Keep the sample synthetic and change one thing at a time.",
+    "Compare observed behavior against a written expectation and consult the linked official reference if the runtime differs."
+  ],
+  "summary": [
+    "IIS and Filesystem Security is one step in the larger Classic ASP request, state, data, security, or maintenance workflow.",
+    "The syllabus coverage includes Least-privilege application identities; Database credentials and permissions; Restricting writable directories; Protecting configuration and include files; Path traversal risks; Upload directory isolation; Preventing exposure of source and log files.",
+    "A reproducible legacy-code example records input, environment/version, expected outcome, observed outcome, and a meaningful failure case."
+  ],
+  "run_mode": "static-validation",
+  "expected_output": "Separate read/execute access from write access and keep protected storage outside public web paths.",
+  "common_mistakes": [
+    {
+      "problem": "Assuming syntax alone proves the application works.",
+      "why": "IIS configuration, permissions, COM activation, database providers, and response behavior are external dependencies.",
+      "fix": "Run against the documented local test host and record exact evidence."
+    },
+    {
+      "problem": "Trusting browser-supplied values.",
+      "why": "Query strings, form fields, cookies, and hidden controls remain client-controlled.",
+      "fix": "Validate on the server and apply authorization and output encoding at the appropriate boundary."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "id": "asp-ref-sql-injection",
+      "title": "SQL Injection Prevention Cheat Sheet",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+      "publisher": "OWASP Cheat Sheet Series",
+      "checked_on": "2026-10-15",
+      "concepts": [
+        "parameterized queries",
+        "least privilege",
+        "allow-list validation"
+      ],
+      "source_type": "security guidance"
+    },
+    {
+      "id": "asp-ref-xss",
+      "title": "Cross Site Scripting Prevention Cheat Sheet",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
+      "publisher": "OWASP Cheat Sheet Series",
+      "checked_on": "2026-10-15",
+      "concepts": [
+        "contextual output encoding",
+        "safe handling of untrusted text"
+      ],
+      "source_type": "security guidance"
+    },
+    {
+      "id": "asp-ref-csrf",
+      "title": "Cross-Site Request Forgery Prevention Cheat Sheet",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
+      "publisher": "OWASP Cheat Sheet Series",
+      "checked_on": "2026-10-15",
+      "concepts": [
+        "CSRF tokens",
+        "state-changing requests",
+        "cookie-based authentication"
+      ],
+      "source_type": "security guidance"
+    },
+    {
+      "id": "asp-ref-session",
+      "title": "Session Management Cheat Sheet",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html",
+      "publisher": "OWASP Cheat Sheet Series",
+      "checked_on": "2026-10-15",
+      "concepts": [
+        "session identifiers",
+        "expiration",
+        "cookie protection"
+      ],
+      "source_type": "security guidance"
+    },
+    {
+      "id": "asp-ref-password-storage",
+      "title": "Password Storage Cheat Sheet",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html",
+      "publisher": "OWASP Cheat Sheet Series",
+      "checked_on": "2026-10-15",
+      "concepts": [
+        "password hashing",
+        "salt and work factor",
+        "password verification"
+      ],
+      "source_type": "security guidance"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Draft generated from the attached ASP (Classic Active Server Pages) curriculum. Requires technical review and target-IIS/provider verification before publication.",
+  "exercise_files": []
+}

@@ -1,0 +1,175 @@
+{
+  "id": "genai-lesson-225",
+  "slug": "performance-and-cost-troubleshooting",
+  "title": "Performance and Cost Troubleshooting",
+  "sequence": 225,
+  "module_id": "genai-module-25",
+  "module_slug": "troubleshooting-best-practices-and-professional-readiness",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "professional-practice",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "genai-lesson-189"
+  ],
+  "previous_lesson_id": "genai-lesson-224",
+  "next_lesson_id": "genai-lesson-226",
+  "keywords": [
+    "Performance and Cost Troubleshooting",
+    "Excessive token consumption",
+    "High inference latency",
+    "Slow retrieval pipelines",
+    "Repeated model calls",
+    "Memory and resource bottlenecks",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 225,
+  "subtopics": [
+    "Excessive token consumption",
+    "High inference latency",
+    "Slow retrieval pipelines",
+    "Repeated model calls",
+    "Memory and resource bottlenecks",
+    "Cost spikes and usage anomalies"
+  ],
+  "learning_outcomes": [
+    "Explain excessive token consumption and how it connects to performance and cost troubleshooting.",
+    "Apply high inference latency in the example and predict the output before running it.",
+    "Test one realistic edge case for performance and cost troubleshooting and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers performance and cost troubleshooting through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Use structured debugging and professional practices to diagnose failure modes, document limits, and present a portfolio with repeatable test evidence.",
+    "why_it_matters": "Excessive token consumption is part of the representation and generation mechanism. Follow the information flow from input representation to model computation to output selection, then distinguish the architecture's capabilities from limits caused by data, context, decoding choices, or compute.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Performance and Cost Troubleshooting: concept map",
+        "asset_path": "diagrams/lessons/lesson-225-performance-and-cost-troubleshooting.svg",
+        "alt_text": "Diagram for Performance and Cost Troubleshooting: understand Excessive token consumption, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Excessive token consumption, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Excessive token consumption is part of the representation and generation mechanism. Follow the information flow from input representation to model computation to output selection, then distinguish the architecture's capabilities from limits caused by data, context, decoding choices, or compute."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Excessive token consumption",
+            "text": "Excessive token consumption is part of the representation and generation mechanism. Follow the information flow from input representation to model computation to output selection, then distinguish the architecture's capabilities from limits caused by data, context, decoding choices, or compute."
+          },
+          {
+            "title": "High inference latency",
+            "text": "Use high inference latency to reason about behavior under real workloads, not just a successful local example. Measure latency and cost on representative requests, define operational limits and rollback options, and test what happens when dependencies slow down or fail."
+          },
+          {
+            "title": "Slow retrieval pipelines",
+            "text": "Slow retrieval pipelines concerns how content is represented, selected, or ranked for relevance. Keep the source text and metadata traceable, measure retrieval with labeled queries, and verify that similarity scores correspond to useful results rather than assuming nearby vectors prove factual correctness."
+          },
+          {
+            "title": "Repeated model calls",
+            "text": "Use repeated model calls as a lens for understanding performance and cost troubleshooting. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Memory and resource bottlenecks",
+            "text": "Use memory and resource bottlenecks as a lens for understanding performance and cost troubleshooting. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Cost spikes and usage anomalies",
+            "text": "Use cost spikes and usage anomalies to reason about behavior under real workloads, not just a successful local example. Measure latency and cost on representative requests, define operational limits and rollback options, and test what happens when dependencies slow down or fail."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Performance and Cost Troubleshooting\nrequests = [{\"input_tokens\": 1000, \"output_tokens\": 200}, {\"input_tokens\": 8000, \"output_tokens\": 500}]\nprint({\"total_tokens\": sum(r[\"input_tokens\"]+r[\"output_tokens\"] for r in requests), \"largest_input\": max(r[\"input_tokens\"] for r in requests)})",
+        "expected_output": "{'total_tokens': 9700, 'largest_input': 8000}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice excessive token consumption within performance and cost troubleshooting: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'total_tokens': 9700, 'largest_input': 8000}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-225-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Performance and Cost Troubleshooting is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://genai.owasp.org/initiative/owasp-top-10-for-llm-and-genai/",
+      "https://developers.openai.com/api/docs/guides/text",
+      "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Top 10 for LLM and GenAI",
+      "url": "https://genai.owasp.org/initiative/owasp-top-10-for-llm-and-genai/",
+      "publisher": "OWASP GenAI Security Project",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "prompt injection"
+      ]
+    },
+    {
+      "title": "Text generation",
+      "url": "https://developers.openai.com/api/docs/guides/text",
+      "publisher": "OpenAI API documentation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "text generation API patterns"
+      ]
+    },
+    {
+      "title": "Design and develop a RAG solution",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide",
+      "publisher": "Microsoft Learn / Azure Architecture Center",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "RAG architecture"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

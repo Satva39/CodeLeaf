@@ -1,0 +1,181 @@
+{
+  "id": "expressjs-lesson-175",
+  "slug": "express-5-routing-changes",
+  "title": "Express 5 Routing Changes",
+  "sequence": 175,
+  "module_id": "expressjs-module-19",
+  "module_slug": "express-4-to-express-5-and-legacy-maintenance",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "legacy-compatibility",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "expressjs-lesson-174"
+  ],
+  "previous_lesson_id": "expressjs-lesson-174",
+  "next_lesson_id": "expressjs-lesson-176",
+  "keywords": [
+    "express-5-routing-changes",
+    "express-4-to-express-5-and-legacy-maintenance",
+    "changes-to-route-path-syntax",
+    "named-wildcard-requirements",
+    "changes-to-optional-route-syntax",
+    "updating-route-matching-tests",
+    "finding-legacy-path-patterns"
+  ],
+  "source_syllabus_number": 175,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Changes to route-path syntax",
+    "Named wildcard requirements",
+    "Changes to optional route syntax",
+    "Updating route matching tests",
+    "Finding legacy path patterns"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and terminology of Express 5 Routing Changes.",
+    "Apply or interpret one Express.js 5 pattern related to changes to route-path syntax.",
+    "Identify a meaningful edge case and choose a repeatable local test for it."
+  ],
+  "execution_mode": "server-runner",
+  "status": "draft",
+  "content": {
+    "intro": "In this lesson, you will learn express 5 routing changes and connect the named syllabus points to a small Express.js example. The course baseline is Express 5.x on a supported Node.js LTS release; the page shows reference output, not execution of Node.js code.",
+    "why_it_matters": "Express 5 Routing Changes matters because it helps keep the request/response contract explicit and the application maintainable as inputs, users and dependencies become less predictable. Upgrade with focused regression tests.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Concept map: Express 5 Routing Changes",
+        "asset_path": "diagrams/lesson-175-visual.svg",
+        "alt_text": "A conceptual three-stage flow for Express 5 Routing Changes: context or input, the Express.js concept, and verification of expected behavior with an edge case.",
+        "caption": "Use this visual to connect changes to route-path syntax to express 5 routing changes; the final step is to verify both normal and boundary behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Express 5 Routing Changes is part of express 4 to express 5 and legacy maintenance. Treat Express 4-to-5 migration as a compatibility task: audit path patterns and API changes, rely on the documented promise-rejection behavior carefully, and run tests against all routes and middleware. For this topic, make the observable behavior explicit, then check what happens when an input is missing, malformed, unauthorized, or a dependency fails (choose the relevant cases for this lesson)."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the attached syllabus",
+        "items": [
+          {
+            "title": "Changes to route-path syntax",
+            "text": "Treat the HTTP method and path as an API contract. Use the current Express 5 path syntax, validate captured values, and test both matching and non-matching requests."
+          },
+          {
+            "title": "Named wildcard requirements",
+            "text": "Treat the HTTP method and path as an API contract. Use the current Express 5 path syntax, validate captured values, and test both matching and non-matching requests."
+          },
+          {
+            "title": "Changes to optional route syntax",
+            "text": "Treat the HTTP method and path as an API contract. Use the current Express 5 path syntax, validate captured values, and test both matching and non-matching requests."
+          },
+          {
+            "title": "Updating route matching tests",
+            "text": "Treat the HTTP method and path as an API contract. Use the current Express 5 path syntax, validate captured values, and test both matching and non-matching requests."
+          },
+          {
+            "title": "Finding legacy path patterns",
+            "text": "Treat the HTTP method and path as an API contract. Use the current Express 5 path syntax, validate captured values, and test both matching and non-matching requests."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Read the example carefully",
+        "text": "A useful way to study express 5 routing changes is to start from the first syllabus point — changes to route-path syntax — and follow it through a small request or application example. Keep Express's built-in behavior separate from optional packages and your own application policy."
+      },
+      {
+        "type": "code",
+        "title": "Worked example (reference only)",
+        "language": "javascript",
+        "code": "import express from 'express';\nconst app = express();\n\n// Express 5: named wildcard; includes / as well as deeper paths.\napp.get('/{*splat}', (req, res) => {\n  res.status(404).json({ error: 'Not found' });\n});\n\napp.listen(3000);",
+        "expected_output": "GET /unknown → 404 {\"error\":\"Not found\"} (illustrative response)",
+        "notes": "This example shows the Express 5 named wildcard syntax. Re-check route ordering if a more specific route should handle the request first."
+      },
+      {
+        "type": "callout",
+        "title": "Safety / production rule",
+        "text": "Module rule — Treat Express 4-to-5 migration as a compatibility task: audit path patterns and API changes, rely on the documented promise-rejection behavior carefully, and run tests against all routes and middleware."
+      }
+    ],
+    "expected_output": "GET /unknown → 404 {\"error\":\"Not found\"} (illustrative response)",
+    "task": "Try it yourself: adapt the worked example to demonstrate express 5 routing changes. Write down the exact request or command, expected status/body, one boundary case, and how you would reset the local lab. CodeLeaf does not execute Express code in this lesson page; run Node.js server examples locally.",
+    "task_acceptance_criteria": [
+      "The example has a clear local run or inspection path and the required dependencies are named.",
+      "A normal request and a malformed/edge/failure request have documented expected outcomes.",
+      "No credentials, production data, or claim of successful runtime execution is included."
+    ],
+    "hints": [
+      "Hint 1: identify which part of express 5 routing changes is supplied by Express and which part belongs to your own application or another package.",
+      "Hint 2: check the official Express 5 guide/API reference and isolate the smallest example that proves one behavior.",
+      "Hint 3: verify a success case, a boundary case and the expected status/response; restart from a clean state before repeating."
+    ],
+    "solution_notes": "Suggested approach: Treat Express 4-to-5 migration as a compatibility task: audit path patterns and API changes, rely on the documented promise-rejection behavior carefully, and run tests against all routes and middleware. The sample is a focused reference fragment. Review all dependency, schema, proxy and runtime assumptions before using it in an application.",
+    "common_mistakes": [
+      {
+        "problem": "Copying an example without checking its assumptions",
+        "why": "A fragment may omit route setup, middleware order, external packages, database schema or production configuration.",
+        "fix": "State the runtime/dependency assumptions, run the focused example locally, and test a success path plus one failure path."
+      },
+      {
+        "problem": "Treating all request values as trusted",
+        "why": "Parameters, query values, body properties, files and upstream responses can be missing or malicious.",
+        "fix": "Validate schema, type and bounds at the boundary; keep authorization and database constraints as separate checks."
+      },
+      {
+        "problem": "Assuming the demo output means the server executed",
+        "why": "The course page shows reference output for Node.js/Express code; it is not an isolated Node runtime.",
+        "fix": "Run the example locally with the documented Node.js version and record actual command/output and test results."
+      }
+    ],
+    "summary": [
+      "Explain the central idea behind express 5 routing changes.",
+      "Connect the relevant subtopics to the request/response or application boundary.",
+      "Verify one normal outcome and one edge/error case with repeatable evidence."
+    ],
+    "run_mode": "static-validation",
+    "execution_mode": "server-runner",
+    "run_instructions": [
+      "Open a terminal in the lesson lab directory.",
+      "Install dependencies for the sample if required; use a supported Node.js LTS release.",
+      "Run the documented file with node, send the stated request with curl or an API client, and compare the actual status/body with the reference."
+    ],
+    "reset_steps": [
+      "Stop the local process with Ctrl+C.",
+      "Clear only temporary/synthetic records or files created by the lab.",
+      "Restart the server before repeating the example."
+    ],
+    "troubleshooting": [
+      "If node reports a module-syntax error, check package.json module type or use the matching CommonJS syntax.",
+      "If a package cannot be resolved, install the named dependency in the local lab and verify the lockfile.",
+      "If output differs, verify middleware order, the request path/method, environment variables and the expected runtime version."
+    ],
+    "accessibility_notes": "The lesson diagram has an explicit title, description and textual labels; color is supplementary and not the only way to distinguish stages.",
+    "version_notes": "Express 5.x teaching baseline. Check the official migration guide before applying these examples to Express 4 projects.",
+    "knowledge_check_file": "exams/question-files/lesson-175-questions.json"
+  },
+  "sources": [
+    {
+      "title": "Migrating to Express 5",
+      "url": "https://expressjs.com/en/guide/migrating-5.html",
+      "publisher": "OpenJS Foundation / Express.js",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "Node.js minimum for Express 5, named wildcard route syntax, changed APIs and migration checklist."
+      ]
+    },
+    {
+      "title": "Express.js routing guide (5.x)",
+      "url": "https://expressjs.com/en/5x/guide/routing.html",
+      "publisher": "OpenJS Foundation / Express.js",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "Route methods, paths, handlers, app.route() and express.Router()."
+      ]
+    }
+  ],
+  "exercise_files": []
+}

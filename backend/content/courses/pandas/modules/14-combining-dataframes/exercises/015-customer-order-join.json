@@ -1,0 +1,67 @@
+{
+  "id": "pandas-exercise-15",
+  "slug": "customer-order-join",
+  "title": "Customer-Order Join",
+  "sequence": 15,
+  "lesson_id": "pandas-lesson-112",
+  "lesson_slug": "validating-merges",
+  "module_id": "pandas-module-14",
+  "difficulty": "intermediate",
+  "type": "code",
+  "prompt": "Combine customer and order tables and validate join cardinality.",
+  "scenario": "Use the synthetic data described below to practise m, e, r, g, e, s,  , a, n, d,  , r, e, l, a, t, i, o, n, a, l,  , k, e, y, s. Do not assume the input is correct without validating it.",
+  "skills": "Merges and relational keys",
+  "starter": {
+    "language": "python",
+    "code": "import pandas as pd\n\norders = pd.DataFrame({\"order_id\": [1, 2], \"customer_id\": [10, 11]})\ncustomers = pd.DataFrame({\"customer_id\": [10, 11], \"name\": [\"Ari\", \"Bo\"]})\njoined = orders.merge(customers, on=\"customer_id\", how=\"left\", validate=\"many_to_one\", indicator=True)\nprint(joined[\"_merge\"].value_counts().to_dict())",
+    "dataset_note": "Use small synthetic in-memory data; do not place private or real customer data in exercises."
+  },
+  "input_schema": {
+    "description": "Create or use a synthetic DataFrame with only the columns needed for this exercise.",
+    "validation": [
+      "Document expected columns and data types.",
+      "State how missing values or duplicates should be treated."
+    ]
+  },
+  "expected_output": [
+    "Define primary/foreign keys and check uniqueness on the expected side.",
+    "Join the tables using a documented relationship validation.",
+    "Use the merge indicator to report unmatched keys."
+  ],
+  "public_tests": [
+    {
+      "name": "normal-case",
+      "description": "The solution returns the required columns and correctly computes the stated result."
+    },
+    {
+      "name": "edge-case",
+      "description": "The solution documents behavior for a missing value, duplicate key, empty input, invalid value, or other relevant edge case."
+    }
+  ],
+  "hints": [
+    "Write down the expected result before coding.",
+    "Use Pandas operations that preserve labels unless position-based behavior is intended.",
+    "Add a small assertion for the most important property."
+  ],
+  "acceptance_criteria": [
+    "Define primary/foreign keys and check uniqueness on the expected side.",
+    "Join the tables using a documented relationship validation.",
+    "Use the merge indicator to report unmatched keys."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "m"
+    ],
+    "case_sensitive": false,
+    "note": "The generic short-response grader is only an initial scaffold; a reviewed isolated Python grader is required for automatic execution of arbitrary learner code."
+  },
+  "solution_file": "solutions/015-customer-order-join-solution.json",
+  "solution": {},
+  "retry_policy": {
+    "max_attempts": null,
+    "allow_retry_after_feedback": true
+  },
+  "status": "draft",
+  "status_note": "Review prompt, starter, rubric, and server-side grading before publication."
+}

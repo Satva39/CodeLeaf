@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-54",
+  "exercise_id": "dsa-exercise-pdf-54",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\ndef streaming_mean(values):\n    count=0; mean=0.0\n    for value in values:\n        count += 1\n        mean += (value - mean) / count\n    return mean if count else None\n\nassert streaming_mean(iter([2,4,6])) == 4.0\n# One pass and O(1) auxiliary space; the input itself is never retained.\n# For a real memory-limited task, define accuracy, input errors and numeric types.\n```",
+  "explanation": "Welford-style incremental mean uses a single pass and O(1) state, suitable when input cannot be retained. Define numeric precision and invalid-data policy for a real workload.",
+  "tested_reference_code": "def streaming_mean(values):\n    count=0; mean=0.0\n    for value in values:\n        count += 1\n        mean += (value - mean) / count\n    return mean if count else None\n\nassert streaming_mean(iter([2,4,6])) == 4.0\n# One pass and O(1) auxiliary space; the input itself is never retained.\n# For a real memory-limited task, define accuracy, input errors and numeric types.",
+  "language": "python"
+}

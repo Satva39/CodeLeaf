@@ -1,0 +1,63 @@
+{
+  "id": "github-actions-exercise-042",
+  "slug": "dependency-and-supply-chain-security-practice",
+  "title": "Dependency and Supply-Chain Security practice",
+  "type": "coding",
+  "lesson_id": "github-actions-lesson-164",
+  "module_id": "github-actions-module-22",
+  "difficulty": "easy",
+  "sequence": 42,
+  "prompt": "Create a release evidence checklist covering dependency review, action references, SBOM availability, provenance, and verification.",
+  "objective": "Demonstrate the behavior of dependency and supply-chain security practice and capture verifiable evidence.",
+  "target_skills": [
+    "optional",
+    "workflow YAML",
+    "validation",
+    "safe automation"
+  ],
+  "starter": {
+    "language": "yaml",
+    "code": "name: Controlled workflow review\non: workflow_dispatch\npermissions:\n  contents: read\njobs:\n  review:\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo \"Review permissions, triggers, artifacts, and recovery evidence\"",
+    "execution_mode": "workflow-fragment"
+  },
+  "expected_output": "A reviewed workflow or design note satisfying: SBOM, provenance, verification. Verify behavior on a disposable repository where execution is required; a static sketch is not proof of a live deployment.",
+  "public_tests": [
+    {
+      "name": "Required evidence check",
+      "required_strings": [
+        "SBOM",
+        "provenance",
+        "verification"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Include or explain `SBOM`.",
+    "Include or explain `provenance`.",
+    "Include or explain `verification`.",
+    "Explain one validation result or limitation.",
+    "Do not include a real secret or use production resources."
+  ],
+  "hints": [
+    "First identify the trigger, input, and expected result.",
+    "Start with read-only permissions and a disposable branch or test environment.",
+    "Compare your result with the linked lesson and official documentation; distinguish a configuration sketch from a live integration."
+  ],
+  "solution": {
+    "answer": null,
+    "explanation": "The detailed reference solution is stored in a protected repository-only JSON file; it is not intended for a learner-facing response."
+  },
+  "solution_file": "../solutions/042-dependency-and-supply-chain-security-practice-solution.json",
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "SBOM",
+      "provenance",
+      "verification"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus human review for workflow semantics and security boundaries.",
+  "retry_policy": "Allow retries; incorrect submissions do not award XP. The platform awards exercise XP only after server-verified successful completion and applies idempotency per activity.",
+  "status": "draft",
+  "status_note": "Source mapping: Section E: Optional specialist tracks; original learning task adapted to CodeLeaf structure. Starter example aligned with its linked lesson; review and replace any remaining repository-specific placeholders."
+}

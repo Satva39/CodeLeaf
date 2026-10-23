@@ -1,0 +1,166 @@
+{
+  "id": "rest-api-development-lesson-116",
+  "slug": "json-web-tokens",
+  "title": "JSON Web Tokens",
+  "sequence": 116,
+  "module_id": "rest-api-development-module-13",
+  "module_slug": "authentication-authorization-and-identity",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "rest-api-development-lesson-115"
+  ],
+  "previous_lesson_id": "rest-api-development-lesson-115",
+  "next_lesson_id": "rest-api-development-lesson-117",
+  "keywords": [
+    "rest-api-development",
+    "json-web-tokens",
+    "authentication-authorization-and-identity",
+    "jwt-structure-and-claims",
+    "signature-verification"
+  ],
+  "source_syllabus_number": 116,
+  "subtopics": [
+    "JWT structure and claims",
+    "Signature verification",
+    "Issuer, audience, expiration, and not-before checks",
+    "Key rotation and algorithm selection",
+    "JWTs versus opaque tokens"
+  ],
+  "learning_outcomes": [
+    "Explain how json web tokens affects an API contract or implementation.",
+    "Apply the key ideas from jwt structure and claims to a concrete API example.",
+    "Identify one failure, security, or compatibility risk and describe how to verify it."
+  ],
+  "content": {
+    "intro": "This lesson focuses on json web tokens in authentication, authorization, and identity. You will connect jwt structure and claims to a concrete API contract decision, inspect a small example, and decide what evidence proves the behavior is correct.",
+    "why_it_matters": "JSON Web Tokens matters because API consumers depend on predictable behavior even when clients, servers, networks, and stored data evolve independently. Applying jwt structure and claims deliberately reduces ambiguity, makes failures easier to diagnose, and gives tests a clear expectation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Lesson 116 concept map",
+        "asset_path": "diagrams/lesson-116-concept-map.svg",
+        "alt_text": "Lesson 116: JWT structure and claims → Signature verification → Issuer, audience, expiration, and not-before checks → Key rotation and algorithm selection → JWTs versus opaque tokens.",
+        "caption": "Follow the 5 syllabus topics in order, then inspect the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "A credential may identify a caller; policy checks decide whether that caller can perform this operation on this resource. In this lesson, treat “JSON Web Tokens” as a design or implementation decision: name the expected behavior, identify its boundary, and verify it with a representative request or test."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          "JWT structure and claims",
+          "Signature verification",
+          "Issuer, audience, expiration, and not-before checks",
+          "Key rotation and algorithm selection",
+          "JWTs versus opaque tokens"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Inspect the pattern: JSON Web Tokens",
+        "language": "http",
+        "execution_mode": "static-validation",
+        "code": "GET /v1/profile HTTP/1.1\nHost: api.example.test\nAuthorization: Bearer <short-lived-access-token>\nAccept: application/json\n\n# The server validates token signature/issuer/audience/expiry,\n# then checks the caller's permission for this specific resource.",
+        "expected_output": "A valid token authenticates a caller but does not automatically authorize every action or resource."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walkthrough",
+        "text": "Start with “JWT structure and claims”; it establishes the vocabulary for this topic. Next, compare it with “Signature verification” and “JWTs versus opaque tokens”. In a real API, write down the observable behavior first, then test one normal request and one invalid or unauthorized request. Keep resource state, caller identity, and internal implementation details separate."
+      },
+      {
+        "type": "callout",
+        "title": "Professional review check",
+        "text": "Authentication establishes identity; authorization must still check the requested action and resource. The worked snippet is intentionally inspectable, not an executable hosted API. Replace example.test and placeholder identifiers with local test data only when you implement the lesson project."
+      }
+    ],
+    "task": "Create a small design note or request/response example demonstrating json web tokens. Use the subtopics above to explain the intended behavior, the main edge case, and the evidence you would use to verify it.",
+    "task_acceptance_criteria": [
+      "Explain the role of “JWT structure and claims” in this API topic.",
+      "Provide a concrete resource, request, response, schema, test, or operational example as appropriate.",
+      "Identify one failure/security/compatibility edge case and a test or check for it."
+    ],
+    "expected_output": "A reviewable example for JSON Web Tokens with a clear expected behavior and at least one verifiable edge case.",
+    "run_instructions": "Execution mode: static-validation. This lesson example is a protocol, schema, SQL, or code fragment for inspection; it is not submitted to a production server and CodeLeaf does not execute arbitrary learner code. Validate JSON/YAML with a local linter or run the relevant HTTP request against the isolated service you implement for a project. Do not send illustrative example.test requests to a real service.",
+    "reset_steps": "Use a disposable local database or test fixture for implementation work. Restore seed data between runs; never point exercises at production customer data or live payment endpoints.",
+    "troubleshooting": [
+      "Check the exact HTTP method, path, status, header, media type, and payload before changing implementation code.",
+      "Separate a transport failure from an application validation failure, authorization denial, and dependency/database failure.",
+      "Confirm the example and its client tooling version are compatible; consult the linked standard or official guidance when behavior is ambiguous."
+    ],
+    "common_mistakes": [
+      "Treating json web tokens as an implementation detail rather than a documented behavior.",
+      "Testing only the happy path and ignoring malformed, unauthorized, conflicting, duplicate, or dependency-failure cases.",
+      "Publishing an example without checking version assumptions, sensitive-data exposure, and the expected output."
+    ],
+    "summary": [
+      "A credential may identify a caller; policy checks decide whether that caller can perform this operation on this resource. In this lesson, treat “JSON Web Tokens” as a design or implementation decision: name the expected behavior, identify its boundary, and verify it with a representative request or test.",
+      "Next, connect this idea to Lesson 117: OAuth 2.0 Fundamentals."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-116-questions.json",
+    "solution_notes": "Knowledge-check answer keys and explanations remain in repository-side question files. The public lesson API strips this file reference and serves only prompts/options from the protected endpoint.",
+    "references": [
+      {
+        "title": "RFC 9700 — OAuth 2.0 Security Best Current Practice",
+        "url": "https://www.rfc-editor.org/rfc/rfc9700.html"
+      },
+      {
+        "title": "RFC 6750 — The OAuth 2.0 Authorization Framework: Bearer Token Usage",
+        "url": "https://www.rfc-editor.org/rfc/rfc6750.html"
+      },
+      {
+        "title": "OpenID Connect Core 1.0",
+        "url": "https://openid.net/specs/openid-connect-core-1_0.html"
+      }
+    ],
+    "run_mode": "static-validation"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "RFC 9700 — OAuth 2.0 Security Best Current Practice",
+      "url": "https://www.rfc-editor.org/rfc/rfc9700.html",
+      "publisher": "IETF / RFC Editor",
+      "checked_on": "2026-10-19",
+      "source_type": "Best Current Practice",
+      "supports": [
+        "OAuth security",
+        "redirect URI validation",
+        "modern OAuth threat mitigation"
+      ]
+    },
+    {
+      "title": "RFC 6750 — The OAuth 2.0 Authorization Framework: Bearer Token Usage",
+      "url": "https://www.rfc-editor.org/rfc/rfc6750.html",
+      "publisher": "IETF / RFC Editor",
+      "checked_on": "2026-10-19",
+      "source_type": "Standards Track RFC",
+      "supports": [
+        "bearer token transmission",
+        "Authorization header",
+        "token handling"
+      ]
+    },
+    {
+      "title": "OpenID Connect Core 1.0",
+      "url": "https://openid.net/specs/openid-connect-core-1_0.html",
+      "publisher": "OpenID Foundation",
+      "checked_on": "2026-10-19",
+      "source_type": "Specification",
+      "supports": [
+        "authentication layer over OAuth 2.0",
+        "ID tokens",
+        "identity claims"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Unreviewed educational draft based on the attached REST API syllabus; verify the technical framing, worked example, and assessment before publication."
+}

@@ -1,0 +1,18 @@
+{
+  "id": "cpp-exercise-solution-041",
+  "exercise_id": "cpp-exercise-041",
+  "title": "JSON-based configuration parser reference solution notes",
+  "language": "cpp",
+  "answer": "// Requires the external nlohmann/json single-header library.\n#include <iostream>\n#include <nlohmann/json.hpp>\nint main() {\n    const auto config = nlohmann::json::parse(R\"({\"port\": 8080, \"debug\": true})\");\n    const int port = config.at(\"port\").get<int>();\n    const bool debug = config.at(\"debug\").get<bool>();\n    std::cout << \"port=\" << port << \", debug=\" << std::boolalpha << debug << '\\n';\n}\n",
+  "explanation": "port=8080, debug=true",
+  "manual_validation_checklist": [
+    "Compile locally with C++20 and -Wall -Wextra -Wpedantic (add the external library named in the solution when applicable).",
+    "Test normal inputs and at least one boundary/failure case named in the exercise prompt.",
+    "Check integer range, object lifetime, resource cleanup and error handling where relevant.",
+    "The library handles JSON syntax and escaping; production code should catch parse/type exceptions, validate ranges and pin/manage the external dependency.",
+    "Keep this solution in repository-only protected content; do not include it in learner API responses."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only reference notes; replace with a reviewed implementation and test suite before publishing the exercise."
+}

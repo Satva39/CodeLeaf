@@ -1,0 +1,67 @@
+{
+  "id": "pandas-exercise-16",
+  "slug": "pivot-a-sales-report",
+  "title": "Pivot a Sales Report",
+  "sequence": 16,
+  "lesson_id": "pandas-lesson-117",
+  "lesson_slug": "creating-pivot-tables",
+  "module_id": "pandas-module-15",
+  "difficulty": "intermediate",
+  "type": "code",
+  "prompt": "Convert long-form sales records into a monthly summary table.",
+  "scenario": "Use the synthetic data described below to practise p, i, v, o, t, i, n, g, ,,  , r, e, s, h, a, p, e,  , a, n, d,  , s, t, a, t, i, s, t, i, c, s. Do not assume the input is correct without validating it.",
+  "skills": "Pivoting, reshape and statistics",
+  "starter": {
+    "language": "python",
+    "code": "import pandas as pd\n\nlong = pd.DataFrame({\"month\": [\"Jan\", \"Jan\", \"Feb\"], \"category\": [\"A\", \"B\", \"A\"], \"revenue\": [10, 5, 7]})\npivot = long.pivot_table(index=\"month\", columns=\"category\", values=\"revenue\", aggfunc=\"sum\")\nprint(pivot)",
+    "dataset_note": "Use small synthetic in-memory data; do not place private or real customer data in exercises."
+  },
+  "input_schema": {
+    "description": "Create or use a synthetic DataFrame with only the columns needed for this exercise.",
+    "validation": [
+      "Document expected columns and data types.",
+      "State how missing values or duplicates should be treated."
+    ]
+  },
+  "expected_output": [
+    "Create a long-form sales table with month, category, and revenue.",
+    "Use pivot_table with a stated aggregation function.",
+    "Check totals before and after reshaping."
+  ],
+  "public_tests": [
+    {
+      "name": "normal-case",
+      "description": "The solution returns the required columns and correctly computes the stated result."
+    },
+    {
+      "name": "edge-case",
+      "description": "The solution documents behavior for a missing value, duplicate key, empty input, invalid value, or other relevant edge case."
+    }
+  ],
+  "hints": [
+    "Write down the expected result before coding.",
+    "Use Pandas operations that preserve labels unless position-based behavior is intended.",
+    "Add a small assertion for the most important property."
+  ],
+  "acceptance_criteria": [
+    "Create a long-form sales table with month, category, and revenue.",
+    "Use pivot_table with a stated aggregation function.",
+    "Check totals before and after reshaping."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "p"
+    ],
+    "case_sensitive": false,
+    "note": "The generic short-response grader is only an initial scaffold; a reviewed isolated Python grader is required for automatic execution of arbitrary learner code."
+  },
+  "solution_file": "solutions/016-pivot-a-sales-report-solution.json",
+  "solution": {},
+  "retry_policy": {
+    "max_attempts": null,
+    "allow_retry_after_feedback": true
+  },
+  "status": "draft",
+  "status_note": "Review prompt, starter, rubric, and server-side grading before publication."
+}

@@ -1,0 +1,56 @@
+{
+  "id": "r-exercise-002",
+  "slug": "build-a-basic-calculator",
+  "title": "Build a basic calculator",
+  "type": "short_answer",
+  "lesson_id": "r-lesson-028",
+  "module_id": "r-module-04",
+  "sequence": 2,
+  "difficulty": "beginner",
+  "prompt": "Write a calculator function for addition, subtraction, multiplication and division. Specify what happens when the divisor is zero.",
+  "objective": "Practice arithmetic operators, functions, input/output with explicit acceptance criteria and a reproducible result.",
+  "target_skills": [
+    "Arithmetic operators",
+    "functions",
+    "input/output"
+  ],
+  "starter": {
+    "language": "r",
+    "source_code": "calculate <- function(a, b, op) {\n  if (op == \"add\") return(a + b)\n  if (op == \"subtract\") return(a - b)\n  if (op == \"multiply\") return(a * b)\n  if (op == \"divide\" && b != 0) return(a / b)\n  stop(\"Unsupported operation or zero divisor\")\n}",
+    "mode": "static-validation"
+  },
+  "expected_output": "Test one operation, an unsupported operator, and a zero divisor.",
+  "public_tests": [
+    {
+      "name": "Includes core concept",
+      "description": "The submission demonstrates function."
+    },
+    {
+      "name": "Includes validation or outcome",
+      "description": "The submission also demonstrates stop(."
+    }
+  ],
+  "acceptance_criteria": [
+    "The submission addresses the task and all required core concepts.",
+    "Expected behavior and an edge case are described and checked.",
+    "Input assumptions, missing-value handling and output shape are documented where relevant.",
+    "Code is readable, uses appropriate R constructs and avoids destructive/external side effects.",
+    "Any result derived from statistics includes assumptions and relevant limitations."
+  ],
+  "hints": [
+    "Identify the input, output and key R concept: Arithmetic operators, functions, input/output.",
+    "Test one operation, an unsupported operator, and a zero divisor.",
+    "Test a normal case, a boundary/failure case, and verify the output independently."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "function",
+      "stop("
+    ]
+  },
+  "grading_method": "Draft/static token check only. The current platform grader can check whether the submitted text contains these strings, but it cannot execute R or prove program correctness. Keep unpublished and use human review or a separately isolated R runner before enabling XP-bearing completion.",
+  "retry_policy": "Allow learner retries in a reviewed course policy; this content file does not override platform retry or XP policy.",
+  "solution_file": "../solutions/002-build-a-basic-calculator-solution.json",
+  "status": "draft"
+}

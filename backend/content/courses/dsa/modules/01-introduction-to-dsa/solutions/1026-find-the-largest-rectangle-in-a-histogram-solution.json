@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-26",
+  "exercise_id": "dsa-exercise-pdf-26",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\ndef largest_rectangle(heights):\n    best, stack = 0, []\n    for i, height in enumerate(list(heights) + [0]):\n        while stack and heights[stack[-1]] > height:\n            h = heights[stack.pop()]\n            left = stack[-1] + 1 if stack else 0\n            best = max(best, h * (i - left))\n        stack.append(i)\n    return best\n\nassert largest_rectangle([2,1,5,6,2,3]) == 10\n```",
+  "explanation": "The monotonic stack finds the maximal span for each bar. O(n) time and O(n) auxiliary space; the trailing zero flushes remaining bars.",
+  "tested_reference_code": "def largest_rectangle(heights):\n    best, stack = 0, []\n    for i, height in enumerate(list(heights) + [0]):\n        while stack and heights[stack[-1]] > height:\n            h = heights[stack.pop()]\n            left = stack[-1] + 1 if stack else 0\n            best = max(best, h * (i - left))\n        stack.append(i)\n    return best\n\nassert largest_rectangle([2,1,5,6,2,3]) == 10",
+  "language": "python"
+}

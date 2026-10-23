@@ -1,0 +1,204 @@
+{
+  "id": "django-lesson-040",
+  "slug": "passing-data-from-views",
+  "title": "Passing Data from Views",
+  "sequence": 40,
+  "module_id": "django-module-05",
+  "module_slug": "url-routing-and-views",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "optional-specialization",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "django-lesson-039"
+  ],
+  "previous_lesson_id": "django-lesson-039",
+  "next_lesson_id": "django-lesson-041",
+  "keywords": [
+    "passing-data-from-views",
+    "url-routing-and-views",
+    "django",
+    "context-dictionaries",
+    "dynamic-content",
+    "data-retrieved-from-models",
+    "passing-collections-to-templates",
+    "avoiding-unnecessary-database-operations"
+  ],
+  "source_syllabus_number": 40,
+  "subtopics": [
+    "Context dictionaries",
+    "Dynamic content",
+    "Data retrieved from models",
+    "Passing collections to templates",
+    "Avoiding unnecessary database operations"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of passing data from views and at least two listed subtopics.",
+    "Interpret the passing data from views example and predict its expected result.",
+    "Choose a verification step and identify one version, security, data, or troubleshooting consideration."
+  ],
+  "content": {
+    "intro": "Learn passing data from views through a compact visual, an inspectable Django example, and a practical verification task.",
+    "why_it_matters": "Passing Data from Views matters because a Django project has to behave predictably across requests, database state, configuration, and deployments. Understanding this piece makes the surrounding application easier to test, maintain, and secure.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Visual guide: Passing Data from Views",
+        "asset_path": "diagrams/module-05-overview.svg",
+        "alt_text": "Overview visual for module 5, URL Routing and Views; use it as a roadmap for the lesson topic Passing Data from Views.",
+        "caption": "Use this visual to connect Passing Data from Views to the broader flow; it is an overview, not a substitute for the worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "This lesson examines passing data from views as part of url routing and views. The objective is to understand the behavior, connect it to the listed subtopics, and verify it with a small example rather than relying on memorized syntax."
+      },
+      {
+        "type": "paragraph",
+        "title": "What to cover",
+        "text": "The source syllabus for this lesson names: Context dictionaries; Dynamic content; Data retrieved from models; Passing collections to templates; Avoiding unnecessary database operations. Keep these distinct concepts together: know what each item does, when it applies, and what assumption must be verified in your project."
+      },
+      {
+        "type": "list",
+        "title": "Lesson concepts and practical notes",
+        "items": [
+          {
+            "title": "Context dictionaries",
+            "text": "For Context dictionaries, identify the Django component responsible, the inputs and outputs it owns, and the boundary conditions that matter. Use the accompanying example as a starting point, verify it with the official versioned documentation, and record one test demonstrating expected behavior."
+          },
+          {
+            "title": "Dynamic content",
+            "text": "For Dynamic content, identify the Django component responsible, the inputs and outputs it owns, and the boundary conditions that matter. Use the accompanying example as a starting point, verify it with the official versioned documentation, and record one test demonstrating expected behavior."
+          },
+          {
+            "title": "Data retrieved from models",
+            "text": "Data retrieved from models affects persistence and data correctness. Keep invariants in validation and database constraints where appropriate, inspect generated SQL/migrations, and test both expected data and error/rollback behavior."
+          },
+          {
+            "title": "Passing collections to templates",
+            "text": "Passing collections to templates shapes the presentation layer. Separate layout from business logic, escape untrusted output, provide meaningful empty/error states, and check semantic structure and keyboard usability."
+          },
+          {
+            "title": "Avoiding unnecessary database operations",
+            "text": "Avoiding unnecessary database operations affects persistence and data correctness. Keep invariants in validation and database constraints where appropriate, inspect generated SQL/migrations, and test both expected data and error/rollback behavior."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Passing Data from Views",
+        "language": "python",
+        "code": "from django.http import HttpResponse\nfrom django.urls import path\n\ndef topic_view(request):\n    return HttpResponse(\"Topic ready\")\n\nurlpatterns = [path(\"topic/\", topic_view, name=\"topic-view\")]",
+        "expected_output": "A request to /topic/ resolves to topic_view and receives a text response.",
+        "execution_mode": "server-runner",
+        "run_instructions": "Open a local project using the documented Django 6.1-compatible Python environment. If this snippet depends on model names, URL configuration, settings, or an optional package, add those prerequisites before running it. Otherwise inspect it as a static example. CodeLeaf browser preview does not execute Django/Python server code.",
+        "troubleshooting": "Include the URLconf and import the shown symbols. Use named routes rather than hardcoded internal links."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "First identify the input and the responsible Django component. Next trace how the example moves through “Passing Data from Views” and the related concept “Context dictionaries”. Predict the result before running or inspecting it. Finally compare the observed behavior with the expected result and the cited official documentation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Change one input or configuration choice related to Context dictionaries. Write down the expected outcome, test one normal case and one invalid or boundary case, then record what changed. Do not add real credentials or sensitive production data."
+      },
+      {
+        "type": "paragraph",
+        "title": "Common mistakes and fixes",
+        "text": "Common pitfalls include skipping a required configuration/import, copying a fragment without its model or URL context, trusting client input, or treating a development-only behavior as production-ready. Check the earliest failing assumption, consult the version-specific docs, and add a regression test for the failure you found."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to describe passing data from views, explain the listed topics, inspect the example, and choose an appropriate verification step. Keep the scope and version caveat visible when sharing your solution."
+      }
+    ],
+    "execution_mode": "server-runner",
+    "expected_result": "A request to /topic/ resolves to topic_view and receives a text response.",
+    "run_instructions": "Use an isolated local project and synthetic data. Follow the code block instructions; setup-dependent fragments must be integrated into the relevant app. Static examples can be reviewed without execution.",
+    "troubleshooting": [
+      "Include the URLconf and import the shown symbols. Use named routes rather than hardcoded internal links.",
+      "Confirm the active Python virtual environment, settings module, app registration, URL routing, dependencies, and database migrations before debugging application behavior."
+    ],
+    "reset_steps": "Reset only local practice data or recreate the disposable development database as documented for your project. Never delete production data or migration history to reset an exercise.",
+    "try_it_yourself": "Apply Context dictionaries to a small local example, then record a normal case, an invalid/boundary case, and the expected versus observed result.",
+    "progressive_hints": [
+      "Identify which Django component owns this behavior.",
+      "Trace a single request or object through the example before adding more features.",
+      "Use the relevant linked official documentation and a test for the failure case."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Copying a framework fragment without its imports, configuration, model, or URL context.",
+        "why": "The snippet may be incomplete when separated from a Django project.",
+        "fix": "Use the stated prerequisites and run the relevant management check or focused test."
+      },
+      {
+        "problem": "Trusting input or relying only on a happy-path example.",
+        "why": "Invalid values, unauthorized requests, or concurrent activity can violate assumptions.",
+        "fix": "Validate on the server and add a negative or boundary test."
+      },
+      {
+        "problem": "Treating the development sample as production-ready.",
+        "why": "Production hosting, secrets, storage, monitoring and resource limits differ from local use.",
+        "fix": "Follow the current deployment/security references and document untested areas."
+      }
+    ],
+    "recap": "Passing Data from Views connects Context dictionaries; Dynamic content; Data retrieved from models; Passing collections to templates; Avoiding unnecessary database operations. Verify behavior in your project and keep any version-specific assumption documented.",
+    "knowledge_check_file": "exams/question-files/lesson-040-questions.json",
+    "content_review_status": "draft",
+    "accessibility_notes": "Use descriptive headings, meaningful labels/alt text, keyboard-accessible interactions, and text explanations alongside the diagram. Never rely on color alone.",
+    "version_notes": "Examples target Django 6.1 concepts and must be checked against the installed supported patch release. Optional third-party integrations are labelled separately; snippets with dependencies are not claimed to have been executed.",
+    "source_syllabus_topics_reviewed": true,
+    "topic_explanations_count": 5,
+    "run_mode": "static-validation",
+    "task": "Apply Context dictionaries to a small local example, then record a normal case, an invalid/boundary case, and the expected versus observed result.",
+    "task_acceptance_criteria": [
+      "Record a predicted result before running or inspecting the example.",
+      "Include one normal case and one invalid or boundary case.",
+      "State the Python/Django version and verification method used."
+    ],
+    "hints": [
+      "Identify which Django component owns this behavior.",
+      "Trace a single request or object through the example before adding more features.",
+      "Use the relevant linked official documentation and a test for the failure case."
+    ],
+    "solution_notes": "Suggested approach: identify the responsible Django component, keep input validation and authorization at the server boundary where relevant, then verify passing data from views with a focused test. This is a learning hint, not a claim that code was executed.",
+    "summary": [
+      "Passing Data from Views is part of url routing and views and should be understood alongside its listed subtopics.",
+      "The worked example is a starting point; review its prerequisites and version notes before local execution.",
+      "Verify the expected behavior with normal and failure cases and keep the result reproducible."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "django-urls",
+      "title": "URL dispatcher",
+      "url": "https://docs.djangoproject.com/en/6.1/topics/http/urls/",
+      "publisher": "Django Software Foundation",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "path",
+        "URL names",
+        "reverse resolution"
+      ]
+    },
+    {
+      "id": "django-views",
+      "title": "Writing views",
+      "url": "https://docs.djangoproject.com/en/6.1/topics/http/views/",
+      "publisher": "Django Software Foundation",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "request-response",
+        "HTTP methods",
+        "responses"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Django curriculum; pending Django-specialist and instructional review before publication."
+}

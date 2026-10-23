@@ -1,0 +1,179 @@
+{
+  "id": "numpy-lesson-151",
+  "slug": "date-and-time-data-types",
+  "title": "Date and Time Data Types",
+  "sequence": 151,
+  "module_id": "numpy-module-16",
+  "module_slug": "strings-dates-structured-arrays-and-masked-data",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 8,
+  "prerequisites": [
+    "numpy-lesson-150"
+  ],
+  "previous_lesson_id": "numpy-lesson-150",
+  "next_lesson_id": "numpy-lesson-152",
+  "keywords": [
+    "date and time data types",
+    "strings, dates, structured arrays, and masked data",
+    "- datetime64",
+    "- timedelta64",
+    "- Units and resolutions",
+    "- Missing or invalid date representations",
+    "NumPy",
+    "ndarray"
+  ],
+  "source_syllabus_number": 151,
+  "subtopics": [
+    "- datetime64",
+    "- timedelta64",
+    "- Units and resolutions",
+    "- Missing or invalid date representations"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of date and time data types and name one situation where it is useful.",
+    "Apply - datetime64 to a small NumPy example and inspect the resulting values, shape, or dtype.",
+    "Identify one important limitation, boundary case, or validation check for date and time data types."
+  ],
+  "content": {
+    "intro": "This lesson develops topic 151 of the supplied curriculum: **Date and Time Data Types**. The main starting point is **- datetime64**. You will connect the idea to a small, synthetic example, then use the result to reason about shape, dtype, accuracy, or memory as appropriate.",
+    "why_it_matters": "Specialized arrays represent data whose structure is not captured by a plain homogeneous numeric array. Choose the representation intentionally and document missing-value semantics.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Date and Time Data Types",
+        "asset_path": "diagrams/lesson-151-date-and-time-data-types.svg",
+        "alt_text": "Teaching visual for lesson 151, Date and Time Data Types. It illustrates Specialized values, then Choose data representation, leading to Validate fields and missingness.",
+        "caption": "Visual model for Date and Time Data Types. Synthetic conceptual diagram; inspect shape, dtype, and assumptions as relevant."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Treat **Date and Time Data Types** as an explicit step in an array workflow. This lesson centers on **- datetime64** and the source syllabus's related subtopics. Before trusting a result, identify the input shape and dtype, perform the smallest useful operation, and inspect the output. The example uses synthetic data so you can change one value and observe what changes."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics from the supplied curriculum",
+        "items": [
+          "- datetime64",
+          "- timedelta64",
+          "- Units and resolutions",
+          "- Missing or invalid date representations"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "import numpy as np\n\ndays = np.array(['2026-10-13', '2026-10-14'], dtype='datetime64[D]')\nprint(days[1] - days[0])",
+        "expected_output": "Observed output in the available validation environment (Python 3.13.5, NumPy 2.3.5):\n1 days",
+        "execution_mode": "static-validation",
+        "run_instructions": "Save this snippet as a .py file inside the intended Python environment, then run `python filename.py`. Install NumPy in that same environment first. This learning page displays the sample; it does not execute arbitrary Python on the web server.",
+        "reset_steps": "For examples that create files, use a temporary working directory and remove its outputs after reviewing them. The memory-map example already uses a temporary directory."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "Start with the stated input and the core operation. The code example demonstrates a minimal path through date and time data types; inspect the output before scaling it to a larger dataset."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          "Represent the same small data using a more suitable specialized dtype or mask. Record the trade-off.",
+          "Change one input value or parameter and predict the output before running the example.",
+          "Record one edge case and explain how your code should respond."
+        ]
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          "Topic 151: Date and Time Data Types.",
+          "Core focus: - datetime64.",
+          "Check the official reference when signatures or version-specific behavior matter."
+        ]
+      }
+    ],
+    "expected_output": "Observed output in the available validation environment (Python 3.13.5, NumPy 2.3.5):\n1 days",
+    "run_instructions": "Run Python examples locally in the same environment where NumPy is installed; no embedded server-side Python execution is assumed.",
+    "reset_steps": "Use temporary paths for file-writing experiments. Restore modified arrays by recreating the example input. No platform progress or rewards are created by viewing the lesson.",
+    "hints": [
+      "First identify the input values and their shape/dtype.",
+      "Run the smallest complete example and compare the actual output with the expected behavior.",
+      "Change one variable at a time; if the result differs, inspect shape, dtype, finite values, and version-specific behavior before changing the algorithm."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-151-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming object/string/date data behave like floats",
+        "why": "Different dtypes provide different operations and semantics.",
+        "fix": "Inspect dtype and select matching routines."
+      },
+      {
+        "problem": "Treating masked values as automatically removed everywhere",
+        "why": "Masked-array behavior depends on the operation and conversion boundary.",
+        "fix": "Check how downstream libraries treat masks and missing values."
+      }
+    ],
+    "summary": [
+      "Topic 151 covers date and time data types and the subtopics listed in the curriculum.",
+      "Choose specialized data representations and document their field or missing-value behavior.",
+      "Examples and assessments are draft and require subject-matter review before publication."
+    ],
+    "references": [
+      {
+        "title": "Datetimes and timedeltas",
+        "url": "https://numpy.org/doc/stable/reference/arrays.datetime.html",
+        "publisher": "NumPy project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "Date and Time Data Types",
+          "- datetime64",
+          "- timedelta64"
+        ]
+      },
+      {
+        "title": "NumPy fundamentals",
+        "url": "https://numpy.org/doc/stable/user/basics.html",
+        "publisher": "NumPy project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "Date and Time Data Types",
+          "- datetime64",
+          "- timedelta64"
+        ]
+      }
+    ],
+    "accessibility_notes": "Every visual has descriptive SVG title/description and adjacent text explaining the concept. The diagram does not rely on color alone; text labels state each stage.",
+    "version_notes": "Written against the NumPy 2.5 stable documentation checked 2026-10-13. Example outputs that were executed were observed in an available NumPy 2.3.5 environment; release-specific formatting or pseudorandom streams may vary."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Datetimes and timedeltas",
+      "url": "https://numpy.org/doc/stable/reference/arrays.datetime.html",
+      "publisher": "NumPy project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Date and Time Data Types",
+        "- datetime64",
+        "- timedelta64"
+      ]
+    },
+    {
+      "title": "NumPy fundamentals",
+      "url": "https://numpy.org/doc/stable/user/basics.html",
+      "publisher": "NumPy project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Date and Time Data Types",
+        "- datetime64",
+        "- timedelta64"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the supplied syllabus with original explanations and examples. Subject-matter review, learner testing, and publication approval are still required."
+}

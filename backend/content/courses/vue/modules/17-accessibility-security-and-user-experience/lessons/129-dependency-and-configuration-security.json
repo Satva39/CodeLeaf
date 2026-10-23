@@ -1,0 +1,185 @@
+{
+  "id": "vue-lesson-129",
+  "slug": "dependency-and-configuration-security",
+  "title": "Dependency and Configuration Security",
+  "sequence": 129,
+  "module_id": "vue-module-17",
+  "module_slug": "accessibility-security-and-user-experience",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "vue-lesson-128"
+  ],
+  "previous_lesson_id": "vue-lesson-128",
+  "next_lesson_id": "vue-lesson-130",
+  "keywords": [
+    "Dependency and Configuration Security",
+    "Accessibility, Security, and User Experience",
+    "Keeping dependencies updated",
+    "Reviewing third-party packages",
+    "Managing public and private configuration",
+    "Preventing secret exposure in client bundles",
+    "Production error and data handling",
+    "Vue 3",
+    "Composition API"
+  ],
+  "source_syllabus_number": 129,
+  "subtopics": [
+    "Keeping dependencies updated",
+    "Reviewing third-party packages",
+    "Managing public and private configuration",
+    "Preventing secret exposure in client bundles",
+    "Production error and data handling"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Dependency and Configuration Security in a Vue 3 application.",
+    "Apply at least one of the syllabus subtopics in a small, inspectable example.",
+    "Verify one expected behavior and identify a relevant edge case."
+  ],
+  "content": {
+    "intro": "This lesson studies Dependency and Configuration Security within Accessibility, Security, and User Experience. The source PDF subtopics are preserved below and connected to an original working-style example.",
+    "why_it_matters": "A frontend can guide a user but cannot make authorization, inventory, payments, or access-control decisions authoritative by itself.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Dependency and Configuration Security: Safe rendering and trust boundaries",
+        "asset_path": "diagrams/lessons/lesson-129-dependency-and-configuration-security.svg",
+        "alt_text": "Safe rendering and trust boundaries diagram for lesson 129: Dependency and Configuration Security. Treat strings, URLs, and client state as untrusted → Escape text; validate URLs and payloads → Enforce access and sensitive decisions on the backend",
+        "caption": "Security flow: untrusted values are rendered safely, while the server remains responsible for authorization and sensitive decisions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The idea in context",
+        "text": "Accessible and secure Vue interfaces use semantic HTML, labels, keyboard support, safe rendering, and explicit backend trust boundaries. This lesson focuses on Dependency and Configuration Security. Start by naming the state, component, browser behavior, or deployment boundary involved; then predict what should change and test the smallest example."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Keeping dependencies updated",
+            "text": "For Keeping dependencies updated, connect the term to a visible behavior in a small Vue 3 example. State what input or reactive dependency changes, predict the UI result, and verify the prediction with a normal case plus a boundary case."
+          },
+          {
+            "title": "Reviewing third-party packages",
+            "text": "For Reviewing third-party packages, trace the path from the entry point to the root component, then identify the configuration or tool responsible for compiling and serving it. Use the official create-vue/Vite workflow for a fresh Vue 3 project and keep dependency versions reproducible."
+          },
+          {
+            "title": "Managing public and private configuration",
+            "text": "For Managing public and private configuration, trace the path from the entry point to the root component, then identify the configuration or tool responsible for compiling and serving it. Use the official create-vue/Vite workflow for a fresh Vue 3 project and keep dependency versions reproducible."
+          },
+          {
+            "title": "Preventing secret exposure in client bundles",
+            "text": "For Preventing secret exposure in client bundles, treat browser input and browser-held state as untrusted. Prefer Vue's escaped text interpolation for plain text, avoid compiling user-provided templates, and send authorization or sensitive decisions to a server that verifies them independently."
+          },
+          {
+            "title": "Production error and data handling",
+            "text": "For Production error and data handling, decide which code runs during build, on the server, and in the browser. Keep output deterministic during hydration, isolate state per server request, keep secrets server-only, and test the actual production build rather than relying only on the dev server."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "vue",
+        "code": "<script setup>\nconst userText = '<img src=x onerror=alert(1)>'\n</script>\n<template><p>{{ userText }}</p></template>",
+        "expected_output": "Vue renders the value as text rather than interpreting the string as HTML. Never use unsanitized user content with v-html.",
+        "run_instructions": "Run as App.vue and inspect the rendered paragraph. Backend validation, safe URL policies, and authorization remain necessary for full application security.",
+        "reset_steps": "Restore the initial values or original code, reload the development app/test, and repeat once with a boundary or failure case. Remove temporary logs and test data before committing.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Work through Dependency and Configuration Security with a predict–change–verify loop. First state the expected UI or console output. Change only the relevant input/state value, then observe the result. Compare it with the expected output in the code block; if it differs, check the exact file, runtime/version, browser Console, and network response before widening the investigation."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Extend the example to include “Reviewing third-party packages”. Keep the same behavior for the ordinary input, then try an empty, invalid, repeated, or failure condition that makes sense for the example. Record the expected result before testing."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming behavior instead of checking it",
+            "text": "Write down the expected result and reproduce the issue in the smallest possible example; inspect the browser Console and the exact reactive value or request."
+          },
+          {
+            "title": "Ignoring an edge case",
+            "text": "Try empty input, a missing item, repeated interaction, a failed request, or unmounting while work is pending; handle the case explicitly."
+          },
+          {
+            "title": "Putting every responsibility in one component",
+            "text": "Separate display, reusable logic, API service, and shared state when that boundary makes the behavior easier to test and explain."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "Remember: Accessible and secure Vue interfaces use semantic HTML, labels, keyboard support, safe rendering, and explicit backend trust boundaries. For Dependency and Configuration Security, keep the example small, verify the rendered or logged result, and consult the official references when behavior depends on a specific Vue or ecosystem version."
+      },
+      {
+        "type": "callout",
+        "title": "Accessibility, version, and runtime notes",
+        "text": "Use semantic HTML, readable labels, keyboard-operable controls, and visible errors where the example interacts with users. Vue examples are intended for Vue 3.x with create-vue/Vite unless a legacy or specialist lesson explicitly says otherwise. This CodeLeaf playground does not execute arbitrary Vue code; the snippets are labeled for static validation and should be run in a separate local project."
+      }
+    ],
+    "task": "Create a small example for “Dependency and Configuration Security” that applies “Keeping dependencies updated”, predicts the expected result, and verifies a relevant boundary case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named Vue concept rather than only mentioning it.",
+      "The expected output or observable behavior is written down and can be checked locally.",
+      "At least one boundary, loading, invalid-input, or failure case is tested or explicitly reasoned about.",
+      "The example uses semantic/accessible interaction patterns and does not treat frontend state as authoritative security."
+    ],
+    "hints": [
+      "Start with the smallest observable part of “Keeping dependencies updated”.",
+      "Predict the output before changing one input at a time.",
+      "Use the browser Console, Vue DevTools, or the appropriate test runner to isolate a mismatch."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "The example only covers the happy path.",
+        "why": "Real interfaces receive empty values, delayed responses, invalid input, and failed requests.",
+        "fix": "Add one realistic edge/failure case and state its expected behavior."
+      },
+      {
+        "problem": "The code assumes an API or feature exists in every runtime.",
+        "why": "Tool and API support depends on Vue, the build tool, or the chosen SSR/test framework.",
+        "fix": "Check the linked official reference and record the runtime/version assumption."
+      }
+    ],
+    "summary": [
+      "Dependency and Configuration Security belongs to the broader area Accessibility, Security, and User Experience.",
+      "The main concept to practice is Keeping dependencies updated.",
+      "Verify a normal result and one meaningful boundary case before using the pattern in a production feature."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-129-questions.json",
+    "references": [
+      "https://vuejs.org/guide/best-practices/security.html"
+    ]
+  },
+  "exercise_files": [
+    "../exercises/035-dependency-security-review.json"
+  ],
+  "sources": [
+    {
+      "title": "Vue Security Best Practices",
+      "url": "https://vuejs.org/guide/best-practices/security.html",
+      "publisher": "Vue.js core team",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Dependency and Configuration Security",
+        "Keeping dependencies updated",
+        "Reviewing third-party packages",
+        "Managing public and private configuration"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Authored as a syllabus-complete educational draft. Technical and instructional review required before publication."
+}

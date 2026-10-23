@@ -1,0 +1,192 @@
+{
+  "id": "linux-lesson-230",
+  "slug": "infrastructure-automation-with-ansible",
+  "title": "Infrastructure Automation with Ansible",
+  "sequence": 230,
+  "module_id": "linux-module-24",
+  "module_slug": "production-operations-cloud-and-reliability",
+  "level": "professional",
+  "difficulty": "professional",
+  "track": "advanced",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "linux-lesson-229"
+  ],
+  "previous_lesson_id": "linux-lesson-229",
+  "next_lesson_id": "linux-lesson-231",
+  "keywords": [
+    "infrastructure",
+    "automation",
+    "with",
+    "ansible",
+    "inventory and host groups",
+    "modules and tasks",
+    "playbooks",
+    "variables and templates"
+  ],
+  "source_syllabus_number": 230,
+  "subtopics": [
+    "Inventory and host groups",
+    "Modules and tasks",
+    "Playbooks",
+    "Variables and templates",
+    "Idempotency and safe changes"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Infrastructure Automation with Ansible and identify key concepts from the supplied syllabus.",
+    "Use an appropriate read-only check or controlled example to demonstrate infrastructure automation with ansible.",
+    "Describe one common failure mode, safety consideration, or platform/version difference relevant to this topic."
+  ],
+  "content": {
+    "intro": "This lesson introduces infrastructure automation with ansible as part of production operations, cloud, and reliability. Begin with an observation you can safely repeat, then explain what the result tells you and what it does not prove.",
+    "why_it_matters": "Operate cloud-hosted Linux workloads with reproducible provisioning, release strategies, monitoring, backup, and recovery.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual: Infrastructure Automation with Ansible",
+        "asset_path": "diagrams/module-24-overview.svg",
+        "alt_text": "Module roadmap for Production Operations, Cloud, and Reliability, listing 10 lessons from 228 through 237 in curriculum order.",
+        "caption": "Visual aid for Infrastructure Automation with Ansible. Use it to orient the example, then return to the lesson text for caveats and distribution differences."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Operational reliability depends on declarative changes, staged releases, observability, verified backups, and demonstrated recovery—not a deployment command alone."
+      },
+      {
+        "type": "list",
+        "title": "What the syllabus covers",
+        "items": [
+          {
+            "title": "Inventory and host groups",
+            "text": "Inventory and host groups: Check the effective identity and policy, prefer the minimum required privileges, and verify both allowed and denied access in a test environment."
+          },
+          {
+            "title": "Modules and tasks",
+            "text": "Modules and tasks: Identify the concept’s role in the workflow, choose a read-only inspection first, and record the version or distribution details that could change the result."
+          },
+          {
+            "title": "Playbooks",
+            "text": "Playbooks: Identify the concept’s role in the workflow, choose a read-only inspection first, and record the version or distribution details that could change the result."
+          },
+          {
+            "title": "Variables and templates",
+            "text": "Variables and templates: Try a small reproducible command with quoted inputs, inspect standard output and error separately, and check the exit status as well as the printed text."
+          },
+          {
+            "title": "Idempotency and safe changes",
+            "text": "Idempotency and safe changes: Identify the concept’s role in the workflow, choose a read-only inspection first, and record the version or distribution details that could change the result."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "bash",
+        "execution_mode": "manual-terminal; requires a local Linux environment or disposable VM; no isolated Linux runner is provided by CodeLeaf",
+        "code": "ansible --version | head -n 1",
+        "expected_output": "Ansible version if installed; otherwise the command is unavailable.",
+        "run_instructions": "Use a Linux machine, WSL environment, or disposable virtual machine. Check the command with its local manual page before adapting it. The in-page example shows reference output only; it does not execute Bash/Linux commands on the CodeLeaf server. Commands and output formats may vary by distribution and installed utility version.",
+        "reset_steps": "These example commands are read-only or print-only. Exit the terminal when finished; if you adapt the task to create files, use a disposable practice folder and remove only the test files you deliberately created.",
+        "example_review_note": "Topic-specific draft example authored for Linux course. Output is environment-dependent where stated; review on the target distribution before publishing."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "First, state what you expect from the example. Run it in the intended environment, capture standard output and any error message, and inspect the exit status where meaningful. Then connect the observation to this lesson: Infrastructure Automation with Ansible. Do not infer more than the evidence supports."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake",
+        "text": "A common mistake is to assume infrastructure automation with ansible behaves identically on every distribution, kernel, utility version, and administrative policy. Verify the installed tool and consult the matching manual before using the procedure elsewhere."
+      },
+      {
+        "type": "callout",
+        "title": "Safety and compatibility",
+        "text": "The value depends on the installed and running kernel. For commands that edit files, manage services, change network/firewall state, partition disks, change permissions recursively, or alter boot settings, use an isolated VM, take a snapshot/backup, review the exact target, and prepare a recovery path before acting."
+      },
+      {
+        "type": "paragraph",
+        "title": "Troubleshooting and reset",
+        "text": "If the command is missing, check whether the required package is installed and which distribution you are using. If access is denied, do not immediately escalate to root; confirm the target path, identity, and required permission. If the result differs, capture the command, output, version, and environment so the issue can be reproduced."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "Remember the core relationship: Operational reliability depends on declarative changes, staged releases, observability, verified backups, and demonstrated recovery—not a deployment command alone. The goal is to explain the observed result, test a boundary case, and record a limitation rather than memorize a command in isolation."
+      }
+    ],
+    "task": "In an isolated Linux lab, investigate infrastructure automation with ansible. Use the guided example as a starting point, record the output/status, and test one boundary, failure, or distribution-specific case. Explain what you learned without changing a production system.",
+    "task_acceptance_criteria": [
+      "The practical step is aligned to this lesson and uses synthetic inputs or a disposable environment.",
+      "The submission records expected and observed behavior, including an exit status or error when relevant.",
+      "One boundary case, failure path, or version/distribution difference is tested and explained.",
+      "Any potentially destructive command is previewed and kept out of production; the result can be reproduced."
+    ],
+    "hints": [
+      "Start with read-only inspection and use the manual page for the installed command.",
+      "Change one variable at a time and preserve the exact output/error.",
+      "Record the distribution, kernel/utility version, privileges, and any assumptions that affect the result."
+    ],
+    "recap": [
+      "Operational reliability depends on declarative changes, staged releases, observability, verified backups, and demonstrated recovery—not a deployment command alone.",
+      "Use evidence rather than assumptions; make platform differences explicit.",
+      "Protect credentials and data, and plan how to reverse state-changing operations."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-230-questions.json"
+  },
+  "exercise_files": [
+    "../exercises/230-infrastructure-automation-with-ansible-practice.json",
+    "../exercises/section-c-a08-automate-machine-configuration.json"
+  ],
+  "sources": [
+    {
+      "id": "ansible-docs",
+      "title": "Ansible documentation",
+      "url": "https://docs.ansible.com/ansible/latest/index.html",
+      "publisher": "Ansible community documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "repeatable provisioning",
+        "configuration management",
+        "idempotent automation"
+      ],
+      "source_type": "official project documentation",
+      "notes": "Test playbooks against inventory in a disposable environment before applying them to managed hosts."
+    },
+    {
+      "id": "ubuntu-server",
+      "title": "Ubuntu Server documentation",
+      "url": "https://documentation.ubuntu.com/server/",
+      "publisher": "Canonical / Ubuntu",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "installation",
+        "networking",
+        "storage",
+        "package management",
+        "SSH",
+        "server administration"
+      ],
+      "source_type": "official distribution documentation",
+      "notes": "Distribution-specific procedures should not be assumed to apply unchanged to Fedora, Arch, Alpine, openSUSE, or other systems."
+    },
+    {
+      "id": "prometheus-docs",
+      "title": "Prometheus documentation",
+      "url": "https://prometheus.io/docs/introduction/overview/",
+      "publisher": "Prometheus project",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "metrics",
+        "monitoring",
+        "alerting",
+        "observability"
+      ],
+      "source_type": "official project documentation",
+      "notes": "Metrics should be tied to a useful question, a defined threshold, and an actionable response."
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson mapped directly to Linux.pdf Section B lesson 230. Review the command example and assessment before publication."
+}

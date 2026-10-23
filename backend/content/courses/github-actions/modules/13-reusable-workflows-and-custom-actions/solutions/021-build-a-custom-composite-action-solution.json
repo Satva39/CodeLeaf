@@ -1,0 +1,13 @@
+{
+  "id": "github-actions-exercise-solution-021",
+  "exercise_id": "github-actions-exercise-021",
+  "title": "Build a custom composite action reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": {
+    "approach": "A complete response for build a custom composite action should include: using: composite, inputs:, outputs:, action.yml.",
+    "example": "# action.yml\nname: Repository checks\ndescription: Run shared, non-destructive checks\ninputs:\n  message:\n    description: Status message\n    required: false\n    default: \"Checks ready\"\nruns:\n  using: composite\n  steps:\n    - name: Print status\n      shell: bash\n      env:\n        MESSAGE: ${{ inputs.message }}\n      run: echo \"$MESSAGE\"",
+    "verification": "A composite action exposes a `message` input and executes one shell step. Inputs are passed through an environment variable."
+  },
+  "explanation": "Reason about the trigger, permission boundary, expected observable result, and failure path for build a custom composite action. Place `action.yml` in an action directory and call it with `uses: ./path/to/action`. Test empty, normal, and unexpected input values. Adapt action references and runtime details against the official docs checked on 2026-10-20."
+}

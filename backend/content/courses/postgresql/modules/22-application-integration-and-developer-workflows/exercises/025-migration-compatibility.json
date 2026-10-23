@@ -1,0 +1,56 @@
+{
+  "id": "postgresql-exercise-025",
+  "slug": "migration-compatibility",
+  "title": "Migration Compatibility",
+  "type": "practical",
+  "lesson_id": "postgresql-lesson-204",
+  "module_id": "postgresql-module-22",
+  "difficulty": "advanced",
+  "sequence": 1,
+  "prompt": "Prepare an expand/backfill/verify/contract migration plan that supports an old and new application version during rollout. Test on populated synthetic data.",
+  "objective": "Migration Compatibility",
+  "target_skills": [
+    "Versioned migrations",
+    "Schema Migrations and Application Releases",
+    "SQL correctness, verification and safe change management"
+  ],
+  "starter": {
+    "language": "sql",
+    "content": "ALTER TABLE customers ADD COLUMN contact_label text;\n-- Deploy compatible code and backfill in bounded batches before considering a later contract step."
+  },
+  "expected_output": "A reviewable working artifact for Migration Compatibility with stated assumptions, expected results and verification evidence. Any live database operation remains a learner-run lab; no production execution is performed by CodeLeaf.",
+  "public_tests": [
+    {
+      "name": "Required SQL or plan elements",
+      "required_strings": [
+        "ALTER TABLE",
+        "ADD COLUMN",
+        "backfill"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Address the main task: Prepare an expand/backfill/verify/contract migration plan that supports an old and new application version during rollout. Test on populated synthetic data.",
+    "Use only synthetic data in a disposable local database or provide a human-reviewed design artifact.",
+    "Show the expected result and at least one failure/edge-case check.",
+    "Explain any role/permission, transaction, migration, backup or cleanup implications relevant to this task."
+  ],
+  "hints": [
+    "Start from the lesson and official references. Identify the minimal schema and version assumptions before coding.",
+    "Test with a tiny synthetic dataset; include both a normal result and at least one edge case.",
+    "For operations/security/recovery tasks, capture the exact evidence and confirm cleanup or isolation."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "ALTER TABLE",
+      "ADD COLUMN",
+      "backfill"
+    ]
+  },
+  "grading_method": "Server-side case-sensitive substring smoke-check for documented required strings plus human review of SQL semantics, constraints, execution evidence and safety. The grader does not connect to PostgreSQL or execute arbitrary learner SQL.",
+  "retry_policy": "Retries permitted after feedback; correct completion is recorded once by CodeLeaf. The platform controls XP; this file contains no XP override.",
+  "solution_file": "../solutions/025-migration-compatibility-solution.json",
+  "status": "draft",
+  "status_note": "Derived from the attached PostgreSQL.pdf Section C exercise brief. Runtime correctness still requires a safe local PostgreSQL test and review."
+}

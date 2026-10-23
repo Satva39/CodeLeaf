@@ -1,0 +1,136 @@
+{
+  "id": "typescript-lesson-213",
+  "slug": "213-transactions-and-data-integrity",
+  "title": "Transactions and Data Integrity",
+  "sequence": 213,
+  "module_id": "typescript-module-23",
+  "module_slug": "backend-development-with-typescript",
+  "level": "professional",
+  "difficulty": "professional",
+  "track": "specialist",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "typescript-lesson-212"
+  ],
+  "previous_lesson_id": "typescript-lesson-212",
+  "next_lesson_id": "typescript-lesson-214",
+  "keywords": [
+    "transactions-and-data-integrity",
+    "backend-development-with-typescript",
+    "transaction-workflows",
+    "handling-failures-and-rollbacks",
+    "validating-invariants-across-related-operations"
+  ],
+  "source_syllabus_number": 213,
+  "subtopics": [
+    "Transaction workflows",
+    "Handling failures and rollbacks",
+    "Validating invariants across related operations"
+  ],
+  "learning_outcomes": [
+    "Explain transaction workflows in the context of transactions and data integrity.",
+    "Apply the lesson concept in a small TypeScript example and describe what the compiler can check.",
+    "Identify one limitation or failure case and choose an appropriate runtime check or test when needed."
+  ],
+  "content": {
+    "intro": "Learn transactions and data integrity through a compact mental model, syllabus-aligned subtopics, a worked example and a practical task. The goal is not to memorize syntax but to know what the type contract guarantees and what evidence is still needed.",
+    "why_it_matters": "Framework and service APIs vary by version. Keep application/domain models separate from transport input, validate untrusted data at runtime, and test the behavior that sits behind each type contract.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Transactions and Data Integrity concept map",
+        "asset_path": "diagrams/lessons/213-transactions-and-data-integrity.svg",
+        "alt_text": "Lesson 213: Transactions and Data Integrity. Understand the concept, model its contract, and verify expected behavior.",
+        "caption": "Concept map for Transactions and Data Integrity; use the numbered stages rather than relying on color."
+      },
+      {
+        "type": "paragraph",
+        "title": "Mental model",
+        "text": "**Transactions and Data Integrity.** This lesson belongs to **Backend Development with TypeScript**. Start by identifying the problem that transactions and data integrity solves. In TypeScript, separate three questions: what values your program intends to accept, what the compiler can prove from the code, and what must still be checked while the program runs. The last category matters whenever data comes from a user, file, API, storage layer, or an untyped JavaScript dependency."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics and how to use them",
+        "items": [
+          {
+            "title": "Transaction workflows",
+            "text": "For transaction workflows, connect the concept to a small concrete example, state the assumption it relies on, and verify the result with a compiler diagnostic or a runtime test as appropriate."
+          },
+          {
+            "title": "Handling failures and rollbacks",
+            "text": "For handling failures and rollbacks, connect the concept to a small concrete example, state the assumption it relies on, and verify the result with a compiler diagnostic or a runtime test as appropriate."
+          },
+          {
+            "title": "Validating invariants across related operations",
+            "text": "For validating invariants across related operations, connect the concept to a small concrete example, state the assumption it relies on, and verify the result with a compiler diagnostic or a runtime test as appropriate."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Transactions and Data Integrity",
+        "language": "typescript",
+        "code": "type ApiError = { code: string; message: string };\ntype ApiResponse<T> = { ok: true; data: T } | { ok: false; error: ApiError };\nfunction respond<T>(data: T): ApiResponse<T> {\n  return { ok: true, data };\n}",
+        "expected_output": "The response type distinguishes success from failure. An actual HTTP API still needs request validation, authorization, persistence, and tested error mapping.",
+        "run_instructions": "This course displays TypeScript examples as static teaching text. The CodeLeaf web playground currently previews HTML/CSS/JavaScript only; TypeScript is not compiled or executed in the browser preview. For actual compiler feedback, create a local project with a pinned TypeScript version and run `npx tsc --noEmit`. For snippets requiring a browser, Node.js, React/JSX or a test runner, use the matching environment and dependencies.",
+        "reset_steps": "The lesson example does not modify files or remote systems. If you run it locally, use a disposable project directory, keep package versions recorded, and remove only the generated output you created.",
+        "execution_mode": "static-validation",
+        "limitations": "Static lesson example only. The browser preview is not a TypeScript compiler and does not execute backend, Node.js, React/TSX, test-runner, network or filesystem examples."
+      },
+      {
+        "type": "callout",
+        "title": "Compile-time versus runtime",
+        "text": "Type annotations and most type declarations are erased when TypeScript emits JavaScript. They do not validate external JSON, authorize a user, sanitize HTML, or prevent runtime failures by themselves. Validate trust-boundary inputs and test the behavior."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-213-knowledge-check.json",
+    "task": "Create a small TypeScript example for “Transactions and Data Integrity”. Demonstrate transaction workflows, explain your assumption, and include one check that shows the expected behavior. Do not treat a type annotation as runtime validation for external input.",
+    "task_acceptance_criteria": [
+      "The example demonstrates at least one syllabus subtopic named in this lesson.",
+      "The type contract is explicit enough that another learner can explain what it accepts and rejects.",
+      "The learner records a failure case and distinguishes compile-time checks from runtime validation."
+    ],
+    "hints": [
+      "Start with the syllabus item “Transaction workflows” and define the smallest example that demonstrates it.",
+      "Ask which part is checked by TypeScript and which part depends on runtime data, the environment or a test.",
+      "For external input, start with unknown and validate the required shape before using a domain type."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Treating a successful type check as a runtime guarantee.",
+        "why": "Type annotations do not generally validate data after JavaScript starts running.",
+        "fix": "Add runtime checks for external input and tests for meaningful failure cases."
+      },
+      {
+        "problem": "Using any or an assertion to silence a useful diagnostic.",
+        "why": "That can hide the exact mismatch the type system would otherwise report.",
+        "fix": "Prefer a more precise type or unknown plus narrowing; use assertions only when a verified invariant justifies them."
+      },
+      {
+        "problem": "Copying a compiler setting or runtime example without checking the project environment.",
+        "why": "Module resolution, DOM/Node globals, JSX and tool behavior depend on the configured versions and environment.",
+        "fix": "Pin the toolchain, match tsconfig to the runtime/bundler, and run the actual project's typecheck and tests."
+      }
+    ],
+    "summary": [
+      "Transactions and Data Integrity is taught through the subtopics listed in the source syllabus: Transaction workflows, Handling failures and rollbacks, Validating invariants across related operations.",
+      "Prefer precise contracts and use compiler diagnostics as evidence, not as a replacement for runtime tests.",
+      "Validate untrusted data and describe environment/version assumptions explicitly."
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation",
+    "solution_notes": "The lesson provides progressive hints, not a hidden single correct implementation. Compare your example against the stated learning outcomes and acceptance criteria."
+  },
+  "exercise_files": [],
+  "sources": [
+    "PDF: Complete TypeScript Curriculum — Beginner to Professional, Section B, topic 213.",
+    "TypeScript Handbook — https://www.typescriptlang.org/docs/handbook/intro.html",
+    "Runtime/API details depend on environment; validate using official Node.js and platform documentation."
+  ],
+  "technical_review_date": "2026-10-14",
+  "status": "draft",
+  "status_note": "Generated as a complete curriculum draft from the PDF syllabus; review all technical examples against the configured compiler/runtime before publication."
+}

@@ -1,0 +1,109 @@
+{
+  "id": "django-project-008",
+  "slug": "multi-tenant-saas-application",
+  "title": "Multi-Tenant SaaS Application",
+  "sequence": 8,
+  "tier": "advanced",
+  "objective": "Build a reviewable Django application that demonstrates Organizations, memberships and invitations, Role-based access, Tenant-owned records.",
+  "prerequisite_lesson_ids": [
+    "django-lesson-129",
+    "django-lesson-144",
+    "django-lesson-153",
+    "django-lesson-162",
+    "django-lesson-179",
+    "django-lesson-193",
+    "django-lesson-206",
+    "django-lesson-221",
+    "django-lesson-233"
+  ],
+  "recommended_lesson_range": "Modules 13–21",
+  "skills": [
+    "Defense-in-depth tenant scoping",
+    "Membership lifecycle and permissions",
+    "Idempotent background jobs",
+    "Cross-tenant negative tests"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Requirements and design",
+      "acceptance_criteria": [
+        "Write the goal, data ownership rules, routes, and key assumptions.",
+        "Identify one failure/boundary case before coding."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Core models and workflows",
+      "acceptance_criteria": [
+        "Implement a minimal vertical slice with models, views, templates/API and migrations as appropriate.",
+        "Keep business rules separate from display code and validate untrusted input."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Verification and access control",
+      "acceptance_criteria": [
+        "Add positive, negative, validation, and permission tests.",
+        "Record expected versus observed results; do not claim unrun tests passed."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Maintainability and delivery notes",
+      "acceptance_criteria": [
+        "Document setup, local reset instructions, dependencies and version assumptions.",
+        "Document security, backup/deployment limits and remaining work."
+      ]
+    }
+  ],
+  "required_features": [
+    "Organizations, memberships and invitations",
+    "Role-based access",
+    "Tenant-owned records",
+    "Audit history and background reports",
+    "Tenant-aware cache/storage isolation"
+  ],
+  "stretch_features": [
+    "Add a documented performance measurement or appropriate database constraint.",
+    "Add an accessibility/usability check and a recovery path for expected failures.",
+    "Add structured logs/monitoring notes with sensitive values redacted."
+  ],
+  "test_plan": [
+    "Test a normal workflow with synthetic data.",
+    "Test invalid/missing input and a denied/unauthorized request.",
+    "Test an edge or concurrency case relevant to the application.",
+    "Record Python/Django/database versions and exact commands run."
+  ],
+  "rubric": [
+    {
+      "criterion": "Correctness and required feature coverage",
+      "points": 30
+    },
+    {
+      "criterion": "Design, data modeling and framework use",
+      "points": 20
+    },
+    {
+      "criterion": "Positive, negative and edge-case testing",
+      "points": 20
+    },
+    {
+      "criterion": "Security, privacy and access control",
+      "points": 15
+    },
+    {
+      "criterion": "Reproducibility and documentation",
+      "points": 15
+    }
+  ],
+  "starter_readme": "projects/starter-files/008-multi-tenant-saas-application/README.md",
+  "starter_files": [
+    "projects/starter-files/008-multi-tenant-saas-application/starter-snippet.txt"
+  ],
+  "reference_solution_file": "projects/solutions/008-multi-tenant-saas-application-solution.json",
+  "review_method": "Human-reviewed local project with automated tests, documented evidence, and static validation. The CodeLeaf browser preview does not execute arbitrary Django/Python applications.",
+  "status": "draft",
+  "status_note": "Adapted from Section D of the attached Django PDF. A reference outline is not a complete implementation; review the project, tests, and security boundaries before publication.",
+  "rubric_total": 100
+}

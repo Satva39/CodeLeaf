@@ -1,0 +1,151 @@
+{
+  "id": "lua-lesson-070",
+  "slug": "copying-tables",
+  "title": "Copying Tables",
+  "sequence": 70,
+  "module_id": "lua-module-07",
+  "module_slug": "tables-and-data-structures",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "lua-lesson-069"
+  ],
+  "previous_lesson_id": "lua-lesson-069",
+  "next_lesson_id": "lua-lesson-071",
+  "keywords": [
+    "copying-tables",
+    "reference-assignment-versus-copying",
+    "shallow-copying-and-deep-copying"
+  ],
+  "source_syllabus_number": 70,
+  "subtopics": [
+    "Reference assignment versus copying",
+    "Shallow copying and deep copying"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of copying Tables and the key behavior described in this lesson.",
+    "Apply copying Tables in a small Lua example and predict its result.",
+    "Identify a relevant edge case, version constraint, or host-runtime limitation for copying Tables."
+  ],
+  "content": {
+    "intro": "Tables unify array-like sequences, records, dictionaries, sets, grids, and object-like structures. They are reference values, typically use one-based sequence indexes, and need explicit copying when independent data is required.",
+    "why_it_matters": "Tables unify array-like sequences, records, dictionaries, sets, grids, and object-like structures. They are reference values, typically use one-based sequence indexes, and need explicit copying when independent data is required. This concept appears in the supplied syllabus; keep the scope and assumptions visible in your implementation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual map: Copying Tables",
+        "asset_path": "diagrams/lessons/lesson-070.svg",
+        "alt_text": "Concept map for Copying Tables; understand the concept, inspect a Lua example, and verify behavior and edge cases.",
+        "caption": "Visual summary of Copying Tables; use the three-step path while working through the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Copying Tables is part of Tables and Data Structures. Start with the exact rule or capability, identify what the example assumes, and note what changes on another Lua version or in a host application."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core explanation",
+        "text": "Tables unify array-like sequences, records, dictionaries, sets, grids, and object-like structures. They are reference values, typically use one-based sequence indexes, and need explicit copying when independent data is required."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics to cover",
+        "items": [
+          {
+            "title": "Reference assignment versus copying",
+            "text": "Understand Reference assignment versus copying; connect it to Copying Tables, then state one useful example or boundary case."
+          },
+          {
+            "title": "Shallow copying and deep copying",
+            "text": "Understand Shallow copying and deep copying; connect it to Copying Tables, then state one useful example or boundary case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through the example",
+        "text": "Read the small example, predict every output line, then run it locally with a compatible runtime. Assignment aliases a table; it does not copy table contents. Keep the smallest reproducible case if the observed behavior differs."
+      },
+      {
+        "type": "code",
+        "language": "lua",
+        "execution_mode": "static-validation",
+        "code": "local original = { score = 10 }\nlocal alias = original\nalias.score = 11\nprint(original.score)",
+        "expected_output": "11",
+        "caption": "Static reference example for local verification; CodeLeaf does not execute this snippet unless a dedicated isolated runner is explicitly provided.",
+        "run_instructions": "Save the code in a local file with the correct language extension and test it using the runtime noted in the lesson. Assignment aliases a table; it does not copy table contents. Compare the exact output to the documented result.",
+        "reset_steps": "Restore the original snippet, remove generated test files if any, and repeat from a clean local test state."
+      },
+      {
+        "type": "callout",
+        "title": "Version, host, and safety note",
+        "text": "Assignment aliases a table; it does not copy table contents."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Mistake 1",
+            "text": "Confusing Copying Tables with a similarly named feature in another language or runtime. Fix: follow the version-matched reference and test the smallest example."
+          },
+          {
+            "title": "Mistake 2",
+            "text": "Relying on an output order or environment capability that the language/host does not guarantee. Fix: document assumptions and make order/capabilities explicit."
+          },
+          {
+            "title": "Mistake 3",
+            "text": "Skipping a boundary test or failing to check error-return values. Fix: test invalid and boundary inputs and inspect failure values."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Recap and next step",
+        "text": "Recap: explain Copying Tables without the example, predict its behavior, and name one limit. Next: Comparing Tables."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate “Copying Tables” with a different input or boundary case. Predict the result before running it, record what you observe, and explain one limitation.",
+    "task_acceptance_criteria": [
+      "Explain the central behavior of Copying Tables in your own words.",
+      "Verify the result using a supported local runtime or clearly state why the host/tooling prevents a full run.",
+      "Identify a boundary case or compatibility/security limit relevant to the lesson."
+    ],
+    "hints": [
+      "First identify the input, output, and any assumed runtime or host feature.",
+      "Reduce the problem to the smallest example that exposes the relevant rule.",
+      "Test one normal case and one boundary/failure case; inspect error output without leaking secrets."
+    ],
+    "expected_output": "11",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-070-knowledge-check.json",
+    "references": [
+      {
+        "title": "Lua 5.5 Reference Manual",
+        "url": "https://www.lua.org/manual/5.5/",
+        "publisher": "Lua.org",
+        "checked_on": "2026-10-20"
+      }
+    ]
+  },
+  "exercise_files": [
+    "../exercises/070-deep-copy-utility.json"
+  ],
+  "sources": [
+    "references/reference-index.json"
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Lua curriculum; requires expert technical, grading, accessibility, and runtime review before publication.",
+  "common_mistakes": [
+    "Confusing Copying Tables with a similarly named feature in another language or runtime.",
+    "Relying on an output order or environment capability that the language/host does not guarantee.",
+    "Skipping a boundary test or failing to check error-return values."
+  ],
+  "next_steps": [
+    "Continue with Comparing Tables."
+  ]
+}

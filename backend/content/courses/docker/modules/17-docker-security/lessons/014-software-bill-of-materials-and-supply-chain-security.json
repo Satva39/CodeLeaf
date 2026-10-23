@@ -1,0 +1,189 @@
+{
+  "id": "docker-lesson-189",
+  "slug": "software-bill-of-materials-and-supply-chain-security",
+  "title": "Software Bill of Materials and Supply-Chain Security",
+  "sequence": 189,
+  "module_id": "docker-module-17",
+  "module_slug": "docker-security",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "docker-lesson-188"
+  ],
+  "previous_lesson_id": "docker-lesson-188",
+  "next_lesson_id": "docker-lesson-190",
+  "keywords": [
+    "software-bill-of-materials-and-supply-chain-security",
+    "sbom-concepts",
+    "build-provenance",
+    "image-attestations",
+    "artifact-integrity",
+    "tracking-software-components"
+  ],
+  "source_syllabus_number": 189,
+  "subtopics": [
+    "SBOM concepts",
+    "Build provenance",
+    "Image attestations",
+    "Artifact integrity",
+    "Tracking software components"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and key terms of software bill of materials and supply-chain security.",
+    "Choose and interpret a suitable Docker example connected to software bill of materials and supply-chain security.",
+    "Predict an expected result and verify it using observable evidence in a controlled environment."
+  ],
+  "content": {
+    "intro": "This lesson covers Software Bill of Materials and Supply-Chain Security. You will connect the named subtopics from the supplied Docker curriculum to a small, observable example. Work through the visual first, then use the example to form a prediction and check it against the actual behavior.",
+    "why_it_matters": "Treat an image and its runtime settings as part of the security boundary. Use maintained image bases, non-root execution where possible, minimal capabilities, constrained mounts and networks, secret-safe build mechanisms, and vulnerability/component review. Docker daemon access itself is privileged. Learning software bill of materials and supply-chain security helps you make deployment behavior explicit and repeatable instead of relying on a command that happened to work on one machine.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Layered container security controls",
+        "asset_path": "diagrams/security-controls.svg",
+        "alt_text": "Layered container security controls",
+        "caption": "Image trust, user identity, capabilities, filesystem, network, and daemon access are separate review points."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Treat an image and its runtime settings as part of the security boundary. Use maintained image bases, non-root execution where possible, minimal capabilities, constrained mounts and networks, secret-safe build mechanisms, and vulnerability/component review. Docker daemon access itself is privileged."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the supplied curriculum",
+        "items": [
+          {
+            "title": "SBOM concepts",
+            "text": "Supply-chain metadata can describe included packages and how the image was built. Check support in the chosen builder/output and review the resulting artifact, rather than assuming metadata exists."
+          },
+          {
+            "title": "Build provenance",
+            "text": "Supply-chain metadata can describe included packages and how the image was built. Check support in the chosen builder/output and review the resulting artifact, rather than assuming metadata exists."
+          },
+          {
+            "title": "Image attestations",
+            "text": "Supply-chain metadata can describe included packages and how the image was built. Check support in the chosen builder/output and review the resulting artifact, rather than assuming metadata exists."
+          },
+          {
+            "title": "Artifact integrity",
+            "text": "For artifact integrity, name the relevant Docker object, setting, or operational step; predict its effect; and capture evidence from a controlled test or inspection command. Relate the result back to software bill of materials and supply-chain security rather than assuming that a successful command proves the wider system is correct."
+          },
+          {
+            "title": "Tracking software components",
+            "text": "For tracking software components, name the relevant Docker object, setting, or operational step; predict its effect; and capture evidence from a controlled test or inspection command. Relate the result back to software bill of materials and supply-chain security rather than assuming that a successful command proves the wider system is correct."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "Start with the supplied example for software bill of materials and supply-chain security. Before running it, state what you expect to happen. Compare the real output with that prediction, then change one variable or setting in a disposable lab to test the boundary of the idea. If a command is not supported on your operating system or installed Docker version, consult the linked official reference and record the actual version rather than guessing."
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Software Bill of Materials and Supply-Chain Security",
+        "language": "shell",
+        "code": "docker run --rm --read-only --cap-drop=ALL --security-opt=no-new-privileges:true --user 10001:10001 --tmpfs /tmp:rw,noexec,nosuid,size=16m alpine:3.22 id",
+        "expected_output": "On a compatible Linux-container environment the process runs as UID/GID 10001 with a read-only root filesystem and reduced privileges.",
+        "run_instructions": "Run in a local test Docker environment; options differ by OS/runtime, and the intended app may need additional specific permissions.",
+        "reset_steps": "The container is removed at exit; no named storage is created.",
+        "execution_mode": "human-review",
+        "safety_note": "Security-hardening example. Verify compatibility and required capabilities rather than copying flags blindly to production.",
+        "limitations": "CodeLeaf currently does not execute Docker Engine, Docker Compose, build, networking, or host-administration commands from lesson pages. Use the example as inspectable material and run only in an approved local lab. Production services and arbitrary learner commands must never run inside the FastAPI web process.",
+        "schema_assumptions": "Confirm the installed Docker Engine, CLI, Compose, and Buildx versions and the target OS before using version- or platform-sensitive options."
+      },
+      {
+        "type": "callout",
+        "title": "Practical checkpoint",
+        "text": "Keep this lesson in draft while reviewing: Software Bill of Materials and Supply-Chain Security. Capture the command/configuration, expected and actual result, one failure or edge case, and cleanup performed. This course does not award XP from content files; CodeLeaf backend rules remain authoritative."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-189-questions.json"
+  },
+  "task": "Apply software bill of materials and supply-chain security to a small local case. Record the configuration or command, expected result, observed result, one limitation/edge case, and how you verified the result.",
+  "hints": [
+    "Begin with read-only inspection commands and identify the active Docker context before any mutating action.",
+    "Use a disposable name, local test image, and synthetic data; change one thing at a time.",
+    "If the outcome differs, preserve the exact error and logs, check the official reference for your installed version, and document the verified fix."
+  ],
+  "expected_output": "On a compatible Linux-container environment the process runs as UID/GID 10001 with a read-only root filesystem and reduced privileges.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Assuming that a successful start means the application is ready.",
+      "why": "A container can start while its dependent service is unavailable or the application is failing after startup.",
+      "fix": "Inspect health/status and logs; add a meaningful health check or retry strategy where appropriate."
+    },
+    {
+      "problem": "Keeping required data only in the container writable layer.",
+      "why": "Replacing the container can discard that layer and its application state.",
+      "fix": "Select a named volume or an external storage system, then rehearse a restore."
+    },
+    {
+      "problem": "Copying a command without checking context, target, or permissions.",
+      "why": "Docker commands affect the active endpoint and can change host resources or publish services.",
+      "fix": "Check `docker context show`, use an isolated lab, make the smallest change, and verify the resulting state."
+    }
+  ],
+  "summary": [
+    "Treat an image and its runtime settings as part of the security boundary. Use maintained image bases, non-root execution where possible, minimal capabilities, constrained mounts and networks, secret-safe build mechanisms, and vulnerability/component review. Docker daemon access itself is privileged.",
+    "The attached PDF lists 5 subtopic(s) under this lesson; keep each one represented in the explanation and practical notes.",
+    "Docker execution mode in CodeLeaf is human-run/static validation only; do not interpret code display as evidence that a command was executed."
+  ],
+  "sources": [
+    {
+      "title": "Docker Engine security",
+      "url": "https://docs.docker.com/engine/security/",
+      "publisher": "Docker Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "namespaces",
+        "cgroups",
+        "daemon attack surface",
+        "runtime hardening"
+      ]
+    },
+    {
+      "title": "Rootless mode",
+      "url": "https://docs.docker.com/engine/security/rootless/",
+      "publisher": "Docker Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "rootless operation",
+        "daemon privilege reduction",
+        "rootless limitations"
+      ]
+    },
+    {
+      "title": "Docker Scout",
+      "url": "https://docs.docker.com/scout/",
+      "publisher": "Docker Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "image analysis",
+        "package inventory",
+        "vulnerability policy"
+      ]
+    },
+    {
+      "title": "Build secrets",
+      "url": "https://docs.docker.com/build/building/secrets/",
+      "publisher": "Docker Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "BuildKit secret mounts",
+        "SSH mounts",
+        "credential handling"
+      ]
+    }
+  ],
+  "exercise_files": [
+    "../exercises/004-supply-chain-metadata.json"
+  ],
+  "status": "draft",
+  "status_note": "Generated as a reviewable first draft from the full Docker syllabus. Commands and build snippets have not been executed in a Docker daemon during this generation run; review syntax and platform assumptions before publishing."
+}

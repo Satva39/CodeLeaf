@@ -1,0 +1,189 @@
+{
+  "id": "r-lesson-216",
+  "slug": "publishing-and-maintaining-packages",
+  "title": "Publishing and Maintaining Packages",
+  "sequence": 216,
+  "module_id": "r-module-20",
+  "module_slug": "r-packages-and-package-development",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "r-lesson-215"
+  ],
+  "previous_lesson_id": "r-lesson-215",
+  "next_lesson_id": "r-lesson-217",
+  "keywords": [
+    "publishing-and-maintaining-packages",
+    "r-packages-and-package-development",
+    "preparing-release-metadata",
+    "license-selection-and-compatibility",
+    "cran-submission-concepts",
+    "package-versioning",
+    "managing-issues-and-contributions",
+    "release-notes-and-deprecation",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 216,
+  "subtopics": [
+    "Preparing Release Metadata",
+    "License Selection and Compatibility",
+    "CRAN Submission Concepts",
+    "Package Versioning",
+    "Managing Issues and Contributions",
+    "Release Notes and Deprecation"
+  ],
+  "learning_outcomes": [
+    "Explain the role of publishing and maintaining packages and identify its main inputs, outputs or constraints.",
+    "Apply preparing release metadata in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Publishing and Maintaining Packages is part of R Packages and Package Development. Start with preparing release metadata and connect it to the worked example and expected result.",
+    "why_it_matters": "A reproducible analysis records its inputs, code, dependency versions, assumptions, outputs and limitations so another person can rerun it.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Publishing and Maintaining Packages",
+        "asset_path": "diagrams/package-quality-gates.svg",
+        "alt_text": "Concept visual supporting lesson 216, Publishing and Maintaining Packages. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "A reproducible analysis records its inputs, code, dependency versions, assumptions, outputs and limitations so another person can rerun it. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Preparing Release Metadata",
+            "text": "Explain preparing release metadata in the context of publishing and maintaining packages, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "License Selection and Compatibility",
+            "text": "Explain license selection and compatibility in the context of publishing and maintaining packages, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "CRAN Submission Concepts",
+            "text": "Explain cran submission concepts in the context of publishing and maintaining packages, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Package Versioning",
+            "text": "Explain package versioning in the context of publishing and maintaining packages, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Managing Issues and Contributions",
+            "text": "Explain managing issues and contributions in the context of publishing and maintaining packages, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Release Notes and Deprecation",
+            "text": "Explain release notes and deprecation in the context of publishing and maintaining packages, connect it to the example, and verify one expected result or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Describe the input files and package versions, then outline how to render the report and verify its output. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Publishing and Maintaining Packages",
+        "language": "r",
+        "code": "# Lesson 216: Publishing and Maintaining Packages\n# Static package sketch\n# DESCRIPTION declares package metadata and dependencies\n# R/ contains functions; tests/ contains automated tests",
+        "expected_output": "The sketch identifies common package components; validate a real package with tests and R CMD check.",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "Do not claim a package is ready to publish until clean-environment checks pass. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For publishing and maintaining packages, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-216-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply publishing and maintaining packages to a small synthetic example. Start with preparing release metadata, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the preparing release metadata idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible publishing and maintaining packages example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Preparing Release Metadata” and identify the input and output before coding.",
+      "Prefer a small repeatable test and capture the result before changing the implementation.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Relying on a package attached only in the interactive workspace.",
+        "why": "A clean session may not have that dependency attached or installed.",
+        "fix": "Declare imports and test package functions from a fresh R session."
+      },
+      {
+        "problem": "Publishing examples without running their tests or checks.",
+        "why": "Documentation can be stale and examples can fail on a clean machine.",
+        "fix": "Run package tests and R CMD check under the supported R version."
+      },
+      {
+        "problem": "Leaving dependencies and version assumptions undocumented.",
+        "why": "Users may not be able to reproduce the package behavior.",
+        "fix": "Declare dependencies and document compatibility."
+      }
+    ],
+    "summary": [
+      "Key idea: A reproducible analysis records its inputs, code, dependency versions, assumptions, outputs and limitations so another person can rerun it.",
+      "Practice: Describe the input files and package versions, then outline how to render the report and verify its output.",
+      "Source syllabus focus: Preparing Release Metadata. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply publishing and maintaining packages to a small synthetic example. Start with preparing release metadata, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible publishing and maintaining packages example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Preparing Release Metadata” and identify the input and output before coding.",
+    "Prefer a small repeatable test and capture the result before changing the implementation.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Relying on a package attached only in the interactive workspace.",
+      "why": "A clean session may not have that dependency attached or installed.",
+      "fix": "Declare imports and test package functions from a fresh R session."
+    },
+    {
+      "problem": "Publishing examples without running their tests or checks.",
+      "why": "Documentation can be stale and examples can fail on a clean machine.",
+      "fix": "Run package tests and R CMD check under the supported R version."
+    },
+    {
+      "problem": "Leaving dependencies and version assumptions undocumented.",
+      "why": "Users may not be able to reproduce the package behavior.",
+      "fix": "Declare dependencies and document compatibility."
+    }
+  ],
+  "summary": [
+    "Key idea: A reproducible analysis records its inputs, code, dependency versions, assumptions, outputs and limitations so another person can rerun it.",
+    "Practice: Describe the input files and package versions, then outline how to render the report and verify its output.",
+    "Source syllabus focus: Preparing Release Metadata. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 20 — R Packages and Package Development, lesson 216: Publishing and Maintaining Packages.",
+    "Official documentation: https://cran.r-project.org/doc/manuals/r-release/R-exts.html",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

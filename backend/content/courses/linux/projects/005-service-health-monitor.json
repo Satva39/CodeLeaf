@@ -1,0 +1,137 @@
+{
+  "id": "linux-project-005",
+  "slug": "service-health-monitor",
+  "title": "Service Health Monitor",
+  "sequence": 5,
+  "tier": "intermediate",
+  "objective": "Monitor selected local services and create a useful, timestamped health summary.",
+  "prerequisite_lesson_ids": [
+    "linux-lesson-078"
+  ],
+  "recommended_module_ranges": [
+    10,
+    16,
+    19
+  ],
+  "skills": [
+    "Service-state checks",
+    "Relevant log inspection",
+    "Timestamped reports",
+    "Configurable alerts and failure summaries"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Milestone 1: Service-state checks",
+      "acceptance_criteria": [
+        "Demonstrate service-state checks using synthetic data or a disposable Linux environment.",
+        "Record repeatable verification steps and expected/observed results.",
+        "Document one failure mode, safety boundary, and recovery approach."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Milestone 2: Relevant log inspection",
+      "acceptance_criteria": [
+        "Demonstrate relevant log inspection using synthetic data or a disposable Linux environment.",
+        "Record repeatable verification steps and expected/observed results.",
+        "Document one failure mode, safety boundary, and recovery approach."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Milestone 3: Timestamped reports",
+      "acceptance_criteria": [
+        "Demonstrate timestamped reports using synthetic data or a disposable Linux environment.",
+        "Record repeatable verification steps and expected/observed results.",
+        "Document one failure mode, safety boundary, and recovery approach."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Milestone 4: Configurable alerts and failure summaries",
+      "acceptance_criteria": [
+        "Demonstrate configurable alerts and failure summaries using synthetic data or a disposable Linux environment.",
+        "Record repeatable verification steps and expected/observed results.",
+        "Document one failure mode, safety boundary, and recovery approach."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "contents": "# Service Health Monitor\n\nMonitor selected local services and create a useful, timestamped health summary.\n\n## Required features\n- [ ] Service-state checks\n- [ ] Relevant log inspection\n- [ ] Timestamped reports\n- [ ] Configurable alerts and failure summaries\n\nUse synthetic data and a disposable VM. Do not place passwords, private keys, or production data in this project. Document setup, tests, distribution/kernel assumptions, limitations, and recovery. State whether a check was run locally; CodeLeaf does not execute arbitrary Linux/Bash commands inside the FastAPI web process.\n"
+    },
+    {
+      "path": "bin/main.sh",
+      "language": "bash",
+      "contents": "#!/usr/bin/env bash\n# Service Health Monitor\n# Safe draft scaffold; fill in behavior only after defining inputs and expected results.\nset -u\n\nusage() {\n  printf 'Usage: %s [--dry-run] [--help]\\n' \"${0##*/}\"\n}\n\nmain() {\n  case ${1:-help} in\n    help|-h|--help) usage ;;\n    --dry-run) printf 'Dry run: no system changes requested.\\n' ;;\n    *) printf 'Unsupported option: %s\\n' \"$1\" >&2; return 2 ;;\n  esac\n}\n\nmain \"${1:-help}\"\n"
+    }
+  ],
+  "required_features": [
+    "Service-state checks",
+    "Relevant log inspection",
+    "Timestamped reports",
+    "Configurable alerts and failure summaries"
+  ],
+  "stretch_features": [
+    "Add automated tests over fixtures and boundary cases.",
+    "Add structured logs and machine-readable output.",
+    "Add a documented dry-run and rollback/recovery path.",
+    "Run static checks such as ShellCheck where applicable."
+  ],
+  "tests": [
+    {
+      "name": "Functional behavior",
+      "mode": "human_review",
+      "criteria": [
+        "Required behavior works on synthetic inputs.",
+        "Expected output and exit status are documented."
+      ]
+    },
+    {
+      "name": "Safety and recovery",
+      "mode": "human_review",
+      "criteria": [
+        "Dry-run or safe preview is available where state changes are possible.",
+        "No private credentials are committed.",
+        "A tested backup or rollback procedure is documented where relevant."
+      ]
+    },
+    {
+      "name": "Compatibility",
+      "mode": "human_review",
+      "criteria": [
+        "Distribution and tool versions are identified.",
+        "Missing dependencies and unsupported cases have actionable messages."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correctness and required features",
+      "points": 30
+    },
+    {
+      "criterion": "Tests and reproducible evidence",
+      "points": 25
+    },
+    {
+      "criterion": "Safety, security, and recovery",
+      "points": 20
+    },
+    {
+      "criterion": "Design, maintainability, and documentation",
+      "points": 15
+    },
+    {
+      "criterion": "Compatibility and stated limitations",
+      "points": 10
+    }
+  ],
+  "review_method": "Human review or execution in a separately isolated runner; the platform web process must not execute arbitrary Bash/Linux commands.",
+  "reference_solution_file": "projects/solutions/005-service-health-monitor-reference.json",
+  "status": "draft",
+  "notes": "Draft project based on Linux.pdf Section D. Relevant module numbers are 10, 16, 19; require actual evidence of verification and recovery rather than claiming completion from a successful first run."
+}

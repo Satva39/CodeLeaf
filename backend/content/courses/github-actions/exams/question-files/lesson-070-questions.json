@@ -1,0 +1,53 @@
+{
+  "id": "github-actions-lesson-070-knowledge-check",
+  "lesson_id": "github-actions-lesson-070",
+  "lesson_slug": "secrets-versus-configuration-variables",
+  "title": "Secrets Versus Configuration Variables knowledge check",
+  "question_count": 3,
+  "questions": [
+    {
+      "id": "github-actions-q-070-01",
+      "type": "single_choice",
+      "prompt": "Which statement correctly describes Secrets Versus Configuration Variables?",
+      "options": [
+        "Use secrets for credentials and `vars` for non-sensitive configuration; place each at the narrowest repository/environment/organization scope that fits.",
+        "Give every job write permission to avoid troubleshooting authorization errors.",
+        "Print all environment variables and event payloads to make the run easier to debug.",
+        "Run untrusted pull-request code in the same job that holds production credentials."
+      ],
+      "answer_key": "Use secrets for credentials and `vars` for non-sensitive configuration; place each at the narrowest repository/environment/organization scope that fits.",
+      "explanation": "This is the central behavior of secrets versus configuration variables: Use secrets for credentials and `vars` for non-sensitive configuration; place each at the narrowest repository/environment/organization scope that fits. Validate configuration and behavior against the current official reference before production use.",
+      "difficulty": "applied"
+    },
+    {
+      "id": "github-actions-q-070-02",
+      "type": "single_choice",
+      "prompt": "A team is working with “Sensitive and non-sensitive configuration”. Which practice best fits this topic?",
+      "options": [
+        "Print all environment variables and event payloads to make the run easier to debug.",
+        "Run untrusted pull-request code in the same job that holds production credentials.",
+        "For sensitive and non-sensitive configuration, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing.",
+        "Give every job write permission to avoid troubleshooting authorization errors."
+      ],
+      "answer_key": "For sensitive and non-sensitive configuration, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing.",
+      "explanation": "Sensitive and non-sensitive configuration: For sensitive and non-sensitive configuration, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing. Apply the guidance to the actual event, runner, permissions, or artifact boundary and test the relevant case.",
+      "difficulty": "applied"
+    },
+    {
+      "id": "github-actions-q-070-03",
+      "type": "single_choice",
+      "prompt": "How should a reviewer verify a change related to secrets versus configuration variables?",
+      "options": [
+        "Run a controlled test or static check, inspect the relevant job and step result, and compare the evidence with the stated acceptance criteria.",
+        "Assume the workflow is correct as soon as the YAML file is committed.",
+        "Retry every failure without looking at the exit code or preserving evidence.",
+        "Publish the workflow to production before reviewing its triggers and permissions."
+      ],
+      "answer_key": "Run a controlled test or static check, inspect the relevant job and step result, and compare the evidence with the stated acceptance criteria.",
+      "explanation": "Reliable verification uses observable evidence. For this lesson, consider: Use secrets for credentials and `vars` for non-sensitive configuration; place each at the narrowest repository/environment/organization scope that fits. A syntax check alone cannot prove remote execution, permissions, or deployment behavior.",
+      "difficulty": "applied"
+    }
+  ],
+  "status": "draft",
+  "visibility": "protected_content_repository_only"
+}

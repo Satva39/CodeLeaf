@@ -1,0 +1,157 @@
+{
+  "id": "rust-lesson-221",
+  "slug": "debugging-with-compiler-diagnostics-and-debuggers",
+  "title": "Debugging with Compiler Diagnostics and Debuggers",
+  "sequence": 221,
+  "module_id": "rust-module-18",
+  "module_slug": "testing-debugging-and-documentation",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "quality-and-abstraction",
+  "estimated_minutes": 13,
+  "prerequisites": [
+    "rust-lesson-220"
+  ],
+  "previous_lesson_id": "rust-lesson-220",
+  "next_lesson_id": "rust-lesson-222",
+  "keywords": [
+    "and",
+    "compiler",
+    "debuggers",
+    "debugging",
+    "diagnostics",
+    "repeatable-quality-checks-and-feedback",
+    "rust",
+    "with"
+  ],
+  "source_syllabus_number": 221,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the main purpose of Debugging with Compiler Diagnostics and Debuggers and distinguish it from a closely related Rust concept.",
+    "Apply or trace Debugging with Compiler Diagnostics and Debuggers in a small Rust example, using the module guidance and stated toolchain assumptions.",
+    "Identify one relevant edge case or failure mode for Debugging with Compiler Diagnostics and Debuggers and select a suitable verification step."
+  ],
+  "content": {
+    "intro": "This lesson covers Debugging with Compiler Diagnostics and Debuggers. It sits in Module 18, Testing, Debugging, and Documentation, and builds toward a practical Rust mental model rather than memorizing a term in isolation.",
+    "why_it_matters": "Debugging with Compiler Diagnostics and Debuggers matters when you work with repeatable quality checks and feedback. Understanding the rule helps you predict compiler or runtime behavior, document assumptions, and choose a safer implementation when inputs or system conditions change.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Debugging with Compiler Diagnostics and Debuggers",
+        "asset_path": "diagrams/lesson-221-debugging-with-compiler-diagnostics-and-debuggers.svg",
+        "alt_text": "Concept diagram for Debugging with Compiler Diagnostics and Debuggers: repeatable quality checks and feedback; inputs flow through a rule to an outcome, followed by a verification step.",
+        "caption": "Visual model for Debugging with Compiler Diagnostics and Debuggers. The diagram is a learning aid; use the prose and examples for exact conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Reliable code uses tests and diagnostics to make assumptions visible. Unit tests isolate behavior, integration tests exercise public boundaries, and documentation tests keep example code checked alongside the API."
+      },
+      {
+        "type": "paragraph",
+        "title": "A reliable way to reason about it",
+        "text": "For Debugging with Compiler Diagnostics and Debuggers, write down the inputs, the guarantee you expect, and the boundary where that guarantee stops. Work through a minimal example first; then deliberately test one edge case. Make tests deterministic and focused. Documentation examples should be executable where possible, and mocks should not obscure the behavior that matters."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Debugging with Compiler Diagnostics and Debuggers",
+            "text": "Reliable code uses tests and diagnostics to make assumptions visible. Unit tests isolate behavior, integration tests exercise public boundaries, and documentation tests keep example code checked alongside the API."
+          },
+          {
+            "title": "Inputs and guarantees",
+            "text": "Identify the value, type, state, tool, or external system involved in Debugging with Compiler Diagnostics and Debuggers. Separate what Rust checks at compile time from what still needs validation or a test."
+          },
+          {
+            "title": "Boundary case",
+            "text": "Try an empty, missing, invalid, unusually large, or concurrently accessed input when that boundary applies to Debugging with Compiler Diagnostics and Debuggers. Record what should happen and how you can verify it."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "rust",
+        "execution_mode": "static-validation",
+        "code": "fn add(a: i32, b: i32) -> i32 { a + b }\n\n#[cfg(test)]\nmod tests {\n    use super::add;\n\n    #[test]\n    fn adds_two_numbers() {\n        assert_eq!(add(2, 3), 5);\n    }\n}\n\nfn main() {\n    println!(\"{}\", add(2, 3));\n}",
+        "expected_output": "Running the binary prints 5; cargo test also discovers the unit test.",
+        "run_instructions": "Save as src/main.rs in a Cargo binary. Run cargo run and cargo test; adapt the test shape to the real behavior under review.",
+        "reset_steps": "Return the sample to its original form, run the documented command again, and compare the result. If a dependency, target, runtime, database, or hardware device is required, configure that separately before treating the result as verified."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not assume Debugging with Compiler Diagnostics and Debuggers guarantees more than it actually does. Reduce a failure to a small reproducer, read the full compiler diagnostic or error value, consult the matching official reference, and change one assumption at a time."
+      },
+      {
+        "type": "callout",
+        "title": "Toolchain and execution boundary",
+        "text": "Course examples are static reference snippets, not executed inside CodeLeaf. Most standard-library examples can be tried in a Rust 2024 Cargo project; specialized networking, database, async, procedural-macro, embedded, and WebAssembly scenarios require the toolchain and dependencies described in their lessons."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate Debugging with Compiler Diagnostics and Debuggers. Predict the result before you run it, then explain one normal case and one relevant boundary case in your own words.",
+    "task_acceptance_criteria": [
+      "Explain the purpose of Debugging with Compiler Diagnostics and Debuggers using a concrete example.",
+      "Verify the example using an appropriate local command, targeted test, or documented manual check.",
+      "Describe one edge case, failure mode, version assumption, or limitation that matters for this topic."
+    ],
+    "hints": [
+      "Start by identifying the inputs and guarantee involved in Debugging with Compiler Diagnostics and Debuggers.",
+      "Use the smallest example that isolates one rule; avoid changing multiple variables at once.",
+      "Check the matching official reference if compiler behavior, a library API, or toolchain support differs from your expectation."
+    ],
+    "expected_output": "Running the binary prints 5; cargo test also discovers the unit test.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-221-questions.json",
+    "recap": [
+      "Debugging with Compiler Diagnostics and Debuggers supports repeatable quality checks and feedback.",
+      "Predict and verify behavior with small examples.",
+      "Keep library and target-specific assumptions explicit."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "The Cargo Book",
+      "url": "https://doc.rust-lang.org/cargo/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "packages and crates",
+        "Cargo.toml",
+        "Cargo.lock",
+        "dependencies",
+        "workspaces",
+        "build profiles",
+        "testing",
+        "publishing"
+      ]
+    },
+    {
+      "title": "Rustdoc Book",
+      "url": "https://doc.rust-lang.org/rustdoc/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "documentation comments",
+        "API documentation",
+        "documentation tests"
+      ]
+    },
+    {
+      "title": "Clippy documentation",
+      "url": "https://doc.rust-lang.org/clippy/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "static analysis",
+        "lints",
+        "quality gates"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Rust.pdf; review explanation, code behavior, version notes, and assessment quality before publication."
+}

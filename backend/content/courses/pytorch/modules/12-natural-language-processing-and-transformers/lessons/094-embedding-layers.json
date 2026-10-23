@@ -1,0 +1,207 @@
+{
+  "id": "pytorch-lesson-094",
+  "slug": "embedding-layers",
+  "title": "Embedding Layers",
+  "sequence": 94,
+  "module_id": "pytorch-module-12",
+  "module_slug": "natural-language-processing-and-transformers",
+  "level": "Specialist",
+  "difficulty": "advanced",
+  "track": "nlp-specialization",
+  "estimated_minutes": 25,
+  "prerequisites": [
+    "pytorch-lesson-093"
+  ],
+  "previous_lesson_id": "pytorch-lesson-093",
+  "next_lesson_id": "pytorch-lesson-095",
+  "keywords": [
+    "embedding-layers",
+    "nn-embedding",
+    "token-embeddings",
+    "position-embeddings",
+    "vocabulary-sizes",
+    "padding-indices",
+    "pytorch",
+    "deep-learning"
+  ],
+  "learning_outcomes": [
+    "Explain the role of embedding layers in a PyTorch workflow.",
+    "Apply a small example of embedding layers and interpret the output.",
+    "Identify a relevant limitation, debugging check, or reproducibility concern."
+  ],
+  "content": {
+    "intro": "Embedding Layers: NLP pipelines turn text into token IDs, pad variable-length sequences, and create embeddings or hidden states that a model can process. In this lesson, use a small example to make the inputs, outputs, and boundary conditions explicit.",
+    "why_it_matters": "Tokenization, padding, masking, and shifted targets define what a language model is allowed to see and what it is trained to predict. For this lesson, focus on nn.embedding and the evidence you can collect from a controlled example.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 12 roadmap",
+        "asset_path": "diagrams/module-12-overview.svg",
+        "alt_text": "Overview diagram of the ordered lessons in module 12: Natural Language Processing and Transformers. This lesson is item 94 in the 164-lesson course.",
+        "caption": "Orientation map for Natural Language Processing and Transformers; use the list below to connect this lesson to related ideas."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Keep vocabulary/tokenizer, special tokens, padding masks, sequence lengths, and prediction targets aligned. Test one short and one long sequence. The source topics for this lesson are: nn.Embedding, Token embeddings, Position embeddings. Keep each topic connected to a checkable input/output behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "Read the example",
+        "text": "Inspect token IDs and output dimensions through an embedding or attention layer, checking that padding does not become meaningful content unintentionally. The example is a teaching-scale check, not evidence of a trained model score or a hardware-independent performance claim."
+      },
+      {
+        "type": "list",
+        "title": "Source-aligned topic checklist",
+        "items": [
+          {
+            "title": "nn.Embedding",
+            "text": "Trace token IDs, sequence length, padding/causal masks, and prediction targets so the model only uses information available for the task."
+          },
+          {
+            "title": "Token embeddings",
+            "text": "Trace token IDs, sequence length, padding/causal masks, and prediction targets so the model only uses information available for the task."
+          },
+          {
+            "title": "Position embeddings",
+            "text": "Trace token IDs, sequence length, padding/causal masks, and prediction targets so the model only uses information available for the task."
+          },
+          {
+            "title": "Vocabulary sizes",
+            "text": "Connect this topic to the lesson workflow: Keep vocabulary/tokenizer, special tokens, padding masks, sequence lengths, and prediction targets aligned. Test one short and one long sequence. Write down the expected behavior and test it on a small, inspectable input."
+          },
+          {
+            "title": "Padding indices",
+            "text": "Inspect one sample before batching, verify feature/label alignment, and confirm that preprocessing and split boundaries fit the intended stage."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Guided PyTorch example",
+        "language": "python",
+        "code": "import torch\nfrom torch import nn\nembedding = nn.Embedding(num_embeddings=20, embedding_dim=8)\ntoken_ids = torch.tensor([[1, 5, 3]])\nprint(embedding(token_ids).shape)",
+        "expected_output": "torch.Size([1, 3, 8])",
+        "run_instructions": "Save as example.py in a Python environment with a compatible PyTorch installation, then run `python example.py`. PyTorch snippets are not executed in the browser. For GPU- or package-specific snippets, install the matching supported dependencies first.",
+        "reset_steps": "Restore the code block, rerun it, and compare both the printed output and tensor metadata.",
+        "run_mode": "server-runner"
+      },
+      {
+        "type": "callout",
+        "title": "Version and execution note",
+        "text": "The code block is a local Python example, not a browser execution promise. CodeLeaf does not currently provide an isolated general-purpose Python runner; use a virtual environment. Installation commands, optional packages, hardware behavior, and rapidly evolving specialist APIs must be checked against the linked official documentation."
+      }
+    ],
+    "task": "Try it yourself: Encode two differently sized toy sentences, pad them into one batch, build a mask, and show the expected embedding shape. Record the observed result and one limitation; do not report an unrun training or performance result as measured.",
+    "task_acceptance_criteria": [
+      "The experiment demonstrates at least one relevant aspect of embedding layers.",
+      "Record the expected and observed result, including shape/dtype/device information when relevant.",
+      "Explain one common failure mode, compatibility limitation, or evaluation caveat."
+    ],
+    "hints": [
+      "Begin with the smallest working example for embedding layers and keep input shapes explicit.",
+      "Change only one variable at a time; compare a tensor property, a printed value, or a test assertion.",
+      "Use the linked official reference for any hardware-specific, optional-package, or version-sensitive behavior."
+    ],
+    "expected_output": "torch.Size([1, 3, 8])",
+    "troubleshooting": [
+      {
+        "symptom": "A tensor operation raises a shape, dtype, or device mismatch.",
+        "check": "Print .shape, .dtype, and .device for each input. Resolve the mismatch intentionally instead of changing dimensions blindly."
+      },
+      {
+        "symptom": "The example fails because an optional package or accelerator is unavailable.",
+        "check": "Check the installed PyTorch/package versions and device availability. Use the official installation selector and run the CPU-compatible path where appropriate."
+      },
+      {
+        "symptom": "The result differs across runs or machines.",
+        "check": "Fix the seed where useful, record versions and inputs, and document operations that remain nondeterministic or hardware dependent."
+      }
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Relying on assumptions instead of inspecting the data or output.",
+        "why": "Many ML failures come from incorrect shapes, labels, preprocessing, or execution mode rather than a syntax error.",
+        "fix": "Inspect representative inputs and add assertions for the expected shape, dtype, range, or behavior."
+      },
+      {
+        "problem": "Mixing training-time behavior with inference-time behavior.",
+        "why": "Dropout, normalization, gradient tracking, and optimizer updates can change how a model behaves.",
+        "fix": "Do not let a language model attend to future target tokens during autoregressive training or evaluation."
+      },
+      {
+        "problem": "Using a current or experimental API without recording its version assumptions.",
+        "why": "Hardware support and ecosystem APIs can change independently of the core package.",
+        "fix": "Pin compatible dependencies, record the environment, and test after upgrades."
+      }
+    ],
+    "summary": [
+      "Embedding Layers belongs to the Natural Language Processing and Transformers learning path.",
+      "Practice nn.embedding, token embeddings, position embeddings using the source-aligned checklist and read-example explanation.",
+      "Do not let a language model attend to future target tokens during autoregressive training or evaluation."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-094-questions.json",
+    "solution_notes": "The linked lesson knowledge-check answers and exercise reference solutions are kept in protected backend content files. A published endpoint must return learner-safe prompts only.",
+    "run_mode": "server-runner",
+    "execution_note": "Requires a local or separately isolated Python runner. Do not execute learner-supplied Python inside the FastAPI process or the production web container.",
+    "references": [
+      {
+        "title": "Learn the Basics",
+        "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro.html",
+        "publisher": "PyTorch Tutorials",
+        "checked_on": "2026-10-20",
+        "supports": [
+          "tensors",
+          "datasets and data loaders",
+          "transforms",
+          "models",
+          "autograd"
+        ]
+      },
+      {
+        "title": "PyTorch API Documentation",
+        "url": "https://docs.pytorch.org/docs/stable/",
+        "publisher": "PyTorch",
+        "checked_on": "2026-10-20",
+        "supports": [
+          "tensor operations",
+          "torch.nn",
+          "autograd",
+          "testing",
+          "serialization"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Learn the Basics",
+      "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro.html",
+      "publisher": "PyTorch Tutorials",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "tensors",
+        "datasets and data loaders",
+        "transforms",
+        "models",
+        "autograd"
+      ]
+    },
+    {
+      "title": "PyTorch API Documentation",
+      "url": "https://docs.pytorch.org/docs/stable/",
+      "publisher": "PyTorch",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "tensor operations",
+        "torch.nn",
+        "autograd",
+        "testing",
+        "serialization"
+      ]
+    }
+  ],
+  "status": "draft"
+}

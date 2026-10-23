@@ -1,0 +1,54 @@
+{
+  "id": "fastapi-exercise-011",
+  "slug": "dependency-injection",
+  "title": "Dependency injection",
+  "type": "practical",
+  "lesson_id": "fastapi-lesson-043",
+  "module_id": "fastapi-module-08",
+  "difficulty": "intermediate",
+  "sequence": 11,
+  "prompt": "Share database sessions and common validation logic through dependencies.",
+  "objective": "Dependency injection",
+  "target_skills": [
+    "Dependency injection",
+    "FastAPI request/response design",
+    "testing and safe verification"
+  ],
+  "starter": {
+    "language": "python",
+    "content": "def get_service():\n    return Service()\nservice: Annotated[Service, Depends(get_service)]"
+  },
+  "expected_output": "A request receives its own managed dependency value and cleanup occurs.",
+  "public_tests": [
+    {
+      "name": "Required concepts in submitted artifact",
+      "required_strings": [
+        "Depends",
+        "Annotated"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Address the exercise task: Share database sessions and common validation logic through dependencies.",
+    "State prerequisites and expected behavior; include one success case and one invalid/edge case.",
+    "Use synthetic data and a disposable local environment; do not include production credentials.",
+    "Explain what was actually tested and identify any untested runtime/security assumption."
+  ],
+  "hints": [
+    "Read the linked lesson and identify the smallest endpoint/model/dependency needed.",
+    "Write a test for the expected result before adding optional features.",
+    "Static keyword checks do not execute Python; confirm runtime correctness with pytest or appropriate local tests."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "Depends",
+      "Annotated"
+    ]
+  },
+  "grading_method": "Server-side static required-string check plus human review; CodeLeaf does not execute arbitrary learner Python. This draft exercise must not be treated as proof of runtime correctness.",
+  "retry_policy": "Retries permitted after feedback; completion is recorded idempotently by CodeLeaf. Platform-wide XP rules apply; no course-authored reward override.",
+  "solution_file": "solutions/011-dependency-injection-solution.json",
+  "status": "draft",
+  "status_note": "Original task based on the corresponding FastAPI.pdf Section C exercise. The file has not been promoted to published and the example still requires technical/runtimes tests."
+}

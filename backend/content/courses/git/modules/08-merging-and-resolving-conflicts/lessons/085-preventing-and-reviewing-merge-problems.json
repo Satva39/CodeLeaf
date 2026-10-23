@@ -1,0 +1,145 @@
+{
+  "id": "git-lesson-085",
+  "slug": "preventing-and-reviewing-merge-problems",
+  "title": "Preventing and Reviewing Merge Problems",
+  "sequence": 85,
+  "module_id": "git-module-08",
+  "module_slug": "merging-and-resolving-conflicts",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "primary_service": "Git version control",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "git-lesson-084"
+  ],
+  "previous_lesson_id": "git-lesson-084",
+  "next_lesson_id": "git-lesson-086",
+  "keywords": [
+    "git-automation-scripting-and-production-workflows",
+    "merging-and-resolving-conflicts",
+    "git",
+    "keeping-branches-updated",
+    "making-focused-changes",
+    "testing-after-integration",
+    "reviewing-the-final-merge-diff"
+  ],
+  "source_syllabus_number": 85,
+  "subtopics": [
+    "Keeping branches updated",
+    "Making focused changes",
+    "Testing after integration",
+    "Reviewing the final merge diff"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and boundaries of preventing and reviewing merge problems.",
+    "Choose and interpret a Git command relevant to preventing and reviewing merge problems using a disposable repository.",
+    "Verify the result with repository state or history and identify one safety limitation."
+  ],
+  "content": {
+    "intro": "This lesson introduces preventing and reviewing merge problems as part of Merging and Resolving Conflicts. It follows the supplied Git curriculum and adds an original explanation, an inspectable command example, troubleshooting notes, and a practice task.",
+    "why_it_matters": "Good merge hygiene includes reviewing the final diff, resolving conflicts intentionally, updating from the correct base and running project checks. Integration is not complete just because Git accepted the merge.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 8: Merging and Resolving Conflicts",
+        "asset_path": "diagrams/module-08-overview.svg",
+        "alt_text": "Four-step view of Merging and Resolving Conflicts, with key syllabus checkpoints and a verification reminder.",
+        "caption": "Original CodeLeaf diagram. Review labels as well as the explanatory text; color is not the only signal."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "**Core idea.** Good merge hygiene includes reviewing the final diff, resolving conflicts intentionally, updating from the correct base and running project checks. Integration is not complete just because Git accepted the merge.\n\nFor **Preventing and Reviewing Merge Problems**, keep the named subtopics in view: Keeping branches updated; Making focused changes; Testing after integration; Reviewing the final merge diff. Treat those as the scope of this lesson, then practise the smallest workflow that demonstrates the idea."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "**Before you run a command:** decide what state you are inspecting or changing, identify whether the effect is local or remote, and write down what evidence would count as success. Before integration, verify the branch base, review the final diff and run the project’s normal tests. A clean diff is not proof of functional correctness."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered",
+        "items": [
+          "Keeping branches updated",
+          "Making focused changes",
+          "Testing after integration",
+          "Reviewing the final merge diff"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Command example: Preventing and Reviewing Merge Problems",
+        "language": "bash",
+        "code": "git diff --check\ngit diff --stat",
+        "expected_output": "A whitespace/error check and a summary of the current diff.",
+        "run_instructions": "Before integration, verify the branch base, review the final diff and run the project’s normal tests. A clean diff is not proof of functional correctness.",
+        "reset_steps": "Use a disposable repository. If the exercise changes state, check git status and git log before and after; discard the practice directory only after confirming it contains no valuable work.",
+        "execution_mode": "static-validation",
+        "limitations": "The CodeLeaf web lesson page does not execute arbitrary Git commands. Run commands locally in a disposable repository with a Git version appropriate to your task. Placeholder paths, branches, commit IDs and repository URLs must be replaced with values from that practice repository."
+      },
+      {
+        "type": "callout",
+        "title": "Safety and verification checkpoint",
+        "text": "Start with git status --short --branch. For destructive or history-rewriting operations, review the exact target, create a recovery reference when appropriate, and keep valuable work backed up. Never put credentials, access tokens or private keys in course submissions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-085-questions.json"
+  },
+  "task": "Create or use two clearly named branches in a disposable repository. Make one small change on each, inspect the commit graph, perform the relevant integration step, then verify the final files and history.",
+  "hints": [
+    "Start by reviewing: Keeping branches updated.",
+    "Use a read-only inspection command before any operation that changes files, refs or remote state.",
+    "After the example, verify with git status --short --branch and/or git log --oneline --graph as appropriate."
+  ],
+  "expected_output": "A whitespace/error check and a summary of the current diff.",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Running a state-changing command without confirming the target repository or branch.",
+      "why": "A command may affect the wrong working tree or move a reference that other work depends on.",
+      "fix": "Check git rev-parse --show-toplevel and git status --short --branch before proceeding."
+    },
+    {
+      "problem": "Assuming a command succeeded because no error was visible.",
+      "why": "Some Git commands are silent on success, and some expected actions are blocked by repository state or permissions.",
+      "fix": "Verify status, log, references, remote state or the named output explicitly."
+    },
+    {
+      "problem": "Using an example placeholder literally or applying a destructive example to valuable work.",
+      "why": "Paths, branch names and object IDs depend on the current repository; restore/reset/clean operations can discard work.",
+      "fix": "Substitute real practice values, use a disposable repository, and preview changes before proceeding."
+    }
+  ],
+  "summary": [
+    "Preventing and Reviewing Merge Problems is covered through these syllabus topics: Keeping branches updated; Making focused changes; Testing after integration; Reviewing the final merge diff.",
+    "Choose the command for the intended effect; understand whether it changes files, the index, local references, or remote state.",
+    "Verify the result, record unexpected output, and retain a recovery path for risky operations."
+  ],
+  "references": [
+    "references/reference-index.json",
+    "https://git-scm.com/docs",
+    "https://git-scm.com/book/en/v2"
+  ],
+  "sources": [
+    {
+      "title": "Git Reference Documentation",
+      "url": "https://git-scm.com/docs",
+      "publisher": "Git project",
+      "checked_on": "2026-10-15",
+      "source_type": "official-reference"
+    },
+    {
+      "title": "Pro Git Book, 2nd Edition",
+      "url": "https://git-scm.com/book/en/v2",
+      "publisher": "Git project / Pro Git",
+      "checked_on": "2026-10-15",
+      "source_type": "officially-hosted-book"
+    }
+  ],
+  "exercise_files": [],
+  "technical_review_date": "2026-10-15",
+  "status": "draft",
+  "status_note": "Generated from the supplied Git syllabus. Content and commands need editorial/technical review before publication."
+}

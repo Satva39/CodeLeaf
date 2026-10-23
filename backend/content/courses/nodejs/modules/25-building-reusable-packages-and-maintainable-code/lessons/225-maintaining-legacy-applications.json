@@ -1,0 +1,160 @@
+{
+  "id": "nodejs-lesson-225",
+  "slug": "maintaining-legacy-applications",
+  "title": "Maintaining Legacy Applications",
+  "sequence": 225,
+  "module_id": "nodejs-module-25",
+  "module_slug": "building-reusable-packages-and-maintainable-code",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "nodejs-lesson-224"
+  ],
+  "previous_lesson_id": "nodejs-lesson-224",
+  "next_lesson_id": "nodejs-lesson-226",
+  "keywords": [
+    "Maintaining Legacy Applications",
+    "Reading existing code",
+    "Identifying deprecated APIs",
+    "Dependency compatibility",
+    "Incremental refactoring",
+    "Node.js",
+    "JavaScript runtime"
+  ],
+  "source_syllabus_number": 225,
+  "subtopics": [
+    "Reading existing code",
+    "Identifying deprecated APIs",
+    "Dependency compatibility",
+    "Incremental refactoring",
+    "Planning runtime upgrades"
+  ],
+  "learning_outcomes": [
+    "Describe Reading existing code and explain how it relates to Maintaining Legacy Applications.",
+    "Demonstrate Identifying deprecated APIs in a small Node.js example and predict the observable result.",
+    "Test a failure, boundary, lifecycle, or version-compatibility case involving Dependency compatibility."
+  ],
+  "content": {
+    "intro": "Maintaining Legacy Applications is part of building reusable packages and maintainable code. This lesson connects Reading existing code, Identifying deprecated APIs, Dependency compatibility to a concrete Node.js example. Focus on the behavior you can observe, the assumptions the API makes, and one failure or boundary case.",
+    "why_it_matters": "npm metadata and lockfiles make dependencies and project tasks repeatable across machines. Install from the lockfile in a clean checkout and run tests after dependency changes.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Maintaining Legacy Applications: concept map",
+        "asset_path": "diagrams/lessons/lesson-225-maintaining-legacy-applications.svg",
+        "alt_text": "Concept map for lesson 225: Maintaining Legacy Applications. It shows representative syllabus concepts in a Concept → Example → Verification sequence.",
+        "caption": "Read the three labeled cards from left to right; the lesson steps connect the concept to a practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "npm metadata and lockfiles make dependencies and project tasks repeatable across machines. Keep direct dependencies intentional, commit the lockfile, review lifecycle scripts, and audit updates."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Reading existing code",
+            "text": "For Reading existing code, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Identifying deprecated APIs",
+            "text": "For Identifying deprecated APIs, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Dependency compatibility",
+            "text": "For Dependency compatibility, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Incremental refactoring",
+            "text": "For Incremental refactoring, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Planning runtime upgrades",
+            "text": "For Planning runtime upgrades, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "function fullName(first, last) { return [first, last].filter(Boolean).join(' '); }\nconsole.log(fullName('Nia', 'Patel'));",
+        "expected_output": "Nia Patel; preserve public behavior while changing internals and run tests after refactoring.",
+        "run_instructions": "Inspect this JavaScript in a local Node.js project. It is a static-validation teaching example: CodeLeaf does not run this arbitrary example in the API process. If it needs a package, file, server, database, or external service, provision that dependency in a separate local project and follow its official setup instructions. Run with `node example.mjs` when the example is self-contained, or adapt the required imports/inputs first.",
+        "reset_steps": "Restore the starting snippet and inputs. Repeat with one different valid value and one invalid, missing, empty, or failure input appropriate to the example.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Start with the code shown above. Predict the result before running it, then verify it against: node --test Change one input or simulate one failure and describe how the behavior should change. Install from the lockfile in a clean checkout and run tests after dependency changes."
+      },
+      {
+        "type": "callout",
+        "title": "Runtime and safety note",
+        "text": "Teaching baseline: use a supported Node.js LTS release (Node.js 24 LTS as checked on 2026-10-13). The official releases page lists Node.js 26 as Current and Node.js 24/22 as LTS. Some advanced APIs, flags, permission behavior, embedded SQLite capabilities, module-loader hooks, and TypeScript integration are version-sensitive; verify the exact installed runtime. The Node.js 22 runtime available in the build-check environment is used only for syntax checks. This example is for learning and static validation, not for executing untrusted learner code inside CodeLeaf."
+      }
+    ],
+    "task": "Create or inspect a small Node.js example for Maintaining Legacy Applications. Include at least one listed subtopic, document the expected result, and verify a normal case plus a boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates a named lesson concept, rather than only mentioning the title.",
+      "Expected output or observable behavior is documented and reproducible.",
+      "At least one invalid, empty, timeout, resource, or failure case is handled or explained.",
+      "The solution does not put secrets in source code and does not execute untrusted code inside the production API process."
+    ],
+    "hints": [
+      "Start with Reading existing code; identify the input, operation, and observable result.",
+      "Run the smallest relevant example in the selected Node.js release before adding frameworks or external services.",
+      "Test one failure or boundary case for Identifying deprecated APIs, then explain why the outcome is expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Treating semver ranges or an audit report as a guarantee that a dependency is safe.",
+        "why": "The code may pass a simple demonstration yet fail with real inputs, resource limits, timing, or runtime differences.",
+        "fix": "Review provenance, release notes, transitive dependencies, and behavior before upgrading."
+      },
+      {
+        "problem": "Copying a snippet without checking its runtime, dependencies, input assumptions, or cleanup behavior.",
+        "why": "Node.js APIs and surrounding ecosystem tools have explicit version, trust, and resource boundaries.",
+        "fix": "State the environment and dependency assumptions, then rerun the example from a clean starting state."
+      }
+    ],
+    "summary": [
+      "For Reading existing code, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone.",
+      "This lesson covers: Reading existing code, Identifying deprecated APIs, Dependency compatibility, Incremental refactoring.",
+      "Verify both normal and failure behavior, and document runtime, dependency, and resource assumptions."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-225-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "npm documentation",
+      "url": "https://docs.npmjs.com/",
+      "publisher": "npm",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "package.json",
+        "npm scripts",
+        "dependency management"
+      ]
+    },
+    {
+      "title": "Node.js Releases and Release Schedule",
+      "url": "https://nodejs.org/en/about/previous-releases",
+      "publisher": "OpenJS Foundation / Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "supported release lines",
+        "LTS versus Current",
+        "version compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Source-derived syllabus; educational draft requiring technical/instructional review before publication."
+}

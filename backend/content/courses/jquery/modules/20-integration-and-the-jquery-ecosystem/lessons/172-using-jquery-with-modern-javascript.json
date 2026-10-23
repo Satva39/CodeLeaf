@@ -1,0 +1,203 @@
+{
+  "id": "jquery-lesson-172",
+  "slug": "using-jquery-with-modern-javascript",
+  "title": "Using jQuery With Modern JavaScript",
+  "sequence": 172,
+  "module_id": "jquery-module-20",
+  "module_slug": "integration-and-the-jquery-ecosystem",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "jquery-lesson-171"
+  ],
+  "previous_lesson_id": "jquery-lesson-171",
+  "next_lesson_id": "jquery-lesson-173",
+  "keywords": [
+    "using jquery with modern javascript",
+    "jquery",
+    "javascript",
+    "integration and the jquery ecosystem",
+    "using const and let in jquery code",
+    "arrow functions and callback semantics",
+    "template literals",
+    "native fetch() and promises"
+  ],
+  "source_syllabus_number": 172,
+  "subtopics": [
+    "Using const and let in jQuery code",
+    "Arrow functions and callback semantics",
+    "Template literals",
+    "Native fetch() and promises",
+    "Mixing native DOM methods with jQuery selectively"
+  ],
+  "learning_outcomes": [
+    "Explain the role of using jquery with modern javascript in a jQuery application.",
+    "Apply using const and let in jquery code in a small example and describe its expected result.",
+    "Verify arrow functions and callback semantics with an explicit test or browser observation."
+  ],
+  "exercise_files": [
+    "../exercises/172-using-jquery-with-modern-javascript.json"
+  ],
+  "sources": [
+    {
+      "title": "jQuery UI and Widget Factory",
+      "url": "https://learn.jquery.com/jquery-ui/",
+      "publisher": "jQuery Learning Center",
+      "checked_on": "2026-10-12",
+      "source_type": "official_ecosystem_reference",
+      "supports": [
+        "Optional widgets",
+        "Widget Factory",
+        "Ecosystem scope"
+      ]
+    },
+    {
+      "title": "jQuery Learning Center: Plugins",
+      "url": "https://learn.jquery.com/plugins/",
+      "publisher": "jQuery Learning Center",
+      "checked_on": "2026-10-12",
+      "source_type": "official_learning_resource",
+      "supports": [
+        "Plugin patterns",
+        "Extending jQuery collections",
+        "Plugin maintenance"
+      ]
+    },
+    {
+      "title": "jQuery Learning Center",
+      "url": "https://learn.jquery.com/",
+      "publisher": "jQuery project",
+      "checked_on": "2026-10-12",
+      "source_type": "official_learning_resource",
+      "supports": [
+        "Concept explanations",
+        "Events",
+        "Effects",
+        "AJAX",
+        "Plugins",
+        "Performance",
+        "Code organization"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the attached syllabus and official references; requires lesson-by-lesson technical review, local execution, accessibility checks, and editorial approval.",
+  "content": {
+    "intro": "In this lesson, you will work through using jquery with modern javascript with a focused jQuery example. The subtopics below preserve the supplied curriculum coverage and connect the API idea to a small browser interface.",
+    "why_it_matters": "This topic is useful because it turns using const and let in jquery code into a repeatable implementation choice. jQuery Core is separate from jQuery UI and third-party plugins. Integrate it with server-rendered pages and modern JavaScript selectively, and avoid competing ownership of the same DOM subtree.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 20 overview",
+        "asset_path": "diagrams/module-20-overview.svg",
+        "alt_text": "Overview of Integration and the jQuery Ecosystem, illustrating the sequence from understanding the concept to implementing and checking it.",
+        "caption": "Use this module map to place using jquery with modern javascript within the wider learning path."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "jQuery Core is separate from jQuery UI and third-party plugins. Integrate it with server-rendered pages and modern JavaScript selectively, and avoid competing ownership of the same DOM subtree."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the supplied syllabus",
+        "items": [
+          "Using const and let in jQuery code",
+          "Arrow functions and callback semantics",
+          "Template literals",
+          "Native fetch() and promises",
+          "Mixing native DOM methods with jQuery selectively"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "const element = document.querySelector(\"#status\");\n$(element).text(\"Updated with jQuery\");\nfetch(\"/api/status\").then((response) => response.json()).then(console.log);",
+        "expected_output": "A native element is wrapped by jQuery, and fetch handles the API request using native Promises. Check response.ok and errors in production.",
+        "run_instructions": "Use a local HTML page with jQuery 4.0.0 loaded before app.js for JavaScript snippets. HTML and package-manager snippets can be checked as configuration examples. Run the interaction in browser DevTools, inspect the DOM/Network panel, and compare actual behavior with the expected result. Do not submit learner code to the production API for arbitrary execution.",
+        "reset_steps": "Restore the original markup and code, clear console/network filters, reload the local page, and repeat the same interaction. For a request example, return the mock endpoint to its original response before retrying."
+      },
+      {
+        "type": "callout",
+        "title": "Guided example",
+        "text": "Start with a known DOM structure, apply the pattern for using jquery with modern javascript, and test one normal case plus one edge case. Keep selectors scoped to the intended component and verify the real browser result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Integrate using jquery with modern javascript into a small existing page while keeping library responsibilities separate. Verify dependency loading and document any optional plugin version requirements."
+      }
+    ],
+    "task": "Integrate using jquery with modern javascript into a small existing page while keeping library responsibilities separate. Verify dependency loading and document any optional plugin version requirements.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates using jquery with modern javascript using a current, documented approach.",
+      "The learner records the expected and actual behavior and checks at least one edge case.",
+      "The example preserves semantic HTML and does not render untrusted data as HTML.",
+      "The test setup and any runtime limitation are documented honestly."
+    ],
+    "hints": [
+      "First identify which DOM nodes and runtime state are involved in using jquery with modern javascript.",
+      "Make one small change, inspect the resulting element or request, and compare it with the expected result.",
+      "If the result differs, check the selector, script order, browser console, event target, and relevant API documentation before adding more code."
+    ],
+    "expected_output": "A native element is wrapped by jQuery, and fetch handles the API request using native Promises. Check response.ok and errors in production.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-172-questions.json",
+    "common_mistakes": [
+      "Assuming a selector matched an element without checking the collection length.",
+      "Confusing jQuery collections with native DOM elements or live properties with markup attributes.",
+      "Using .html() with untrusted data or assuming client-side validation enforces server rules.",
+      "Treating a demo snippet as production-ready without testing failure and accessibility states."
+    ],
+    "summary": [
+      "Using jQuery With Modern JavaScript is one part of the integration and the jquery ecosystem workflow.",
+      "jQuery Core is separate from jQuery UI and third-party plugins. Integrate it with server-rendered pages and modern JavaScript selectively, and avoid competing ownership of the same DOM subtree.",
+      "Use the official API or upgrade guide for version-specific behavior and verify an example locally before relying on it."
+    ],
+    "references": [
+      {
+        "title": "jQuery UI and Widget Factory",
+        "url": "https://learn.jquery.com/jquery-ui/",
+        "publisher": "jQuery Learning Center",
+        "checked_on": "2026-10-12",
+        "source_type": "official_ecosystem_reference",
+        "supports": [
+          "Optional widgets",
+          "Widget Factory",
+          "Ecosystem scope"
+        ]
+      },
+      {
+        "title": "jQuery Learning Center: Plugins",
+        "url": "https://learn.jquery.com/plugins/",
+        "publisher": "jQuery Learning Center",
+        "checked_on": "2026-10-12",
+        "source_type": "official_learning_resource",
+        "supports": [
+          "Plugin patterns",
+          "Extending jQuery collections",
+          "Plugin maintenance"
+        ]
+      },
+      {
+        "title": "jQuery Learning Center",
+        "url": "https://learn.jquery.com/",
+        "publisher": "jQuery project",
+        "checked_on": "2026-10-12",
+        "source_type": "official_learning_resource",
+        "supports": [
+          "Concept explanations",
+          "Events",
+          "Effects",
+          "AJAX",
+          "Plugins",
+          "Performance",
+          "Code organization"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "id": "dart-lesson-216",
+  "slug": "setup-teardown-and-test-fixtures",
+  "title": "Setup, Teardown, and Test Fixtures",
+  "sequence": 216,
+  "module_id": "dart-module-20",
+  "module_slug": "testing-and-quality-assurance",
+  "level": "intermediate",
+  "difficulty": "advanced",
+  "track": "testing-quality",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "dart-lesson-215"
+  ],
+  "previous_lesson_id": "dart-lesson-215",
+  "next_lesson_id": "dart-lesson-217",
+  "keywords": [
+    "setup",
+    "teardown",
+    "test",
+    "fixtures"
+  ],
+  "source_syllabus_number": 216,
+  "source_syllabus_description": "Preparing resources, isolating test cases, and reliably cleaning up.",
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain Setup, Teardown, and Test Fixtures and its role in a Dart program.",
+    "Apply or trace a small example related to Setup, Teardown, and Test Fixtures and state the expected result.",
+    "Identify one edge case, diagnostic, or version/platform caveat relevant to the topic."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study Setup, Teardown, and Test Fixtures.",
+    "why_it_matters": "This skill helps you reason about preparing resources, isolating test cases, and reliably cleaning up. before introducing it into a maintainable program.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "asset_path": "diagrams/lesson-216-setup-teardown-and-test-fixtures.svg",
+        "alt_text": "Original learning diagram for Setup, Teardown, and Test Fixtures; shows concept, application, and verification stages.",
+        "caption": "Setup, Teardown, and Test Fixtures: relate the central idea to its implementation and one checkable result."
+      },
+      {
+        "type": "paragraph",
+        "text": "Setup, Teardown, and Test Fixtures matters because Dart programs need predictable behavior, explicit contracts, and examples that can be verified. This topic focuses on preparing resources, isolating test cases, and reliably cleaning up. Keep the lesson’s core distinction separate from runtime, SDK, package, or platform details that may vary. When you build on this idea, state your assumptions, try the smallest useful example, and check edge cases before integrating it into a larger project."
+      },
+      {
+        "type": "list",
+        "title": "Concept checkpoints",
+        "items": [
+          "Define the term in Setup, Teardown, and Test Fixtures and explain the boundary it introduces.",
+          "Explain how the topic affects correctness, readability, or maintenance in a Dart program.",
+          "Identify one edge case or platform/version assumption that should be verified."
+        ]
+      },
+      {
+        "type": "code",
+        "language": "dart",
+        "filename": "example-216.dart",
+        "code": "import 'package:test/test.dart';\n\nint total(List<int> values) => values.fold(0, (sum, value) => sum + value);\n\nvoid main() {\n  test('total adds every value', () {\n    expect(total([2, 3, 4]), 9);\n  });\n}",
+        "expected_output": "All tests passed (1 test)",
+        "run_instructions": "Save in `test/total_test.dart`, add `test` as a dev dependency, and run `dart test`.",
+        "reset_steps": "Restore the original snippet, rerun the same command, and compare the complete output. For package/platform examples, restore pubspec and target settings too.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "style": "tip",
+        "title": "Try it yourself",
+        "text": "Change one input or condition in the example for “Setup, Teardown, and Test Fixtures”. Predict the output first, then run or statically inspect it. Add one boundary test and explain why the result is expected."
+      },
+      {
+        "type": "paragraph",
+        "text": "Common mistakes: confusing a language guarantee with a runtime or package behavior; skipping malformed/empty inputs; relying on undocumented version assumptions; and changing multiple things before reproducing a failure. Prefer explicit naming, a small test, and official documentation."
+      }
+    ],
+    "task": "Create a small, standalone Dart example that demonstrates Setup, Teardown, and Test Fixtures. Include a short comment naming the assumption being tested, then verify one ordinary input and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example focuses on the stated topic and uses clear Dart naming.",
+      "Expected behavior is documented and checked with a repeatable command or static inspection.",
+      "At least one boundary/error/platform assumption is stated."
+    ],
+    "hints": [
+      "Start from the supplied minimal example and change only one behavior.",
+      "Write down the expected output before running the program.",
+      "Use `dart format .` and `dart analyze .`; add a test when the behavior matters."
+    ],
+    "expected_output": "All tests passed (1 test)",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-216-questions.json",
+    "recap": [
+      "Setup, Teardown, and Test Fixtures: Preparing resources, isolating test cases, and reliably cleaning up.",
+      "Prefer explicit assumptions, a minimal reproduction, and an appropriate edge-case check."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Dart language overview",
+      "url": "https://dart.dev/language",
+      "publisher": "Dart project",
+      "checked_on": "2026-10-19"
+    },
+    {
+      "title": "Dart built-in types",
+      "url": "https://dart.dev/language/built-in-types",
+      "publisher": "Dart project",
+      "checked_on": "2026-10-19"
+    },
+    {
+      "title": "Dart records",
+      "url": "https://dart.dev/language/records",
+      "publisher": "Dart project",
+      "checked_on": "2026-10-19"
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the supplied Dart syllabus; run examples against the selected stable SDK and review wording before publishing."
+}

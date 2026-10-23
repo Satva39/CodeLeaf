@@ -1,0 +1,152 @@
+{
+  "id": "rust-lesson-281",
+  "slug": "using-benchmark-results-to-guide-optimization",
+  "title": "Using Benchmark Results to Guide Optimization",
+  "sequence": 281,
+  "module_id": "rust-module-23",
+  "module_slug": "compiler-build-system-and-performance",
+  "level": "specialization",
+  "difficulty": "specialization",
+  "track": "professional-performance",
+  "estimated_minutes": 13,
+  "prerequisites": [
+    "rust-lesson-280"
+  ],
+  "previous_lesson_id": "rust-lesson-280",
+  "next_lesson_id": "rust-lesson-282",
+  "keywords": [
+    "benchmark",
+    "explicit-absence-and-failure-paths",
+    "guide",
+    "optimization",
+    "results",
+    "rust",
+    "using"
+  ],
+  "source_syllabus_number": 281,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the main purpose of Using Benchmark Results to Guide Optimization and distinguish it from a closely related Rust concept.",
+    "Apply or trace Using Benchmark Results to Guide Optimization in a small Rust example, using the module guidance and stated toolchain assumptions.",
+    "Identify one relevant edge case or failure mode for Using Benchmark Results to Guide Optimization and select a suitable verification step."
+  ],
+  "content": {
+    "intro": "This lesson covers Using Benchmark Results to Guide Optimization. It sits in Module 23, Compiler, Build System, and Performance, and builds toward a practical Rust mental model rather than memorizing a term in isolation.",
+    "why_it_matters": "Using Benchmark Results to Guide Optimization matters when you work with explicit absence and failure paths. Understanding the rule helps you predict compiler or runtime behavior, document assumptions, and choose a safer implementation when inputs or system conditions change.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Using Benchmark Results to Guide Optimization",
+        "asset_path": "diagrams/lesson-281-using-benchmark-results-to-guide-optimization.svg",
+        "alt_text": "Concept diagram for Using Benchmark Results to Guide Optimization: explicit absence and failure paths; inputs flow through a rule to an outcome, followed by a verification step.",
+        "caption": "Visual model for Using Benchmark Results to Guide Optimization. The diagram is a learning aid; use the prose and examples for exact conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Result<T, E> represents either success (Ok(value)) or failure (Err(error)). Callers can handle an error, propagate it with ?, or deliberately convert it."
+      },
+      {
+        "type": "paragraph",
+        "title": "A reliable way to reason about it",
+        "text": "For Using Benchmark Results to Guide Optimization, write down the inputs, the guarantee you expect, and the boundary where that guarantee stops. Work through a minimal example first; then deliberately test one edge case. Inspect the compilation pipeline to locate a problem, then measure before optimizing. Release-mode results are different from debug-mode results."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Using Benchmark Results to Guide Optimization",
+            "text": "Result<T, E> represents either success (Ok(value)) or failure (Err(error)). Callers can handle an error, propagate it with ?, or deliberately convert it."
+          },
+          {
+            "title": "Inputs and guarantees",
+            "text": "Identify the value, type, state, tool, or external system involved in Using Benchmark Results to Guide Optimization. Separate what Rust checks at compile time from what still needs validation or a test."
+          },
+          {
+            "title": "Boundary case",
+            "text": "Try an empty, missing, invalid, unusually large, or concurrently accessed input when that boundary applies to Using Benchmark Results to Guide Optimization. Record what should happen and how you can verify it."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "rust",
+        "execution_mode": "static-validation",
+        "code": "fn parse_count(raw: &str) -> Result<u32, std::num::ParseIntError> {\n    raw.parse()\n}\n\nfn main() {\n    println!(\"{:?}\", parse_count(\"12\"));\n}",
+        "expected_output": "Ok(12)",
+        "run_instructions": "Save as src/main.rs and run cargo run. Try a non-numeric input to inspect the Err case.",
+        "reset_steps": "Return the sample to its original form, run the documented command again, and compare the result. If a dependency, target, runtime, database, or hardware device is required, configure that separately before treating the result as verified."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not assume Using Benchmark Results to Guide Optimization guarantees more than it actually does. Reduce a failure to a small reproducer, read the full compiler diagnostic or error value, consult the matching official reference, and change one assumption at a time."
+      },
+      {
+        "type": "callout",
+        "title": "Toolchain and execution boundary",
+        "text": "Course examples are static reference snippets, not executed inside CodeLeaf. Most standard-library examples can be tried in a Rust 2024 Cargo project; specialized networking, database, async, procedural-macro, embedded, and WebAssembly scenarios require the toolchain and dependencies described in their lessons."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate Using Benchmark Results to Guide Optimization. Predict the result before you run it, then explain one normal case and one relevant boundary case in your own words.",
+    "task_acceptance_criteria": [
+      "Explain the purpose of Using Benchmark Results to Guide Optimization using a concrete example.",
+      "Verify the example using an appropriate local command, targeted test, or documented manual check.",
+      "Describe one edge case, failure mode, version assumption, or limitation that matters for this topic."
+    ],
+    "hints": [
+      "Start by identifying the inputs and guarantee involved in Using Benchmark Results to Guide Optimization.",
+      "Use the smallest example that isolates one rule; avoid changing multiple variables at once.",
+      "Check the matching official reference if compiler behavior, a library API, or toolchain support differs from your expectation."
+    ],
+    "expected_output": "Ok(12)",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-281-questions.json",
+    "recap": [
+      "Using Benchmark Results to Guide Optimization supports explicit absence and failure paths.",
+      "Predict and verify behavior with small examples.",
+      "Keep library and target-specific assumptions explicit."
+    ]
+  },
+  "exercise_files": [
+    "../exercises/027-profile-and-optimize-a-data-processing-program.json"
+  ],
+  "sources": [
+    {
+      "title": "The Cargo Book",
+      "url": "https://doc.rust-lang.org/cargo/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "packages and crates",
+        "Cargo.toml",
+        "Cargo.lock",
+        "dependencies",
+        "workspaces",
+        "build profiles",
+        "testing",
+        "publishing"
+      ]
+    },
+    {
+      "title": "The Rust Reference",
+      "url": "https://doc.rust-lang.org/reference/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "language syntax and semantics",
+        "type system",
+        "patterns",
+        "macros",
+        "unsafe Rust",
+        "FFI",
+        "ABI",
+        "compiler behavior"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Rust.pdf; review explanation, code behavior, version notes, and assessment quality before publication."
+}

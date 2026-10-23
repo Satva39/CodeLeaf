@@ -1,0 +1,194 @@
+{
+  "id": "r-lesson-223",
+  "slug": "nonstandard-evaluation-and-metaprogramming",
+  "title": "Nonstandard Evaluation and Metaprogramming",
+  "sequence": 223,
+  "module_id": "r-module-21",
+  "module_slug": "advanced-r-programming-and-performance",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "r-lesson-222"
+  ],
+  "previous_lesson_id": "r-lesson-222",
+  "next_lesson_id": "r-lesson-224",
+  "keywords": [
+    "nonstandard-evaluation-and-metaprogramming",
+    "advanced-r-programming-and-performance",
+    "language-objects-and-expressions",
+    "quoting-and-evaluating-expressions",
+    "substitute-and-eval",
+    "quasiquotation-concepts",
+    "data-masking",
+    "tidy-evaluation-and-rlang",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 223,
+  "subtopics": [
+    "Language Objects and Expressions",
+    "Quoting and Evaluating Expressions",
+    "substitute() and eval()",
+    "Quasiquotation Concepts",
+    "Data Masking",
+    "Tidy Evaluation and rlang",
+    "Safe Design of Programmable Interfaces"
+  ],
+  "learning_outcomes": [
+    "Explain the role of nonstandard evaluation and metaprogramming and identify its main inputs, outputs or constraints.",
+    "Apply language objects and expressions in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Nonstandard Evaluation and Metaprogramming is part of Advanced R Programming and Performance. Start with language objects and expressions and connect it to the worked example and expected result.",
+    "why_it_matters": "Modeling requires a clear target, a suitable baseline, leakage-aware evaluation and diagnostics that match the task.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Nonstandard Evaluation and Metaprogramming",
+        "asset_path": "diagrams/module-21-overview.svg",
+        "alt_text": "Concept visual supporting lesson 223, Nonstandard Evaluation and Metaprogramming. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Modeling requires a clear target, a suitable baseline, leakage-aware evaluation and diagnostics that match the task. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Language Objects and Expressions",
+            "text": "Explain language objects and expressions in the context of nonstandard evaluation and metaprogramming, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Quoting and Evaluating Expressions",
+            "text": "Explain quoting and evaluating expressions in the context of nonstandard evaluation and metaprogramming, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "substitute() and eval()",
+            "text": "Explain substitute() and eval() in the context of nonstandard evaluation and metaprogramming, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Quasiquotation Concepts",
+            "text": "Explain quasiquotation concepts in the context of nonstandard evaluation and metaprogramming, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Data Masking",
+            "text": "Explain data masking in the context of nonstandard evaluation and metaprogramming, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Tidy Evaluation and rlang",
+            "text": "Explain tidy evaluation and rlang in the context of nonstandard evaluation and metaprogramming, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Safe Design of Programmable Interfaces",
+            "text": "Explain safe design of programmable interfaces in the context of nonstandard evaluation and metaprogramming, connect it to the example, and verify one expected result or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Identify the target and predictors, keep test data separate, and explain one failure mode or model limitation. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Nonstandard Evaluation and Metaprogramming",
+        "language": "r",
+        "code": "# Lesson 223: Nonstandard Evaluation and Metaprogramming\nmodel <- lm(mpg ~ wt, data = mtcars)\nclass(model)",
+        "expected_output": "[1] \"lm\"",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "Use the built-in example only to inspect an lm object; evaluate assumptions and hold-out performance before interpretation. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For nonstandard evaluation and metaprogramming, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-223-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply nonstandard evaluation and metaprogramming to a small synthetic example. Start with language objects and expressions, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the language objects and expressions idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible nonstandard evaluation and metaprogramming example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Language Objects and Expressions” and identify the input and output before coding.",
+      "Prefer a small repeatable test and capture the result before changing the implementation.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: Modeling requires a clear target, a suitable baseline, leakage-aware evaluation and diagnostics that match the task.",
+      "Practice: Identify the target and predictors, keep test data separate, and explain one failure mode or model limitation.",
+      "Source syllabus focus: Language Objects and Expressions. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply nonstandard evaluation and metaprogramming to a small synthetic example. Start with language objects and expressions, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible nonstandard evaluation and metaprogramming example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Language Objects and Expressions” and identify the input and output before coding.",
+    "Prefer a small repeatable test and capture the result before changing the implementation.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: Modeling requires a clear target, a suitable baseline, leakage-aware evaluation and diagnostics that match the task.",
+    "Practice: Identify the target and predictors, keep test data separate, and explain one failure mode or model limitation.",
+    "Source syllabus focus: Language Objects and Expressions. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 21 — Advanced R Programming and Performance, lesson 223: Nonstandard Evaluation and Metaprogramming.",
+    "Official documentation: https://adv-r.hadley.nz/",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

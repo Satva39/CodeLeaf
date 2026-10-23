@@ -1,0 +1,174 @@
+{
+  "id": "web-application-security-lesson-105",
+  "slug": "testing-file-security",
+  "title": "Testing File Security",
+  "sequence": 105,
+  "module_id": "web-application-security-module-14",
+  "module_slug": "file-upload-download-and-storage-security",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced-security",
+  "curriculum_tier": "advanced",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "web-application-security-lesson-104"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-104",
+  "next_lesson_id": "web-application-security-lesson-106",
+  "keywords": [
+    "testing",
+    "file",
+    "security",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 105,
+  "source_syllabus_title": "Testing File Security",
+  "source_subtopics": [
+    {
+      "number": "105.1",
+      "title": "Upload validation test matrices"
+    },
+    {
+      "number": "105.2",
+      "title": "Authorization tests for stored files"
+    },
+    {
+      "number": "105.3",
+      "title": "Testing invalid and oversized files"
+    },
+    {
+      "number": "105.4",
+      "title": "Verifying isolated processing"
+    },
+    {
+      "number": "105.5",
+      "title": "Regression tests for file handling"
+    }
+  ],
+  "subtopics": [
+    "Upload validation test matrices",
+    "Authorization tests for stored files",
+    "Testing invalid and oversized files",
+    "Verifying isolated processing",
+    "Regression tests for file handling"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in Testing File Security.",
+    "Choose an appropriate defensive control for Testing File Security and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for Testing File Security, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 14: File Upload, Download, and Storage Security. It builds practical understanding of Testing File Security with the syllabus subtopics retained below.",
+    "why_it_matters": "Testing File Security addresses how untrusted data or requests cross a boundary and may influence application behavior. The safe fix should address the root cause and remain testable. Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Testing File Security",
+        "asset_path": "diagrams/lesson-105-testing-file-security.svg",
+        "alt_text": "Four-stage visual model for Testing File Security: Define authorized scope; Form a test hypothesis; Record sanitized evidence; Retest the fix.",
+        "caption": "Concept map for Testing File Security. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Testing File Security can be understood through this sequence: Define authorized scope → Form a test hypothesis → Record sanitized evidence → Retest the fix. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 105.1 Upload validation test matrices; 105.2 Authorization tests for stored files; 105.3 Testing invalid and oversized files; 105.4 Verifying isolated processing; 105.5 Regression tests for file handling. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "text",
+        "execution_mode": "human-review",
+        "title": "Safe reference example: Testing File Security",
+        "code": "Topic: Testing File Security\nReview artifact: define scope, assumptions, control owner, expected secure behavior, failure behavior, and a reproducible verification step.",
+        "expected_output": "A written review artifact names the control and the evidence needed to verify it.",
+        "run_instructions": "Use a local/owned application or explicitly authorized test target. Record only sanitized synthetic evidence; use human review for behavior that a static snippet cannot prove.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “Testing File Security”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for Testing File Security in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "human-review",
+    "knowledge_check_file": "exams/question-files/lesson-105-questions.json",
+    "recap": [
+      "Testing File Security is a security boundary/control topic, not a standalone checklist item.",
+      "Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

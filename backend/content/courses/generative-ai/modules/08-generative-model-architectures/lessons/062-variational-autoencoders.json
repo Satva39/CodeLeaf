@@ -1,0 +1,163 @@
+{
+  "id": "genai-lesson-062",
+  "slug": "variational-autoencoders",
+  "title": "Variational Autoencoders",
+  "sequence": 62,
+  "module_id": "genai-module-08",
+  "module_slug": "generative-model-architectures",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-foundations",
+  "estimated_minutes": 12,
+  "prerequisites": [],
+  "previous_lesson_id": "genai-lesson-061",
+  "next_lesson_id": "genai-lesson-063",
+  "keywords": [
+    "Variational Autoencoders",
+    "Encoder-decoder architecture",
+    "Latent variables and latent spaces",
+    "Reconstruction objectives",
+    "Regularization using KL divergence",
+    "Sampling and generating new examples",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 62,
+  "subtopics": [
+    "Encoder-decoder architecture",
+    "Latent variables and latent spaces",
+    "Reconstruction objectives",
+    "Regularization using KL divergence",
+    "Sampling and generating new examples",
+    "Applications and limitations of VAEs"
+  ],
+  "learning_outcomes": [
+    "Explain encoder-decoder architecture and how it connects to variational autoencoders.",
+    "Apply latent variables and latent spaces in the example and predict the output before running it.",
+    "Test one realistic edge case for variational autoencoders and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers variational autoencoders through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Compare autoregressive, latent-variable, adversarial, diffusion, and other generative approaches by objective, output modality, control, cost, and limitations.",
+    "why_it_matters": "Encoder-decoder architecture is part of the representation and generation mechanism. Follow the information flow from input representation to model computation to output selection, then distinguish the architecture's capabilities from limits caused by data, context, decoding choices, or compute.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Variational Autoencoders: concept map",
+        "asset_path": "diagrams/lessons/lesson-062-variational-autoencoders.svg",
+        "alt_text": "Diagram for Variational Autoencoders: understand Encoder-decoder architecture, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Encoder-decoder architecture, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Encoder-decoder architecture is part of the representation and generation mechanism. Follow the information flow from input representation to model computation to output selection, then distinguish the architecture's capabilities from limits caused by data, context, decoding choices, or compute."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Encoder-decoder architecture",
+            "text": "Encoder-decoder architecture is part of the representation and generation mechanism. Follow the information flow from input representation to model computation to output selection, then distinguish the architecture's capabilities from limits caused by data, context, decoding choices, or compute."
+          },
+          {
+            "title": "Latent variables and latent spaces",
+            "text": "Latent variables and latent spaces is part of the representation and generation mechanism. Follow the information flow from input representation to model computation to output selection, then distinguish the architecture's capabilities from limits caused by data, context, decoding choices, or compute."
+          },
+          {
+            "title": "Reconstruction objectives",
+            "text": "Use reconstruction objectives as a lens for understanding variational autoencoders. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Regularization using KL divergence",
+            "text": "The purpose of regularization using kl divergence is to make model computations and uncertainty more precise. Track dimensions and assumptions, work through a small numerical example, and check whether the calculation and its interpretation match the task; mathematical familiarity helps explain behavior but does not by itself guarantee a good system."
+          },
+          {
+            "title": "Sampling and generating new examples",
+            "text": "Use sampling and generating new examples as a lens for understanding variational autoencoders. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Applications and limitations of VAEs",
+            "text": "Use applications and limitations of vaes as a lens for understanding variational autoencoders. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Variational Autoencoders\nmu, sigma, epsilon = 0.3, 0.8, -1.0\nlatent_z = mu + sigma * epsilon\nprint({\"mean\": mu, \"scale\": sigma, \"sampled_latent\": round(latent_z, 2)})\n# The example illustrates reparameterization, not a trained VAE.",
+        "expected_output": "{'mean': 0.3, 'scale': 0.8, 'sampled_latent': -0.5}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice encoder-decoder architecture within variational autoencoders: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'mean': 0.3, 'scale': 0.8, 'sampled_latent': -0.5}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-062-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Variational Autoencoders is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://huggingface.co/learn/llm-course/en/chapter1/1",
+      "https://docs.pytorch.org/tutorials/beginner/basics/intro"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Hugging Face LLM Course",
+      "url": "https://huggingface.co/learn/llm-course/en/chapter1/1",
+      "publisher": "Hugging Face",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tokenization"
+      ]
+    },
+    {
+      "title": "Learn the Basics: PyTorch Tutorials",
+      "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro",
+      "publisher": "PyTorch",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tensors"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

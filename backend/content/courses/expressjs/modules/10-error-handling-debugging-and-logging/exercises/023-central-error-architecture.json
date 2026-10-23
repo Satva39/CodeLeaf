@@ -1,0 +1,55 @@
+{
+  "id": "expressjs-exercise-023",
+  "slug": "central-error-architecture",
+  "title": "Central Error Architecture",
+  "type": "practical",
+  "lesson_id": "expressjs-lesson-085",
+  "module_id": "expressjs-module-10",
+  "difficulty": "advanced",
+  "sequence": 1,
+  "prompt": "Standardize errors across routes, services, and repositories. Submit a focused JavaScript/Express artifact and explain how you would run and verify it locally. Use synthetic data and test both a normal request and an invalid or failure case.",
+  "objective": "Central Error Architecture",
+  "target_skills": [
+    "error classes",
+    "centralized handling"
+  ],
+  "starter": {
+    "language": "javascript",
+    "code": "// Central Error Architecture\n// TODO: implement the required behavior.\n// Lesson example reference:\nimport express from 'express';\nimport { randomUUID } from 'node:crypto';\nconst app = express();\napp.use((req, res, next) => {\n  const started = process.hrtime.bigint();\n  req.requestId = randomUUID();\n  res.setHeader('X-Request-Id', req.requestId);\n  res.on('finish', () => {\n    const ms = Number(process.hrtime.bigint() - started) / 1e6;\n    console.log(JSON.stringify({ id: req.requestId, method: req.method, path: req.path, status: res.statusCode, ms: Math.round(ms) }));\n  });\n  next();\n});\napp.get('/health', (_req, res) => res.json({ status: 'ok' }));\napp.listen(3000);"
+  },
+  "expected_output": "A reviewable implementation for Central Error Architecture with a documented expected response and a local test for one success case and one failure/edge case. CodeLeaf checks required strings only; it does not run submitted Node.js code in the browser.",
+  "public_tests": [
+    {
+      "name": "Required implementation markers (static smoke check)",
+      "required_strings": [
+        "headersSent",
+        "next(err)",
+        "INTERNAL_ERROR"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Address the task: Standardize errors across routes, services, and repositories.",
+    "Use the Express.js 5 syntax and make the required status/response behavior explicit.",
+    "Document the local command and show a successful request plus one invalid or dependency-failure request.",
+    "Do not include credentials or production data; explain any remaining runtime or security review needed."
+  ],
+  "hints": [
+    "Start with the smallest route or middleware that demonstrates the requested concept, then add the validation/error path.",
+    "Check the relevant Express 5 guide and the expected status/response shape before changing the example.",
+    "Run the server locally and test both a valid request and an invalid/boundary request; capture the result rather than assuming it passed."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "headersSent",
+      "next(err)",
+      "INTERNAL_ERROR"
+    ]
+  },
+  "grading_method": "Server-side case-sensitive required-string smoke check plus human/runtime review. It is not a Node.js sandbox and does not prove that submitted code executes correctly.",
+  "retry_policy": "Retries permitted after feedback; CodeLeaf records successful completion once. XP is controlled centrally by the backend; this content file defines no reward override.",
+  "solution_file": "../solutions/expressjs-exercise-023-reference.json",
+  "status": "draft",
+  "status_note": "Adapted from Section C of ExpressJS.pdf; static grading only checks markers, so manually run and review the implementation before publication."
+}

@@ -1,0 +1,175 @@
+{
+  "id": "react-lesson-116",
+  "slug": "rules-of-hooks",
+  "title": "Rules of Hooks",
+  "sequence": 116,
+  "module_id": "react-module-11",
+  "module_slug": "react-hooks",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "react-lesson-115"
+  ],
+  "previous_lesson_id": "react-lesson-115",
+  "next_lesson_id": "react-lesson-117",
+  "keywords": [
+    "Rules of Hooks",
+    "React Hooks",
+    "Calling Hooks at the top level",
+    "Calling Hooks from React components or custom Hooks",
+    "Avoiding Hooks inside conditions and loops",
+    "Enforcing the rules with linting",
+    "hooks"
+  ],
+  "source_syllabus_number": 116,
+  "subtopics": [
+    "Calling Hooks at the top level",
+    "Calling Hooks from React components or custom Hooks",
+    "Avoiding Hooks inside conditions and loops",
+    "Enforcing the rules with linting"
+  ],
+  "learning_outcomes": [
+    "Explain how Rules of Hooks relates to React Hooks.",
+    "Apply Calling Hooks at the top level in a small React or JavaScript example and describe the expected result.",
+    "Test one edge/failure case and identify a maintainable, accessible fix."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study Rules of Hooks as part of React Hooks. The syllabus topics are kept below, then connected to a small example you can inspect and adapt.",
+    "why_it_matters": "Calling Hooks at the top level is a Hook-based way to reuse behavior or coordinate React state. Call Hooks consistently at the top level of a component or custom Hook, and choose the smallest API that expresses the need.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Rules of Hooks: concept map",
+        "asset_path": "diagrams/lessons/lesson-116-rules-of-hooks.svg",
+        "alt_text": "Concept map for Rules of Hooks: Calling Hooks at the top level, Calling Hooks from React components or custom Hooks, Avoiding Hooks inside conditions and loops.",
+        "caption": "A visual scaffold for the idea; the code and verification steps below provide the practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Calling Hooks at the top level is a Hook-based way to reuse behavior or coordinate React state. Call Hooks consistently at the top level of a component or custom Hook, and choose the smallest API that expresses the need. Start with one responsibility at a time: identify the data, describe the expected interface, then decide which event, state update, request, or runtime boundary changes the result."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Calling Hooks at the top level",
+            "text": "Calling Hooks at the top level is a Hook-based way to reuse behavior or coordinate React state. Call Hooks consistently at the top level of a component or custom Hook, and choose the smallest API that expresses the need."
+          },
+          {
+            "title": "Calling Hooks from React components or custom Hooks",
+            "text": "Calling Hooks from React components or custom Hooks is a Hook-based way to reuse behavior or coordinate React state. Call Hooks consistently at the top level of a component or custom Hook, and choose the smallest API that expresses the need."
+          },
+          {
+            "title": "Avoiding Hooks inside conditions and loops",
+            "text": "Avoiding Hooks inside conditions and loops is a Hook-based way to reuse behavior or coordinate React state. Call Hooks consistently at the top level of a component or custom Hook, and choose the smallest API that expresses the need."
+          },
+          {
+            "title": "Enforcing the rules with linting",
+            "text": "Enforcing the rules with linting is a Hook-based way to reuse behavior or coordinate React state. Call Hooks consistently at the top level of a component or custom Hook, and choose the smallest API that expresses the need."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "jsx",
+        "code": "function Example() {\n  return <section><h2>Rules of Hooks</h2><p>Inspect the input, behavior, and rendered result.</p></section>;\n}",
+        "expected_output": "A small component renders a titled section; verify its output and one edge case.",
+        "run_instructions": "This is an inspectable teaching example, not an arbitrary-code runner inside CodeLeaf. Place JSX in a React/Vite project (or the relevant CSS/HTML/config file), run the project with its documented toolchain, and compare the visible behavior with the expected result. Server rendering and framework APIs require their stated runtime.",
+        "reset_steps": "Restore the original snippet, reset the component/data to its starting state, and repeat with a different input or an edge/failure case.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Use the code as a small experiment for Rules of Hooks. First predict the result, then run or inspect it in the required runtime. Change one input and explain why the output changed. If the topic depends on React version or framework support, confirm that the project uses a compatible version before interpreting a result."
+      },
+      {
+        "type": "callout",
+        "title": "Version and environment note",
+        "text": "This course assumes the React 19.3 documentation snapshot dated 2026-10-12. Core component, JSX, props, state, and event concepts apply broadly; modern APIs and server rendering must be checked against the stated React version and the framework/runtime in use."
+      }
+    ],
+    "task": "Create a minimal example demonstrating Rules of Hooks. Include the relevant subtopic “Calling Hooks at the top level”, explain the expected UI/result, and verify one normal case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named concept rather than merely mentioning it.",
+      "The expected visible or logged result is documented and reproducible.",
+      "At least one boundary, empty, loading, or failure case is handled or explained.",
+      "The implementation remains accessible and does not introduce avoidable mutation, stale state, or insecure client-only trust."
+    ],
+    "hints": [
+      "Start with the smallest part of “Calling Hooks at the top level” that can be observed independently.",
+      "Write down what should appear before changing the code; then change one input at a time.",
+      "Use the browser console, React Developer Tools, or the appropriate test/runtime to isolate a mismatch."
+    ],
+    "expected_output": "A small component renders a titled section; verify its output and one edge case.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-116-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "The example handles only the happy path.",
+        "why": "Real UI receives empty values, delayed responses, and invalid input.",
+        "fix": "Add one explicit edge/failure case and document the expected message or state."
+      },
+      {
+        "problem": "The example stores redundant data or mutates an existing array/object.",
+        "why": "The displayed result can drift from the source data or React may not observe the intended change.",
+        "fix": "Derive values where possible and create a new value when updating state."
+      },
+      {
+        "problem": "A browser or framework capability is assumed to exist everywhere.",
+        "why": "Availability can depend on the host runtime, React version, and framework.",
+        "fix": "Check the official reference, declare the runtime/version, and provide a fallback when appropriate."
+      }
+    ],
+    "summary": [
+      "Rules of Hooks fits into the broader React Hooks workflow.",
+      "The central concept is Calling Hooks at the top level; apply it with the smallest reproducible example.",
+      "Verify correctness with at least one normal input and one boundary or failure case."
+    ],
+    "references": [
+      "https://react.dev/learn",
+      "https://react.dev/reference/react",
+      "https://react.dev/blog/2026/09/09/react-19-3"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "React — Learn",
+      "url": "https://react.dev/learn",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "Rules of Hooks",
+        "Calling Hooks at the top level",
+        "Calling Hooks from React components or custom Hooks"
+      ]
+    },
+    {
+      "title": "React Reference",
+      "url": "https://react.dev/reference/react",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "React APIs and behavior",
+        "Rules of Hooks"
+      ]
+    },
+    {
+      "title": "React 19.3 Release Notes",
+      "url": "https://react.dev/blog/2026/09/09/react-19-3",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "version-specific modern APIs and compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus and authored as an educational draft; technical/instructional review required before publication."
+}

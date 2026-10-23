@@ -1,0 +1,18 @@
+{
+  "id": "cpp-exercise-solution-043",
+  "exercise_id": "cpp-exercise-043",
+  "title": "Cross-platform command-line utility reference solution notes",
+  "language": "cpp",
+  "answer": "#include <filesystem>\n#include <iostream>\nint main(int argc, char* argv[]) {\n    const std::filesystem::path input = argc > 1 ? argv[1] : \"report.txt\";\n    std::cout << \"name=\" << input.filename().string() << \", extension=\" << input.extension().string() << '\\n';\n}\n",
+  "explanation": "Uses path operations instead of hard-coded directory separators.",
+  "manual_validation_checklist": [
+    "Compile locally with C++20 and -Wall -Wextra -Wpedantic (add the external library named in the solution when applicable).",
+    "Test normal inputs and at least one boundary/failure case named in the exercise prompt.",
+    "Check integer range, object lifetime, resource cleanup and error handling where relevant.",
+    "Check platform differences in permissions, path case-sensitivity and encoding. Filesystem path inspection alone does not establish that a file exists.",
+    "Keep this solution in repository-only protected content; do not include it in learner API responses."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only reference notes; replace with a reviewed implementation and test suite before publishing the exercise."
+}

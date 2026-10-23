@@ -1,0 +1,213 @@
+{
+  "id": "php-lesson-174",
+  "slug": "sql-injection",
+  "title": "SQL Injection",
+  "sequence": 174,
+  "module_id": "php-module-18",
+  "module_slug": "php-security-and-privacy",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "php-lesson-173"
+  ],
+  "previous_lesson_id": "php-lesson-173",
+  "next_lesson_id": "php-lesson-175",
+  "keywords": [
+    "sql injection",
+    "php security and privacy",
+    "how injection occurs",
+    "parameterized statements",
+    "avoiding dynamic sql concatenation",
+    "allowlisting identifiers when dynamic identifiers are necessary",
+    "database permissions and defense in depth",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 174,
+  "subtopics": [
+    "How injection occurs.",
+    "Parameterized statements.",
+    "Avoiding dynamic SQL concatenation.",
+    "Allowlisting identifiers when dynamic identifiers are necessary.",
+    "Database permissions and defense in depth."
+  ],
+  "learning_outcomes": [
+    "Explain what sql injection contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: how injection occurs.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Security begins at trust boundaries. Validate data for the intended operation, encode output for its exact context, constrain file and network access, protect credentials, and apply authorization consistently. In this lesson, focus on how injection occurs; then compare it with parameterized statements. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use sql injection when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 18 overview: PHP Security and Privacy",
+        "asset_path": "diagrams/module-18-overview.svg",
+        "alt_text": "Four-stage overview for module 18, PHP Security and Privacy, grouping lesson topics in order.",
+        "caption": "Use this overview to place sql injection in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Security begins at trust boundaries. Validate data for the intended operation, encode output for its exact context, constrain file and network access, protect credentials, and apply authorization consistently. For sql injection, begin with how injection occurs. Also distinguish parameterized statements; avoiding dynamic sql concatenation; allowlisting identifiers when dynamic identifiers are necessary. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "How injection occurs",
+            "text": "Treat the relevant value as untrusted, apply the defense at the correct boundary, and verify a deliberately invalid or hostile-looking input is rejected or encoded."
+          },
+          {
+            "title": "Parameterized statements",
+            "text": "Know when to use parameterized statements, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Avoiding dynamic SQL concatenation",
+            "text": "Keep query structure separate from data values, check failures explicitly, and use constraints or transactions when integrity depends on multiple operations."
+          },
+          {
+            "title": "Allowlisting identifiers when dynamic identifiers are necessary",
+            "text": "Know when to use allowlisting identifiers when dynamic identifiers are necessary, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Database permissions and defense in depth",
+            "text": "Keep query structure separate from data values, check failures explicitly, and use constraints or transactions when integrity depends on multiple operations."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for SQL Injection",
+        "language": "php",
+        "code": "<?php\n$sql = \"SELECT id, name FROM products WHERE category = :category\";\n$params = [\":category\" => \"books\"];\necho str_contains($sql, \":category\") && isset($params[\":category\"]) ? \"named placeholder ready\" : \"check binding\";",
+        "expected_output": "named placeholder ready",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Validate data at system boundaries and encode output for the target context; validation and escaping solve different problems."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for sql injection from top to bottom. Start by identifying how injection occurs, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for sql injection that demonstrates \"how injection occurs\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of how injection occurs.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "named placeholder ready",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-174-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating input validation as output escaping.",
+        "why": "A value can be valid data and still be unsafe in an HTML or JavaScript output context.",
+        "fix": "Validate shape and business rules at input boundaries, then apply context-appropriate output encoding."
+      },
+      {
+        "problem": "Trusting client-side checks alone.",
+        "why": "A request can be sent without the original form or browser UI.",
+        "fix": "Repeat all security-relevant validation and authorization on the server."
+      },
+      {
+        "problem": "Returning internal error details to the browser.",
+        "why": "Stack traces and configuration values may expose sensitive information.",
+        "fix": "Log safe diagnostics server-side and return a generic, useful response."
+      }
+    ],
+    "summary": [
+      "SQL Injection is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Validate data at system boundaries and encode output for the target context; validation and escaping solve different problems."
+    ],
+    "references": [
+      {
+        "title": "PHP security",
+        "url": "https://www.php.net/manual/en/security.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "security model",
+          "filesystem security",
+          "database security",
+          "session security"
+        ]
+      },
+      {
+        "title": "OWASP Cross Site Scripting Prevention Cheat Sheet",
+        "url": "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
+        "publisher": "OWASP",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "contextual output encoding",
+          "XSS prevention"
+        ]
+      },
+      {
+        "title": "OWASP SQL Injection Prevention Cheat Sheet",
+        "url": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+        "publisher": "OWASP",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "parameterized queries",
+          "SQL injection prevention"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "PHP security",
+      "url": "https://www.php.net/manual/en/security.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "security model",
+        "filesystem security",
+        "database security",
+        "session security"
+      ]
+    },
+    {
+      "title": "OWASP Cross Site Scripting Prevention Cheat Sheet",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
+      "publisher": "OWASP",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "contextual output encoding",
+        "XSS prevention"
+      ]
+    },
+    {
+      "title": "OWASP SQL Injection Prevention Cheat Sheet",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+      "publisher": "OWASP",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "parameterized queries",
+        "SQL injection prevention"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

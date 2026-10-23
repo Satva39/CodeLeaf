@@ -1,0 +1,155 @@
+{
+  "id": "ruby-lesson-274",
+  "slug": "sessions-cookies-and-csrf",
+  "title": "Sessions, Cookies, and CSRF",
+  "sequence": 274,
+  "module_id": "ruby-module-25",
+  "module_slug": "ruby-web-development-and-apis",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "application-specialization",
+  "estimated_minutes": 14,
+  "prerequisites": [],
+  "previous_lesson_id": "ruby-lesson-273",
+  "next_lesson_id": "ruby-lesson-275",
+  "keywords": [
+    "sessions-cookies-and-csrf",
+    "ruby-web-development-and-apis",
+    "ruby",
+    "session-management",
+    "cookie-security-attributes",
+    "cross-site-request-forgery-protection",
+    "appropriate-use-of-server-side-state"
+  ],
+  "source_syllabus_number": 274,
+  "subtopics": [
+    "Session management",
+    "Cookie security attributes",
+    "Cross-site request forgery protection",
+    "Appropriate use of server-side state"
+  ],
+  "learning_outcomes": [
+    "Explain the role of sessions, cookies, and csrf in a Ruby program and name the key rule involved.",
+    "Apply sessions, cookies, and csrf in a small example and predict its result before running it.",
+    "Identify one boundary or failure case related to appropriate use of server-side state and verify the intended behavior."
+  ],
+  "content": {
+    "intro": "Learn Sessions, Cookies, and CSRF through a visual model, a minimal Ruby example, and a practical check.",
+    "why_it_matters": "Understanding sessions, cookies, and csrf helps you write code that is easier to explain, test, and maintain. It also helps separate Ruby language guarantees from runtime assumptions, dependency behavior, and application-specific rules.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Sessions, Cookies, and CSRF",
+        "asset_path": "diagrams/lesson-274-sessions-cookies-and-csrf.svg",
+        "alt_text": "Three-stage concept diagram for Sessions, Cookies, and CSRF.",
+        "caption": "Use this diagram to plan a small example, then verify exact behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Sessions, Cookies, and CSRF helps you reason about session management. In Ruby, prefer a small example whose inputs and expected result are easy to explain. This lesson connects the syllabus topic to practical code and highlights where assumptions or edge cases matter."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to think about it",
+        "text": "Begin by identifying the key rule: Session management. Then connect it to Cookie security attributes. The remaining syllabus points—Cross-site request forgery protection, Appropriate use of server-side state—are useful checks before applying this in a larger project."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to cover",
+        "items": [
+          {
+            "title": "Session management",
+            "text": "Explain how session management affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Cookie security attributes",
+            "text": "Explain how cookie security attributes affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Cross-site request forgery protection",
+            "text": "Explain how cross-site request forgery protection affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Appropriate use of server-side state",
+            "text": "Explain how appropriate use of server-side state affects the example, the public interface, or the behavior learners need to verify."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Sessions, Cookies, and CSRF",
+        "language": "ruby",
+        "code": "puts \"Use secure, HttpOnly, appropriately scoped cookies and CSRF protection for state-changing requests.\"",
+        "expected_output": "Use secure, HttpOnly, appropriately scoped cookies and CSRF protection for state-changing requests.",
+        "execution_mode": "server-runner",
+        "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+        "dependencies": "Framework-specific examples require declared gems and a separate isolated Ruby runner.",
+        "notes": "Local Ruby execution is required. CodeLeaf’s existing playground only previews HTML/CSS/JavaScript; do not run arbitrary Ruby inside the FastAPI process."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming the happy path is enough",
+            "text": "Test an empty value, a boundary value, and one invalid value before depending on the behavior."
+          },
+          {
+            "title": "Treating an example as a universal rule",
+            "text": "Check Ruby version, runtime implementation, and third-party library documentation when behavior is version-sensitive."
+          },
+          {
+            "title": "Mixing too many concerns",
+            "text": "Separate input parsing, domain behavior, and output so each piece is easier to test."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Run the example as written, compare it with the expected result, and explain why each line supports sessions, cookies, and csrf. Next change one input or condition and predict the result before running it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second example for sessions, cookies, and csrf using a different input. Add one edge case from the syllabus list (Appropriate use of server-side state), state the expected behavior, and write a small test or manual check that would catch a regression."
+      },
+      {
+        "type": "paragraph",
+        "title": "Run, troubleshoot, and reset",
+        "text": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed. If the command fails, confirm `ruby --version`, inspect the full error message, and verify that required standard-library or gem dependencies are installed. Reset by removing temporary files created by your experiment and returning the code to the smallest reproducible example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain sessions, cookies, and csrf, identify its place in ruby web development and apis, run a focused example, and verify an important boundary. Revisit the linked exercise if this is a core topic; advanced runtime or framework examples remain draft until reviewed in a suitable environment."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-274-questions.json",
+    "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+    "reset_steps": [
+      "Restore the original minimal example before trying another variation.",
+      "Remove only temporary sample data created for the lesson.",
+      "Keep credentials and personal data out of logs, fixtures, and screenshots."
+    ],
+    "guided_example": "Predict the output, run the example, and explain the relationship between session management and cookie security attributes.",
+    "try_it_yourself": "Create one variation of sessions, cookies, and csrf, test a normal input and one boundary input, and note any version or dependency assumptions.",
+    "progressive_hints": [
+      "Write down the input and output contract first.",
+      "Reduce the task to one relevant Ruby method or construct.",
+      "Add the boundary case and verify it independently."
+    ],
+    "accessibility_notes": "The diagram includes a text alternative and the lesson explains the flow in prose. Do not use color alone to infer the correct sequence.",
+    "execution_mode": "server-runner",
+    "execution_note": "CodeLeaf does not currently provide an isolated Ruby runner. Run Ruby examples locally; a production runner needs a separate sandbox with time, memory, filesystem, and network limits."
+  },
+  "exercise_files": [],
+  "sources": [
+    "https://docs.ruby-lang.org/en/4.0/",
+    "https://www.ruby-lang.org/en/documentation/"
+  ],
+  "status": "draft",
+  "status_note": "Original lesson authored from the listed PDF syllabus topics; requires technical and editorial review before publication."
+}

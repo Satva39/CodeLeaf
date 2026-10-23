@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-121",
+  "slug": "idempotency-keys-and-request-coordination",
+  "title": "Idempotency Keys and Request Coordination",
+  "sequence": 121,
+  "module_id": "redis-module-15",
+  "module_slug": "caching-architecture-and-common-patterns",
+  "level": "intermediate to advanced",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-120"
+  ],
+  "previous_lesson_id": "redis-lesson-120",
+  "next_lesson_id": "redis-lesson-122",
+  "keywords": [
+    "idempotency-keys-and-request-coordination",
+    "detecting-duplicate-requests",
+    "idempotency-key-expiration",
+    "atomic-request-registration",
+    "conflict-handling",
+    "coordination-across-application-instances",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 121,
+  "subtopics": [
+    "Detecting duplicate requests",
+    "Idempotency-key expiration",
+    "Atomic request registration",
+    "Conflict handling",
+    "Coordination across application instances"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Idempotency Keys and Request Coordination and distinguish it from a related Redis concept.",
+    "Apply or trace Idempotency Keys and Request Coordination in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Idempotency Keys and Request Coordination and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Idempotency Keys and Request Coordination in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Idempotency Keys and Request Coordination helps implement build a cache policy that states its source of truth, expiration, invalidation, and stale-data tolerance. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Idempotency Keys and Request Coordination",
+        "asset_path": "diagrams/lesson-121-idempotency-keys-and-request-coordination.svg",
+        "alt_text": "Concept diagram for Idempotency Keys and Request Coordination, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Idempotency Keys and Request Coordination; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Idempotency Keys and Request Coordination helps implement build a cache policy that states its source of truth, expiration, invalidation, and stale-data tolerance. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Idempotency Keys and Request Coordination, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Detecting duplicate requests",
+            "text": "Connect Detecting duplicate requests to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Idempotency-key expiration",
+            "text": "Connect Idempotency-key expiration to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Atomic request registration",
+            "text": "Connect Atomic request registration to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Conflict handling",
+            "text": "Connect Conflict handling to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Coordination across application instances",
+            "text": "Connect Coordination across application instances to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Idempotency Keys and Request Coordination",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "INCR api:limit:user-42\nEXPIRE api:limit:user-42 60\nTTL api:limit:user-42",
+        "expected_output": "1\n1\n<0..60 seconds>",
+        "run_instructions": "This is a teaching sketch, not a complete race-free rate limiter. Set expiry atomically with the increment and define the exact window semantics.",
+        "reset_steps": "DEL api:limit:user-42",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Idempotency Keys and Request Coordination. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Idempotency Keys and Request Coordination in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Idempotency Keys and Request Coordination.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "1\n1\n<0..60 seconds>",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-121-questions.json",
+    "recap": [
+      "Idempotency Keys and Request Coordination is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Using Redis commands",
+      "url": "https://redis.io/docs/latest/develop/use/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "keys, command usage, transactions, pipelining and round-trip reduction"
+      ]
+    },
+    {
+      "title": "Redis data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "strings, hashes, lists, sets, sorted sets, streams, geospatial indexes, bitmaps, bitfields, JSON, arrays, time series, probabilistic structures, vector sets"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

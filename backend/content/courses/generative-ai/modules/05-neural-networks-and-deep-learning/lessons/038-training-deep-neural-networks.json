@@ -1,0 +1,173 @@
+{
+  "id": "genai-lesson-038",
+  "slug": "training-deep-neural-networks",
+  "title": "Training Deep Neural Networks",
+  "sequence": 38,
+  "module_id": "genai-module-05",
+  "module_slug": "neural-networks-and-deep-learning",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-foundations",
+  "estimated_minutes": 12,
+  "prerequisites": [],
+  "previous_lesson_id": "genai-lesson-037",
+  "next_lesson_id": "genai-lesson-039",
+  "keywords": [
+    "Training Deep Neural Networks",
+    "Epochs and mini-batches",
+    "Batch size and memory use",
+    "Initialization",
+    "Normalization layers",
+    "Dropout and regularization",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 38,
+  "subtopics": [
+    "Epochs and mini-batches",
+    "Batch size and memory use",
+    "Initialization",
+    "Normalization layers",
+    "Dropout and regularization",
+    "Checkpoints and training curves"
+  ],
+  "learning_outcomes": [
+    "Explain epochs and mini-batches and how it connects to training deep neural networks.",
+    "Apply batch size and memory use in the example and predict the output before running it.",
+    "Test one realistic edge case for training deep neural networks and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers training deep neural networks through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Connect neurons, layers, activations, losses, gradients, and training loops with small numerical examples. Large-scale training requires separate compute and engineering resources.",
+    "why_it_matters": "Use epochs and mini-batches as a lens for understanding training deep neural networks. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Training Deep Neural Networks: concept map",
+        "asset_path": "diagrams/lessons/lesson-038-training-deep-neural-networks.svg",
+        "alt_text": "Diagram for Training Deep Neural Networks: understand Epochs and mini-batches, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Epochs and mini-batches, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Use epochs and mini-batches as a lens for understanding training deep neural networks. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Epochs and mini-batches",
+            "text": "Use epochs and mini-batches as a lens for understanding training deep neural networks. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Batch size and memory use",
+            "text": "Use batch size and memory use as a lens for understanding training deep neural networks. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Initialization",
+            "text": "Use initialization as a lens for understanding training deep neural networks. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Normalization layers",
+            "text": "Normalization layers addresses how information is prepared, described, versioned, or governed. Validate the input, keep source and access metadata, handle duplicates and missing values deliberately, and test the downstream effect of a data change rather than treating the data pipeline as invisible plumbing."
+          },
+          {
+            "title": "Dropout and regularization",
+            "text": "Use dropout and regularization as a lens for understanding training deep neural networks. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Checkpoints and training curves",
+            "text": "For checkpoints and training curves, distinguish the training objective from the evaluation goal. Check provenance and data quality, keep validation/test examples isolated from training, record the baseline and configuration, and evaluate both improvement on the target task and possible regressions elsewhere."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Training Deep Neural Networks\nexamples = list(range(10))\nbatch_size = 4\nbatches = [examples[i:i+batch_size] for i in range(0, len(examples), batch_size)]\nprint({\"batch_sizes\": [len(batch) for batch in batches], \"batches_per_epoch\": len(batches)})",
+        "expected_output": "{'batch_sizes': [4, 4, 2], 'batches_per_epoch': 3}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice epochs and mini-batches within training deep neural networks: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'batch_sizes': [4, 4, 2], 'batches_per_epoch': 3}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-038-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Training Deep Neural Networks is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://developers.google.com/machine-learning/crash-course/",
+      "https://docs.pytorch.org/tutorials/beginner/basics/intro",
+      "https://docs.python.org/3/tutorial/"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Machine Learning Crash Course",
+      "url": "https://developers.google.com/machine-learning/crash-course/",
+      "publisher": "Google for Developers",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "AI and machine learning foundations"
+      ]
+    },
+    {
+      "title": "Learn the Basics: PyTorch Tutorials",
+      "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro",
+      "publisher": "PyTorch",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tensors"
+      ]
+    },
+    {
+      "title": "The Python Tutorial",
+      "url": "https://docs.python.org/3/tutorial/",
+      "publisher": "Python Software Foundation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Python fundamentals"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

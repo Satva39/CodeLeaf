@@ -1,0 +1,32 @@
+{
+  "id": "java-exercise-solution-045",
+  "exercise_id": "java-exercise-045",
+  "title": "Custom Logging Utility reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "language": "java",
+  "answer": "import java.util.logging.Level;\nimport java.util.logging.Logger;\n\npublic class Main {\n    private static final Logger LOG = Logger.getLogger(Main.class.getName());\n    public static void main(String[] args) {\n        LOG.info(\"Application started\");\n        try {\n            int items = Integer.parseInt(\"not-a-number\");\n            LOG.fine(\"Items: \" + items);\n        } catch (NumberFormatException failure) {\n            LOG.log(Level.WARNING, \"Invalid item count; using a safe fallback\", failure);\n        }\n    }\n}",
+  "explanation": "Use log levels to distinguish ordinary lifecycle events from warning/error details. Avoid logging secrets or whole untrusted payloads, and make logging configuration explicit in a real application.",
+  "hidden_tests": [
+    {
+      "case": "normal case",
+      "input_or_setup": "Use the deterministic sample data or representative valid input described in the exercise.",
+      "expected_behavior": "Logs startup and a warning with exception context",
+      "purpose": "Verify the main behavior and the output contract."
+    },
+    {
+      "case": "boundary case",
+      "input_or_setup": "Test empty, zero, minimum/maximum, duplicate, or end-of-range input as appropriate to the exercise.",
+      "expected_behavior": "The result matches the documented boundary rule and does not silently corrupt state.",
+      "purpose": "Check a boundary or invariant."
+    },
+    {
+      "case": "invalid or failure case",
+      "input_or_setup": "Provide malformed input or simulate a missing file, unavailable endpoint, missing configuration, or database failure where relevant.",
+      "expected_behavior": "The operation fails clearly or returns a safe result; resources are released and secrets are not printed.",
+      "purpose": "Check explicit error behavior and cleanup."
+    }
+  ],
+  "review_notes": "Repository-only reference material. Keep it out of public API responses and frontend bundles. The platform grader is only a required-token smoke check; complete task-specific execution tests in an isolated Java runner before publication.",
+  "sample_expected_result": "Logs startup and a warning with exception context"
+}

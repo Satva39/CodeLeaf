@@ -1,0 +1,192 @@
+{
+  "id": "web-application-security-lesson-047",
+  "slug": "multi-factor-authentication-and-passkeys",
+  "title": "Multi-Factor Authentication and Passkeys",
+  "sequence": 47,
+  "module_id": "web-application-security-module-07",
+  "module_slug": "authentication-and-session-management",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-security",
+  "curriculum_tier": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "web-application-security-lesson-046"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-046",
+  "next_lesson_id": "web-application-security-lesson-048",
+  "keywords": [
+    "multi",
+    "factor",
+    "authentication",
+    "and",
+    "passkeys",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 47,
+  "source_syllabus_title": "Multi-Factor Authentication and Passkeys",
+  "source_subtopics": [
+    {
+      "number": "47.1",
+      "title": "Knowledge, possession, and inherence factors"
+    },
+    {
+      "number": "47.2",
+      "title": "Time-based and challenge-based one-time passwords"
+    },
+    {
+      "number": "47.3",
+      "title": "WebAuthn and FIDO2 concepts"
+    },
+    {
+      "number": "47.4",
+      "title": "Passkeys and phishing-resistant authentication"
+    },
+    {
+      "number": "47.5",
+      "title": "Recovery methods and fallback risks"
+    },
+    {
+      "number": "47.6",
+      "title": "Step-up authentication for sensitive actions"
+    }
+  ],
+  "subtopics": [
+    "Knowledge, possession, and inherence factors",
+    "Time-based and challenge-based one-time passwords",
+    "WebAuthn and FIDO2 concepts",
+    "Passkeys and phishing-resistant authentication",
+    "Recovery methods and fallback risks",
+    "Step-up authentication for sensitive actions"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in Multi-Factor Authentication and Passkeys.",
+    "Choose an appropriate defensive control for Multi-Factor Authentication and Passkeys and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for Multi-Factor Authentication and Passkeys, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 7: Authentication and Session Management. It builds practical understanding of Multi-Factor Authentication and Passkeys with the syllabus subtopics retained below.",
+    "why_it_matters": "Multi-Factor Authentication and Passkeys protects identity and data boundaries. A control that exists only in the interface can be bypassed, so policy must be enforced at the authoritative server boundary. Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Multi-Factor Authentication and Passkeys",
+        "asset_path": "diagrams/lesson-047-multi-factor-authentication-and-passkeys.svg",
+        "alt_text": "Four-stage visual model for Multi-Factor Authentication and Passkeys: Establish identity; Protect credential; Manage token/session; Test expiry + recovery.",
+        "caption": "Concept map for Multi-Factor Authentication and Passkeys. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Multi-Factor Authentication and Passkeys can be understood through this sequence: Establish identity → Protect credential → Manage token/session → Test expiry + recovery. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 47.1 Knowledge, possession, and inherence factors; 47.2 Time-based and challenge-based one-time passwords; 47.3 WebAuthn and FIDO2 concepts; 47.4 Passkeys and phishing-resistant authentication; 47.5 Recovery methods and fallback risks; 47.6 Step-up authentication for sensitive actions. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "text",
+        "execution_mode": "human-review",
+        "title": "Safe reference example: Multi-Factor Authentication and Passkeys",
+        "code": "Authentication review checklist:\n- Use a maintained password-hashing function (prefer Argon2id where available).\n- Rate-limit credential attempts and protect recovery tokens.\n- Rotate sessions after authentication or privilege changes.\n- Verify expiry, revocation, and recovery paths.",
+        "expected_output": "The review produces a control checklist covering credential storage, abuse prevention, and the full identity lifecycle.",
+        "run_instructions": "Do not implement cryptography from scratch. Choose controls based on the application’s threat model and follow current framework/OWASP guidance.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “Multi-Factor Authentication and Passkeys”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for Multi-Factor Authentication and Passkeys in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "human-review",
+    "knowledge_check_file": "exams/question-files/lesson-047-questions.json",
+    "recap": [
+      "Multi-Factor Authentication and Passkeys is a security boundary/control topic, not a standalone checklist item.",
+      "Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "Authentication Cheat Sheet",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication error behavior",
+        "throttling",
+        "reauthentication"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

@@ -1,0 +1,181 @@
+{
+  "id": "react-lesson-185",
+  "slug": "authentication-and-session-integration",
+  "title": "Authentication and Session Integration",
+  "sequence": 185,
+  "module_id": "react-module-16",
+  "module_slug": "working-with-apis-and-remote-data",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "advanced",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "react-lesson-184"
+  ],
+  "previous_lesson_id": "react-lesson-184",
+  "next_lesson_id": "react-lesson-186",
+  "keywords": [
+    "Authentication and Session Integration",
+    "Working with APIs and Remote Data",
+    "Login and logout flows",
+    "Token and cookie concepts",
+    "Session expiration",
+    "Refreshing authenticated data",
+    "Respecting server-side authorization",
+    "security"
+  ],
+  "source_syllabus_number": 185,
+  "subtopics": [
+    "Login and logout flows",
+    "Token and cookie concepts",
+    "Session expiration",
+    "Refreshing authenticated data",
+    "Respecting server-side authorization"
+  ],
+  "learning_outcomes": [
+    "Explain how Authentication and Session Integration relates to Working with APIs and Remote Data.",
+    "Apply Login and logout flows in a small React or JavaScript example and describe the expected result.",
+    "Test one edge/failure case and identify a maintainable, accessible fix."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study Authentication and Session Integration as part of Working with APIs and Remote Data. The syllabus topics are kept below, then connected to a small example you can inspect and adapt.",
+    "why_it_matters": "Login and logout flows is part of a trust boundary. Treat browser input and client state as untrusted; enforce authorization, validation, and secrets on the server, then provide clear UI feedback.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Authentication and Session Integration: concept map",
+        "asset_path": "diagrams/lessons/lesson-185-authentication-and-session-integration.svg",
+        "alt_text": "Concept map for Authentication and Session Integration: Login and logout flows, Token and cookie concepts, Session expiration.",
+        "caption": "A visual scaffold for the idea; the code and verification steps below provide the practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Login and logout flows is part of a trust boundary. Treat browser input and client state as untrusted; enforce authorization, validation, and secrets on the server, then provide clear UI feedback. Start with one responsibility at a time: identify the data, describe the expected interface, then decide which event, state update, request, or runtime boundary changes the result."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Login and logout flows",
+            "text": "Login and logout flows is part of a trust boundary. Treat browser input and client state as untrusted; enforce authorization, validation, and secrets on the server, then provide clear UI feedback."
+          },
+          {
+            "title": "Token and cookie concepts",
+            "text": "Token and cookie concepts is part of a trust boundary. Treat browser input and client state as untrusted; enforce authorization, validation, and secrets on the server, then provide clear UI feedback."
+          },
+          {
+            "title": "Session expiration",
+            "text": "Session expiration is part of a trust boundary. Treat browser input and client state as untrusted; enforce authorization, validation, and secrets on the server, then provide clear UI feedback."
+          },
+          {
+            "title": "Refreshing authenticated data",
+            "text": "Refreshing authenticated data is part of a trust boundary. Treat browser input and client state as untrusted; enforce authorization, validation, and secrets on the server, then provide clear UI feedback."
+          },
+          {
+            "title": "Respecting server-side authorization",
+            "text": "Respecting server-side authorization is part of a trust boundary. Treat browser input and client state as untrusted; enforce authorization, validation, and secrets on the server, then provide clear UI feedback."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "async function loadProfile() {\n  const response = await fetch(\"/api/profile\", { credentials: \"same-origin\" });\n  if (!response.ok) throw new Error(\"Profile request failed\");\n  return response.json();\n}\n// Authorization must still be enforced by the server.",
+        "expected_output": "The client checks request status; the server remains responsible for authorization.",
+        "run_instructions": "Save console-only JavaScript as a small .js file and run it with Node.js, or adapt the snippet to a React component where appropriate. The CodeLeaf playground is not a general server-side code runner. Compare actual output with the expectation and try one boundary case.",
+        "reset_steps": "Restore the original snippet, reset the component/data to its starting state, and repeat with a different input or an edge/failure case.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Use the code as a small experiment for Authentication and Session Integration. First predict the result, then run or inspect it in the required runtime. Change one input and explain why the output changed. If the topic depends on React version or framework support, confirm that the project uses a compatible version before interpreting a result."
+      },
+      {
+        "type": "callout",
+        "title": "Version and environment note",
+        "text": "This course assumes the React 19.3 documentation snapshot dated 2026-10-12. Core component, JSX, props, state, and event concepts apply broadly; modern APIs and server rendering must be checked against the stated React version and the framework/runtime in use."
+      }
+    ],
+    "task": "Create a minimal example demonstrating Authentication and Session Integration. Include the relevant subtopic “Login and logout flows”, explain the expected UI/result, and verify one normal case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named concept rather than merely mentioning it.",
+      "The expected visible or logged result is documented and reproducible.",
+      "At least one boundary, empty, loading, or failure case is handled or explained.",
+      "The implementation remains accessible and does not introduce avoidable mutation, stale state, or insecure client-only trust."
+    ],
+    "hints": [
+      "Start with the smallest part of “Login and logout flows” that can be observed independently.",
+      "Write down what should appear before changing the code; then change one input at a time.",
+      "Use the browser console, React Developer Tools, or the appropriate test/runtime to isolate a mismatch."
+    ],
+    "expected_output": "The client checks request status; the server remains responsible for authorization.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-185-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "The example handles only the happy path.",
+        "why": "Real UI receives empty values, delayed responses, and invalid input.",
+        "fix": "Add one explicit edge/failure case and document the expected message or state."
+      },
+      {
+        "problem": "The example stores redundant data or mutates an existing array/object.",
+        "why": "The displayed result can drift from the source data or React may not observe the intended change.",
+        "fix": "Derive values where possible and create a new value when updating state."
+      },
+      {
+        "problem": "A browser or framework capability is assumed to exist everywhere.",
+        "why": "Availability can depend on the host runtime, React version, and framework.",
+        "fix": "Check the official reference, declare the runtime/version, and provide a fallback when appropriate."
+      }
+    ],
+    "summary": [
+      "Authentication and Session Integration fits into the broader Working with APIs and Remote Data workflow.",
+      "The central concept is Login and logout flows; apply it with the smallest reproducible example.",
+      "Verify correctness with at least one normal input and one boundary or failure case."
+    ],
+    "references": [
+      "https://react.dev/learn",
+      "https://react.dev/reference/react",
+      "https://react.dev/blog/2026/09/09/react-19-3"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "React — Learn",
+      "url": "https://react.dev/learn",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "Authentication and Session Integration",
+        "Login and logout flows",
+        "Token and cookie concepts"
+      ]
+    },
+    {
+      "title": "React Reference",
+      "url": "https://react.dev/reference/react",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "React APIs and behavior",
+        "Authentication and Session Integration"
+      ]
+    },
+    {
+      "title": "React 19.3 Release Notes",
+      "url": "https://react.dev/blog/2026/09/09/react-19-3",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "version-specific modern APIs and compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus and authored as an educational draft; technical/instructional review required before publication."
+}

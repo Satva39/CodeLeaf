@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-013",
+  "slug": "verifying-the-installation",
+  "title": "Verifying the Installation",
+  "sequence": 13,
+  "module_id": "redis-module-02",
+  "module_slug": "installation-and-environment-setup",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core-redis",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "redis-lesson-012"
+  ],
+  "previous_lesson_id": "redis-lesson-012",
+  "next_lesson_id": "redis-lesson-014",
+  "keywords": [
+    "verifying-the-installation",
+    "ping-and-pong",
+    "info",
+    "command",
+    "checking-the-server-version",
+    "checking-connection-and-server-status",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 13,
+  "subtopics": [
+    "PING and PONG",
+    "INFO",
+    "COMMAND",
+    "Checking the server version",
+    "Checking connection and server status"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Verifying the Installation and distinguish it from a related Redis concept.",
+    "Apply or trace Verifying the Installation in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Verifying the Installation and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Verifying the Installation in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Verifying the Installation helps implement create a predictable local environment and prove that the server, client, and configuration agree. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Verifying the Installation",
+        "asset_path": "diagrams/lesson-013-verifying-the-installation.svg",
+        "alt_text": "Concept diagram for Verifying the Installation, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Verifying the Installation; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Verifying the Installation helps implement create a predictable local environment and prove that the server, client, and configuration agree. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Verifying the Installation, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "PING and PONG",
+            "text": "Connect PING and PONG to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "INFO",
+            "text": "Connect INFO to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "COMMAND",
+            "text": "Connect COMMAND to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Checking the server version",
+            "text": "Connect Checking the server version to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Checking connection and server status",
+            "text": "Connect Checking connection and server status to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Verifying the Installation",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "PING",
+        "expected_output": "PONG",
+        "run_instructions": "Run against a local development Redis instance.",
+        "reset_steps": "No data is written.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Verifying the Installation. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Verifying the Installation in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Verifying the Installation.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "PONG",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-013-questions.json",
+    "recap": [
+      "Verifying the Installation is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Install Redis Open Source",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "install and development environment choices"
+      ]
+    },
+    {
+      "title": "Redis commands reference",
+      "url": "https://redis.io/docs/latest/commands/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "command syntax, return values, complexity, compatibility and command history"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

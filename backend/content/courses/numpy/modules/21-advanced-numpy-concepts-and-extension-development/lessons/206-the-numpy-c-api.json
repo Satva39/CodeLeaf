@@ -1,0 +1,203 @@
+{
+  "id": "numpy-lesson-206",
+  "slug": "the-numpy-c-api",
+  "title": "The NumPy C API",
+  "sequence": 206,
+  "module_id": "numpy-module-21",
+  "module_slug": "advanced-numpy-concepts-and-extension-development",
+  "level": "specialist",
+  "difficulty": "specialist",
+  "track": "specialist",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "numpy-lesson-016",
+    "numpy-lesson-019",
+    "numpy-lesson-175"
+  ],
+  "previous_lesson_id": "numpy-lesson-205",
+  "next_lesson_id": "numpy-lesson-207",
+  "keywords": [
+    "the numpy c api",
+    "advanced numpy concepts and extension development",
+    "Reasons for using the C API",
+    "Array objects in compiled extensions",
+    "Data types, dimensions, and strides",
+    "Managing references and memory safely",
+    "NumPy",
+    "ndarray"
+  ],
+  "source_syllabus_number": 206,
+  "subtopics": [
+    "Reasons for using the C API",
+    "Array objects in compiled extensions",
+    "Data types, dimensions, and strides",
+    "Managing references and memory safely"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of the numpy c api and name one situation where it is useful.",
+    "Apply reasons for using the c api to a small NumPy example and inspect the resulting values, shape, or dtype.",
+    "Identify one important limitation, boundary case, or validation check for the numpy c api."
+  ],
+  "content": {
+    "intro": "This lesson develops topic 206 of the supplied curriculum: **The NumPy C API**. The main starting point is **Reasons for using the C API**. You will connect the idea to a small, synthetic example, then use the result to reason about shape, dtype, accuracy, or memory as appropriate.",
+    "why_it_matters": "Compiled extensions and stride-level operations can improve specialized workloads but increase portability and memory-safety complexity. Learn the high-level array contract first and keep extension paths narrowly tested.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: The NumPy C API",
+        "asset_path": "diagrams/lesson-206-the-numpy-c-api.svg",
+        "alt_text": "Teaching visual for lesson 206, The NumPy C API. It illustrates Python array metadata, then API / protocol / compiled boundary, leading to Validate ownership and compatibility.",
+        "caption": "Visual model for The NumPy C API. Synthetic conceptual diagram; inspect shape, dtype, and assumptions as relevant."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Treat **The NumPy C API** as an explicit step in an array workflow. This lesson centers on **Reasons for using the C API** and the source syllabus's related subtopics. Before trusting a result, identify the input shape and dtype, perform the smallest useful operation, and inspect the output. The example uses synthetic data so you can change one value and observe what changes."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics from the supplied curriculum",
+        "items": [
+          "Reasons for using the C API",
+          "Array objects in compiled extensions",
+          "Data types, dimensions, and strides",
+          "Managing references and memory safely"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "import numpy as np\n\na = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float64)\nprint(a.shape, a.dtype, a.flags.c_contiguous)",
+        "expected_output": "Observed output in the available validation environment (Python 3.13.5, NumPy 2.3.5):\n(2, 2) float64 True",
+        "execution_mode": "static-validation",
+        "run_instructions": "Save this snippet as a .py file inside the intended Python environment, then run `python filename.py`. Install NumPy in that same environment first. This learning page displays the sample; it does not execute arbitrary Python on the web server.",
+        "reset_steps": "For examples that create files, use a temporary working directory and remove its outputs after reviewing them. The memory-map example already uses a temporary directory."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "The C API is a specialist boundary for extensions, not required for everyday NumPy. Memory ownership, dtype layout, strides, reference management, and NumPy version compatibility matter."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          "Explain the preconditions that a lower-level or compiled implementation must preserve. Keep the example high-level and testable.",
+          "Change one input value or parameter and predict the output before running the example.",
+          "Record one edge case and explain how your code should respond."
+        ]
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          "Topic 206: The NumPy C API.",
+          "Core focus: Reasons for using the C API.",
+          "Check the official reference when signatures or version-specific behavior matter."
+        ]
+      }
+    ],
+    "expected_output": "Observed output in the available validation environment (Python 3.13.5, NumPy 2.3.5):\n(2, 2) float64 True",
+    "run_instructions": "Run Python examples locally in the same environment where NumPy is installed; no embedded server-side Python execution is assumed.",
+    "reset_steps": "Use temporary paths for file-writing experiments. Restore modified arrays by recreating the example input. No platform progress or rewards are created by viewing the lesson.",
+    "hints": [
+      "First identify the input values and their shape/dtype.",
+      "Run the smallest complete example and compare the actual output with the expected behavior.",
+      "Change one variable at a time; if the result differs, inspect shape, dtype, finite values, and version-specific behavior before changing the algorithm."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-206-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Using low-level memory tools without validating strides and bounds",
+        "why": "Strided views and extension interfaces depend on layout and ownership contracts.",
+        "fix": "Start with safer high-level functions and add targeted tests before low-level paths."
+      },
+      {
+        "problem": "Assuming compiled binaries work across major NumPy versions",
+        "why": "The C API has binary-compatibility concerns across major versions.",
+        "fix": "Build/test wheels against supported NumPy versions and review migration notes."
+      }
+    ],
+    "summary": [
+      "Topic 206 covers the numpy c api and the subtopics listed in the curriculum.",
+      "Keep low-level or compiled pathways isolated, documented, and tested for supported versions.",
+      "Examples and assessments are draft and require subject-matter review before publication."
+    ],
+    "references": [
+      {
+        "title": "NumPy C API",
+        "url": "https://numpy.org/doc/stable/reference/c-api/",
+        "publisher": "NumPy project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "The NumPy C API",
+          "Reasons for using the C API",
+          "Array objects in compiled extensions"
+        ]
+      },
+      {
+        "title": "F2PY user guide",
+        "url": "https://numpy.org/doc/stable/f2py/",
+        "publisher": "NumPy project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "The NumPy C API",
+          "Reasons for using the C API",
+          "Array objects in compiled extensions"
+        ]
+      },
+      {
+        "title": "NumPy typing",
+        "url": "https://numpy.org/doc/stable/reference/typing.html",
+        "publisher": "NumPy project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "The NumPy C API",
+          "Reasons for using the C API",
+          "Array objects in compiled extensions"
+        ]
+      }
+    ],
+    "accessibility_notes": "Every visual has descriptive SVG title/description and adjacent text explaining the concept. The diagram does not rely on color alone; text labels state each stage.",
+    "version_notes": "Written against the NumPy 2.5 stable documentation checked 2026-10-13. Example outputs that were executed were observed in an available NumPy 2.3.5 environment; release-specific formatting or pseudorandom streams may vary."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "NumPy C API",
+      "url": "https://numpy.org/doc/stable/reference/c-api/",
+      "publisher": "NumPy project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "The NumPy C API",
+        "Reasons for using the C API",
+        "Array objects in compiled extensions"
+      ]
+    },
+    {
+      "title": "F2PY user guide",
+      "url": "https://numpy.org/doc/stable/f2py/",
+      "publisher": "NumPy project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "The NumPy C API",
+        "Reasons for using the C API",
+        "Array objects in compiled extensions"
+      ]
+    },
+    {
+      "title": "NumPy typing",
+      "url": "https://numpy.org/doc/stable/reference/typing.html",
+      "publisher": "NumPy project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "The NumPy C API",
+        "Reasons for using the C API",
+        "Array objects in compiled extensions"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the supplied syllabus with original explanations and examples. Subject-matter review, learner testing, and publication approval are still required."
+}

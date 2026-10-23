@@ -1,0 +1,147 @@
+{
+  "id": "git-lesson-033",
+  "slug": "viewing-changes-before-committing",
+  "title": "Viewing Changes Before Committing",
+  "sequence": 33,
+  "module_id": "git-module-04",
+  "module_slug": "basic-git-workflow",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "primary_service": "Git version control",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "git-lesson-032"
+  ],
+  "previous_lesson_id": "git-lesson-032",
+  "next_lesson_id": "git-lesson-034",
+  "keywords": [
+    "git-automation-scripting-and-production-workflows",
+    "basic-git-workflow",
+    "git",
+    "using-git-diff",
+    "comparing-working-tree-changes",
+    "comparing-staged-changes-with-git-diff-cached",
+    "understanding-diff-output"
+  ],
+  "source_syllabus_number": 33,
+  "subtopics": [
+    "Using git diff",
+    "Comparing working-tree changes",
+    "Comparing staged changes with git diff --cached",
+    "Understanding diff output"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and boundaries of viewing changes before committing.",
+    "Choose and interpret a Git command relevant to viewing changes before committing using a disposable repository.",
+    "Verify the result with repository state or history and identify one safety limitation."
+  ],
+  "content": {
+    "intro": "This lesson introduces viewing changes before committing as part of Basic Git Workflow. It follows the supplied Git curriculum and adds an original explanation, an inspectable command example, troubleshooting notes, and a practice task.",
+    "why_it_matters": "Viewing Changes Before Committing helps you apply a specific Git concept deliberately, understand its effect on repository state, and verify the outcome before continuing.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Working tree to commit: staging lifecycle",
+        "asset_path": "diagrams/staging-lifecycle.svg",
+        "alt_text": "Edits begin in the working tree, selected changes enter the index with git add, and git commit records the index as a repository snapshot.",
+        "caption": "Original CodeLeaf diagram. Review labels as well as the explanatory text; color is not the only signal."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "**Core idea.** Viewing Changes Before Committing helps you apply a specific Git concept deliberately, understand its effect on repository state, and verify the outcome before continuing.\n\nFor **Viewing Changes Before Committing**, keep the named subtopics in view: Using git diff; Comparing working-tree changes; Comparing staged changes with git diff --cached; Understanding diff output. Treat those as the scope of this lesson, then practise the smallest workflow that demonstrates the idea."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "**Before you run a command:** decide what state you are inspecting or changing, identify whether the effect is local or remote, and write down what evidence would count as success. Use git diff --cached for staged changes and git diff A..B for a suitable comparison range."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered",
+        "items": [
+          "Using git diff",
+          "Comparing working-tree changes",
+          "Comparing staged changes with git diff --cached",
+          "Understanding diff output"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Command example: Viewing Changes Before Committing",
+        "language": "bash",
+        "code": "git diff",
+        "expected_output": "A patch showing unstaged tracked-file changes; no output means no such differences.",
+        "run_instructions": "Use git diff --cached for staged changes and git diff A..B for a suitable comparison range.",
+        "reset_steps": "Use a disposable repository. If the exercise changes state, check git status and git log before and after; discard the practice directory only after confirming it contains no valuable work.",
+        "execution_mode": "static-validation",
+        "limitations": "The CodeLeaf web lesson page does not execute arbitrary Git commands. Run commands locally in a disposable repository with a Git version appropriate to your task. Placeholder paths, branches, commit IDs and repository URLs must be replaced with values from that practice repository."
+      },
+      {
+        "type": "callout",
+        "title": "Safety and verification checkpoint",
+        "text": "Start with git status --short --branch. For destructive or history-rewriting operations, review the exact target, create a recovery reference when appropriate, and keep valuable work backed up. Never put credentials, access tokens or private keys in course submissions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-033-questions.json"
+  },
+  "task": "In a disposable practice repository, follow the command example, capture the result, and write one sentence explaining how the result verifies the lesson’s concept. Keep unrelated changes out of the exercise.",
+  "hints": [
+    "Start by reviewing: Using git diff.",
+    "Use a read-only inspection command before any operation that changes files, refs or remote state.",
+    "After the example, verify with git status --short --branch and/or git log --oneline --graph as appropriate."
+  ],
+  "expected_output": "A patch showing unstaged tracked-file changes; no output means no such differences.",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Running a state-changing command without confirming the target repository or branch.",
+      "why": "A command may affect the wrong working tree or move a reference that other work depends on.",
+      "fix": "Check git rev-parse --show-toplevel and git status --short --branch before proceeding."
+    },
+    {
+      "problem": "Assuming a command succeeded because no error was visible.",
+      "why": "Some Git commands are silent on success, and some expected actions are blocked by repository state or permissions.",
+      "fix": "Verify status, log, references, remote state or the named output explicitly."
+    },
+    {
+      "problem": "Using an example placeholder literally or applying a destructive example to valuable work.",
+      "why": "Paths, branch names and object IDs depend on the current repository; restore/reset/clean operations can discard work.",
+      "fix": "Substitute real practice values, use a disposable repository, and preview changes before proceeding."
+    }
+  ],
+  "summary": [
+    "Viewing Changes Before Committing is covered through these syllabus topics: Using git diff; Comparing working-tree changes; Comparing staged changes with git diff --cached; Understanding diff output.",
+    "Choose the command for the intended effect; understand whether it changes files, the index, local references, or remote state.",
+    "Verify the result, record unexpected output, and retain a recovery path for risky operations."
+  ],
+  "references": [
+    "references/reference-index.json",
+    "https://git-scm.com/docs",
+    "https://git-scm.com/book/en/v2"
+  ],
+  "sources": [
+    {
+      "title": "Git Reference Documentation",
+      "url": "https://git-scm.com/docs",
+      "publisher": "Git project",
+      "checked_on": "2026-10-15",
+      "source_type": "official-reference"
+    },
+    {
+      "title": "Pro Git Book, 2nd Edition",
+      "url": "https://git-scm.com/book/en/v2",
+      "publisher": "Git project / Pro Git",
+      "checked_on": "2026-10-15",
+      "source_type": "officially-hosted-book"
+    }
+  ],
+  "exercise_files": [
+    "../exercises/009-diff-comparison.json"
+  ],
+  "technical_review_date": "2026-10-15",
+  "status": "draft",
+  "status_note": "Generated from the supplied Git syllabus. Content and commands need editorial/technical review before publication."
+}

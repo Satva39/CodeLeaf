@@ -1,0 +1,59 @@
+{
+  "id": "nextjs-question-set-084",
+  "lesson_id": "nextjs-lesson-084",
+  "lesson_slug": "understanding-cache-tags",
+  "title": "Quick check: Understanding Cache Tags",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "questions": [
+    {
+      "id": "nextjs-q-084-1",
+      "prompt": "In the context of “Understanding Cache Tags” and “Assigning cache tags”, Before caching data, what is the most important correctness question?",
+      "options": [
+        "Whether the data may be shared, how fresh it must be, and which user/request dimensions affect the result.",
+        "Whether caching makes tests unnecessary.",
+        "Whether private data can share one global cache key across users.",
+        "Whether the same defaults apply to every Next.js release."
+      ],
+      "answer_key": "Whether the data may be shared, how fresh it must be, and which user/request dimensions affect the result.",
+      "explanation": "Cache behavior depends on the configured model and data sensitivity; user-specific results must not leak across cache boundaries.",
+      "lesson_context": {
+        "lesson_title": "Understanding Cache Tags",
+        "focus": "Assigning cache tags"
+      }
+    },
+    {
+      "id": "nextjs-q-084-2",
+      "prompt": "While implementing “Understanding Cache Tags”, What should happen when a mutation changes content that was cached?",
+      "options": [
+        "Assume all clients refresh automatically in every situation.",
+        "Delete every unrelated database table.",
+        "Invalidate or revalidate the relevant route/data according to the chosen cache strategy.",
+        "Disable authorization until the cache expires."
+      ],
+      "answer_key": "Invalidate or revalidate the relevant route/data according to the chosen cache strategy.",
+      "explanation": "A cache strategy needs an explicit path or tag invalidation plan that matches which data changed.",
+      "lesson_context": {
+        "lesson_title": "Understanding Cache Tags",
+        "focus": "Assigning cache tags"
+      }
+    },
+    {
+      "id": "nextjs-q-084-3",
+      "prompt": "When reviewing “Understanding Cache Tags”, Which approach is safest for user-specific data?",
+      "options": [
+        "Use request/user-appropriate cache boundaries and verify that one user cannot receive another user’s response.",
+        "Cache every response globally by URL only, regardless of identity.",
+        "Rely on hiding a result in CSS.",
+        "Treat a local development test as proof of all production behavior."
+      ],
+      "answer_key": "Use request/user-appropriate cache boundaries and verify that one user cannot receive another user’s response.",
+      "explanation": "Cache isolation is a security property and should be tested alongside freshness and performance.",
+      "lesson_context": {
+        "lesson_title": "Understanding Cache Tags",
+        "focus": "Assigning cache tags"
+      }
+    }
+  ],
+  "review_note": "Draft question set with module-specific concepts. Review item wording and answer accuracy before publication; learner-facing APIs should expose prompt/options only and release correctness feedback after grading."
+}

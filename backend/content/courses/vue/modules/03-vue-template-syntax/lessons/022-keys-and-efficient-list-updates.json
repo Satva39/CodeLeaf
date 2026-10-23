@@ -1,0 +1,190 @@
+{
+  "id": "vue-lesson-022",
+  "slug": "keys-and-efficient-list-updates",
+  "title": "Keys and Efficient List Updates",
+  "sequence": 22,
+  "module_id": "vue-module-03",
+  "module_slug": "vue-template-syntax",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "vue-lesson-021"
+  ],
+  "previous_lesson_id": "vue-lesson-021",
+  "next_lesson_id": "vue-lesson-023",
+  "keywords": [
+    "Keys and Efficient List Updates",
+    "Vue Template Syntax",
+    "Purpose of the key attribute",
+    "Stable and unique keys",
+    "Keys when rendering components",
+    "Common list-rendering mistakes",
+    "Vue 3",
+    "Composition API"
+  ],
+  "source_syllabus_number": 22,
+  "subtopics": [
+    "Purpose of the key attribute",
+    "Stable and unique keys",
+    "Keys when rendering components",
+    "Common list-rendering mistakes"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Keys and Efficient List Updates in a Vue 3 application.",
+    "Apply at least one of the syllabus subtopics in a small, inspectable example.",
+    "Verify one expected behavior and identify a relevant edge case."
+  ],
+  "content": {
+    "intro": "This lesson studies Keys and Efficient List Updates within Vue Template Syntax. The source PDF subtopics are preserved below and connected to an original working-style example.",
+    "why_it_matters": "Templates keep intent visible: the UI describes what should appear for the current state instead of manually editing the DOM.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Keys and Efficient List Updates: Component communication",
+        "asset_path": "diagrams/lessons/lesson-022-keys-and-efficient-list-updates.svg",
+        "alt_text": "Component communication diagram for lesson 22: Keys and Efficient List Updates. Parent owns the value or business intent → Child receives data and renders its view → Child emits intent; parent decides updates",
+        "caption": "Component flow: data moves into children through props; emitted events communicate requested changes back to the owner."
+      },
+      {
+        "type": "paragraph",
+        "title": "The idea in context",
+        "text": "Vue templates bind readable HTML-like markup to data and events, using expressions and directives for dynamic behavior. This lesson focuses on Keys and Efficient List Updates. Start by naming the state, component, browser behavior, or deployment boundary involved; then predict what should change and test the smallest example."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Purpose of the key attribute",
+            "text": "For Purpose of the key attribute, document what data enters the component, which events leave it, and where shared content or behavior belongs. Keep props one-way, emit changes rather than mutating parent-owned values, and add slots only when a real composition point is needed."
+          },
+          {
+            "title": "Stable and unique keys",
+            "text": "For Stable and unique keys, express the intended DOM result through a Vue template binding instead of directly manipulating the DOM. Keep template expressions small, use stable keys for stateful list items, and choose directives based on whether content should be created, removed, or merely hidden."
+          },
+          {
+            "title": "Keys when rendering components",
+            "text": "For Keys when rendering components, document what data enters the component, which events leave it, and where shared content or behavior belongs. Keep props one-way, emit changes rather than mutating parent-owned values, and add slots only when a real composition point is needed."
+          },
+          {
+            "title": "Common list-rendering mistakes",
+            "text": "For Common list-rendering mistakes, express the intended DOM result through a Vue template binding instead of directly manipulating the DOM. Keep template expressions small, use stable keys for stateful list items, and choose directives based on whether content should be created, removed, or merely hidden."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "vue",
+        "code": "<script setup>\nconst products = [{ id: 'p1', name: 'Notebook' }, { id: 'p2', name: 'Pen' }]\n</script>\n<template><ul><li v-for=\"product in products\" :key=\"product.id\">{{ product.name }}</li></ul></template>",
+        "expected_output": "The list displays Notebook and Pen in order, using stable product IDs as keys.",
+        "run_instructions": "Run as App.vue. Keep the key unique and stable when items are inserted, removed, or reordered.",
+        "reset_steps": "Restore the initial values or original code, reload the development app/test, and repeat once with a boundary or failure case. Remove temporary logs and test data before committing.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Work through Keys and Efficient List Updates with a predict–change–verify loop. First state the expected UI or console output. Change only the relevant input/state value, then observe the result. Compare it with the expected output in the code block; if it differs, check the exact file, runtime/version, browser Console, and network response before widening the investigation."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Extend the example to include “Stable and unique keys”. Keep the same behavior for the ordinary input, then try an empty, invalid, repeated, or failure condition that makes sense for the example. Record the expected result before testing."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming behavior instead of checking it",
+            "text": "Write down the expected result and reproduce the issue in the smallest possible example; inspect the browser Console and the exact reactive value or request."
+          },
+          {
+            "title": "Ignoring an edge case",
+            "text": "Try empty input, a missing item, repeated interaction, a failed request, or unmounting while work is pending; handle the case explicitly."
+          },
+          {
+            "title": "Putting every responsibility in one component",
+            "text": "Separate display, reusable logic, API service, and shared state when that boundary makes the behavior easier to test and explain."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "Remember: Vue templates bind readable HTML-like markup to data and events, using expressions and directives for dynamic behavior. For Keys and Efficient List Updates, keep the example small, verify the rendered or logged result, and consult the official references when behavior depends on a specific Vue or ecosystem version."
+      },
+      {
+        "type": "callout",
+        "title": "Accessibility, version, and runtime notes",
+        "text": "Use semantic HTML, readable labels, keyboard-operable controls, and visible errors where the example interacts with users. Vue examples are intended for Vue 3.x with create-vue/Vite unless a legacy or specialist lesson explicitly says otherwise. This CodeLeaf playground does not execute arbitrary Vue code; the snippets are labeled for static validation and should be run in a separate local project."
+      }
+    ],
+    "task": "Create a small example for “Keys and Efficient List Updates” that applies “Purpose of the key attribute”, predicts the expected result, and verifies a relevant boundary case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named Vue concept rather than only mentioning it.",
+      "The expected output or observable behavior is written down and can be checked locally.",
+      "At least one boundary, loading, invalid-input, or failure case is tested or explicitly reasoned about.",
+      "The example uses semantic/accessible interaction patterns and does not treat frontend state as authoritative security."
+    ],
+    "hints": [
+      "Start with the smallest observable part of “Purpose of the key attribute”.",
+      "Predict the output before changing one input at a time.",
+      "Use the browser Console, Vue DevTools, or the appropriate test runner to isolate a mismatch."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "The example only covers the happy path.",
+        "why": "Real interfaces receive empty values, delayed responses, invalid input, and failed requests.",
+        "fix": "Add one realistic edge/failure case and state its expected behavior."
+      },
+      {
+        "problem": "The code assumes an API or feature exists in every runtime.",
+        "why": "Tool and API support depends on Vue, the build tool, or the chosen SSR/test framework.",
+        "fix": "Check the linked official reference and record the runtime/version assumption."
+      }
+    ],
+    "summary": [
+      "Keys and Efficient List Updates belongs to the broader area Vue Template Syntax.",
+      "The main concept to practice is Purpose of the key attribute.",
+      "Verify a normal result and one meaningful boundary case before using the pattern in a production feature."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-022-questions.json",
+    "references": [
+      "https://vuejs.org/guide/essentials/template-syntax.html",
+      "https://vuejs.org/guide/essentials/reactivity-fundamentals.html"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Vue Template Syntax",
+      "url": "https://vuejs.org/guide/essentials/template-syntax.html",
+      "publisher": "Vue.js core team",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Keys and Efficient List Updates",
+        "Purpose of the key attribute",
+        "Stable and unique keys",
+        "Keys when rendering components"
+      ]
+    },
+    {
+      "title": "Vue Reactivity Fundamentals",
+      "url": "https://vuejs.org/guide/essentials/reactivity-fundamentals.html",
+      "publisher": "Vue.js core team",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Keys and Efficient List Updates",
+        "Purpose of the key attribute",
+        "Stable and unique keys",
+        "Keys when rendering components"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Authored as a syllabus-complete educational draft. Technical and instructional review required before publication."
+}

@@ -1,0 +1,184 @@
+{
+  "id": "flask-lesson-049",
+  "slug": "jinja-filters",
+  "title": "Jinja Filters",
+  "sequence": 49,
+  "module_id": "flask-module-05",
+  "module_slug": "html-templates-and-jinja",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core-foundations",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "flask-lesson-048"
+  ],
+  "previous_lesson_id": "flask-lesson-048",
+  "next_lesson_id": "flask-lesson-050",
+  "keywords": [
+    "jinja-filters",
+    "flask",
+    "string-and-number-formatting",
+    "default-values",
+    "chaining-filters",
+    "built-in-filters-commonly-used-in-websites"
+  ],
+  "source_syllabus_number": 49,
+  "subtopics": [
+    "String and number formatting",
+    "Default values",
+    "Chaining filters",
+    "Built-in filters commonly used in websites"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of jinja filters and identify at least two of its listed subtopics.",
+    "Trace the worked example for jinja filters and describe its expected result.",
+    "Select a focused test or verification step for a normal case and a meaningful failure boundary."
+  ],
+  "content": {
+    "intro": "Explore jinja filters through the source syllabus topics, a small inspectable example, and a practical verification task. The example is teaching material, not a claim that the platform executed Flask code.",
+    "why_it_matters": "Jinja Filters turns data into HTML. Templates should present data without replacing validation, authorization or business logic in Python code.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Visual guide: Jinja Filters",
+        "asset_path": "diagrams/module-05-overview.svg",
+        "alt_text": "Four-stage overview for module 5, HTML Templates and Jinja: Pass data to Jinja; Render template; Escape output; Reuse layouts.",
+        "caption": "Module 5 roadmap for HTML Templates and Jinja: progress through the labeled ideas, then verify an outcome with a focused practice task."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Jinja Filters turns data into HTML. Templates should present data without replacing validation, authorization or business logic in Python code."
+      },
+      {
+        "type": "paragraph",
+        "title": "What to learn",
+        "text": "This lesson covers: String and number formatting; Default values; Chaining filters; Built-in filters commonly used in websites. Keep the source terms intact; for each one, name the component that owns the behavior, the inputs/assumptions, and the expected result."
+      },
+      {
+        "type": "list",
+        "title": "Concepts and practical notes",
+        "items": [
+          {
+            "title": "String and number formatting",
+            "text": "For string and number formatting, identify the component responsible, the input it receives, and the observable result it should produce."
+          },
+          {
+            "title": "Default values",
+            "text": "Use default values as a named design decision: note the assumptions, the normal path, and one boundary case to test."
+          },
+          {
+            "title": "Chaining filters",
+            "text": "When applying chaining filters, keep the implementation small, document version-dependent behavior, and verify it with a focused check."
+          },
+          {
+            "title": "Built-in filters commonly used in websites",
+            "text": "Connect built-in filters commonly used in websites to html templates and jinja by tracing one example from its input through the observable output."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Jinja Filters",
+        "language": "python",
+        "code": "from flask import Flask, render_template_string\n\napp = Flask(__name__)\n\n@app.get(\"/hello/<name>\")\ndef hello(name):\n    page = \"<h1>Hello, {{ name }}</h1>\"\n    return render_template_string(page, name=name)",
+        "expected_output": "Visiting /hello/Ada displays “Hello, Ada”. A value containing HTML markup is escaped by the normal Jinja autoescaping workflow for an HTML template.",
+        "execution_mode": "server-runner",
+        "run_instructions": "Run locally and test with a normal name and a name containing HTML-like characters. Prefer template files for full pages."
+      },
+      {
+        "type": "callout",
+        "title": "Before using this beyond practice",
+        "text": "Validate untrusted input at the server boundary, keep secrets out of source code, and test the failure path. Optional extensions or hosting infrastructure are separate dependencies unless stated otherwise."
+      }
+    ],
+    "execution_mode": "server-runner",
+    "expected_result": "Visiting /hello/Ada displays “Hello, Ada”. A value containing HTML markup is escaped by the normal Jinja autoescaping workflow for an HTML template.",
+    "run_instructions": "Run locally and test with a normal name and a name containing HTML-like characters. Prefer template files for full pages.",
+    "troubleshooting": [
+      "Confirm the expected virtual environment and installed dependency versions before diagnosing framework behavior.",
+      "Check route/method, input shape, status code, traceback location and relevant configuration one at a time.",
+      "For database or third-party integration examples, use isolated local resources and explicit timeouts; do not use production credentials."
+    ],
+    "reset_steps": "Stop the local development server, reset only disposable local practice data if needed, and remove temporary artifacts created by the exercise. Never delete production data or migration history to reset practice.",
+    "try_it_yourself": "Apply jinja filters to a tiny local Flask app. Predict what a normal request should do, test one invalid or boundary case, and record expected versus observed behavior.",
+    "progressive_hints": [
+      "Name the Flask component or ecosystem tool responsible for jinja filters.",
+      "Run the smallest example in an isolated local project and compare the actual response with the stated expected result.",
+      "Add one negative or boundary test, then check the linked version-specific official documentation."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Copying a fragment without checking its imports, app configuration or dependencies.",
+        "why": "Many Flask examples assume a configured app and a specific runtime or extension version.",
+        "fix": "Follow the run instructions, record the Flask/Python version and test the smallest behavior first."
+      },
+      {
+        "problem": "Checking only the successful request path.",
+        "why": "Missing fields, unsupported methods, unauthorized objects and service failures often have different behavior.",
+        "fix": "Add a negative or boundary test and assert the status code and response contract."
+      },
+      {
+        "problem": "Treating a local example as production-ready.",
+        "why": "Secret management, concurrency, deployment, monitoring and failure recovery need separate design decisions.",
+        "fix": "Review the matching deployment and security references before publication or real use."
+      }
+    ],
+    "recap": "Jinja Filters connects String and number formatting; Default values; Chaining filters; Built-in filters commonly used in websites. Verify the example under the selected environment and keep its assumptions visible.",
+    "knowledge_check_file": "exams/question-files/lesson-049-questions.json",
+    "content_review_status": "draft",
+    "accessibility_notes": "Use descriptive headings, meaningful labels and alt text; provide a text explanation of the diagram; keep code selectable and keyboard navigable; never rely on color alone.",
+    "version_notes": "Baseline: Flask 3.1.x, with the official changelog listing 3.1.3 on 2026-02-18. Verify current patch versions and ecosystem compatibility before use. Optional packages are not Flask built-ins.",
+    "source_syllabus_topics_reviewed": true,
+    "topic_explanations_count": 4,
+    "run_mode": "server-runner",
+    "task": "Apply jinja filters to a tiny local Flask app. Predict what a normal request should do, test one invalid or boundary case, and record expected versus observed behavior.",
+    "task_acceptance_criteria": [
+      "State the Python and Flask versions or the relevant non-Flask tool version.",
+      "Record expected and observed results for a normal case.",
+      "Test one invalid, unauthorized or boundary case and explain the status/result."
+    ],
+    "hints": [
+      "Identify the main responsibility behind jinja filters.",
+      "Keep request/data boundaries explicit and verify assumptions with a focused test.",
+      "Consult the linked official reference before using a version-sensitive API."
+    ],
+    "solution_notes": "Suggested approach: trace one input through the relevant framework component, keep validation and authorization explicit, and write the smallest test that demonstrates the intended behavior. This note does not claim the example was executed.",
+    "summary": [
+      "Jinja Filters is part of html templates and jinja and should be understood alongside its listed source subtopics.",
+      "The worked example is a focused fragment; use the stated context and dependencies before running it.",
+      "Verify expected and failure behavior locally and record the check so it can be reproduced."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "flask-templates",
+      "title": "Templates",
+      "url": "https://flask.palletsprojects.com/en/stable/templating/",
+      "publisher": "Pallets Projects",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "Jinja rendering",
+        "template context",
+        "HTML escaping"
+      ]
+    },
+    {
+      "id": "flask-quickstart",
+      "title": "Quickstart",
+      "url": "https://flask.palletsprojects.com/en/stable/quickstart/",
+      "publisher": "Pallets Projects",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "application object",
+        "routes",
+        "responses",
+        "templates"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_status": "generated_from_attached_curriculum_and_official_docs",
+  "status_note": "Draft: generated and structurally validated; requires subject-matter review before publication."
+}

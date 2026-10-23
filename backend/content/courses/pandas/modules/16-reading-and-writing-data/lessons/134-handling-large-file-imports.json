@@ -1,0 +1,183 @@
+{
+  "id": "pandas-lesson-134",
+  "slug": "handling-large-file-imports",
+  "title": "Handling Large File Imports",
+  "sequence": 134,
+  "module_id": "pandas-module-16",
+  "module_slug": "reading-and-writing-data",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "analysis",
+  "estimated_minutes": 12,
+  "prerequisites": [],
+  "previous_lesson_id": "pandas-lesson-133",
+  "next_lesson_id": "pandas-lesson-135",
+  "keywords": [
+    "handling large file imports",
+    "using chunksize",
+    "processing data chunk by chunk",
+    "aggregating partial results",
+    "combining chunk results",
+    "balancing memory use and processing time",
+    "pandas",
+    "data analysis"
+  ],
+  "source_syllabus_number": 134,
+  "subtopics": [
+    "Using chunksize",
+    "Processing data chunk by chunk",
+    "Aggregating partial results",
+    "Combining chunk results",
+    "Balancing memory use and processing time"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of handling large file imports and identify when the concept is useful.",
+    "Apply at least one method or decision from handling large file imports to a small synthetic dataset.",
+    "Verify the result by checking relevant values, labels, row counts, dtypes, or assumptions."
+  ],
+  "content": {
+    "intro": "Learn handling large file imports through a focused example and a checkable task. This lesson keeps the source syllabus subtopics visible and uses synthetic data so you can reproduce the behavior safely.",
+    "why_it_matters": "Import/export choices affect types, memory, missing-value interpretation, and whether a result can be reproduced.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Handling Large File Imports",
+        "asset_path": "diagrams/lesson-134-handling-large-file-imports.svg",
+        "alt_text": "Diagram for Handling Large File Imports: input or question → Pandas concept → result validation.",
+        "caption": "Visual guide to Handling Large File Imports; the next blocks explain the decisions and example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Import/export choices affect types, memory, missing-value interpretation, and whether a result can be reproduced."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Chunking processes an input in batches, but it works best when each chunk can be summarized independently or needs little coordination. Combine partial summaries and test that the result matches a small whole-data baseline."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Using chunksize",
+            "text": "Using chunksize is one part of handling large file imports. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Processing data chunk by chunk",
+            "text": "Processing data chunk by chunk is one part of handling large file imports. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Aggregating partial results",
+            "text": "Aggregating partial results is one part of handling large file imports. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Combining chunk results",
+            "text": "Combining chunk results is one part of handling large file imports. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Balancing memory use and processing time",
+            "text": "Balancing memory use and processing time is one part of handling large file imports. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "import pandas as pd\n\n# For large inputs: for chunk in pd.read_csv(\"large.csv\", chunksize=100_000):\n#     totals = chunk.groupby(\"category\")[\"sales\"].sum()\nprint(\"Aggregate each chunk; combine partial summaries, not raw chunks.\")",
+        "expected_output": "Prints the chunk-processing strategy; uncomment and adapt after supplying a real CSV file.",
+        "execution_mode": "static-validation",
+        "run_instructions": "Run in a local Python environment after supplying the required workbook, file, optional engine, or database connection. The commented or outlined operations are intentionally not run against external resources in this course package.",
+        "reset_steps": "The example uses synthetic, in-memory values and does not modify project files. Restart the Python process or recreate the DataFrame to reset its state."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to interpret the result",
+        "text": "Compare the result with the task’s intended meaning. Check whether row order, labels, missing values, inferred dtypes, and duplicate keys should be preserved or changed. When the result depends on a library version or optional dependency, test against the environment you plan to use."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          {
+            "title": "Change one input",
+            "text": "Use a tiny synthetic dataset to practise handling large file imports and change one value, label, or edge case."
+          },
+          {
+            "title": "Verify the invariant",
+            "text": "State the expected row count, key uniqueness, output dtype, or numerical result before running your solution."
+          },
+          {
+            "title": "Explain a limitation",
+            "text": "Write one sentence identifying an assumption, a missing-data rule, a version concern, or a case where this operation is not suitable."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Common mistakes and fixes",
+        "text": "Avoid assuming inferred types are always correct, treating every repeated record as an error, or overlooking alignment by labels. Check the actual API documentation for the target version and assert the properties that matter to the task."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-134-questions.json"
+  },
+  "exercise_files": [
+    "../exercises/025-chunked-processing.json"
+  ],
+  "sources": [
+    {
+      "title": "Input/output tools",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html",
+      "publisher": "pandas project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Handling Large File Imports"
+      ]
+    },
+    {
+      "title": "Pandas API Reference",
+      "url": "https://pandas.pydata.org/docs/reference/index.html",
+      "publisher": "pandas project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Handling Large File Imports"
+      ]
+    }
+  ],
+  "run_mode": "static-validation",
+  "task": "Practise handling large file imports with a small synthetic DataFrame. Keep the input, transformation, and expected result explicit.",
+  "task_acceptance_criteria": [
+    "The code uses an appropriate Pandas operation for the stated goal.",
+    "The result is checked for the expected values, labels, dtypes, row count, or alignment.",
+    "The solution documents a relevant edge case, assumption, or compatibility note."
+  ],
+  "hints": [
+    "Start by printing the relevant shape, labels, and dtypes.",
+    "Write down the expected result for a tiny example before applying the operation to larger data.",
+    "Use a small assertion or comparison to verify the outcome instead of relying only on visual inspection."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Assuming imported data already has the intended schema.",
+      "why": "I/O parsing can infer a wrong dtype, encoding, delimiter, date, or missing-value rule.",
+      "fix": "Declare or validate the schema after loading and record relevant reader options."
+    },
+    {
+      "problem": "Using the operation without considering missing values or duplicate keys.",
+      "why": "Those records may change totals, group sizes, or join cardinality.",
+      "fix": "State the policy and test an example containing the relevant edge case."
+    }
+  ],
+  "summary": [
+    "Handling Large File Imports supports one clearly defined part of a repeatable data workflow.",
+    "Check labels, dtypes, missing values, and row counts where they affect the result.",
+    "Record assumptions and consult the official reference when version-specific behavior matters."
+  ],
+  "next_steps": [
+    "Review the next topic after handling large file imports and compare how it builds on the same data model."
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached syllabus and official documentation links; subject-matter review and target-version execution are required before publication."
+}

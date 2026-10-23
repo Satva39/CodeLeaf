@@ -1,0 +1,67 @@
+{
+  "id": "pandas-exercise-11",
+  "slug": "text-cleaning-tool",
+  "title": "Text Cleaning Tool",
+  "sequence": 11,
+  "lesson_id": "pandas-lesson-080",
+  "lesson_slug": "regular-expressions-with-pandas",
+  "module_id": "pandas-module-10",
+  "difficulty": "intermediate",
+  "type": "code",
+  "prompt": "Normalize product names and extract product codes with regular expressions.",
+  "scenario": "Use the synthetic data described below to practise s, t, r, i, n, g,  , o, p, e, r, a, t, i, o, n, s,  , a, n, d,  , r, e, g, e, x,  , e, x, t, r, a, c, t, i, o, n. Do not assume the input is correct without validating it.",
+  "skills": "String operations and regex extraction",
+  "starter": {
+    "language": "python",
+    "code": "import pandas as pd\n\nlabels = pd.Series([\"  Tea-104 \", \"Juice-219\", \"unknown\"])\nclean = labels.str.strip().str.extract(r\"(?P<product>[A-Za-z]+)-(?P<code>\\d+)\")\nprint(clean.to_dict(\"records\"))",
+    "dataset_note": "Use small synthetic in-memory data; do not place private or real customer data in exercises."
+  },
+  "input_schema": {
+    "description": "Create or use a synthetic DataFrame with only the columns needed for this exercise.",
+    "validation": [
+      "Document expected columns and data types.",
+      "State how missing values or duplicates should be treated."
+    ]
+  },
+  "expected_output": [
+    "Trim and normalize product labels.",
+    "Extract a code with a regular expression and mark unmatched values.",
+    "Test input with extra spaces, an empty string, and missing data."
+  ],
+  "public_tests": [
+    {
+      "name": "normal-case",
+      "description": "The solution returns the required columns and correctly computes the stated result."
+    },
+    {
+      "name": "edge-case",
+      "description": "The solution documents behavior for a missing value, duplicate key, empty input, invalid value, or other relevant edge case."
+    }
+  ],
+  "hints": [
+    "Write down the expected result before coding.",
+    "Use Pandas operations that preserve labels unless position-based behavior is intended.",
+    "Add a small assertion for the most important property."
+  ],
+  "acceptance_criteria": [
+    "Trim and normalize product labels.",
+    "Extract a code with a regular expression and mark unmatched values.",
+    "Test input with extra spaces, an empty string, and missing data."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "s"
+    ],
+    "case_sensitive": false,
+    "note": "The generic short-response grader is only an initial scaffold; a reviewed isolated Python grader is required for automatic execution of arbitrary learner code."
+  },
+  "solution_file": "solutions/011-text-cleaning-tool-solution.json",
+  "solution": {},
+  "retry_policy": {
+    "max_attempts": null,
+    "allow_retry_after_feedback": true
+  },
+  "status": "draft",
+  "status_note": "Review prompt, starter, rubric, and server-side grading before publication."
+}

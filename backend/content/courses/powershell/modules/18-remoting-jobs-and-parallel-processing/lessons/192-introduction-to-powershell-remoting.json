@@ -1,0 +1,128 @@
+{
+  "id": "powershell-lesson-192",
+  "slug": "introduction-to-powershell-remoting",
+  "title": "Introduction to PowerShell Remoting",
+  "sequence": 192,
+  "module_id": "powershell-module-18",
+  "module_slug": "remoting-jobs-and-parallel-processing",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "powershell-lesson-191"
+  ],
+  "previous_lesson_id": "powershell-lesson-191",
+  "next_lesson_id": "powershell-lesson-193",
+  "keywords": [
+    "introduction",
+    "to",
+    "powershell",
+    "remoting",
+    "module-18"
+  ],
+  "source_syllabus_number": 192,
+  "subtopics": [
+    "Remote execution concepts",
+    "Local versus remote sessions",
+    "Remoting prerequisites",
+    "Identity, permissions, and connectivity"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose of Introduction to PowerShell Remoting and define its core vocabulary.",
+    "Apply introduction to powershell remoting in a small PowerShell example and predict its result.",
+    "Identify one relevant edge case, version constraint, or troubleshooting step."
+  ],
+  "content": {
+    "intro": "This lesson covers Introduction to PowerShell Remoting in the PowerShell learning path. It expands the supplied syllabus heading into an actionable draft with a visual, a worked example, and a short knowledge check.",
+    "why_it_matters": "Remote and concurrent operations multiply both value and risk. Use only explicitly authorized test targets, confirm identity and transport, cap parallelism, isolate failures, and treat remoted objects as serialized representations rather than always-live local .NET objects.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Lesson 192 visual map",
+        "asset_path": "diagrams/lesson-192-introduction-to-powershell-remoting.svg",
+        "alt_text": "Lesson 192 concept map for Introduction to PowerShell Remoting: concept and purpose, a local example and result, followed by practice and verification.",
+        "caption": "Follow the concept → example → verification path for Introduction to PowerShell Remoting."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Introduction to PowerShell Remoting belongs to Remoting, Jobs, and Parallel Processing. Focus on the rule or workflow this lesson introduces, work through a small example, and explain the expected result and one boundary case."
+      },
+      {
+        "type": "paragraph",
+        "title": "Build understanding step by step",
+        "text": "Start with the syllabus concepts: Remote execution concepts; Local versus remote sessions; Remoting prerequisites; Identity, permissions, and connectivity. Separate the input, the operation and the expected result. Use a disposable local workspace for file or system examples, and verify platform-specific behavior against the active runtime."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Remote execution concepts",
+            "text": "Remote execution concepts is one part of Introduction to PowerShell Remoting. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Local versus remote sessions",
+            "text": "Local versus remote sessions is one part of Introduction to PowerShell Remoting. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Remoting prerequisites",
+            "text": "Remoting prerequisites is one part of Introduction to PowerShell Remoting. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Identity, permissions, and connectivity",
+            "text": "Identity, permissions, and connectivity is one part of Introduction to PowerShell Remoting. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "powershell",
+        "execution_mode": "static-validation",
+        "code": "$sample = [pscustomobject]@{ Topic = 'Introduction to PowerShell Remoting'; Verified = $true }\n$sample | Format-List Topic, Verified",
+        "expected_output": "A formatted list showing Topic = 'Introduction to PowerShell Remoting' and Verified = True.",
+        "run_instructions": "Review this snippet as a static teaching example. In a local PowerShell 7.6 session, save a copy under your course workspace, run it manually, and compare the result with the stated expectation. CodeLeaf’s current course preview does not execute PowerShell. Adjust environment-dependent output to your machine.",
+        "troubleshooting": "Check command availability with Get-Command, inspect values with Get-Member, consult Get-Help -Full, and verify PowerShell version/platform before assuming identical output. Do not run examples that change system state without adapting and reviewing them.",
+        "reset_steps": "Restore the original snippet and use synthetic values. If you created test files, delete only those files within the dedicated practice folder after checking their paths."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety note",
+        "text": "The main path targets modern PowerShell 7.6 LTS. Windows PowerShell 5.1 compatibility is labeled separately. Some providers, admin cmdlets and APIs depend on OS, module version, permissions or tenant access; the examples are static references, not proof of execution."
+      }
+    ],
+    "task": "Try it yourself: apply the concept to a small reproducible automation task. Use synthetic data or a disposable practice folder, write down your predicted result, check it locally, and explain one boundary case.",
+    "task_acceptance_criteria": [
+      "Explain the central idea in Introduction to PowerShell Remoting in your own words.",
+      "Verify the expected result using a local session or a documented manual check.",
+      "Describe one relevant edge case, limitation or troubleshooting step."
+    ],
+    "hints": [
+      "Predict the output before changing the example.",
+      "Change one input or condition at a time and compare the results.",
+      "Use Get-Help and official versioned documentation when behavior differs; do not treat a static preview as execution."
+    ],
+    "expected_output": "A formatted list showing Topic = 'Introduction to PowerShell Remoting' and Verified = True.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-192-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "PowerShell remoting over SSH",
+      "url": "https://learn.microsoft.com/en-us/powershell/scripting/learn/remoting/ssh-remoting-in-powershell",
+      "publisher": "Microsoft Learn",
+      "supports": [
+        "SSH remoting setup",
+        "cross-platform sessions",
+        "WinRM versus SSH differences"
+      ],
+      "checked_on": "2026-10-20",
+      "source_type": "official_documentation"
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson expanded from the numbered PowerShell PDF syllabus. Static examples, answers, version details and technical phrasing need subject-matter review before publication."
+}

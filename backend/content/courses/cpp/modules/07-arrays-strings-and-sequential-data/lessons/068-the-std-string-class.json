@@ -1,0 +1,214 @@
+{
+  "id": "cpp-lesson-068",
+  "slug": "the-std-string-class",
+  "title": "The std::string Class",
+  "sequence": 68,
+  "module_id": "cpp-module-07",
+  "module_slug": "arrays-strings-and-sequential-data",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "cpp-lesson-067"
+  ],
+  "previous_lesson_id": "cpp-lesson-067",
+  "next_lesson_id": "cpp-lesson-069",
+  "keywords": [
+    "the-std-string-class",
+    "creating-strings",
+    "string-initialization",
+    "concatenation",
+    "length-and-size",
+    "accessing-characters",
+    "comparing-strings",
+    "searching-and-finding-substrings"
+  ],
+  "source_syllabus_number": 68,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Creating Strings",
+    "String Initialization",
+    "Concatenation",
+    "Length and Size",
+    "Accessing Characters",
+    "Comparing Strings",
+    "Searching and Finding Substrings",
+    "Substrings and Replacement",
+    "Inserting and Erasing Characters",
+    "String Capacity and Memory"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and core rule of the std::string class using at least one example.",
+    "Trace or adapt a minimal C++ example related to the std::string class and state its expected result.",
+    "Identify one precondition, error case, lifetime issue, portability assumption or version constraint relevant to the topic."
+  ],
+  "content": {
+    "intro": "The std::string Class focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "The std::string Class matters because trace indexes from zero, distinguish element count from capacity, and check whether references or views can outlive or be invalidated by their source. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "The std::string Class: visual trace",
+        "asset_path": "diagrams/lessons/lesson-068.svg",
+        "alt_text": "Lesson 68 visual for The std::string Class; concept: Creating Strings; apply: String Initialization; verify: Concatenation.",
+        "caption": "Original lesson-specific overview: understand creating strings, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Sequential data combines ordered values and text. Prefer standard containers for ownership and bounds-aware interfaces where they fit the problem.\n\nThe std::string Class focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nTrace indexes from zero, distinguish element count from capacity, and check whether references or views can outlive or be invalidated by their source."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: The std::string Class",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <iostream>\n#include <string>\n\nint main() {\n    const std::string message = \"modern C++\";\n    std::size_t spaces = 0;\n    for (char ch : message) if (ch == ' ') ++spaces;\n    std::cout << \"length=\" << message.size() << \", spaces=\" << spaces << '\\n';\n}\n",
+        "expected_output": "length=10, spaces=1",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "std::string owns its character sequence. Its size counts char code units, not necessarily user-perceived Unicode characters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Creating Strings",
+            "text": "Explain creating strings in the context of The std::string Class: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "String Initialization",
+            "text": "Explain string initialization in the context of The std::string Class: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Concatenation",
+            "text": "Explain concatenation in the context of The std::string Class: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Length and Size",
+            "text": "Explain length and size in the context of The std::string Class: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Accessing Characters",
+            "text": "Explain accessing characters in the context of The std::string Class: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Comparing Strings",
+            "text": "Explain comparing strings in the context of The std::string Class: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Searching and Finding Substrings",
+            "text": "Explain searching and finding substrings in the context of The std::string Class: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Substrings and Replacement",
+            "text": "Explain substrings and replacement in the context of The std::string Class: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Inserting and Erasing Characters",
+            "text": "Explain inserting and erasing characters in the context of The std::string Class: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "String Capacity and Memory",
+            "text": "Explain string capacity and memory in the context of The std::string Class: identify the rule, trace a minimal example, and check one boundary or failure case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate creating strings, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "Use standard C++ rather than compiler-specific behavior unless the lesson explicitly labels the dependency. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-068-questions.json",
+    "task": "Create a small, independent example that demonstrates the std::string class. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example builds under a documented standard mode with warnings enabled.",
+      "The predicted and observed result are recorded; deviations are explained.",
+      "At least one boundary, invalid-input, lifetime or portability assumption is tested or documented."
+    ],
+    "hints": [
+      "Start with the smallest example that demonstrates creating strings.",
+      "Trace the relevant values and state the expected output before running the program.",
+      "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+    ],
+    "summary": [
+      "The std::string Class is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying the std::string class.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation"
+  },
+  "task": "Create a small, independent example that demonstrates the std::string class. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+  "hints": [
+    "Start with the smallest example that demonstrates creating strings.",
+    "Trace the relevant values and state the expected output before running the program.",
+    "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+  ],
+  "expected_output": "length=10, spaces=1",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "The std::string Class is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying the std::string class.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 7, lesson 68: The std::string Class.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

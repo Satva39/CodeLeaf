@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-143",
+  "slug": "resharding-and-cluster-maintenance",
+  "title": "Resharding and Cluster Maintenance",
+  "sequence": 143,
+  "module_id": "redis-module-18",
+  "module_slug": "high-availability-sentinel-and-redis-cluster",
+  "level": "advanced to professional",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-142"
+  ],
+  "previous_lesson_id": "redis-lesson-142",
+  "next_lesson_id": "redis-lesson-144",
+  "keywords": [
+    "resharding-and-cluster-maintenance",
+    "slot-migration",
+    "adding-nodes",
+    "removing-nodes",
+    "rebalancing",
+    "maintenance-and-recovery-procedures",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 143,
+  "subtopics": [
+    "Slot migration",
+    "Adding nodes",
+    "Removing nodes",
+    "Rebalancing",
+    "Maintenance and recovery procedures"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Resharding and Cluster Maintenance and distinguish it from a related Redis concept.",
+    "Apply or trace Resharding and Cluster Maintenance in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Resharding and Cluster Maintenance and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Resharding and Cluster Maintenance in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Resharding and Cluster Maintenance is an operational design choice: state the workload’s durability, recovery, freshness, availability and capacity requirements before selecting settings.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Resharding and Cluster Maintenance",
+        "asset_path": "diagrams/lesson-143-resharding-and-cluster-maintenance.svg",
+        "alt_text": "Concept diagram for Resharding and Cluster Maintenance, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Resharding and Cluster Maintenance; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Resharding and Cluster Maintenance is an operational design choice: state the workload’s durability, recovery, freshness, availability and capacity requirements before selecting settings."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Resharding and Cluster Maintenance, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Slot migration",
+            "text": "Connect Slot migration to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Adding nodes",
+            "text": "Connect Adding nodes to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Removing nodes",
+            "text": "Connect Removing nodes to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Rebalancing",
+            "text": "Connect Rebalancing to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Maintenance and recovery procedures",
+            "text": "Connect Maintenance and recovery procedures to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Resharding and Cluster Maintenance",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "INFO replication\nROLE",
+        "expected_output": "Reports replication role and connected replica/primary details for the active node.",
+        "run_instructions": "Topology commands and fields depend on the deployment. Do not reconfigure a production primary for a tutorial.",
+        "reset_steps": "Read-only inspection.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Resharding and Cluster Maintenance. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Resharding and Cluster Maintenance in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Resharding and Cluster Maintenance.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "Reports replication role and connected replica/primary details for the active node.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-143-questions.json",
+    "recap": [
+      "Resharding and Cluster Maintenance is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "High availability with Redis Sentinel",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "monitoring, quorum, failover and client discovery"
+      ]
+    },
+    {
+      "title": "Scale with Redis Cluster",
+      "url": "https://redis.io/docs/latest/management/scaling/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "sharding, cluster behavior, availability and operating topology"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

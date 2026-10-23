@@ -1,0 +1,175 @@
+{
+  "id": "xml-lesson-128",
+  "slug": "xpointer",
+  "title": "XPointer",
+  "sequence": 128,
+  "module_id": "xml-module-15",
+  "module_slug": "advanced-xml-specifications-and-technologies",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "optional",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "xml-lesson-127"
+  ],
+  "previous_lesson_id": "xml-lesson-127",
+  "next_lesson_id": "xml-lesson-129",
+  "keywords": [
+    "xpointer",
+    "advanced-xml-specifications-and-technologies",
+    "identifying-portions-of-xml-documents",
+    "element-based-addressing",
+    "fragment-identification",
+    "common-use-cases-and-compatibility"
+  ],
+  "source_syllabus_number": 128,
+  "subtopics": [
+    "Identifying portions of XML documents",
+    "Element-based addressing",
+    "Fragment identification",
+    "Common use cases and compatibility"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose of xpointer and explain at least one listed subtopic.",
+    "Interpret the example related to xpointer and predict its expected result.",
+    "Identify one validation, compatibility, security, or troubleshooting consideration relevant to the example."
+  ],
+  "content": {
+    "intro": "In this lesson, you will explore xpointer within Advanced XML Specifications and Technologies. You will connect its syllabus topics to an inspectable example, check the expected result, and note tool/version limits.",
+    "why_it_matters": "XPointer matters because XML workflows rely on explicit structure and predictable processing. The lesson helps you reason about identifying portions of xml documents, avoid a common misunderstanding, and make a result reproducible for another developer.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "XPointer: concept map",
+        "asset_path": "diagrams/lessons/lesson-128-xpointer.svg",
+        "alt_text": "Concept flow covering Identifying portions of XML documents, Element-based addressing, Fragment identification, Common use cases and compatibility.",
+        "caption": "The visual introduces xpointer; inspect the worked example and then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "These related specifications extend how XML documents refer to external resources, address fragments, represent links, or define a logical information model. They are optional specialist tools rather than requirements for every XML application."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the subtopics",
+        "text": "This lesson explicitly covers: Identifying portions of XML documents; Element-based addressing; Fragment identification; Common use cases and compatibility. Treat these as connected parts of one workflow: define the structure, make the relevant assumptions explicit, and verify a result with a small known input."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: XPointer",
+        "language": "xml",
+        "code": "<!-- XPointer examples are processor-dependent; identify a target using a URI fragment and supported scheme. -->\n<chapter xml:id=\"intro\"><title>Introduction</title></chapter>",
+        "expected_output": "The XML document has a stable xml:id target, but XPointer fragment support must be checked in the consuming application.",
+        "run_instructions": "Inspect this example as text. Run it only in a processor that supports the shown language/version; the standard CodeLeaf playground previews HTML/CSS/JavaScript only and does not execute XML, XSD, XPath, XSLT, XQuery, Python, or SQL. Confirm support in the intended processor and treat all external references as policy-controlled inputs. For signature or encryption workflows, use standards-based cryptographic libraries and validate the complete protocol, not a hand-written fragment.",
+        "reset_steps": "Restore the sample to its exact starting state before each experiment. Change one element, attribute, expression, or constraint at a time, then compare the result with the expected behavior.",
+        "execution_mode": "static-validation",
+        "limitations": "This snippet is an inspectable example, not an XML execution service. Validate it with a standards-compatible XML processor; feature support depends on the processor/version."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety checkpoint",
+        "text": "Record the exact processor and version: specification support is not universal, especially for XSD 1.1, XPath 2.0/3.1, XQuery, and XSLT 2.0/3.0."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a small synthetic example that demonstrates “Identifying portions of XML documents”. Then add one boundary case involving “Element-based addressing”. Write down what should happen before testing, and record the exact output or processor message afterward."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-128-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming a document is correct because it looks readable.",
+        "why": "Visual appearance does not prove well-formedness, schema validity, correct namespace handling, or application-level meaning.",
+        "fix": "Parse and validate the document with the intended processor, then assert its meaning using a focused test."
+      },
+      {
+        "problem": "Mixing specification features with processor support.",
+        "why": "A standard may define features that a specific runtime does not implement.",
+        "fix": "Record the version and feature support; test with the actual target processor."
+      },
+      {
+        "problem": "Testing only one happy-path example.",
+        "why": "Missing values, wrong types, namespace differences, or boundary inputs can expose failures.",
+        "fix": "Add a valid case, an invalid case, and an edge case to the verification notes."
+      }
+    ],
+    "task": "Build a short demonstration of xpointer using synthetic data. Include the concept “Identifying portions of XML documents”, a known expected result, and a short note explaining one edge case.",
+    "task_acceptance_criteria": [
+      "The artifact clearly demonstrates Identifying portions of XML documents.",
+      "The expected result is written before verification.",
+      "One invalid or boundary case is documented.",
+      "Processor/version assumptions and relevant security limits are recorded."
+    ],
+    "hints": [
+      "Start with the exact definition or construct associated with identifying portions of xml documents.",
+      "Keep the example minimal and change one thing at a time.",
+      "Compare the observed result with the expected behavior and consult the linked specification if they differ."
+    ],
+    "summary": [
+      "XPointer contributes to the larger XML workflow of creating, checking, querying, transforming, or maintaining structured documents.",
+      "The listed syllabus concepts include Identifying portions of XML documents, Element-based addressing, Fragment identification.",
+      "A reproducible XML example includes the input, processor/version assumptions, expected result, and a meaningful failure case."
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "The XML document has a stable xml:id target, but XPointer fragment support must be checked in the consuming application."
+  },
+  "task": "Build a short demonstration of xpointer using synthetic data. Include the concept “Identifying portions of XML documents”, a known expected result, and a short note explaining one edge case.",
+  "task_acceptance_criteria": [
+    "The artifact clearly demonstrates Identifying portions of XML documents.",
+    "The expected result is written before verification.",
+    "One invalid or boundary case is documented.",
+    "Processor/version assumptions and relevant security limits are recorded."
+  ],
+  "hints": [
+    "Start with the exact definition or construct associated with identifying portions of xml documents.",
+    "Keep the example minimal and change one thing at a time.",
+    "Compare the observed result with the expected behavior and consult the linked specification if they differ."
+  ],
+  "summary": [
+    "XPointer contributes to the larger XML workflow of creating, checking, querying, transforming, or maintaining structured documents.",
+    "The listed syllabus concepts include Identifying portions of XML documents, Element-based addressing, Fragment identification.",
+    "A reproducible XML example includes the input, processor/version assumptions, expected result, and a meaningful failure case."
+  ],
+  "run_mode": "static-validation",
+  "expected_output": "The XML document has a stable xml:id target, but XPointer fragment support must be checked in the consuming application.",
+  "common_mistakes": [
+    {
+      "problem": "Assuming a document is correct because it looks readable.",
+      "why": "Visual appearance does not prove well-formedness, schema validity, correct namespace handling, or application-level meaning.",
+      "fix": "Parse and validate the document with the intended processor, then assert its meaning using a focused test."
+    },
+    {
+      "problem": "Mixing specification features with processor support.",
+      "why": "A standard may define features that a specific runtime does not implement.",
+      "fix": "Record the version and feature support; test with the actual target processor."
+    },
+    {
+      "problem": "Testing only one happy-path example.",
+      "why": "Missing values, wrong types, namespace differences, or boundary inputs can expose failures.",
+      "fix": "Add a valid case, an invalid case, and an edge case to the verification notes."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "title": "Extensible Markup Language (XML) 1.0, Fifth Edition",
+      "url": "https://www.w3.org/TR/xml/",
+      "publisher": "W3C",
+      "checked_on": "2026-10-12"
+    },
+    {
+      "title": "Namespaces in XML 1.0, Third Edition",
+      "url": "https://www.w3.org/TR/xml-names/",
+      "publisher": "W3C",
+      "checked_on": "2026-10-12"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Generated from the attached XML syllabus; requires technical review and validation in the target XML processor before publication.",
+  "exercise_files": []
+}

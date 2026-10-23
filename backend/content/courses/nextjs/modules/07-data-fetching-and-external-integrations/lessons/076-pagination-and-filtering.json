@@ -1,0 +1,167 @@
+{
+  "id": "nextjs-lesson-076",
+  "slug": "pagination-and-filtering",
+  "title": "Pagination and Filtering",
+  "sequence": 76,
+  "module_id": "nextjs-module-07",
+  "module_slug": "data-fetching-and-external-integrations",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "nextjs-lesson-075"
+  ],
+  "previous_lesson_id": "nextjs-lesson-075",
+  "next_lesson_id": "nextjs-lesson-077",
+  "keywords": [
+    "Pagination and Filtering",
+    "Query-string-driven pagination",
+    "Server-side filtering",
+    "Search and sorting parameters",
+    "Efficient database queries",
+    "Next.js",
+    "JavaScript",
+    "App Router"
+  ],
+  "source_syllabus_number": 76,
+  "subtopics": [
+    "Query-string-driven pagination",
+    "Server-side filtering",
+    "Search and sorting parameters",
+    "Efficient database queries"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and boundaries of Pagination and Filtering in the context of Data Fetching and External Integrations.",
+    "Apply Query-string-driven pagination in a minimal JavaScript/JSX or configuration example and describe its expected result.",
+    "Verify the example with one relevant edge or failure case and identify version/runtime assumptions."
+  ],
+  "content": {
+    "intro": "This lesson develops Pagination and Filtering in the supplied Next.js curriculum. The list below preserves its named syllabus subtopics and ties them to a small example you can inspect and adapt.",
+    "why_it_matters": "Prefer direct server-side data access where it fits. Handle status errors, validate returned data, and design loading and failure behavior explicitly. In practice, query-string-driven pagination should be understood well enough to explain the expected behavior and how it can fail.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Pagination and Filtering: concept map",
+        "asset_path": "diagrams/lessons/lesson-076-pagination-and-filtering.svg",
+        "alt_text": "Lesson 76: Pagination and Filtering: a four-step visual flow showing Query-string-driven pagination, Server-side filtering, Search and sorting parameters, Efficient database queries.",
+        "caption": "Concept map for Pagination and Filtering in Data Fetching and External Integrations; understand the idea, inspect its convention, practice, and verify. The numbered steps communicate order independently of color."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Prefer direct server-side data access where it fits. Handle status errors, validate returned data, and design loading and failure behavior explicitly. “Pagination and Filtering” is part of the lesson model for Pagination and Filtering. Describe its role, use the framework convention that applies to the selected Next.js version, and confirm the result with a focused example."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Query-string-driven pagination",
+            "text": "“Query-string-driven pagination” is part of the lesson model for Pagination and Filtering. Describe its role, use the framework convention that applies to the selected Next.js version, and confirm the result with a focused example."
+          },
+          {
+            "title": "Server-side filtering",
+            "text": "“Server-side filtering” is part of the lesson model for Pagination and Filtering. Describe its role, use the framework convention that applies to the selected Next.js version, and confirm the result with a focused example."
+          },
+          {
+            "title": "Search and sorting parameters",
+            "text": "For search and sorting parameters, connect the URL and filesystem convention to the rendered result and verify direct navigation as well as client-side transitions."
+          },
+          {
+            "title": "Efficient database queries",
+            "text": "For efficient database queries, make input/output shape explicit, handle non-success responses, and keep credentials in trusted server code."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "jsx",
+        "filename": "app/page.jsx",
+        "code": "// app/products/page.jsx\nexport default async function ProductsPage({ searchParams }) {\n  const { q = '' } = await searchParams;\n  return <main><h1>Products</h1><p>Search: {q}</p></main>;\n}",
+        "expected_output": "A URL such as /products?q=mug displays “Search: mug”. Validate and normalize query values before passing them to data access.",
+        "run_instructions": "This is an inspectable example, not an arbitrary-code runner inside CodeLeaf. Start from a separate JavaScript App Router project created with `npx create-next-app@latest my-next-app --js --app`, put the snippet in the named or relevant file, and run `npm run dev`. Examples that call application-owned helpers, databases, authentication, or third-party APIs require those dependencies and appropriate environment variables. Use `npm run build` to validate a production build after adapting it.",
+        "reset_steps": "Restore the original snippet, reset the example data and request state, then rerun the same normal case and one empty, invalid, slow, denied, or failed case as relevant. Remove any test records and use non-production credentials.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Work through “Pagination and Filtering” by predicting the result before running the example. Identify which file convention or API creates the behavior, then vary one relevant input such as a route parameter, form value, request result, or viewport. Record the actual outcome and compare it with the expected result above."
+      },
+      {
+        "type": "callout",
+        "title": "Version and environment note",
+        "text": "This JavaScript-first course uses the Next.js 16 documentation snapshot checked on 2026-10-18. Runtime note: this snippet is static instructional material, not an arbitrary-code runner. Run it in a separate, version-matched Next.js project and compare its output with the expected result. TypeScript is an optional parallel skill, not a requirement for these examples. Confirm any experimental or configuration-dependent API in the exact version installed in your learning project."
+      }
+    ],
+    "task": "Create or inspect a minimal example for “Pagination and Filtering”. Include the syllabus concept “Query-string-driven pagination”, state its expected output, and verify one normal and one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named concept rather than only mentioning it.",
+      "Expected output and the project/runtime needed to reproduce it are documented.",
+      "At least one boundary, empty, loading, denied, or failure case is tested or explicitly reasoned about.",
+      "Secrets and trusted server operations stay on the server; UI behavior remains semantic and accessible where relevant."
+    ],
+    "hints": [
+      "Start with the smallest observable part of “Query-string-driven pagination”.",
+      "Predict the output, change one input at a time, and compare the result with your expectation.",
+      "If results differ, check the route/file convention, current Next.js and Node.js versions, server logs, and whether the behavior is cache-dependent."
+    ],
+    "expected_output": "A URL such as /products?q=mug displays “Search: mug”. Validate and normalize query values before passing them to data access.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-076-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating a development preview as proof that the production application is correct.",
+        "why": "Caching, environment configuration, deployment constraints, and error handling can differ between development and production.",
+        "fix": "Run the relevant targeted tests and a production build, then verify the deployed/runtime-specific behavior."
+      },
+      {
+        "problem": "Relying on client-only checks for sensitive data or mutations.",
+        "why": "Requests can be sent without using the visible UI.",
+        "fix": "Authenticate, authorize, validate inputs, and check resource ownership inside the trusted server operation."
+      },
+      {
+        "problem": "Assuming a Next.js behavior is universal across releases.",
+        "why": "Rendering, caching, config, and request processing APIs evolve between versions.",
+        "fix": "Name the target release and check its matching official docs before publishing or upgrading the example."
+      }
+    ],
+    "summary": [
+      "Pagination and Filtering fits into Data Fetching and External Integrations and should be explained with the vocabulary in the syllabus subtopics.",
+      "Keep the implementation minimal, make its runtime boundary explicit, and document its expected output.",
+      "Verify at least one relevant edge/failure case before treating the example as correct."
+    ],
+    "references": [
+      "https://nextjs.org/docs/app/getting-started/fetching-data",
+      "https://nextjs.org/docs/app/api-reference/functions/fetch"
+    ]
+  },
+  "exercise_files": [
+    "../exercises/004-build-a-searchable-product-catalog.json",
+    "../exercises/012-develop-a-filtered-dashboard.json"
+  ],
+  "sources": [
+    {
+      "title": "Fetching Data",
+      "url": "https://nextjs.org/docs/app/getting-started/fetching-data",
+      "publisher": "Vercel / Next.js documentation team",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "server-side data fetching, direct data access, and streaming"
+      ]
+    },
+    {
+      "title": "Fetch API Reference",
+      "url": "https://nextjs.org/docs/app/api-reference/functions/fetch",
+      "publisher": "Vercel / Next.js documentation team",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "server fetch cache and revalidation options"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Authored from the supplied syllabus and current official documentation links; instructor and technical review are required before publication."
+}

@@ -1,0 +1,96 @@
+{
+  "id": "c-lesson-331",
+  "slug": "c17-c18-corrections-and-compatibility",
+  "title": "C17/C18: Corrections and Compatibility",
+  "sequence": 331,
+  "module_id": "c-module-29",
+  "module_slug": "modern-c-standards-and-legacy-compatibility",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "c-lesson-330"
+  ],
+  "previous_lesson_id": "c-lesson-330",
+  "next_lesson_id": "c-lesson-332",
+  "keywords": [
+    "c17-c18-corrections-and-compatibility",
+    "modern-c-standards-and-legacy-compatibility"
+  ],
+  "source_syllabus_number": 331,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the main idea behind c17/c18: corrections and compatibility in your own words.",
+    "Apply c17/c18: corrections and compatibility to a minimal C example and predict the result.",
+    "Identify a relevant boundary, portability assumption, or failure mode."
+  ],
+  "content": {
+    "intro": "This lesson explores C17/C18: Corrections and Compatibility through an original visual, a compact C example and a check you can perform locally.",
+    "why_it_matters": "Understanding c17/c18: corrections and compatibility helps you reason about C programs rather than relying on trial and error. It also helps you communicate assumptions, write safer code, and debug behavior across toolchains.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 29 roadmap",
+        "asset_path": "diagrams/module-29-overview.svg",
+        "alt_text": "Module 29 overview for Modern C Standards and Legacy Compatibility, showing this lesson in sequence with the surrounding syllabus topics.",
+        "caption": "Module visual overview; the numbered syllabus map remains the canonical order."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "C17/C18: Corrections and Compatibility is studied as part of **Modern C Standards and Legacy Compatibility**. Start with the contract: identify the inputs or program state, the rule C applies, and the observable result. Then check the behavior in a small, repeatable example.\n\nIn C, details can depend on the selected language standard and implementation. Distinguish defined behavior from unspecified, implementation-defined, or undefined behavior, and consult the cited standard/compiler references when portability matters."
+      },
+      {
+        "type": "paragraph",
+        "title": "Practical reasoning",
+        "text": "For “C17/C18: Corrections and Compatibility”, write down the preconditions first. Identify valid inputs and boundaries, decide which C rule applies, then choose evidence that would falsify your assumption. Prefer a small test with a clear expected result and compile with diagnostics enabled."
+      },
+      {
+        "type": "code",
+        "title": "Standard mode awareness",
+        "language": "c",
+        "code": "#include <stdbool.h>\n#include <stdio.h>\n\nint main(void) {\n    bool portable_example = true;\n    printf(\"portable C example: %s\\n\", portable_example ? \"yes\" : \"no\");\n    return 0;\n}",
+        "expected_output": "portable C example: yes",
+        "run_instructions": "Select an explicit compiler mode and check the vendor feature table. C23 support is feature-by-feature; this example intentionally stays compatible with C17.",
+        "reset_steps": "Restore the original example, rebuild with the same compiler flags, rerun the same inputs, and compare actual output with the stated result. For time-, platform-, or input-dependent examples, record the environment and do not expect identical values everywhere.",
+        "execution_mode": "static-validation",
+        "limitations": "The CodeLeaf lesson page does not run C code. Compile locally or use a separately deployed, isolated C runner; do not execute arbitrary learner code inside FastAPI."
+      },
+      {
+        "type": "callout",
+        "title": "Portability and safety check",
+        "text": "Use a documented standard mode; treat compiler extensions as extensions, not ISO C guarantees. Check return values, buffer bounds, and object lifetime. This course example is draft material and needs code review on the target toolchain before publication."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-331-questions.json"
+  },
+  "task": "In a scratch file, create one small example that demonstrates c17/c18: corrections and compatibility. Explain the expected result before running it, compile with warnings enabled, and record one boundary case or portability question.",
+  "hints": [
+    "Reduce the program to the smallest example that still shows the concept.",
+    "Write down the input, expected result, and assumptions before running it.",
+    "Check the official language/compiler reference and test a boundary case."
+  ],
+  "expected_output": "A short, reproducible C example and explanation showing c17/c18: corrections and compatibility, plus a note about one boundary or portability consideration.",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    "Treating c17/c18: corrections and compatibility as a rule to memorize rather than a behavior to test.",
+    "Ignoring compiler warnings, input validity, or object lifetime.",
+    "Assuming behavior observed on one compiler is guaranteed by every C implementation."
+  ],
+  "summary": [
+    "C17/C18: Corrections and Compatibility belongs to Modern C Standards and Legacy Compatibility.",
+    "State the assumptions, verify the smallest example, and test boundaries.",
+    "Check the selected language standard and target compiler when portability matters."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C Language — Complete Learning Curriculum, Section B, module 29, topic 331.",
+    "Official and technical sources indexed in references/reference-index.json."
+  ],
+  "status": "draft"
+}

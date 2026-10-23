@@ -1,0 +1,153 @@
+{
+  "id": "kotlin-lesson-096",
+  "slug": "abstract-classes-and-members",
+  "title": "Abstract Classes and Members",
+  "sequence": 96,
+  "module_id": "kotlin-module-10",
+  "module_slug": "inheritance-interfaces-and-polymorphism",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "kotlin-lesson-095"
+  ],
+  "previous_lesson_id": "kotlin-lesson-095",
+  "next_lesson_id": "kotlin-lesson-097",
+  "keywords": [
+    "abstract-classes-and-members",
+    "abstract-classes",
+    "abstract-properties-and-functi",
+    "when-to-use-abstract-classes"
+  ],
+  "source_syllabus_number": 96,
+  "subtopics": [
+    "Abstract Classes",
+    "Abstract Properties and Functions",
+    "When to Use Abstract Classes"
+  ],
+  "learning_outcomes": [
+    "Explain the central rule or purpose of abstract classes and members using at least one correct term from the lesson.",
+    "Interpret or adapt a small Kotlin example that demonstrates abstract classes and members.",
+    "Identify one relevant edge case, debugging step, or version/platform constraint."
+  ],
+  "content": {
+    "intro": "In this lesson, you will learn **Abstract Classes and Members** as part of **Inheritance, Interfaces, and Polymorphism**. Classes group state and behavior; primary constructors and properties keep ordinary domain models concise, while initialization order still matters. Use the subtopics—Abstract Classes, Abstract Properties and Functions, When to Use Abstract Classes—as a checklist: predict what the example will do, then verify it in a project configured for the target platform.",
+    "why_it_matters": "These concepts help you model domain rules and reusable APIs. Good boundaries reduce accidental mutation, unsafe casts, and code that is difficult to extend.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Concept visual",
+        "asset_path": "diagrams/lesson-096-abstract-classes-and-members.svg",
+        "alt_text": "Concept diagram for lesson 96, Abstract Classes and Members: connects Abstract Classes with Abstract Properties and Functions and a practice/check step.",
+        "caption": "Lesson 96: Abstract Classes and Members. Use this concept map to connect the syllabus subtopics to the small example and test task."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Classes group state and behavior; primary constructors and properties keep ordinary domain models concise, while initialization order still matters."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with abstract classes. Then compare it with abstract properties and functions. Identify the input, state, dependency, or branch that determines the result. The snippet is a static reference for CodeLeaf and is not executed in the lesson page."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the syllabus",
+        "items": [
+          {
+            "title": "Abstract Classes",
+            "text": "Abstract Classes should support a clear object invariant: make valid states easy to represent, restrict mutation to the intended API, and keep initialization and dependencies explicit."
+          },
+          {
+            "title": "Abstract Properties and Functions",
+            "text": "Abstract Properties and Functions describes how behavior is declared, passed, or composed. Make inputs and return types clear, keep side effects visible, and use a small call-site example to judge readability."
+          },
+          {
+            "title": "When to Use Abstract Classes",
+            "text": "When to Use Abstract Classes should support a clear object invariant: make valid states easy to represent, restrict mutation to the intended API, and keep initialization and dependencies explicit."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "kotlin",
+        "execution_mode": "static-validation",
+        "code": "class Counter(start: Int = 0) {\n    var value: Int = start\n        private set\n    fun increment() { value++ }\n}\n\nfun main() {\n    val counter = Counter()\n    counter.increment()\n    println(counter.value)\n}",
+        "expected_output": "1",
+        "run_instructions": "Save the snippet in a Kotlin/JVM console project and run the configured Gradle application task, or use the Kotlin Playground for examples that need no external dependencies.",
+        "reset_steps": "Restore the documented starting values, rerun the smallest test, and compare the result with the expected output. If behavior differs, check the compiler/plugin/runtime versions and the active target before changing more than one thing."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake to avoid",
+        "text": "Abstract Classes and Members removes the need to test boundary conditions or verify the chosen runtime/library version."
+      },
+      {
+        "type": "paragraph",
+        "title": "Troubleshooting and reset",
+        "text": "If the example fails, first confirm which runtime/project type the snippet requires. Read the first useful compiler or runtime message, check imports and declared dependencies, reduce the example to a minimal case, and rerun. For target-specific code, use the target toolchain rather than assuming a console or browser runner can execute it."
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          {
+            "title": "Explain",
+            "text": "Describe the main rule of abstract classes and members in your own words."
+          },
+          {
+            "title": "Apply",
+            "text": "Change one input or condition and predict the result before running it."
+          },
+          {
+            "title": "Verify",
+            "text": "Check one edge case and the official reference for the selected Kotlin/runtime version."
+          }
+        ]
+      }
+    ],
+    "task": "Try it yourself: create a small variation that demonstrates abstract classes and members. Write down your predicted result first, run it in the correct local project, then explain one boundary case involving abstract classes.",
+    "task_acceptance_criteria": [
+      "Explain abstract classes and members without copying the lesson wording.",
+      "Demonstrate the concept with a small code/configuration change and state the expected result.",
+      "Test one boundary case or explain a relevant platform/version limitation."
+    ],
+    "hints": [
+      "Begin with the first syllabus subtopic: Abstract Classes. What input or state does it act on?",
+      "Change only one value, branch, declaration, or dependency at a time. Predict what should happen before running the code.",
+      "Compare your observed result with the expected output and the official reference; verify that you are using the required project type and dependency set."
+    ],
+    "expected_output": "1",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-096-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Kotlin Documentation",
+      "url": "https://kotlinlang.org/docs/home.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Abstract Classes and Members",
+        "Abstract Classes",
+        "Abstract Properties and Functions"
+      ]
+    },
+    {
+      "title": "Kotlin Language Features and Proposals",
+      "url": "https://kotlinlang.org/docs/kotlin-language-features-and-proposals.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "language feature stability",
+        "compiler version compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson derived from the numbered syllabus entry 96 in Kotlin.pdf. Review example compatibility and question alignment before publishing."
+}

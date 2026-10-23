@@ -1,0 +1,136 @@
+{
+  "id": "typescript-lesson-121",
+  "slug": "121-object-oriented-design-in-typescript",
+  "title": "Object-Oriented Design in TypeScript",
+  "sequence": 121,
+  "module_id": "typescript-module-12",
+  "module_slug": "classes-and-object-oriented-programming",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 13,
+  "prerequisites": [
+    "typescript-lesson-120"
+  ],
+  "previous_lesson_id": "typescript-lesson-120",
+  "next_lesson_id": "typescript-lesson-122",
+  "keywords": [
+    "object-oriented-design-in-typescript",
+    "classes-and-object-oriented-programming",
+    "composition-versus-inheritance",
+    "dependency-injection-concepts",
+    "separating-responsibilities"
+  ],
+  "source_syllabus_number": 121,
+  "subtopics": [
+    "Composition versus inheritance",
+    "Dependency injection concepts",
+    "Separating responsibilities"
+  ],
+  "learning_outcomes": [
+    "Explain composition versus inheritance in the context of object-oriented design in typescript.",
+    "Apply the lesson concept in a small TypeScript example and describe what the compiler can check.",
+    "Identify one limitation or failure case and choose an appropriate runtime check or test when needed."
+  ],
+  "content": {
+    "intro": "Learn object-oriented design in typescript through a compact mental model, syllabus-aligned subtopics, a worked example and a practical task. The goal is not to memorize syntax but to know what the type contract guarantees and what evidence is still needed.",
+    "why_it_matters": "Type-level expressiveness is most valuable when it describes real runtime contracts. Keep module mode and tsconfig aligned with the actual Node.js or bundler environment, and treat compiler-version changes as a tested migration.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Object-Oriented Design in TypeScript concept map",
+        "asset_path": "diagrams/lessons/121-object-oriented-design-in-typescript.svg",
+        "alt_text": "Lesson 121: Object-Oriented Design in TypeScript. Understand the concept, model its contract, and verify expected behavior.",
+        "caption": "Concept map for Object-Oriented Design in TypeScript; use the numbered stages rather than relying on color."
+      },
+      {
+        "type": "paragraph",
+        "title": "Mental model",
+        "text": "**Object-Oriented Design in TypeScript.** This lesson belongs to **Classes and Object-Oriented Programming**. Start by identifying the problem that object-oriented design in typescript solves. In TypeScript, separate three questions: what values your program intends to accept, what the compiler can prove from the code, and what must still be checked while the program runs. The last category matters whenever data comes from a user, file, API, storage layer, or an untyped JavaScript dependency."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics and how to use them",
+        "items": [
+          {
+            "title": "Composition versus inheritance",
+            "text": "For composition versus inheritance, separate a compile-time contract from runtime JavaScript behavior. Choose encapsulation and composition deliberately, and keep initialization and side effects easy to reason about."
+          },
+          {
+            "title": "Dependency injection concepts",
+            "text": "For dependency injection concepts, treat incoming values as untrusted until runtime checks establish the required shape. A TypeScript annotation does not validate network, file, database, storage, or user-provided data by itself."
+          },
+          {
+            "title": "Separating responsibilities",
+            "text": "For separating responsibilities, connect the concept to a small concrete example, state the assumption it relies on, and verify the result with a compiler diagnostic or a runtime test as appropriate."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Object-Oriented Design in TypeScript",
+        "language": "typescript",
+        "code": "class Counter {\n  constructor(private value = 0) {}\n  increment(): number { return ++this.value; }\n}\nconst counter = new Counter();\nconsole.log(counter.increment());",
+        "expected_output": "Runtime output: 1. Class examples are static-validated here; CodeLeaf does not execute TypeScript.",
+        "run_instructions": "This course displays TypeScript examples as static teaching text. The CodeLeaf web playground currently previews HTML/CSS/JavaScript only; TypeScript is not compiled or executed in the browser preview. For actual compiler feedback, create a local project with a pinned TypeScript version and run `npx tsc --noEmit`. For snippets requiring a browser, Node.js, React/JSX or a test runner, use the matching environment and dependencies.",
+        "reset_steps": "The lesson example does not modify files or remote systems. If you run it locally, use a disposable project directory, keep package versions recorded, and remove only the generated output you created.",
+        "execution_mode": "static-validation",
+        "limitations": "Static lesson example only. The browser preview is not a TypeScript compiler and does not execute backend, Node.js, React/TSX, test-runner, network or filesystem examples."
+      },
+      {
+        "type": "callout",
+        "title": "Compile-time versus runtime",
+        "text": "Type annotations and most type declarations are erased when TypeScript emits JavaScript. They do not validate external JSON, authorize a user, sanitize HTML, or prevent runtime failures by themselves. Validate trust-boundary inputs and test the behavior."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-121-knowledge-check.json",
+    "task": "Create a small TypeScript example for “Object-Oriented Design in TypeScript”. Demonstrate composition versus inheritance, explain your assumption, and include one check that shows the expected behavior. Do not treat a type annotation as runtime validation for external input.",
+    "task_acceptance_criteria": [
+      "The example demonstrates at least one syllabus subtopic named in this lesson.",
+      "The type contract is explicit enough that another learner can explain what it accepts and rejects.",
+      "The learner records a failure case and distinguishes compile-time checks from runtime validation."
+    ],
+    "hints": [
+      "Start with the syllabus item “Composition versus inheritance” and define the smallest example that demonstrates it.",
+      "Ask which part is checked by TypeScript and which part depends on runtime data, the environment or a test.",
+      "For external input, start with unknown and validate the required shape before using a domain type."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Treating a successful type check as a runtime guarantee.",
+        "why": "Type annotations do not generally validate data after JavaScript starts running.",
+        "fix": "Add runtime checks for external input and tests for meaningful failure cases."
+      },
+      {
+        "problem": "Using any or an assertion to silence a useful diagnostic.",
+        "why": "That can hide the exact mismatch the type system would otherwise report.",
+        "fix": "Prefer a more precise type or unknown plus narrowing; use assertions only when a verified invariant justifies them."
+      },
+      {
+        "problem": "Copying a compiler setting or runtime example without checking the project environment.",
+        "why": "Module resolution, DOM/Node globals, JSX and tool behavior depend on the configured versions and environment.",
+        "fix": "Pin the toolchain, match tsconfig to the runtime/bundler, and run the actual project's typecheck and tests."
+      }
+    ],
+    "summary": [
+      "Object-Oriented Design in TypeScript is taught through the subtopics listed in the source syllabus: Composition versus inheritance, Dependency injection concepts, Separating responsibilities.",
+      "Prefer precise contracts and use compiler diagnostics as evidence, not as a replacement for runtime tests.",
+      "Validate untrusted data and describe environment/version assumptions explicitly."
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation",
+    "solution_notes": "The lesson provides progressive hints, not a hidden single correct implementation. Compare your example against the stated learning outcomes and acceptance criteria."
+  },
+  "exercise_files": [],
+  "sources": [
+    "PDF: Complete TypeScript Curriculum — Beginner to Professional, Section B, topic 121.",
+    "TypeScript Handbook — https://www.typescriptlang.org/docs/handbook/intro.html",
+    "Classes — https://www.typescriptlang.org/docs/handbook/2/classes.html"
+  ],
+  "technical_review_date": "2026-10-14",
+  "status": "draft",
+  "status_note": "Generated as a complete curriculum draft from the PDF syllabus; review all technical examples against the configured compiler/runtime before publication."
+}

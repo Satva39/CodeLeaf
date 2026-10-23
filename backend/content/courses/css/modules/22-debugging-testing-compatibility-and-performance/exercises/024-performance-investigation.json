@@ -1,0 +1,57 @@
+{
+  "id": "css-exercise-024",
+  "slug": "performance-investigation",
+  "title": "Performance Investigation",
+  "type": "coding",
+  "lesson_id": "css-lesson-226",
+  "module_id": "css-module-22",
+  "difficulty": "advanced",
+  "sequence": 24,
+  "prompt": "Inspect an effect-heavy component and reduce unnecessary animation work. Prefer a small transform/opacity effect, honor reduced motion, and describe how you would profile it in browser tools.",
+  "objective": "Demonstrate performance, rendering, animation profiling in a small stylesheet and explain the behavior.",
+  "target_skills": [
+    "performance",
+    "rendering",
+    "animation profiling"
+  ],
+  "starter": {
+    "language": "css",
+    "code": ".card { /* transform / opacity transition only if appropriate */ }\n@media (prefers-reduced-motion: reduce) { /* simplify motion */ }\n"
+  },
+  "expected_output": "A stylesheet that meets the acceptance criteria for Performance Investigation and passes manual browser checks.",
+  "public_tests": [
+    {
+      "name": "Required CSS evidence",
+      "required_strings": [
+        "transform:",
+        "opacity:",
+        "prefers-reduced-motion"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Include `transform:` where appropriate.",
+    "Include `opacity:` where appropriate.",
+    "Include `prefers-reduced-motion` where appropriate.",
+    "Test the interface at a narrow and wide viewport where relevant.",
+    "Record one explanation of why the CSS produces the observed result."
+  ],
+  "hints": [
+    "Identify the smallest selector that needs to change.",
+    "Add one property or state at a time, then inspect the result.",
+    "Use browser developer tools and an official reference to resolve unexpected behavior."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "transform:",
+      "opacity:",
+      "prefers-reduced-motion"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus human review. This does not prove that a rendered page is visually or accessibly correct.",
+  "retry_policy": "Allow retries. Only a correct server-side check may complete the activity; XP is controlled by CodeLeaf backend rules and is not configured in this file.",
+  "status": "draft",
+  "status_note": "Draft until the starter, expected behavior, browser compatibility, and manual review rubric are verified.",
+  "solution_file": "../solutions/024-performance-investigation-solution.json"
+}

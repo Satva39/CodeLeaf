@@ -1,0 +1,63 @@
+{
+  "id": "excel-practical-20",
+  "slug": "practical-20-automated-monthly-report",
+  "title": "Automated Monthly Report",
+  "type": "choice",
+  "lesson_id": "excel-lesson-200",
+  "module_id": "excel-module-21",
+  "difficulty": "advanced",
+  "sequence": 2,
+  "source_exercise_id": "PDF-EX-20",
+  "source_topics": [
+    200
+  ],
+  "prompt": "Create a repeatable import-clean-summarize workflow.\n\nSkills: Power Query, PivotTables and refresh workflows.\n\nUse the supplied synthetic CSV at assets/data/practical-20-automated-monthly-report.csv. A small copy/pastable sample is included below in case the CSV is not directly downloadable from the lesson page. Complete the work in a separate .xlsx copy, preserve a raw-data sheet, and check the result against the acceptance criteria. Then answer the short grading check; it does not validate the workbook itself.\n\nSample CSV (synthetic):\nMonth,Region,Sales\nJan,East,1200\nJan,West,900\nFeb,East,1450\nFeb,West,1120",
+  "objective": "Create a repeatable import-clean-summarize workflow.",
+  "target_skills": [
+    "Power Query",
+    "PivotTables and refresh workflows."
+  ],
+  "starter": {
+    "options": [
+      "Refresh source queries, validate row counts/totals, refresh summaries, then record the run result.",
+      "Refresh only the PivotTable while leaving source queries stale.",
+      "Delete source data after a report is created.",
+      "Hide failed refreshes if the old chart remains visible."
+    ]
+  },
+  "expected_output": "Expected: the refresh procedure can be repeated without manual reconstruction; stale or failed refreshes are apparent.",
+  "public_tests": [
+    {
+      "name": "Sample-data acceptance",
+      "checklist": [
+        "Input records are preserved and data types are checked.",
+        "Totals/results reconcile with a small independent calculation.",
+        "An edge case, duplicate or threshold boundary is tested where relevant."
+      ]
+    },
+    {
+      "name": "Server-side answer check",
+      "note": "A text/choice check does not execute Excel or inspect the workbook artifact."
+    }
+  ],
+  "acceptance_criteria": [
+    "Expected: the refresh procedure can be repeated without manual reconstruction; stale or failed refreshes are apparent.",
+    "Use a labeled result area and document formulas, assumptions or transformation steps.",
+    "Compare actual results with a manual/independently calculated expected result and test one edge case.",
+    "Keep source data intact and request human review of the completed workbook; do not treat the text grader as artifact validation."
+  ],
+  "hints": [
+    "Import data without losing dates, decimals or leading zeros.",
+    "Separate raw inputs, calculations and presentation outputs.",
+    "Test empty inputs, duplicated keys, boundary values or missing matches as appropriate to the scenario."
+  ],
+  "grading_config": {
+    "mode": "choice",
+    "correct_answer": "Refresh source queries, validate row counts/totals, refresh summaries, then record the run result."
+  },
+  "grading_method": "Server-side choice check of the submitted answer/expression only; does not execute Excel or inspect the workbook. This workbook-practice task needs a human-reviewed artifact and test evidence for full acceptance. Repeatable reporting needs explicit refresh order and visible failure/staleness handling, plus a reconciliation check.",
+  "retry_policy": "Retries are permitted. A failed string/choice submission does not complete the exercise. Course files do not define XP; platform-wide server logic applies.",
+  "solution_file": "solutions/practical-20-automated-monthly-report-solution.json",
+  "status": "draft",
+  "source_data_file": "assets/data/practical-20-automated-monthly-report.csv"
+}

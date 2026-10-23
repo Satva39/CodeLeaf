@@ -1,0 +1,91 @@
+{
+  "id": "excel-practical-04",
+  "slug": "practical-04-employee-salary-sheet",
+  "title": "Employee Salary Sheet",
+  "type": "workbook-practice",
+  "lesson_id": "excel-lesson-040",
+  "module_id": "excel-module-05",
+  "difficulty": "beginner",
+  "sequence": 2,
+  "source_exercise_id": "PDF-EX-04",
+  "source_topics": [
+    40
+  ],
+  "prompt": "Calculate allowances, deductions and net salary.\n\nSkills: References, percentages and IF.\n\nUse the supplied synthetic CSV at assets/data/practical-04-employee-salary-sheet.csv. A small copy/pastable sample is included below in case the CSV is not directly downloadable from the lesson page. Complete the work in a separate .xlsx copy, preserve a raw-data sheet, and check the result against the acceptance criteria. Then answer the short grading check; it does not validate the workbook itself.\n\nSample CSV (synthetic):\nEmployeeID,Name,BasicPay,AllowanceRate,DeductionRate\nE001,Asha,30000,0.12,0.05\nE002,Dev,36000,0.1,0.06\nE003,Mira,28000,0.15,0.04",
+  "objective": "Calculate allowances, deductions and net salary.",
+  "target_skills": [
+    "References",
+    "percentages and IF."
+  ],
+  "starter": {
+    "format": "csv",
+    "path": "assets/data/practical-04-employee-salary-sheet.csv",
+    "headers": [
+      "EmployeeID",
+      "Name",
+      "BasicPay",
+      "AllowanceRate",
+      "DeductionRate"
+    ],
+    "rows": [
+      [
+        "E001",
+        "Asha",
+        30000,
+        0.12,
+        0.05
+      ],
+      [
+        "E002",
+        "Dev",
+        36000,
+        0.1,
+        0.06
+      ],
+      [
+        "E003",
+        "Mira",
+        28000,
+        0.15,
+        0.04
+      ]
+    ],
+    "sample_row_count": 3,
+    "instructions": "Open/import the UTF-8 CSV into Excel. Keep the original source data unchanged and perform work on a separate sheet or workbook."
+  },
+  "expected_output": "Expected: gross pay, deductions and net pay reconcile, and tax/allowance assumptions are visible and editable.",
+  "public_tests": [
+    {
+      "name": "Sample-data acceptance",
+      "checklist": [
+        "Input records are preserved and data types are checked.",
+        "Totals/results reconcile with a small independent calculation.",
+        "An edge case, duplicate or threshold boundary is tested where relevant."
+      ]
+    },
+    {
+      "name": "Server-side answer check",
+      "note": "A text/choice check does not execute Excel or inspect the workbook artifact."
+    }
+  ],
+  "acceptance_criteria": [
+    "Expected: gross pay, deductions and net pay reconcile, and tax/allowance assumptions are visible and editable.",
+    "Use a labeled result area and document formulas, assumptions or transformation steps.",
+    "Compare actual results with a manual/independently calculated expected result and test one edge case.",
+    "Keep source data intact and request human review of the completed workbook; do not treat the text grader as artifact validation."
+  ],
+  "hints": [
+    "Import data without losing dates, decimals or leading zeros.",
+    "Separate raw inputs, calculations and presentation outputs.",
+    "Test empty inputs, duplicated keys, boundary values or missing matches as appropriate to the scenario."
+  ],
+  "grading_config": {
+    "mode": "exact_text",
+    "expected_text": "=C2*(1+D2)*(1-E2)"
+  },
+  "grading_method": "Server-side exact_text check of the submitted answer/expression only; does not execute Excel or inspect the workbook. This workbook-practice task needs a human-reviewed artifact and test evidence for full acceptance. Illustrative net-pay formula if allowance is added to base pay and deductions are calculated from gross pay; explicitly confirm the organization’s real policy before use.",
+  "retry_policy": "Retries are permitted. A failed string/choice submission does not complete the exercise. Course files do not define XP; platform-wide server logic applies.",
+  "solution_file": "solutions/practical-04-employee-salary-sheet-solution.json",
+  "status": "draft",
+  "source_data_file": "assets/data/practical-04-employee-salary-sheet.csv"
+}

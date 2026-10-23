@@ -1,0 +1,200 @@
+{
+  "id": "cpp-lesson-106",
+  "slug": "abstract-classes-and-interfaces",
+  "title": "Abstract Classes and Interfaces",
+  "sequence": 106,
+  "module_id": "cpp-module-10",
+  "module_slug": "classes-and-object-oriented-programming",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "cpp-lesson-105"
+  ],
+  "previous_lesson_id": "cpp-lesson-105",
+  "next_lesson_id": "cpp-lesson-107",
+  "keywords": [
+    "abstract-classes-and-interfaces",
+    "pure-virtual-functions",
+    "abstract-classes",
+    "interface-like-base-classes",
+    "implementing-derived-interfaces",
+    "runtime-interface-design",
+    "limitations-of-multiple-inheritance",
+    "designing-small-cohesive-interfaces"
+  ],
+  "source_syllabus_number": 106,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Pure Virtual Functions",
+    "Abstract Classes",
+    "Interface-Like Base Classes",
+    "Implementing Derived Interfaces",
+    "Runtime Interface Design",
+    "Limitations of Multiple Inheritance",
+    "Designing Small, Cohesive Interfaces"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and core rule of abstract classes and interfaces using at least one example.",
+    "Trace or adapt a minimal C++ example related to abstract classes and interfaces and state its expected result.",
+    "Identify one precondition, error case, lifetime issue, portability assumption or version constraint relevant to the topic."
+  ],
+  "content": {
+    "intro": "Abstract Classes and Interfaces focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Abstract Classes and Interfaces matters because exercise construction, mutation and destruction, and prefer composition when it expresses the relationship without an inheritance hierarchy. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Abstract Classes and Interfaces: visual trace",
+        "asset_path": "diagrams/lessons/lesson-106.svg",
+        "alt_text": "Lesson 106 visual for Abstract Classes and Interfaces; concept: Pure Virtual Functions; apply: Abstract Classes; verify: Interface-Like Base Classes.",
+        "caption": "Original lesson-specific overview: understand pure virtual functions, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Classes combine state and operations behind an interface. Encapsulation protects invariants, and polymorphism is useful when runtime substitution is a real requirement.\n\nAbstract Classes and Interfaces focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nExercise construction, mutation and destruction, and prefer composition when it expresses the relationship without an inheritance hierarchy."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Abstract Classes and Interfaces",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <iostream>\n#include <string_view>\n\nstruct Formatter { virtual ~Formatter() = default; virtual std::string_view format() const = 0; };\nstruct JsonFormatter final : Formatter { std::string_view format() const override { return \"json\"; } };\nint main() { JsonFormatter formatter; std::cout << formatter.format() << '\\n'; }\n",
+        "expected_output": "json",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "A class with a pure virtual function is abstract and cannot be instantiated directly; derived classes implement the interface contract."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Pure Virtual Functions",
+            "text": "Explain pure virtual functions in the context of Abstract Classes and Interfaces: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Abstract Classes",
+            "text": "A class defines a type with state and operations; encapsulation protects invariants, and object lifetime defines when its resources exist."
+          },
+          {
+            "title": "Interface-Like Base Classes",
+            "text": "A class defines a type with state and operations; encapsulation protects invariants, and object lifetime defines when its resources exist."
+          },
+          {
+            "title": "Implementing Derived Interfaces",
+            "text": "Explain implementing derived interfaces in the context of Abstract Classes and Interfaces: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Runtime Interface Design",
+            "text": "Use runtime interface design as a design decision: state the contract, explain the trade-off, and keep the implementation maintainable and testable."
+          },
+          {
+            "title": "Limitations of Multiple Inheritance",
+            "text": "Inheritance models an is-a relationship and can enable runtime polymorphism; composition is often simpler when the relationship is has-a."
+          },
+          {
+            "title": "Designing Small, Cohesive Interfaces",
+            "text": "Use designing small, cohesive interfaces as a design decision: state the contract, explain the trade-off, and keep the implementation maintainable and testable."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate pure virtual functions, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "Use standard C++ rather than compiler-specific behavior unless the lesson explicitly labels the dependency. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-106-questions.json",
+    "task": "Extend the example for Abstract Classes and Interfaces with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+    "task_acceptance_criteria": [
+      "The code compiles in the documented standard mode with warnings enabled.",
+      "The predicted output matches the actual result for the added case.",
+      "One relevant boundary, lifetime, portability or error case is tested or documented."
+    ],
+    "hints": [
+      "Start by isolating the central rule from Abstract Classes and Interfaces.",
+      "Trace values or object lifetimes before changing the program.",
+      "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+    ],
+    "summary": [
+      "Abstract Classes and Interfaces is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying abstract classes and interfaces.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "json"
+  },
+  "task": "Extend the example for Abstract Classes and Interfaces with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+  "hints": [
+    "Start by isolating the central rule from Abstract Classes and Interfaces.",
+    "Trace values or object lifetimes before changing the program.",
+    "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+  ],
+  "expected_output": "json",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Abstract Classes and Interfaces is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying abstract classes and interfaces.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 10, lesson 106: Abstract Classes and Interfaces.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

@@ -1,0 +1,186 @@
+{
+  "id": "bash-lesson-099",
+  "slug": "signals-and-interruptions",
+  "title": "Signals and Interruptions",
+  "sequence": 99,
+  "module_id": "bash-module-11",
+  "module_slug": "processes-jobs-signals-and-concurrency",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "bash-lesson-098"
+  ],
+  "previous_lesson_id": "bash-lesson-098",
+  "next_lesson_id": "bash-lesson-100",
+  "keywords": [
+    "signals",
+    "and",
+    "interruptions",
+    "signal",
+    "terminology",
+    "interrupt",
+    "termination",
+    "handling",
+    "common",
+    "signal-driven",
+    "workflows",
+    "limits",
+    "trapping"
+  ],
+  "source_syllabus_number": 99,
+  "subtopics": [
+    "Signal terminology",
+    "Interrupt and termination handling",
+    "Common signal-driven workflows",
+    "Limits on trapping and handling signals",
+    "Designing predictable shutdown behavior"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Signals and Interruptions and identify at least two relevant syllabus points.",
+    "Apply signals and interruptions in a small Bash example and verify the expected output or status.",
+    "Identify one edge case or failure mode and state how to test it safely."
+  ],
+  "content": {
+    "intro": "Signals request a process action such as interrupting or terminating it, but not every signal can be caught or handled.",
+    "why_it_matters": "Signals and Interruptions matters because reliable shell automation depends on making this behavior explicit, testing its boundaries, and documenting environment assumptions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 11 visual roadmap",
+        "asset_path": "diagrams/module-11-overview.svg",
+        "alt_text": "Overview roadmap for Module 11: Processes, Jobs, Signals, and Concurrency, listing lessons 96 through 106 in curriculum order. Lesson focus: Signals and Interruptions.",
+        "caption": "Module roadmap for context. For this lesson, focus on: Signal terminology; Interrupt and termination handling; Common signal-driven workflows."
+      },
+      {
+        "type": "paragraph",
+        "title": "The central idea",
+        "text": "Process coordination needs explicit lifecycle management. Track PIDs, collect statuses, bound concurrency, and plan cleanup for interruption as well as normal completion."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the supplied syllabus",
+        "items": [
+          {
+            "title": "Signal terminology",
+            "text": "Observe process completion and its status; define what should happen on normal exit, command failure, and interruption."
+          },
+          {
+            "title": "Interrupt and termination handling",
+            "text": "Trace one normal iteration, one boundary condition, and the termination case; make sure each path can finish."
+          },
+          {
+            "title": "Common signal-driven workflows",
+            "text": "Observe process completion and its status; define what should happen on normal exit, command failure, and interruption."
+          },
+          {
+            "title": "Limits on trapping and handling signals",
+            "text": "Observe process completion and its status; define what should happen on normal exit, command failure, and interruption."
+          },
+          {
+            "title": "Designing predictable shutdown behavior",
+            "text": "Define what “Designing predictable shutdown behavior” means in this lesson, show it with a minimal example, and verify the expected result plus one limitation or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How it fits into Bash",
+        "text": "Signals request a process action such as interrupting or terminating it, but not every signal can be caught or handled. Define shutdown behavior and cleanup while accounting for commands that may already have changed external state."
+      },
+      {
+        "type": "code",
+        "language": "bash",
+        "execution_mode": "manual-terminal",
+        "code": "printf 'Plan for SIGINT, SIGTERM, and normal completion.\\n'",
+        "expected_output": "Plan for SIGINT, SIGTERM, and normal completion.",
+        "run_instructions": "Save the snippet in a temporary practice file and run it with the locally installed Bash interpreter. The CodeLeaf in-page preview displays reference output only; it does not execute Bash code. Some examples require commands already installed on your machine.",
+        "reset_steps": "Discard the temporary file or reset the editor to the original snippet. The examples are designed not to modify important data."
+      },
+      {
+        "type": "callout",
+        "title": "Watch out",
+        "text": "Start with independent harmless tasks, bound concurrency, record each result, and plan cleanup for both normal exit and interruption. Do not assume the same command options or newer Bash features exist on every operating system."
+      },
+      {
+        "type": "paragraph",
+        "title": "Check your result",
+        "text": "Compare the observed output and exit status with the reference behavior. Change one input at a time, include a boundary or invalid input, and note what differs on your target Bash/utility version."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety note",
+        "text": "Use a local test directory, avoid secrets in commands/history/logs, and check the installed interpreter with `bash --version`. This course remains draft until technical examples and assessments receive subject-matter review."
+      }
+    ],
+    "task": "Build a small local example for “Signals and Interruptions” using synthetic input or a disposable practice directory. Explain what the command should do, check its output and exit status, and test one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "Use an example aligned with the lesson and preserve arguments, paths, or streams correctly.",
+      "Record the observed output and exit status.",
+      "Test one boundary case or expected failure.",
+      "State the Bash version and any external utility dependency that matters."
+    ],
+    "hints": [
+      "Reduce the problem to one command or one small function first.",
+      "Use quoting and printf to make argument boundaries visible.",
+      "Check exit statuses as well as printed output; use syntax-only validation before testing changes."
+    ],
+    "expected_output": "A documented example for “Signals and Interruptions” with the observed output/status, one tested boundary case, and an explicit statement of any version or utility dependency.",
+    "run_mode": "static-validation",
+    "troubleshooting": [
+      "If the snippet uses an external command, check availability with `command -v NAME` and consult that program’s local help.",
+      "If behavior differs by operating system or Bash version, record `bash --version` and check the official manual linked below.",
+      "For syntax-only validation run `bash -n script.sh`; this parses but does not execute the script."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming a successful-looking output means the command succeeded.",
+        "why": "Output and exit status are separate signals, and a later command may replace `$?`.",
+        "fix": "Capture important statuses immediately and check all relevant pipeline stages."
+      },
+      {
+        "problem": "Copying example commands straight into a production path.",
+        "why": "Real paths, permissions, input names, and external utility versions differ.",
+        "fix": "Use a disposable fixture and inspect the planned side effects first."
+      },
+      {
+        "problem": "Treating Bash-specific syntax as portable `sh` syntax.",
+        "why": "Arrays, `[[ ... ]]`, process substitution, and some parameter operators are extensions.",
+        "fix": "Name the interpreter and test the minimum supported version."
+      }
+    ],
+    "summary": [
+      "Signals and Interruptions has specific syntax and behavior; verify it rather than relying on guesswork.",
+      "Preserve argument boundaries and keep shell commands separate from untrusted data.",
+      "Test successful, boundary, and failure cases in a safe environment."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-099-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "gnu-bash-manual-5-3",
+      "title": "GNU Bash Reference Manual, Edition 5.3",
+      "url": "https://www.gnu.org/s/bash/manual/bash.html",
+      "publisher": "GNU Project / Free Software Foundation",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "Bash syntax and parsing",
+        "quoting and expansion",
+        "variables and arrays",
+        "control flow",
+        "functions",
+        "redirection and pipelines",
+        "processes and traps",
+        "startup files and shell options",
+        "version compatibility"
+      ],
+      "source_type": "official language reference",
+      "notes": "The primary technical reference for Bash-specific behavior. Verify examples against the interpreter installed on the target system."
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft content mapped to Bash.pdf Section B lesson 99. Technical examples and grading require review before publication."
+}

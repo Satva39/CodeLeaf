@@ -1,0 +1,196 @@
+{
+  "id": "mysql-lesson-005",
+  "slug": "mysql-architecture-overview",
+  "title": "MySQL Architecture Overview",
+  "sequence": 5,
+  "module_id": "mysql-module-01",
+  "module_slug": "introduction-to-mysql",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "mysql-lesson-004"
+  ],
+  "previous_lesson_id": "mysql-lesson-004",
+  "next_lesson_id": "mysql-lesson-006",
+  "keywords": [
+    "mysql-architecture-overview",
+    "introduction-to-mysql",
+    "mysql",
+    "database",
+    "client-server-architecture",
+    "sql-parsing-and-execution",
+    "query-optimization",
+    "storage-engines",
+    "data-persistence"
+  ],
+  "source_syllabus_number": 5,
+  "source_module_number": 1,
+  "subtopics": [
+    "Client-server architecture",
+    "SQL parsing and execution",
+    "Query optimization",
+    "Storage engines",
+    "Data persistence"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of mysql architecture overview in MySQL and when it is useful.",
+    "Interpret or adapt the supplied sql example and predict its expected behavior.",
+    "Verify one relevant boundary, safety requirement, or version-specific assumption."
+  ],
+  "content": {
+    "intro": "Learn mysql architecture overview in the context of introduction to mysql. This lesson covers the supplied syllabus topic, demonstrates a representative MySQL example, and finishes with a verification task.",
+    "why_it_matters": "A client sends a statement to the MySQL server; the server parses and optimizes it, executes it through the relevant storage engine, and returns a result or status. Persistent storage and transaction rules govern what survives.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "MySQL Architecture Overview",
+        "asset_path": "diagrams/lesson-005-mysql-architecture-overview.svg",
+        "alt_text": "Concept flow for MySQL Architecture Overview: understand the MySQL concept, inspect the example, verify its behavior, and apply it safely.",
+        "caption": "MySQL Architecture Overview: connect the concept to a concrete example, verify the result, and apply it in a disposable lab."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "A client sends a statement to the MySQL server; the server parses and optimizes it, executes it through the relevant storage engine, and returns a result or status. Persistent storage and transaction rules govern what survives."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics to master",
+        "items": [
+          {
+            "title": "Client-server architecture",
+            "text": "Confirm the operating system, installed server release, effective configuration and required privileges; record verification output rather than guessing."
+          },
+          {
+            "title": "SQL parsing and execution",
+            "text": "Explain the role of SQL parsing and execution, use a small example or inspection step, and record one limitation or boundary condition."
+          },
+          {
+            "title": "Query optimization",
+            "text": "Explain the role of Query optimization, use a small example or inspection step, and record one limitation or boundary condition."
+          },
+          {
+            "title": "Storage engines",
+            "text": "Explain the role of Storage engines, use a small example or inspection step, and record one limitation or boundary condition."
+          },
+          {
+            "title": "Data persistence",
+            "text": "Explain the role of Data persistence, use a small example or inspection step, and record one limitation or boundary condition."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Apply the idea",
+        "text": "Apply MySQL Architecture Overview to a synthetic MySQL lab scenario, write down the expected outcome, and specify how you will verify it safely. Write down the expected result before running the snippet. Compare actual output with the reference, then try one normal case and one edge case."
+      },
+      {
+        "type": "code",
+        "language": "sql",
+        "execution_mode": "static-validation",
+        "code": "SELECT VERSION() AS server_version, @@version_comment AS distribution;",
+        "expected_output": "One row reports the connected server version and distribution comment; values depend on the installed server.",
+        "run_instructions": "Run in a dedicated local MySQL lab using the stated MySQL release track. For schema-changing or administrative snippets, inspect every statement and use only a disposable schema; the in-page editor shows reference output and does not execute SQL.",
+        "reset_steps": "Remove only objects created for this lesson from the disposable schema/session, or restore the lab snapshot. Never run reset or destructive commands against production."
+      },
+      {
+        "type": "callout",
+        "title": "Version, security, and safety note",
+        "text": "Use MySQL 9.7 LTS documentation as the default stable-track reference; verify behavior against MySQL 26.7 documentation when relevant and label any MySQL 8.4-specific fact. Examples are static references, not executed by CodeLeaf. Run mutation, privilege, replication, backup, and recovery examples only in an isolated lab."
+      }
+    ],
+    "task": "Try it yourself: Apply MySQL Architecture Overview to a synthetic MySQL lab scenario, write down the expected outcome, and specify how you will verify it safely. Submit the query, result or decision record, plus one edge case and one verification step.",
+    "task_acceptance_criteria": [
+      "Address the core behavior in mysql architecture overview using a MySQL-specific example or a clear operational plan.",
+      "State the expected result and demonstrate how it would be verified in the selected environment.",
+      "Identify one relevant edge case, permissions boundary, operational risk, or version assumption."
+    ],
+    "hints": [
+      "Start by identifying the question that mysql architecture overview needs to answer.",
+      "Reduce the example to the smallest meaningful row set or operational change, then write down the result you expect.",
+      "Check the applicable official manual and version note before treating the reference output as guaranteed."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming that a sample result proves the whole design is correct.",
+        "why": "Edge cases such as NULLs, duplicate matches, concurrency, privileges, or version differences may change behavior.",
+        "fix": "Add a targeted boundary case and record the server version, schema and expected result."
+      },
+      {
+        "problem": "Running a mutating or administrative example in the wrong environment.",
+        "why": "DDL, data changes, access grants, and recovery commands may have persistent impact.",
+        "fix": "Use a disposable lab, preview targets and permissions, and write a reset/recovery plan before executing."
+      }
+    ],
+    "summary": [
+      "A client sends a statement to the MySQL server; the server parses and optimizes it, executes it through the relevant storage engine, and returns a result or status. Persistent storage and transaction rules govern what survives.",
+      "Use the PDF subtopics for mysql architecture overview as a checklist, then validate behavior in the chosen MySQL version.",
+      "Keep the example, assumptions, expected output, and recovery steps together."
+    ],
+    "references": [
+      {
+        "title": "MySQL 9.7 Reference Manual",
+        "url": "https://dev.mysql.com/doc/refman/9.7/en/",
+        "publisher": "Oracle / MySQL",
+        "checked_on": "2026-10-12",
+        "supports": [
+          "core SQL syntax",
+          "data types",
+          "DDL and DML",
+          "query optimization",
+          "security",
+          "administration"
+        ]
+      },
+      {
+        "title": "MySQL Releases: Innovation and LTS",
+        "url": "https://dev.mysql.com/doc/refman/9.7/en/mysql-releases.html",
+        "publisher": "Oracle / MySQL",
+        "checked_on": "2026-10-12",
+        "supports": [
+          "release-track model",
+          "calendar versioning",
+          "LTS and Innovation choices"
+        ]
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-005-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "Draft authored from the supplied MySQL curriculum outline. Code samples require technical review and do not execute in the browser."
+  },
+  "exercise_files": [
+    "../exercises/005-mysql-architecture-overview-practice.json"
+  ],
+  "sources": [
+    {
+      "title": "MySQL 9.7 Reference Manual",
+      "url": "https://dev.mysql.com/doc/refman/9.7/en/",
+      "publisher": "Oracle / MySQL",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "core SQL syntax",
+        "data types",
+        "DDL and DML",
+        "query optimization",
+        "security",
+        "administration"
+      ]
+    },
+    {
+      "title": "MySQL Releases: Innovation and LTS",
+      "url": "https://dev.mysql.com/doc/refman/9.7/en/mysql-releases.html",
+      "publisher": "Oracle / MySQL",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "release-track model",
+        "calendar versioning",
+        "LTS and Innovation choices"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft: verify the lesson, example, expected output, references, and version notes before publishing."
+}

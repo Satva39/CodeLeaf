@@ -1,0 +1,175 @@
+{
+  "id": "genai-lesson-141",
+  "slug": "multi-agent-systems",
+  "title": "Multi-Agent Systems",
+  "sequence": 141,
+  "module_id": "genai-module-16",
+  "module_slug": "ai-agents-and-agentic-systems",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced-specialization",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "genai-lesson-140"
+  ],
+  "previous_lesson_id": "genai-lesson-140",
+  "next_lesson_id": "genai-lesson-142",
+  "keywords": [
+    "Multi-Agent Systems",
+    "Single-agent versus multi-agent architectures",
+    "Specialized agent roles",
+    "Coordinator and worker patterns",
+    "Communication and shared state",
+    "Parallel and sequential collaboration",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 141,
+  "subtopics": [
+    "Single-agent versus multi-agent architectures",
+    "Specialized agent roles",
+    "Coordinator and worker patterns",
+    "Communication and shared state",
+    "Parallel and sequential collaboration",
+    "Coordination failures and evaluation"
+  ],
+  "learning_outcomes": [
+    "Explain single-agent versus multi-agent architectures and how it connects to multi-agent systems.",
+    "Apply specialized agent roles in the example and predict the output before running it.",
+    "Test one realistic edge case for multi-agent systems and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers multi-agent systems through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Treat agentic systems as bounded loops over plans, state, tools, observations, and stopping conditions. Prefer deterministic workflows when they meet the need more reliably.",
+    "why_it_matters": "Single-agent versus multi-agent architectures describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Multi-Agent Systems: concept map",
+        "asset_path": "diagrams/lessons/lesson-141-multi-agent-systems.svg",
+        "alt_text": "Diagram for Multi-Agent Systems: understand Single-agent versus multi-agent architectures, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Single-agent versus multi-agent architectures, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Single-agent versus multi-agent architectures describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Single-agent versus multi-agent architectures",
+            "text": "Single-agent versus multi-agent architectures describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+          },
+          {
+            "title": "Specialized agent roles",
+            "text": "Treat specialized agent roles as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs."
+          },
+          {
+            "title": "Coordinator and worker patterns",
+            "text": "Use coordinator and worker patterns as a lens for understanding multi-agent systems. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Communication and shared state",
+            "text": "Use communication and shared state as a lens for understanding multi-agent systems. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Parallel and sequential collaboration",
+            "text": "Parallel and sequential collaboration connects model capabilities to a real user's task. Define an observable success measure, keep uncertainty and failure states visible, make correction or escalation possible, and compare the AI-assisted workflow with a useful baseline rather than optimizing engagement alone."
+          },
+          {
+            "title": "Coordination failures and evaluation",
+            "text": "Use coordination failures and evaluation to turn a vague quality claim into an observable criterion. Define a representative dataset, an expected outcome or rubric, a baseline, and the failure categories you will record; interpret aggregate scores alongside examples and affected groups."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Multi-Agent Systems\nagents = {\"retriever\": \"find evidence\", \"drafter\": \"write candidate\", \"verifier\": \"check evidence\"}\nprint({\"distinct_roles\": len(set(agents.values())), \"verification_role\": agents[\"verifier\"]})",
+        "expected_output": "{'distinct_roles': 3, 'verification_role': 'check evidence'}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice single-agent versus multi-agent architectures within multi-agent systems: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'distinct_roles': 3, 'verification_role': 'check evidence'}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-141-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Multi-Agent Systems is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://huggingface.co/learn/agents-course/en/unit0/introduction",
+      "https://developers.openai.com/api/docs/guides/function-calling",
+      "https://modelcontextprotocol.io/specification/2026-07-28"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Hugging Face AI Agents Course",
+      "url": "https://huggingface.co/learn/agents-course/en/unit0/introduction",
+      "publisher": "Hugging Face",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "agent fundamentals"
+      ]
+    },
+    {
+      "title": "Function calling",
+      "url": "https://developers.openai.com/api/docs/guides/function-calling",
+      "publisher": "OpenAI API documentation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tool calling"
+      ]
+    },
+    {
+      "title": "Model Context Protocol specification",
+      "url": "https://modelcontextprotocol.io/specification/2026-07-28",
+      "publisher": "Model Context Protocol",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "external tools and resources"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

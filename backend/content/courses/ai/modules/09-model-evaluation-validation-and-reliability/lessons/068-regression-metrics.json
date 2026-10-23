@@ -1,0 +1,198 @@
+{
+  "id": "ai-lesson-068",
+  "slug": "regression-metrics",
+  "title": "Regression Metrics",
+  "sequence": 68,
+  "module_id": "ai-module-09",
+  "module_slug": "model-evaluation-validation-and-reliability",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "ai-lesson-067"
+  ],
+  "previous_lesson_id": "ai-lesson-067",
+  "next_lesson_id": "ai-lesson-069",
+  "keywords": [
+    "regression",
+    "metrics",
+    "mean-absolute-error",
+    "mean-squared-error",
+    "root-mean-squared-error",
+    "coefficient-of-determination"
+  ],
+  "source_syllabus_number": 68,
+  "subtopics": [
+    "Mean absolute error",
+    "Mean squared error",
+    "Root mean squared error",
+    "Coefficient of determination",
+    "Metric selection by use case",
+    "Interpreting errors in practical units"
+  ],
+  "learning_outcomes": [
+    "Explain regression Metrics and connect at least two of its listed subtopics.",
+    "Apply the central idea in regression Metrics to a small example or select a suitable approach for a stated scenario.",
+    "Identify an important assumption, failure mode, risk, or limitation and describe how it should be checked."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study regression Metrics within Model Evaluation, Validation, and Reliability. You will connect the syllabus topics below to a small, inspectable example and practice stating what the evidence does—and does not—support.",
+    "why_it_matters": "Evaluation is part of system design, not an afterthought. A metric is useful only when it reflects the goal, data conditions, and error costs.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 09 visual roadmap",
+        "asset_path": "diagrams/module-09-overview.svg",
+        "alt_text": "Two-column lesson roadmap for Module 9: Model Evaluation, Validation, and Reliability. It lists 10 curriculum topics and ends with the workflow Observe, Experiment, Evaluate, Iterate.",
+        "caption": "Module 9 visual roadmap: scan the ordered lesson cards, then use the Observe → Experiment → Evaluate → Iterate cycle when applying the concepts."
+      },
+      {
+        "type": "paragraph",
+        "title": "The central idea",
+        "text": "Regression metrics summarize numeric prediction errors in different ways. Mean absolute error remains in the target unit; squared-error metrics emphasize larger misses. Interpret the value relative to a baseline and business context."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered in this lesson",
+        "items": [
+          {
+            "title": "Mean absolute error",
+            "text": "Mean absolute error is one of the concepts used to reason about regression metrics. Define the inputs, assumptions, and intended result in this context, then test the idea on a small representative example and document where it may not apply."
+          },
+          {
+            "title": "Mean squared error",
+            "text": "Mean squared error is one of the concepts used to reason about regression metrics. Define the inputs, assumptions, and intended result in this context, then test the idea on a small representative example and document where it may not apply."
+          },
+          {
+            "title": "Root mean squared error",
+            "text": "Root mean squared error is one of the concepts used to reason about regression metrics. Define the inputs, assumptions, and intended result in this context, then test the idea on a small representative example and document where it may not apply."
+          },
+          {
+            "title": "Coefficient of determination",
+            "text": "Coefficient of determination is one of the concepts used to reason about regression metrics. Define the inputs, assumptions, and intended result in this context, then test the idea on a small representative example and document where it may not apply."
+          },
+          {
+            "title": "Metric selection by use case",
+            "text": "Metric selection by use case is one of the concepts used to reason about regression metrics. Define the inputs, assumptions, and intended result in this context, then test the idea on a small representative example and document where it may not apply."
+          },
+          {
+            "title": "Interpreting errors in practical units",
+            "text": "Interpreting errors in practical units is one of the concepts used to reason about regression metrics. Define the inputs, assumptions, and intended result in this context, then test the idea on a small representative example and document where it may not apply."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "1. Identify what regression metrics takes as input and what result or decision it is intended to support. 2. Read the example before running it and predict the output. 3. Run the small example, compare actual and expected output, then change one input or assumption and repeat. 4. Record what the example demonstrates and what it does not demonstrate about a real system."
+      },
+      {
+        "type": "paragraph",
+        "title": "A practical way to reason about it",
+        "text": "Start with the task definition and the inputs available. Make the expected behavior explicit, choose a simple reference point, and inspect both ordinary examples and cases where assumptions may fail. Evaluation is part of system design, not an afterthought. A metric is useful only when it reflects the goal, data conditions, and error costs."
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "execution_mode": "static-validation",
+        "code": "history = [10, 12, 14, 16]\nbaseline_forecast = sum(history) / len(history)\nprint(\"baseline forecast:\", baseline_forecast)",
+        "expected_output": "baseline forecast: 13.0",
+        "run_instructions": "Copy the code into a local file named main.py and run `python main.py` with Python 3. Compare the printed output with the expected result documented here. This CodeLeaf content block is static; it does not execute the snippet in the browser and needs no external API key.",
+        "reset_steps": "Restore the original snippet or return to the small synthetic input, rerun it, and change one value at a time. Do not add real credentials, private user data, or untrusted code to the example."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistakes and fixes",
+        "text": "If the output differs, check indentation and spelling, confirm you saved the intended file, and compare each input value with the example. If the example runs as expected, do not infer that it proves a trained model works; this snippet is a deterministic teaching aid. Keep sensitive data out of tests."
+      },
+      {
+        "type": "callout",
+        "title": "Check before you trust a result",
+        "text": "This is a small, deterministic teaching example—not a trained AI model or evidence of production performance. Run it with a local Python 3 interpreter; do not paste secrets or private data into experiments."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap and next step",
+        "text": "Recap: Regression metrics summarize numeric prediction errors in different ways. Mean absolute error remains in the target unit; squared-error metrics emphasize larger misses. Interpret the value relative to a baseline and business context. Next, connect this lesson to its prerequisite or next lesson and carry the same habit forward: define success, test a representative case, inspect failures, and document limitations."
+      }
+    ],
+    "task": "Try it yourself: build a tiny synthetic dataset for regression metrics, establish a simple baseline, and define a suitable metric before looking at results. Separate development decisions from final evaluation and describe one important error.",
+    "task_acceptance_criteria": [
+      "Explain the core concept and accurately refer to the source syllabus topics.",
+      "Record a prediction and compare it with a reproducible result or a clearly stated manual trace.",
+      "Document at least one limitation, safety consideration, or evaluation requirement."
+    ],
+    "hints": [
+      "Write down the inputs, expected output, and assumptions before changing the example.",
+      "Change only one input or condition and compare the results with your original prediction.",
+      "Ask whether the example covers realistic cases, important subgroups, and failure conditions; a toy example does not establish production reliability."
+    ],
+    "expected_output": "baseline forecast: 13.0",
+    "run_mode": "static-validation",
+    "troubleshooting": [
+      "Use Python 3 and run the file from the folder where it was saved.",
+      "If output differs, restore the original input and compare one changed value at a time.",
+      "If Python reports a syntax error, check copied quotation marks, indentation, and whether the full code block was copied.",
+      "These examples require no external packages, network access, model credentials, or personal data."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-068-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "google-mlcc",
+      "title": "Machine Learning Crash Course",
+      "url": "https://developers.google.com/machine-learning/crash-course/",
+      "publisher": "Google for Developers",
+      "checked_on": "2026-10-15",
+      "supports": [
+        "machine learning foundations",
+        "neural networks",
+        "embeddings",
+        "large language models",
+        "evaluation",
+        "production ML",
+        "fairness"
+      ],
+      "source_type": "official learning resource",
+      "notes": "Modular introductory and intermediate ML instruction; use for concept reinforcement, not as a replacement for the source syllabus."
+    },
+    {
+      "id": "sklearn-getting-started",
+      "title": "Getting Started — scikit-learn",
+      "url": "https://scikit-learn.org/stable/getting_started",
+      "publisher": "scikit-learn developers",
+      "checked_on": "2026-10-15",
+      "supports": [
+        "train/test split",
+        "estimators",
+        "model evaluation",
+        "cross-validation",
+        "machine learning workflows"
+      ],
+      "source_type": "official project documentation",
+      "notes": "Examples demonstrate that fitting is not evidence of good unseen-data performance; evaluate on appropriately held-out data."
+    },
+    {
+      "id": "pytorch-basics",
+      "title": "Learn the Basics — PyTorch Tutorials",
+      "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro.html",
+      "publisher": "PyTorch documentation",
+      "checked_on": "2026-10-15",
+      "supports": [
+        "tensors",
+        "data loaders",
+        "models",
+        "autograd",
+        "optimization",
+        "saving and loading models"
+      ],
+      "source_type": "official project documentation",
+      "notes": "Tool-specific procedures can change; confirm current package and runtime compatibility before running examples."
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft authored from AI.pdf lesson 68, preserving its title and listed subtopics. Review model-specific facts, examples, and assessment wording before publishing."
+}

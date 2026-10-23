@@ -1,0 +1,49 @@
+{
+  "id": "rest-api-development-knowledge-check-032",
+  "lesson_id": "rest-api-development-lesson-032",
+  "lesson_slug": "path-parameters-and-query-parameters",
+  "title": "Knowledge check: Path Parameters and Query Parameters",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "questions": [
+    {
+      "id": "rest-api-development-q-032-01",
+      "type": "single_choice",
+      "prompt": "Which URL best expresses a resource-oriented interface for one order?",
+      "options": [
+        "POST /v1/orders/{orderId}/delete is the default way to read an order.",
+        "GET /v1/orders?operation=remove deletes an order safely.",
+        "GET /v1/orders/{orderId} identifies an individual order resource.",
+        "GET /v1/getOrderDetails?id={orderId} is always more resource-oriented because it uses a verb."
+      ],
+      "answer_key": "GET /v1/orders/{orderId} identifies an individual order resource.",
+      "explanation": "GET /v1/orders/{orderId} identifies an individual order resource. This is especially relevant to “Path Parameters and Query Parameters” because the API contract must remain explicit and reviewable."
+    },
+    {
+      "id": "rest-api-development-q-032-02",
+      "type": "single_choice",
+      "prompt": "For the lesson “Path Parameters and Query Parameters”, which check provides the strongest practical evidence?",
+      "options": [
+        "Test against production records so the exercise cannot be repeated safely.",
+        "Check that resource paths and relationships remain stable and do not expose implementation details.",
+        "Rely on a code review comment without running any representative check.",
+        "Run one happy-path call and skip invalid, denied, and failure scenarios."
+      ],
+      "answer_key": "Check that resource paths and relationships remain stable and do not expose implementation details.",
+      "explanation": "A useful check is repeatable, tied to an observable contract, and includes an important negative or boundary scenario."
+    },
+    {
+      "id": "rest-api-development-q-032-03",
+      "type": "single_choice",
+      "prompt": "Which review warning is most relevant to “Path Parameters and Query Parameters”?",
+      "options": [
+        "Paths mix resource identity with ad-hoc commands and inconsistent identifiers.",
+        "The expected behavior and relevant failure cases are documented.",
+        "A representative test can reproduce the result.",
+        "The API avoids exposing internal secrets and personal data."
+      ],
+      "answer_key": "Paths mix resource identity with ad-hoc commands and inconsistent identifiers.",
+      "explanation": "This finding weakens a core API guarantee and should be treated as a design or release issue, not only a style concern."
+    }
+  ]
+}

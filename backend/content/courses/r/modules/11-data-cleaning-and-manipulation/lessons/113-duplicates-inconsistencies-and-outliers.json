@@ -1,0 +1,191 @@
+{
+  "id": "r-lesson-113",
+  "slug": "duplicates-inconsistencies-and-outliers",
+  "title": "Duplicates, Inconsistencies, and Outliers",
+  "sequence": 113,
+  "module_id": "r-module-11",
+  "module_slug": "data-cleaning-and-manipulation",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "r-lesson-112"
+  ],
+  "previous_lesson_id": "r-lesson-112",
+  "next_lesson_id": "r-lesson-114",
+  "keywords": [
+    "duplicates-inconsistencies-and-outliers",
+    "data-cleaning-and-manipulation",
+    "detecting-duplicate-records",
+    "removing-exact-duplicates",
+    "detecting-inconsistent-categories",
+    "standardizing-units-and-labels",
+    "investigating-outliers",
+    "keeping-an-audit-trail-of-cleaning-operations",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 113,
+  "subtopics": [
+    "Detecting Duplicate Records",
+    "Removing Exact Duplicates",
+    "Detecting Inconsistent Categories",
+    "Standardizing Units and Labels",
+    "Investigating Outliers",
+    "Keeping an Audit Trail of Cleaning Operations"
+  ],
+  "learning_outcomes": [
+    "Explain the role of duplicates, inconsistencies, and outliers and identify its main inputs, outputs or constraints.",
+    "Apply detecting duplicate records in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Duplicates, Inconsistencies, and Outliers is part of Data Cleaning and Manipulation. Start with detecting duplicate records and connect it to the worked example and expected result.",
+    "why_it_matters": "Data transformations should be explicit and auditable: define the rule, check row counts and keys, and preserve the reason for each cleaning choice.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Duplicates, Inconsistencies, and Outliers",
+        "asset_path": "diagrams/data-cleaning-before-after.svg",
+        "alt_text": "Concept visual supporting lesson 113, Duplicates, Inconsistencies, and Outliers. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Data transformations should be explicit and auditable: define the rule, check row counts and keys, and preserve the reason for each cleaning choice. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Detecting Duplicate Records",
+            "text": "For detecting duplicate records, include a failing or boundary case and explain how it should be detected without silently losing information."
+          },
+          {
+            "title": "Removing Exact Duplicates",
+            "text": "For removing exact duplicates, include a failing or boundary case and explain how it should be detected without silently losing information."
+          },
+          {
+            "title": "Detecting Inconsistent Categories",
+            "text": "Explain detecting inconsistent categories in the context of duplicates, inconsistencies, and outliers, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Standardizing Units and Labels",
+            "text": "Explain standardizing units and labels in the context of duplicates, inconsistencies, and outliers, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Investigating Outliers",
+            "text": "For investigating outliers, include a failing or boundary case and explain how it should be detected without silently losing information."
+          },
+          {
+            "title": "Keeping an Audit Trail of Cleaning Operations",
+            "text": "Explain keeping an audit trail of cleaning operations in the context of duplicates, inconsistencies, and outliers, connect it to the example, and verify one expected result or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Compare before/after row counts, check a key or range invariant, and record how missing or duplicate records were handled. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Duplicates, Inconsistencies, and Outliers",
+        "language": "r",
+        "code": "# Lesson 113: Duplicates, Inconsistencies, and Outliers\nexample_rows <- data.frame(group = c(\"A\", \"B\", \"A\"), amount = c(3, 4, 5))\naggregate(amount ~ group, data = example_rows, sum)",
+        "expected_output": "  group amount\n1     A      8\n2     B      4",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "Synthetic grouping demonstrates a transformation; validate key relationships and row counts in a real workflow. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For duplicates, inconsistencies, and outliers, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-113-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply duplicates, inconsistencies, and outliers to a small synthetic example. Start with detecting duplicate records, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the detecting duplicate records idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible duplicates, inconsistencies, and outliers example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Detecting Duplicate Records” and identify the input and output before coding.",
+      "Check file existence, column types, row counts, keys and missing-value counts.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Removing rows before measuring how much information is missing.",
+        "why": "Missingness or outliers may be systematic and can bias the result.",
+        "fix": "Count affected rows, state the rule, compare before/after summaries and keep an audit trail."
+      },
+      {
+        "problem": "Treating every repeated key as an accidental duplicate.",
+        "why": "Repeated rows may represent repeated events or valid measurements.",
+        "fix": "Define the expected key grain and review examples before deleting records."
+      },
+      {
+        "problem": "Changing categories or units without documenting the transformation.",
+        "why": "Silent standardization makes results difficult to reproduce.",
+        "fix": "Record the mapping rule and add a validation check."
+      }
+    ],
+    "summary": [
+      "Key idea: Data transformations should be explicit and auditable: define the rule, check row counts and keys, and preserve the reason for each cleaning choice.",
+      "Practice: Compare before/after row counts, check a key or range invariant, and record how missing or duplicate records were handled.",
+      "Source syllabus focus: Detecting Duplicate Records. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply duplicates, inconsistencies, and outliers to a small synthetic example. Start with detecting duplicate records, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible duplicates, inconsistencies, and outliers example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Detecting Duplicate Records” and identify the input and output before coding.",
+    "Check file existence, column types, row counts, keys and missing-value counts.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Removing rows before measuring how much information is missing.",
+      "why": "Missingness or outliers may be systematic and can bias the result.",
+      "fix": "Count affected rows, state the rule, compare before/after summaries and keep an audit trail."
+    },
+    {
+      "problem": "Treating every repeated key as an accidental duplicate.",
+      "why": "Repeated rows may represent repeated events or valid measurements.",
+      "fix": "Define the expected key grain and review examples before deleting records."
+    },
+    {
+      "problem": "Changing categories or units without documenting the transformation.",
+      "why": "Silent standardization makes results difficult to reproduce.",
+      "fix": "Record the mapping rule and add a validation check."
+    }
+  ],
+  "summary": [
+    "Key idea: Data transformations should be explicit and auditable: define the rule, check row counts and keys, and preserve the reason for each cleaning choice.",
+    "Practice: Compare before/after row counts, check a key or range invariant, and record how missing or duplicate records were handled.",
+    "Source syllabus focus: Detecting Duplicate Records. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 11 — Data Cleaning and Manipulation, lesson 113: Duplicates, Inconsistencies, and Outliers.",
+    "Official documentation: https://dplyr.tidyverse.org/",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [
+    "../exercises/016-clean-a-dataset-containing-missing-values-and-duplicate-records.json"
+  ],
+  "status": "draft"
+}

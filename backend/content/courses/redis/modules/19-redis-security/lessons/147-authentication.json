@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-147",
+  "slug": "authentication",
+  "title": "Authentication",
+  "sequence": 147,
+  "module_id": "redis-module-19",
+  "module_slug": "redis-security",
+  "level": "advanced to professional",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-146"
+  ],
+  "previous_lesson_id": "redis-lesson-146",
+  "next_lesson_id": "redis-lesson-148",
+  "keywords": [
+    "authentication",
+    "auth",
+    "password-based-authentication",
+    "acl-users",
+    "credential-rotation",
+    "authentication-failure-handling",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 147,
+  "subtopics": [
+    "AUTH",
+    "Password-based authentication",
+    "ACL users",
+    "Credential rotation",
+    "Authentication failure handling"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Authentication and distinguish it from a related Redis concept.",
+    "Apply or trace Authentication in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Authentication and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Authentication in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Authentication must be evaluated using least privilege, network isolation, TLS, secret handling and application input validation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Authentication",
+        "asset_path": "diagrams/lesson-147-authentication.svg",
+        "alt_text": "Concept diagram for Authentication, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Authentication; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Authentication must be evaluated using least privilege, network isolation, TLS, secret handling and application input validation."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Authentication, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "AUTH",
+            "text": "Connect AUTH to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Password-based authentication",
+            "text": "Connect Password-based authentication to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "ACL users",
+            "text": "Connect ACL users to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Credential rotation",
+            "text": "Connect Credential rotation to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Authentication failure handling",
+            "text": "Connect Authentication failure handling to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Authentication",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "ACL WHOAMI\nACL LIST",
+        "expected_output": "Returns the authenticated user name and ACL definitions that the current user is allowed to inspect.",
+        "run_instructions": "Run only with a suitably authorized account against a controlled test instance; never paste actual passwords or secrets.",
+        "reset_steps": "Read-only inspection; credentials are not displayed in the lesson.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Authentication. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Authentication in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Authentication.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "Returns the authenticated user name and ACL definitions that the current user is allowed to inspect.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-147-questions.json",
+    "recap": [
+      "Authentication is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Redis security",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/management/security/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "network exposure, ACLs, TLS and secure deployment"
+      ]
+    },
+    {
+      "title": "Redis ACL",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "users, command permissions and key-pattern restrictions"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

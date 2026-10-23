@@ -1,0 +1,63 @@
+{
+  "id": "github-actions-exercise-020",
+  "slug": "use-oidc-authentication",
+  "title": "Use OIDC authentication",
+  "type": "coding",
+  "lesson_id": "github-actions-lesson-074",
+  "module_id": "github-actions-module-10",
+  "difficulty": "advanced",
+  "sequence": 20,
+  "prompt": "Configure a test cloud environment for short-lived GitHub Actions credentials rather than a long-lived cloud secret.",
+  "objective": "Demonstrate the behavior of use oidc authentication and capture verifiable evidence.",
+  "target_skills": [
+    "advanced",
+    "workflow YAML",
+    "validation",
+    "safe automation"
+  ],
+  "starter": {
+    "language": "yaml",
+    "code": "jobs:\n  deploy:\n    permissions:\n      contents: read\n      id-token: write\n    environment: staging\n    runs-on: ubuntu-latest\n    steps:\n      - name: Request cloud identity\n        run: echo \"Configure the provider-specific OIDC login action here\"",
+    "execution_mode": "design-fragment"
+  },
+  "expected_output": "A reviewed workflow or design note satisfying: id-token: write, permissions:, environment:. Verify behavior on a disposable repository where execution is required; a static sketch is not proof of a live deployment.",
+  "public_tests": [
+    {
+      "name": "Required evidence check",
+      "required_strings": [
+        "id-token: write",
+        "permissions:",
+        "environment:"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Include or explain `id-token: write`.",
+    "Include or explain `permissions:`.",
+    "Include or explain `environment:`.",
+    "Explain one validation result or limitation.",
+    "Do not include a real secret or use production resources."
+  ],
+  "hints": [
+    "First identify the trigger, input, and expected result.",
+    "Start with read-only permissions and a disposable branch or test environment.",
+    "Compare your result with the linked lesson and official documentation; distinguish a configuration sketch from a live integration."
+  ],
+  "solution": {
+    "answer": null,
+    "explanation": "The detailed reference solution is stored in a protected repository-only JSON file; it is not intended for a learner-facing response."
+  },
+  "solution_file": "../solutions/020-use-oidc-authentication-solution.json",
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "id-token: write",
+      "permissions:",
+      "environment:"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus human review for workflow semantics and security boundaries.",
+  "retry_policy": "Allow retries; incorrect submissions do not award XP. The platform awards exercise XP only after server-verified successful completion and applies idempotency per activity.",
+  "status": "draft",
+  "status_note": "Source mapping: Section C: Practical Exercises; original learning task adapted to CodeLeaf structure."
+}

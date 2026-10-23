@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-107",
+  "slug": "client-errors-and-reconnection",
+  "title": "Client Errors and Reconnection",
+  "sequence": 107,
+  "module_id": "redis-module-14",
+  "module_slug": "redis-client-libraries-and-application-integration",
+  "level": "beginner to advanced",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-106"
+  ],
+  "previous_lesson_id": "redis-lesson-106",
+  "next_lesson_id": "redis-lesson-108",
+  "keywords": [
+    "client-errors-and-reconnection",
+    "connection-timeout",
+    "command-timeout",
+    "connection-reset",
+    "retry-policies",
+    "backoff-and-reconnection-behavior",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 107,
+  "subtopics": [
+    "Connection timeout",
+    "Command timeout",
+    "Connection reset",
+    "Retry policies",
+    "Backoff and reconnection behavior"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Client Errors and Reconnection and distinguish it from a related Redis concept.",
+    "Apply or trace Client Errors and Reconnection in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Client Errors and Reconnection and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Client Errors and Reconnection in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Client Errors and Reconnection helps implement use supported client libraries with secure configuration, connection reuse, and controlled retries. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Client Errors and Reconnection",
+        "asset_path": "diagrams/lesson-107-client-errors-and-reconnection.svg",
+        "alt_text": "Concept diagram for Client Errors and Reconnection, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Client Errors and Reconnection; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Client Errors and Reconnection helps implement use supported client libraries with secure configuration, connection reuse, and controlled retries. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Client Errors and Reconnection, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Connection timeout",
+            "text": "Connect Connection timeout to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Command timeout",
+            "text": "Connect Command timeout to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Connection reset",
+            "text": "Connect Connection reset to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Retry policies",
+            "text": "Connect Retry policies to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Backoff and reconnection behavior",
+            "text": "Connect Backoff and reconnection behavior to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Client Errors and Reconnection",
+        "language": "Python (redis-py)",
+        "execution_mode": "static-validation",
+        "code": "import os\nimport redis\n\nr = redis.Redis.from_url(os.environ[\"REDIS_URL\"], decode_responses=True)\nprint(r.ping())",
+        "expected_output": "True",
+        "run_instructions": "Install redis-py in a local virtual environment, set REDIS_URL for a disposable development instance, and never commit credentials.",
+        "reset_steps": "The snippet performs a read-only ping; close the client or connection pool when the application shuts down.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Client Errors and Reconnection. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Client Errors and Reconnection in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Client Errors and Reconnection.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "True",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-107-questions.json",
+    "recap": [
+      "Client Errors and Reconnection is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Connect with Redis client libraries",
+      "url": "https://redis.io/docs/latest/connect/clients/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "supported client libraries, protocols and integrations"
+      ]
+    },
+    {
+      "title": "Connect to Redis with redis-py",
+      "url": "https://redis.io/docs/latest/develop/clients/redis-py/connect/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "Python connection configuration and TLS examples"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

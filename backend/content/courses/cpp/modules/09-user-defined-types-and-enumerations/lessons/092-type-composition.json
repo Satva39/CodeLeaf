@@ -1,0 +1,194 @@
+{
+  "id": "cpp-lesson-092",
+  "slug": "type-composition",
+  "title": "Type Composition",
+  "sequence": 92,
+  "module_id": "cpp-module-09",
+  "module_slug": "user-defined-types-and-enumerations",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "cpp-lesson-091"
+  ],
+  "previous_lesson_id": "cpp-lesson-091",
+  "next_lesson_id": "cpp-lesson-093",
+  "keywords": [
+    "type-composition",
+    "composition-of-structures",
+    "containing-arrays-and-vectors",
+    "objects-containing-other-objects",
+    "composition-versus-inheritance",
+    "modeling-real-world-entities",
+    "avoiding-excessive-data-coupling"
+  ],
+  "source_syllabus_number": 92,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Composition of Structures",
+    "Containing Arrays and Vectors",
+    "Objects Containing Other Objects",
+    "Composition Versus Inheritance",
+    "Modeling Real-World Entities",
+    "Avoiding Excessive Data Coupling"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and core rule of type composition using at least one example.",
+    "Trace or adapt a minimal C++ example related to type composition and state its expected result.",
+    "Identify one precondition, error case, lifetime issue, portability assumption or version constraint relevant to the topic."
+  ],
+  "content": {
+    "intro": "Type Composition focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Type Composition matters because choose a representation that matches the domain and write down the invariants constructors or helper functions must preserve. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Type Composition: visual trace",
+        "asset_path": "diagrams/lessons/lesson-092.svg",
+        "alt_text": "Lesson 92 visual for Type Composition; concept: Composition of Structures; apply: Containing Arrays and Vectors; verify: Objects Containing Other Objects.",
+        "caption": "Original lesson-specific overview: understand composition of structures, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "User-defined types give domain concepts a name and restrict values to meaningful states. Type design can prevent invalid combinations from being representable.\n\nType Composition focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nChoose a representation that matches the domain and write down the invariants constructors or helper functions must preserve."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Type Composition",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <iostream>\n#include <string>\n\nstruct Engine { int horsepower; };\nstruct Car { std::string model; Engine engine; };\nint main() {\n    const Car car{\"Roadster\", {220}};\n    std::cout << car.model << \": \" << car.engine.horsepower << \" hp\\n\";\n}\n",
+        "expected_output": "Roadster: 220 hp",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "Composition expresses a has-a relationship: the Car contains an Engine value, making the data relationship explicit."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Composition of Structures",
+            "text": "A struct groups related data under one type; in C++, its default member access is public, unlike class."
+          },
+          {
+            "title": "Containing Arrays and Vectors",
+            "text": "An array stores a sequence of elements and indexing starts at zero; built-in array bounds are not checked automatically."
+          },
+          {
+            "title": "Objects Containing Other Objects",
+            "text": "Explain objects containing other objects in the context of Type Composition: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Composition Versus Inheritance",
+            "text": "Inheritance models an is-a relationship and can enable runtime polymorphism; composition is often simpler when the relationship is has-a."
+          },
+          {
+            "title": "Modeling Real-World Entities",
+            "text": "Explain modeling real-world entities in the context of Type Composition: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Avoiding Excessive Data Coupling",
+            "text": "Explain avoiding excessive data coupling in the context of Type Composition: identify the rule, trace a minimal example, and check one boundary or failure case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate composition of structures, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "Use standard C++ rather than compiler-specific behavior unless the lesson explicitly labels the dependency. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-092-questions.json",
+    "task": "Extend the example for Type Composition with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+    "task_acceptance_criteria": [
+      "The code compiles in the documented standard mode with warnings enabled.",
+      "The predicted output matches the actual result for the added case.",
+      "One relevant boundary, lifetime, portability or error case is tested or documented."
+    ],
+    "hints": [
+      "Start by isolating the central rule from Type Composition.",
+      "Trace values or object lifetimes before changing the program.",
+      "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+    ],
+    "summary": [
+      "Type Composition is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying type composition.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "Roadster: 220 hp"
+  },
+  "task": "Extend the example for Type Composition with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+  "hints": [
+    "Start by isolating the central rule from Type Composition.",
+    "Trace values or object lifetimes before changing the program.",
+    "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+  ],
+  "expected_output": "Roadster: 220 hp",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Type Composition is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying type composition.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 9, lesson 92: Type Composition.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

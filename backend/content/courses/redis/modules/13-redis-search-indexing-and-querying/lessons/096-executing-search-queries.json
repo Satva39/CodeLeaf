@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-096",
+  "slug": "executing-search-queries",
+  "title": "Executing Search Queries",
+  "sequence": 96,
+  "module_id": "redis-module-13",
+  "module_slug": "redis-search-indexing-and-querying",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "version-dependent-specialist",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-095"
+  ],
+  "previous_lesson_id": "redis-lesson-095",
+  "next_lesson_id": "redis-lesson-097",
+  "keywords": [
+    "executing-search-queries",
+    "ft-search",
+    "text-matching",
+    "boolean-filters",
+    "sorting-and-pagination",
+    "query-syntax-and-escaping",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 96,
+  "subtopics": [
+    "FT.SEARCH",
+    "Text matching",
+    "Boolean filters",
+    "Sorting and pagination",
+    "Query syntax and escaping"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Executing Search Queries and distinguish it from a related Redis concept.",
+    "Apply or trace Executing Search Queries in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Executing Search Queries and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Executing Search Queries in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Executing Search Queries helps implement index structured records and assess relevance, storage, and query cost. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Executing Search Queries",
+        "asset_path": "diagrams/lesson-096-executing-search-queries.svg",
+        "alt_text": "Concept diagram for Executing Search Queries, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Executing Search Queries; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Executing Search Queries helps implement index structured records and assess relevance, storage, and query cost. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Executing Search Queries, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "FT.SEARCH",
+            "text": "Connect FT.SEARCH to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Text matching",
+            "text": "Connect Text matching to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Boolean filters",
+            "text": "Connect Boolean filters to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Sorting and pagination",
+            "text": "Connect Sorting and pagination to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Query syntax and escaping",
+            "text": "Connect Query syntax and escaping to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Executing Search Queries",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "FT.CREATE idx:products ON HASH PREFIX 1 product: SCHEMA name TEXT category TAG\nFT.SEARCH idx:products \"keyboard\"",
+        "expected_output": "OK\n0",
+        "run_instructions": "This shows the index/query shape. Search command availability and index schema compatibility must be verified on the target deployment.",
+        "reset_steps": "FT.DROPINDEX idx:products DD when safe for the isolated lab; otherwise remove only test keys.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Executing Search Queries. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Executing Search Queries in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Executing Search Queries.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "OK\n0",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-096-questions.json",
+    "recap": [
+      "Executing Search Queries is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "FT.CREATE command reference",
+      "url": "https://redis.io/docs/latest/commands/ft.create/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "search index schemas and field types"
+      ]
+    },
+    {
+      "title": "Redis data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "strings, hashes, lists, sets, sorted sets, streams, geospatial indexes, bitmaps, bitfields, JSON, arrays, time series, probabilistic structures, vector sets"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

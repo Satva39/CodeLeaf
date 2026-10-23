@@ -1,0 +1,155 @@
+{
+  "id": "ruby-lesson-220",
+  "slug": "method-and-class-hooks",
+  "title": "Method and Class Hooks",
+  "sequence": 220,
+  "module_id": "ruby-module-20",
+  "module_slug": "advanced-language-features-and-metaprogramming",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced-language",
+  "estimated_minutes": 14,
+  "prerequisites": [],
+  "previous_lesson_id": "ruby-lesson-219",
+  "next_lesson_id": "ruby-lesson-221",
+  "keywords": [
+    "method-and-class-hooks",
+    "advanced-language-features-and-metaprogramming",
+    "ruby",
+    "inherited",
+    "included-and-prepended",
+    "method-added",
+    "observing-class-definition-behavior"
+  ],
+  "source_syllabus_number": 220,
+  "subtopics": [
+    "inherited",
+    "included and prepended",
+    "method_added",
+    "Observing class-definition behavior"
+  ],
+  "learning_outcomes": [
+    "Explain the role of method and class hooks in a Ruby program and name the key rule involved.",
+    "Apply method and class hooks in a small example and predict its result before running it.",
+    "Identify one boundary or failure case related to observing class-definition behavior and verify the intended behavior."
+  ],
+  "content": {
+    "intro": "Learn Method and Class Hooks through a visual model, a minimal Ruby example, and a practical check.",
+    "why_it_matters": "Understanding method and class hooks helps you write code that is easier to explain, test, and maintain. It also helps separate Ruby language guarantees from runtime assumptions, dependency behavior, and application-specific rules.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Method and Class Hooks",
+        "asset_path": "diagrams/lesson-220-method-and-class-hooks.svg",
+        "alt_text": "Three-stage concept diagram for Method and Class Hooks.",
+        "caption": "Use this diagram to plan a small example, then verify exact behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Method and Class Hooks helps you reason about inherited. In Ruby, prefer a small example whose inputs and expected result are easy to explain. This lesson connects the syllabus topic to practical code and highlights where assumptions or edge cases matter."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to think about it",
+        "text": "Begin by identifying the key rule: inherited. Then connect it to included and prepended. The remaining syllabus points—method_added, Observing class-definition behavior—are useful checks before applying this in a larger project."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to cover",
+        "items": [
+          {
+            "title": "inherited",
+            "text": "Explain how inherited affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "included and prepended",
+            "text": "Explain how included and prepended affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "method_added",
+            "text": "Explain how method_added affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Observing class-definition behavior",
+            "text": "Explain how observing class-definition behavior affects the example, the public interface, or the behavior learners need to verify."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Method and Class Hooks",
+        "language": "ruby",
+        "code": "case [1, 2, 3]\nin [Integer, *] => first, *rest\n  puts first\n  p rest\nend",
+        "expected_output": "1\n[2, 3]",
+        "execution_mode": "server-runner",
+        "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+        "dependencies": "Ruby standard library",
+        "notes": "Local Ruby execution is required. CodeLeaf’s existing playground only previews HTML/CSS/JavaScript; do not run arbitrary Ruby inside the FastAPI process."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming the happy path is enough",
+            "text": "Test an empty value, a boundary value, and one invalid value before depending on the behavior."
+          },
+          {
+            "title": "Treating an example as a universal rule",
+            "text": "Check Ruby version, runtime implementation, and third-party library documentation when behavior is version-sensitive."
+          },
+          {
+            "title": "Mixing too many concerns",
+            "text": "Separate input parsing, domain behavior, and output so each piece is easier to test."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Run the example as written, compare it with the expected result, and explain why each line supports method and class hooks. Next change one input or condition and predict the result before running it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second example for method and class hooks using a different input. Add one edge case from the syllabus list (Observing class-definition behavior), state the expected behavior, and write a small test or manual check that would catch a regression."
+      },
+      {
+        "type": "paragraph",
+        "title": "Run, troubleshoot, and reset",
+        "text": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed. If the command fails, confirm `ruby --version`, inspect the full error message, and verify that required standard-library or gem dependencies are installed. Reset by removing temporary files created by your experiment and returning the code to the smallest reproducible example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain method and class hooks, identify its place in advanced language features and metaprogramming, run a focused example, and verify an important boundary. Revisit the linked exercise if this is a core topic; advanced runtime or framework examples remain draft until reviewed in a suitable environment."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-220-questions.json",
+    "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+    "reset_steps": [
+      "Restore the original minimal example before trying another variation.",
+      "Remove only temporary sample data created for the lesson.",
+      "Keep credentials and personal data out of logs, fixtures, and screenshots."
+    ],
+    "guided_example": "Predict the output, run the example, and explain the relationship between inherited and included and prepended.",
+    "try_it_yourself": "Create one variation of method and class hooks, test a normal input and one boundary input, and note any version or dependency assumptions.",
+    "progressive_hints": [
+      "Write down the input and output contract first.",
+      "Reduce the task to one relevant Ruby method or construct.",
+      "Add the boundary case and verify it independently."
+    ],
+    "accessibility_notes": "The diagram includes a text alternative and the lesson explains the flow in prose. Do not use color alone to infer the correct sequence.",
+    "execution_mode": "server-runner",
+    "execution_note": "CodeLeaf does not currently provide an isolated Ruby runner. Run Ruby examples locally; a production runner needs a separate sandbox with time, memory, filesystem, and network limits."
+  },
+  "exercise_files": [],
+  "sources": [
+    "https://docs.ruby-lang.org/en/4.0/",
+    "https://www.ruby-lang.org/en/documentation/"
+  ],
+  "status": "draft",
+  "status_note": "Original lesson authored from the listed PDF syllabus topics; requires technical and editorial review before publication."
+}

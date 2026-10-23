@@ -1,0 +1,170 @@
+{
+  "id": "csharp-lesson-137",
+  "slug": "cancellation-and-timeouts",
+  "title": "Cancellation and Timeouts",
+  "sequence": 137,
+  "module_id": "csharp-module-18",
+  "module_slug": "asynchronous-programming-and-concurrency",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "csharp-lesson-136"
+  ],
+  "previous_lesson_id": "csharp-lesson-136",
+  "next_lesson_id": "csharp-lesson-138",
+  "keywords": [
+    "cancellation",
+    "and",
+    "timeouts",
+    "asynchronous programming and concurrency",
+    "c#",
+    ".net"
+  ],
+  "source_syllabus_number": 137,
+  "subtopics": [
+    "Cancellation tokens",
+    "Passing cancellation tokens",
+    "Cooperative cancellation",
+    "Handling cancellation exceptions",
+    "Implementing timeouts",
+    "Designing cancellable APIs"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of cancellation and timeouts in a C#/.NET program.",
+    "Predict the result of the included C# example and verify the documented output.",
+    "Apply cancellation and timeouts to a small task and identify one relevant boundary, limitation, or version requirement."
+  ],
+  "content": {
+    "intro": "Cancellation and Timeouts is lesson 137 in Asynchronous Programming and Concurrency. Asynchronous methods let a caller await an operation without blocking a thread during I/O. Concurrency, parallel execution, and thread safety solve different problems.",
+    "why_it_matters": "Asynchrony improves responsiveness; it does not automatically make CPU work faster or shared state safe. This lesson focuses on cancellation and timeouts and shows how to verify the behavior instead of relying on assumptions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 18 visual map: Asynchronous Programming and Concurrency",
+        "asset_path": "diagrams/module-18-overview.svg",
+        "alt_text": "Numbered visual roadmap of Asynchronous Programming and Concurrency, with the lesson sequence and learn-inspect-test-apply workflow.",
+        "caption": "This module map locates Cancellation and Timeouts among the ordered concepts; the lesson text and example focus on the highlighted topic."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Asynchronous methods let a caller await an operation without blocking a thread during I/O. Concurrency, parallel execution, and thread safety solve different problems."
+      },
+      {
+        "type": "paragraph",
+        "title": "A practical way to learn it",
+        "text": "Start with the smallest valid case for cancellation and timeouts. Predict the output, run or inspect the example in the stated toolchain, then change one input or rule and compare the result. For production code, record assumptions and verify boundary cases."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics to connect",
+        "items": [
+          {
+            "title": "Cancellation tokens",
+            "text": "Await I/O-bound tasks, pass cancellation tokens across boundaries, and protect shared mutable state explicitly."
+          },
+          {
+            "title": "Passing cancellation tokens",
+            "text": "Await I/O-bound tasks, pass cancellation tokens across boundaries, and protect shared mutable state explicitly."
+          },
+          {
+            "title": "Cooperative cancellation",
+            "text": "Await I/O-bound tasks, pass cancellation tokens across boundaries, and protect shared mutable state explicitly."
+          },
+          {
+            "title": "Handling cancellation exceptions",
+            "text": "Catch only failures you can handle, preserve context when rethrowing, and use finally or disposal for cleanup."
+          },
+          {
+            "title": "Implementing timeouts",
+            "text": "Await I/O-bound tasks, pass cancellation tokens across boundaries, and protect shared mutable state explicitly."
+          },
+          {
+            "title": "Designing cancellable APIs",
+            "text": "Use explicit timeouts, parameterized database commands, small service boundaries, and validation for external results."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "csharp",
+        "execution_mode": "static-validation",
+        "code": "// Lesson 137: Cancellation and Timeouts\nusing var cts = new CancellationTokenSource();\ncts.Cancel();\nConsole.WriteLine(cts.IsCancellationRequested);",
+        "expected_output": "True",
+        "run_instructions": "This snippet is a static reference; CodeLeaf does not execute C# in the browser. To run it, create a .NET 10 console app with `dotnet new console`, replace Program.cs with the example (keeping any required using directives), then run `dotnet run`. A snippet that names a test framework, provider package, unsafe setting, or advanced runtime feature must be placed in a project with that dependency/configuration.",
+        "reset_steps": "Restore the documented snippet, rerun it locally in a compatible .NET project, and compare output. Remove temporary files or test data after checking them. Do not treat the in-page output panel as execution."
+      },
+      {
+        "type": "callout",
+        "title": "Version and reliability note",
+        "text": "Asynchronous methods let a caller await an operation without blocking a thread during I/O. Concurrency, parallel execution, and thread safety solve different problems."
+      }
+    ],
+    "task": "Try it yourself: create a small C# example that demonstrates cancellation and timeouts. Change one input or implementation detail, predict the result, then check it locally and explain one edge case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates cancellation and timeouts rather than only repeating its definition.",
+      "The result is checked locally or against a clearly documented reference output.",
+      "At least one relevant boundary, invalid-input case, or compatibility condition is considered."
+    ],
+    "hints": [
+      "List the assumptions and expected behavior for cancellation and timeouts before editing the code.",
+      "Change one variable or rule at a time; keep the previous output for comparison.",
+      "If behavior differs, confirm the compiler/target framework and consult the linked official documentation."
+    ],
+    "solution_notes": "Suggested approach: identify the expected input and output, start from the smallest example, use the feature only where it clarifies the rule, and verify both a typical case and a boundary/failure case.",
+    "expected_output": "True",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-137-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the feature works identically on every target",
+        "why": "Language syntax, libraries, and runtime support are version-dependent.",
+        "fix": "Check the target framework and official versioned reference before using the feature."
+      },
+      {
+        "problem": "Testing only a happy path",
+        "why": "Boundary values, malformed input, and failure states often expose the real bug.",
+        "fix": "Add one typical input and one boundary or invalid case to the manual or automated checks."
+      },
+      {
+        "problem": "Treating sample output as proof that the code ran",
+        "why": "The course reader uses static reference output for C# because it has no C# execution runner.",
+        "fix": "Run the snippet in a local .NET project or a separately isolated execution service."
+      }
+    ],
+    "summary": [
+      "Cancellation and Timeouts belongs to Asynchronous Programming and Concurrency.",
+      "Asynchronous methods let a caller await an operation without blocking a thread during I/O. Concurrency, parallel execution, and thread safety solve different problems.",
+      "Check assumptions, verify output, and document one meaningful limitation or edge case."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "C# language documentation",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/",
+      "publisher": "Microsoft Learn",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "Asynchronous Programming and Concurrency",
+        "Cancellation and Timeouts",
+        "language and .NET concepts"
+      ]
+    },
+    {
+      "title": "C# language version history",
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-version-history",
+      "publisher": "Microsoft Learn",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "feature-version history",
+        "compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson expanded from the numbered C# syllabus in C#(1).pdf. Code examples and pedagogical framing are original. Review feature compatibility and compile every runnable sample with the target .NET SDK before publication."
+}

@@ -1,0 +1,227 @@
+{
+  "id": "github-actions-lesson-064",
+  "slug": "dependency-caching",
+  "title": "Dependency Caching",
+  "sequence": 64,
+  "module_id": "github-actions-module-09",
+  "module_slug": "artifacts-caching-and-inter-job-data",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "github-actions-lesson-063"
+  ],
+  "previous_lesson_id": "github-actions-lesson-063",
+  "next_lesson_id": "github-actions-lesson-065",
+  "keywords": [
+    "dependency-caching",
+    "artifacts-caching-and-inter-job-data",
+    "why-caching-is-useful",
+    "cache-keys",
+    "restore-keys",
+    "cache-hit-and-miss-behavior",
+    "cache-invalidation",
+    "cache-versioning-and-restore-behavior"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of dependency caching and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to dependency caching.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on dependency caching. Dependency caches save rebuildable inputs using keys and restore prefixes; a cache miss should affect performance, not correctness. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "Dependency Caching matters because it affects correctness, security, maintainability, or operating cost. Dependency caches save rebuildable inputs using keys and restore prefixes; a cache miss should affect performance, not correctness. Artifacts preserve files produced by a run; caches accelerate reconstruction of dependencies. They serve different purposes and neither should contain secrets.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 9 visual map",
+        "asset_path": "diagrams/module-09-overview.svg",
+        "alt_text": "Ordered overview of module 9: Understanding Workflow Artifacts; Uploading and Downloading Artifacts; Sharing Data Between Jobs; Dependency Caching; Caching Common Development Dependencies; Artifact and Cache Security; Diagnosing Cache and Artifact Problems.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Artifact vs. cache",
+        "asset_path": "diagrams/artifact-vs-cache.svg",
+        "alt_text": "A side-by-side conceptual comparison of artifacts for run outputs and caches for rebuildable dependencies, with their security notes.",
+        "caption": "Artifacts preserve run outputs; caches reuse rebuildable inputs and must not contain secrets."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Dependency caches save rebuildable inputs using keys and restore prefixes; a cache miss should affect performance, not correctness. Artifacts preserve files produced by a run; caches accelerate reconstruction of dependencies. They serve different purposes and neither should contain secrets. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "Why caching is useful",
+            "text": "For why caching is useful, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Cache keys",
+            "text": "Cache rebuildable dependencies using a key that includes the package manager, runtime/OS as appropriate, and lockfile hash. A cache miss must not change build correctness, and secrets do not belong in caches."
+          },
+          {
+            "title": "Restore keys",
+            "text": "Use a scoped token, validate request inputs and event payloads, check HTTP/error status, handle pagination and rate limits, and avoid logging credentials or unneeded private response data."
+          },
+          {
+            "title": "Cache hit and miss behavior",
+            "text": "Cache rebuildable dependencies using a key that includes the package manager, runtime/OS as appropriate, and lockfile hash. A cache miss must not change build correctness, and secrets do not belong in caches."
+          },
+          {
+            "title": "Cache invalidation",
+            "text": "Cache rebuildable dependencies using a key that includes the package manager, runtime/OS as appropriate, and lockfile hash. A cache miss must not change build correctness, and secrets do not belong in caches."
+          },
+          {
+            "title": "Cache versioning and restore behavior",
+            "text": "Cache rebuildable dependencies using a key that includes the package manager, runtime/OS as appropriate, and lockfile hash. A cache miss must not change build correctness, and secrets do not belong in caches."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "steps:\n  - uses: actions/checkout@v4\n  - uses: actions/setup-node@v4\n    with:\n      node-version: \"20\"\n      cache: npm\n  - run: npm ci\n  - run: npm test",
+        "expected_output": "The setup action configures Node and dependency caching based on the npm lockfile; the tests still run even when there is a cache miss.",
+        "run_instructions": "Use this only in a Node project with a committed lockfile and test script. Review action source/pinning policy for production use.",
+        "reset_steps": "Restore the original snippet and remove temporary workflow changes. If you triggered a real run, inspect the run log before editing the file again.",
+        "execution_mode": "workflow-fragment"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to dependency caching. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain dependency caching, read the example, and identify a way to validate it. The wider system goal remains: Choose between short-lived outputs, persisted artifacts, and reusable dependency caches."
+      }
+    ],
+    "task": "Apply dependency caching to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: Dependency caches save rebuildable inputs using keys and restore prefixes; a cache miss should affect performance, not correctness.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: Dependency caches save rebuildable inputs using keys and restore prefixes; a cache miss should affect performance, not correctness. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "Dependency caches save rebuildable inputs using keys and restore prefixes; a cache miss should affect performance, not correctness.",
+      "Artifacts preserve files produced by a run; caches accelerate reconstruction of dependencies. They serve different purposes and neither should contain secrets.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-064-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "workflow-fragment",
+    "references": [
+      {
+        "title": "Workflow artifacts",
+        "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/workflow-artifacts",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "build outputs",
+          "test reports",
+          "inter-job data",
+          "artifact attestations"
+        ]
+      },
+      {
+        "title": "Dependency caching",
+        "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/dependency-caching",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "dependency cache",
+          "artifacts versus cache",
+          "cache security"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [
+    "../exercises/011-configure-caching.json"
+  ],
+  "sources": [
+    {
+      "title": "Workflow artifacts",
+      "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/workflow-artifacts",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "build outputs",
+        "test reports",
+        "inter-job data",
+        "artifact attestations"
+      ]
+    },
+    {
+      "title": "Dependency caching",
+      "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/dependency-caching",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "dependency cache",
+        "artifacts versus cache",
+        "cache security"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "64",
+    "module_title": "Artifacts, Caching, and Inter-Job Data",
+    "subtopics": [
+      "Why caching is useful",
+      "Cache keys",
+      "Restore keys",
+      "Cache hit and miss behavior",
+      "Cache invalidation",
+      "Cache versioning and restore behavior"
+    ]
+  }
+}

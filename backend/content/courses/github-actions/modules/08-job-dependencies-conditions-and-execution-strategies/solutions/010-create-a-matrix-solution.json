@@ -1,0 +1,13 @@
+{
+  "id": "github-actions-exercise-solution-010",
+  "exercise_id": "github-actions-exercise-010",
+  "title": "Create a matrix reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": {
+    "approach": "A complete response for create a matrix should include: strategy:, matrix:, runs-on:, ${{ matrix..",
+    "example": "jobs:\n  test:\n    runs-on: ${{ matrix.os }}\n    strategy:\n      fail-fast: false\n      matrix:\n        os: [ubuntu-latest, windows-latest]\n        python: [\"3.11\", \"3.12\"]\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with:\n          python-version: ${{ matrix.python }}\n      - run: python -m unittest discover -s tests",
+    "verification": "The test job expands into four OS/Python combinations. A real repository must contain a compatible `tests` directory."
+  },
+  "explanation": "Reason about the trigger, permission boundary, expected observable result, and failure path for create a matrix. Insert this job under `jobs` in a workflow. For production use, review and pin third-party actions to verified immutable references according to your policy. Adapt action references and runtime details against the official docs checked on 2026-10-20."
+}

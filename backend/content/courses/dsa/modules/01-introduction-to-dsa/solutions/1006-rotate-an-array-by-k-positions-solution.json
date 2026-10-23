@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-06",
+  "exercise_id": "dsa-exercise-pdf-06",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\ndef rotate_right(values, k):\n    n = len(values)\n    if not n: return values\n    k %= n\n    def reverse(left, right):\n        while left < right:\n            values[left], values[right] = values[right], values[left]\n            left += 1; right -= 1\n    reverse(0, n - 1); reverse(0, k - 1); reverse(k, n - 1)\n    return values\n\nassert rotate_right([1, 2, 3, 4, 5], 2) == [4, 5, 1, 2, 3]\n```",
+  "explanation": "Three reversals rotate right by k; reduce k modulo n and handle an empty list. Time O(n), auxiliary space O(1).",
+  "tested_reference_code": "def rotate_right(values, k):\n    n = len(values)\n    if not n: return values\n    k %= n\n    def reverse(left, right):\n        while left < right:\n            values[left], values[right] = values[right], values[left]\n            left += 1; right -= 1\n    reverse(0, n - 1); reverse(0, k - 1); reverse(k, n - 1)\n    return values\n\nassert rotate_right([1, 2, 3, 4, 5], 2) == [4, 5, 1, 2, 3]",
+  "language": "python"
+}

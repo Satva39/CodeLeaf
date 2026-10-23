@@ -1,0 +1,152 @@
+{
+  "id": "redis-lesson-197",
+  "slug": "replication-and-cluster-troubleshooting",
+  "title": "Replication and Cluster Troubleshooting",
+  "sequence": 197,
+  "module_id": "redis-module-24",
+  "module_slug": "troubleshooting-best-practices-and-professional-readiness",
+  "level": "beginner to professional",
+  "difficulty": "professional",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-196"
+  ],
+  "previous_lesson_id": "redis-lesson-196",
+  "next_lesson_id": "redis-lesson-198",
+  "keywords": [
+    "replication-and-cluster-troubleshooting",
+    "replication-lag",
+    "failover-problems",
+    "cluster-redirections",
+    "slot-movement",
+    "incomplete-recovery",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 197,
+  "subtopics": [
+    "Replication lag",
+    "Failover problems",
+    "Cluster redirections",
+    "Slot movement",
+    "Incomplete recovery"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Replication and Cluster Troubleshooting and distinguish it from a related Redis concept.",
+    "Apply or trace Replication and Cluster Troubleshooting in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Replication and Cluster Troubleshooting and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Replication and Cluster Troubleshooting in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Replication and Cluster Troubleshooting helps implement diagnose failures systematically and document safe, testable production practices. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Replication and Cluster Troubleshooting",
+        "asset_path": "diagrams/lesson-197-replication-and-cluster-troubleshooting.svg",
+        "alt_text": "Concept diagram for Replication and Cluster Troubleshooting, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Replication and Cluster Troubleshooting; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Replication and Cluster Troubleshooting helps implement diagnose failures systematically and document safe, testable production practices. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Replication and Cluster Troubleshooting, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Replication lag",
+            "text": "Connect Replication lag to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Failover problems",
+            "text": "Connect Failover problems to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Cluster redirections",
+            "text": "Connect Cluster redirections to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Slot movement",
+            "text": "Connect Slot movement to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Incomplete recovery",
+            "text": "Connect Incomplete recovery to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Replication and Cluster Troubleshooting",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "INFO replication\nROLE",
+        "expected_output": "Reports replication role and connected replica/primary details for the active node.",
+        "run_instructions": "Topology commands and fields depend on the deployment. Do not reconfigure a production primary for a tutorial.",
+        "reset_steps": "Read-only inspection.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Replication and Cluster Troubleshooting. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Replication and Cluster Troubleshooting in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Replication and Cluster Troubleshooting.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "Reports replication role and connected replica/primary details for the active node.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-197-questions.json",
+    "recap": [
+      "Replication and Cluster Troubleshooting is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Redis commands reference",
+      "url": "https://redis.io/docs/latest/commands/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "command syntax, return values, complexity, compatibility and command history"
+      ]
+    },
+    {
+      "title": "Diagnosing latency issues",
+      "url": "https://redis.io/docs/latest/management/optimization/latency/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "latency sources, slow commands, round trips and diagnosis"
+      ]
+    },
+    {
+      "title": "Redis persistence",
+      "url": "https://redis.io/docs/latest/management/persistence/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "RDB, AOF, combined persistence, backup and trade-offs"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

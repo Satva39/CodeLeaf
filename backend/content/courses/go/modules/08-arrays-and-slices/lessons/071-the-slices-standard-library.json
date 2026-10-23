@@ -1,0 +1,200 @@
+{
+  "id": "go-lesson-071",
+  "slug": "the-slices-standard-library",
+  "title": "The Slices Standard Library",
+  "sequence": 71,
+  "module_id": "go-module-08",
+  "module_slug": "arrays-and-slices",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "go-lesson-070"
+  ],
+  "previous_lesson_id": "go-lesson-070",
+  "next_lesson_id": "go-lesson-072",
+  "keywords": [
+    "the slices standard library",
+    "sorting slices",
+    "searching slices",
+    "comparing and cloning slices",
+    "inserting and deleting elements",
+    "choosing the appropriate helper functions",
+    "Go",
+    "Golang"
+  ],
+  "source_syllabus_number": 71,
+  "subtopics": [
+    "Sorting slices",
+    "Searching slices",
+    "Comparing and cloning slices",
+    "Inserting and deleting elements",
+    "Choosing the appropriate helper functions"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and behavior of the slices standard library.",
+    "Apply at least one lesson concept—sorting slices—in a small Go example or workflow.",
+    "Predict a representative result, then test a boundary case and explain any difference."
+  ],
+  "exercise_files": [
+    "../exercises/009-slice-operations.json"
+  ],
+  "content": {
+    "intro": "The Slices Standard Library helps transform a small program into a reusable data-processing tool. Trace each function input, returned value, and mutation of any collection. For arrays, slices, and maps, pay attention to whether a value is copied or shares underlying storage.",
+    "why_it_matters": "These building blocks appear in everyday Go utilities, APIs, and services; understanding the data flow helps prevent subtle correctness bugs.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Slices and shared storage",
+        "asset_path": "diagrams/concept-04-slice-backing-array.svg",
+        "alt_text": "A slice describes a view into an underlying array; append may reuse or replace that storage. Labeled phases: Slice header; Length / capacity; Backing array; Append may reallocate.",
+        "caption": "A slice describes a view into an underlying array; append may reuse or replace that storage."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "The Slices Standard Library helps transform a small program into a reusable data-processing tool. Trace each function input, returned value, and mutation of any collection. For arrays, slices, and maps, pay attention to whether a value is copied or shares underlying storage."
+      },
+      {
+        "type": "list",
+        "title": "Topics covered in this lesson",
+        "items": [
+          {
+            "title": "Sorting slices",
+            "text": "Be able to explain sorting slices, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Searching slices",
+            "text": "Be able to explain searching slices, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Comparing and cloning slices",
+            "text": "Be able to explain comparing and cloning slices, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Inserting and deleting elements",
+            "text": "Be able to explain inserting and deleting elements, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Choosing the appropriate helper functions",
+            "text": "Be able to explain choosing the appropriate helper functions, identify the inputs or program state it affects, and name one boundary case worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: The Slices Standard Library",
+        "language": "go",
+        "code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    nums := []int{4, 1, 3}\n    nums = append(nums, 2)\n    fmt.Println(nums)\n    fmt.Println(\"len:\", len(nums), \"cap:\", cap(nums))\n}\n",
+        "expected_output": "[4 1 3 2]\nlen: 4 cap: (capacity is at least 4 and may vary)",
+        "run_mode": "server-runner",
+        "run_instructions": "Save as main.go and run `go run main.go`. Slice capacity may vary as the runtime grows the backing array."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through the example",
+        "text": "First, identify the input or initial state in the example for the slices standard library. Next, trace the operation or contract that matters, and predict the result before running it. If the example depends on a version-specific feature, a driver, or an external service, follow the stated prerequisites rather than assuming it works in a browser preview."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to one subtopic—Sorting slices—and add a second case that could fail or behave differently. Write down the expected result before testing."
+      }
+    ],
+    "task": "Create a small example connected to “The Slices Standard Library”. Use Sorting slices as the starting point, predict the output, then add one invalid, empty, or boundary case and document its result.",
+    "task_acceptance_criteria": [
+      "The example demonstrates sorting slices or a closely related concept.",
+      "Inputs, relevant state changes, and expected output are clear.",
+      "At least one boundary case is deliberately tested or documented.",
+      "Errors are handled honestly and no success state is reported when the operation fails."
+    ],
+    "hints": [
+      "Start from the simplest example related to sorting slices.",
+      "Predict the result manually and annotate the value that changes at each step.",
+      "Run `gofmt` and the appropriate local `go run`, `go test`, `go vet`, or inspection command when prerequisites are available."
+    ],
+    "expected_output": "[4 1 3 2]\nlen: 4 cap: (capacity is at least 4 and may vary)",
+    "run_mode": "server-runner",
+    "knowledge_check_file": "exams/question-files/lesson-071-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the happy-path output proves all inputs are safe.",
+        "why": "Empty, malformed, boundary, or concurrent cases may follow different paths.",
+        "fix": "Add focused tests for a normal input and at least one relevant edge case."
+      },
+      {
+        "problem": "Ignoring returned errors or external-system status.",
+        "why": "Go APIs commonly report expected failures as explicit error values.",
+        "fix": "Check errors close to the operation, add useful context when propagating, and clean up resources."
+      },
+      {
+        "problem": "Using an API or syntax without checking the selected Go version.",
+        "why": "Language and standard-library capabilities can change between releases.",
+        "fix": "Record `go version`, inspect the `go` directive, and read official release notes for version-specific topics."
+      }
+    ],
+    "summary": [
+      "The Slices Standard Library provides a reusable rule or workflow for Go programs.",
+      "The subtopics to revisit are: Sorting slices; Searching slices; Comparing and cloning slices; Inserting and deleting elements; Choosing the appropriate helper functions.",
+      "Prefer a small reproducible example, explicit errors, appropriate tests, and version-matched official documentation."
+    ],
+    "references": [
+      {
+        "title": "Go Documentation",
+        "url": "https://go.dev/doc/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "tutorials",
+          "language concepts",
+          "tooling",
+          "application development"
+        ]
+      },
+      {
+        "title": "The Go Programming Language Specification",
+        "url": "https://go.dev/ref/spec",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "syntax",
+          "types",
+          "control flow",
+          "interfaces"
+        ]
+      }
+    ],
+    "accessibility_note": "The diagram includes descriptive alt text and a text caption. Code examples are also described in prose; do not rely on color alone to understand a sequence.",
+    "execution_note": "Save as main.go and run `go run main.go`. Slice capacity may vary as the runtime grows the backing array. Examples that need a database driver, external service, isolated execution environment, or version-specific feature are labeled as static examples and should not be treated as already executed."
+  },
+  "sources": [
+    {
+      "title": "Go Documentation",
+      "url": "https://go.dev/doc/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tutorials",
+        "language concepts",
+        "tooling",
+        "application development"
+      ]
+    },
+    {
+      "title": "The Go Programming Language Specification",
+      "url": "https://go.dev/ref/spec",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "syntax",
+        "types",
+        "control flow",
+        "interfaces"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied Go.pdf syllabus mapping. Human review and local runtime verification are required before publication."
+}

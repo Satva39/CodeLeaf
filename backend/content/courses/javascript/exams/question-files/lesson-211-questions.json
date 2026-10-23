@@ -1,0 +1,45 @@
+{
+  "id": "javascript-question-set-211",
+  "lesson_id": "javascript-lesson-211",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "questions": [
+    {
+      "id": "javascript-q-211-1",
+      "prompt": "Does fetch() reject its Promise for every HTTP error status such as 404?",
+      "options": [
+        "Yes; every non-2xx response rejects automatically.",
+        "No; fetch never rejects for network errors either.",
+        "Only if JSON parsing has already succeeded.",
+        "No; callers normally check response.ok or response.status."
+      ],
+      "answer_key": "D",
+      "explanation": "Fetch typically rejects for network-level failures, but HTTP error statuses still produce a Response object."
+    },
+    {
+      "id": "javascript-q-211-2",
+      "prompt": "After a fetch() call returns a Response, what should application code check?",
+      "options": [
+        "Whether the browser has a localStorage entry.",
+        "response.ok or response.status before treating the response as successful.",
+        "Only whether the Promise resolved.",
+        "Only whether response.url is non-empty."
+      ],
+      "answer_key": "B",
+      "explanation": "An HTTP 404/500 response is still a fulfilled fetch Promise; inspect the status before parsing it as successful data."
+    },
+    {
+      "id": "javascript-q-211-3",
+      "prompt": "Where should you verify environment-specific behavior related to Browser Navigation and History?",
+      "options": [
+        "An unrelated-language tutorial.",
+        "Only the output from one computer.",
+        "A random post that does not identify the runtime version.",
+        "The official documentation for the browser API or Node.js runtime involved, alongside the ECMAScript reference for language semantics."
+      ],
+      "answer_key": "D",
+      "explanation": "The specification defines language semantics; host documentation defines environment APIs and compatibility."
+    }
+  ],
+  "review_note": "Draft topic-aware knowledge checks; answer and explanation must remain protected from public lesson/API responses."
+}

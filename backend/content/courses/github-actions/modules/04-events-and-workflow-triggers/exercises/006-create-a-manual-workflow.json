@@ -1,0 +1,63 @@
+{
+  "id": "github-actions-exercise-006",
+  "slug": "create-a-manual-workflow",
+  "title": "Create a manual workflow",
+  "type": "coding",
+  "lesson_id": "github-actions-lesson-025",
+  "module_id": "github-actions-module-04",
+  "difficulty": "easy",
+  "sequence": 6,
+  "prompt": "Accept a user input with workflow_dispatch and consume it in a controlled, non-destructive step.",
+  "objective": "Demonstrate the behavior of create a manual workflow and capture verifiable evidence.",
+  "target_skills": [
+    "beginner",
+    "workflow YAML",
+    "validation",
+    "safe automation"
+  ],
+  "starter": {
+    "language": "yaml",
+    "code": "name: Manual preview\non:\n  workflow_dispatch:\n    inputs:\n      target:\n        description: \"Preview target\"\n        type: choice\n        options: [staging, demo]\n        required: true\npermissions:\n  contents: read\njobs:\n  preview:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Show selected target\n        env:\n          TARGET: ${{ inputs.target }}\n        run: echo \"Preview target is $TARGET\"",
+    "execution_mode": "workflow-file"
+  },
+  "expected_output": "A reviewed workflow or design note satisfying: workflow_dispatch:, inputs:, run:. Verify behavior on a disposable repository where execution is required; a static sketch is not proof of a live deployment.",
+  "public_tests": [
+    {
+      "name": "Required evidence check",
+      "required_strings": [
+        "workflow_dispatch:",
+        "inputs:",
+        "run:"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Include or explain `workflow_dispatch:`.",
+    "Include or explain `inputs:`.",
+    "Include or explain `run:`.",
+    "Explain one validation result or limitation.",
+    "Do not include a real secret or use production resources."
+  ],
+  "hints": [
+    "First identify the trigger, input, and expected result.",
+    "Start with read-only permissions and a disposable branch or test environment.",
+    "Compare your result with the linked lesson and official documentation; distinguish a configuration sketch from a live integration."
+  ],
+  "solution": {
+    "answer": null,
+    "explanation": "The detailed reference solution is stored in a protected repository-only JSON file; it is not intended for a learner-facing response."
+  },
+  "solution_file": "../solutions/006-create-a-manual-workflow-solution.json",
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "workflow_dispatch:",
+      "inputs:",
+      "run:"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus human review for workflow semantics and security boundaries.",
+  "retry_policy": "Allow retries; incorrect submissions do not award XP. The platform awards exercise XP only after server-verified successful completion and applies idempotency per activity.",
+  "status": "draft",
+  "status_note": "Source mapping: Section C: Practical Exercises; original learning task adapted to CodeLeaf structure."
+}

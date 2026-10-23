@@ -1,0 +1,13 @@
+{
+  "id": "github-actions-exercise-solution-030",
+  "exercise_id": "github-actions-exercise-030",
+  "title": "Compare CI, delivery, and deployment reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": {
+    "approach": "A complete response for compare ci, delivery, and deployment should include: integration, delivery, deployment.",
+    "example": "name: CI then package\non: [push, pull_request]\npermissions:\n  contents: read\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: echo \"Replace with the repository test command\"\n  package:\n    needs: test\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo \"Package only after tests pass\"",
+    "verification": "The `package` job runs only after `test` succeeds; replace the placeholder commands with the repository’s real test and packaging commands."
+  },
+  "explanation": "Reason about the trigger, permission boundary, expected observable result, and failure path for compare ci, delivery, and deployment. Use a disposable branch or repository, compare the behavior with the official reference linked in this lesson, and reset any temporary changes afterwards. Adapt action references and runtime details against the official docs checked on 2026-10-20. Reference snippet updated to align with the linked lesson; adapt it to the exact exercise acceptance criteria before applying it."
+}

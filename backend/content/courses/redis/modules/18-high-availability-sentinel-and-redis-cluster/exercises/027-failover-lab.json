@@ -1,0 +1,54 @@
+{
+  "id": "redis-exercise-027",
+  "slug": "failover-lab",
+  "title": "Failover Lab",
+  "type": "coding",
+  "lesson_id": "redis-lesson-137",
+  "module_id": "redis-module-18",
+  "difficulty": "advanced",
+  "sequence": 27,
+  "prompt": "Plan a safe Sentinel failover test. Use only synthetic data and the disposable local/test instance. Record the commands or application code, expected result, one edge case, and cleanup steps.",
+  "objective": "Plan a safe Sentinel failover test",
+  "target_skills": [
+    "Redis data modeling and command use",
+    "expected-output reasoning",
+    "boundary testing and cleanup"
+  ],
+  "starter": {
+    "language": "redis-cli / notes",
+    "code": "# TODO: Plan a safe Sentinel failover test.\n# Add the smallest correct implementation and document normal + boundary cases.\n"
+  },
+  "expected_output": "A reproducible Redis lab for Failover Lab, with the requested behavior, one normal-case check, one edge-case check, and cleanup instructions in the README or notes.",
+  "public_tests": [
+    {
+      "name": "Required implementation evidence",
+      "required_strings": [
+        "Sentinel",
+        "failover"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "The solution implements the stated goal: Plan a safe Sentinel failover test.",
+    "The learner uses a disposable key namespace and does not include real personal data, passwords, or production credentials.",
+    "At least one normal and one boundary/error case are checked.",
+    "The result records the relevant command/version assumptions and a cleanup/reset step."
+  ],
+  "hints": [
+    "Write down the data model and expected result before coding.",
+    "Use a unique demo: key prefix, and state what happens for a missing key or repeated request.",
+    "Static token checks are only smoke checks; run commands in a local compatible Redis environment and review the result manually."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "Sentinel",
+      "failover"
+    ]
+  },
+  "grading_method": "Static required-token smoke check only. This is not Redis command execution and does not prove correctness, atomicity, version compatibility, or recovery behavior; perform the local lab and human review described in the criteria.",
+  "retry_policy": "Allow retries. Platform backend owns completion and reward idempotency; this file defines no XP override.",
+  "solution_file": "../../../solutions/exercises/027-failover-lab-solution.json",
+  "status": "draft",
+  "status_note": "Draft derived from Section C of Redis.pdf; inspect command compatibility, expected outputs, and grading tokens before publication."
+}

@@ -1,0 +1,296 @@
+{
+  "id": "go-lesson-135",
+  "slug": "module-graphs-and-dependency-maintenance",
+  "title": "Module Graphs and Dependency Maintenance",
+  "sequence": 135,
+  "module_id": "go-module-15",
+  "module_slug": "packages-modules-and-dependencies",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "go-lesson-134"
+  ],
+  "previous_lesson_id": "go-lesson-134",
+  "next_lesson_id": "go-lesson-136",
+  "keywords": [
+    "module graphs and dependency maintenance",
+    "minimal version selection",
+    "go mod tidy",
+    "go mod graph",
+    "go mod verify",
+    "replacing and excluding module versions",
+    "vendoring with go mod vendor",
+    "Go",
+    "Golang"
+  ],
+  "source_syllabus_number": 135,
+  "subtopics": [
+    "Minimal version selection",
+    "go mod tidy",
+    "go mod graph",
+    "go mod verify",
+    "Replacing and excluding module versions",
+    "Vendoring with go mod vendor"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and behavior of module graphs and dependency maintenance.",
+    "Apply at least one lesson concept—minimal version selection—in a small Go example or workflow.",
+    "Predict a representative result, then test a boundary case and explain any difference."
+  ],
+  "exercise_files": [],
+  "content": {
+    "intro": "Module Graphs and Dependency Maintenance helps you define stable behavior across functions, types, packages, and dependencies. Prefer the smallest contract that expresses the required behavior, keep errors explicit, and check the selected module/toolchain version before relying on newer language or library features.",
+    "why_it_matters": "Readable package boundaries and dependable error behavior make larger programs easier to test, review, and evolve.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Modules contain packages",
+        "asset_path": "diagrams/concept-10-module-package.svg",
+        "alt_text": "A module version describes a collection of packages; go.mod records the module path and dependency requirements. Labeled phases: Repository / module; go.mod + versions; Packages / imports; Build and test.",
+        "caption": "A module version describes a collection of packages; go.mod records the module path and dependency requirements."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Module Graphs and Dependency Maintenance helps you define stable behavior across functions, types, packages, and dependencies. Prefer the smallest contract that expresses the required behavior, keep errors explicit, and check the selected module/toolchain version before relying on newer language or library features."
+      },
+      {
+        "type": "list",
+        "title": "Topics covered in this lesson",
+        "items": [
+          {
+            "title": "Minimal version selection",
+            "text": "Be able to explain minimal version selection, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "go mod tidy",
+            "text": "Be able to explain go mod tidy, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "go mod graph",
+            "text": "Be able to explain go mod graph, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "go mod verify",
+            "text": "Be able to explain go mod verify, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Replacing and excluding module versions",
+            "text": "Be able to explain replacing and excluding module versions, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Vendoring with go mod vendor",
+            "text": "Be able to explain vendoring with go mod vendor, identify the inputs or program state it affects, and name one boundary case worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Module Graphs and Dependency Maintenance",
+        "language": "bash",
+        "code": "// Production readiness sequence\n// gofmt -w .\n// go test ./...\n// go vet ./...\n// govulncheck ./...\n// Build a versioned artifact, deploy gradually, verify health signals, and keep a rollback plan.\n",
+        "expected_output": "Formatting, tests, static analysis, vulnerability review, and artifact verification complete before release.",
+        "run_mode": "static-validation",
+        "run_instructions": "Run commands from the project root. Install govulncheck as documented by the Go security guide when it is not present."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through the example",
+        "text": "First, identify the input or initial state in the example for module graphs and dependency maintenance. Next, trace the operation or contract that matters, and predict the result before running it. If the example depends on a version-specific feature, a driver, or an external service, follow the stated prerequisites rather than assuming it works in a browser preview."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to one subtopic—Minimal version selection—and add a second case that could fail or behave differently. Write down the expected result before testing."
+      }
+    ],
+    "task": "Create a small example connected to “Module Graphs and Dependency Maintenance”. Use Minimal version selection as the starting point, predict the output, then add one invalid, empty, or boundary case and document its result.",
+    "task_acceptance_criteria": [
+      "The example demonstrates minimal version selection or a closely related concept.",
+      "Inputs, relevant state changes, and expected output are clear.",
+      "At least one boundary case is deliberately tested or documented.",
+      "Errors are handled honestly and no success state is reported when the operation fails."
+    ],
+    "hints": [
+      "Start from the simplest example related to minimal version selection.",
+      "Predict the result manually and annotate the value that changes at each step.",
+      "Run `gofmt` and the appropriate local `go run`, `go test`, `go vet`, or inspection command when prerequisites are available."
+    ],
+    "expected_output": "Formatting, tests, static analysis, vulnerability review, and artifact verification complete before release.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-135-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the happy-path output proves all inputs are safe.",
+        "why": "Empty, malformed, boundary, or concurrent cases may follow different paths.",
+        "fix": "Add focused tests for a normal input and at least one relevant edge case."
+      },
+      {
+        "problem": "Ignoring returned errors or external-system status.",
+        "why": "Go APIs commonly report expected failures as explicit error values.",
+        "fix": "Check errors close to the operation, add useful context when propagating, and clean up resources."
+      },
+      {
+        "problem": "Using an API or syntax without checking the selected Go version.",
+        "why": "Language and standard-library capabilities can change between releases.",
+        "fix": "Record `go version`, inspect the `go` directive, and read official release notes for version-specific topics."
+      }
+    ],
+    "summary": [
+      "Module Graphs and Dependency Maintenance provides a reusable rule or workflow for Go programs.",
+      "The subtopics to revisit are: Minimal version selection; go mod tidy; go mod graph; go mod verify; Replacing and excluding module versions.",
+      "Prefer a small reproducible example, explicit errors, appropriate tests, and version-matched official documentation."
+    ],
+    "references": [
+      {
+        "title": "Go Documentation",
+        "url": "https://go.dev/doc/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "tutorials",
+          "language concepts",
+          "tooling",
+          "application development"
+        ]
+      },
+      {
+        "title": "The Go Programming Language Specification",
+        "url": "https://go.dev/ref/spec",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "syntax",
+          "types",
+          "control flow",
+          "interfaces"
+        ]
+      },
+      {
+        "title": "Create a Go Module",
+        "url": "https://go.dev/doc/tutorial/create-module",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "go.mod",
+          "module setup",
+          "dependencies",
+          "tests"
+        ]
+      },
+      {
+        "title": "Go Modules Reference",
+        "url": "https://go.dev/ref/mod",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "module directives",
+          "versions",
+          "workspaces",
+          "vendoring"
+        ]
+      },
+      {
+        "title": "Managing Dependencies",
+        "url": "https://go.dev/doc/modules/managing-dependencies",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "adding dependencies",
+          "updating dependencies",
+          "version selection"
+        ]
+      },
+      {
+        "title": "Go Workspaces",
+        "url": "https://go.dev/doc/tutorial/workspaces",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "multi-module development",
+          "go.work",
+          "workspace workflows"
+        ]
+      }
+    ],
+    "accessibility_note": "The diagram includes descriptive alt text and a text caption. Code examples are also described in prose; do not rely on color alone to understand a sequence.",
+    "execution_note": "Run commands from the project root. Install govulncheck as documented by the Go security guide when it is not present. Examples that need a database driver, external service, isolated execution environment, or version-specific feature are labeled as static examples and should not be treated as already executed."
+  },
+  "sources": [
+    {
+      "title": "Go Documentation",
+      "url": "https://go.dev/doc/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tutorials",
+        "language concepts",
+        "tooling",
+        "application development"
+      ]
+    },
+    {
+      "title": "The Go Programming Language Specification",
+      "url": "https://go.dev/ref/spec",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "syntax",
+        "types",
+        "control flow",
+        "interfaces"
+      ]
+    },
+    {
+      "title": "Create a Go Module",
+      "url": "https://go.dev/doc/tutorial/create-module",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "go.mod",
+        "module setup",
+        "dependencies",
+        "tests"
+      ]
+    },
+    {
+      "title": "Go Modules Reference",
+      "url": "https://go.dev/ref/mod",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "module directives",
+        "versions",
+        "workspaces",
+        "vendoring"
+      ]
+    },
+    {
+      "title": "Managing Dependencies",
+      "url": "https://go.dev/doc/modules/managing-dependencies",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "adding dependencies",
+        "updating dependencies",
+        "version selection"
+      ]
+    },
+    {
+      "title": "Go Workspaces",
+      "url": "https://go.dev/doc/tutorial/workspaces",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "multi-module development",
+        "go.work",
+        "workspace workflows"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied Go.pdf syllabus mapping. Human review and local runtime verification are required before publication."
+}

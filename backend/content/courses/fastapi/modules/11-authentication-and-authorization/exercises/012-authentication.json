@@ -1,0 +1,54 @@
+{
+  "id": "fastapi-exercise-012",
+  "slug": "authentication",
+  "title": "Authentication",
+  "type": "practical",
+  "lesson_id": "fastapi-lesson-068",
+  "module_id": "fastapi-module-11",
+  "difficulty": "intermediate",
+  "sequence": 12,
+  "prompt": "Protect selected endpoints and test valid and invalid access.",
+  "objective": "Authentication",
+  "target_skills": [
+    "Authentication",
+    "FastAPI request/response design",
+    "testing and safe verification"
+  ],
+  "starter": {
+    "language": "python",
+    "content": "oauth2_scheme = OAuth2PasswordBearer(tokenUrl=\"token\")"
+  },
+  "expected_output": "Missing/invalid credentials are denied; valid identity and permissions are checked on server.",
+  "public_tests": [
+    {
+      "name": "Required concepts in submitted artifact",
+      "required_strings": [
+        "OAuth2PasswordBearer",
+        "Depends"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Address the exercise task: Protect selected endpoints and test valid and invalid access.",
+    "State prerequisites and expected behavior; include one success case and one invalid/edge case.",
+    "Use synthetic data and a disposable local environment; do not include production credentials.",
+    "Explain what was actually tested and identify any untested runtime/security assumption."
+  ],
+  "hints": [
+    "Read the linked lesson and identify the smallest endpoint/model/dependency needed.",
+    "Write a test for the expected result before adding optional features.",
+    "Static keyword checks do not execute Python; confirm runtime correctness with pytest or appropriate local tests."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "OAuth2PasswordBearer",
+      "Depends"
+    ]
+  },
+  "grading_method": "Server-side static required-string check plus human review; CodeLeaf does not execute arbitrary learner Python. This draft exercise must not be treated as proof of runtime correctness.",
+  "retry_policy": "Retries permitted after feedback; completion is recorded idempotently by CodeLeaf. Platform-wide XP rules apply; no course-authored reward override.",
+  "solution_file": "solutions/012-authentication-solution.json",
+  "status": "draft",
+  "status_note": "Original task based on the corresponding FastAPI.pdf Section C exercise. The file has not been promoted to published and the example still requires technical/runtimes tests."
+}

@@ -1,0 +1,221 @@
+{
+  "id": "scipy-lesson-135",
+  "slug": "end-to-end-scipy-project-structure",
+  "title": "End-to-End SciPy Project Structure",
+  "sequence": 135,
+  "module_id": "scipy-module-20",
+  "module_slug": "capstone-integration-and-specialization",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "capstone",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "scipy-lesson-134"
+  ],
+  "previous_lesson_id": "scipy-lesson-134",
+  "next_lesson_id": "scipy-lesson-136",
+  "keywords": [
+    "end-to-end scipy project structure",
+    "integrated scipy workflow",
+    "organizing reusable modules",
+    "keeping configuration separate from computation",
+    "reproducible execution",
+    "automated validation",
+    "data input/output"
+  ],
+  "source_syllabus_number": 135,
+  "source_syllabus_page": 28,
+  "subtopics": [
+    "Organizing reusable modules",
+    "Keeping configuration separate from computation",
+    "Reproducible execution",
+    "Automated validation",
+    "Data input/output",
+    "Documentation and final reporting"
+  ],
+  "learning_outcomes": [
+    "Describe the role of organizing reusable modules in end-to-end scipy project structure.",
+    "Use a suitable SciPy API or numerical procedure related to end-to-end project structure in a small deterministic example.",
+    "Validate the result with a relevant tolerance, shape/domain check, residual, diagnostic, or independent calculation."
+  ],
+  "content": {
+    "intro": "In this lesson, work through **End-to-End SciPy Project Structure** using the syllabus terms **Organizing reusable modules** and **Keeping configuration separate from computation**. Start from a clearly stated numerical question, choose the smallest appropriate SciPy tool, and inspect the result rather than treating the returned number as self-validating.",
+    "why_it_matters": "End-to-End SciPy Project Structure supports reliable scientific computing by turning a mathematical or data-analysis problem into a repeatable computation. It is useful when you need to choose between methods, understand assumptions, and report limits rather than merely produce a number.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: End-to-End SciPy Project Structure",
+        "asset_path": "diagrams/lesson-135-end-to-end-scipy-project-structure.svg",
+        "alt_text": "Lesson 135 visual for End-to-End SciPy Project Structure. Stages show Organizing reusable modules, end-to-end project structure, and Documentation and final reporting.",
+        "caption": "Concept map for lesson 135; the labels identify the core idea, method family, and validation focus."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "**End-to-End SciPy Project Structure** is best approached as a deliberate numerical workflow. The supplied curriculum highlights **Organizing reusable modules**, along with **Keeping configuration separate from computation**, **Reproducible execution**, **Automated validation**. Define what the inputs mean and what result would count as credible before increasing problem size or complexity."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics from the supplied curriculum",
+        "items": [
+          "Organizing reusable modules",
+          "Keeping configuration separate from computation",
+          "Reproducible execution",
+          "Automated validation",
+          "Data input/output",
+          "Documentation and final reporting"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about the method",
+        "text": "Connect the mathematics to the documented API family **end-to-end project structure**. Check input shape and dtype, units and domain assumptions, and whether the method is exact, approximate, iterative, or statistical. The output should be accompanied by an error estimate or a separate check when the API provides one or when the problem allows it."
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "def trapezoid_area(y0, y1, width):\n    return (y0 + y1) * width / 2\n\nprint(trapezoid_area(0.0, 2.0, 3.0))",
+        "expected_output": "3.0",
+        "execution_mode": "static-validation",
+        "run_instructions": "Create and activate an isolated Python virtual environment, install SciPy and NumPy with `python -m pip install scipy numpy`, save the code as a `.py` file, and run it using that environment. This lesson displays examples; it does not execute learner code on the production API.",
+        "reset_steps": "Examples use small synthetic values. Re-run with the original values to restore the stated output. Examples that write files use a temporary directory and remove it automatically."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "First identify the input and the quantity the code computes. Follow the call through the API **end-to-end project structure**, then compare the displayed result to the expected behavior. Change one input or parameter and predict what should happen before re-running. For an iterative solver, also inspect its status and stopping criteria."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          "Change one input related to organizing reusable modules and predict the result before running the example.",
+          "Add a check for one edge case relevant to end-to-end scipy project structure (for example, invalid shape, boundary input, non-finite data, or a solver that does not converge).",
+          "Write one sentence describing an assumption or limitation that a reader should know before trusting the result."
+        ]
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          "Topic 135: End-to-End SciPy Project Structure.",
+          "Keep the curriculum focus visible: Organizing reusable modules.",
+          "Choose methods from their documented assumptions and validate numerical output independently where possible."
+        ]
+      }
+    ],
+    "expected_output": "3.0",
+    "run_instructions": "Run locally with the SciPy version used by the course environment. `static-validation` means the example is displayed and syntax-checked; it is not run inside the CodeLeaf production API.",
+    "reset_steps": "Recreate the small synthetic inputs and temporary output directory before each run; no persistent platform activity is changed by viewing a lesson.",
+    "hints": [
+      "Start by writing down the intended quantity and the role of organizing reusable modules.",
+      "Run the smallest complete example and compare observed results with the expected behavior.",
+      "If results differ, inspect shape, dtype, valid domain, solver status, tolerances, and the installed SciPy version before changing the method."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-135-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Choosing an algorithm before stating the problem and assumptions.",
+        "why": "Two algorithms that look similar can have different domains, stability, performance, and convergence behavior.",
+        "fix": "Write down input shape, units/domain, the quantity to compute, and a validation check before selecting an API."
+      },
+      {
+        "problem": "Treating returned values as exact truths.",
+        "why": "Floating-point arithmetic and iterative numerical algorithms use finite precision and stopping conditions.",
+        "fix": "Inspect success/status fields and error estimates where available; use scale-appropriate tolerances and independent checks."
+      },
+      {
+        "problem": "Copying an example without checking version or edge cases.",
+        "why": "Signatures and legacy status can change between releases, and example data rarely covers boundary behavior.",
+        "fix": "Check the installed SciPy version, official documentation, input constraints, and a failure case."
+      }
+    ],
+    "summary": [
+      "Topic 135 is End-to-End SciPy Project Structure; its complete subtopic list is kept in this lesson file.",
+      "The demonstration uses end-to-end project structure with synthetic values.",
+      "This generated lesson remains draft pending technical review and execution under the targeted release."
+    ],
+    "references": [
+      {
+        "title": "SciPy User Guide",
+        "url": "https://docs.scipy.org/doc/scipy/tutorial/index.html",
+        "publisher": "SciPy project",
+        "checked_on": "2026-10-17",
+        "source_type": "official documentation",
+        "supports": [
+          "Package overview",
+          "Algorithm selection",
+          "Scientific computing workflow"
+        ]
+      },
+      {
+        "title": "SciPy User Guide",
+        "url": "https://docs.scipy.org/doc/scipy/tutorial/index.html",
+        "publisher": "SciPy project",
+        "checked_on": "2026-10-17",
+        "source_type": "official documentation",
+        "supports": [
+          "Package overview",
+          "Algorithm selection",
+          "Scientific computing workflow"
+        ]
+      },
+      {
+        "title": "SciPy release notes",
+        "url": "https://docs.scipy.org/doc/scipy/release/",
+        "publisher": "SciPy project",
+        "checked_on": "2026-10-17",
+        "source_type": "official release documentation",
+        "supports": [
+          "Version compatibility",
+          "Deprecations",
+          "Migration review"
+        ]
+      }
+    ],
+    "accessibility_notes": "The SVG has a title and description, each stage is labeled in text, and the adjacent lesson text explains the sequence without relying on color alone. Code examples are text and can be copied into a local editor.",
+    "version_notes": "Reference baseline: the official SciPy 1.18.0 manual visible on 2026-10-17. The locally available validation runtime reported SciPy 1.17.0; the examples have not been represented as run against 1.18.0. Recheck release notes and behavior before publishing."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "SciPy User Guide",
+      "url": "https://docs.scipy.org/doc/scipy/tutorial/index.html",
+      "publisher": "SciPy project",
+      "checked_on": "2026-10-17",
+      "source_type": "official documentation",
+      "supports": [
+        "Package overview",
+        "Algorithm selection",
+        "Scientific computing workflow"
+      ]
+    },
+    {
+      "title": "SciPy User Guide",
+      "url": "https://docs.scipy.org/doc/scipy/tutorial/index.html",
+      "publisher": "SciPy project",
+      "checked_on": "2026-10-17",
+      "source_type": "official documentation",
+      "supports": [
+        "Package overview",
+        "Algorithm selection",
+        "Scientific computing workflow"
+      ]
+    },
+    {
+      "title": "SciPy release notes",
+      "url": "https://docs.scipy.org/doc/scipy/release/",
+      "publisher": "SciPy project",
+      "checked_on": "2026-10-17",
+      "source_type": "official release documentation",
+      "supports": [
+        "Version compatibility",
+        "Deprecations",
+        "Migration review"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the supplied SciPy curriculum with original explanations, synthetic examples, and original SVG visuals. Subject-matter review, targeted-version execution, accessibility review, and publication approval remain required."
+}

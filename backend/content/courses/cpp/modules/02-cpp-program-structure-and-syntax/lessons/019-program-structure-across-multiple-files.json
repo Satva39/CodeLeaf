@@ -1,0 +1,200 @@
+{
+  "id": "cpp-lesson-019",
+  "slug": "program-structure-across-multiple-files",
+  "title": "Program Structure Across Multiple Files",
+  "sequence": 19,
+  "module_id": "cpp-module-02",
+  "module_slug": "cpp-program-structure-and-syntax",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "cpp-lesson-018"
+  ],
+  "previous_lesson_id": "cpp-lesson-018",
+  "next_lesson_id": "cpp-lesson-020",
+  "keywords": [
+    "program-structure-across-multiple-files",
+    "source-files-and-header-files",
+    "declarations-and-definitions",
+    "function-prototypes",
+    "header-guards",
+    "pragma-once-and-portability-considerations",
+    "translation-units",
+    "organizing-a-small-project"
+  ],
+  "source_syllabus_number": 19,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Source Files and Header Files",
+    "Declarations and Definitions",
+    "Function Prototypes",
+    "Header Guards",
+    "#pragma once and Portability Considerations",
+    "Translation Units",
+    "Organizing a Small Project"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and core rule of program structure across multiple files using at least one example.",
+    "Trace or adapt a minimal C++ example related to program structure across multiple files and state its expected result.",
+    "Identify one precondition, error case, lifetime issue, portability assumption or version constraint relevant to the topic."
+  ],
+  "content": {
+    "intro": "Program Structure Across Multiple Files focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Program Structure Across Multiple Files matters because for each example, locate the declaration, expression, statement boundary, scope and observable output before changing the code. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Program Structure Across Multiple Files: visual trace",
+        "asset_path": "diagrams/lessons/lesson-019.svg",
+        "alt_text": "Lesson 19 visual for Program Structure Across Multiple Files; concept: Source Files and Header Files; apply: Declarations and Definitions; verify: Function Prototypes.",
+        "caption": "Original lesson-specific overview: understand source files and header files, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "C++ syntax gives structure to names, expressions, statements and translation units. Small formatting conventions make scope and diagnostics easier to reason about.\n\nProgram Structure Across Multiple Files focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nFor each example, locate the declaration, expression, statement boundary, scope and observable output before changing the code."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Program Structure Across Multiple Files",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <iostream>\n\nint square(int value); // declaration: the signature is visible before the definition\n\nint square(int value) { return value * value; }\n\nint main() {\n    std::cout << square(6) << '\\n';\n}\n",
+        "expected_output": "36",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "A multi-file design usually places declarations in a header and definitions in a source file; include guards and the One Definition Rule still matter."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Source Files and Header Files",
+            "text": "A header normally provides declarations and shared definitions; include guards prevent repeated inclusion within one translation unit."
+          },
+          {
+            "title": "Declarations and Definitions",
+            "text": "Explain declarations and definitions in the context of Program Structure Across Multiple Files: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Function Prototypes",
+            "text": "Explain function prototypes in the context of Program Structure Across Multiple Files: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Header Guards",
+            "text": "Explain header guards in the context of Program Structure Across Multiple Files: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "#pragma once and Portability Considerations",
+            "text": "Explain #pragma once and portability considerations in the context of Program Structure Across Multiple Files: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Translation Units",
+            "text": "A multi-file program separates declarations from definitions and then links independently compiled translation units."
+          },
+          {
+            "title": "Organizing a Small Project",
+            "text": "Explain organizing a small project in the context of Program Structure Across Multiple Files: identify the rule, trace a minimal example, and check one boundary or failure case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate source files and header files, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "Use standard C++ rather than compiler-specific behavior unless the lesson explicitly labels the dependency. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-019-questions.json",
+    "task": "Extend the example for Program Structure Across Multiple Files with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+    "task_acceptance_criteria": [
+      "The code compiles in the documented standard mode with warnings enabled.",
+      "The predicted output matches the actual result for the added case.",
+      "One relevant boundary, lifetime, portability or error case is tested or documented."
+    ],
+    "hints": [
+      "Start by isolating the central rule from Program Structure Across Multiple Files.",
+      "Trace values or object lifetimes before changing the program.",
+      "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+    ],
+    "summary": [
+      "Program Structure Across Multiple Files is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying program structure across multiple files.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "36"
+  },
+  "task": "Extend the example for Program Structure Across Multiple Files with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+  "hints": [
+    "Start by isolating the central rule from Program Structure Across Multiple Files.",
+    "Trace values or object lifetimes before changing the program.",
+    "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+  ],
+  "expected_output": "36",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Program Structure Across Multiple Files is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying program structure across multiple files.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 2, lesson 19: Program Structure Across Multiple Files.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

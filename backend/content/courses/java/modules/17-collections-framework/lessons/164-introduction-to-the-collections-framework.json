@@ -1,0 +1,206 @@
+{
+  "id": "java-lesson-164",
+  "slug": "introduction-to-the-collections-framework",
+  "title": "Introduction to the Collections Framework",
+  "sequence": 164,
+  "module_id": "java-module-17",
+  "module_slug": "collections-framework",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 11,
+  "prerequisites": [
+    "java-lesson-163"
+  ],
+  "previous_lesson_id": "java-lesson-163",
+  "next_lesson_id": "java-lesson-165",
+  "keywords": [
+    "introduction",
+    "to",
+    "the",
+    "collections",
+    "framework",
+    "versus",
+    "arrays",
+    "core",
+    "interfaces",
+    "common",
+    "collection",
+    "implementations"
+  ],
+  "source_syllabus_number": 164,
+  "subtopics": [
+    "Collections versus arrays",
+    "Core interfaces",
+    "Common collection implementations",
+    "Choosing collections based on requirements"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of introduction to the collections framework and identify when it is appropriate in a Java program.",
+    "Apply at least one of the lesson topics—collections versus arrays—in a small, readable example.",
+    "Predict the example result and check it against the stated output or a boundary-case test."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study introduction to the collections framework with a short explanation, an original visual map, a Java example, and a check you can perform yourself. Focus on the relationship between the rule and the behavior rather than memorizing isolated syntax.",
+    "why_it_matters": "This concept matters because it helps you select data structures according to ordering, uniqueness, lookup, and update needs. In this lesson, focus on collections versus arrays and use a minimal example to check what the rule actually guarantees.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Introduction to the Collections Framework: concept map",
+        "asset_path": "diagrams/lesson-164.svg",
+        "alt_text": "Four-stage diagram for Introduction to the Collections Framework: Collections versus arrays; Core interfaces; Common collection implementations; Choosing collections based on requirements.",
+        "caption": "Visual summary of Introduction to the Collections Framework; use it as a map while reading the explanation and testing the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Arrays are fixed-length indexed containers. Check index bounds, iterate from the correct starting point, and choose a suitable search or sorting algorithm for the data and its existing order. The important habit is to make the assumptions explicit and use the code example as a small experiment."
+      },
+      {
+        "type": "paragraph",
+        "title": "How the pieces fit",
+        "text": "Connect collections versus arrays with core interfaces before choosing an implementation. The example is a small, observable case; extend it by changing one input and checking a boundary, invalid value, or compatibility limit where relevant."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Collections versus arrays",
+            "text": "Arrays are fixed-length indexed containers. Check index bounds, iterate from the correct starting point, and choose a suitable search or sorting algorithm for the data and its existing order."
+          },
+          {
+            "title": "Core interfaces",
+            "text": "Primitive variables store values of the eight primitive types. Choose a type that represents the domain and range required; use exact decimal arithmetic for monetary values when appropriate."
+          },
+          {
+            "title": "Common collection implementations",
+            "text": "Choose a collection according to ordering, uniqueness, lookup, and update requirements. Review equals/hashCode contracts, iteration behavior, and concurrent-modification rules before selecting an implementation."
+          },
+          {
+            "title": "Choosing collections based on requirements",
+            "text": "Choose a collection according to ordering, uniqueness, lookup, and update requirements. Review equals/hashCode contracts, iteration behavior, and concurrent-modification rules before selecting an implementation."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "java",
+        "code": "import java.util.List;\nimport java.util.ArrayList;\npublic class Main {\n    public static void main(String[] args) {\n        List<String> names = new ArrayList<>(List.of(\"Ada\", \"Grace\"));\n        names.add(\"Katherine\");\n        System.out.println(names.size());\n    }\n}\n",
+        "expected_output": "3",
+        "run_instructions": "Pick a collection based on ordering, uniqueness, and lookup needs. For ordinary Java SE examples, use JDK 25, save a complete class as Main.java, and run `javac Main.java` followed by `java Main`. CodeLeaf does not execute Java in the browser; use a local JDK for these examples. Preview-only and configuration-file examples have their own version or filename notes.",
+        "reset_steps": "Restore the original example, remove any temporary output files it created, and rerun the baseline case. Do not leave credentials, generated private data, or large test files in the project directory."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Keep one clear hypothesis per experiment. Check the version, read the error message, test boundaries, and record what evidence supports your conclusion."
+      }
+    ],
+    "task": "Try it yourself: build the smallest program that demonstrates collections versus arrays. Change one input, predict the result, and add one boundary or invalid case before considering the task complete.",
+    "task_acceptance_criteria": [
+      "The example demonstrates at least one listed topic from Introduction to the Collections Framework.",
+      "The learner states the expected result before running or inspecting the example.",
+      "At least one boundary, failure, compatibility, or maintainability consideration is documented where relevant."
+    ],
+    "hints": [
+      "Start by identifying the contract or rule behind collections versus arrays.",
+      "Reduce the example to the smallest input that makes the behavior visible.",
+      "Test one boundary or failure case and compare the result with the expected behavior."
+    ],
+    "expected_output": "3",
+    "run_mode": "server-runner",
+    "execution_notes": "Java requires a JDK or a separate isolated server runner. No Java sandbox is bundled with this content; never execute learner code inside the FastAPI process or public production container.",
+    "knowledge_check_file": "exams/question-files/lesson-164-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Applying the rule from memory without checking its exact contract.",
+        "why": "Small differences in type, scope, API version, or input shape can change the result.",
+        "fix": "Inspect the relevant official API/language documentation and build a minimal reproducer."
+      },
+      {
+        "problem": "Testing only a single happy path.",
+        "why": "Boundary values and failures often reveal assumptions hidden by the simplest example.",
+        "fix": "Add an empty, boundary, or invalid case and state the expected behavior before running it."
+      },
+      {
+        "problem": "Changing several things between runs.",
+        "why": "It becomes difficult to identify the actual cause of a different result.",
+        "fix": "Change one factor at a time and keep a short record of observed behavior."
+      }
+    ],
+    "summary": [
+      "Introduction to the Collections Framework is best understood by connecting its contract to a small observable example.",
+      "Key syllabus points: Collections versus arrays, Core interfaces, Common collection implementations.",
+      "Use official versioned documentation and tests to confirm assumptions before relying on behavior in a larger application."
+    ],
+    "references": [
+      {
+        "title": "Learn Java",
+        "url": "https://dev.java/learn/"
+      },
+      {
+        "title": "Java SE 25 API Specification",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html"
+      },
+      {
+        "title": "Collections Framework and Streams",
+        "url": "https://dev.java/learn/api/collections-and-streams/"
+      }
+    ]
+  },
+  "exercise_files": [
+    "../exercises/021-library-book-tracker.json"
+  ],
+  "sources": [
+    {
+      "title": "Learn Java",
+      "url": "https://dev.java/learn/",
+      "publisher": "Oracle / dev.java",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "getting started",
+        "language basics",
+        "object-oriented programming",
+        "generics",
+        "lambdas",
+        "collections",
+        "streams",
+        "modules",
+        "JVM tools",
+        "security"
+      ]
+    },
+    {
+      "title": "Java SE 25 API Specification",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "standard-library types and methods",
+        "API contracts",
+        "java.base",
+        "java.sql",
+        "java.net.http",
+        "java.nio.file",
+        "java.util.concurrent"
+      ]
+    },
+    {
+      "title": "Collections Framework and Streams",
+      "url": "https://dev.java/learn/api/collections-and-streams/",
+      "publisher": "Oracle / dev.java",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "collections",
+        "maps",
+        "stream pipelines",
+        "collectors",
+        "parallel streams"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Java curriculum outline and current official references; requires Java subject-matter review and local verification before publication."
+}

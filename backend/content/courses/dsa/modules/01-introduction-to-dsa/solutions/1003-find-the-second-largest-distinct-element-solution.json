@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-03",
+  "exercise_id": "dsa-exercise-pdf-03",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\ndef second_largest_distinct(values):\n    largest = second = None\n    for value in values:\n        if largest is None or value > largest:\n            if value != largest:\n                second, largest = largest, value\n        elif value != largest and (second is None or value > second):\n            second = value\n    return second\n\nassert second_largest_distinct([5, 1, 5, 3]) == 3\nassert second_largest_distinct([4, 4]) is None\n```",
+  "explanation": "Track the largest and second-largest distinct values. Time O(n), auxiliary space O(1); duplicates of the maximum do not become the second value.",
+  "tested_reference_code": "def second_largest_distinct(values):\n    largest = second = None\n    for value in values:\n        if largest is None or value > largest:\n            if value != largest:\n                second, largest = largest, value\n        elif value != largest and (second is None or value > second):\n            second = value\n    return second\n\nassert second_largest_distinct([5, 1, 5, 3]) == 3\nassert second_largest_distinct([4, 4]) is None",
+  "language": "python"
+}

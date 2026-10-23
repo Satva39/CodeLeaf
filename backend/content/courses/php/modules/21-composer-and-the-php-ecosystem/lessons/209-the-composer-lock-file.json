@@ -1,0 +1,213 @@
+{
+  "id": "php-lesson-209",
+  "slug": "the-composer-lock-file",
+  "title": "The composer.lock File",
+  "sequence": 209,
+  "module_id": "php-module-21",
+  "module_slug": "composer-and-the-php-ecosystem",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 13,
+  "prerequisites": [
+    "php-lesson-208"
+  ],
+  "previous_lesson_id": "php-lesson-208",
+  "next_lesson_id": "php-lesson-210",
+  "keywords": [
+    "the composer lock file",
+    "composer and the php ecosystem",
+    "lockfile purpose",
+    "reproducible installs",
+    "version consistency",
+    "application versus library lockfile practices",
+    "reviewing dependency changes",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 209,
+  "subtopics": [
+    "Lockfile purpose.",
+    "Reproducible installs.",
+    "Version consistency.",
+    "Application versus library lockfile practices.",
+    "Reviewing dependency changes."
+  ],
+  "learning_outcomes": [
+    "Explain what the composer.lock file contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: lockfile purpose.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Composer describes dependencies and maps namespaces to source files. Lockfiles make application installs reproducible; declared constraints and maintenance/security review keep dependency choices intentional. In this lesson, focus on lockfile purpose; then compare it with reproducible installs. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use the composer.lock file when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 21 overview: Composer and the PHP Ecosystem",
+        "asset_path": "diagrams/module-21-overview.svg",
+        "alt_text": "Four-stage overview for module 21, Composer and the PHP Ecosystem, grouping lesson topics in order.",
+        "caption": "Use this overview to place the composer.lock file in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Composer describes dependencies and maps namespaces to source files. Lockfiles make application installs reproducible; declared constraints and maintenance/security review keep dependency choices intentional. For the composer.lock file, begin with lockfile purpose. Also distinguish reproducible installs; version consistency; application versus library lockfile practices. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Lockfile purpose",
+            "text": "Check the operation result, use a known storage boundary, and consider empty files, permissions, invalid paths, and cleanup."
+          },
+          {
+            "title": "Reproducible installs",
+            "text": "Know when to use reproducible installs, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Version consistency",
+            "text": "Know when to use version consistency, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Application versus library lockfile practices",
+            "text": "Check the operation result, use a known storage boundary, and consider empty files, permissions, invalid paths, and cleanup."
+          },
+          {
+            "title": "Reviewing dependency changes",
+            "text": "Keep package metadata and source layout consistent, and verify version constraints and class-to-file mapping with the selected tools."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for The composer.lock File",
+        "language": "php",
+        "code": "<?php\n$file = tempnam(sys_get_temp_dir(), \"php-course-\");\nif ($file === false) { throw new RuntimeException(\"Cannot create temp file\"); }\nfile_put_contents($file, \"ready\\n\");\necho trim((string) file_get_contents($file)) . PHP_EOL;\nunlink($file);",
+        "expected_output": "ready",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Use Composer metadata and locked dependency versions, and review package compatibility and maintenance before adoption."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for the composer.lock file from top to bottom. Start by identifying lockfile purpose, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for the composer.lock file that demonstrates \"lockfile purpose\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of lockfile purpose.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "ready",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-209-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Editing vendor files directly.",
+        "why": "Updates can overwrite manual changes and make builds irreproducible.",
+        "fix": "Declare dependencies in composer.json and regenerate the lock/autoload state using Composer."
+      },
+      {
+        "problem": "Ignoring composer.lock in an application.",
+        "why": "Different environments may resolve different dependency versions.",
+        "fix": "Commit the lockfile for applications and use the project’s intended install workflow."
+      },
+      {
+        "problem": "Choosing a package by download count alone.",
+        "why": "Popularity does not prove security, maintenance, or version compatibility.",
+        "fix": "Review maintenance activity, releases, dependencies, license, and docs."
+      }
+    ],
+    "summary": [
+      "The composer.lock File is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Use Composer metadata and locked dependency versions, and review package compatibility and maintenance before adoption."
+    ],
+    "references": [
+      {
+        "title": "Composer basic usage",
+        "url": "https://getcomposer.org/doc/01-basic-usage.md",
+        "publisher": "Composer",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "composer install",
+          "lockfiles",
+          "autoloading"
+        ]
+      },
+      {
+        "title": "Composer schema",
+        "url": "https://getcomposer.org/doc/04-schema.md",
+        "publisher": "Composer",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "composer.json",
+          "version constraints",
+          "autoload metadata"
+        ]
+      },
+      {
+        "title": "PSR-4 Autoloader",
+        "url": "https://www.php-fig.org/psr/psr-4/",
+        "publisher": "PHP-FIG",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "namespace-to-path mapping",
+          "autoload interoperability"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Composer basic usage",
+      "url": "https://getcomposer.org/doc/01-basic-usage.md",
+      "publisher": "Composer",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "composer install",
+        "lockfiles",
+        "autoloading"
+      ]
+    },
+    {
+      "title": "Composer schema",
+      "url": "https://getcomposer.org/doc/04-schema.md",
+      "publisher": "Composer",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "composer.json",
+        "version constraints",
+        "autoload metadata"
+      ]
+    },
+    {
+      "title": "PSR-4 Autoloader",
+      "url": "https://www.php-fig.org/psr/psr-4/",
+      "publisher": "PHP-FIG",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "namespace-to-path mapping",
+        "autoload interoperability"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

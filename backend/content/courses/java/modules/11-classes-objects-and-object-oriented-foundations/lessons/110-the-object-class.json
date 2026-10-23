@@ -1,0 +1,204 @@
+{
+  "id": "java-lesson-110",
+  "slug": "the-object-class",
+  "title": "The Object Class",
+  "sequence": 110,
+  "module_id": "java-module-11",
+  "module_slug": "classes-objects-and-object-oriented-foundations",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 11,
+  "prerequisites": [],
+  "previous_lesson_id": "java-lesson-109",
+  "next_lesson_id": "java-lesson-111",
+  "keywords": [
+    "the",
+    "object",
+    "class",
+    "common",
+    "inherited",
+    "methods",
+    "equals",
+    "hashcode",
+    "tostring",
+    "getclass"
+  ],
+  "source_syllabus_number": 110,
+  "subtopics": [
+    "Common inherited methods",
+    "equals()",
+    "hashCode()",
+    "toString()",
+    "getClass()"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of the object class and identify when it is appropriate in a Java program.",
+    "Apply at least one of the lesson topics—common inherited methods—in a small, readable example.",
+    "Predict the example result and check it against the stated output or a boundary-case test."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study the object class with a short explanation, an original visual map, a Java example, and a check you can perform yourself. Focus on the relationship between the rule and the behavior rather than memorizing isolated syntax.",
+    "why_it_matters": "This concept matters because it helps you model valid object state and expose behavior without leaking implementation details. In this lesson, focus on common inherited methods and use a minimal example to check what the rule actually guarantees.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "The Object Class: concept map",
+        "asset_path": "diagrams/lesson-110.svg",
+        "alt_text": "Four-stage diagram for The Object Class: Common inherited methods; equals(); hashCode(); toString().",
+        "caption": "Visual summary of The Object Class; use it as a map while reading the explanation and testing the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "A method gives a named contract to a unit of behavior. Keep responsibilities focused, define clear parameter and return types, and test typical, boundary, and invalid cases independently. The important habit is to make the assumptions explicit and use the code example as a small experiment."
+      },
+      {
+        "type": "paragraph",
+        "title": "How the pieces fit",
+        "text": "Connect common inherited methods with equals() before choosing an implementation. The example is a small, observable case; extend it by changing one input and checking a boundary, invalid value, or compatibility limit where relevant."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Common inherited methods",
+            "text": "A method gives a named contract to a unit of behavior. Keep responsibilities focused, define clear parameter and return types, and test typical, boundary, and invalid cases independently."
+          },
+          {
+            "title": "equals()",
+            "text": "A class defines state and behavior; an object is an instance. Use constructors to establish valid state and encapsulation to keep the object’s invariants true as it changes. Apply that reasoning specifically to equals() and confirm the result with the example or a targeted test."
+          },
+          {
+            "title": "hashCode()",
+            "text": "Choose a collection according to ordering, uniqueness, lookup, and update requirements. Review equals/hashCode contracts, iteration behavior, and concurrent-modification rules before selecting an implementation."
+          },
+          {
+            "title": "toString()",
+            "text": "String values are immutable sequences of text. Use value equality for text content, understand Unicode code points for international text, and prefer StringBuilder for repeated concatenation in loops."
+          },
+          {
+            "title": "getClass()",
+            "text": "A class defines state and behavior; an object is an instance. Encapsulation protects invariants by keeping mutable state private and validating updates through a small public API."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "java",
+        "code": "public class Main {\nstatic class Book {\n    final String title;\n    Book(String title) { this.title = title; }\n}\n    public static void main(String[] args) {\n        Book first = new Book(\"Java Basics\");\n        System.out.println(first.title);\n    }\n}\n",
+        "expected_output": "Java Basics",
+        "run_instructions": "Create an instance and inspect the state initialized by its constructor. For ordinary Java SE examples, use JDK 25, save a complete class as Main.java, and run `javac Main.java` followed by `java Main`. CodeLeaf does not execute Java in the browser; use a local JDK for these examples. Preview-only and configuration-file examples have their own version or filename notes.",
+        "reset_steps": "Restore the original example, remove any temporary output files it created, and rerun the baseline case. Do not leave credentials, generated private data, or large test files in the project directory."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Keep one clear hypothesis per experiment. Check the version, read the error message, test boundaries, and record what evidence supports your conclusion."
+      }
+    ],
+    "task": "Try it yourself: build the smallest program that demonstrates common inherited methods. Change one input, predict the result, and add one boundary or invalid case before considering the task complete.",
+    "task_acceptance_criteria": [
+      "The example demonstrates at least one listed topic from The Object Class.",
+      "The learner states the expected result before running or inspecting the example.",
+      "At least one boundary, failure, compatibility, or maintainability consideration is documented where relevant."
+    ],
+    "hints": [
+      "Start by identifying the contract or rule behind common inherited methods.",
+      "Reduce the example to the smallest input that makes the behavior visible.",
+      "Test one boundary or failure case and compare the result with the expected behavior."
+    ],
+    "expected_output": "Java Basics",
+    "run_mode": "server-runner",
+    "execution_notes": "Java requires a JDK or a separate isolated server runner. No Java sandbox is bundled with this content; never execute learner code inside the FastAPI process or public production container.",
+    "knowledge_check_file": "exams/question-files/lesson-110-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Applying the rule from memory without checking its exact contract.",
+        "why": "Small differences in type, scope, API version, or input shape can change the result.",
+        "fix": "Inspect the relevant official API/language documentation and build a minimal reproducer."
+      },
+      {
+        "problem": "Testing only a single happy path.",
+        "why": "Boundary values and failures often reveal assumptions hidden by the simplest example.",
+        "fix": "Add an empty, boundary, or invalid case and state the expected behavior before running it."
+      },
+      {
+        "problem": "Changing several things between runs.",
+        "why": "It becomes difficult to identify the actual cause of a different result.",
+        "fix": "Change one factor at a time and keep a short record of observed behavior."
+      }
+    ],
+    "summary": [
+      "The Object Class is best understood by connecting its contract to a small observable example.",
+      "Key syllabus points: Common inherited methods, equals(), hashCode().",
+      "Use official versioned documentation and tests to confirm assumptions before relying on behavior in a larger application."
+    ],
+    "references": [
+      {
+        "title": "Learn Java",
+        "url": "https://dev.java/learn/"
+      },
+      {
+        "title": "Java SE 25 API Specification",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html"
+      },
+      {
+        "title": "Java SE 25 Specifications",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/specs/index.html"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Learn Java",
+      "url": "https://dev.java/learn/",
+      "publisher": "Oracle / dev.java",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "getting started",
+        "language basics",
+        "object-oriented programming",
+        "generics",
+        "lambdas",
+        "collections",
+        "streams",
+        "modules",
+        "JVM tools",
+        "security"
+      ]
+    },
+    {
+      "title": "Java SE 25 API Specification",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "standard-library types and methods",
+        "API contracts",
+        "java.base",
+        "java.sql",
+        "java.net.http",
+        "java.nio.file",
+        "java.util.concurrent"
+      ]
+    },
+    {
+      "title": "Java SE 25 Specifications",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/specs/index.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "Java Language Specification",
+        "Java Virtual Machine Specification",
+        "preview feature classification",
+        "class-file and JDK tool specifications"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Java curriculum outline and current official references; requires Java subject-matter review and local verification before publication."
+}

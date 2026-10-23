@@ -1,0 +1,32 @@
+{
+  "id": "java-exercise-solution-043",
+  "exercise_id": "java-exercise-043",
+  "title": "Secure Configuration Manager reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "language": "java",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        int port = Integer.parseInt(System.getenv().getOrDefault(\"APP_PORT\", \"8080\"));\n        if (port < 1 || port > 65535) throw new IllegalArgumentException(\"APP_PORT must be 1-65535\");\n        String token = System.getenv(\"APP_TOKEN\");\n        if (token == null || token.isBlank()) throw new IllegalStateException(\"APP_TOKEN is required\");\n        System.out.println(\"Port: \" + port);\n        System.out.println(\"Token configured: \" + !token.isBlank());\n    }\n}",
+  "explanation": "Load secret values from the runtime environment or a managed secret store and never print their values. Validate configuration at startup and fail clearly when required settings are missing.",
+  "hidden_tests": [
+    {
+      "case": "normal case",
+      "input_or_setup": "Use the deterministic sample data or representative valid input described in the exercise.",
+      "expected_behavior": "With APP_PORT=8080 and a non-empty APP_TOKEN, prints Port: 8080 and Token configured: true",
+      "purpose": "Verify the main behavior and the output contract."
+    },
+    {
+      "case": "boundary case",
+      "input_or_setup": "Test empty, zero, minimum/maximum, duplicate, or end-of-range input as appropriate to the exercise.",
+      "expected_behavior": "The result matches the documented boundary rule and does not silently corrupt state.",
+      "purpose": "Check a boundary or invariant."
+    },
+    {
+      "case": "invalid or failure case",
+      "input_or_setup": "Provide malformed input or simulate a missing file, unavailable endpoint, missing configuration, or database failure where relevant.",
+      "expected_behavior": "The operation fails clearly or returns a safe result; resources are released and secrets are not printed.",
+      "purpose": "Check explicit error behavior and cleanup."
+    }
+  ],
+  "review_notes": "Repository-only reference material. Keep it out of public API responses and frontend bundles. The platform grader is only a required-token smoke check; complete task-specific execution tests in an isolated Java runner before publication.",
+  "sample_expected_result": "With APP_PORT=8080 and a non-empty APP_TOKEN, prints Port: 8080 and Token configured: true"
+}

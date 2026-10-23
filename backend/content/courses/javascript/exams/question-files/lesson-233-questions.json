@@ -1,0 +1,45 @@
+{
+  "id": "javascript-question-set-233",
+  "lesson_id": "javascript-lesson-233",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "questions": [
+    {
+      "id": "javascript-q-233-1",
+      "prompt": "Does fetch() reject its Promise for every HTTP error status such as 404?",
+      "options": [
+        "Only if JSON parsing has already succeeded.",
+        "No; callers normally check response.ok or response.status.",
+        "Yes; every non-2xx response rejects automatically.",
+        "No; fetch never rejects for network errors either."
+      ],
+      "answer_key": "B",
+      "explanation": "Fetch typically rejects for network-level failures, but HTTP error statuses still produce a Response object."
+    },
+    {
+      "id": "javascript-q-233-2",
+      "prompt": "After a fetch() call returns a Response, what should application code check?",
+      "options": [
+        "Only whether the Promise resolved.",
+        "Only whether response.url is non-empty.",
+        "Whether the browser has a localStorage entry.",
+        "response.ok or response.status before treating the response as successful."
+      ],
+      "answer_key": "D",
+      "explanation": "An HTTP 404/500 response is still a fulfilled fetch Promise; inspect the status before parsing it as successful data."
+    },
+    {
+      "id": "javascript-q-233-3",
+      "prompt": "Where should you verify environment-specific behavior related to Accessibility in JavaScript Interfaces?",
+      "options": [
+        "A random post that does not identify the runtime version.",
+        "The official documentation for the browser API or Node.js runtime involved, alongside the ECMAScript reference for language semantics.",
+        "An unrelated-language tutorial.",
+        "Only the output from one computer."
+      ],
+      "answer_key": "B",
+      "explanation": "The specification defines language semantics; host documentation defines environment APIs and compatibility."
+    }
+  ],
+  "review_note": "Draft topic-aware knowledge checks; answer and explanation must remain protected from public lesson/API responses."
+}

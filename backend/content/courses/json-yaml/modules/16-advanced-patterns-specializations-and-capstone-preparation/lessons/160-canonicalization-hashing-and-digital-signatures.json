@@ -1,0 +1,192 @@
+{
+  "id": "json-yaml-lesson-160",
+  "slug": "canonicalization-hashing-and-digital-signatures",
+  "title": "Canonicalization, Hashing, and Digital Signatures",
+  "sequence": 160,
+  "module_id": "json-yaml-module-16",
+  "module_slug": "advanced-patterns-specializations-and-capstone-preparation",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "specialization",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "json-yaml-lesson-159"
+  ],
+  "previous_lesson_id": "json-yaml-lesson-159",
+  "next_lesson_id": "json-yaml-lesson-161",
+  "keywords": [
+    "canonicalization-hashing-and-digital-signatures",
+    "why-stable-representation-matters-structural-equality-versus-byte-equality-canonical-json-concepts",
+    "ordering-and-whitespace-considerations-hashing-serialized-content-digital-signatures-and-verification",
+    "why-ordinary-reformatting-can-invalidate-byte-based-signatures"
+  ],
+  "source_syllabus_number": 160,
+  "subtopics": [
+    "Why stable representation matters. Structural equality versus byte equality. Canonical JSON concepts.",
+    "Ordering and whitespace considerations. Hashing serialized content. Digital signatures and verification.",
+    "Why ordinary reformatting can invalidate byte-based signatures."
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of canonicalization, hashing, and digital signatures and identify at least one related syllabus concept.",
+    "Interpret the example for canonicalization, hashing, and digital signatures and describe its expected result.",
+    "Choose a relevant syntax, type, compatibility, security, or troubleshooting check for the example."
+  ],
+  "content": {
+    "intro": "This lesson focuses on canonicalization, hashing, and digital signatures and connects the PDF syllabus topics to a small, inspectable example. Work from the intended data model, write down the expected result, then verify syntax and semantics with the target tool.",
+    "why_it_matters": "Canonicalization, Hashing, and Digital Signatures matters because structured-data files sit between people, tools, services, and deployment systems. A clear contract and repeatable checks make the result easier to maintain and safer to consume.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Canonicalization, Hashing, and Digital Signatures: visual explanation",
+        "asset_path": "diagrams/lessons/lesson-160-canonicalization-hashing-and-digital-signatures.svg",
+        "alt_text": "Canonicalization, Hashing, and Digital Signatures: Why stable representation matters. Structural equality versus byte equality. Canonical JSON concepts. leads to Interpret / validate, then Expected structure.",
+        "caption": "Use this concept flow to predict the result for Canonicalization, Hashing, and Digital Signatures before you test the snippet."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Advanced workflows combine data modeling, schema composition, parser portability, transformation pipelines, streaming, canonicalization, and operational documentation. Use specialized features only when their compatibility and security implications are understood."
+      },
+      {
+        "type": "paragraph",
+        "title": "What you will cover",
+        "text": "This lesson explicitly addresses: Why stable representation matters. Structural equality versus byte equality. Canonical JSON concepts.; Ordering and whitespace considerations. Hashing serialized content. Digital signatures and verification.; Why ordinary reformatting can invalidate byte-based signatures.. Treat each as part of a workflow: define what the data should mean, represent it consistently, and test how the chosen implementation interprets it."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Canonicalization, Hashing, and Digital Signatures",
+        "language": "text",
+        "code": "canonical representation\n        ↓\ncryptographic hash\n        ↓\nsign or compare digest\n\nNever sign an ambiguously serialized value; define canonicalization and verify the exact algorithm/standard first.",
+        "expected_output": "A digital signature or hash requires a precisely defined byte representation; ordinary JSON member order/whitespace alone does not provide a universal canonical form.",
+        "run_instructions": "Inspect the example and compare it against the lesson concepts. This code block is static-validation: CodeLeaf does not execute arbitrary data parsers or commands in the standard browser preview.",
+        "reset_steps": "Restore the starting fixture before each test. Change one field, indentation level, parser option, or schema constraint at a time, then compare the result with the prediction.",
+        "execution_mode": "static-validation",
+        "limitations": "This snippet is a reference/example, not evidence that the CodeLeaf browser executes JSON/YAML parsing, shell commands, or Python. Validate locally with a named parser or tool before relying on it."
+      },
+      {
+        "type": "list",
+        "title": "A reliable working sequence",
+        "items": [
+          {
+            "title": "1. State the contract",
+            "text": "Write down the expected root type, required fields, scalar types, and any compatibility assumptions."
+          },
+          {
+            "title": "2. Validate before use",
+            "text": "Parse the document and run the applicable schema or policy checks; syntax success alone is not full correctness."
+          },
+          {
+            "title": "3. Test a boundary",
+            "text": "Include at least one missing, malformed, ambiguous, or unexpected input and record the desired behavior."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety checkpoint",
+        "text": "Advanced features are useful only when all relevant tools agree on their semantics. Prefer the simplest portable representation that meets the requirement. Confirm implementation-specific behavior against the target parser, tool version, and standards documentation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second synthetic fixture for “Why stable representation matters. Structural equality versus byte equality. Canonical JSON concepts.”. Predict the parsed types/result, change one relevant detail, and record whether the target tool behaved as expected. Include one invalid or boundary case."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-160-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating readable text as proof of correctness.",
+        "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+        "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+      },
+      {
+        "problem": "Assuming every parser interprets the feature identically.",
+        "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+        "fix": "Record the exact parser/version and test the target environment."
+      },
+      {
+        "problem": "Testing only a happy path.",
+        "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+        "fix": "Keep valid, invalid, and boundary fixtures in version control."
+      }
+    ],
+    "task": "Prepare a brief, reviewable demonstration of Canonicalization, Hashing, and Digital Signatures. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+    "task_acceptance_criteria": [
+      "The artifact clearly demonstrates Why stable representation matters. Structural equality versus byte equality. Canonical JSON concepts..",
+      "Expected behavior is written before verification.",
+      "One invalid or boundary case is documented.",
+      "The relevant format, parser/version, and any security or interoperability limits are recorded."
+    ],
+    "hints": [
+      "Start with the smallest valid example that demonstrates Why stable representation matters. Structural equality versus byte equality. Canonical JSON concepts..",
+      "Change one thing at a time and compare parsed values, not only visual formatting.",
+      "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+    ],
+    "summary": [
+      "Canonicalization, Hashing, and Digital Signatures fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+      "Topics retained from the source PDF include Why stable representation matters. Structural equality versus byte equality. Canonical JSON concepts.; Ordering and whitespace considerations. Hashing serialized content. Digital signatures and verification.; Why ordinary reformatting can invalidate byte-based signatures..",
+      "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "A digital signature or hash requires a precisely defined byte representation; ordinary JSON member order/whitespace alone does not provide a universal canonical form."
+  },
+  "task": "Prepare a brief, reviewable demonstration of Canonicalization, Hashing, and Digital Signatures. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+  "task_acceptance_criteria": [
+    "The artifact clearly demonstrates Why stable representation matters. Structural equality versus byte equality. Canonical JSON concepts..",
+    "Expected behavior is written before verification.",
+    "One invalid or boundary case is documented.",
+    "The relevant format, parser/version, and any security or interoperability limits are recorded."
+  ],
+  "hints": [
+    "Start with the smallest valid example that demonstrates Why stable representation matters. Structural equality versus byte equality. Canonical JSON concepts..",
+    "Change one thing at a time and compare parsed values, not only visual formatting.",
+    "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+  ],
+  "summary": [
+    "Canonicalization, Hashing, and Digital Signatures fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+    "Topics retained from the source PDF include Why stable representation matters. Structural equality versus byte equality. Canonical JSON concepts.; Ordering and whitespace considerations. Hashing serialized content. Digital signatures and verification.; Why ordinary reformatting can invalidate byte-based signatures..",
+    "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+  ],
+  "run_mode": "static-validation",
+  "expected_output": "A digital signature or hash requires a precisely defined byte representation; ordinary JSON member order/whitespace alone does not provide a universal canonical form.",
+  "common_mistakes": [
+    {
+      "problem": "Treating readable text as proof of correctness.",
+      "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+      "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+    },
+    {
+      "problem": "Assuming every parser interprets the feature identically.",
+      "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+      "fix": "Record the exact parser/version and test the target environment."
+    },
+    {
+      "problem": "Testing only a happy path.",
+      "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+      "fix": "Keep valid, invalid, and boundary fixtures in version control."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "id": "json-yaml-ref-rfc8259",
+      "title": "RFC 8259 — The JavaScript Object Notation (JSON) Data Interchange Format",
+      "url": "https://www.rfc-editor.org/rfc/rfc8259",
+      "publisher": "IETF / RFC Editor",
+      "checked_on": "2026-10-20"
+    },
+    {
+      "id": "json-yaml-ref-ecma404",
+      "title": "ECMA-404 — The JSON Data Interchange Syntax",
+      "url": "https://ecma-international.org/publications-and-standards/standards/ecma-404/",
+      "publisher": "Ecma International",
+      "checked_on": "2026-10-20"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Generated from the attached JSON and YAML syllabus; requires technical review and target-tool validation before publication.",
+  "exercise_files": []
+}

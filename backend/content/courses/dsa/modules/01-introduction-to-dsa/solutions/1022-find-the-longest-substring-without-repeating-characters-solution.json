@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-22",
+  "exercise_id": "dsa-exercise-pdf-22",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\ndef longest_unique_substring(text):\n    last_seen, start, best = {}, 0, 0\n    for end, char in enumerate(text):\n        if char in last_seen and last_seen[char] >= start:\n            start = last_seen[char] + 1\n        last_seen[char] = end\n        best = max(best, end - start + 1)\n    return best\n\nassert longest_unique_substring(\"abcabcbb\") == 3\n```",
+  "explanation": "Maintain the start of a valid window and last-seen positions. Expected O(n) time and O(k) space for unique character state.",
+  "tested_reference_code": "def longest_unique_substring(text):\n    last_seen, start, best = {}, 0, 0\n    for end, char in enumerate(text):\n        if char in last_seen and last_seen[char] >= start:\n            start = last_seen[char] + 1\n        last_seen[char] = end\n        best = max(best, end - start + 1)\n    return best\n\nassert longest_unique_substring(\"abcabcbb\") == 3",
+  "language": "python"
+}

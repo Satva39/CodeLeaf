@@ -1,0 +1,149 @@
+{
+  "id": "css-project-05",
+  "slug": "analytics-dashboard",
+  "title": "Analytics Dashboard",
+  "sequence": 5,
+  "tier": "intermediate",
+  "objective": "Build a structured dashboard that presents synthetic metrics in a consistent, responsive interface.",
+  "prerequisite_lesson_ids": [
+    "css-lesson-070",
+    "css-lesson-082",
+    "css-lesson-093",
+    "css-lesson-104",
+    "css-lesson-113",
+    "css-lesson-124",
+    "css-lesson-135",
+    "css-lesson-178"
+  ],
+  "recommended_module_range": [
+    8,
+    21
+  ],
+  "recommended_lesson_range": [
+    70,
+    184
+  ],
+  "skills": [
+    "CSS layout",
+    "visual hierarchy",
+    "responsive design",
+    "accessibility",
+    "maintainable stylesheets"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Sidebar and top-level navigation",
+      "acceptance_criteria": [
+        "Demonstrate sidebar and top-level navigation in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Metric cards and data panels",
+      "acceptance_criteria": [
+        "Demonstrate metric cards and data panels in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Responsive chart placeholders with labels",
+      "acceptance_criteria": [
+        "Demonstrate responsive chart placeholders with labels in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Consistent color, spacing, and typography tokens",
+      "acceptance_criteria": [
+        "Demonstrate consistent color, spacing, and typography tokens in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    },
+    {
+      "sequence": 5,
+      "title": "Responsive Grid/Flexbox layout",
+      "acceptance_criteria": [
+        "Demonstrate responsive grid/flexbox layout in the project.",
+        "Keep the CSS readable, responsive, and testable."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "index.html",
+      "language": "html",
+      "contents": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Analytics Dashboard</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n<div class=\"dashboard-shell\"><aside class=\"dashboard-sidebar\"><a class=\"brand\" href=\"#overview\">Metric / Lab</a><nav aria-label=\"Dashboard navigation\"><a href=\"#overview\" aria-current=\"page\">Overview</a><a href=\"#traffic\">Traffic</a><a href=\"#reports\">Reports</a></nav><p class=\"sidebar-note\">Synthetic example data</p></aside><main id=\"overview\" class=\"dashboard-main\"><header class=\"dashboard-header\"><div><p class=\"eyebrow\">Workspace / Overview</p><h1>Good afternoon.</h1><p>Here is a sample view of your weekly activity.</p></div><button class=\"button button-secondary\" type=\"button\">Export preview</button></header><section class=\"metric-grid\" aria-label=\"Summary metrics\"><article class=\"metric-card\"><p>Visitors</p><strong>24,680</strong><span class=\"trend trend-up\">+8.4% vs last week</span></article><article class=\"metric-card\"><p>Sign-ups</p><strong>1,284</strong><span class=\"trend trend-up\">+4.2% vs last week</span></article><article class=\"metric-card\"><p>Conversion</p><strong>5.2%</strong><span class=\"trend trend-down\">−0.3% vs last week</span></article><article class=\"metric-card\"><p>Avg. session</p><strong>03:48</strong><span>Within expected range</span></article></section><section id=\"traffic\" class=\"chart-panel\"><div class=\"panel-heading\"><div><h2>Weekly traffic</h2><p>Illustrative values, not live analytics</p></div><span class=\"chart-legend\">Visitors</span></div><div class=\"chart-placeholder\" role=\"img\" aria-label=\"Illustrative weekly traffic bar chart. Monday 42, Tuesday 58, Wednesday 49, Thursday 74, Friday 66, Saturday 82, Sunday 61.\"><div class=\"chart-bar bar-1\"><span>Mon</span></div><div class=\"chart-bar bar-2\"><span>Tue</span></div><div class=\"chart-bar bar-3\"><span>Wed</span></div><div class=\"chart-bar bar-4\"><span>Thu</span></div><div class=\"chart-bar bar-5\"><span>Fri</span></div><div class=\"chart-bar bar-6\"><span>Sat</span></div><div class=\"chart-bar bar-7\"><span>Sun</span></div></div></section><section id=\"reports\" class=\"data-panel\"><h2>Recent reports</h2><p>Weekly summary · Interface review · Accessibility checklist</p></section></main></div>\n</body>\n</html>\n"
+    },
+    {
+      "path": "styles.css",
+      "language": "css",
+      "contents": "* { box-sizing: border-box; }\n:root { --color-text: #172554; --color-surface: #ffffff; --color-accent: #1d4ed8; --space: 1rem; --radius: 0.75rem; }\nbody { margin: 0; color: var(--color-text); background: #f8fafc; font-family: system-ui, sans-serif; line-height: 1.55; }\na { color: inherit; }\nbutton, input, select { font: inherit; }\n:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 3px; }\n.page-shell { width: min(calc(100% - 2rem), 74rem); margin-inline: auto; }\n.site-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space); padding: var(--space); }\n@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }\n"
+    }
+  ],
+  "required_features": [
+    "Sidebar and top-level navigation",
+    "Metric cards and data panels",
+    "Responsive chart placeholders with labels",
+    "Consistent color, spacing, and typography tokens",
+    "Responsive Grid/Flexbox layout"
+  ],
+  "stretch_features": [
+    "Add a second theme using custom properties.",
+    "Test at 320 CSS pixels, 768 CSS pixels, and a wide desktop viewport.",
+    "Document browser support assumptions and any fallback for optional CSS features."
+  ],
+  "tests": [
+    {
+      "name": "Required CSS checks",
+      "mode": "human_review",
+      "criteria": [
+        "All listed required features are present and behave as described.",
+        "Inspect the stylesheet for invalid declarations and unintended overrides.",
+        "Check keyboard focus, responsive reflow, and reduced-motion handling where relevant."
+      ]
+    },
+    {
+      "name": "Responsive behavior",
+      "mode": "human_review",
+      "criteria": [
+        "No unintended horizontal overflow at narrow widths.",
+        "Layout remains coherent when text is longer than sample content."
+      ]
+    },
+    {
+      "name": "Maintainability",
+      "mode": "human_review",
+      "criteria": [
+        "Reusable tokens and component classes are used intentionally.",
+        "Known feature support limits and design choices are documented."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correctness and required features",
+      "points": 30
+    },
+    {
+      "criterion": "Responsive visual hierarchy and layout",
+      "points": 25
+    },
+    {
+      "criterion": "Accessibility and interaction states",
+      "points": 20
+    },
+    {
+      "criterion": "Maintainability, testing, and rationale",
+      "points": 25
+    }
+  ],
+  "rubric_total": 100,
+  "review_method": "Human-reviewed visual and accessibility evaluation supported by the listed checks; CSS string checks alone cannot prove rendered behavior.",
+  "reference_solution_file": "projects/solutions/005-analytics-dashboard-solution.json",
+  "status": "draft",
+  "status_note": "Draft brief and starter scaffold; complete the milestones and review before publication."
+}

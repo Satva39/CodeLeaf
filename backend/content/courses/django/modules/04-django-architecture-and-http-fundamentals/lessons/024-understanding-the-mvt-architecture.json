@@ -1,0 +1,198 @@
+{
+  "id": "django-lesson-024",
+  "slug": "understanding-the-mvt-architecture",
+  "title": "Understanding the MVT Architecture",
+  "sequence": 24,
+  "module_id": "django-module-04",
+  "module_slug": "django-architecture-and-http-fundamentals",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "optional-specialization",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "django-lesson-023"
+  ],
+  "previous_lesson_id": "django-lesson-023",
+  "next_lesson_id": "django-lesson-025",
+  "keywords": [
+    "understanding-the-mvt-architecture",
+    "django-architecture-and-http-fundamentals",
+    "django",
+    "model-view-and-template-responsibilities",
+    "mapping-mvt-concepts-to-application-code",
+    "djangos-role-in-the-architecture",
+    "the-difference-between-mvt-and-traditional-mvc-terminology"
+  ],
+  "source_syllabus_number": 24,
+  "subtopics": [
+    "Model, View, and Template responsibilities",
+    "Mapping MVT concepts to application code",
+    "Django's role in the architecture",
+    "The difference between MVT and traditional MVC terminology"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of understanding the mvt architecture and at least two listed subtopics.",
+    "Interpret the understanding the mvt architecture example and predict its expected result.",
+    "Choose a verification step and identify one version, security, data, or troubleshooting consideration."
+  ],
+  "content": {
+    "intro": "Learn understanding the mvt architecture through a compact visual, an inspectable Django example, and a practical verification task.",
+    "why_it_matters": "Understanding the MVT Architecture matters because a Django project has to behave predictably across requests, database state, configuration, and deployments. Understanding this piece makes the surrounding application easier to test, maintain, and secure.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Visual guide: Understanding the MVT Architecture",
+        "asset_path": "diagrams/lessons/lesson-024-understanding-the-mvt-architecture.svg",
+        "alt_text": "MVT separates request handling, data access, and HTML presentation without claiming that Django calls its view a controller.",
+        "caption": "Use this visual to connect Understanding the MVT Architecture to the broader flow; it is an overview, not a substitute for the worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "This lesson examines understanding the mvt architecture as part of django architecture and http fundamentals. The objective is to understand the behavior, connect it to the listed subtopics, and verify it with a small example rather than relying on memorized syntax."
+      },
+      {
+        "type": "paragraph",
+        "title": "What to cover",
+        "text": "The source syllabus for this lesson names: Model, View, and Template responsibilities; Mapping MVT concepts to application code; Django's role in the architecture; The difference between MVT and traditional MVC terminology. Keep these distinct concepts together: know what each item does, when it applies, and what assumption must be verified in your project."
+      },
+      {
+        "type": "list",
+        "title": "Lesson concepts and practical notes",
+        "items": [
+          {
+            "title": "Model, View, and Template responsibilities",
+            "text": "Model, View, and Template responsibilities affects persistence and data correctness. Keep invariants in validation and database constraints where appropriate, inspect generated SQL/migrations, and test both expected data and error/rollback behavior."
+          },
+          {
+            "title": "Mapping MVT concepts to application code",
+            "text": "MVT separates model/data access, view/request coordination, and template presentation. It resembles MVC conceptually, but Django’s term “view” is not a one-to-one naming match for every MVC framework."
+          },
+          {
+            "title": "Django's role in the architecture",
+            "text": "For Django's role in the architecture, identify the Django component responsible, the inputs and outputs it owns, and the boundary conditions that matter. Use the accompanying example as a starting point, verify it with the official versioned documentation, and record one test demonstrating expected behavior."
+          },
+          {
+            "title": "The difference between MVT and traditional MVC terminology",
+            "text": "MVT separates model/data access, view/request coordination, and template presentation. It resembles MVC conceptually, but Django’s term “view” is not a one-to-one naming match for every MVC framework."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Understanding the MVT Architecture",
+        "language": "python",
+        "code": "from django.shortcuts import render\n\ndef book_list(request):\n    books = Book.objects.order_by(\"title\")\n    return render(request, \"catalog/book_list.html\", {\"books\": books})",
+        "expected_output": "The view coordinates request handling and data retrieval, then passes context to a template for presentation.",
+        "execution_mode": "server-runner",
+        "run_instructions": "Open a local project using the documented Django 6.1-compatible Python environment. If this snippet depends on model names, URL configuration, settings, or an optional package, add those prerequisites before running it. Otherwise inspect it as a static example. CodeLeaf browser preview does not execute Django/Python server code.",
+        "troubleshooting": "Book must be a model imported in this app. The template path must match the configured template discovery rules."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "First identify the input and the responsible Django component. Next trace how the example moves through “Understanding the MVT Architecture” and the related concept “Model, View, and Template responsibilities”. Predict the result before running or inspecting it. Finally compare the observed behavior with the expected result and the cited official documentation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Change one input or configuration choice related to Model, View, and Template responsibilities. Write down the expected outcome, test one normal case and one invalid or boundary case, then record what changed. Do not add real credentials or sensitive production data."
+      },
+      {
+        "type": "paragraph",
+        "title": "Common mistakes and fixes",
+        "text": "Common pitfalls include skipping a required configuration/import, copying a fragment without its model or URL context, trusting client input, or treating a development-only behavior as production-ready. Check the earliest failing assumption, consult the version-specific docs, and add a regression test for the failure you found."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to describe understanding the mvt architecture, explain the listed topics, inspect the example, and choose an appropriate verification step. Keep the scope and version caveat visible when sharing your solution."
+      }
+    ],
+    "execution_mode": "server-runner",
+    "expected_result": "The view coordinates request handling and data retrieval, then passes context to a template for presentation.",
+    "run_instructions": "Use an isolated local project and synthetic data. Follow the code block instructions; setup-dependent fragments must be integrated into the relevant app. Static examples can be reviewed without execution.",
+    "troubleshooting": [
+      "Book must be a model imported in this app. The template path must match the configured template discovery rules.",
+      "Confirm the active Python virtual environment, settings module, app registration, URL routing, dependencies, and database migrations before debugging application behavior."
+    ],
+    "reset_steps": "Reset only local practice data or recreate the disposable development database as documented for your project. Never delete production data or migration history to reset an exercise.",
+    "try_it_yourself": "Apply Model, View, and Template responsibilities to a small local example, then record a normal case, an invalid/boundary case, and the expected versus observed result.",
+    "progressive_hints": [
+      "Identify which Django component owns this behavior.",
+      "Trace a single request or object through the example before adding more features.",
+      "Use the relevant linked official documentation and a test for the failure case."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Copying a framework fragment without its imports, configuration, model, or URL context.",
+        "why": "The snippet may be incomplete when separated from a Django project.",
+        "fix": "Use the stated prerequisites and run the relevant management check or focused test."
+      },
+      {
+        "problem": "Trusting input or relying only on a happy-path example.",
+        "why": "Invalid values, unauthorized requests, or concurrent activity can violate assumptions.",
+        "fix": "Validate on the server and add a negative or boundary test."
+      },
+      {
+        "problem": "Treating the development sample as production-ready.",
+        "why": "Production hosting, secrets, storage, monitoring and resource limits differ from local use.",
+        "fix": "Follow the current deployment/security references and document untested areas."
+      }
+    ],
+    "recap": "Understanding the MVT Architecture connects Model, View, and Template responsibilities; Mapping MVT concepts to application code; Django's role in the architecture; The difference between MVT and traditional MVC terminology. Verify behavior in your project and keep any version-specific assumption documented.",
+    "knowledge_check_file": "exams/question-files/lesson-024-questions.json",
+    "content_review_status": "draft",
+    "accessibility_notes": "Use descriptive headings, meaningful labels/alt text, keyboard-accessible interactions, and text explanations alongside the diagram. Never rely on color alone.",
+    "version_notes": "Examples target Django 6.1 concepts and must be checked against the installed supported patch release. Optional third-party integrations are labelled separately; snippets with dependencies are not claimed to have been executed.",
+    "source_syllabus_topics_reviewed": true,
+    "topic_explanations_count": 4,
+    "run_mode": "static-validation",
+    "task": "Apply Model, View, and Template responsibilities to a small local example, then record a normal case, an invalid/boundary case, and the expected versus observed result.",
+    "task_acceptance_criteria": [
+      "Record a predicted result before running or inspecting the example.",
+      "Include one normal case and one invalid or boundary case.",
+      "State the Python/Django version and verification method used."
+    ],
+    "hints": [
+      "Identify which Django component owns this behavior.",
+      "Trace a single request or object through the example before adding more features.",
+      "Use the relevant linked official documentation and a test for the failure case."
+    ],
+    "solution_notes": "Suggested approach: identify the responsible Django component, keep input validation and authorization at the server boundary where relevant, then verify understanding the mvt architecture with a focused test. This is a learning hint, not a claim that code was executed.",
+    "summary": [
+      "Understanding the MVT Architecture is part of django architecture and http fundamentals and should be understood alongside its listed subtopics.",
+      "The worked example is a starting point; review its prerequisites and version notes before local execution.",
+      "Verify the expected behavior with normal and failure cases and keep the result reproducible."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "django-urls",
+      "title": "URL dispatcher",
+      "url": "https://docs.djangoproject.com/en/6.1/topics/http/urls/",
+      "publisher": "Django Software Foundation",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "path",
+        "URL names",
+        "reverse resolution"
+      ]
+    },
+    {
+      "id": "django-views",
+      "title": "Writing views",
+      "url": "https://docs.djangoproject.com/en/6.1/topics/http/views/",
+      "publisher": "Django Software Foundation",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "request-response",
+        "HTTP methods",
+        "responses"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Django curriculum; pending Django-specialist and instructional review before publication."
+}

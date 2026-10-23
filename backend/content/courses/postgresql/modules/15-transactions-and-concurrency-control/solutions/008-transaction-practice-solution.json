@@ -1,0 +1,8 @@
+{
+  "id": "postgresql-exercise-solution-008",
+  "exercise_id": "postgresql-exercise-008",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference approach for Transaction Practice:\n\nBEGIN;\nUPDATE lab_inventory SET quantity = quantity - 1 WHERE sku = 'SKU-100';\nSELECT sku, quantity FROM lab_inventory WHERE sku = 'SKU-100';\nROLLBACK;\n\nReview requirements:\n- State all schema assumptions and prerequisites.\n- Use deterministic ordering when comparing query outputs.\n- Include a verification query and a realistic failure case.\n- Avoid using production data or credentials.\n- Record limitations; a static keyword grader does not prove runtime correctness.",
+  "explanation": "The reference approach for Transaction Practice is guidance rather than a universal production implementation. Review the schema, concurrency model, privileges and current PostgreSQL 18.6 documentation. The public static grader only checks required strings; a reviewer must assess correctness and evidence."
+}

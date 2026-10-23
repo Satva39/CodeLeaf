@@ -1,0 +1,9 @@
+{
+  "id": "lua-exercise-solution-140",
+  "exercise_id": "lua-exercise-140",
+  "visibility": "protected_content_repository_only",
+  "answer": "local backing = { score = 10 }\nlocal proxy = setmetatable({}, {\n    __index = backing,\n    __newindex = function(_, key, value)\n        if key ~= \"score\" or type(value) ~= \"number\" then\n            error(\"unsupported field or value\")\n        end\n        backing[key] = value\n    end,\n})\nproxy.score = 12\nprint(proxy.score)\n-- A Lua proxy is not an OS-enforced sandbox.",
+  "explanation": "Reference implementation for Metatable-Based Proxy. Review it against the prompt, run under the supported runtime, and test normal plus boundary/error cases. This answer is repository-only and must never be returned by a public course API.",
+  "status": "draft",
+  "solution_code": "local backing = { score = 10 }\nlocal proxy = setmetatable({}, {\n    __index = backing,\n    __newindex = function(_, key, value)\n        if key ~= \"score\" or type(value) ~= \"number\" then\n            error(\"unsupported field or value\")\n        end\n        backing[key] = value\n    end,\n})\nproxy.score = 12\nprint(proxy.score)\n-- A Lua proxy is not an OS-enforced sandbox."
+}

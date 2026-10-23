@@ -1,0 +1,163 @@
+{
+  "id": "genai-lesson-090",
+  "slug": "sending-text-generation-requests",
+  "title": "Sending Text Generation Requests",
+  "sequence": 90,
+  "module_id": "genai-module-11",
+  "module_slug": "generative-ai-apis-and-application-integration",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-application-development",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "genai-lesson-088",
+    "genai-lesson-089"
+  ],
+  "previous_lesson_id": "genai-lesson-089",
+  "next_lesson_id": "genai-lesson-091",
+  "keywords": [
+    "Sending Text Generation Requests",
+    "Constructing requests",
+    "System and user instructions where supported",
+    "Passing conversation history",
+    "Reading response content and metadata",
+    "Handling successful and unsuccessful responses",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 90,
+  "subtopics": [
+    "Constructing requests",
+    "System and user instructions where supported",
+    "Passing conversation history",
+    "Reading response content and metadata",
+    "Handling successful and unsuccessful responses"
+  ],
+  "learning_outcomes": [
+    "Explain constructing requests and how it connects to sending text generation requests.",
+    "Apply system and user instructions where supported in the example and predict the output before running it.",
+    "Test one realistic edge case for sending text generation requests and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers sending text generation requests through 5 syllabus subtopics preserved from the supplied Generative AI curriculum. Build API integrations with server-side secrets, input validation, safe retries, cancellation, observability, and budget controls. Model-provider payloads are not interchangeable by default.",
+    "why_it_matters": "Constructing requests belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Sending Text Generation Requests: concept map",
+        "asset_path": "diagrams/lessons/lesson-090-sending-text-generation-requests.svg",
+        "alt_text": "Diagram for Sending Text Generation Requests: understand Constructing requests, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Constructing requests, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Constructing requests belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Constructing requests",
+            "text": "Constructing requests belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation."
+          },
+          {
+            "title": "System and user instructions where supported",
+            "text": "Treat system and user instructions where supported as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs."
+          },
+          {
+            "title": "Passing conversation history",
+            "text": "Use passing conversation history as a lens for understanding sending text generation requests. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Reading response content and metadata",
+            "text": "Reading response content and metadata belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation."
+          },
+          {
+            "title": "Handling successful and unsuccessful responses",
+            "text": "Handling successful and unsuccessful responses belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Sending Text Generation Requests\nimport json\npayload = {\"model\": \"REPLACE_WITH_SUPPORTED_MODEL\", \"input\": \"Summarize a synthetic delivery ticket\"}\nserialized = json.dumps(payload, separators=(\",\", \":\"))\nprint({\"payload_bytes\": len(serialized.encode(\"utf-8\")), \"has_input\": bool(payload[\"input\"])})",
+        "expected_output": "{'payload_bytes': 88, 'has_input': True}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice constructing requests within sending text generation requests: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'payload_bytes': 88, 'has_input': True}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-090-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Sending Text Generation Requests is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://developers.openai.com/api/docs/guides/text",
+      "https://docs.python.org/3/tutorial/"
+    ]
+  },
+  "exercise_files": [
+    "../exercises/090-build-a-model-api-client.json"
+  ],
+  "sources": [
+    {
+      "title": "Text generation",
+      "url": "https://developers.openai.com/api/docs/guides/text",
+      "publisher": "OpenAI API documentation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "text generation API patterns"
+      ]
+    },
+    {
+      "title": "The Python Tutorial",
+      "url": "https://docs.python.org/3/tutorial/",
+      "publisher": "Python Software Foundation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Python fundamentals"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

@@ -1,0 +1,191 @@
+{
+  "id": "jquery-lesson-163",
+  "slug": "debugging-ajax-requests",
+  "title": "Debugging AJAX Requests",
+  "sequence": 163,
+  "module_id": "jquery-module-19",
+  "module_slug": "debugging-testing-and-quality-assurance",
+  "level": "professional",
+  "difficulty": "advanced",
+  "track": "professional",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "jquery-lesson-162"
+  ],
+  "previous_lesson_id": "jquery-lesson-162",
+  "next_lesson_id": "jquery-lesson-164",
+  "keywords": [
+    "debugging ajax requests",
+    "jquery",
+    "javascript",
+    "debugging, testing, and quality assurance",
+    "inspecting request and response data",
+    "reading http status codes",
+    "finding cors failures",
+    "checking request headers"
+  ],
+  "source_syllabus_number": 163,
+  "subtopics": [
+    "Inspecting request and response data",
+    "Reading HTTP status codes",
+    "Finding CORS failures",
+    "Checking request headers",
+    "Diagnosing network and timeout issues"
+  ],
+  "learning_outcomes": [
+    "Explain the role of debugging ajax requests in a jQuery application.",
+    "Apply inspecting request and response data in a small example and describe its expected result.",
+    "Verify reading http status codes with an explicit test or browser observation."
+  ],
+  "exercise_files": [
+    "../exercises/163-debugging-ajax-requests.json"
+  ],
+  "sources": [
+    {
+      "title": "jQuery.ajax() API",
+      "url": "https://api.jquery.com/jQuery.ajax/",
+      "publisher": "jQuery API documentation",
+      "checked_on": "2026-10-12",
+      "source_type": "official_api_reference",
+      "supports": [
+        "AJAX options",
+        "Success and error callbacks",
+        "Request lifecycle"
+      ]
+    },
+    {
+      "title": "MDN: CORS",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-12",
+      "source_type": "platform_security_reference",
+      "supports": [
+        "Browser cross-origin request rules",
+        "Server CORS configuration"
+      ]
+    },
+    {
+      "title": "MDN: Fetch API",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-12",
+      "source_type": "platform_reference",
+      "supports": [
+        "Native fetch interoperability",
+        "Request and response workflows"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the attached syllabus and official references; requires lesson-by-lesson technical review, local execution, accessibility checks, and editorial approval.",
+  "content": {
+    "intro": "Use this lesson on debugging ajax requests as a professional review habit: identify the relevant behavior, make one controlled change, and verify its outcome.",
+    "why_it_matters": "This topic is useful because it turns inspecting request and response data into a repeatable implementation choice. Debug through reproducible steps, browser tools, focused assertions, and regression tests. QUnit can test DOM behavior and asynchronous results without assuming that a single passing unit test proves the whole application.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 19 overview",
+        "asset_path": "diagrams/module-19-overview.svg",
+        "alt_text": "Overview of Debugging, Testing, and Quality Assurance, illustrating the sequence from understanding the concept to implementing and checking it.",
+        "caption": "Use this module map to place debugging ajax requests within the wider learning path."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Debug through reproducible steps, browser tools, focused assertions, and regression tests. QUnit can test DOM behavior and asynchronous results without assuming that a single passing unit test proves the whole application."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the supplied syllabus",
+        "items": [
+          "Inspecting request and response data",
+          "Reading HTTP status codes",
+          "Finding CORS failures",
+          "Checking request headers",
+          "Diagnosing network and timeout issues"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "$.ajax({ url: \"/api/status\", dataType: \"json\" })\n  .done((data) => console.log(\"status\", data))\n  .fail((xhr, status) => console.error(xhr.status, status));",
+        "expected_output": "Use the Network panel to inspect the request and status code; the failure callback logs HTTP/network context.",
+        "run_instructions": "Use a local HTML page with jQuery 4.0.0 loaded before app.js for JavaScript snippets. HTML and package-manager snippets can be checked as configuration examples. Run the interaction in browser DevTools, inspect the DOM/Network panel, and compare actual behavior with the expected result. Do not submit learner code to the production API for arbitrary execution.",
+        "reset_steps": "Restore the original markup and code, clear console/network filters, reload the local page, and repeat the same interaction. For a request example, return the mock endpoint to its original response before retrying."
+      },
+      {
+        "type": "callout",
+        "title": "Guided example",
+        "text": "Start with a known DOM structure, apply the pattern for debugging ajax requests, and test one normal case plus one edge case. Keep selectors scoped to the intended component and verify the real browser result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Write a focused verification case for debugging ajax requests. Include a success path and a failure or edge case; record what the test does not cover."
+      }
+    ],
+    "task": "Write a focused verification case for debugging ajax requests. Include a success path and a failure or edge case; record what the test does not cover.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates debugging ajax requests using a current, documented approach.",
+      "The learner records the expected and actual behavior and checks at least one edge case.",
+      "The example preserves semantic HTML and does not render untrusted data as HTML.",
+      "The test setup and any runtime limitation are documented honestly."
+    ],
+    "hints": [
+      "First identify which DOM nodes and runtime state are involved in debugging ajax requests.",
+      "Make one small change, inspect the resulting element or request, and compare it with the expected result.",
+      "If the result differs, check the selector, script order, browser console, event target, and relevant API documentation before adding more code."
+    ],
+    "expected_output": "Use the Network panel to inspect the request and status code; the failure callback logs HTTP/network context.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-163-questions.json",
+    "common_mistakes": [
+      "Assuming a selector matched an element without checking the collection length.",
+      "Confusing jQuery collections with native DOM elements or live properties with markup attributes.",
+      "Using .html() with untrusted data or assuming client-side validation enforces server rules.",
+      "Treating a demo snippet as production-ready without testing failure and accessibility states."
+    ],
+    "summary": [
+      "Debugging AJAX Requests is one part of the debugging, testing, and quality assurance workflow.",
+      "Debug through reproducible steps, browser tools, focused assertions, and regression tests. QUnit can test DOM behavior and asynchronous results without assuming that a single passing unit test proves the whole application.",
+      "Use the official API or upgrade guide for version-specific behavior and verify an example locally before relying on it."
+    ],
+    "references": [
+      {
+        "title": "jQuery.ajax() API",
+        "url": "https://api.jquery.com/jQuery.ajax/",
+        "publisher": "jQuery API documentation",
+        "checked_on": "2026-10-12",
+        "source_type": "official_api_reference",
+        "supports": [
+          "AJAX options",
+          "Success and error callbacks",
+          "Request lifecycle"
+        ]
+      },
+      {
+        "title": "MDN: CORS",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS",
+        "publisher": "MDN Web Docs",
+        "checked_on": "2026-10-12",
+        "source_type": "platform_security_reference",
+        "supports": [
+          "Browser cross-origin request rules",
+          "Server CORS configuration"
+        ]
+      },
+      {
+        "title": "MDN: Fetch API",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
+        "publisher": "MDN Web Docs",
+        "checked_on": "2026-10-12",
+        "source_type": "platform_reference",
+        "supports": [
+          "Native fetch interoperability",
+          "Request and response workflows"
+        ]
+      }
+    ]
+  }
+}

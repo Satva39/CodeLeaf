@@ -1,0 +1,59 @@
+{
+  "id": "nextjs-question-set-073",
+  "lesson_id": "nextjs-lesson-073",
+  "lesson_slug": "parallel-data-fetching",
+  "title": "Quick check: Parallel Data Fetching",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "questions": [
+    {
+      "id": "nextjs-q-073-1",
+      "prompt": "In the context of “Parallel Data Fetching” and “Identifying independent requests”, Where is a suitable place to fetch private application data when using the App Router?",
+      "options": [
+        "Inside a publicly shipped bundle with credentials embedded.",
+        "In trusted server-side code such as a Server Component or server-only data-access module.",
+        "Inside the image alt text.",
+        "Only after sending database credentials from the browser."
+      ],
+      "answer_key": "In trusted server-side code such as a Server Component or server-only data-access module.",
+      "explanation": "Server-side data access can keep credentials out of the client bundle, but authorization and safe data shaping are still required.",
+      "lesson_context": {
+        "lesson_title": "Parallel Data Fetching",
+        "focus": "Identifying independent requests"
+      }
+    },
+    {
+      "id": "nextjs-q-073-2",
+      "prompt": "While implementing “Parallel Data Fetching”, Why should a `fetch` example check `response.ok` before parsing expected data?",
+      "options": [
+        "Because `response.ok` automatically validates the JSON schema.",
+        "Because every request returns a successful status.",
+        "Because it makes a remote endpoint trustworthy without checking it.",
+        "An HTTP failure can still return a response object, so the code should handle non-success status explicitly."
+      ],
+      "answer_key": "An HTTP failure can still return a response object, so the code should handle non-success status explicitly.",
+      "explanation": "Check status and validate the received shape; HTTP success alone does not guarantee complete or trusted data.",
+      "lesson_context": {
+        "lesson_title": "Parallel Data Fetching",
+        "focus": "Identifying independent requests"
+      }
+    },
+    {
+      "id": "nextjs-q-073-3",
+      "prompt": "When reviewing “Parallel Data Fetching”, How can independent data requests avoid an unnecessary request waterfall?",
+      "options": [
+        "Always await every independent request one after the other.",
+        "Run independent operations concurrently, for example with `Promise.all`, and define partial-failure behavior where needed.",
+        "Fetch data in a Client Component even when no browser interaction is needed.",
+        "Ignore one request’s rejection without defining the UI behavior."
+      ],
+      "answer_key": "Run independent operations concurrently, for example with `Promise.all`, and define partial-failure behavior where needed.",
+      "explanation": "Parallel requests can reduce waiting time, while error handling still needs to match the page’s requirements.",
+      "lesson_context": {
+        "lesson_title": "Parallel Data Fetching",
+        "focus": "Identifying independent requests"
+      }
+    }
+  ],
+  "review_note": "Draft question set with module-specific concepts. Review item wording and answer accuracy before publication; learner-facing APIs should expose prompt/options only and release correctness feedback after grading."
+}

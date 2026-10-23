@@ -1,0 +1,178 @@
+{
+  "id": "github-actions-project-11",
+  "slug": "secure-reusable-multi-environment-ci-cd-system",
+  "title": "Secure, Reusable, Multi-Environment CI/CD System",
+  "sequence": 11,
+  "tier": "capstone",
+  "objective": "Build a production-minded delivery platform that tests code, produces traceable artifacts, and deploys through controlled environments.",
+  "prerequisite_lesson_ids": [
+    "github-actions-lesson-016",
+    "github-actions-lesson-017",
+    "github-actions-lesson-162"
+  ],
+  "recommended_lesson_range": [
+    16,
+    162
+  ],
+  "skills": [
+    "YAML and Workflow Structure",
+    "Events and Workflow Triggers",
+    "Runners and Execution Environments",
+    "Variables, Contexts, and Expressions",
+    "Job Dependencies, Conditions, and Execution Strategies",
+    "Artifacts, Caching, and Inter-Job Data",
+    "Secrets, Permissions, and Authentication",
+    "Building Continuous Integration Pipelines",
+    "Deployment and Release Automation",
+    "Reusable Workflows and Custom Actions",
+    "Packages, Containers, and Release Ecosystems",
+    "Monitoring, Debugging, and Troubleshooting",
+    "Performance, Reliability, and Cost Management",
+    "Enterprise Governance and Advanced Workflow Architecture",
+    "Capstone Preparation and Professional Workflow Design",
+    "workflow YAML",
+    "CI/CD design",
+    "security review",
+    "testing and operations"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "PR checks, lint, automated tests, and build",
+      "acceptance_criteria": [
+        "Demonstrate pr checks, lint, automated tests, and build.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Matrix coverage and intentional caching",
+      "acceptance_criteria": [
+        "Demonstrate matrix coverage and intentional caching.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Reusable workflow contracts",
+      "acceptance_criteria": [
+        "Demonstrate reusable workflow contracts.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Least privilege and protected secrets",
+      "acceptance_criteria": [
+        "Demonstrate least privilege and protected secrets.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 5,
+      "title": "OIDC where supported",
+      "acceptance_criteria": [
+        "Demonstrate oidc where supported.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 6,
+      "title": "Traceable artifacts and container images",
+      "acceptance_criteria": [
+        "Demonstrate traceable artifacts and container images.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 7,
+      "title": "Development and staging stages",
+      "acceptance_criteria": [
+        "Demonstrate development and staging stages.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "contents": "# Secure, Reusable, Multi-Environment CI/CD System\n\nBuild a production-minded delivery platform that tests code, produces traceable artifacts, and deploys through controlled environments.\n\n## Verification record\n\n- Trigger tested:\n- Checks that passed:\n- Failure path checked:\n- Permission review:\n- Remaining limitations:\n"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "language": "yaml",
+      "contents": "name: CI\non: [push, pull_request]\npermissions:\n  contents: read\njobs:\n  checks:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Repository check\n        run: test -f README.md\n"
+    }
+  ],
+  "required_features": [
+    "PR checks, lint, automated tests, and build",
+    "Matrix coverage and intentional caching",
+    "Reusable workflow contracts",
+    "Least privilege and protected secrets",
+    "OIDC where supported",
+    "Traceable artifacts and container images",
+    "Development and staging stages",
+    "Production approvals and concurrency",
+    "Health checks, failure notifications, rollback, and handover documentation"
+  ],
+  "stretch_features": [
+    "Add an explicit cancellation/timeout policy and test it.",
+    "Pin third-party action dependencies to verified immutable references per repository policy.",
+    "Add a troubleshooting guide with sanitized logs and a rollback or recovery plan."
+  ],
+  "tests": [
+    {
+      "name": "Required workflow evidence",
+      "mode": "human_review",
+      "criteria": [
+        "Workflow triggers match the documented intent.",
+        "Required jobs and checks actually run.",
+        "No production secret is exposed.",
+        "Permissions are limited to required operations.",
+        "Failure and recovery behavior is documented."
+      ]
+    },
+    {
+      "name": "Safe execution",
+      "mode": "human_review",
+      "criteria": [
+        "Validate in a disposable repository/environment.",
+        "Do not deploy real resources until configuration, access, and rollback are reviewed."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correct behavior and completion criteria",
+      "points": 30
+    },
+    {
+      "criterion": "Workflow design, clarity, and maintainability",
+      "points": 20
+    },
+    {
+      "criterion": "Permissions, credential handling, and trust boundaries",
+      "points": 25
+    },
+    {
+      "criterion": "Testing, failure handling, and traceable evidence",
+      "points": 15
+    },
+    {
+      "criterion": "Documentation and operational handover",
+      "points": 10
+    }
+  ],
+  "rubric_total": 100,
+  "review_method": "Human review against the rubric and recorded workflow-run evidence; local static checks do not replace a live GitHub Actions run.",
+  "reference_solution_file": "projects/solutions/011-secure-reusable-multi-environment-ci-cd-system-solution.json",
+  "status": "draft"
+}

@@ -1,0 +1,155 @@
+{
+  "id": "nodejs-lesson-170",
+  "slug": "introduction-to-real-time-applications",
+  "title": "Introduction to Real-Time Applications",
+  "sequence": 170,
+  "module_id": "nodejs-module-20",
+  "module_slug": "real-time-systems-workers-and-background-jobs",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "nodejs-lesson-169"
+  ],
+  "previous_lesson_id": "nodejs-lesson-169",
+  "next_lesson_id": "nodejs-lesson-171",
+  "keywords": [
+    "Introduction to Real-Time Applications",
+    "Request-response versus long-lived connections",
+    "Real-time event delivery",
+    "Presence and connection state",
+    "Latency considerations",
+    "Node.js",
+    "JavaScript runtime"
+  ],
+  "source_syllabus_number": 170,
+  "subtopics": [
+    "Request-response versus long-lived connections",
+    "Real-time event delivery",
+    "Presence and connection state",
+    "Latency considerations"
+  ],
+  "learning_outcomes": [
+    "Describe Request-response versus long-lived connections and explain how it relates to Introduction to Real-Time Applications.",
+    "Demonstrate Real-time event delivery in a small Node.js example and predict the observable result.",
+    "Test a failure, boundary, lifecycle, or version-compatibility case involving Presence and connection state."
+  ],
+  "content": {
+    "intro": "Introduction to Real-Time Applications is part of real time systems workers and background jobs. This lesson connects Request-response versus long-lived connections, Real-time event delivery, Presence and connection state to a concrete Node.js example. Focus on the behavior you can observe, the assumptions the API makes, and one failure or boundary case.",
+    "why_it_matters": "Performance work starts with a representative measurement and a profile, not with guesswork or isolated microbenchmarks. Record a baseline, repeat the workload, report runtime/version and variance, and compare correctness as well as speed.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Introduction to Real-Time Applications: concept map",
+        "asset_path": "diagrams/lessons/lesson-170-introduction-to-real-time-applications.svg",
+        "alt_text": "Concept map for lesson 170: Introduction to Real-Time Applications. It shows representative syllabus concepts in a Concept → Example → Verification sequence.",
+        "caption": "Read the three labeled cards from left to right; the lesson steps connect the concept to a practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Performance work starts with a representative measurement and a profile, not with guesswork or isolated microbenchmarks. Measure latency, throughput, event-loop delay, CPU, and memory under representative workloads before optimizing."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Request-response versus long-lived connections",
+            "text": "For Request-response versus long-lived connections, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Real-time event delivery",
+            "text": "For Real-time event delivery, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Presence and connection state",
+            "text": "For Presence and connection state, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Latency considerations",
+            "text": "For Latency considerations, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "import { performance } from 'node:perf_hooks';\nconst start = performance.now();\nfor (let i = 0; i < 1000; i += 1) Math.sqrt(i);\nconsole.log(Number.isFinite(performance.now() - start));",
+        "expected_output": "true; the measured duration depends on the machine and runtime.",
+        "run_instructions": "Inspect this JavaScript in a local Node.js project. It is a static-validation teaching example: CodeLeaf does not run this arbitrary example in the API process. If it needs a package, file, server, database, or external service, provision that dependency in a separate local project and follow its official setup instructions. Run with `node example.mjs` when the example is self-contained, or adapt the required imports/inputs first.",
+        "reset_steps": "Restore the starting snippet and inputs. Repeat with one different valid value and one invalid, missing, empty, or failure input appropriate to the example.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Start with the code shown above. Predict the result before running it, then verify it against: true; the measured duration depends on the machine and runtime. Change one input or simulate one failure and describe how the behavior should change. Record a baseline, repeat the workload, report runtime/version and variance, and compare correctness as well as speed."
+      },
+      {
+        "type": "callout",
+        "title": "Runtime and safety note",
+        "text": "Teaching baseline: use a supported Node.js LTS release (Node.js 24 LTS as checked on 2026-10-13). The official releases page lists Node.js 26 as Current and Node.js 24/22 as LTS. Some advanced APIs, flags, permission behavior, embedded SQLite capabilities, module-loader hooks, and TypeScript integration are version-sensitive; verify the exact installed runtime. The Node.js 22 runtime available in the build-check environment is used only for syntax checks. This example is for learning and static validation, not for executing untrusted learner code inside CodeLeaf."
+      }
+    ],
+    "task": "Create or inspect a small Node.js example for Introduction to Real-Time Applications. Include at least one listed subtopic, document the expected result, and verify a normal case plus a boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates a named lesson concept, rather than only mentioning the title.",
+      "Expected output or observable behavior is documented and reproducible.",
+      "At least one invalid, empty, timeout, resource, or failure case is handled or explained.",
+      "The solution does not put secrets in source code and does not execute untrusted code inside the production API process."
+    ],
+    "hints": [
+      "Start with Request-response versus long-lived connections; identify the input, operation, and observable result.",
+      "Run the smallest relevant example in the selected Node.js release before adding frameworks or external services.",
+      "Test one failure or boundary case for Real-time event delivery, then explain why the outcome is expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Optimizing before measuring or treating a single benchmark run as a universal conclusion.",
+        "why": "The code may pass a simple demonstration yet fail with real inputs, resource limits, timing, or runtime differences.",
+        "fix": "Use reproducible workloads, profiler evidence, multiple runs, and regression thresholds."
+      },
+      {
+        "problem": "Copying a snippet without checking its runtime, dependencies, input assumptions, or cleanup behavior.",
+        "why": "Node.js APIs and surrounding ecosystem tools have explicit version, trust, and resource boundaries.",
+        "fix": "State the environment and dependency assumptions, then rerun the example from a clean starting state."
+      }
+    ],
+    "summary": [
+      "For Request-response versus long-lived connections, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone.",
+      "This lesson covers: Request-response versus long-lived connections, Real-time event delivery, Presence and connection state, Latency considerations.",
+      "Verify both normal and failure behavior, and document runtime, dependency, and resource assumptions."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-170-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Diagnostics",
+      "url": "https://nodejs.org/en/learn/diagnostics",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "debugging",
+        "performance diagnostics",
+        "memory analysis"
+      ]
+    },
+    {
+      "title": "Learn Node.js",
+      "url": "https://nodejs.org/learn",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "getting started",
+        "CLI",
+        "HTTP"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Source-derived syllabus; educational draft requiring technical/instructional review before publication."
+}

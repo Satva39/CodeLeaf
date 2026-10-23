@@ -1,0 +1,151 @@
+{
+  "id": "angular-lesson-096",
+  "slug": "096-composition-patterns",
+  "title": "Composition Patterns",
+  "sequence": 96,
+  "module_id": "angular-module-07",
+  "module_slug": "component-communication-and-composition",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "angular-lesson-095"
+  ],
+  "previous_lesson_id": "angular-lesson-095",
+  "next_lesson_id": "angular-lesson-097",
+  "keywords": [
+    "composition-patterns",
+    "component-communication-and-composition",
+    "smart-and-presentational-patterns",
+    "slot-based-composition",
+    "compound-ui-patterns",
+    "avoiding-unnecessary-component-coupling"
+  ],
+  "source_syllabus_number": 96,
+  "subtopics": [
+    "Smart and presentational patterns",
+    "Slot-based composition",
+    "Compound UI patterns",
+    "Avoiding unnecessary component coupling"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of composition patterns and name the relevant Angular concepts.",
+    "Apply at least one syllabus item from this lesson in a focused Angular example.",
+    "Verify expected behavior and identify one compatibility, failure or trust-boundary limitation."
+  ],
+  "content": {
+    "intro": "This lesson focuses on composition patterns inside Component Communication and Composition. Begin with the syllabus anchor “Smart and presentational patterns”, name the data or UI behavior involved, and then verify the result with a focused example. The goal is to make one clear engineering decision rather than memorize an isolated API.",
+    "why_it_matters": "Composition Patterns helps keep Angular features understandable as the application grows. A small explicit pattern is easier to reuse, test and review than scattered UI-specific logic.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Composition Patterns concept map",
+        "asset_path": "diagrams/lessons/096-composition-patterns.svg",
+        "alt_text": "Lesson 96: Composition Patterns. Four numbered stages connect the concept, its model, a practical application and verification.",
+        "caption": "Visual path for Composition Patterns: use the numbered stages and the labels to connect smart and presentational patterns to a practical implementation and evidence."
+      },
+      {
+        "type": "paragraph",
+        "title": "Mental model",
+        "text": "**Composition Patterns.** This is part of **Component Communication and Composition**. Start from the concrete question “what changes in the application when this concept is used?” Then map the supplied syllabus terms to a small behavior, keep dependencies and trust boundaries visible, and verify what the example does. Composition Patterns helps keep Angular features understandable as the application grows. A small explicit pattern is easier to reuse, test and review than scattered UI-specific logic."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics to connect",
+        "items": [
+          {
+            "title": "Smart and presentational patterns",
+            "text": "Identify what “Smart and presentational patterns” contributes to composition patterns; write down its inputs, outputs or state changes before coding."
+          },
+          {
+            "title": "Slot-based composition",
+            "text": "Connect “Slot-based composition” to one small user-visible behavior. Keep the boundary explicit and consider empty, invalid or failure states."
+          },
+          {
+            "title": "Compound UI patterns",
+            "text": "Use “Compound UI patterns” as a checkpoint: verify the relevant behavior with a test, compiler diagnostic, browser inspection or documented human review."
+          },
+          {
+            "title": "Avoiding unnecessary component coupling",
+            "text": "Identify what “Avoiding unnecessary component coupling” contributes to composition patterns; write down its inputs, outputs or state changes before coding."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Composition Patterns",
+        "language": "typescript",
+        "code": "import { Component, input } from '@angular/core';\n\n@Component({ selector: 'app-greeting', template: '<p>Hello {{ name() }}</p>' })\nexport class GreetingComponent {\n  name = input('learner');\n}",
+        "expected_output": "Expected UI: the greeting uses the provided name; the default appears if the parent does not set it.",
+        "run_instructions": "Create or use a disposable Angular CLI workspace with a compatible Angular/Node/TypeScript version. Put the snippet in the matching component, template, stylesheet or project configuration; satisfy imports and providers from the surrounding lesson context. Run `ng serve` for browser behavior and the project test command for assertions. Shell examples should be run from the stated workspace directory.",
+        "reset_steps": "Save or commit your starting point before changing configuration. Revert only files created or edited for this lesson; do not delete a shared workspace or production data.",
+        "execution_mode": "static-validation",
+        "limitations": "This is a source/example inspection, not a live Angular compiler or arbitrary-code runner. Resource and Signal Forms examples are version-sensitive; check official docs and the installed package signatures."
+      },
+      {
+        "type": "callout",
+        "title": "Engineering note",
+        "text": "Execution note: this CodeLeaf course presents Angular and TypeScript snippets as static teaching material. The browser playground does not compile Angular TypeScript; run examples in a locally generated Angular workspace and verify them with the matching CLI, tests and browser."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-096-knowledge-check.json",
+    "task": "Apply composition patterns to a small feature in a disposable Angular learning project. Demonstrate at least one supplied subtopic (Smart and presentational patterns), record the expected UI or console result, and include one test, failure case or version note.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates “Smart and presentational patterns” in the context of Composition Patterns.",
+      "The learner explains the expected result and includes an empty, invalid or failure case where appropriate.",
+      "Verification evidence matches the actual environment; a static CodeLeaf snippet is not described as a successfully executed Angular build."
+    ],
+    "hints": [
+      "Start with the syllabus item “Smart and presentational patterns” and write down the expected behavior before changing code.",
+      "Keep the example small; include only dependencies, inputs, providers and state that the example actually needs.",
+      "Reproduce the intended behavior in a pinned local Angular workspace and inspect both normal and failure paths."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Copying a snippet without checking its surrounding context.",
+        "why": "Angular examples can depend on imports, providers, template context or a particular framework version.",
+        "fix": "Use the run instructions and validate against the exact generated workspace."
+      },
+      {
+        "problem": "Treating an attractive UI result as proof of correctness.",
+        "why": "Accessibility, boundary cases, failures and server-side rules may not be visible in the happy path.",
+        "fix": "Add a focused assertion and test at least one realistic failure state."
+      },
+      {
+        "problem": "Assuming client code guarantees authorization or validates all external data.",
+        "why": "Browser code is controlled by the client and can receive unexpected network responses.",
+        "fix": "Validate external values and enforce protected business rules on the backend."
+      }
+    ],
+    "summary": [
+      "Composition Patterns has a concrete purpose within Component Communication and Composition.",
+      "Use “Smart and presentational patterns” in a small example and verify the behavior.",
+      "Check version compatibility, failure states and trust boundaries before reusing the pattern."
+    ],
+    "run_mode": "static-validation",
+    "execution_mode": "static-validation",
+    "run_instructions": "Create or use a disposable Angular CLI workspace with a compatible Angular/Node/TypeScript version. Put the snippet in the matching component, template, stylesheet or project configuration; satisfy imports and providers from the surrounding lesson context. Run `ng serve` for browser behavior and the project test command for assertions. Shell examples should be run from the stated workspace directory.",
+    "reset_steps": "Save or commit your starting point before changing configuration. Revert only files created or edited for this lesson; do not delete a shared workspace or production data.",
+    "version_notes": "Version-sensitive topics require checking the official Angular version compatibility and release documentation at the time of use."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Components",
+      "url": "https://angular.dev/guide/components",
+      "publisher": "Angular documentation",
+      "checked_on": "2026-10-14"
+    },
+    {
+      "title": "Templates",
+      "url": "https://angular.dev/guide/templates",
+      "publisher": "Angular documentation",
+      "checked_on": "2026-10-14"
+    }
+  ],
+  "technical_review_date": "2026-10-14",
+  "status": "draft",
+  "status_note": "Complete syllabus-aligned draft generated from the attached curriculum. Technical examples and version-sensitive APIs require human review and local execution before publication."
+}

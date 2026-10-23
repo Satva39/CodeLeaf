@@ -1,0 +1,145 @@
+{
+  "id": "git-lesson-081",
+  "slug": "using-merge-tools",
+  "title": "Using Merge Tools",
+  "sequence": 81,
+  "module_id": "git-module-08",
+  "module_slug": "merging-and-resolving-conflicts",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "primary_service": "Git version control",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "git-lesson-080"
+  ],
+  "previous_lesson_id": "git-lesson-080",
+  "next_lesson_id": "git-lesson-082",
+  "keywords": [
+    "git-automation-scripting-and-production-workflows",
+    "merging-and-resolving-conflicts",
+    "git",
+    "configuring-a-merge-tool",
+    "launching-a-merge-session",
+    "reviewing-conflicting-sections",
+    "verifying-the-resolved-file"
+  ],
+  "source_syllabus_number": 81,
+  "subtopics": [
+    "Configuring a merge tool",
+    "Launching a merge session",
+    "Reviewing conflicting sections",
+    "Verifying the resolved file"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and boundaries of using merge tools.",
+    "Choose and interpret a Git command relevant to using merge tools using a disposable repository.",
+    "Verify the result with repository state or history and identify one safety limitation."
+  ],
+  "content": {
+    "intro": "This lesson introduces using merge tools as part of Merging and Resolving Conflicts. It follows the supplied Git curriculum and adds an original explanation, an inspectable command example, troubleshooting notes, and a practice task.",
+    "why_it_matters": "A merge tool presents conflicting versions side by side or in another supported interface. The tool helps edit a file but cannot know the desired behavior; verify the final file and test it after resolution.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 8: Merging and Resolving Conflicts",
+        "asset_path": "diagrams/module-08-overview.svg",
+        "alt_text": "Four-step view of Merging and Resolving Conflicts, with key syllabus checkpoints and a verification reminder.",
+        "caption": "Original CodeLeaf diagram. Review labels as well as the explanatory text; color is not the only signal."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "**Core idea.** A merge tool presents conflicting versions side by side or in another supported interface. The tool helps edit a file but cannot know the desired behavior; verify the final file and test it after resolution.\n\nFor **Using Merge Tools**, keep the named subtopics in view: Configuring a merge tool; Launching a merge session; Reviewing conflicting sections; Verifying the resolved file. Treat those as the scope of this lesson, then practise the smallest workflow that demonstrates the idea."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "**Before you run a command:** decide what state you are inspecting or changing, identify whether the effect is local or remote, and write down what evidence would count as success. Tool availability depends on the platform and installed applications. Launch a merge tool only when a conflict is active and you understand the target file."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered",
+        "items": [
+          "Configuring a merge tool",
+          "Launching a merge session",
+          "Reviewing conflicting sections",
+          "Verifying the resolved file"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Command example: Using Merge Tools",
+        "language": "bash",
+        "code": "git mergetool --tool-help",
+        "expected_output": "A list of supported/available merge-tool options for the installed Git environment.",
+        "run_instructions": "Tool availability depends on the platform and installed applications. Launch a merge tool only when a conflict is active and you understand the target file.",
+        "reset_steps": "Use a disposable repository. If the exercise changes state, check git status and git log before and after; discard the practice directory only after confirming it contains no valuable work.",
+        "execution_mode": "static-validation",
+        "limitations": "The CodeLeaf web lesson page does not execute arbitrary Git commands. Run commands locally in a disposable repository with a Git version appropriate to your task. Placeholder paths, branches, commit IDs and repository URLs must be replaced with values from that practice repository."
+      },
+      {
+        "type": "callout",
+        "title": "Safety and verification checkpoint",
+        "text": "Start with git status --short --branch. For destructive or history-rewriting operations, review the exact target, create a recovery reference when appropriate, and keep valuable work backed up. Never put credentials, access tokens or private keys in course submissions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-081-questions.json"
+  },
+  "task": "Create or use two clearly named branches in a disposable repository. Make one small change on each, inspect the commit graph, perform the relevant integration step, then verify the final files and history.",
+  "hints": [
+    "Start by reviewing: Configuring a merge tool.",
+    "Use a read-only inspection command before any operation that changes files, refs or remote state.",
+    "After the example, verify with git status --short --branch and/or git log --oneline --graph as appropriate."
+  ],
+  "expected_output": "A list of supported/available merge-tool options for the installed Git environment.",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Running a state-changing command without confirming the target repository or branch.",
+      "why": "A command may affect the wrong working tree or move a reference that other work depends on.",
+      "fix": "Check git rev-parse --show-toplevel and git status --short --branch before proceeding."
+    },
+    {
+      "problem": "Assuming a command succeeded because no error was visible.",
+      "why": "Some Git commands are silent on success, and some expected actions are blocked by repository state or permissions.",
+      "fix": "Verify status, log, references, remote state or the named output explicitly."
+    },
+    {
+      "problem": "Using an example placeholder literally or applying a destructive example to valuable work.",
+      "why": "Paths, branch names and object IDs depend on the current repository; restore/reset/clean operations can discard work.",
+      "fix": "Substitute real practice values, use a disposable repository, and preview changes before proceeding."
+    }
+  ],
+  "summary": [
+    "Using Merge Tools is covered through these syllabus topics: Configuring a merge tool; Launching a merge session; Reviewing conflicting sections; Verifying the resolved file.",
+    "Choose the command for the intended effect; understand whether it changes files, the index, local references, or remote state.",
+    "Verify the result, record unexpected output, and retain a recovery path for risky operations."
+  ],
+  "references": [
+    "references/reference-index.json",
+    "https://git-scm.com/docs",
+    "https://git-scm.com/book/en/v2"
+  ],
+  "sources": [
+    {
+      "title": "Git Reference Documentation",
+      "url": "https://git-scm.com/docs",
+      "publisher": "Git project",
+      "checked_on": "2026-10-15",
+      "source_type": "official-reference"
+    },
+    {
+      "title": "Pro Git Book, 2nd Edition",
+      "url": "https://git-scm.com/book/en/v2",
+      "publisher": "Git project / Pro Git",
+      "checked_on": "2026-10-15",
+      "source_type": "officially-hosted-book"
+    }
+  ],
+  "exercise_files": [],
+  "technical_review_date": "2026-10-15",
+  "status": "draft",
+  "status_note": "Generated from the supplied Git syllabus. Content and commands need editorial/technical review before publication."
+}

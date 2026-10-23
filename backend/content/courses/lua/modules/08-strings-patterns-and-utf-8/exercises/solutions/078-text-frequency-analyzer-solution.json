@@ -1,0 +1,9 @@
+{
+  "id": "lua-exercise-solution-078",
+  "exercise_id": "lua-exercise-078",
+  "visibility": "protected_content_repository_only",
+  "answer": "local text = \"Lua is small and Lua is embeddable\"\nlocal counts = {}\nfor word in text:lower():gmatch(\"%a+\") do\n    counts[word] = (counts[word] or 0) + 1\nend\nlocal words = {}\nfor word in pairs(counts) do table.insert(words, word) end\ntable.sort(words)\nfor _, word in ipairs(words) do print(word, counts[word]) end",
+  "explanation": "Reference implementation for Text Frequency Analyzer. Review it against the prompt, run under the supported runtime, and test normal plus boundary/error cases. This answer is repository-only and must never be returned by a public course API.",
+  "status": "draft",
+  "solution_code": "local text = \"Lua is small and Lua is embeddable\"\nlocal counts = {}\nfor word in text:lower():gmatch(\"%a+\") do\n    counts[word] = (counts[word] or 0) + 1\nend\nlocal words = {}\nfor word in pairs(counts) do table.insert(words, word) end\ntable.sort(words)\nfor _, word in ipairs(words) do print(word, counts[word]) end"
+}

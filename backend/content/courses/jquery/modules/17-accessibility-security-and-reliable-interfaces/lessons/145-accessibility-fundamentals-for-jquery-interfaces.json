@@ -1,0 +1,191 @@
+{
+  "id": "jquery-lesson-145",
+  "slug": "accessibility-fundamentals-for-jquery-interfaces",
+  "title": "Accessibility Fundamentals for jQuery Interfaces",
+  "sequence": 145,
+  "module_id": "jquery-module-17",
+  "module_slug": "accessibility-security-and-reliable-interfaces",
+  "level": "professional",
+  "difficulty": "advanced",
+  "track": "professional",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "jquery-lesson-144"
+  ],
+  "previous_lesson_id": "jquery-lesson-144",
+  "next_lesson_id": "jquery-lesson-146",
+  "keywords": [
+    "accessibility fundamentals for jquery interfaces",
+    "jquery",
+    "javascript",
+    "accessibility, security, and reliable interfaces",
+    "semantic html",
+    "keyboard accessibility",
+    "accessible naming",
+    "focus management"
+  ],
+  "source_syllabus_number": 145,
+  "subtopics": [
+    "Semantic HTML",
+    "Keyboard accessibility",
+    "Accessible naming",
+    "Focus management",
+    "Providing feedback beyond color alone"
+  ],
+  "learning_outcomes": [
+    "Explain the role of accessibility fundamentals for jquery interfaces in a jQuery application.",
+    "Apply semantic html in a small example and describe its expected result.",
+    "Verify keyboard accessibility with an explicit test or browser observation."
+  ],
+  "exercise_files": [
+    "../exercises/145-accessibility-fundamentals-for-jquery-interfaces.json"
+  ],
+  "sources": [
+    {
+      "title": "MDN: Cross-site scripting (XSS)",
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-12",
+      "source_type": "platform_security_reference",
+      "supports": [
+        "DOM-based XSS concept",
+        "Safe rendering"
+      ]
+    },
+    {
+      "title": "MDN: Content Security Policy",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-12",
+      "source_type": "platform_security_reference",
+      "supports": [
+        "CSP policies",
+        "Script execution restrictions"
+      ]
+    },
+    {
+      "title": "jQuery.ajax() API",
+      "url": "https://api.jquery.com/jQuery.ajax/",
+      "publisher": "jQuery API documentation",
+      "checked_on": "2026-10-12",
+      "source_type": "official_api_reference",
+      "supports": [
+        "AJAX options",
+        "Success and error callbacks",
+        "Request lifecycle"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the attached syllabus and official references; requires lesson-by-lesson technical review, local execution, accessibility checks, and editorial approval.",
+  "content": {
+    "intro": "Use this lesson on accessibility fundamentals for jquery interfaces as a professional review habit: identify the relevant behavior, make one controlled change, and verify its outcome.",
+    "why_it_matters": "This topic is useful because it turns semantic html into a repeatable implementation choice. Accessible interactions use semantic elements, keyboard controls, visible focus, meaningful status updates, and synchronized ARIA state. Secure interfaces render untrusted data safely and rely on server controls for sensitive actions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 17 overview",
+        "asset_path": "diagrams/module-17-overview.svg",
+        "alt_text": "Overview of Accessibility, Security, and Reliable Interfaces, illustrating the sequence from understanding the concept to implementing and checking it.",
+        "caption": "Use this module map to place accessibility fundamentals for jquery interfaces within the wider learning path."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Accessible interactions use semantic elements, keyboard controls, visible focus, meaningful status updates, and synchronized ARIA state. Secure interfaces render untrusted data safely and rely on server controls for sensitive actions."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the supplied syllabus",
+        "items": [
+          "Semantic HTML",
+          "Keyboard accessibility",
+          "Accessible naming",
+          "Focus management",
+          "Providing feedback beyond color alone"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "$(\"#dialog-close\").on(\"click\", closeDialog);\n$(document).on(\"keydown.dialog\", function (event) {\n  if (event.key === \"Escape\") closeDialog();\n});",
+        "expected_output": "The dialog supports a keyboard Escape action; production dialog code must also manage focus and restore it to the opener.",
+        "run_instructions": "Use a local HTML page with jQuery 4.0.0 loaded before app.js for JavaScript snippets. HTML and package-manager snippets can be checked as configuration examples. Run the interaction in browser DevTools, inspect the DOM/Network panel, and compare actual behavior with the expected result. Do not submit learner code to the production API for arbitrary execution.",
+        "reset_steps": "Restore the original markup and code, clear console/network filters, reload the local page, and repeat the same interaction. For a request example, return the mock endpoint to its original response before retrying."
+      },
+      {
+        "type": "callout",
+        "title": "Guided example",
+        "text": "Start with a known DOM structure, apply the pattern for accessibility fundamentals for jquery interfaces, and test one normal case plus one edge case. Keep selectors scoped to the intended component and verify the real browser result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Audit a widget for accessibility fundamentals for jquery interfaces. Test keyboard operation, visible feedback, safe text rendering, and its server-side trust boundary."
+      }
+    ],
+    "task": "Audit a widget for accessibility fundamentals for jquery interfaces. Test keyboard operation, visible feedback, safe text rendering, and its server-side trust boundary.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates accessibility fundamentals for jquery interfaces using a current, documented approach.",
+      "The learner records the expected and actual behavior and checks at least one edge case.",
+      "The example preserves semantic HTML and does not render untrusted data as HTML.",
+      "The test setup and any runtime limitation are documented honestly."
+    ],
+    "hints": [
+      "First identify which DOM nodes and runtime state are involved in accessibility fundamentals for jquery interfaces.",
+      "Make one small change, inspect the resulting element or request, and compare it with the expected result.",
+      "If the result differs, check the selector, script order, browser console, event target, and relevant API documentation before adding more code."
+    ],
+    "expected_output": "The dialog supports a keyboard Escape action; production dialog code must also manage focus and restore it to the opener.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-145-questions.json",
+    "common_mistakes": [
+      "Assuming a selector matched an element without checking the collection length.",
+      "Confusing jQuery collections with native DOM elements or live properties with markup attributes.",
+      "Using .html() with untrusted data or assuming client-side validation enforces server rules.",
+      "Treating a demo snippet as production-ready without testing failure and accessibility states."
+    ],
+    "summary": [
+      "Accessibility Fundamentals for jQuery Interfaces is one part of the accessibility, security, and reliable interfaces workflow.",
+      "Accessible interactions use semantic elements, keyboard controls, visible focus, meaningful status updates, and synchronized ARIA state. Secure interfaces render untrusted data safely and rely on server controls for sensitive actions.",
+      "Use the official API or upgrade guide for version-specific behavior and verify an example locally before relying on it."
+    ],
+    "references": [
+      {
+        "title": "MDN: Cross-site scripting (XSS)",
+        "url": "https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting",
+        "publisher": "MDN Web Docs",
+        "checked_on": "2026-10-12",
+        "source_type": "platform_security_reference",
+        "supports": [
+          "DOM-based XSS concept",
+          "Safe rendering"
+        ]
+      },
+      {
+        "title": "MDN: Content Security Policy",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP",
+        "publisher": "MDN Web Docs",
+        "checked_on": "2026-10-12",
+        "source_type": "platform_security_reference",
+        "supports": [
+          "CSP policies",
+          "Script execution restrictions"
+        ]
+      },
+      {
+        "title": "jQuery.ajax() API",
+        "url": "https://api.jquery.com/jQuery.ajax/",
+        "publisher": "jQuery API documentation",
+        "checked_on": "2026-10-12",
+        "source_type": "official_api_reference",
+        "supports": [
+          "AJAX options",
+          "Success and error callbacks",
+          "Request lifecycle"
+        ]
+      }
+    ]
+  }
+}

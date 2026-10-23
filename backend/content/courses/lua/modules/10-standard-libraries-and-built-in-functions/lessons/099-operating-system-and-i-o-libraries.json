@@ -1,0 +1,149 @@
+{
+  "id": "lua-lesson-099",
+  "slug": "operating-system-and-i-o-libraries",
+  "title": "Operating System and I/O Libraries",
+  "sequence": 99,
+  "module_id": "lua-module-10",
+  "module_slug": "standard-libraries-and-built-in-functions",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "lua-lesson-098"
+  ],
+  "previous_lesson_id": "lua-lesson-098",
+  "next_lesson_id": "lua-lesson-100",
+  "keywords": [
+    "operating-system-and-i-o-libraries",
+    "time-environment-file-operations-and-process-facilities",
+    "portability-and-host-restrictions"
+  ],
+  "source_syllabus_number": 99,
+  "subtopics": [
+    "Time, environment, file operations, and process facilities",
+    "Portability and host restrictions"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of operating System and I/O Libraries and the key behavior described in this lesson.",
+    "Apply operating System and I/O Libraries in a small Lua example and predict its result.",
+    "Identify a relevant edge case, version constraint, or host-runtime limitation for operating System and I/O Libraries."
+  ],
+  "content": {
+    "intro": "The standard libraries cover basic functions, math, strings, tables, coroutines, UTF-8, I/O, OS services and debugging. Embedding hosts can omit or restrict libraries, so treat availability as a runtime assumption.",
+    "why_it_matters": "The standard libraries cover basic functions, math, strings, tables, coroutines, UTF-8, I/O, OS services and debugging. Embedding hosts can omit or restrict libraries, so treat availability as a runtime assumption. This concept appears in the supplied syllabus; keep the scope and assumptions visible in your implementation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual map: Operating System and I/O Libraries",
+        "asset_path": "diagrams/lessons/lesson-099.svg",
+        "alt_text": "Concept map for Operating System and I/O Libraries; understand the concept, inspect a Lua example, and verify behavior and edge cases.",
+        "caption": "Visual summary of Operating System and I/O Libraries; use the three-step path while working through the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Operating System and I/O Libraries is part of Standard Libraries and Built-In Functions. Start with the exact rule or capability, identify what the example assumes, and note what changes on another Lua version or in a host application."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core explanation",
+        "text": "The standard libraries cover basic functions, math, strings, tables, coroutines, UTF-8, I/O, OS services and debugging. Embedding hosts can omit or restrict libraries, so treat availability as a runtime assumption."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics to cover",
+        "items": [
+          {
+            "title": "Time, environment, file operations, and process facilities",
+            "text": "Understand Time, environment, file operations, and process facilities; connect it to Operating System and I/O Libraries, then state one useful example or boundary case."
+          },
+          {
+            "title": "Portability and host restrictions",
+            "text": "Understand Portability and host restrictions; connect it to Operating System and I/O Libraries, then state one useful example or boundary case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through the example",
+        "text": "Read the small example, predict every output line, then run it locally with a compatible runtime. Uses a temporary file, not a project path; close resources even after failures. The host may restrict I/O libraries. Keep the smallest reproducible case if the observed behavior differs."
+      },
+      {
+        "type": "code",
+        "language": "lua",
+        "execution_mode": "static-validation",
+        "code": "local file = io.tmpfile()\nassert(file, \"could not create temporary file\")\nfile:write(\"Lua data\\n\")\nfile:seek(\"set\")\nprint(file:read(\"*l\"))\nfile:close()",
+        "expected_output": "Lua data",
+        "caption": "Static reference example for local verification; CodeLeaf does not execute this snippet unless a dedicated isolated runner is explicitly provided.",
+        "run_instructions": "Save the code in a local file with the correct language extension and test it using the runtime noted in the lesson. Uses a temporary file, not a project path; close resources even after failures. The host may restrict I/O libraries. Compare the exact output to the documented result.",
+        "reset_steps": "Restore the original snippet, remove generated test files if any, and repeat from a clean local test state."
+      },
+      {
+        "type": "callout",
+        "title": "Version, host, and safety note",
+        "text": "Uses a temporary file, not a project path; close resources even after failures. The host may restrict I/O libraries."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Mistake 1",
+            "text": "Confusing Operating System and I/O Libraries with a similarly named feature in another language or runtime. Fix: follow the version-matched reference and test the smallest example."
+          },
+          {
+            "title": "Mistake 2",
+            "text": "Relying on an output order or environment capability that the language/host does not guarantee. Fix: document assumptions and make order/capabilities explicit."
+          },
+          {
+            "title": "Mistake 3",
+            "text": "Skipping a boundary test or failing to check error-return values. Fix: test invalid and boundary inputs and inspect failure values."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Recap and next step",
+        "text": "Recap: explain Operating System and I/O Libraries without the example, predict its behavior, and name one limit. Next: The Debug Library."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate “Operating System and I/O Libraries” with a different input or boundary case. Predict the result before running it, record what you observe, and explain one limitation.",
+    "task_acceptance_criteria": [
+      "Explain the central behavior of Operating System and I/O Libraries in your own words.",
+      "Verify the result using a supported local runtime or clearly state why the host/tooling prevents a full run.",
+      "Identify a boundary case or compatibility/security limit relevant to the lesson."
+    ],
+    "hints": [
+      "First identify the input, output, and any assumed runtime or host feature.",
+      "Reduce the problem to the smallest example that exposes the relevant rule.",
+      "Test one normal case and one boundary/failure case; inspect error output without leaking secrets."
+    ],
+    "expected_output": "Lua data",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-099-knowledge-check.json",
+    "references": [
+      {
+        "title": "Lua 5.5 Reference Manual",
+        "url": "https://www.lua.org/manual/5.5/",
+        "publisher": "Lua.org",
+        "checked_on": "2026-10-20"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    "references/reference-index.json"
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Lua curriculum; requires expert technical, grading, accessibility, and runtime review before publication.",
+  "common_mistakes": [
+    "Confusing Operating System and I/O Libraries with a similarly named feature in another language or runtime.",
+    "Relying on an output order or environment capability that the language/host does not guarantee.",
+    "Skipping a boundary test or failing to check error-return values."
+  ],
+  "next_steps": [
+    "Continue with The Debug Library."
+  ]
+}

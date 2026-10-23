@@ -1,0 +1,150 @@
+{
+  "id": "lua-lesson-217",
+  "slug": "lua-and-lua-derived-languages",
+  "title": "Lua and Lua-Derived Languages",
+  "sequence": 217,
+  "module_id": "lua-module-21",
+  "module_slug": "lua-ecosystem-and-real-world-applications",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "specialist",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "lua-lesson-216"
+  ],
+  "previous_lesson_id": "lua-lesson-216",
+  "next_lesson_id": "lua-lesson-218",
+  "keywords": [
+    "lua-and-lua-derived-languages",
+    "lua-versus-luau-and-other-dialects",
+    "differences-in-syntax-typing-libraries-and-host-compatibility",
+    "tracks-rather-than-being-assumed-to-be-universal-lua-features"
+  ],
+  "source_syllabus_number": 217,
+  "subtopics": [
+    "Lua versus Luau and other dialects",
+    "Differences in syntax, typing, libraries, and host compatibility"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of lua and Lua-Derived Languages and the key behavior described in this lesson.",
+    "Apply lua and Lua-Derived Languages in a small Lua example and predict its result.",
+    "Identify a relevant edge case, version constraint, or host-runtime limitation for lua and Lua-Derived Languages."
+  ],
+  "content": {
+    "intro": "Game engines, OpenResty, editors, and other scriptable hosts add their own APIs and lifecycle. Teach those interfaces as optional tracks and keep standard Lua behavior separate from host-provided globals.",
+    "why_it_matters": "Game engines, OpenResty, editors, and other scriptable hosts add their own APIs and lifecycle. Teach those interfaces as optional tracks and keep standard Lua behavior separate from host-provided globals. This concept appears in the supplied syllabus; keep the scope and assumptions visible in your implementation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual map: Lua and Lua-Derived Languages",
+        "asset_path": "diagrams/lessons/lesson-217.svg",
+        "alt_text": "Concept map for Lua and Lua-Derived Languages; understand the concept, inspect a Lua example, and verify behavior and edge cases.",
+        "caption": "Visual summary of Lua and Lua-Derived Languages; use the three-step path while working through the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Lua and Lua-Derived Languages is part of Lua Ecosystem and Real-World Applications. Start with the exact rule or capability, identify what the example assumes, and note what changes on another Lua version or in a host application."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core explanation",
+        "text": "Game engines, OpenResty, editors, and other scriptable hosts add their own APIs and lifecycle. Teach those interfaces as optional tracks and keep standard Lua behavior separate from host-provided globals."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics to cover",
+        "items": [
+          {
+            "title": "Lua versus Luau and other dialects",
+            "text": "Understand Lua versus Luau and other dialects; connect it to Lua and Lua-Derived Languages, then state one useful example or boundary case."
+          },
+          {
+            "title": "Differences in syntax, typing, libraries, and host compatibility",
+            "text": "Understand Differences in syntax, typing, libraries, and host compatibility; connect it to Lua and Lua-Derived Languages, then state one useful example or boundary case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through the example",
+        "text": "Read the small example, predict every output line, then run it locally with a compatible runtime. Expected version output depends on the interpreter actually used; LuaJIT reports its own runtime identity. Run on every target version rather than assuming compatibility. Keep the smallest reproducible case if the observed behavior differs."
+      },
+      {
+        "type": "code",
+        "language": "lua",
+        "execution_mode": "static-validation",
+        "code": "local runtime = _VERSION\nprint(runtime)\n-- Test language features on every supported interpreter.",
+        "expected_output": "Lua 5.5",
+        "caption": "Static reference example for local verification; CodeLeaf does not execute this snippet unless a dedicated isolated runner is explicitly provided.",
+        "run_instructions": "Save the code in a local file with the correct language extension and test it using the runtime noted in the lesson. Expected version output depends on the interpreter actually used; LuaJIT reports its own runtime identity. Run on every target version rather than assuming compatibility. Compare the exact output to the documented result.",
+        "reset_steps": "Restore the original snippet, remove generated test files if any, and repeat from a clean local test state."
+      },
+      {
+        "type": "callout",
+        "title": "Version, host, and safety note",
+        "text": "Expected version output depends on the interpreter actually used; LuaJIT reports its own runtime identity. Run on every target version rather than assuming compatibility."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Mistake 1",
+            "text": "Confusing Lua and Lua-Derived Languages with a similarly named feature in another language or runtime. Fix: follow the version-matched reference and test the smallest example."
+          },
+          {
+            "title": "Mistake 2",
+            "text": "Relying on an output order or environment capability that the language/host does not guarantee. Fix: document assumptions and make order/capabilities explicit."
+          },
+          {
+            "title": "Mistake 3",
+            "text": "Skipping a boundary test or failing to check error-return values. Fix: test invalid and boundary inputs and inspect failure values."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Recap and next step",
+        "text": "Recap: explain Lua and Lua-Derived Languages without the example, predict its behavior, and name one limit. Next: What's New in Lua 5.5."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate “Lua and Lua-Derived Languages” with a different input or boundary case. Predict the result before running it, record what you observe, and explain one limitation.",
+    "task_acceptance_criteria": [
+      "Explain the central behavior of Lua and Lua-Derived Languages in your own words.",
+      "Verify the result using a supported local runtime or clearly state why the host/tooling prevents a full run.",
+      "Identify a boundary case or compatibility/security limit relevant to the lesson."
+    ],
+    "hints": [
+      "First identify the input, output, and any assumed runtime or host feature.",
+      "Reduce the problem to the smallest example that exposes the relevant rule.",
+      "Test one normal case and one boundary/failure case; inspect error output without leaking secrets."
+    ],
+    "expected_output": "Lua 5.5",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-217-knowledge-check.json",
+    "references": [
+      {
+        "title": "Lua 5.5 Reference Manual",
+        "url": "https://www.lua.org/manual/5.5/",
+        "publisher": "Lua.org",
+        "checked_on": "2026-10-20"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    "references/reference-index.json"
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Lua curriculum; requires expert technical, grading, accessibility, and runtime review before publication.",
+  "common_mistakes": [
+    "Confusing Lua and Lua-Derived Languages with a similarly named feature in another language or runtime.",
+    "Relying on an output order or environment capability that the language/host does not guarantee.",
+    "Skipping a boundary test or failing to check error-return values."
+  ],
+  "next_steps": [
+    "Continue with What's New in Lua 5.5."
+  ]
+}

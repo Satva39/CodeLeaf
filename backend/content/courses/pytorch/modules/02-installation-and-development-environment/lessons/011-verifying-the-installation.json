@@ -1,0 +1,221 @@
+{
+  "id": "pytorch-lesson-011",
+  "slug": "verifying-the-installation",
+  "title": "Verifying the Installation",
+  "sequence": 11,
+  "module_id": "pytorch-module-02",
+  "module_slug": "installation-and-development-environment",
+  "level": "Beginner",
+  "difficulty": "beginner",
+  "track": "core-foundations",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "pytorch-lesson-010"
+  ],
+  "previous_lesson_id": "pytorch-lesson-010",
+  "next_lesson_id": "pytorch-lesson-012",
+  "keywords": [
+    "verifying-the-installation",
+    "importing-torch",
+    "checking-the-installed-version",
+    "creating-a-test-tensor",
+    "checking-device-availability",
+    "diagnosing-installation-and-import-errors",
+    "pytorch",
+    "deep-learning"
+  ],
+  "learning_outcomes": [
+    "Explain the role of verifying the installation in a PyTorch workflow.",
+    "Apply a small example of verifying the installation and interpret the output.",
+    "Identify a relevant limitation, debugging check, or reproducibility concern."
+  ],
+  "content": {
+    "intro": "Verifying the Installation: A reliable environment isolates Python packages and makes the installed PyTorch build explicit. CPU and accelerator builds are not interchangeable in every configuration. In this lesson, use a small example to make the inputs, outputs, and boundary conditions explicit.",
+    "why_it_matters": "A recorded, reproducible environment prevents many installation and import errors and lets another learner repeat the same example. For this lesson, focus on importing torch and the evidence you can collect from a controlled example.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 02 roadmap",
+        "asset_path": "diagrams/module-02-overview.svg",
+        "alt_text": "Overview diagram of the ordered lessons in module 2: Installation and Development Environment. This lesson is item 11 in the 164-lesson course.",
+        "caption": "Orientation map for Installation and Development Environment; use the list below to connect this lesson to related ideas."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Create and activate a project virtual environment, install a build selected for the learner’s OS/Python/device, and verify the import before debugging model code. The source topics for this lesson are: Importing torch, Checking the installed version, Creating a test tensor. Keep each topic connected to a checkable input/output behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "Read the example",
+        "text": "Run each setup check in the same interpreter that will execute the course script. A notebook kernel and terminal can silently point to different environments. The example is a teaching-scale check, not evidence of a trained model score or a hardware-independent performance claim."
+      },
+      {
+        "type": "list",
+        "title": "Source-aligned topic checklist",
+        "items": [
+          {
+            "title": "Importing torch",
+            "text": "Connect this topic to the lesson workflow: Create and activate a project virtual environment, install a build selected for the learner’s OS/Python/device, and verify the import before debugging model code. Write down the expected behavior and test it on a small, inspectable input."
+          },
+          {
+            "title": "Checking the installed version",
+            "text": "Connect this topic to the lesson workflow: Create and activate a project virtual environment, install a build selected for the learner’s OS/Python/device, and verify the import before debugging model code. Write down the expected behavior and test it on a small, inspectable input."
+          },
+          {
+            "title": "Creating a test tensor",
+            "text": "Turn the expected behavior into a repeatable check, include at least one failure case, and document dependency or data-trust assumptions."
+          },
+          {
+            "title": "Checking device availability",
+            "text": "Check device/dtype placement and measure memory or numerical behavior on the actual target hardware; optional acceleration is not guaranteed."
+          },
+          {
+            "title": "Diagnosing installation and import errors",
+            "text": "Turn the expected behavior into a repeatable check, include at least one failure case, and document dependency or data-trust assumptions."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Guided PyTorch example",
+        "language": "python",
+        "code": "import torch\nprint(torch.__version__)\nprint(torch.cuda.is_available())",
+        "expected_output": "<installed PyTorch version>\nTrue or False depending on the supported CUDA runtime and hardware",
+        "run_instructions": "Save as example.py in a Python environment with a compatible PyTorch installation, then run `python example.py`. PyTorch snippets are not executed in the browser. For GPU- or package-specific snippets, install the matching supported dependencies first.",
+        "reset_steps": "Restore the code block, rerun it, and compare both the printed output and tensor metadata.",
+        "run_mode": "server-runner"
+      },
+      {
+        "type": "callout",
+        "title": "Version and execution note",
+        "text": "The code block is a local Python example, not a browser execution promise. CodeLeaf does not currently provide an isolated general-purpose Python runner; use a virtual environment. Installation commands, optional packages, hardware behavior, and rapidly evolving specialist APIs must be checked against the linked official documentation."
+      }
+    ],
+    "task": "Try it yourself: Create a project virtual environment, print the interpreter and torch version, then record a CPU/device-availability check. Record the observed result and one limitation; do not report an unrun training or performance result as measured.",
+    "task_acceptance_criteria": [
+      "The experiment demonstrates at least one relevant aspect of verifying the installation.",
+      "Record the expected and observed result, including shape/dtype/device information when relevant.",
+      "Explain one common failure mode, compatibility limitation, or evaluation caveat."
+    ],
+    "hints": [
+      "Begin with the smallest working example for verifying the installation and keep input shapes explicit.",
+      "Change only one variable at a time; compare a tensor property, a printed value, or a test assertion.",
+      "Use the linked official reference for any hardware-specific, optional-package, or version-sensitive behavior."
+    ],
+    "expected_output": "<installed PyTorch version>\nTrue or False depending on the supported CUDA runtime and hardware",
+    "troubleshooting": [
+      {
+        "symptom": "A tensor operation raises a shape, dtype, or device mismatch.",
+        "check": "Print .shape, .dtype, and .device for each input. Resolve the mismatch intentionally instead of changing dimensions blindly."
+      },
+      {
+        "symptom": "The example fails because an optional package or accelerator is unavailable.",
+        "check": "Check the installed PyTorch/package versions and device availability. Use the official installation selector and run the CPU-compatible path where appropriate."
+      },
+      {
+        "symptom": "The result differs across runs or machines.",
+        "check": "Fix the seed where useful, record versions and inputs, and document operations that remain nondeterministic or hardware dependent."
+      }
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Relying on assumptions instead of inspecting the data or output.",
+        "why": "Many ML failures come from incorrect shapes, labels, preprocessing, or execution mode rather than a syntax error.",
+        "fix": "Inspect representative inputs and add assertions for the expected shape, dtype, range, or behavior."
+      },
+      {
+        "problem": "Mixing training-time behavior with inference-time behavior.",
+        "why": "Dropout, normalization, gradient tracking, and optimizer updates can change how a model behaves.",
+        "fix": "Do not copy one CUDA/ROCm command for every machine; match the build to the supported hardware and Python version."
+      },
+      {
+        "problem": "Using a current or experimental API without recording its version assumptions.",
+        "why": "Hardware support and ecosystem APIs can change independently of the core package.",
+        "fix": "Pin compatible dependencies, record the environment, and test after upgrades."
+      }
+    ],
+    "summary": [
+      "Verifying the Installation belongs to the Installation and Development Environment learning path.",
+      "Practice importing torch, checking the installed version, creating a test tensor using the source-aligned checklist and read-example explanation.",
+      "Do not copy one CUDA/ROCm command for every machine; match the build to the supported hardware and Python version."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-011-questions.json",
+    "solution_notes": "The linked lesson knowledge-check answers and exercise reference solutions are kept in protected backend content files. A published endpoint must return learner-safe prompts only.",
+    "run_mode": "server-runner",
+    "execution_note": "Requires a local or separately isolated Python runner. Do not execute learner-supplied Python inside the FastAPI process or the production web container.",
+    "references": [
+      {
+        "title": "Get Started Locally",
+        "url": "https://pytorch.org/get-started/locally/",
+        "publisher": "PyTorch",
+        "checked_on": "2026-10-20",
+        "supports": [
+          "supported installation combinations",
+          "CPU and accelerator installation",
+          "package selector"
+        ]
+      },
+      {
+        "title": "Python venv Documentation",
+        "url": "https://docs.python.org/3/library/venv.html",
+        "publisher": "Python Software Foundation",
+        "checked_on": "2026-10-20",
+        "supports": [
+          "virtual environments"
+        ]
+      },
+      {
+        "title": "Learn the Basics",
+        "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro.html",
+        "publisher": "PyTorch Tutorials",
+        "checked_on": "2026-10-20",
+        "supports": [
+          "tensors",
+          "datasets and data loaders",
+          "transforms",
+          "models",
+          "autograd"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Get Started Locally",
+      "url": "https://pytorch.org/get-started/locally/",
+      "publisher": "PyTorch",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "supported installation combinations",
+        "CPU and accelerator installation",
+        "package selector"
+      ]
+    },
+    {
+      "title": "Python venv Documentation",
+      "url": "https://docs.python.org/3/library/venv.html",
+      "publisher": "Python Software Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "virtual environments"
+      ]
+    },
+    {
+      "title": "Learn the Basics",
+      "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro.html",
+      "publisher": "PyTorch Tutorials",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "tensors",
+        "datasets and data loaders",
+        "transforms",
+        "models",
+        "autograd"
+      ]
+    }
+  ],
+  "status": "draft"
+}

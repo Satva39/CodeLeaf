@@ -1,0 +1,121 @@
+{
+  "id": "c-lesson-011",
+  "slug": "basic-computer-architecture",
+  "title": "Basic Computer Architecture",
+  "sequence": 11,
+  "module_id": "c-module-02",
+  "module_slug": "computer-fundamentals-and-development-environment",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 9,
+  "prerequisites": [
+    "c-lesson-010"
+  ],
+  "previous_lesson_id": "c-lesson-010",
+  "next_lesson_id": "c-lesson-012",
+  "keywords": [
+    "basic-computer-architecture",
+    "computer-fundamentals-and-development-environment",
+    "cpu-memory-storage-and-input-output",
+    "bits-bytes-and-memory-addresses",
+    "how-instructions-and-data-are-represented"
+  ],
+  "source_syllabus_number": 11,
+  "subtopics": [
+    "CPU, memory, storage, and input/output",
+    "Bits, bytes, and memory addresses",
+    "How instructions and data are represented"
+  ],
+  "learning_outcomes": [
+    "Explain the main idea behind basic computer architecture in your own words.",
+    "Apply basic computer architecture to a minimal C example and predict the result.",
+    "Identify a relevant boundary, portability assumption, or failure mode."
+  ],
+  "content": {
+    "intro": "This lesson explores Basic Computer Architecture through an original visual, a compact C example and a check you can perform locally.",
+    "why_it_matters": "Understanding basic computer architecture helps you reason about C programs rather than relying on trial and error. It also helps you communicate assumptions, write safer code, and debug behavior across toolchains.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 2 roadmap",
+        "asset_path": "diagrams/module-02-overview.svg",
+        "alt_text": "Module 2 overview for Computer Fundamentals and Development Environment, showing this lesson in sequence with the surrounding syllabus topics.",
+        "caption": "Module visual overview; the numbered syllabus map remains the canonical order."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Basic Computer Architecture is studied as part of **Computer Fundamentals and Development Environment**. Start with the contract: identify the inputs or program state, the rule C applies, and the observable result. Then check the behavior in a small, repeatable example.\n\nThe source curriculum also lists: CPU, memory, storage, and input/output, Bits, bytes, and memory addresses, How instructions and data are represented. Keep these subtopics connected to the parent concept rather than treating them as unrelated trivia.\n\nIn C, details can depend on the selected language standard and implementation. Distinguish defined behavior from unspecified, implementation-defined, or undefined behavior, and consult the cited standard/compiler references when portability matters."
+      },
+      {
+        "type": "paragraph",
+        "title": "Practical reasoning",
+        "text": "For “Basic Computer Architecture”, write down the preconditions first. Identify valid inputs and boundaries, decide which C rule applies, then choose evidence that would falsify your assumption. Prefer a small test with a clear expected result and compile with diagnostics enabled."
+      },
+      {
+        "type": "list",
+        "title": "PDF subtopics to cover",
+        "items": [
+          {
+            "title": "CPU, memory, storage, and input/output",
+            "text": "Explain cpu, memory, storage, and input/output and connect it to the parent topic “Basic Computer Architecture”. Add a minimal example or counterexample during review."
+          },
+          {
+            "title": "Bits, bytes, and memory addresses",
+            "text": "Explain bits, bytes, and memory addresses and connect it to the parent topic “Basic Computer Architecture”. Add a minimal example or counterexample during review."
+          },
+          {
+            "title": "How instructions and data are represented",
+            "text": "Explain how instructions and data are represented and connect it to the parent topic “Basic Computer Architecture”. Add a minimal example or counterexample during review."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Inspecting storage sizes",
+        "language": "c",
+        "code": "#include <stdio.h>\n\nint main(void) {\n    printf(\"char: %zu byte(s)\\n\", sizeof(char));\n    printf(\"int: %zu byte(s)\\n\", sizeof(int));\n    return 0;\n}",
+        "expected_output": "char: 1 byte(s)\nint: implementation-dependent byte count",
+        "run_instructions": "Compile and run locally. `sizeof(char)` is always 1 C byte; `sizeof(int)` depends on the implementation. A C byte is not guaranteed to be eight bits.",
+        "reset_steps": "Restore the original example, rebuild with the same compiler flags, rerun the same inputs, and compare actual output with the stated result. For time-, platform-, or input-dependent examples, record the environment and do not expect identical values everywhere.",
+        "execution_mode": "static-validation",
+        "limitations": "The CodeLeaf lesson page does not run C code. Compile locally or use a separately deployed, isolated C runner; do not execute arbitrary learner code inside FastAPI."
+      },
+      {
+        "type": "callout",
+        "title": "Portability and safety check",
+        "text": "Use a documented standard mode; treat compiler extensions as extensions, not ISO C guarantees. Check return values, buffer bounds, and object lifetime. This course example is draft material and needs code review on the target toolchain before publication."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-011-questions.json"
+  },
+  "task": "In a scratch file, create one small example that demonstrates basic computer architecture. Explain the expected result before running it, compile with warnings enabled, and record one boundary case or portability question.",
+  "hints": [
+    "Reduce the program to the smallest example that still shows the concept.",
+    "Write down the input, expected result, and assumptions before running it.",
+    "Check the official language/compiler reference and test a boundary case."
+  ],
+  "expected_output": "A short, reproducible C example and explanation showing basic computer architecture, plus a note about one boundary or portability consideration.",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    "Treating basic computer architecture as a rule to memorize rather than a behavior to test.",
+    "Ignoring compiler warnings, input validity, or object lifetime.",
+    "Assuming behavior observed on one compiler is guaranteed by every C implementation."
+  ],
+  "summary": [
+    "Basic Computer Architecture belongs to Computer Fundamentals and Development Environment.",
+    "State the assumptions, verify the smallest example, and test boundaries.",
+    "Check the selected language standard and target compiler when portability matters."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C Language — Complete Learning Curriculum, Section B, module 2, topic 11.",
+    "Official and technical sources indexed in references/reference-index.json."
+  ],
+  "status": "draft"
+}

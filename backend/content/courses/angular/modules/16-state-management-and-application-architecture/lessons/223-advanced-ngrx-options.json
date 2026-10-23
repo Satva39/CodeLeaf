@@ -1,0 +1,151 @@
+{
+  "id": "angular-lesson-223",
+  "slug": "223-advanced-ngrx-options",
+  "title": "Advanced NgRx Options",
+  "sequence": 223,
+  "module_id": "angular-module-16",
+  "module_slug": "state-management-and-application-architecture",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "angular-lesson-222"
+  ],
+  "previous_lesson_id": "angular-lesson-222",
+  "next_lesson_id": "angular-lesson-224",
+  "keywords": [
+    "advanced-ngrx-options",
+    "state-management-and-application-architecture",
+    "ngrx-signal-store",
+    "feature-state-composition",
+    "devtools-and-action-tracing",
+    "testing-state-transitions"
+  ],
+  "source_syllabus_number": 223,
+  "subtopics": [
+    "NgRx Signal Store",
+    "Feature state composition",
+    "DevTools and action tracing",
+    "Testing state transitions"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of advanced ngrx options and name the relevant Angular concepts.",
+    "Apply at least one syllabus item from this lesson in a focused Angular example.",
+    "Verify expected behavior and identify one compatibility, failure or trust-boundary limitation."
+  ],
+  "content": {
+    "intro": "This lesson focuses on advanced ngrx options inside State Management and Application Architecture. Begin with the syllabus anchor “NgRx Signal Store”, name the data or UI behavior involved, and then verify the result with a focused example. The goal is to make one clear engineering decision rather than memorize an isolated API.",
+    "why_it_matters": "Advanced NgRx Options helps keep Angular features understandable as the application grows. A small explicit pattern is easier to reuse, test and review than scattered UI-specific logic.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Advanced NgRx Options concept map",
+        "asset_path": "diagrams/lessons/223-advanced-ngrx-options.svg",
+        "alt_text": "Lesson 223: Advanced NgRx Options. Four numbered stages connect the concept, its model, a practical application and verification.",
+        "caption": "Visual path for Advanced NgRx Options: use the numbered stages and the labels to connect ngrx signal store to a practical implementation and evidence."
+      },
+      {
+        "type": "paragraph",
+        "title": "Mental model",
+        "text": "**Advanced NgRx Options.** This is part of **State Management and Application Architecture**. Start from the concrete question “what changes in the application when this concept is used?” Then map the supplied syllabus terms to a small behavior, keep dependencies and trust boundaries visible, and verify what the example does. Advanced NgRx Options helps keep Angular features understandable as the application grows. A small explicit pattern is easier to reuse, test and review than scattered UI-specific logic."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics to connect",
+        "items": [
+          {
+            "title": "NgRx Signal Store",
+            "text": "Identify what “NgRx Signal Store” contributes to advanced ngrx options; write down its inputs, outputs or state changes before coding."
+          },
+          {
+            "title": "Feature state composition",
+            "text": "Connect “Feature state composition” to one small user-visible behavior. Keep the boundary explicit and consider empty, invalid or failure states."
+          },
+          {
+            "title": "DevTools and action tracing",
+            "text": "Use “DevTools and action tracing” as a checkpoint: verify the relevant behavior with a test, compiler diagnostic, browser inspection or documented human review."
+          },
+          {
+            "title": "Testing state transitions",
+            "text": "Identify what “Testing state transitions” contributes to advanced ngrx options; write down its inputs, outputs or state changes before coding."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Advanced NgRx Options",
+        "language": "typescript",
+        "code": "import { Injectable, computed, signal } from '@angular/core';\n\n@Injectable({ providedIn: 'root' })\nexport class CartState {\n  private items = signal(0);\n  readonly count = computed(() => this.items());\n  add() { this.items.update(n => n + 1); }\n}",
+        "expected_output": "Expected behavior: any consumer of CartState.count observes the derived item count after add() runs. Keep state ownership explicit.",
+        "run_instructions": "Create or use a disposable Angular CLI workspace with a compatible Angular/Node/TypeScript version. Put the snippet in the matching component, template, stylesheet or project configuration; satisfy imports and providers from the surrounding lesson context. Run `ng serve` for browser behavior and the project test command for assertions. Shell examples should be run from the stated workspace directory.",
+        "reset_steps": "Save or commit your starting point before changing configuration. Revert only files created or edited for this lesson; do not delete a shared workspace or production data.",
+        "execution_mode": "static-validation",
+        "limitations": "This is a source/example inspection, not a live Angular compiler or arbitrary-code runner. Resource and Signal Forms examples are version-sensitive; check official docs and the installed package signatures."
+      },
+      {
+        "type": "callout",
+        "title": "Engineering note",
+        "text": "Execution note: this CodeLeaf course presents Angular and TypeScript snippets as static teaching material. The browser playground does not compile Angular TypeScript; run examples in a locally generated Angular workspace and verify them with the matching CLI, tests and browser."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-223-knowledge-check.json",
+    "task": "Apply advanced ngrx options to a small feature in a disposable Angular learning project. Demonstrate at least one supplied subtopic (NgRx Signal Store), record the expected UI or console result, and include one test, failure case or version note.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates “NgRx Signal Store” in the context of Advanced NgRx Options.",
+      "The learner explains the expected result and includes an empty, invalid or failure case where appropriate.",
+      "Verification evidence matches the actual environment; a static CodeLeaf snippet is not described as a successfully executed Angular build."
+    ],
+    "hints": [
+      "Start with the syllabus item “NgRx Signal Store” and write down the expected behavior before changing code.",
+      "Keep the example small; include only dependencies, inputs, providers and state that the example actually needs.",
+      "Reproduce the intended behavior in a pinned local Angular workspace and inspect both normal and failure paths."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Copying a snippet without checking its surrounding context.",
+        "why": "Angular examples can depend on imports, providers, template context or a particular framework version.",
+        "fix": "Use the run instructions and validate against the exact generated workspace."
+      },
+      {
+        "problem": "Treating an attractive UI result as proof of correctness.",
+        "why": "Accessibility, boundary cases, failures and server-side rules may not be visible in the happy path.",
+        "fix": "Add a focused assertion and test at least one realistic failure state."
+      },
+      {
+        "problem": "Assuming client code guarantees authorization or validates all external data.",
+        "why": "Browser code is controlled by the client and can receive unexpected network responses.",
+        "fix": "Validate external values and enforce protected business rules on the backend."
+      }
+    ],
+    "summary": [
+      "Advanced NgRx Options has a concrete purpose within State Management and Application Architecture.",
+      "Use “NgRx Signal Store” in a small example and verify the behavior.",
+      "Check version compatibility, failure states and trust boundaries before reusing the pattern."
+    ],
+    "run_mode": "static-validation",
+    "execution_mode": "static-validation",
+    "run_instructions": "Create or use a disposable Angular CLI workspace with a compatible Angular/Node/TypeScript version. Put the snippet in the matching component, template, stylesheet or project configuration; satisfy imports and providers from the surrounding lesson context. Run `ng serve` for browser behavior and the project test command for assertions. Shell examples should be run from the stated workspace directory.",
+    "reset_steps": "Save or commit your starting point before changing configuration. Revert only files created or edited for this lesson; do not delete a shared workspace or production data.",
+    "version_notes": "Version-sensitive topics require checking the official Angular version compatibility and release documentation at the time of use."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Angular Signals",
+      "url": "https://angular.dev/guide/signals",
+      "publisher": "Angular documentation",
+      "checked_on": "2026-10-14"
+    },
+    {
+      "title": "RxJS interop with Angular",
+      "url": "https://angular.dev/ecosystem/rxjs-interop",
+      "publisher": "Angular documentation",
+      "checked_on": "2026-10-14"
+    }
+  ],
+  "technical_review_date": "2026-10-14",
+  "status": "draft",
+  "status_note": "Complete syllabus-aligned draft generated from the attached curriculum. Technical examples and version-sensitive APIs require human review and local execution before publication."
+}

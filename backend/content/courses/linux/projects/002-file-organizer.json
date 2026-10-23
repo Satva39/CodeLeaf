@@ -1,0 +1,138 @@
+{
+  "id": "linux-project-002",
+  "slug": "file-organizer",
+  "title": "File Organizer",
+  "sequence": 2,
+  "tier": "beginner",
+  "objective": "Organize a designated practice directory into categorized folders without overwriting data unexpectedly.",
+  "prerequisite_lesson_ids": [
+    "linux-lesson-027"
+  ],
+  "recommended_module_ranges": [
+    4,
+    6,
+    14,
+    15
+  ],
+  "skills": [
+    "File discovery",
+    "Extension-based grouping",
+    "Duplicate-name handling",
+    "Dry-run preview and operation logs"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Milestone 1: File discovery",
+      "acceptance_criteria": [
+        "Demonstrate file discovery using synthetic data or a disposable Linux environment.",
+        "Record repeatable verification steps and expected/observed results.",
+        "Document one failure mode, safety boundary, and recovery approach."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Milestone 2: Extension-based grouping",
+      "acceptance_criteria": [
+        "Demonstrate extension-based grouping using synthetic data or a disposable Linux environment.",
+        "Record repeatable verification steps and expected/observed results.",
+        "Document one failure mode, safety boundary, and recovery approach."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Milestone 3: Duplicate-name handling",
+      "acceptance_criteria": [
+        "Demonstrate duplicate-name handling using synthetic data or a disposable Linux environment.",
+        "Record repeatable verification steps and expected/observed results.",
+        "Document one failure mode, safety boundary, and recovery approach."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Milestone 4: Dry-run preview and operation logs",
+      "acceptance_criteria": [
+        "Demonstrate dry-run preview and operation logs using synthetic data or a disposable Linux environment.",
+        "Record repeatable verification steps and expected/observed results.",
+        "Document one failure mode, safety boundary, and recovery approach."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "contents": "# File Organizer\n\nOrganize a designated practice directory into categorized folders without overwriting data unexpectedly.\n\n## Required features\n- [ ] File discovery\n- [ ] Extension-based grouping\n- [ ] Duplicate-name handling\n- [ ] Dry-run preview and operation logs\n\nUse synthetic data and a disposable VM. Do not place passwords, private keys, or production data in this project. Document setup, tests, distribution/kernel assumptions, limitations, and recovery. State whether a check was run locally; CodeLeaf does not execute arbitrary Linux/Bash commands inside the FastAPI web process.\n"
+    },
+    {
+      "path": "bin/main.sh",
+      "language": "bash",
+      "contents": "#!/usr/bin/env bash\n# File Organizer\n# Safe draft scaffold; fill in behavior only after defining inputs and expected results.\nset -u\n\nusage() {\n  printf 'Usage: %s [--dry-run] [--help]\\n' \"${0##*/}\"\n}\n\nmain() {\n  case ${1:-help} in\n    help|-h|--help) usage ;;\n    --dry-run) printf 'Dry run: no system changes requested.\\n' ;;\n    *) printf 'Unsupported option: %s\\n' \"$1\" >&2; return 2 ;;\n  esac\n}\n\nmain \"${1:-help}\"\n"
+    }
+  ],
+  "required_features": [
+    "File discovery",
+    "Extension-based grouping",
+    "Duplicate-name handling",
+    "Dry-run preview and operation logs"
+  ],
+  "stretch_features": [
+    "Add automated tests over fixtures and boundary cases.",
+    "Add structured logs and machine-readable output.",
+    "Add a documented dry-run and rollback/recovery path.",
+    "Run static checks such as ShellCheck where applicable."
+  ],
+  "tests": [
+    {
+      "name": "Functional behavior",
+      "mode": "human_review",
+      "criteria": [
+        "Required behavior works on synthetic inputs.",
+        "Expected output and exit status are documented."
+      ]
+    },
+    {
+      "name": "Safety and recovery",
+      "mode": "human_review",
+      "criteria": [
+        "Dry-run or safe preview is available where state changes are possible.",
+        "No private credentials are committed.",
+        "A tested backup or rollback procedure is documented where relevant."
+      ]
+    },
+    {
+      "name": "Compatibility",
+      "mode": "human_review",
+      "criteria": [
+        "Distribution and tool versions are identified.",
+        "Missing dependencies and unsupported cases have actionable messages."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correctness and required features",
+      "points": 30
+    },
+    {
+      "criterion": "Tests and reproducible evidence",
+      "points": 25
+    },
+    {
+      "criterion": "Safety, security, and recovery",
+      "points": 20
+    },
+    {
+      "criterion": "Design, maintainability, and documentation",
+      "points": 15
+    },
+    {
+      "criterion": "Compatibility and stated limitations",
+      "points": 10
+    }
+  ],
+  "review_method": "Human review or execution in a separately isolated runner; the platform web process must not execute arbitrary Bash/Linux commands.",
+  "reference_solution_file": "projects/solutions/002-file-organizer-reference.json",
+  "status": "draft",
+  "notes": "Draft project based on Linux.pdf Section D. Relevant module numbers are 4, 6, 14, 15; require actual evidence of verification and recovery rather than claiming completion from a successful first run."
+}

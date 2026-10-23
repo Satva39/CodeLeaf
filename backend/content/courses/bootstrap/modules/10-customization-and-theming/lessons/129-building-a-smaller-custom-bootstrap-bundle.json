@@ -1,0 +1,179 @@
+{
+  "id": "bootstrap-lesson-129",
+  "slug": "building-a-smaller-custom-bootstrap-bundle",
+  "title": "Building a Smaller Custom Bootstrap Bundle",
+  "sequence": 129,
+  "module_id": "bootstrap-module-10",
+  "module_slug": "customization-and-theming",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "bootstrap-lesson-128"
+  ],
+  "previous_lesson_id": "bootstrap-lesson-128",
+  "next_lesson_id": "bootstrap-lesson-130",
+  "keywords": [
+    "building a smaller custom bootstrap bundle",
+    "bootstrap",
+    "bootstrap customization and theming",
+    "selecting required sass imports",
+    "excluding unused features",
+    "selecting javascript plugins"
+  ],
+  "source_syllabus_number": 129,
+  "subtopics": [
+    "Selecting required Sass imports",
+    "Excluding unused features",
+    "Selecting JavaScript plugins",
+    "Understanding dependency requirements",
+    "Evaluating maintainability against bundle-size savings"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of building a smaller custom bootstrap bundle and when it is appropriate.",
+    "Apply selecting required sass imports using the documented Bootstrap 5.3 pattern.",
+    "Check excluding unused features and identify one likely failure mode."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study building a smaller custom bootstrap bundle and connect it to a small implementation or review task. The included subtopics preserve the attached Bootstrap curriculum outline.",
+    "why_it_matters": "Building a Smaller Custom Bootstrap Bundle is a customization capability. Prefer built-in utilities first, then CSS variables for local changes, and Sass/build customization only when the design needs generated framework changes.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Selective production build",
+        "asset_path": "diagrams/production-build-pipeline.svg",
+        "alt_text": "A production pipeline moves selected Sass and JavaScript imports through a bundler, minification and checks, and then deployable CSS and JS assets.",
+        "caption": "Show source imports passing through bundling and optimization before deployment."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Building a Smaller Custom Bootstrap Bundle is a customization capability. Prefer built-in utilities first, then CSS variables for local changes, and Sass/build customization only when the design needs generated framework changes."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          "Selecting required Sass imports",
+          "Excluding unused features",
+          "Selecting JavaScript plugins",
+          "Understanding dependency requirements",
+          "Evaluating maintainability against bundle-size savings"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "import { Collapse, Dropdown, Modal } from \"bootstrap\";\n\n// Prefer importing only plugins the application uses.\n// Verify the generated production bundle rather than assuming tree-shaking.",
+        "expected_output": "The example illustrates building a smaller custom bootstrap bundle. Expected review result: static-validation can be followed and the intended behavior or configuration can be explained; the lesson-specific acceptance checks still apply.",
+        "run_instructions": "Treat this as a build-configuration exercise. Run it only in a local project with the documented Bootstrap 5.3.8 Sass or bundler setup.",
+        "reset_steps": "Restore the original example, undo one change at a time, and repeat the same browser/build check. Do not keep temporary debugging rules in the final implementation."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Use the pinned Bootstrap 5.3.x baseline, follow the official component documentation, and verify semantic HTML, responsive behavior, and keyboard access before reusing the pattern."
+      }
+    ],
+    "task": "Apply building a smaller custom bootstrap bundle in a small branch or throwaway build. Compare the output before and after the change and record when this approach is preferable to a built-in utility.",
+    "task_acceptance_criteria": [
+      "Explain the purpose and appropriate use of building a smaller custom bootstrap bundle.",
+      "Use the documented class, component, API, or workflow correctly.",
+      "Record a responsive, accessibility, or build verification relevant to this example."
+    ],
+    "hints": [
+      "Start with the smallest source example in this lesson.",
+      "Change one class, attribute, or configuration item at a time.",
+      "Compare expected behavior with the result; consult the linked official page if the version-specific behavior differs."
+    ],
+    "expected_output": "A working or reviewed example of building a smaller custom bootstrap bundle, with a short explanation and recorded verification steps.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-129-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating building a smaller custom bootstrap bundle as a visual-only change.",
+        "why": "A class or style does not automatically add semantic meaning, application logic, or secure server behavior.",
+        "fix": "Use the appropriate HTML semantics and verify the actual interaction."
+      },
+      {
+        "problem": "Checking only the default viewport or happy path.",
+        "why": "Responsive changes and interaction states can reveal issues that are not visible in a single screenshot.",
+        "fix": "Repeat the task at a narrow and a wide viewport and include keyboard/error state checks where relevant."
+      }
+    ],
+    "summary": [
+      "Building a Smaller Custom Bootstrap Bundle belongs to the ordered Bootstrap syllabus topic 129.",
+      "Core check: Selecting required Sass imports.",
+      "Use the official documentation and record what was tested before promoting the lesson from draft."
+    ],
+    "references": [
+      {
+        "title": "Building a Smaller Custom Bootstrap Bundle",
+        "url": "https://getbootstrap.com/docs/5.3/customize/sass/",
+        "publisher": "Bootstrap official documentation",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "Building a Smaller Custom Bootstrap Bundle",
+          "Selecting required Sass imports",
+          "Excluding unused features"
+        ]
+      },
+      {
+        "title": "Customize overview",
+        "url": "https://getbootstrap.com/docs/5.3/customize/overview/",
+        "publisher": "Bootstrap official documentation",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "Building a Smaller Custom Bootstrap Bundle"
+        ]
+      },
+      {
+        "title": "CSS variables",
+        "url": "https://getbootstrap.com/docs/5.3/customize/css-variables/",
+        "publisher": "Bootstrap official documentation",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "Building a Smaller Custom Bootstrap Bundle"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [
+    "../exercises/018-build-a-reduced-bootstrap-css-and-javascript-bundle.json"
+  ],
+  "sources": [
+    {
+      "title": "Building a Smaller Custom Bootstrap Bundle",
+      "url": "https://getbootstrap.com/docs/5.3/customize/sass/",
+      "publisher": "Bootstrap official documentation",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "Building a Smaller Custom Bootstrap Bundle",
+        "Selecting required Sass imports",
+        "Excluding unused features"
+      ]
+    },
+    {
+      "title": "Customize overview",
+      "url": "https://getbootstrap.com/docs/5.3/customize/overview/",
+      "publisher": "Bootstrap official documentation",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "Building a Smaller Custom Bootstrap Bundle"
+      ]
+    },
+    {
+      "title": "CSS variables",
+      "url": "https://getbootstrap.com/docs/5.3/customize/css-variables/",
+      "publisher": "Bootstrap official documentation",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "Building a Smaller Custom Bootstrap Bundle"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the attached Bootstrap syllabus; requires technical review, local execution, accessibility checks, and editorial approval."
+}

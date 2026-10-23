@@ -1,0 +1,10 @@
+{
+  "id": "sql-exercise-solution-028",
+  "exercise_id": "sql-exercise-028",
+  "title": "Recursive Queries reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "WITH RECURSIVE org AS (SELECT employee_id, full_name, manager_id, 0 AS depth FROM employees WHERE manager_id IS NULL UNION ALL SELECT e.employee_id, e.full_name, e.manager_id, org.depth + 1 FROM employees e JOIN org ON e.manager_id = org.employee_id) SELECT * FROM org ORDER BY depth, employee_id;",
+  "explanation": "The query traverses manager-to-report edges from top-level employees. Review the query against the lab data and explain why the chosen joins, filters, aggregation grain, ordering, or transaction boundary is correct.",
+  "review_notes": "Repository-only illustration. Do not expose this file through public content endpoints; replace token-only grading with engine-backed tests before publishing."
+}

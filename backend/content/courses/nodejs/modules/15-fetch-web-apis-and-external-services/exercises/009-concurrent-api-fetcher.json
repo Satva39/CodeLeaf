@@ -1,0 +1,69 @@
+{
+  "id": "nodejs-exercise-009",
+  "slug": "concurrent-api-fetcher",
+  "title": "Concurrent API Fetcher",
+  "sequence": 9,
+  "module_id": "nodejs-module-15",
+  "lesson_id": "nodejs-lesson-119",
+  "lesson_slug": "introduction-to-the-fetch-api-in-nodejs",
+  "type": "coding",
+  "difficulty": "intermediate",
+  "status": "draft",
+  "prompt": "Request independent resources concurrently and normalize successful and failed results. Submit a small source snippet or focused implementation excerpt and verify the runtime behavior locally. CodeLeaf only performs a limited static pattern check here; it does not execute learner code.",
+  "target_skills": [
+    "Concurrent API Fetcher",
+    "Request independent resources concurrently and normalize successful and failed results"
+  ],
+  "starter": {
+    "language": "javascript",
+    "code": "async function getJson(url) {\n  const response = await fetch(url);\n  if (!response.ok) throw new Error(`HTTP ${response.status}`);\n  return response.json();\n}\nconst results = await Promise.allSettled([\n  getJson('https://example.com/a.json'),\n  getJson('https://example.com/b.json')\n]);\nconsole.log(results.length);",
+    "execution_mode": "static-validation",
+    "run_instructions": "Use a separate local Node.js project. Place the snippet in an appropriate .mjs file, provision any named package/file/service, and run documented normal/error cases. The platform does not execute arbitrary code."
+  },
+  "public_tests": [
+    {
+      "name": "Required source markers",
+      "method": "contains_all",
+      "required_strings": [
+        "Promise.allSettled",
+        "fetch",
+        "response.ok"
+      ],
+      "note": "A static marker check is not a substitute for executing tests in a separate isolated environment."
+    }
+  ],
+  "acceptance_criteria": [
+    "The implementation addresses the stated task and uses the intended Node.js API/pattern.",
+    "Input and expected output or observable behavior are documented.",
+    "At least one relevant failure, boundary, authorization, or resource-cleanup case is addressed.",
+    "The example is tested locally with a supported Node.js version before being considered complete."
+  ],
+  "hints": [
+    "Write down the expected result before running the code.",
+    "Keep input validation and error handling close to the boundary where data enters.",
+    "Test one normal input and one failure or edge case."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "Promise.allSettled",
+      "fetch",
+      "response.ok"
+    ],
+    "case_sensitive": false
+  },
+  "solution": {},
+  "solution_file": "solutions/009-concurrent-api-fetcher-solution.json",
+  "retry_policy": {
+    "unlimited_attempts": true,
+    "xp_once_per_activity": true,
+    "award_only_after_grader_pass": true
+  },
+  "execution_mode": "static-validation",
+  "references": [
+    "https://nodejs.org/api/globals.html#fetch",
+    "https://nodejs.org/learn"
+  ],
+  "topic_references_from_pdf": "81–89, 119–127",
+  "status_note": "Limited static-pattern assessment. No arbitrary-code execution is provided by the current CodeLeaf playground."
+}

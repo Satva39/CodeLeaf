@@ -1,0 +1,198 @@
+{
+  "id": "go-lesson-006",
+  "slug": "how-go-programs-work",
+  "title": "How Go Programs Work",
+  "sequence": 6,
+  "module_id": "go-module-01",
+  "module_slug": "introduction-to-go",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "go-lesson-005"
+  ],
+  "previous_lesson_id": "go-lesson-005",
+  "next_lesson_id": "go-lesson-007",
+  "keywords": [
+    "how go programs work",
+    "source code and compilation",
+    "compiler linker and executable binaries",
+    "go runtime",
+    "standard library and external packages",
+    "a basic overview of program execution",
+    "Go",
+    "Golang"
+  ],
+  "source_syllabus_number": 6,
+  "subtopics": [
+    "Source code and compilation",
+    "Compiler, linker, and executable binaries",
+    "Go runtime",
+    "Standard library and external packages",
+    "A basic overview of program execution"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and behavior of how go programs work.",
+    "Apply at least one lesson concept—source code and compilation—in a small Go example or workflow.",
+    "Predict a representative result, then test a boundary case and explain any difference."
+  ],
+  "exercise_files": [],
+  "content": {
+    "intro": "How Go Programs Work is part of the foundation for using Go reliably. Start by identifying the goal, checking the toolchain or runtime assumptions, and reproducing the result with the documented Go commands. Do not assume that a command or setting is identical on every operating system.",
+    "why_it_matters": "You need this topic to set up a repeatable workflow and distinguish an installation/configuration problem from a language or application defect.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "How a Go program runs",
+        "asset_path": "diagrams/concept-01-go-program-lifecycle.svg",
+        "alt_text": "Source files become a linked executable, which runs with the Go runtime and imported packages. Labeled phases: Source files; Compile & link; Executable; Runtime + standard library.",
+        "caption": "Source files become a linked executable, which runs with the Go runtime and imported packages."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "How Go Programs Work is part of the foundation for using Go reliably. Start by identifying the goal, checking the toolchain or runtime assumptions, and reproducing the result with the documented Go commands. Do not assume that a command or setting is identical on every operating system."
+      },
+      {
+        "type": "list",
+        "title": "Topics covered in this lesson",
+        "items": [
+          {
+            "title": "Source code and compilation",
+            "text": "Be able to explain source code and compilation, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Compiler, linker, and executable binaries",
+            "text": "Be able to explain compiler, linker, and executable binaries, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Go runtime",
+            "text": "Be able to explain go runtime, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Standard library and external packages",
+            "text": "Be able to explain standard library and external packages, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "A basic overview of program execution",
+            "text": "Be able to explain a basic overview of program execution, identify the inputs or program state it affects, and name one boundary case worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: How Go Programs Work",
+        "language": "go",
+        "code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"Go is a statically typed, compiled language.\")\n}\n",
+        "expected_output": "Go is a statically typed, compiled language.",
+        "run_mode": "server-runner",
+        "run_instructions": "Save as main.go and run `go run main.go`."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through the example",
+        "text": "First, identify the input or initial state in the example for how go programs work. Next, trace the operation or contract that matters, and predict the result before running it. If the example depends on a version-specific feature, a driver, or an external service, follow the stated prerequisites rather than assuming it works in a browser preview."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to one subtopic—Source code and compilation—and add a second case that could fail or behave differently. Write down the expected result before testing."
+      }
+    ],
+    "task": "Create a small example connected to “How Go Programs Work”. Use Source code and compilation as the starting point, predict the output, then add one invalid, empty, or boundary case and document its result.",
+    "task_acceptance_criteria": [
+      "The example demonstrates source code and compilation or a closely related concept.",
+      "Inputs, relevant state changes, and expected output are clear.",
+      "At least one boundary case is deliberately tested or documented.",
+      "Errors are handled honestly and no success state is reported when the operation fails."
+    ],
+    "hints": [
+      "Start from the simplest example related to source code and compilation.",
+      "Predict the result manually and annotate the value that changes at each step.",
+      "Run `gofmt` and the appropriate local `go run`, `go test`, `go vet`, or inspection command when prerequisites are available."
+    ],
+    "expected_output": "Go is a statically typed, compiled language.",
+    "run_mode": "server-runner",
+    "knowledge_check_file": "exams/question-files/lesson-006-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the happy-path output proves all inputs are safe.",
+        "why": "Empty, malformed, boundary, or concurrent cases may follow different paths.",
+        "fix": "Add focused tests for a normal input and at least one relevant edge case."
+      },
+      {
+        "problem": "Ignoring returned errors or external-system status.",
+        "why": "Go APIs commonly report expected failures as explicit error values.",
+        "fix": "Check errors close to the operation, add useful context when propagating, and clean up resources."
+      },
+      {
+        "problem": "Using an API or syntax without checking the selected Go version.",
+        "why": "Language and standard-library capabilities can change between releases.",
+        "fix": "Record `go version`, inspect the `go` directive, and read official release notes for version-specific topics."
+      }
+    ],
+    "summary": [
+      "How Go Programs Work provides a reusable rule or workflow for Go programs.",
+      "The subtopics to revisit are: Source code and compilation; Compiler, linker, and executable binaries; Go runtime; Standard library and external packages; A basic overview of program execution.",
+      "Prefer a small reproducible example, explicit errors, appropriate tests, and version-matched official documentation."
+    ],
+    "references": [
+      {
+        "title": "Go Documentation",
+        "url": "https://go.dev/doc/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "tutorials",
+          "language concepts",
+          "tooling",
+          "application development"
+        ]
+      },
+      {
+        "title": "The Go Programming Language Specification",
+        "url": "https://go.dev/ref/spec",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "syntax",
+          "types",
+          "control flow",
+          "interfaces"
+        ]
+      }
+    ],
+    "accessibility_note": "The diagram includes descriptive alt text and a text caption. Code examples are also described in prose; do not rely on color alone to understand a sequence.",
+    "execution_note": "Save as main.go and run `go run main.go`. Examples that need a database driver, external service, isolated execution environment, or version-specific feature are labeled as static examples and should not be treated as already executed."
+  },
+  "sources": [
+    {
+      "title": "Go Documentation",
+      "url": "https://go.dev/doc/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tutorials",
+        "language concepts",
+        "tooling",
+        "application development"
+      ]
+    },
+    {
+      "title": "The Go Programming Language Specification",
+      "url": "https://go.dev/ref/spec",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "syntax",
+        "types",
+        "control flow",
+        "interfaces"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied Go.pdf syllabus mapping. Human review and local runtime verification are required before publication."
+}

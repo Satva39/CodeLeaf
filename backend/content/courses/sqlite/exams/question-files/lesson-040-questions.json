@@ -1,0 +1,50 @@
+{
+  "id": "sqlite-l040-question-set",
+  "lesson_id": "sqlite-lesson-040",
+  "lesson_slug": "sorting-results-with-order-by",
+  "title": "Knowledge check: Sorting Results with ORDER BY",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "question_count": 3,
+  "questions": [
+    {
+      "id": "sqlite-l040-q01",
+      "type": "single_choice",
+      "prompt": "Which practice best applies to “Sorting Results with ORDER BY”?",
+      "options": [
+        "Make filtering, ordering and pagination explicit, and test edge cases such as NULL, duplicates and empty result sets.",
+        "Rely on undocumented behavior and skip checking the actual SQLite runtime.",
+        "Concatenate untrusted input directly into SQL and suppress errors.",
+        "Assume the result is correct without checking the schema, data or expected output."
+      ],
+      "answer_key": "Make filtering, ordering and pagination explicit, and test edge cases such as NULL, duplicates and empty result sets.",
+      "explanation": "Sorting Results with ORDER BY: Make filtering, ordering and pagination explicit, and test edge cases such as NULL, duplicates and empty result sets. SQL result ordering is not guaranteed unless ORDER BY specifies it."
+    },
+    {
+      "id": "sqlite-l040-q02",
+      "type": "single_choice",
+      "prompt": "When a minimal example for “Sorting Results with ORDER BY” behaves unexpectedly, what is the best next step?",
+      "options": [
+        "Reduce it to a reproducible fixture, inspect schema and values, and verify the expected result.",
+        "Change several unrelated statements at once and rerun against important production data.",
+        "Ignore the runtime version and assume every SQLite build includes every optional feature.",
+        "Disable constraints so the current test always passes."
+      ],
+      "answer_key": "Reduce it to a reproducible fixture, inspect schema and values, and verify the expected result.",
+      "explanation": "A controlled fixture helps isolate behavior and makes the test repeatable. Preserve constraints and state the assumptions you verified."
+    },
+    {
+      "id": "sqlite-l040-q03",
+      "type": "single_choice",
+      "prompt": "What should be recorded before depending on an SQLite capability related to “Sorting Results with ORDER BY”?",
+      "options": [
+        "The installed CLI only; the linked library and build options never differ.",
+        "The library version linked into the application, relevant feature/build support, and a small compatibility test.",
+        "Only the operating system name.",
+        "Nothing, because SQLite automatically upgrades the application runtime."
+      ],
+      "answer_key": "The library version linked into the application, relevant feature/build support, and a small compatibility test.",
+      "explanation": "The CLI and application may be linked to different SQLite versions, and some capabilities depend on compile-time options or loaded extensions."
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "java-exercise-solution-021",
+  "exercise_id": "java-exercise-021",
+  "title": "Library Book Tracker reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "language": "java",
+  "answer": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Main {\n    record Book(String title, boolean available) { }\n    public static void main(String[] args) {\n        List<Book> books = new ArrayList<>(List.of(\n            new Book(\"Effective Java\", true), new Book(\"Java Puzzlers\", false)));\n        books.stream().filter(Book::available).map(Book::title).forEach(System.out::println);\n    }\n}",
+  "explanation": "Separate the book data from the operation that finds available titles. Lending and returns should update one authoritative state and prevent a book from being borrowed twice.",
+  "hidden_tests": [
+    {
+      "case": "normal case",
+      "input_or_setup": "Use the deterministic sample data or representative valid input described in the exercise.",
+      "expected_behavior": "Effective Java",
+      "purpose": "Verify the main behavior and the output contract."
+    },
+    {
+      "case": "boundary case",
+      "input_or_setup": "Test empty, zero, minimum/maximum, duplicate, or end-of-range input as appropriate to the exercise.",
+      "expected_behavior": "The result matches the documented boundary rule and does not silently corrupt state.",
+      "purpose": "Check a boundary or invariant."
+    },
+    {
+      "case": "invalid or failure case",
+      "input_or_setup": "Provide malformed input or simulate a missing file, unavailable endpoint, missing configuration, or database failure where relevant.",
+      "expected_behavior": "The operation fails clearly or returns a safe result; resources are released and secrets are not printed.",
+      "purpose": "Check explicit error behavior and cleanup."
+    }
+  ],
+  "review_notes": "Repository-only reference material. Keep it out of public API responses and frontend bundles. The platform grader is only a required-token smoke check; complete task-specific execution tests in an isolated Java runner before publication.",
+  "sample_expected_result": "Effective Java"
+}

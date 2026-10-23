@@ -1,0 +1,26 @@
+{
+  "id": "swift-project-011-reference-solution",
+  "project_id": "swift-project-011",
+  "title": "Reference approach: Personal Knowledge Manager",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "approach": "The reference searches notes and tags. A complete app needs atomic import/export, persistence, navigation, localization, accessibility labels, conflict handling, and careful treatment of imported untrusted data.",
+  "reference_snippets": [
+    {
+      "purpose": "Runnable core-logic reference (not a complete production application)",
+      "language": "swift",
+      "code": "import Foundation\n\nstruct Note: Identifiable {\n    let id: UUID\n    var title: String\n    var body: String\n    var tags: Set<String>\n}\n\nfunc search(_ notes: [Note], query: String) -> [Note] {\n    notes.filter { note in\n        note.title.localizedCaseInsensitiveContains(query) ||\n        note.body.localizedCaseInsensitiveContains(query) ||\n        note.tags.contains { $0.localizedCaseInsensitiveContains(query) }\n    }\n}\n\nlet notes = [Note(id: UUID(), title: \"Swift concurrency\", body: \"Tasks and actors\", tags: [\"swift\", \"async\"])]\nprint(search(notes, query: \"ASYNC\").map(\\.title))\n"
+    },
+    {
+      "purpose": "Next implementation and verification steps",
+      "language": "text",
+      "code": "The reference searches notes and tags. A complete app needs atomic import/export, persistence, navigation, localization, accessibility labels, conflict handling, and careful treatment of imported untrusted data. Run in the stated toolchain, then add tests for normal, boundary, invalid-input, and failure cases before considering the project complete."
+    }
+  ],
+  "review_notes": [
+    "This protected code is a compact reference for the central business rule, not proof of a finished production app.",
+    "Compile and run the snippet with the intended Swift version and target.",
+    "Add automated tests, persistence/network/UI integration as specified in the project milestones.",
+    "Keep credentials out of source files and validate external input."
+  ]
+}

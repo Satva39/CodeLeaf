@@ -1,0 +1,160 @@
+{
+  "id": "nodejs-lesson-181",
+  "slug": "introduction-to-testing-nodejs-applications",
+  "title": "Introduction to Testing Node.js Applications",
+  "sequence": 181,
+  "module_id": "nodejs-module-21",
+  "module_slug": "testing-and-quality-assurance",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "nodejs-lesson-180"
+  ],
+  "previous_lesson_id": "nodejs-lesson-180",
+  "next_lesson_id": "nodejs-lesson-182",
+  "keywords": [
+    "Introduction to Testing Node.js Applications",
+    "Why automated tests matter",
+    "Test levels",
+    "Test isolation",
+    "Deterministic tests",
+    "Node.js",
+    "JavaScript runtime"
+  ],
+  "source_syllabus_number": 181,
+  "subtopics": [
+    "Why automated tests matter",
+    "Test levels",
+    "Test isolation",
+    "Deterministic tests",
+    "Test-driven development concepts"
+  ],
+  "learning_outcomes": [
+    "Describe Why automated tests matter and explain how it relates to Introduction to Testing Node.js Applications.",
+    "Demonstrate Test levels in a small Node.js example and predict the observable result.",
+    "Test a failure, boundary, lifecycle, or version-compatibility case involving Test isolation."
+  ],
+  "content": {
+    "intro": "Introduction to Testing Node.js Applications is part of testing and quality assurance. This lesson connects Why automated tests matter, Test levels, Test isolation to a concrete Node.js example. Focus on the behavior you can observe, the assumptions the API makes, and one failure or boundary case.",
+    "why_it_matters": "Tests make expected behavior repeatable and reveal regressions across functions, modules, APIs, and asynchronous work. Test both expected results and failure cases; ensure cleanup runs even when a test fails.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Introduction to Testing Node.js Applications: concept map",
+        "asset_path": "diagrams/lessons/lesson-181-introduction-to-testing-nodejs-applications.svg",
+        "alt_text": "Concept map for lesson 181: Introduction to Testing Node.js Applications. It shows representative syllabus concepts in a Concept → Example → Verification sequence.",
+        "caption": "Read the three labeled cards from left to right; the lesson steps connect the concept to a practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Tests make expected behavior repeatable and reveal regressions across functions, modules, APIs, and asynchronous work. Use the built-in test runner or a documented project tool, assert observable behavior, and isolate tests from real services."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Why automated tests matter",
+            "text": "Tests should assert observable behavior and include failure cases. Deterministic inputs and cleanup are more valuable than depending on network state or exact timing."
+          },
+          {
+            "title": "Test levels",
+            "text": "Tests should assert observable behavior and include failure cases. Deterministic inputs and cleanup are more valuable than depending on network state or exact timing."
+          },
+          {
+            "title": "Test isolation",
+            "text": "Tests should assert observable behavior and include failure cases. Deterministic inputs and cleanup are more valuable than depending on network state or exact timing."
+          },
+          {
+            "title": "Deterministic tests",
+            "text": "Tests should assert observable behavior and include failure cases. Deterministic inputs and cleanup are more valuable than depending on network state or exact timing."
+          },
+          {
+            "title": "Test-driven development concepts",
+            "text": "Tests should assert observable behavior and include failure cases. Deterministic inputs and cleanup are more valuable than depending on network state or exact timing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "import test from 'node:test';\nimport assert from 'node:assert/strict';\n\ntest('addition returns the expected total', () => {\n  assert.equal(2 + 3, 5);\n});",
+        "expected_output": "Run the file with node --test; the test runner reports the passing test.",
+        "run_instructions": "Inspect this JavaScript in a local Node.js project. It is a static-validation teaching example: CodeLeaf does not run this arbitrary example in the API process. If it needs a package, file, server, database, or external service, provision that dependency in a separate local project and follow its official setup instructions. Run with `node example.mjs` when the example is self-contained, or adapt the required imports/inputs first.",
+        "reset_steps": "Restore the starting snippet and inputs. Repeat with one different valid value and one invalid, missing, empty, or failure input appropriate to the example.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Start with the code shown above. Predict the result before running it, then verify it against: Run the file with node --test; the test runner reports the passing test. Change one input or simulate one failure and describe how the behavior should change. Test both expected results and failure cases; ensure cleanup runs even when a test fails."
+      },
+      {
+        "type": "callout",
+        "title": "Runtime and safety note",
+        "text": "Teaching baseline: use a supported Node.js LTS release (Node.js 24 LTS as checked on 2026-10-13). The official releases page lists Node.js 26 as Current and Node.js 24/22 as LTS. Some advanced APIs, flags, permission behavior, embedded SQLite capabilities, module-loader hooks, and TypeScript integration are version-sensitive; verify the exact installed runtime. The Node.js 22 runtime available in the build-check environment is used only for syntax checks. This example is for learning and static validation, not for executing untrusted learner code inside CodeLeaf."
+      }
+    ],
+    "task": "Create or inspect a small Node.js example for Introduction to Testing Node.js Applications. Include at least one listed subtopic, document the expected result, and verify a normal case plus a boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates a named lesson concept, rather than only mentioning the title.",
+      "Expected output or observable behavior is documented and reproducible.",
+      "At least one invalid, empty, timeout, resource, or failure case is handled or explained.",
+      "The solution does not put secrets in source code and does not execute untrusted code inside the production API process."
+    ],
+    "hints": [
+      "Start with Why automated tests matter; identify the input, operation, and observable result.",
+      "Run the smallest relevant example in the selected Node.js release before adding frameworks or external services.",
+      "Test one failure or boundary case for Test levels, then explain why the outcome is expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Testing only private implementation details or depending on network state and timing that the test does not control.",
+        "why": "The code may pass a simple demonstration yet fail with real inputs, resource limits, timing, or runtime differences.",
+        "fix": "Use deterministic fixtures, timeouts, dependency seams, and assertions on externally visible outcomes."
+      },
+      {
+        "problem": "Copying a snippet without checking its runtime, dependencies, input assumptions, or cleanup behavior.",
+        "why": "Node.js APIs and surrounding ecosystem tools have explicit version, trust, and resource boundaries.",
+        "fix": "State the environment and dependency assumptions, then rerun the example from a clean starting state."
+      }
+    ],
+    "summary": [
+      "Tests should assert observable behavior and include failure cases. Deterministic inputs and cleanup are more valuable than depending on network state or exact timing.",
+      "This lesson covers: Why automated tests matter, Test levels, Test isolation, Deterministic tests.",
+      "Verify both normal and failure behavior, and document runtime, dependency, and resource assumptions."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-181-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Test runner",
+      "url": "https://nodejs.org/api/test.html",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "built-in Node.js test runner",
+        "assertions",
+        "test organization"
+      ]
+    },
+    {
+      "title": "Diagnostics",
+      "url": "https://nodejs.org/en/learn/diagnostics",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "debugging",
+        "performance diagnostics",
+        "memory analysis"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Source-derived syllabus; educational draft requiring technical/instructional review before publication."
+}

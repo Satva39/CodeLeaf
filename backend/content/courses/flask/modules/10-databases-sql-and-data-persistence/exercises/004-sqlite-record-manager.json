@@ -1,0 +1,59 @@
+{
+  "id": "flask-exercise-004",
+  "slug": "sqlite-record-manager",
+  "title": "SQLite Record Manager",
+  "type": "practical",
+  "lesson_id": "flask-lesson-101",
+  "module_id": "flask-module-10",
+  "difficulty": "beginner",
+  "sequence": 1,
+  "prompt": "Create, list, edit, and delete synthetic task records in SQLite. Use parameterized queries, explicit transaction handling, and reliable connection cleanup.\n\nSubmission: provide the implementation or design, a relevant test, expected outputs, one failure/boundary case, and version/runtime notes. Flask server code is not executed inside the CodeLeaf browser preview; local verification or human review is required.",
+  "objective": "SQLite Record Manager",
+  "target_skills": [
+    "SQLite",
+    "CRUD",
+    "parameterized SQL",
+    "transactions",
+    "connection lifecycle"
+  ],
+  "starter": {
+    "language": "python",
+    "content": "import sqlite3\n\nconnection = sqlite3.connect(\"practice.db\")\n# Create your schema and implement CRUD operations.",
+    "code": "import sqlite3\n\nconnection = sqlite3.connect(\"practice.db\")\n# Create your schema and implement CRUD operations."
+  },
+  "expected_output": "All four CRUD operations work against a local practice database; a failed write rolls back; user-supplied values are passed as SQL parameters.",
+  "public_tests": [
+    {
+      "name": "Static concept smoke check",
+      "required_strings": [
+        "sqlite3",
+        "execute",
+        "commit"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "All four CRUD operations work against a local practice database; a failed write rolls back; user-supplied values are passed as SQL parameters.",
+    "Document setup/run steps and mark whether verification was static, local, or human-reviewed.",
+    "Do not include private credentials or use real personal data.",
+    "Include a negative/boundary case and explain the expected status/result."
+  ],
+  "hints": [
+    "Use placeholders such as ? rather than string concatenation.",
+    "Define when the operation commits and how failed operations roll back.",
+    "Use a request-scoped connection or a documented context manager pattern."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "sqlite3",
+      "execute",
+      "commit"
+    ]
+  },
+  "grading_method": "Static required-string smoke check plus human review of implementation correctness, tests, validation/security boundaries and reproducibility. The platform does not execute arbitrary Python/Flask code.",
+  "retry_policy": "Retries are allowed after reviewing feedback; the platform backend controls its uniform reward and idempotency rules.",
+  "solution_file": "../../../solutions/exercises/004-sqlite-record-manager-solution.json",
+  "status": "draft",
+  "status_note": "Practice assignment mapped to the supplied Flask PDF. Needs subject-matter review before publication."
+}

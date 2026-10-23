@@ -1,0 +1,175 @@
+{
+  "id": "react-lesson-057",
+  "slug": "the-special-children-prop",
+  "title": "The Special children Prop",
+  "sequence": 57,
+  "module_id": "react-module-06",
+  "module_slug": "props-composition-and-component-communication",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "react-lesson-056"
+  ],
+  "previous_lesson_id": "react-lesson-056",
+  "next_lesson_id": "react-lesson-058",
+  "keywords": [
+    "The Special children Prop",
+    "Props, Composition, and Component Communication",
+    "Passing nested JSX",
+    "Rendering children",
+    "Building reusable containers",
+    "Composing page layouts",
+    "rendering"
+  ],
+  "source_syllabus_number": 57,
+  "subtopics": [
+    "Passing nested JSX",
+    "Rendering children",
+    "Building reusable containers",
+    "Composing page layouts"
+  ],
+  "learning_outcomes": [
+    "Explain how The Special children Prop relates to Props, Composition, and Component Communication.",
+    "Apply Passing nested JSX in a small React or JavaScript example and describe the expected result.",
+    "Test one edge/failure case and identify a maintainable, accessible fix."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study The Special children Prop as part of Props, Composition, and Component Communication. The syllabus topics are kept below, then connected to a small example you can inspect and adapt.",
+    "why_it_matters": "Passing nested JSX influences which UI React calculates and commits. Use stable identity for collections, derive display values from current inputs, and represent loading, empty, and failure cases deliberately.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "The Special children Prop: concept map",
+        "asset_path": "diagrams/lessons/lesson-057-the-special-children-prop.svg",
+        "alt_text": "Concept map for The Special children Prop: Passing nested JSX, Rendering children, Building reusable containers.",
+        "caption": "A visual scaffold for the idea; the code and verification steps below provide the practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Passing nested JSX influences which UI React calculates and commits. Use stable identity for collections, derive display values from current inputs, and represent loading, empty, and failure cases deliberately. Start with one responsibility at a time: identify the data, describe the expected interface, then decide which event, state update, request, or runtime boundary changes the result."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Passing nested JSX",
+            "text": "Passing nested JSX influences which UI React calculates and commits. Use stable identity for collections, derive display values from current inputs, and represent loading, empty, and failure cases deliberately."
+          },
+          {
+            "title": "Rendering children",
+            "text": "Rendering children influences which UI React calculates and commits. Use stable identity for collections, derive display values from current inputs, and represent loading, empty, and failure cases deliberately."
+          },
+          {
+            "title": "Building reusable containers",
+            "text": "Building reusable containers influences which UI React calculates and commits. Use stable identity for collections, derive display values from current inputs, and represent loading, empty, and failure cases deliberately."
+          },
+          {
+            "title": "Composing page layouts",
+            "text": "Composing page layouts influences which UI React calculates and commits. Use stable identity for collections, derive display values from current inputs, and represent loading, empty, and failure cases deliberately."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "jsx",
+        "code": "const visible = products\n  .filter(product => product.active)\n  .map(product => <li key={product.id}>{product.name}</li>);\n\nreturn <ul>{visible}</ul>;",
+        "expected_output": "Only active products are rendered and stable IDs give the rows predictable identity.",
+        "run_instructions": "This is an inspectable teaching example, not an arbitrary-code runner inside CodeLeaf. Place JSX in a React/Vite project (or the relevant CSS/HTML/config file), run the project with its documented toolchain, and compare the visible behavior with the expected result. Server rendering and framework APIs require their stated runtime.",
+        "reset_steps": "Restore the original snippet, reset the component/data to its starting state, and repeat with a different input or an edge/failure case.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Use the code as a small experiment for The Special children Prop. First predict the result, then run or inspect it in the required runtime. Change one input and explain why the output changed. If the topic depends on React version or framework support, confirm that the project uses a compatible version before interpreting a result."
+      },
+      {
+        "type": "callout",
+        "title": "Version and environment note",
+        "text": "This course assumes the React 19.3 documentation snapshot dated 2026-10-12. Core component, JSX, props, state, and event concepts apply broadly; modern APIs and server rendering must be checked against the stated React version and the framework/runtime in use."
+      }
+    ],
+    "task": "Create a minimal example demonstrating The Special children Prop. Include the relevant subtopic “Passing nested JSX”, explain the expected UI/result, and verify one normal case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named concept rather than merely mentioning it.",
+      "The expected visible or logged result is documented and reproducible.",
+      "At least one boundary, empty, loading, or failure case is handled or explained.",
+      "The implementation remains accessible and does not introduce avoidable mutation, stale state, or insecure client-only trust."
+    ],
+    "hints": [
+      "Start with the smallest part of “Passing nested JSX” that can be observed independently.",
+      "Write down what should appear before changing the code; then change one input at a time.",
+      "Use the browser console, React Developer Tools, or the appropriate test/runtime to isolate a mismatch."
+    ],
+    "expected_output": "Only active products are rendered and stable IDs give the rows predictable identity.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-057-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "The example handles only the happy path.",
+        "why": "Real UI receives empty values, delayed responses, and invalid input.",
+        "fix": "Add one explicit edge/failure case and document the expected message or state."
+      },
+      {
+        "problem": "The example stores redundant data or mutates an existing array/object.",
+        "why": "The displayed result can drift from the source data or React may not observe the intended change.",
+        "fix": "Derive values where possible and create a new value when updating state."
+      },
+      {
+        "problem": "A browser or framework capability is assumed to exist everywhere.",
+        "why": "Availability can depend on the host runtime, React version, and framework.",
+        "fix": "Check the official reference, declare the runtime/version, and provide a fallback when appropriate."
+      }
+    ],
+    "summary": [
+      "The Special children Prop fits into the broader Props, Composition, and Component Communication workflow.",
+      "The central concept is Passing nested JSX; apply it with the smallest reproducible example.",
+      "Verify correctness with at least one normal input and one boundary or failure case."
+    ],
+    "references": [
+      "https://react.dev/learn",
+      "https://react.dev/reference/react",
+      "https://react.dev/blog/2026/09/09/react-19-3"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "React — Learn",
+      "url": "https://react.dev/learn",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "The Special children Prop",
+        "Passing nested JSX",
+        "Rendering children"
+      ]
+    },
+    {
+      "title": "React Reference",
+      "url": "https://react.dev/reference/react",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "React APIs and behavior",
+        "The Special children Prop"
+      ]
+    },
+    {
+      "title": "React 19.3 Release Notes",
+      "url": "https://react.dev/blog/2026/09/09/react-19-3",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "version-specific modern APIs and compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus and authored as an educational draft; technical/instructional review required before publication."
+}

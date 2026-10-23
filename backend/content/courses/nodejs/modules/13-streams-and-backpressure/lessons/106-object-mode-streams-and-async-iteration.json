@@ -1,0 +1,158 @@
+{
+  "id": "nodejs-lesson-106",
+  "slug": "object-mode-streams-and-async-iteration",
+  "title": "Object-Mode Streams and Async Iteration",
+  "sequence": 106,
+  "module_id": "nodejs-module-13",
+  "module_slug": "streams-and-backpressure",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "nodejs-lesson-105"
+  ],
+  "previous_lesson_id": "nodejs-lesson-105",
+  "next_lesson_id": "nodejs-lesson-107",
+  "keywords": [
+    "Object-Mode Streams and Async Iteration",
+    "Object-mode configuration",
+    "Consuming streams with async iteration",
+    "Producing streams",
+    "Data-shape conventions",
+    "Node.js",
+    "JavaScript runtime"
+  ],
+  "source_syllabus_number": 106,
+  "subtopics": [
+    "Object-mode configuration",
+    "Consuming streams with async iteration",
+    "Producing streams",
+    "Data-shape conventions",
+    "Appropriate stream abstractions"
+  ],
+  "learning_outcomes": [
+    "Describe Object-mode configuration and explain how it relates to Object-Mode Streams and Async Iteration.",
+    "Demonstrate Consuming streams with async iteration in a small Node.js example and predict the observable result.",
+    "Test a failure, boundary, lifecycle, or version-compatibility case involving Producing streams."
+  ],
+  "content": {
+    "intro": "Object-Mode Streams and Async Iteration is part of streams and backpressure. This lesson connects Object-mode configuration, Consuming streams with async iteration, Producing streams to a concrete Node.js example. Focus on the behavior you can observe, the assumptions the API makes, and one failure or boundary case.",
+    "why_it_matters": "Streams process data in chunks so an application can handle large or continuous input without buffering it all at once. Test empty input, stream errors, a deliberately slow consumer, and memory usage with representative files.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Object-Mode Streams and Async Iteration: concept map",
+        "asset_path": "diagrams/lessons/lesson-106-object-mode-streams-and-async-iteration.svg",
+        "alt_text": "Concept map for lesson 106: Object-Mode Streams and Async Iteration. It shows representative syllabus concepts in a Concept → Example → Verification sequence.",
+        "caption": "Read the three labeled cards from left to right; the lesson steps connect the concept to a practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Streams process data in chunks so an application can handle large or continuous input without buffering it all at once. Compose streams with pipeline-style error handling and respect backpressure from slow consumers."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Object-mode configuration",
+            "text": "Treat environment values as untrusted strings: parse them, validate required settings at startup, and never print secrets in logs."
+          },
+          {
+            "title": "Consuming streams with async iteration",
+            "text": "Streams process data incrementally. Backpressure allows a slow consumer to regulate a faster producer instead of accumulating unbounded memory."
+          },
+          {
+            "title": "Producing streams",
+            "text": "Streams process data incrementally. Backpressure allows a slow consumer to regulate a faster producer instead of accumulating unbounded memory."
+          },
+          {
+            "title": "Data-shape conventions",
+            "text": "For Data-shape conventions, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Appropriate stream abstractions",
+            "text": "Streams process data incrementally. Backpressure allows a slow consumer to regulate a faster producer instead of accumulating unbounded memory."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "import { Readable } from 'node:stream';\nfor await (const record of Readable.from([{ id: 1 }, { id: 2 }])) console.log(record.id);",
+        "expected_output": "1\n2",
+        "run_instructions": "Inspect this JavaScript in a local Node.js project. It is a static-validation teaching example: CodeLeaf does not run this arbitrary example in the API process. If it needs a package, file, server, database, or external service, provision that dependency in a separate local project and follow its official setup instructions. Run with `node example.mjs` when the example is self-contained, or adapt the required imports/inputs first.",
+        "reset_steps": "Restore the starting snippet and inputs. Repeat with one different valid value and one invalid, missing, empty, or failure input appropriate to the example.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Start with the code shown above. Predict the result before running it, then verify it against: Node\n.js Change one input or simulate one failure and describe how the behavior should change. Test empty input, stream errors, a deliberately slow consumer, and memory usage with representative files."
+      },
+      {
+        "type": "callout",
+        "title": "Runtime and safety note",
+        "text": "Teaching baseline: use a supported Node.js LTS release (Node.js 24 LTS as checked on 2026-10-13). The official releases page lists Node.js 26 as Current and Node.js 24/22 as LTS. Some advanced APIs, flags, permission behavior, embedded SQLite capabilities, module-loader hooks, and TypeScript integration are version-sensitive; verify the exact installed runtime. The Node.js 22 runtime available in the build-check environment is used only for syntax checks. This example is for learning and static validation, not for executing untrusted learner code inside CodeLeaf."
+      }
+    ],
+    "task": "Create or inspect a small Node.js example for Object-Mode Streams and Async Iteration. Include at least one listed subtopic, document the expected result, and verify a normal case plus a boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates a named lesson concept, rather than only mentioning the title.",
+      "Expected output or observable behavior is documented and reproducible.",
+      "At least one invalid, empty, timeout, resource, or failure case is handled or explained.",
+      "The solution does not put secrets in source code and does not execute untrusted code inside the production API process."
+    ],
+    "hints": [
+      "Start with Object-mode configuration; identify the input, operation, and observable result.",
+      "Run the smallest relevant example in the selected Node.js release before adding frameworks or external services.",
+      "Test one failure or boundary case for Consuming streams with async iteration, then explain why the outcome is expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Ignoring write() backpressure or failing to propagate stream errors and cleanup.",
+        "why": "The code may pass a simple demonstration yet fail with real inputs, resource limits, timing, or runtime differences.",
+        "fix": "Use pipeline() where suitable and pause/retry writes when the writable stream signals backpressure."
+      },
+      {
+        "problem": "Copying a snippet without checking its runtime, dependencies, input assumptions, or cleanup behavior.",
+        "why": "Node.js APIs and surrounding ecosystem tools have explicit version, trust, and resource boundaries.",
+        "fix": "State the environment and dependency assumptions, then rerun the example from a clean starting state."
+      }
+    ],
+    "summary": [
+      "Treat environment values as untrusted strings: parse them, validate required settings at startup, and never print secrets in logs.",
+      "This lesson covers: Object-mode configuration, Consuming streams with async iteration, Producing streams, Data-shape conventions.",
+      "Verify both normal and failure behavior, and document runtime, dependency, and resource assumptions."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-106-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Stream",
+      "url": "https://nodejs.org/api/stream.html",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "readable/writable/duplex/transform streams",
+        "backpressure",
+        "pipeline"
+      ]
+    },
+    {
+      "title": "Web Streams API",
+      "url": "https://nodejs.org/api/webstreams.html",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Web Streams and interoperability"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Source-derived syllabus; educational draft requiring technical/instructional review before publication."
+}

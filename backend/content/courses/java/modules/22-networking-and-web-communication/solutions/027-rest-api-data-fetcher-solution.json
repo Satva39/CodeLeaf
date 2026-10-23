@@ -1,0 +1,32 @@
+{
+  "id": "java-exercise-solution-027",
+  "exercise_id": "java-exercise-027",
+  "title": "REST API Data Fetcher reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "language": "java",
+  "answer": "import java.net.URI;\nimport java.net.http.HttpClient;\nimport java.net.http.HttpRequest;\nimport java.net.http.HttpResponse;\nimport java.time.Duration;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        URI endpoint = URI.create(\"https://example.com/\"); // Replace with an approved API endpoint.\n        HttpRequest request = HttpRequest.newBuilder(endpoint).timeout(Duration.ofSeconds(5)).GET().build();\n        HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(3)).build();\n        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());\n        System.out.println(\"HTTP status: \" + response.statusCode());\n        if (response.statusCode() >= 200 && response.statusCode() < 300) {\n            System.out.println(\"Response chars: \" + response.body().length());\n        } else {\n            System.out.println(\"Request failed; do not treat this response as valid data.\");\n        }\n    }\n}",
+  "explanation": "The standard HTTP client supports request and connection timeouts. Validate status and response shape before parsing JSON; this example makes a real outbound HTTPS request only when run.",
+  "hidden_tests": [
+    {
+      "case": "normal case",
+      "input_or_setup": "Use the deterministic sample data or representative valid input described in the exercise.",
+      "expected_behavior": "Depends on the approved endpoint and network response",
+      "purpose": "Verify the main behavior and the output contract."
+    },
+    {
+      "case": "boundary case",
+      "input_or_setup": "Test empty, zero, minimum/maximum, duplicate, or end-of-range input as appropriate to the exercise.",
+      "expected_behavior": "The result matches the documented boundary rule and does not silently corrupt state.",
+      "purpose": "Check a boundary or invariant."
+    },
+    {
+      "case": "invalid or failure case",
+      "input_or_setup": "Provide malformed input or simulate a missing file, unavailable endpoint, missing configuration, or database failure where relevant.",
+      "expected_behavior": "The operation fails clearly or returns a safe result; resources are released and secrets are not printed.",
+      "purpose": "Check explicit error behavior and cleanup."
+    }
+  ],
+  "review_notes": "Repository-only reference material. Keep it out of public API responses and frontend bundles. The platform grader is only a required-token smoke check; complete task-specific execution tests in an isolated Java runner before publication.",
+  "sample_expected_result": "Depends on the approved endpoint and network response"
+}

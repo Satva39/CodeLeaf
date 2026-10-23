@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-102",
+  "slug": "how-redis-clients-work",
+  "title": "How Redis Clients Work",
+  "sequence": 102,
+  "module_id": "redis-module-14",
+  "module_slug": "redis-client-libraries-and-application-integration",
+  "level": "beginner to advanced",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-101"
+  ],
+  "previous_lesson_id": "redis-lesson-101",
+  "next_lesson_id": "redis-lesson-103",
+  "keywords": [
+    "how-redis-clients-work",
+    "client-libraries",
+    "connections-and-requests",
+    "command-serialization",
+    "responses-and-error-mapping",
+    "connection-lifecycle",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 102,
+  "subtopics": [
+    "Client libraries",
+    "Connections and requests",
+    "Command serialization",
+    "Responses and error mapping",
+    "Connection lifecycle"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of How Redis Clients Work and distinguish it from a related Redis concept.",
+    "Apply or trace How Redis Clients Work in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for How Redis Clients Work and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores How Redis Clients Work in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "How Redis Clients Work helps implement use supported client libraries with secure configuration, connection reuse, and controlled retries. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: How Redis Clients Work",
+        "asset_path": "diagrams/lesson-102-how-redis-clients-work.svg",
+        "alt_text": "Concept diagram for How Redis Clients Work, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for How Redis Clients Work; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "How Redis Clients Work helps implement use supported client libraries with secure configuration, connection reuse, and controlled retries. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For How Redis Clients Work, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Client libraries",
+            "text": "Connect Client libraries to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Connections and requests",
+            "text": "Connect Connections and requests to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Command serialization",
+            "text": "Connect Command serialization to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Responses and error mapping",
+            "text": "Connect Responses and error mapping to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Connection lifecycle",
+            "text": "Connect Connection lifecycle to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: How Redis Clients Work",
+        "language": "Python (redis-py)",
+        "execution_mode": "static-validation",
+        "code": "import os\nimport redis\n\nr = redis.Redis.from_url(os.environ[\"REDIS_URL\"], decode_responses=True)\nprint(r.ping())",
+        "expected_output": "True",
+        "run_instructions": "Install redis-py in a local virtual environment, set REDIS_URL for a disposable development instance, and never commit credentials.",
+        "reset_steps": "The snippet performs a read-only ping; close the client or connection pool when the application shuts down.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of How Redis Clients Work. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain How Redis Clients Work in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in How Redis Clients Work.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "True",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-102-questions.json",
+    "recap": [
+      "How Redis Clients Work is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Connect with Redis client libraries",
+      "url": "https://redis.io/docs/latest/connect/clients/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "supported client libraries, protocols and integrations"
+      ]
+    },
+    {
+      "title": "Connect to Redis with redis-py",
+      "url": "https://redis.io/docs/latest/develop/clients/redis-py/connect/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "Python connection configuration and TLS examples"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

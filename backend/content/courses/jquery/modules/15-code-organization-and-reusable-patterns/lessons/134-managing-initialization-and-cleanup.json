@@ -1,0 +1,177 @@
+{
+  "id": "jquery-lesson-134",
+  "slug": "managing-initialization-and-cleanup",
+  "title": "Managing Initialization and Cleanup",
+  "sequence": 134,
+  "module_id": "jquery-module-15",
+  "module_slug": "code-organization-and-reusable-patterns",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "jquery-lesson-133"
+  ],
+  "previous_lesson_id": "jquery-lesson-133",
+  "next_lesson_id": "jquery-lesson-135",
+  "keywords": [
+    "managing initialization and cleanup",
+    "jquery",
+    "javascript",
+    "code organization and reusable patterns",
+    "initializing a page or component",
+    "avoiding repeated initialization",
+    "tracking event handlers",
+    "cleaning up before removing components"
+  ],
+  "source_syllabus_number": 134,
+  "subtopics": [
+    "Initializing a page or component",
+    "Avoiding repeated initialization",
+    "Tracking event handlers",
+    "Cleaning up before removing components",
+    "Managing repeated mounting and unmounting"
+  ],
+  "learning_outcomes": [
+    "Explain the role of managing initialization and cleanup in a jQuery application.",
+    "Apply initializing a page or component in a small example and describe its expected result.",
+    "Verify avoiding repeated initialization with an explicit test or browser observation."
+  ],
+  "exercise_files": [
+    "../exercises/134-managing-initialization-and-cleanup.json"
+  ],
+  "sources": [
+    {
+      "title": "jQuery API Documentation",
+      "url": "https://api.jquery.com/",
+      "publisher": "jQuery project",
+      "checked_on": "2026-10-12",
+      "source_type": "official_api_reference",
+      "supports": [
+        "Supported jQuery Core APIs",
+        "Method signatures and return values"
+      ]
+    },
+    {
+      "title": "jQuery Learning Center",
+      "url": "https://learn.jquery.com/",
+      "publisher": "jQuery project",
+      "checked_on": "2026-10-12",
+      "source_type": "official_learning_resource",
+      "supports": [
+        "Concept explanations",
+        "Events",
+        "Effects",
+        "AJAX",
+        "Plugins",
+        "Performance",
+        "Code organization"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the attached syllabus and official references; requires lesson-by-lesson technical review, local execution, accessibility checks, and editorial approval.",
+  "content": {
+    "intro": "In this lesson, you will work through managing initialization and cleanup with a focused jQuery example. The subtopics below preserve the supplied curriculum coverage and connect the API idea to a small browser interface.",
+    "why_it_matters": "This topic is useful because it turns initializing a page or component into a repeatable implementation choice. Use small functions, scoped state, explicit initialization, and cleanup to prevent global namespace pollution and duplicate event handlers.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 15 overview",
+        "asset_path": "diagrams/module-15-overview.svg",
+        "alt_text": "Overview of Code Organization and Reusable Patterns, illustrating the sequence from understanding the concept to implementing and checking it.",
+        "caption": "Use this module map to place managing initialization and cleanup within the wider learning path."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Use small functions, scoped state, explicit initialization, and cleanup to prevent global namespace pollution and duplicate event handlers."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the supplied syllabus",
+        "items": [
+          "Initializing a page or component",
+          "Avoiding repeated initialization",
+          "Tracking event handlers",
+          "Cleaning up before removing components",
+          "Managing repeated mounting and unmounting"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "function mountPanel($root) {\n  $root.off(\"click.panel\").on(\"click.panel\", \".panel-toggle\", togglePanel);\n}\nfunction unmountPanel($root) { $root.off(\".panel\"); }",
+        "expected_output": "Mount is idempotent for the namespaced handler and unmount removes the component’s handlers.",
+        "run_instructions": "Use a local HTML page with jQuery 4.0.0 loaded before app.js for JavaScript snippets. HTML and package-manager snippets can be checked as configuration examples. Run the interaction in browser DevTools, inspect the DOM/Network panel, and compare actual behavior with the expected result. Do not submit learner code to the production API for arbitrary execution.",
+        "reset_steps": "Restore the original markup and code, clear console/network filters, reload the local page, and repeat the same interaction. For a request example, return the mock endpoint to its original response before retrying."
+      },
+      {
+        "type": "callout",
+        "title": "Guided example",
+        "text": "Start with a known DOM structure, apply the pattern for managing initialization and cleanup, and test one normal case plus one edge case. Keep selectors scoped to the intended component and verify the real browser result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Refactor an existing snippet around managing initialization and cleanup into a named function with explicit inputs. Mount it twice and prove that repeated setup does not duplicate behavior."
+      }
+    ],
+    "task": "Refactor an existing snippet around managing initialization and cleanup into a named function with explicit inputs. Mount it twice and prove that repeated setup does not duplicate behavior.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates managing initialization and cleanup using a current, documented approach.",
+      "The learner records the expected and actual behavior and checks at least one edge case.",
+      "The example preserves semantic HTML and does not render untrusted data as HTML.",
+      "The test setup and any runtime limitation are documented honestly."
+    ],
+    "hints": [
+      "First identify which DOM nodes and runtime state are involved in managing initialization and cleanup.",
+      "Make one small change, inspect the resulting element or request, and compare it with the expected result.",
+      "If the result differs, check the selector, script order, browser console, event target, and relevant API documentation before adding more code."
+    ],
+    "expected_output": "Mount is idempotent for the namespaced handler and unmount removes the component’s handlers.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-134-questions.json",
+    "common_mistakes": [
+      "Assuming a selector matched an element without checking the collection length.",
+      "Confusing jQuery collections with native DOM elements or live properties with markup attributes.",
+      "Using .html() with untrusted data or assuming client-side validation enforces server rules.",
+      "Treating a demo snippet as production-ready without testing failure and accessibility states."
+    ],
+    "summary": [
+      "Managing Initialization and Cleanup is one part of the code organization and reusable patterns workflow.",
+      "Use small functions, scoped state, explicit initialization, and cleanup to prevent global namespace pollution and duplicate event handlers.",
+      "Use the official API or upgrade guide for version-specific behavior and verify an example locally before relying on it."
+    ],
+    "references": [
+      {
+        "title": "jQuery API Documentation",
+        "url": "https://api.jquery.com/",
+        "publisher": "jQuery project",
+        "checked_on": "2026-10-12",
+        "source_type": "official_api_reference",
+        "supports": [
+          "Supported jQuery Core APIs",
+          "Method signatures and return values"
+        ]
+      },
+      {
+        "title": "jQuery Learning Center",
+        "url": "https://learn.jquery.com/",
+        "publisher": "jQuery project",
+        "checked_on": "2026-10-12",
+        "source_type": "official_learning_resource",
+        "supports": [
+          "Concept explanations",
+          "Events",
+          "Effects",
+          "AJAX",
+          "Plugins",
+          "Performance",
+          "Code organization"
+        ]
+      }
+    ]
+  }
+}

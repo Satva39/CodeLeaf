@@ -1,0 +1,32 @@
+{
+  "id": "java-exercise-solution-042",
+  "exercise_id": "java-exercise-042",
+  "title": "Thread Deadlock Investigation reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "language": "java",
+  "answer": "import java.lang.management.ManagementFactory;\nimport java.lang.management.ThreadMXBean;\nimport java.util.Arrays;\n\npublic class Main {\n    public static void main(String[] args) {\n        ThreadMXBean threads = ManagementFactory.getThreadMXBean();\n        long[] ids = threads.findDeadlockedThreads();\n        if (ids == null) System.out.println(\"No deadlocked threads detected at this snapshot.\");\n        else System.out.println(\"Deadlocked thread IDs: \" + Arrays.toString(ids));\n    }\n}",
+  "explanation": "The JVM management API can identify monitor and ownable-synchronizer deadlocks at the instant of the snapshot. Repeat observations and capture thread dumps; a single clean snapshot does not rule out a later deadlock.",
+  "hidden_tests": [
+    {
+      "case": "normal case",
+      "input_or_setup": "Use the deterministic sample data or representative valid input described in the exercise.",
+      "expected_behavior": "No deadlocked threads detected at this snapshot (when the program itself is not deadlocked)",
+      "purpose": "Verify the main behavior and the output contract."
+    },
+    {
+      "case": "boundary case",
+      "input_or_setup": "Test empty, zero, minimum/maximum, duplicate, or end-of-range input as appropriate to the exercise.",
+      "expected_behavior": "The result matches the documented boundary rule and does not silently corrupt state.",
+      "purpose": "Check a boundary or invariant."
+    },
+    {
+      "case": "invalid or failure case",
+      "input_or_setup": "Provide malformed input or simulate a missing file, unavailable endpoint, missing configuration, or database failure where relevant.",
+      "expected_behavior": "The operation fails clearly or returns a safe result; resources are released and secrets are not printed.",
+      "purpose": "Check explicit error behavior and cleanup."
+    }
+  ],
+  "review_notes": "Repository-only reference material. Keep it out of public API responses and frontend bundles. The platform grader is only a required-token smoke check; complete task-specific execution tests in an isolated Java runner before publication.",
+  "sample_expected_result": "No deadlocked threads detected at this snapshot (when the program itself is not deadlocked)"
+}

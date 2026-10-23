@@ -1,0 +1,201 @@
+{
+  "id": "r-lesson-170",
+  "slug": "connecting-to-web-apis",
+  "title": "Connecting to Web APIs",
+  "sequence": 170,
+  "module_id": "r-module-16",
+  "module_slug": "databases-apis-and-external-integrations",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "r-lesson-169"
+  ],
+  "previous_lesson_id": "r-lesson-169",
+  "next_lesson_id": "r-lesson-171",
+  "keywords": [
+    "connecting-to-web-apis",
+    "databases-apis-and-external-integrations",
+    "http-fundamentals",
+    "rest-api-concepts",
+    "get-and-post-requests",
+    "headers-and-query-parameters",
+    "json-responses",
+    "pagination",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 170,
+  "subtopics": [
+    "HTTP Fundamentals",
+    "REST API Concepts",
+    "GET and POST Requests",
+    "Headers and Query Parameters",
+    "JSON Responses",
+    "Pagination",
+    "Authentication and API Tokens",
+    "Rate Limits and Error Responses"
+  ],
+  "learning_outcomes": [
+    "Explain the role of connecting to web apis and identify its main inputs, outputs or constraints.",
+    "Apply http fundamentals in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Connecting to Web APIs is part of Databases, APIs, and External Integrations. Start with http fundamentals and connect it to the worked example and expected result.",
+    "why_it_matters": "A request can fail because of network, authentication, rate limits, status or schema changes.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Connecting to Web APIs",
+        "asset_path": "diagrams/module-16-overview.svg",
+        "alt_text": "Concept visual supporting lesson 170, Connecting to Web APIs. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "A request can fail because of network, authentication, rate limits, status or schema changes. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "HTTP Fundamentals",
+            "text": "Explain http fundamentals in the context of connecting to web apis, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "REST API Concepts",
+            "text": "For rest api concepts, describe the trust boundary, input checks, failure handling and cleanup; keep credentials and real private data out of examples."
+          },
+          {
+            "title": "GET and POST Requests",
+            "text": "Explain get and post requests in the context of connecting to web apis, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Headers and Query Parameters",
+            "text": "Explain headers and query parameters in the context of connecting to web apis, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "JSON Responses",
+            "text": "Explain json responses in the context of connecting to web apis, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Pagination",
+            "text": "Explain pagination in the context of connecting to web apis, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Authentication and API Tokens",
+            "text": "For authentication and api tokens, describe the trust boundary, input checks, failure handling and cleanup; keep credentials and real private data out of examples."
+          },
+          {
+            "title": "Rate Limits and Error Responses",
+            "text": "For rate limits and error responses, include a failing or boundary case and explain how it should be detected without silently losing information."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Describe a safe timeout, status check and response-schema validation step. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Connecting to Web APIs",
+        "language": "r",
+        "code": "# API workflow sketch (not executed)\n# response <- httr2::request(endpoint) |> httr2::req_perform()\n# payload <- jsonlite::fromJSON(httr2::resp_body_string(response))",
+        "expected_output": "A safe workflow validates the URL, status, response schema and data before analysis.",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "Use only authorized APIs and add timeouts, error handling and credential hygiene. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For connecting to web apis, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-170-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply connecting to web apis to a small synthetic example. Start with http fundamentals, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the http fundamentals idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible connecting to web apis example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “HTTP Fundamentals” and identify the input and output before coding.",
+      "Use synthetic data and explicit validation; do not access production systems or expose credentials.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming external services always return valid data.",
+        "why": "Timeouts, authorization failures, rate limits and schema changes are normal failure cases.",
+        "fix": "Add timeouts, status/schema validation, least-privilege access and bounded retries."
+      },
+      {
+        "problem": "Embedding credentials or sensitive rows in examples or logs.",
+        "why": "Secrets and private data can leak through source control or diagnostic output.",
+        "fix": "Use environment-based secret handling and synthetic examples; redact logs."
+      },
+      {
+        "problem": "Leaving resources open after an error.",
+        "why": "Unclosed connections and files can leak resources or lock outputs.",
+        "fix": "Use reliable cleanup patterns and test both success and failure paths."
+      }
+    ],
+    "summary": [
+      "Key idea: A request can fail because of network, authentication, rate limits, status or schema changes.",
+      "Practice: Describe a safe timeout, status check and response-schema validation step.",
+      "Source syllabus focus: HTTP Fundamentals. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply connecting to web apis to a small synthetic example. Start with http fundamentals, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible connecting to web apis example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “HTTP Fundamentals” and identify the input and output before coding.",
+    "Use synthetic data and explicit validation; do not access production systems or expose credentials.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Assuming external services always return valid data.",
+      "why": "Timeouts, authorization failures, rate limits and schema changes are normal failure cases.",
+      "fix": "Add timeouts, status/schema validation, least-privilege access and bounded retries."
+    },
+    {
+      "problem": "Embedding credentials or sensitive rows in examples or logs.",
+      "why": "Secrets and private data can leak through source control or diagnostic output.",
+      "fix": "Use environment-based secret handling and synthetic examples; redact logs."
+    },
+    {
+      "problem": "Leaving resources open after an error.",
+      "why": "Unclosed connections and files can leak resources or lock outputs.",
+      "fix": "Use reliable cleanup patterns and test both success and failure paths."
+    }
+  ],
+  "summary": [
+    "Key idea: A request can fail because of network, authentication, rate limits, status or schema changes.",
+    "Practice: Describe a safe timeout, status check and response-schema validation step.",
+    "Source syllabus focus: HTTP Fundamentals. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 16 — Databases, APIs, and External Integrations, lesson 170: Connecting to Web APIs.",
+    "Official documentation: https://dbi.r-dbi.org/",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [
+    "../exercises/026-read-json-returned-by-a-public-api.json"
+  ],
+  "status": "draft"
+}

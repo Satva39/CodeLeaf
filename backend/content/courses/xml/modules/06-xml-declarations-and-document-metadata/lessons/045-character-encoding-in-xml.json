@@ -1,0 +1,173 @@
+{
+  "id": "xml-lesson-045",
+  "slug": "character-encoding-in-xml",
+  "title": "Character Encoding in XML",
+  "sequence": 45,
+  "module_id": "xml-module-06",
+  "module_slug": "xml-declarations-and-document-metadata",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "xml-lesson-044"
+  ],
+  "previous_lesson_id": "xml-lesson-044",
+  "next_lesson_id": "xml-lesson-046",
+  "keywords": [
+    "character-encoding-in-xml",
+    "xml-declarations-and-document-metadata",
+    "utf-8",
+    "utf-16",
+    "encoding-declarations",
+    "file-encoding-versus-declared-encoding",
+    "encoding-errors"
+  ],
+  "source_syllabus_number": 45,
+  "subtopics": [
+    "UTF-8",
+    "UTF-16",
+    "Encoding declarations",
+    "File encoding versus declared encoding",
+    "Encoding errors"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose of character encoding in xml and explain at least one listed subtopic.",
+    "Interpret the example related to character encoding in xml and predict its expected result.",
+    "Identify one validation, compatibility, security, or troubleshooting consideration relevant to the example."
+  ],
+  "content": {
+    "intro": "In this lesson, you will explore character encoding in xml within XML Declarations and Document Metadata. You will connect its syllabus topics to an inspectable example, check the expected result, and note tool/version limits.",
+    "why_it_matters": "Character Encoding in XML matters because XML workflows rely on explicit structure and predictable processing. The lesson helps you reason about utf-8, avoid a common misunderstanding, and make a result reproducible for another developer.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Character Encoding in XML: concept map",
+        "asset_path": "diagrams/lessons/lesson-045-character-encoding-in-xml.svg",
+        "alt_text": "Concept flow covering UTF-8, UTF-16, Encoding declarations, File encoding versus declared encoding.",
+        "caption": "The visual introduces character encoding in xml; inspect the worked example and then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "This lesson focuses on character encoding in xml and the listed concepts: UTF-8; UTF-16; Encoding declarations; File encoding versus declared encoding. XML processors enforce the syntax rules, while validation and application code can impose additional constraints."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the subtopics",
+        "text": "This lesson explicitly covers: UTF-8; UTF-16; Encoding declarations; File encoding versus declared encoding; Encoding errors. Treat these as connected parts of one workflow: define the structure, make the relevant assumptions explicit, and verify a result with a small known input."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Character Encoding in XML",
+        "language": "xml",
+        "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<greeting>Bonjour</greeting>",
+        "expected_output": "The declaration states XML version and the character encoding; the actual file bytes must match the declared encoding.",
+        "run_instructions": "Inspect this example as text. Run it only in a processor that supports the shown language/version; the standard CodeLeaf playground previews HTML/CSS/JavaScript only and does not execute XML, XSD, XPath, XSLT, XQuery, Python, or SQL. Keep document structure separate from presentation, use consistent names, and verify assumptions with a small sample. If behavior depends on an XML processor or version, record it in the project documentation.",
+        "reset_steps": "Restore the sample to its exact starting state before each experiment. Change one element, attribute, expression, or constraint at a time, then compare the result with the expected behavior.",
+        "execution_mode": "static-validation",
+        "limitations": "This snippet is an inspectable example, not an XML execution service. Validate it with a standards-compatible XML processor; feature support depends on the processor/version."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety checkpoint",
+        "text": "Distinguish well-formedness, schema validity, and application-level correctness; they are different checks."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a small synthetic example that demonstrates “UTF-8”. Then add one boundary case involving “UTF-16”. Write down what should happen before testing, and record the exact output or processor message afterward."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-045-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming a document is correct because it looks readable.",
+        "why": "Visual appearance does not prove well-formedness, schema validity, correct namespace handling, or application-level meaning.",
+        "fix": "Parse and validate the document with the intended processor, then assert its meaning using a focused test."
+      },
+      {
+        "problem": "Mixing specification features with processor support.",
+        "why": "A standard may define features that a specific runtime does not implement.",
+        "fix": "Record the version and feature support; test with the actual target processor."
+      },
+      {
+        "problem": "Testing only one happy-path example.",
+        "why": "Missing values, wrong types, namespace differences, or boundary inputs can expose failures.",
+        "fix": "Add a valid case, an invalid case, and an edge case to the verification notes."
+      }
+    ],
+    "task": "Build a short demonstration of character encoding in xml using synthetic data. Include the concept “UTF-8”, a known expected result, and a short note explaining one edge case.",
+    "task_acceptance_criteria": [
+      "The artifact clearly demonstrates UTF-8.",
+      "The expected result is written before verification.",
+      "One invalid or boundary case is documented.",
+      "Processor/version assumptions and relevant security limits are recorded."
+    ],
+    "hints": [
+      "Start with the exact definition or construct associated with utf-8.",
+      "Keep the example minimal and change one thing at a time.",
+      "Compare the observed result with the expected behavior and consult the linked specification if they differ."
+    ],
+    "summary": [
+      "Character Encoding in XML contributes to the larger XML workflow of creating, checking, querying, transforming, or maintaining structured documents.",
+      "The listed syllabus concepts include UTF-8, UTF-16, Encoding declarations.",
+      "A reproducible XML example includes the input, processor/version assumptions, expected result, and a meaningful failure case."
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "The declaration states XML version and the character encoding; the actual file bytes must match the declared encoding."
+  },
+  "task": "Build a short demonstration of character encoding in xml using synthetic data. Include the concept “UTF-8”, a known expected result, and a short note explaining one edge case.",
+  "task_acceptance_criteria": [
+    "The artifact clearly demonstrates UTF-8.",
+    "The expected result is written before verification.",
+    "One invalid or boundary case is documented.",
+    "Processor/version assumptions and relevant security limits are recorded."
+  ],
+  "hints": [
+    "Start with the exact definition or construct associated with utf-8.",
+    "Keep the example minimal and change one thing at a time.",
+    "Compare the observed result with the expected behavior and consult the linked specification if they differ."
+  ],
+  "summary": [
+    "Character Encoding in XML contributes to the larger XML workflow of creating, checking, querying, transforming, or maintaining structured documents.",
+    "The listed syllabus concepts include UTF-8, UTF-16, Encoding declarations.",
+    "A reproducible XML example includes the input, processor/version assumptions, expected result, and a meaningful failure case."
+  ],
+  "run_mode": "static-validation",
+  "expected_output": "The declaration states XML version and the character encoding; the actual file bytes must match the declared encoding.",
+  "common_mistakes": [
+    {
+      "problem": "Assuming a document is correct because it looks readable.",
+      "why": "Visual appearance does not prove well-formedness, schema validity, correct namespace handling, or application-level meaning.",
+      "fix": "Parse and validate the document with the intended processor, then assert its meaning using a focused test."
+    },
+    {
+      "problem": "Mixing specification features with processor support.",
+      "why": "A standard may define features that a specific runtime does not implement.",
+      "fix": "Record the version and feature support; test with the actual target processor."
+    },
+    {
+      "problem": "Testing only one happy-path example.",
+      "why": "Missing values, wrong types, namespace differences, or boundary inputs can expose failures.",
+      "fix": "Add a valid case, an invalid case, and an edge case to the verification notes."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "title": "Extensible Markup Language (XML) 1.0, Fifth Edition",
+      "url": "https://www.w3.org/TR/xml/",
+      "publisher": "W3C",
+      "checked_on": "2026-10-12"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Generated from the attached XML syllabus; requires technical review and validation in the target XML processor before publication.",
+  "exercise_files": [
+    "../exercises/005-multilingual-records.json"
+  ]
+}

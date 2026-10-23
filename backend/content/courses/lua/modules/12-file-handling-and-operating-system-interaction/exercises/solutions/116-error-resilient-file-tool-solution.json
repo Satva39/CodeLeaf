@@ -1,0 +1,9 @@
+{
+  "id": "lua-exercise-solution-116",
+  "exercise_id": "lua-exercise-116",
+  "visibility": "protected_content_repository_only",
+  "answer": "local function read_first_line(path)\n    local file = io.open(path, \"r\")\n    if not file then return nil, \"unable to open input file\" end\n    local ok, line = pcall(function() return file:read(\"*l\") end)\n    local close_ok = file:close()\n    if not ok then return nil, \"read failed\" end\n    if close_ok == nil then return nil, \"close failed\" end\n    return line\nend\nlocal line, err = read_first_line(\"notes.txt\")\nif line then print(line) else print(err) end",
+  "explanation": "Reference implementation for Error-Resilient File Tool. Review it against the prompt, run under the supported runtime, and test normal plus boundary/error cases. This answer is repository-only and must never be returned by a public course API.",
+  "status": "draft",
+  "solution_code": "local function read_first_line(path)\n    local file = io.open(path, \"r\")\n    if not file then return nil, \"unable to open input file\" end\n    local ok, line = pcall(function() return file:read(\"*l\") end)\n    local close_ok = file:close()\n    if not ok then return nil, \"read failed\" end\n    if close_ok == nil then return nil, \"close failed\" end\n    return line\nend\nlocal line, err = read_first_line(\"notes.txt\")\nif line then print(line) else print(err) end"
+}

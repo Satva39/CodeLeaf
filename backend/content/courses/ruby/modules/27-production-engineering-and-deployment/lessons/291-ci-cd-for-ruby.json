@@ -1,0 +1,155 @@
+{
+  "id": "ruby-lesson-291",
+  "slug": "ci-cd-for-ruby",
+  "title": "CI/CD for Ruby",
+  "sequence": 291,
+  "module_id": "ruby-module-27",
+  "module_slug": "production-engineering-and-deployment",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "application-specialization",
+  "estimated_minutes": 14,
+  "prerequisites": [],
+  "previous_lesson_id": "ruby-lesson-290",
+  "next_lesson_id": "ruby-lesson-292",
+  "keywords": [
+    "ci-cd-for-ruby",
+    "production-engineering-and-deployment",
+    "ruby",
+    "automated-validation",
+    "build-and-test-stages",
+    "release-and-deployment-workflows",
+    "rollback-planning"
+  ],
+  "source_syllabus_number": 291,
+  "subtopics": [
+    "Automated validation",
+    "Build and test stages",
+    "Release and deployment workflows",
+    "Rollback planning"
+  ],
+  "learning_outcomes": [
+    "Explain the role of ci/cd for ruby in a Ruby program and name the key rule involved.",
+    "Apply ci/cd for ruby in a small example and predict its result before running it.",
+    "Identify one boundary or failure case related to rollback planning and verify the intended behavior."
+  ],
+  "content": {
+    "intro": "Learn CI/CD for Ruby through a visual model, a minimal Ruby example, and a practical check.",
+    "why_it_matters": "Understanding ci/cd for ruby helps you write code that is easier to explain, test, and maintain. It also helps separate Ruby language guarantees from runtime assumptions, dependency behavior, and application-specific rules.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: CI/CD for Ruby",
+        "asset_path": "diagrams/lesson-291-ci-cd-for-ruby.svg",
+        "alt_text": "Three-stage concept diagram for CI/CD for Ruby.",
+        "caption": "Use this diagram to plan a small example, then verify exact behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "CI/CD for Ruby helps you reason about automated validation. In Ruby, prefer a small example whose inputs and expected result are easy to explain. This lesson connects the syllabus topic to practical code and highlights where assumptions or edge cases matter."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to think about it",
+        "text": "Begin by identifying the key rule: Automated validation. Then connect it to Build and test stages. The remaining syllabus points—Release and deployment workflows, Rollback planning—are useful checks before applying this in a larger project."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to cover",
+        "items": [
+          {
+            "title": "Automated validation",
+            "text": "Explain how automated validation affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Build and test stages",
+            "text": "Explain how build and test stages affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Release and deployment workflows",
+            "text": "Explain how release and deployment workflows affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Rollback planning",
+            "text": "Explain how rollback planning affects the example, the public interface, or the behavior learners need to verify."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: CI/CD for Ruby",
+        "language": "ruby",
+        "code": "healthy = true\nputs({status: healthy ? \"ok\" : \"degraded\"}.to_json) if false\nputs healthy ? \"ok\" : \"degraded\"",
+        "expected_output": "ok",
+        "execution_mode": "server-runner",
+        "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+        "dependencies": "Ruby standard library",
+        "notes": "Local Ruby execution is required. CodeLeaf’s existing playground only previews HTML/CSS/JavaScript; do not run arbitrary Ruby inside the FastAPI process."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming the happy path is enough",
+            "text": "Test an empty value, a boundary value, and one invalid value before depending on the behavior."
+          },
+          {
+            "title": "Treating an example as a universal rule",
+            "text": "Check Ruby version, runtime implementation, and third-party library documentation when behavior is version-sensitive."
+          },
+          {
+            "title": "Mixing too many concerns",
+            "text": "Separate input parsing, domain behavior, and output so each piece is easier to test."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Run the example as written, compare it with the expected result, and explain why each line supports ci/cd for ruby. Next change one input or condition and predict the result before running it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second example for ci/cd for ruby using a different input. Add one edge case from the syllabus list (Rollback planning), state the expected behavior, and write a small test or manual check that would catch a regression."
+      },
+      {
+        "type": "paragraph",
+        "title": "Run, troubleshoot, and reset",
+        "text": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed. If the command fails, confirm `ruby --version`, inspect the full error message, and verify that required standard-library or gem dependencies are installed. Reset by removing temporary files created by your experiment and returning the code to the smallest reproducible example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain ci/cd for ruby, identify its place in production engineering and deployment, run a focused example, and verify an important boundary. Revisit the linked exercise if this is a core topic; advanced runtime or framework examples remain draft until reviewed in a suitable environment."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-291-questions.json",
+    "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+    "reset_steps": [
+      "Restore the original minimal example before trying another variation.",
+      "Remove only temporary sample data created for the lesson.",
+      "Keep credentials and personal data out of logs, fixtures, and screenshots."
+    ],
+    "guided_example": "Predict the output, run the example, and explain the relationship between automated validation and build and test stages.",
+    "try_it_yourself": "Create one variation of ci/cd for ruby, test a normal input and one boundary input, and note any version or dependency assumptions.",
+    "progressive_hints": [
+      "Write down the input and output contract first.",
+      "Reduce the task to one relevant Ruby method or construct.",
+      "Add the boundary case and verify it independently."
+    ],
+    "accessibility_notes": "The diagram includes a text alternative and the lesson explains the flow in prose. Do not use color alone to infer the correct sequence.",
+    "execution_mode": "server-runner",
+    "execution_note": "CodeLeaf does not currently provide an isolated Ruby runner. Run Ruby examples locally; a production runner needs a separate sandbox with time, memory, filesystem, and network limits."
+  },
+  "exercise_files": [],
+  "sources": [
+    "https://docs.ruby-lang.org/en/4.0/",
+    "https://www.ruby-lang.org/en/documentation/"
+  ],
+  "status": "draft",
+  "status_note": "Original lesson authored from the listed PDF syllabus topics; requires technical and editorial review before publication."
+}

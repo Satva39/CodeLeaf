@@ -1,0 +1,171 @@
+{
+  "id": "nodejs-lesson-249",
+  "slug": "scaling-nodejs-applications",
+  "title": "Scaling Node.js Applications",
+  "sequence": 249,
+  "module_id": "nodejs-module-28",
+  "module_slug": "architecture-and-production-grade-systems",
+  "level": "specialist",
+  "difficulty": "specialist",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "nodejs-lesson-248"
+  ],
+  "previous_lesson_id": "nodejs-lesson-248",
+  "next_lesson_id": "nodejs-lesson-250",
+  "keywords": [
+    "Scaling Node.js Applications",
+    "Vertical and horizontal scaling",
+    "Stateless service design",
+    "Shared external state",
+    "Load distribution",
+    "Node.js",
+    "JavaScript runtime"
+  ],
+  "source_syllabus_number": 249,
+  "subtopics": [
+    "Vertical and horizontal scaling",
+    "Stateless service design",
+    "Shared external state",
+    "Load distribution",
+    "Bottleneck identification"
+  ],
+  "learning_outcomes": [
+    "Describe Vertical and horizontal scaling and explain how it relates to Scaling Node.js Applications.",
+    "Demonstrate Stateless service design in a small Node.js example and predict the observable result.",
+    "Test a failure, boundary, lifecycle, or version-compatibility case involving Shared external state."
+  ],
+  "content": {
+    "intro": "Scaling Node.js Applications is part of architecture and production grade systems. This lesson connects Vertical and horizontal scaling, Stateless service design, Shared external state to a concrete Node.js example. Focus on the behavior you can observe, the assumptions the API makes, and one failure or boundary case.",
+    "why_it_matters": "Production architecture balances module boundaries, consistency, failure isolation, latency, operational complexity, and team needs. Trace a request through services and storage, then test retry, partial failure, duplicate delivery, and recovery behavior.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Scaling Node.js Applications: concept map",
+        "asset_path": "diagrams/lessons/lesson-249-scaling-nodejs-applications.svg",
+        "alt_text": "Concept map for lesson 249: Scaling Node.js Applications. It shows representative syllabus concepts in a Concept → Example → Verification sequence.",
+        "caption": "Read the three labeled cards from left to right; the lesson steps connect the concept to a practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Production architecture balances module boundaries, consistency, failure isolation, latency, operational complexity, and team needs. Make trade-offs explicit, design idempotent boundaries, and add service separation only when it solves a demonstrated need."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Vertical and horizontal scaling",
+            "text": "For Vertical and horizontal scaling, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Stateless service design",
+            "text": "For Stateless service design, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Shared external state",
+            "text": "For Shared external state, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Load distribution",
+            "text": "For Load distribution, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Bottleneck identification",
+            "text": "For Bottleneck identification, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "const scalingSignals = ['event-loop delay', 'CPU saturation', 'connection pool wait', 'memory pressure'];\nconsole.log(scalingSignals.length);",
+        "expected_output": "4; measure bottlenecks before increasing replicas or adding workers.",
+        "run_instructions": "Inspect this JavaScript in a local Node.js project. It is a static-validation teaching example: CodeLeaf does not run this arbitrary example in the API process. If it needs a package, file, server, database, or external service, provision that dependency in a separate local project and follow its official setup instructions. Run with `node example.mjs` when the example is self-contained, or adapt the required imports/inputs first.",
+        "reset_steps": "Restore the starting snippet and inputs. Repeat with one different valid value and one invalid, missing, empty, or failure input appropriate to the example.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Start with the code shown above. Predict the result before running it, then verify it against: true Change one input or simulate one failure and describe how the behavior should change. Trace a request through services and storage, then test retry, partial failure, duplicate delivery, and recovery behavior."
+      },
+      {
+        "type": "callout",
+        "title": "Runtime and safety note",
+        "text": "Teaching baseline: use a supported Node.js LTS release (Node.js 24 LTS as checked on 2026-10-13). The official releases page lists Node.js 26 as Current and Node.js 24/22 as LTS. Some advanced APIs, flags, permission behavior, embedded SQLite capabilities, module-loader hooks, and TypeScript integration are version-sensitive; verify the exact installed runtime. The Node.js 22 runtime available in the build-check environment is used only for syntax checks. This example is for learning and static validation, not for executing untrusted learner code inside CodeLeaf."
+      }
+    ],
+    "task": "Create or inspect a small Node.js example for Scaling Node.js Applications. Include at least one listed subtopic, document the expected result, and verify a normal case plus a boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates a named lesson concept, rather than only mentioning the title.",
+      "Expected output or observable behavior is documented and reproducible.",
+      "At least one invalid, empty, timeout, resource, or failure case is handled or explained.",
+      "The solution does not put secrets in source code and does not execute untrusted code inside the production API process."
+    ],
+    "hints": [
+      "Start with Vertical and horizontal scaling; identify the input, operation, and observable result.",
+      "Run the smallest relevant example in the selected Node.js release before adding frameworks or external services.",
+      "Test one failure or boundary case for Stateless service design, then explain why the outcome is expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming microservices, queues, or multiple worker processes automatically make a system more reliable.",
+        "why": "The code may pass a simple demonstration yet fail with real inputs, resource limits, timing, or runtime differences.",
+        "fix": "Start with clear boundaries and measurable requirements, then document the operational cost of each architecture choice."
+      },
+      {
+        "problem": "Copying a snippet without checking its runtime, dependencies, input assumptions, or cleanup behavior.",
+        "why": "Node.js APIs and surrounding ecosystem tools have explicit version, trust, and resource boundaries.",
+        "fix": "State the environment and dependency assumptions, then rerun the example from a clean starting state."
+      }
+    ],
+    "summary": [
+      "For Vertical and horizontal scaling, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone.",
+      "This lesson covers: Vertical and horizontal scaling, Stateless service design, Shared external state, Load distribution.",
+      "Verify both normal and failure behavior, and document runtime, dependency, and resource assumptions."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-249-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Learn Node.js",
+      "url": "https://nodejs.org/learn",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "getting started",
+        "CLI",
+        "HTTP"
+      ]
+    },
+    {
+      "title": "Diagnostics",
+      "url": "https://nodejs.org/en/learn/diagnostics",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "debugging",
+        "performance diagnostics",
+        "memory analysis"
+      ]
+    },
+    {
+      "title": "Security best practices for Node.js applications",
+      "url": "https://nodejs.org/en/learn/getting-started/security-best-practices",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "production security",
+        "dependency risk",
+        "untrusted input and process isolation"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Source-derived syllabus; educational draft requiring technical/instructional review before publication."
+}

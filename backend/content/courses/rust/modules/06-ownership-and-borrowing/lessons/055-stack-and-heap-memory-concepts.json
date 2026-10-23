@@ -1,0 +1,167 @@
+{
+  "id": "rust-lesson-055",
+  "slug": "stack-and-heap-memory-concepts",
+  "title": "Stack and Heap Memory Concepts",
+  "sequence": 55,
+  "module_id": "rust-module-06",
+  "module_slug": "ownership-and-borrowing",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-foundations",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "rust-lesson-054"
+  ],
+  "previous_lesson_id": "rust-lesson-054",
+  "next_lesson_id": "rust-lesson-056",
+  "keywords": [
+    "and",
+    "concepts",
+    "heap",
+    "language-foundations",
+    "memory",
+    "rust",
+    "stack"
+  ],
+  "source_syllabus_number": 55,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the main purpose of Stack and Heap Memory Concepts and distinguish it from a closely related Rust concept.",
+    "Apply or trace Stack and Heap Memory Concepts in a small Rust example, using the module guidance and stated toolchain assumptions.",
+    "Identify one relevant edge case or failure mode for Stack and Heap Memory Concepts and select a suitable verification step."
+  ],
+  "content": {
+    "intro": "This lesson covers Stack and Heap Memory Concepts. It sits in Module 6, Ownership and Borrowing, and builds toward a practical Rust mental model rather than memorizing a term in isolation.",
+    "why_it_matters": "Stack and Heap Memory Concepts matters when you work with language foundations. Understanding the rule helps you predict compiler or runtime behavior, document assumptions, and choose a safer implementation when inputs or system conditions change.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Stack and Heap Memory Concepts",
+        "asset_path": "diagrams/lesson-055-stack-and-heap-memory-concepts.svg",
+        "alt_text": "Concept diagram for Stack and Heap Memory Concepts: language foundations; inputs flow through a rule to an outcome, followed by a verification step.",
+        "caption": "Visual model for Stack and Heap Memory Concepts. The diagram is a learning aid; use the prose and examples for exact conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Stack and Heap Memory Concepts is one building block of this area: Build an accurate mental model of moves, ownership, borrowing, references, and slices. Start with the smallest example, identify the inputs and assumptions, and check the edge cases before using the technique in a larger program."
+      },
+      {
+        "type": "paragraph",
+        "title": "A reliable way to reason about it",
+        "text": "For Stack and Heap Memory Concepts, write down the inputs, the guarantee you expect, and the boundary where that guarantee stops. Work through a minimal example first; then deliberately test one edge case. Ownership and borrowing are central prerequisites. Resolve the compiler message by clarifying who owns a value and how long each borrow needs to remain valid, rather than adding clones indiscriminately."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Stack and Heap Memory Concepts",
+            "text": "Stack and Heap Memory Concepts is one building block of this area: Build an accurate mental model of moves, ownership, borrowing, references, and slices. Start with the smallest example, identify the inputs and assumptions, and check the edge cases before using the technique in a larger program."
+          },
+          {
+            "title": "Inputs and guarantees",
+            "text": "Identify the value, type, state, tool, or external system involved in Stack and Heap Memory Concepts. Separate what Rust checks at compile time from what still needs validation or a test."
+          },
+          {
+            "title": "Boundary case",
+            "text": "Try an empty, missing, invalid, unusually large, or concurrently accessed input when that boundary applies to Stack and Heap Memory Concepts. Record what should happen and how you can verify it."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "rust",
+        "execution_mode": "static-validation",
+        "code": "fn main() { let owner = String::from(\"Rust\"); let borrowed = &owner; println!(\"{borrowed} ({} bytes)\", owner.len()); }",
+        "expected_output": "Rust (4 bytes)",
+        "run_instructions": "Save the Rust sample as src/main.rs in a Cargo project and run cargo run. Review the expected output, then change one input to explore an edge case.",
+        "reset_steps": "Return the sample to its original form, run the documented command again, and compare the result. If a dependency, target, runtime, database, or hardware device is required, configure that separately before treating the result as verified."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not assume Stack and Heap Memory Concepts guarantees more than it actually does. Reduce a failure to a small reproducer, read the full compiler diagnostic or error value, consult the matching official reference, and change one assumption at a time."
+      },
+      {
+        "type": "callout",
+        "title": "Toolchain and execution boundary",
+        "text": "Course examples are static reference snippets, not executed inside CodeLeaf. Most standard-library examples can be tried in a Rust 2024 Cargo project; specialized networking, database, async, procedural-macro, embedded, and WebAssembly scenarios require the toolchain and dependencies described in their lessons."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate Stack and Heap Memory Concepts. Predict the result before you run it, then explain one normal case and one relevant boundary case in your own words.",
+    "task_acceptance_criteria": [
+      "Explain the purpose of Stack and Heap Memory Concepts using a concrete example.",
+      "Verify the example using an appropriate local command, targeted test, or documented manual check.",
+      "Describe one edge case, failure mode, version assumption, or limitation that matters for this topic."
+    ],
+    "hints": [
+      "Start by identifying the inputs and guarantee involved in Stack and Heap Memory Concepts.",
+      "Use the smallest example that isolates one rule; avoid changing multiple variables at once.",
+      "Check the matching official reference if compiler behavior, a library API, or toolchain support differs from your expectation."
+    ],
+    "expected_output": "Rust (4 bytes)",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-055-questions.json",
+    "recap": [
+      "Stack and Heap Memory Concepts supports language foundations.",
+      "Predict and verify behavior with small examples.",
+      "Keep library and target-specific assumptions explicit."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "The Rust Programming Language (The Rust Book)",
+      "url": "https://doc.rust-lang.org/stable/book/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "learning sequence",
+        "syntax",
+        "ownership",
+        "structs and enums",
+        "collections",
+        "generics",
+        "error handling",
+        "modules",
+        "lifetimes",
+        "threads",
+        "testing"
+      ]
+    },
+    {
+      "title": "The Rust Reference",
+      "url": "https://doc.rust-lang.org/reference/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "language syntax and semantics",
+        "type system",
+        "patterns",
+        "macros",
+        "unsafe Rust",
+        "FFI",
+        "ABI",
+        "compiler behavior"
+      ]
+    },
+    {
+      "title": "Rust Standard Library Documentation",
+      "url": "https://doc.rust-lang.org/std/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "standard library APIs",
+        "collections",
+        "I/O",
+        "threads",
+        "smart pointers",
+        "filesystem"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Rust.pdf; review explanation, code behavior, version notes, and assessment quality before publication."
+}

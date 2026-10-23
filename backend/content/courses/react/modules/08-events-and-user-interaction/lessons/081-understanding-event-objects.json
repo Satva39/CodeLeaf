@@ -1,0 +1,175 @@
+{
+  "id": "react-lesson-081",
+  "slug": "understanding-event-objects",
+  "title": "Understanding Event Objects",
+  "sequence": 81,
+  "module_id": "react-module-08",
+  "module_slug": "events-and-user-interaction",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "react-lesson-080"
+  ],
+  "previous_lesson_id": "react-lesson-080",
+  "next_lesson_id": "react-lesson-082",
+  "keywords": [
+    "Understanding Event Objects",
+    "Events and User Interaction",
+    "Event properties",
+    "Target and current target",
+    "Default browser actions",
+    "Event propagation",
+    "events"
+  ],
+  "source_syllabus_number": 81,
+  "subtopics": [
+    "Event properties",
+    "Target and current target",
+    "Default browser actions",
+    "Event propagation"
+  ],
+  "learning_outcomes": [
+    "Explain how Understanding Event Objects relates to Events and User Interaction.",
+    "Apply Event properties in a small React or JavaScript example and describe the expected result.",
+    "Test one edge/failure case and identify a maintainable, accessible fix."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study Understanding Event Objects as part of Events and User Interaction. The syllabus topics are kept below, then connected to a small example you can inspect and adapt.",
+    "why_it_matters": "Event properties connects a user action to a handler. Use semantic browser controls, pass a function rather than invoking it during render, and preserve the browser’s expected keyboard behavior.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Understanding Event Objects: concept map",
+        "asset_path": "diagrams/lessons/lesson-081-understanding-event-objects.svg",
+        "alt_text": "Concept map for Understanding Event Objects: Event properties, Target and current target, Default browser actions.",
+        "caption": "A visual scaffold for the idea; the code and verification steps below provide the practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Event properties connects a user action to a handler. Use semantic browser controls, pass a function rather than invoking it during render, and preserve the browser’s expected keyboard behavior. Start with one responsibility at a time: identify the data, describe the expected interface, then decide which event, state update, request, or runtime boundary changes the result."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Event properties",
+            "text": "Event properties connects a user action to a handler. Use semantic browser controls, pass a function rather than invoking it during render, and preserve the browser’s expected keyboard behavior."
+          },
+          {
+            "title": "Target and current target",
+            "text": "Target and current target connects a user action to a handler. Use semantic browser controls, pass a function rather than invoking it during render, and preserve the browser’s expected keyboard behavior."
+          },
+          {
+            "title": "Default browser actions",
+            "text": "Default browser actions connects a user action to a handler. Use semantic browser controls, pass a function rather than invoking it during render, and preserve the browser’s expected keyboard behavior."
+          },
+          {
+            "title": "Event propagation",
+            "text": "Event propagation connects a user action to a handler. Use semantic browser controls, pass a function rather than invoking it during render, and preserve the browser’s expected keyboard behavior."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "jsx",
+        "code": "function SaveButton({ onSave }) {\n  return <button type=\"button\" onClick={() => onSave(\"draft-1\")}>Save draft</button>;\n}",
+        "expected_output": "Clicking the semantic button invokes onSave with the captured identifier.",
+        "run_instructions": "This is an inspectable teaching example, not an arbitrary-code runner inside CodeLeaf. Place JSX in a React/Vite project (or the relevant CSS/HTML/config file), run the project with its documented toolchain, and compare the visible behavior with the expected result. Server rendering and framework APIs require their stated runtime.",
+        "reset_steps": "Restore the original snippet, reset the component/data to its starting state, and repeat with a different input or an edge/failure case.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Use the code as a small experiment for Understanding Event Objects. First predict the result, then run or inspect it in the required runtime. Change one input and explain why the output changed. If the topic depends on React version or framework support, confirm that the project uses a compatible version before interpreting a result."
+      },
+      {
+        "type": "callout",
+        "title": "Version and environment note",
+        "text": "This course assumes the React 19.3 documentation snapshot dated 2026-10-12. Core component, JSX, props, state, and event concepts apply broadly; modern APIs and server rendering must be checked against the stated React version and the framework/runtime in use."
+      }
+    ],
+    "task": "Create a minimal example demonstrating Understanding Event Objects. Include the relevant subtopic “Event properties”, explain the expected UI/result, and verify one normal case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named concept rather than merely mentioning it.",
+      "The expected visible or logged result is documented and reproducible.",
+      "At least one boundary, empty, loading, or failure case is handled or explained.",
+      "The implementation remains accessible and does not introduce avoidable mutation, stale state, or insecure client-only trust."
+    ],
+    "hints": [
+      "Start with the smallest part of “Event properties” that can be observed independently.",
+      "Write down what should appear before changing the code; then change one input at a time.",
+      "Use the browser console, React Developer Tools, or the appropriate test/runtime to isolate a mismatch."
+    ],
+    "expected_output": "Clicking the semantic button invokes onSave with the captured identifier.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-081-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "The example handles only the happy path.",
+        "why": "Real UI receives empty values, delayed responses, and invalid input.",
+        "fix": "Add one explicit edge/failure case and document the expected message or state."
+      },
+      {
+        "problem": "The example stores redundant data or mutates an existing array/object.",
+        "why": "The displayed result can drift from the source data or React may not observe the intended change.",
+        "fix": "Derive values where possible and create a new value when updating state."
+      },
+      {
+        "problem": "A browser or framework capability is assumed to exist everywhere.",
+        "why": "Availability can depend on the host runtime, React version, and framework.",
+        "fix": "Check the official reference, declare the runtime/version, and provide a fallback when appropriate."
+      }
+    ],
+    "summary": [
+      "Understanding Event Objects fits into the broader Events and User Interaction workflow.",
+      "The central concept is Event properties; apply it with the smallest reproducible example.",
+      "Verify correctness with at least one normal input and one boundary or failure case."
+    ],
+    "references": [
+      "https://react.dev/learn",
+      "https://react.dev/reference/react",
+      "https://react.dev/blog/2026/09/09/react-19-3"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "React — Learn",
+      "url": "https://react.dev/learn",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "Understanding Event Objects",
+        "Event properties",
+        "Target and current target"
+      ]
+    },
+    {
+      "title": "React Reference",
+      "url": "https://react.dev/reference/react",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "React APIs and behavior",
+        "Understanding Event Objects"
+      ]
+    },
+    {
+      "title": "React 19.3 Release Notes",
+      "url": "https://react.dev/blog/2026/09/09/react-19-3",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "version-specific modern APIs and compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus and authored as an educational draft; technical/instructional review required before publication."
+}

@@ -1,0 +1,199 @@
+{
+  "id": "cpp-lesson-210",
+  "slug": "advanced-concurrent-programming",
+  "title": "Advanced Concurrent Programming",
+  "sequence": 210,
+  "module_id": "cpp-module-19",
+  "module_slug": "multithreading-and-concurrency",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "specialized",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "cpp-lesson-209"
+  ],
+  "previous_lesson_id": "cpp-lesson-209",
+  "next_lesson_id": "cpp-lesson-211",
+  "keywords": [
+    "advanced-concurrent-programming",
+    "lock-free-programming-overview",
+    "wait-free-versus-lock-free-concepts",
+    "atomic-memory-ordering",
+    "synchronization-and-happens-before-relationships",
+    "concurrent-queues",
+    "coroutines-versus-threads",
+    "choosing-concurrency-primitives"
+  ],
+  "source_syllabus_number": 210,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Lock-Free Programming Overview",
+    "Wait-Free Versus Lock-Free Concepts",
+    "Atomic Memory Ordering",
+    "Synchronization and Happens-Before Relationships",
+    "Concurrent Queues",
+    "Coroutines Versus Threads",
+    "Choosing Concurrency Primitives"
+  ],
+  "learning_outcomes": [
+    "Describe when advanced concurrent programming is useful and what problem it does not solve.",
+    "Evaluate a small example against its stated constraints, standard version and implementation assumptions.",
+    "Select a test or tool that can provide evidence of correctness without treating one successful run as proof."
+  ],
+  "content": {
+    "intro": "Advanced Concurrent Programming focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Advanced Concurrent Programming matters because identify shared mutable data, establish a single synchronization rule and test cancellation and shutdown as deliberately as normal completion. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Advanced Concurrent Programming: visual trace",
+        "asset_path": "diagrams/lessons/lesson-210.svg",
+        "alt_text": "Lesson 210 visual for Advanced Concurrent Programming; concept: Lock-Free Programming Overview; apply: Wait-Free Versus Lock-Free Concepts; verify: Atomic Memory Ordering.",
+        "caption": "Original lesson-specific overview: understand lock-free programming overview, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Concurrent code shares execution time and may share state. Synchronization and lifetime must be designed explicitly; data races are correctness errors.\n\nAdvanced Concurrent Programming focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nIdentify shared mutable data, establish a single synchronization rule and test cancellation and shutdown as deliberately as normal completion."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Advanced Concurrent Programming",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <iostream>\n#include <queue>\n\nint main() {\n    std::queue<int> jobs;\n    jobs.push(10); jobs.push(20);\n    std::cout << jobs.front() << '\\n';\n    jobs.pop();\n    std::cout << jobs.front() << '\\n';\n}\n",
+        "expected_output": "10\n20",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "A queue is first-in, first-out; concurrent producer-consumer use also needs a correct synchronization protocol."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Lock-Free Programming Overview",
+            "text": "Explain lock-free programming overview in the context of Advanced Concurrent Programming: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Wait-Free Versus Lock-Free Concepts",
+            "text": "Concepts express named constraints on template arguments and can improve diagnostics by stating the operations a generic component requires."
+          },
+          {
+            "title": "Atomic Memory Ordering",
+            "text": "Atomic objects provide operations that are indivisible for that object and can establish memory ordering; they do not automatically make multi-step invariants safe."
+          },
+          {
+            "title": "Synchronization and Happens-Before Relationships",
+            "text": "Explain synchronization and happens-before relationships in the context of Advanced Concurrent Programming: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Concurrent Queues",
+            "text": "Explain concurrent queues in the context of Advanced Concurrent Programming: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Coroutines Versus Threads",
+            "text": "Concurrency lets tasks make progress during overlapping periods; safe shared access requires clear ownership and synchronization."
+          },
+          {
+            "title": "Choosing Concurrency Primitives",
+            "text": "Concurrency lets tasks make progress during overlapping periods; safe shared access requires clear ownership and synchronization."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate lock-free programming overview, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "This topic may depend on newer C++ language or library support; this example uses a C++20-compatible illustration. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-210-questions.json",
+    "task": "Create a small, independent example that demonstrates advanced concurrent programming. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example builds under a documented standard mode with warnings enabled.",
+      "The predicted and observed result are recorded; deviations are explained.",
+      "At least one boundary, invalid-input, lifetime or portability assumption is tested or documented."
+    ],
+    "hints": [
+      "Start with the smallest example that demonstrates lock-free programming overview.",
+      "Trace the relevant values and state the expected output before running the program.",
+      "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+    ],
+    "summary": [
+      "Advanced Concurrent Programming is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying advanced concurrent programming.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation"
+  },
+  "task": "Create a small, independent example that demonstrates advanced concurrent programming. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+  "hints": [
+    "Start with the smallest example that demonstrates lock-free programming overview.",
+    "Trace the relevant values and state the expected output before running the program.",
+    "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+  ],
+  "expected_output": "10\n20",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Advanced Concurrent Programming is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying advanced concurrent programming.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 19, lesson 210: Advanced Concurrent Programming.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

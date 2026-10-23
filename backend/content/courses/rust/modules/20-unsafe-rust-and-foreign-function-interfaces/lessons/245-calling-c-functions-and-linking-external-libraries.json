@@ -1,0 +1,147 @@
+{
+  "id": "rust-lesson-245",
+  "slug": "calling-c-functions-and-linking-external-libraries",
+  "title": "Calling C Functions and Linking External Libraries",
+  "sequence": 245,
+  "module_id": "rust-module-20",
+  "module_slug": "unsafe-rust-and-foreign-function-interfaces",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced-specialization",
+  "estimated_minutes": 13,
+  "prerequisites": [
+    "rust-lesson-244"
+  ],
+  "previous_lesson_id": "rust-lesson-244",
+  "next_lesson_id": "rust-lesson-246",
+  "keywords": [
+    "and",
+    "calling",
+    "external",
+    "functions",
+    "libraries",
+    "linking",
+    "rust",
+    "toolchain-and-compiler-feedback"
+  ],
+  "source_syllabus_number": 245,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the main purpose of Calling C Functions and Linking External Libraries and distinguish it from a closely related Rust concept.",
+    "Apply or trace Calling C Functions and Linking External Libraries in a small Rust example, using the module guidance and stated toolchain assumptions.",
+    "Identify one relevant edge case or failure mode for Calling C Functions and Linking External Libraries and select a suitable verification step."
+  ],
+  "content": {
+    "intro": "This lesson covers Calling C Functions and Linking External Libraries. It sits in Module 20, Unsafe Rust and Foreign Function Interfaces, and builds toward a practical Rust mental model rather than memorizing a term in isolation.",
+    "why_it_matters": "Calling C Functions and Linking External Libraries matters when you work with toolchain and compiler feedback. Understanding the rule helps you predict compiler or runtime behavior, document assumptions, and choose a safer implementation when inputs or system conditions change.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Calling C Functions and Linking External Libraries",
+        "asset_path": "diagrams/lesson-245-calling-c-functions-and-linking-external-libraries.svg",
+        "alt_text": "Concept diagram for Calling C Functions and Linking External Libraries: toolchain and compiler feedback; inputs flow through a rule to an outcome, followed by a verification step.",
+        "caption": "Visual model for Calling C Functions and Linking External Libraries. The diagram is a learning aid; use the prose and examples for exact conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Calling C Functions and Linking External Libraries is one building block of this area: Study unsafe boundaries and foreign-function interfaces as advanced contracts to audit. Start with the smallest example, identify the inputs and assumptions, and check the edge cases before using the technique in a larger program."
+      },
+      {
+        "type": "paragraph",
+        "title": "A reliable way to reason about it",
+        "text": "For Calling C Functions and Linking External Libraries, write down the inputs, the guarantee you expect, and the boundary where that guarantee stops. Work through a minimal example first; then deliberately test one edge case. Treat every unsafe block as a contract with the reader: state the invariants, minimize its scope, and test the safe abstraction built around it."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Calling C Functions and Linking External Libraries",
+            "text": "Calling C Functions and Linking External Libraries is one building block of this area: Study unsafe boundaries and foreign-function interfaces as advanced contracts to audit. Start with the smallest example, identify the inputs and assumptions, and check the edge cases before using the technique in a larger program."
+          },
+          {
+            "title": "Inputs and guarantees",
+            "text": "Identify the value, type, state, tool, or external system involved in Calling C Functions and Linking External Libraries. Separate what Rust checks at compile time from what still needs validation or a test."
+          },
+          {
+            "title": "Boundary case",
+            "text": "Try an empty, missing, invalid, unusually large, or concurrently accessed input when that boundary applies to Calling C Functions and Linking External Libraries. Record what should happen and how you can verify it."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "rust",
+        "execution_mode": "static-validation",
+        "code": "fn square(value: i32) -> i32 {\n    value * value\n}\n\nfn main() {\n    println!(\"{}\", square(6));\n}",
+        "expected_output": "36",
+        "run_instructions": "Save as src/main.rs and run cargo run. Match each function signature to the values it accepts and the value it returns.",
+        "reset_steps": "Return the sample to its original form, run the documented command again, and compare the result. If a dependency, target, runtime, database, or hardware device is required, configure that separately before treating the result as verified."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not assume Calling C Functions and Linking External Libraries guarantees more than it actually does. Reduce a failure to a small reproducer, read the full compiler diagnostic or error value, consult the matching official reference, and change one assumption at a time."
+      },
+      {
+        "type": "callout",
+        "title": "Toolchain and execution boundary",
+        "text": "Course examples are static reference snippets, not executed inside CodeLeaf. Most standard-library examples can be tried in a Rust 2024 Cargo project; specialized networking, database, async, procedural-macro, embedded, and WebAssembly scenarios require the toolchain and dependencies described in their lessons."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate Calling C Functions and Linking External Libraries. Predict the result before you run it, then explain one normal case and one relevant boundary case in your own words.",
+    "task_acceptance_criteria": [
+      "Explain the purpose of Calling C Functions and Linking External Libraries using a concrete example.",
+      "Verify the example using an appropriate local command, targeted test, or documented manual check.",
+      "Describe one edge case, failure mode, version assumption, or limitation that matters for this topic."
+    ],
+    "hints": [
+      "Start by identifying the inputs and guarantee involved in Calling C Functions and Linking External Libraries.",
+      "Use the smallest example that isolates one rule; avoid changing multiple variables at once.",
+      "Check the matching official reference if compiler behavior, a library API, or toolchain support differs from your expectation."
+    ],
+    "expected_output": "36",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-245-questions.json",
+    "recap": [
+      "Calling C Functions and Linking External Libraries supports toolchain and compiler feedback.",
+      "Predict and verify behavior with small examples.",
+      "Keep library and target-specific assumptions explicit."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "The Rustonomicon",
+      "url": "https://doc.rust-lang.org/nomicon/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "unsafe Rust",
+        "memory safety invariants",
+        "FFI",
+        "low-level details"
+      ]
+    },
+    {
+      "title": "The Rust Reference",
+      "url": "https://doc.rust-lang.org/reference/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "language syntax and semantics",
+        "type system",
+        "patterns",
+        "macros",
+        "unsafe Rust",
+        "FFI",
+        "ABI",
+        "compiler behavior"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Rust.pdf; review explanation, code behavior, version notes, and assessment quality before publication."
+}

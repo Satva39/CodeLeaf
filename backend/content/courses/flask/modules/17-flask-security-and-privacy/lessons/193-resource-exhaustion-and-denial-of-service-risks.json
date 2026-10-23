@@ -1,0 +1,185 @@
+{
+  "id": "flask-lesson-193",
+  "slug": "resource-exhaustion-and-denial-of-service-risks",
+  "title": "Resource Exhaustion and Denial-of-Service Risks",
+  "sequence": 193,
+  "module_id": "flask-module-17",
+  "module_slug": "flask-security-and-privacy",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core-professional",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "flask-lesson-192"
+  ],
+  "previous_lesson_id": "flask-lesson-192",
+  "next_lesson_id": "flask-lesson-194",
+  "keywords": [
+    "resource-exhaustion-and-denial-of-service-risks",
+    "flask",
+    "request-and-upload-size-limits",
+    "expensive-endpoints",
+    "rate-limiting",
+    "timeouts-and-bounded-operations"
+  ],
+  "source_syllabus_number": 193,
+  "subtopics": [
+    "Request and upload size limits",
+    "Expensive endpoints",
+    "Rate limiting",
+    "Timeouts and bounded operations"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of resource exhaustion and denial-of-service risks and identify at least two of its listed subtopics.",
+    "Trace the worked example for resource exhaustion and denial-of-service risks and describe its expected result.",
+    "Select a focused test or verification step for a normal case and a meaningful failure boundary."
+  ],
+  "content": {
+    "intro": "Explore resource exhaustion and denial-of-service risks through the source syllabus topics, a small inspectable example, and a practical verification task. The example is teaching material, not a claim that the platform executed Flask code.",
+    "why_it_matters": "Resource Exhaustion and Denial-of-Service Risks belongs in the normal development process. Security is layered across input validation, output encoding, state-changing requests, identity, permissions, resource limits and operations.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Visual guide: Resource Exhaustion and Denial-of-Service Risks",
+        "asset_path": "diagrams/module-17-overview.svg",
+        "alt_text": "Four-stage overview for module 17, Flask Security and Privacy: Map trust boundary; Validate input; Protect state changes; Limit impact + log safely.",
+        "caption": "Module 17 roadmap for Flask Security and Privacy: progress through the labeled ideas, then verify an outcome with a focused practice task."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Resource Exhaustion and Denial-of-Service Risks belongs in the normal development process. Security is layered across input validation, output encoding, state-changing requests, identity, permissions, resource limits and operations."
+      },
+      {
+        "type": "paragraph",
+        "title": "What to learn",
+        "text": "This lesson covers: Request and upload size limits; Expensive endpoints; Rate limiting; Timeouts and bounded operations. Keep the source terms intact; for each one, name the component that owns the behavior, the inputs/assumptions, and the expected result."
+      },
+      {
+        "type": "list",
+        "title": "Concepts and practical notes",
+        "items": [
+          {
+            "title": "Request and upload size limits",
+            "text": "Trace which parts of the incoming request are trusted, which are optional, and how invalid data maps to a response."
+          },
+          {
+            "title": "Expensive endpoints",
+            "text": "Use expensive endpoints as a named design decision: note the assumptions, the normal path, and one boundary case to test."
+          },
+          {
+            "title": "Rate limiting",
+            "text": "When applying rate limiting, keep the implementation small, document version-dependent behavior, and verify it with a focused check."
+          },
+          {
+            "title": "Timeouts and bounded operations",
+            "text": "Connect timeouts and bounded operations to flask security and privacy by tracing one example from its input through the observable output."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Resource Exhaustion and Denial-of-Service Risks",
+        "language": "python",
+        "code": "from flask import Flask, request, jsonify\n\napp = Flask(__name__)\n\n@app.route(\"/api/items\", methods=[\"GET\", \"POST\"])\ndef items():\n    if request.method == \"POST\":\n        payload = request.get_json(silent=True)\n        if not isinstance(payload, dict) or not payload.get(\"name\"):\n            return jsonify(error=\"name is required\"), 400\n        return jsonify(item={\"name\": payload[\"name\"]}), 201\n    return jsonify(items=[], page=1, has_more=False), 200",
+        "expected_output": "GET /api/items returns an empty JSON collection; a valid POST returns HTTP 201; a missing or malformed name returns HTTP 400.",
+        "execution_mode": "server-runner",
+        "run_instructions": "Test with valid JSON, missing fields, malformed JSON, and unsupported methods. Add persistence and authorization before treating this as a full API."
+      },
+      {
+        "type": "callout",
+        "title": "Before using this beyond practice",
+        "text": "Validate untrusted input at the server boundary, keep secrets out of source code, and test the failure path. Optional extensions or hosting infrastructure are separate dependencies unless stated otherwise."
+      }
+    ],
+    "execution_mode": "server-runner",
+    "expected_result": "GET /api/items returns an empty JSON collection; a valid POST returns HTTP 201; a missing or malformed name returns HTTP 400.",
+    "run_instructions": "Test with valid JSON, missing fields, malformed JSON, and unsupported methods. Add persistence and authorization before treating this as a full API.",
+    "troubleshooting": [
+      "Confirm the expected virtual environment and installed dependency versions before diagnosing framework behavior.",
+      "Check route/method, input shape, status code, traceback location and relevant configuration one at a time.",
+      "For database or third-party integration examples, use isolated local resources and explicit timeouts; do not use production credentials."
+    ],
+    "reset_steps": "Stop the local development server, reset only disposable local practice data if needed, and remove temporary artifacts created by the exercise. Never delete production data or migration history to reset practice.",
+    "try_it_yourself": "Apply resource exhaustion and denial-of-service risks to a tiny local Flask app. Predict what a normal request should do, test one invalid or boundary case, and record expected versus observed behavior.",
+    "progressive_hints": [
+      "Name the Flask component or ecosystem tool responsible for resource exhaustion and denial-of-service risks.",
+      "Run the smallest example in an isolated local project and compare the actual response with the stated expected result.",
+      "Add one negative or boundary test, then check the linked version-specific official documentation."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Copying a fragment without checking its imports, app configuration or dependencies.",
+        "why": "Many Flask examples assume a configured app and a specific runtime or extension version.",
+        "fix": "Follow the run instructions, record the Flask/Python version and test the smallest behavior first."
+      },
+      {
+        "problem": "Checking only the successful request path.",
+        "why": "Missing fields, unsupported methods, unauthorized objects and service failures often have different behavior.",
+        "fix": "Add a negative or boundary test and assert the status code and response contract."
+      },
+      {
+        "problem": "Treating a local example as production-ready.",
+        "why": "Secret management, concurrency, deployment, monitoring and failure recovery need separate design decisions.",
+        "fix": "Review the matching deployment and security references before publication or real use."
+      }
+    ],
+    "recap": "Resource Exhaustion and Denial-of-Service Risks connects Request and upload size limits; Expensive endpoints; Rate limiting; Timeouts and bounded operations. Verify the example under the selected environment and keep its assumptions visible.",
+    "knowledge_check_file": "exams/question-files/lesson-193-questions.json",
+    "content_review_status": "draft",
+    "accessibility_notes": "Use descriptive headings, meaningful labels and alt text; provide a text explanation of the diagram; keep code selectable and keyboard navigable; never rely on color alone.",
+    "version_notes": "Baseline: Flask 3.1.x, with the official changelog listing 3.1.3 on 2026-02-18. Verify current patch versions and ecosystem compatibility before use. Optional packages are not Flask built-ins.",
+    "source_syllabus_topics_reviewed": true,
+    "topic_explanations_count": 4,
+    "run_mode": "server-runner",
+    "task": "Apply resource exhaustion and denial-of-service risks to a tiny local Flask app. Predict what a normal request should do, test one invalid or boundary case, and record expected versus observed behavior.",
+    "task_acceptance_criteria": [
+      "State the Python and Flask versions or the relevant non-Flask tool version.",
+      "Record expected and observed results for a normal case.",
+      "Test one invalid, unauthorized or boundary case and explain the status/result."
+    ],
+    "hints": [
+      "Identify the main responsibility behind resource exhaustion and denial-of-service risks.",
+      "Keep request/data boundaries explicit and verify assumptions with a focused test.",
+      "Consult the linked official reference before using a version-sensitive API."
+    ],
+    "solution_notes": "Suggested approach: trace one input through the relevant framework component, keep validation and authorization explicit, and write the smallest test that demonstrates the intended behavior. This note does not claim the example was executed.",
+    "summary": [
+      "Resource Exhaustion and Denial-of-Service Risks is part of flask security and privacy and should be understood alongside its listed source subtopics.",
+      "The worked example is a focused fragment; use the stated context and dependencies before running it.",
+      "Verify expected and failure behavior locally and record the check so it can be reproduced."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "flask-security",
+      "title": "Security Considerations",
+      "url": "https://flask.palletsprojects.com/en/stable/web-security/",
+      "publisher": "Pallets Projects",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "XSS",
+        "CSRF",
+        "security headers",
+        "host validation"
+      ]
+    },
+    {
+      "id": "flask-config",
+      "title": "Configuration Handling",
+      "url": "https://flask.palletsprojects.com/en/stable/config/",
+      "publisher": "Pallets Projects",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "configuration mapping",
+        "environment settings",
+        "secret keys",
+        "cookie options"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_status": "generated_from_attached_curriculum_and_official_docs",
+  "status_note": "Draft: generated and structurally validated; requires subject-matter review before publication."
+}

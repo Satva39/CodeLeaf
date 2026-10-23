@@ -1,0 +1,191 @@
+{
+  "id": "r-lesson-044",
+  "slug": "factors-and-categorical-data",
+  "title": "Factors and Categorical Data",
+  "sequence": 44,
+  "module_id": "r-module-05",
+  "module_slug": "data-structures-in-r",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "r-lesson-043"
+  ],
+  "previous_lesson_id": "r-lesson-043",
+  "next_lesson_id": "r-lesson-045",
+  "keywords": [
+    "factors-and-categorical-data",
+    "data-structures-in-r",
+    "what-is-a-factor",
+    "creating-factors-with-factor",
+    "levels-and-labels",
+    "ordered-factors",
+    "modifying-factor-levels",
+    "using-forcats-for-factor-manipulation",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 44,
+  "subtopics": [
+    "What Is a Factor?",
+    "Creating Factors with factor()",
+    "Levels and Labels",
+    "Ordered Factors",
+    "Modifying Factor Levels",
+    "Using forcats for Factor Manipulation"
+  ],
+  "learning_outcomes": [
+    "Explain the role of factors and categorical data and identify its main inputs, outputs or constraints.",
+    "Apply what is a factor? in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Factors and Categorical Data is part of Data Structures in R. Start with what is a factor? and connect it to the worked example and expected result.",
+    "why_it_matters": "Choose the data structure for the shape and meaning of the information, then verify its dimensions, names, types and class.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Factors and Categorical Data",
+        "asset_path": "diagrams/data-structures.svg",
+        "alt_text": "Concept visual supporting lesson 44, Factors and Categorical Data. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Choose the data structure for the shape and meaning of the information, then verify its dimensions, names, types and class. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "What Is a Factor?",
+            "text": "Explain what is a factor? in the context of factors and categorical data, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Creating Factors with factor()",
+            "text": "Build the smallest example for creating factors with factor(), inspect the returned object, and confirm its names, type and shape before using it downstream."
+          },
+          {
+            "title": "Levels and Labels",
+            "text": "Explain levels and labels in the context of factors and categorical data, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Ordered Factors",
+            "text": "Explain ordered factors in the context of factors and categorical data, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Modifying Factor Levels",
+            "text": "Explain modifying factor levels in the context of factors and categorical data, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Using forcats for Factor Manipulation",
+            "text": "Build the smallest example for using forcats for factor manipulation, inspect the returned object, and confirm its names, type and shape before using it downstream."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Construct a tiny object, inspect it with str() and dim() or names(), and confirm that indexing returns the expected shape. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Factors and Categorical Data",
+        "language": "r",
+        "code": "# Lesson 44: Factors and Categorical Data\nexample_record <- list(id = 4, label = \"sample-44\", valid = TRUE)\nexample_record$label",
+        "expected_output": "[1] \"sample-44\"",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "A list preserves named fields even when the fields have different types. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For factors and categorical data, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-044-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply factors and categorical data to a small synthetic example. Start with what is a factor?, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the what is a factor? idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible factors and categorical data example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “What Is a Factor?” and identify the input and output before coding.",
+      "Inspect with str(), typeof(), class(), names() or dim() as appropriate.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: Choose the data structure for the shape and meaning of the information, then verify its dimensions, names, types and class.",
+      "Practice: Construct a tiny object, inspect it with str() and dim() or names(), and confirm that indexing returns the expected shape.",
+      "Source syllabus focus: What Is a Factor?. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply factors and categorical data to a small synthetic example. Start with what is a factor?, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible factors and categorical data example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “What Is a Factor?” and identify the input and output before coding.",
+    "Inspect with str(), typeof(), class(), names() or dim() as appropriate.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: Choose the data structure for the shape and meaning of the information, then verify its dimensions, names, types and class.",
+    "Practice: Construct a tiny object, inspect it with str() and dim() or names(), and confirm that indexing returns the expected shape.",
+    "Source syllabus focus: What Is a Factor?. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 5 — Data Structures in R, lesson 44: Factors and Categorical Data.",
+    "Official documentation: https://cran.r-project.org/doc/manuals/r-release/R-intro.html",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [
+    "../exercises/011-count-the-frequency-of-each-category.json"
+  ],
+  "status": "draft"
+}

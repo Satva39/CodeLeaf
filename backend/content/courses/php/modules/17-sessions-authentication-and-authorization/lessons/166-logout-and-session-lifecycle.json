@@ -1,0 +1,193 @@
+{
+  "id": "php-lesson-166",
+  "slug": "logout-and-session-lifecycle",
+  "title": "Logout and Session Lifecycle",
+  "sequence": 166,
+  "module_id": "php-module-17",
+  "module_slug": "sessions-authentication-and-authorization",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "php-lesson-165"
+  ],
+  "previous_lesson_id": "php-lesson-165",
+  "next_lesson_id": "php-lesson-167",
+  "keywords": [
+    "logout and session lifecycle",
+    "sessions, authentication, and authorization",
+    "invalidating authentication state",
+    "clearing session cookies appropriately",
+    "expiring sessions",
+    "logout semantics",
+    "testing session lifecycle behavior",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 166,
+  "subtopics": [
+    "Invalidating authentication state.",
+    "Clearing session cookies appropriately.",
+    "Expiring sessions.",
+    "Logout semantics.",
+    "Testing session lifecycle behavior."
+  ],
+  "learning_outcomes": [
+    "Explain what logout and session lifecycle contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: invalidating authentication state.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Authentication establishes who a user is; authorization determines what that user may do. Secure identity workflows depend on password APIs, session lifecycle controls, expiring tokens, and resource-level permission checks. In this lesson, focus on invalidating authentication state; then compare it with clearing session cookies appropriately. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use logout and session lifecycle when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 17 overview: Sessions, Authentication, and Authorization",
+        "asset_path": "diagrams/module-17-overview.svg",
+        "alt_text": "Four-stage overview for module 17, Sessions, Authentication, and Authorization, grouping lesson topics in order.",
+        "caption": "Use this overview to place logout and session lifecycle in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Authentication establishes who a user is; authorization determines what that user may do. Secure identity workflows depend on password APIs, session lifecycle controls, expiring tokens, and resource-level permission checks. For logout and session lifecycle, begin with invalidating authentication state. Also distinguish clearing session cookies appropriately; expiring sessions; logout semantics. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Invalidating authentication state",
+            "text": "Distinguish identity verification from resource permission, and test expiry, invalid credentials, and denied access as well as the success path."
+          },
+          {
+            "title": "Clearing session cookies appropriately",
+            "text": "Distinguish identity verification from resource permission, and test expiry, invalid credentials, and denied access as well as the success path."
+          },
+          {
+            "title": "Expiring sessions",
+            "text": "Distinguish identity verification from resource permission, and test expiry, invalid credentials, and denied access as well as the success path."
+          },
+          {
+            "title": "Logout semantics",
+            "text": "Know when to use logout semantics, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Testing session lifecycle behavior",
+            "text": "Distinguish identity verification from resource permission, and test expiry, invalid credentials, and denied access as well as the success path."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Logout and Session Lifecycle",
+        "language": "php",
+        "code": "<?php\n$session = []; $session[\"user_id\"] = 42;\necho isset($session[\"user_id\"]) ? \"signed-in state present\" : \"missing\";",
+        "expected_output": "signed-in state present",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Use the password hashing API, renew session identifiers after authentication, and check permissions for each protected resource."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for logout and session lifecycle from top to bottom. Start by identifying invalidating authentication state, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for logout and session lifecycle that demonstrates \"invalidating authentication state\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of invalidating authentication state.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "signed-in state present",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-166-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Storing plain-text passwords.",
+        "why": "A database exposure would reveal the original secrets.",
+        "fix": "Use password_hash and password_verify; never design your own password hash."
+      },
+      {
+        "problem": "Confusing authentication with authorization.",
+        "why": "A signed-in user may not own every resource.",
+        "fix": "Check role and resource ownership at every protected operation."
+      },
+      {
+        "problem": "Keeping the same session identifier after sign-in.",
+        "why": "An attacker may be able to reuse a known session ID.",
+        "fix": "Regenerate the session ID at authentication boundaries and invalidate sessions on logout."
+      }
+    ],
+    "summary": [
+      "Logout and Session Lifecycle is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Use the password hashing API, renew session identifiers after authentication, and check permissions for each protected resource."
+    ],
+    "references": [
+      {
+        "title": "Sessions",
+        "url": "https://www.php.net/manual/en/book.session.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "session lifecycle",
+          "session cookies",
+          "session configuration"
+        ]
+      },
+      {
+        "title": "Password hashing",
+        "url": "https://www.php.net/manual/en/book.password.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "password_hash",
+          "password_verify",
+          "password rehashing"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Sessions",
+      "url": "https://www.php.net/manual/en/book.session.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "session lifecycle",
+        "session cookies",
+        "session configuration"
+      ]
+    },
+    {
+      "title": "Password hashing",
+      "url": "https://www.php.net/manual/en/book.password.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "password_hash",
+        "password_verify",
+        "password rehashing"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

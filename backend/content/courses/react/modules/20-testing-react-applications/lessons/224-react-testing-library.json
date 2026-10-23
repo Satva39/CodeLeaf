@@ -1,0 +1,177 @@
+{
+  "id": "react-lesson-224",
+  "slug": "react-testing-library",
+  "title": "React Testing Library",
+  "sequence": 224,
+  "module_id": "react-module-20",
+  "module_slug": "testing-react-applications",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "advanced",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "react-lesson-223"
+  ],
+  "previous_lesson_id": "react-lesson-223",
+  "next_lesson_id": "react-lesson-225",
+  "keywords": [
+    "React Testing Library",
+    "Testing React Applications",
+    "User-centered testing",
+    "Queries based on accessible roles and labels",
+    "Avoiding implementation-detail tests",
+    "Understanding its guiding principles",
+    "accessibility"
+  ],
+  "source_syllabus_number": 224,
+  "subtopics": [
+    "User-centered testing",
+    "Queries based on accessible roles and labels",
+    "Avoiding implementation-detail tests",
+    "Understanding its guiding principles"
+  ],
+  "learning_outcomes": [
+    "Explain how React Testing Library relates to Testing React Applications.",
+    "Apply User-centered testing in a small React or JavaScript example and describe the expected result.",
+    "Test one edge/failure case and identify a maintainable, accessible fix."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study React Testing Library as part of Testing React Applications. The syllabus topics are kept below, then connected to a small example you can inspect and adapt.",
+    "why_it_matters": "User-centered testing makes the interface usable across input methods and assistive technologies. Use native semantic elements first, give controls accessible names, and test focus and keyboard operation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "React Testing Library: concept map",
+        "asset_path": "diagrams/lessons/lesson-224-react-testing-library.svg",
+        "alt_text": "Concept map for React Testing Library: User-centered testing, Queries based on accessible roles and labels, Avoiding implementation-detail tests.",
+        "caption": "A visual scaffold for the idea; the code and verification steps below provide the practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "User-centered testing makes the interface usable across input methods and assistive technologies. Use native semantic elements first, give controls accessible names, and test focus and keyboard operation. Start with one responsibility at a time: identify the data, describe the expected interface, then decide which event, state update, request, or runtime boundary changes the result."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "User-centered testing",
+            "text": "User-centered testing makes the interface usable across input methods and assistive technologies. Use native semantic elements first, give controls accessible names, and test focus and keyboard operation."
+          },
+          {
+            "title": "Queries based on accessible roles and labels",
+            "text": "Queries based on accessible roles and labels makes the interface usable across input methods and assistive technologies. Use native semantic elements first, give controls accessible names, and test focus and keyboard operation."
+          },
+          {
+            "title": "Avoiding implementation-detail tests",
+            "text": "Avoiding implementation-detail tests makes the interface usable across input methods and assistive technologies. Use native semantic elements first, give controls accessible names, and test focus and keyboard operation."
+          },
+          {
+            "title": "Understanding its guiding principles",
+            "text": "Understanding its guiding principles makes the interface usable across input methods and assistive technologies. Use native semantic elements first, give controls accessible names, and test focus and keyboard operation."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "jsx",
+        "code": "function SearchBox({ value, onChange }) {\n  return <label>Search products<input type=\"search\" value={value} onChange={onChange} /></label>;\n}",
+        "expected_output": "The input has a programmatically associated label and a native search role.",
+        "run_instructions": "This is an inspectable teaching example, not an arbitrary-code runner inside CodeLeaf. Place JSX in a React/Vite project (or the relevant CSS/HTML/config file), run the project with its documented toolchain, and compare the visible behavior with the expected result. Server rendering and framework APIs require their stated runtime.",
+        "reset_steps": "Restore the original snippet, reset the component/data to its starting state, and repeat with a different input or an edge/failure case.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Use the code as a small experiment for React Testing Library. First predict the result, then run or inspect it in the required runtime. Change one input and explain why the output changed. If the topic depends on React version or framework support, confirm that the project uses a compatible version before interpreting a result."
+      },
+      {
+        "type": "callout",
+        "title": "Version and environment note",
+        "text": "This course assumes the React 19.3 documentation snapshot dated 2026-10-12. Core component, JSX, props, state, and event concepts apply broadly; modern APIs and server rendering must be checked against the stated React version and the framework/runtime in use."
+      }
+    ],
+    "task": "Create a minimal example demonstrating React Testing Library. Include the relevant subtopic “User-centered testing”, explain the expected UI/result, and verify one normal case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named concept rather than merely mentioning it.",
+      "The expected visible or logged result is documented and reproducible.",
+      "At least one boundary, empty, loading, or failure case is handled or explained.",
+      "The implementation remains accessible and does not introduce avoidable mutation, stale state, or insecure client-only trust."
+    ],
+    "hints": [
+      "Start with the smallest part of “User-centered testing” that can be observed independently.",
+      "Write down what should appear before changing the code; then change one input at a time.",
+      "Use the browser console, React Developer Tools, or the appropriate test/runtime to isolate a mismatch."
+    ],
+    "expected_output": "The input has a programmatically associated label and a native search role.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-224-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "The example handles only the happy path.",
+        "why": "Real UI receives empty values, delayed responses, and invalid input.",
+        "fix": "Add one explicit edge/failure case and document the expected message or state."
+      },
+      {
+        "problem": "The example stores redundant data or mutates an existing array/object.",
+        "why": "The displayed result can drift from the source data or React may not observe the intended change.",
+        "fix": "Derive values where possible and create a new value when updating state."
+      },
+      {
+        "problem": "A browser or framework capability is assumed to exist everywhere.",
+        "why": "Availability can depend on the host runtime, React version, and framework.",
+        "fix": "Check the official reference, declare the runtime/version, and provide a fallback when appropriate."
+      }
+    ],
+    "summary": [
+      "React Testing Library fits into the broader Testing React Applications workflow.",
+      "The central concept is User-centered testing; apply it with the smallest reproducible example.",
+      "Verify correctness with at least one normal input and one boundary or failure case."
+    ],
+    "references": [
+      "https://react.dev/learn",
+      "https://react.dev/reference/react",
+      "https://react.dev/blog/2026/09/09/react-19-3"
+    ]
+  },
+  "exercise_files": [
+    "../exercises/025-automated-test-suite.json"
+  ],
+  "sources": [
+    {
+      "title": "React — Learn",
+      "url": "https://react.dev/learn",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "React Testing Library",
+        "User-centered testing",
+        "Queries based on accessible roles and labels"
+      ]
+    },
+    {
+      "title": "React Reference",
+      "url": "https://react.dev/reference/react",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "React APIs and behavior",
+        "React Testing Library"
+      ]
+    },
+    {
+      "title": "React 19.3 Release Notes",
+      "url": "https://react.dev/blog/2026/09/09/react-19-3",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "version-specific modern APIs and compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus and authored as an educational draft; technical/instructional review required before publication."
+}

@@ -1,0 +1,56 @@
+{
+  "id": "r-exercise-017",
+  "slug": "combine-multiple-monthly-sales-files",
+  "title": "Combine multiple monthly sales files",
+  "type": "short_answer",
+  "lesson_id": "r-lesson-103",
+  "module_id": "r-module-10",
+  "sequence": 17,
+  "difficulty": "intermediate",
+  "prompt": "Sketch a safe batch pipeline to discover monthly CSVs, validate schemas and bind compatible rows.",
+  "objective": "Practice file handling, row binding, automation with explicit acceptance criteria and a reproducible result.",
+  "target_skills": [
+    "File handling",
+    "row binding",
+    "automation"
+  ],
+  "starter": {
+    "language": "r",
+    "source_code": "files <- list.files(\"data/monthly\", pattern = \"\\\\.csv$\", full.names = TRUE)\nparts <- lapply(files, read.csv)\ncombined <- do.call(rbind, parts)",
+    "mode": "static-validation"
+  },
+  "expected_output": "Use a controlled sample directory, check the same columns and types, and stop on schema mismatches.",
+  "public_tests": [
+    {
+      "name": "Includes core concept",
+      "description": "The submission demonstrates list.files."
+    },
+    {
+      "name": "Includes validation or outcome",
+      "description": "The submission also demonstrates do.call."
+    }
+  ],
+  "acceptance_criteria": [
+    "The submission addresses the task and all required core concepts.",
+    "Expected behavior and an edge case are described and checked.",
+    "Input assumptions, missing-value handling and output shape are documented where relevant.",
+    "Code is readable, uses appropriate R constructs and avoids destructive/external side effects.",
+    "Any result derived from statistics includes assumptions and relevant limitations."
+  ],
+  "hints": [
+    "Identify the input, output and key R concept: File handling, row binding, automation.",
+    "Use a controlled sample directory, check the same columns and types, and stop on schema mismatches.",
+    "Test a normal case, a boundary/failure case, and verify the output independently."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "list.files",
+      "do.call"
+    ]
+  },
+  "grading_method": "Draft/static token check only. The current platform grader can check whether the submitted text contains these strings, but it cannot execute R or prove program correctness. Keep unpublished and use human review or a separately isolated R runner before enabling XP-bearing completion.",
+  "retry_policy": "Allow learner retries in a reviewed course policy; this content file does not override platform retry or XP policy.",
+  "solution_file": "../solutions/017-combine-multiple-monthly-sales-files-solution.json",
+  "status": "draft"
+}

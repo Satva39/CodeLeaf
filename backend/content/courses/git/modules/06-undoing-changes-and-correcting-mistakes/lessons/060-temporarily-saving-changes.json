@@ -1,0 +1,147 @@
+{
+  "id": "git-lesson-060",
+  "slug": "temporarily-saving-changes",
+  "title": "Temporarily Saving Changes",
+  "sequence": 60,
+  "module_id": "git-module-06",
+  "module_slug": "undoing-changes-and-correcting-mistakes",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "primary_service": "Git version control",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "git-lesson-059"
+  ],
+  "previous_lesson_id": "git-lesson-059",
+  "next_lesson_id": "git-lesson-061",
+  "keywords": [
+    "git-automation-scripting-and-production-workflows",
+    "undoing-changes-and-correcting-mistakes",
+    "git",
+    "using-git-stash",
+    "saving-tracked-changes",
+    "including-untracked-files-when-appropriate",
+    "listing-and-inspecting-stashes"
+  ],
+  "source_syllabus_number": 60,
+  "subtopics": [
+    "Using git stash",
+    "Saving tracked changes",
+    "Including untracked files when appropriate",
+    "Listing and inspecting stashes"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and boundaries of temporarily saving changes.",
+    "Choose and interpret a Git command relevant to temporarily saving changes using a disposable repository.",
+    "Verify the result with repository state or history and identify one safety limitation."
+  ],
+  "content": {
+    "intro": "This lesson introduces temporarily saving changes as part of Undoing Changes and Correcting Mistakes. It follows the supplied Git curriculum and adds an original explanation, an inspectable command example, troubleshooting notes, and a practice task.",
+    "why_it_matters": "`git stash` saves selected in-progress changes so you can move to other work. Stashes are local and temporary, and the default does not include untracked files unless requested.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 6: Undoing Changes and Correcting Mistakes",
+        "asset_path": "diagrams/module-06-overview.svg",
+        "alt_text": "Four-step view of Undoing Changes and Correcting Mistakes, with key syllabus checkpoints and a verification reminder.",
+        "caption": "Original CodeLeaf diagram. Review labels as well as the explanatory text; color is not the only signal."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "**Core idea.** `git stash` saves selected in-progress changes so you can move to other work. Stashes are local and temporary, and the default does not include untracked files unless requested.\n\nFor **Temporarily Saving Changes**, keep the named subtopics in view: Using git stash; Saving tracked changes; Including untracked files when appropriate; Listing and inspecting stashes. Treat those as the scope of this lesson, then practise the smallest workflow that demonstrates the idea."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "**Before you run a command:** decide what state you are inspecting or changing, identify whether the effect is local or remote, and write down what evidence would count as success. Inspect the working tree first. Untracked files need -u when intentionally included."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered",
+        "items": [
+          "Using git stash",
+          "Saving tracked changes",
+          "Including untracked files when appropriate",
+          "Listing and inspecting stashes"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Command example: Temporarily Saving Changes",
+        "language": "bash",
+        "code": "git stash push -m \"work in progress\"\ngit stash list",
+        "expected_output": "The tracked working changes are saved to a stash when applicable, and the stash list shows the entry.",
+        "run_instructions": "Inspect the working tree first. Untracked files need -u when intentionally included.",
+        "reset_steps": "Use a disposable repository. If the exercise changes state, check git status and git log before and after; discard the practice directory only after confirming it contains no valuable work.",
+        "execution_mode": "human-review",
+        "limitations": "The CodeLeaf web lesson page does not execute arbitrary Git commands. Run commands locally in a disposable repository with a Git version appropriate to your task. Placeholder paths, branches, commit IDs and repository URLs must be replaced with values from that practice repository."
+      },
+      {
+        "type": "callout",
+        "title": "Safety and verification checkpoint",
+        "text": "Start with git status --short --branch. For destructive or history-rewriting operations, review the exact target, create a recovery reference when appropriate, and keep valuable work backed up. Never put credentials, access tokens or private keys in course submissions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-060-questions.json"
+  },
+  "task": "In a disposable practice repository, follow the command example, capture the result, and write one sentence explaining how the result verifies the lesson’s concept. Keep unrelated changes out of the exercise.",
+  "hints": [
+    "Start by reviewing: Using git stash.",
+    "Use a read-only inspection command before any operation that changes files, refs or remote state.",
+    "After the example, verify with git status --short --branch and/or git log --oneline --graph as appropriate."
+  ],
+  "expected_output": "The tracked working changes are saved to a stash when applicable, and the stash list shows the entry.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Running a state-changing command without confirming the target repository or branch.",
+      "why": "A command may affect the wrong working tree or move a reference that other work depends on.",
+      "fix": "Check git rev-parse --show-toplevel and git status --short --branch before proceeding."
+    },
+    {
+      "problem": "Assuming a command succeeded because no error was visible.",
+      "why": "Some Git commands are silent on success, and some expected actions are blocked by repository state or permissions.",
+      "fix": "Verify status, log, references, remote state or the named output explicitly."
+    },
+    {
+      "problem": "Using an example placeholder literally or applying a destructive example to valuable work.",
+      "why": "Paths, branch names and object IDs depend on the current repository; restore/reset/clean operations can discard work.",
+      "fix": "Substitute real practice values, use a disposable repository, and preview changes before proceeding."
+    }
+  ],
+  "summary": [
+    "Temporarily Saving Changes is covered through these syllabus topics: Using git stash; Saving tracked changes; Including untracked files when appropriate; Listing and inspecting stashes.",
+    "Choose the command for the intended effect; understand whether it changes files, the index, local references, or remote state.",
+    "Verify the result, record unexpected output, and retain a recovery path for risky operations."
+  ],
+  "references": [
+    "references/reference-index.json",
+    "https://git-scm.com/docs",
+    "https://git-scm.com/book/en/v2"
+  ],
+  "sources": [
+    {
+      "title": "Git Reference Documentation",
+      "url": "https://git-scm.com/docs",
+      "publisher": "Git project",
+      "checked_on": "2026-10-15",
+      "source_type": "official-reference"
+    },
+    {
+      "title": "Pro Git Book, 2nd Edition",
+      "url": "https://git-scm.com/book/en/v2",
+      "publisher": "Git project / Pro Git",
+      "checked_on": "2026-10-15",
+      "source_type": "officially-hosted-book"
+    }
+  ],
+  "exercise_files": [
+    "../exercises/016-stash-workflow.json"
+  ],
+  "technical_review_date": "2026-10-15",
+  "status": "draft",
+  "status_note": "Generated from the supplied Git syllabus. Content and commands need editorial/technical review before publication."
+}

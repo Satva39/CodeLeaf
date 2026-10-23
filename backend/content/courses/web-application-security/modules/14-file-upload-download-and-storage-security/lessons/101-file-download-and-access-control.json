@@ -1,0 +1,192 @@
+{
+  "id": "web-application-security-lesson-101",
+  "slug": "file-download-and-access-control",
+  "title": "File Download and Access Control",
+  "sequence": 101,
+  "module_id": "web-application-security-module-14",
+  "module_slug": "file-upload-download-and-storage-security",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced-security",
+  "curriculum_tier": "advanced",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "web-application-security-lesson-100"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-100",
+  "next_lesson_id": "web-application-security-lesson-102",
+  "keywords": [
+    "file",
+    "download",
+    "and",
+    "access",
+    "control",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 101,
+  "source_syllabus_title": "File Download and Access Control",
+  "source_subtopics": [
+    {
+      "number": "101.1",
+      "title": "Authorization for downloaded files"
+    },
+    {
+      "number": "101.2",
+      "title": "Preventing path traversal"
+    },
+    {
+      "number": "101.3",
+      "title": "Safe content disposition"
+    },
+    {
+      "number": "101.4",
+      "title": "Content-Type handling and browser interpretation"
+    },
+    {
+      "number": "101.5",
+      "title": "Protecting temporary and generated files"
+    },
+    {
+      "number": "101.6",
+      "title": "Expiring private download links"
+    }
+  ],
+  "subtopics": [
+    "Authorization for downloaded files",
+    "Preventing path traversal",
+    "Safe content disposition",
+    "Content-Type handling and browser interpretation",
+    "Protecting temporary and generated files",
+    "Expiring private download links"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in File Download and Access Control.",
+    "Choose an appropriate defensive control for File Download and Access Control and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for File Download and Access Control, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 14: File Upload, Download, and Storage Security. It builds practical understanding of File Download and Access Control with the syllabus subtopics retained below.",
+    "why_it_matters": "File Download and Access Control addresses how untrusted data or requests cross a boundary and may influence application behavior. The safe fix should address the root cause and remain testable. Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: File Download and Access Control",
+        "asset_path": "diagrams/lesson-101-file-download-and-access-control.svg",
+        "alt_text": "Four-stage visual model for File Download and Access Control: Identify caller; Resolve resource; Enforce server policy; Test allow + deny.",
+        "caption": "Concept map for File Download and Access Control. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "File Download and Access Control can be understood through this sequence: Identify caller → Resolve resource → Enforce server policy → Test allow + deny. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 101.1 Authorization for downloaded files; 101.2 Preventing path traversal; 101.3 Safe content disposition; 101.4 Content-Type handling and browser interpretation; 101.5 Protecting temporary and generated files; 101.6 Expiring private download links. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "execution_mode": "static-validation",
+        "title": "Safe reference example: File Download and Access Control",
+        "code": "def may_read_record(user, record):\n    return (\n        record.owner_id == user.id\n        or user.has_role(\"administrator\")\n    )\n\n# Call this policy on the server for every read and write.",
+        "expected_output": "The function returns True only for a matching owner or an administrator role, assuming the identity and record came from trusted server-side lookups.",
+        "run_instructions": "Illustrative policy function; adapt roles and object model, authenticate the caller, and test denied as well as allowed paths.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “File Download and Access Control”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for File Download and Access Control in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-101-questions.json",
+    "recap": [
+      "File Download and Access Control is a security boundary/control topic, not a standalone checklist item.",
+      "Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "File Upload Cheat Sheet",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "file type checks",
+        "size limits",
+        "storage isolation"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

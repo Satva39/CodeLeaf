@@ -1,0 +1,8 @@
+{
+  "id": "sass-exercise-solution-012",
+  "exercise_id": "sass-exercise-012",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "One valid approach starts with:\n\n@use \"sass:map\";\n$tokens: (space: (sm: 0.5rem, md: 1rem));\n@function token($group, $key) {\n  @if not map.has-key($tokens, $group, $key) { @error \"Unknown token\"; }\n  @return map.get($tokens, $group, $key);\n}\n.card { padding: token(space, md); }\n\nThen compile it with Dart Sass and review the generated CSS. Acceptance depends on the exact prompt and evidence, not on matching the starter byte-for-byte.",
+  "explanation": "Token Lookup Functions is a practice task aligned to lesson 124 (Token Lookup Functions). Silent null values can make a design system fail far from the original configuration mistake. The automatic grader checks only the required strings; a reviewer should verify semantics, real compiled output, and project quality."
+}

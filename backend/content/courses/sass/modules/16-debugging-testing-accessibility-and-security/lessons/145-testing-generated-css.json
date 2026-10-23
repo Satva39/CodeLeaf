@@ -1,0 +1,149 @@
+{
+  "sequence": 145,
+  "title": "Testing Generated CSS",
+  "slug": "testing-generated-css",
+  "id": "sass-lesson-145",
+  "module_id": "sass-module-16",
+  "module_slug": "debugging-testing-accessibility-and-security",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 12,
+  "status": "draft",
+  "prerequisites": [
+    "sass-lesson-144"
+  ],
+  "previous_lesson_id": "sass-lesson-144",
+  "next_lesson_id": "sass-lesson-146",
+  "keywords": [
+    "testing-generated-css",
+    "reviewing-compiled-output",
+    "comparing-generated-css-with-expected-output",
+    "checking-generated-selector-names",
+    "verifying-responsive-variants",
+    "detecting-unintended-output-growth"
+  ],
+  "source_syllabus_number": 145,
+  "learning_outcomes": [
+    "Explain testing generated css and connect it to at least two of its syllabus subtopics.",
+    "Apply testing generated css in a small SCSS example and predict the resulting CSS or compiler behavior.",
+    "Inspect the output, diagnose one plausible mistake, and state a relevant limitation or best practice."
+  ],
+  "exercise_files": [],
+  "content": {
+    "intro": "This lesson turns **Testing Generated CSS** into a practical, inspectable step. You will connect reviewing compiled output with comparing generated css with expected output, then check what Dart Sass emits instead of relying on the SCSS source alone.",
+    "why_it_matters": "A stylesheet is correct only when it compiles and behaves correctly in the target browser and interface. Keep the source, compiler diagnostics, generated CSS, and rendered page available while debugging.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual map: Testing Generated CSS",
+        "asset_path": "diagrams/lessons/lesson-145.svg",
+        "alt_text": "Three-step diagram for Testing Generated CSS: understand the concept, apply it to reviewing compiled output, and verify the result.",
+        "caption": "Use this visual as a check sequence for testing generated css: understand, apply, and verify."
+      },
+      {
+        "type": "paragraph",
+        "title": "The mental model",
+        "text": "Use reproducible checks: compile the required entrypoints, inspect emitted selectors, test keyboard focus and reduced motion where relevant, and verify supported browser features independently of Sass syntax."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics in this lesson",
+        "items": [
+          {
+            "title": "Reviewing compiled output",
+            "text": "For reviewing compiled output, identify the relevant source rule, predict the intended result, and check the emitted CSS against that expectation."
+          },
+          {
+            "title": "Comparing generated CSS with expected output",
+            "text": "Trace the source rule to its emitted CSS and inspect the output file. Treat the browser-facing CSS, not the SCSS source, as the final artifact."
+          },
+          {
+            "title": "Checking generated selector names",
+            "text": "Predict the expanded selector before compiling. Keep nesting shallow and verify that the emitted selector does not match more elements than intended."
+          },
+          {
+            "title": "Verifying responsive variants",
+            "text": "Sass emits the at-rule; the browser evaluates its condition at runtime. Confirm that the output contains the intended query and test the interface at real viewport or feature conditions."
+          },
+          {
+            "title": "Detecting unintended output growth",
+            "text": "Measure the produced CSS or browser behavior and compare it against a baseline. Prefer fewer unnecessary selectors over abstractions that generate unneeded combinations."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "1. Start with the smallest source file that demonstrates testing generated css. 2. State what should change and what should stay the same. 3. Compile the entrypoint with Dart Sass, or use the stated command if this lesson is about the toolchain. 4. Compare the resulting CSS or diagnostic with the expected result, then change one input and repeat."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Testing Generated CSS",
+        "language": "scss",
+        "language_label": "SCSS",
+        "code": ".card {\n  &__title { font-weight: 700; }\n  &:focus-within { outline: 2px solid currentColor; }\n}",
+        "expected_output": ".card__title and .card:focus-within are emitted; test the selector names and focus behavior in the rendered page.",
+        "run_mode": "static-validation",
+        "execution_note": "This course example is a Sass/SCSS or tooling example. CodeLeaf’s current in-browser playground previews HTML/CSS/JavaScript only; compile Sass locally with Dart Sass. Do not treat the browser preview as a Sass compiler."
+      },
+      {
+        "type": "callout",
+        "title": "Modern Sass note",
+        "text": "Use Dart Sass for new work. Prefer @use / @forward and namespaced sass: built-in modules. Sass compiles to CSS; browser-native CSS features still run in the browser."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Audit a small stylesheet for testing generated css. Save the original source and compiled CSS, make one deliberate change, recompile, and write down the evidence that the change is correct and safe."
+      },
+      {
+        "type": "paragraph",
+        "title": "Common mistake to avoid",
+        "text": "Do not edit generated CSS when you intend to change source behavior. Edit the SCSS entrypoint or its module, compile again, and compare the generated output."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-145-questions.json"
+  },
+  "task": "Audit a small stylesheet for testing generated css. Save the original source and compiled CSS, make one deliberate change, recompile, and write down the evidence that the change is correct and safe.",
+  "task_acceptance_criteria": [
+    "The example includes the intended Sass construct and a clear input.",
+    "The expected output or tool result is documented and consistent with the source.",
+    "The work is reproducible and includes one limitation, test, or troubleshooting note."
+  ],
+  "hints": [
+    "Reduce the example to one source file and one entrypoint before adding more abstractions.",
+    "Read the first compiler diagnostic and confirm you are editing the Sass source, not only generated CSS.",
+    "Compile and inspect the emitted CSS; compare exact selectors, values, and at-rules with your expectation."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Assuming SCSS runs directly in the browser.",
+      "why": "Browsers consume CSS, not Sass syntax.",
+      "fix": "Compile with Dart Sass and load the resulting .css file in the HTML page."
+    },
+    {
+      "problem": "Trusting source readability without inspecting generated output.",
+      "why": "Nesting, mixins, loops, and extension can emit unexpected selectors or more CSS than intended.",
+      "fix": "Compile a small example and inspect the CSS output or browser computed styles."
+    }
+  ],
+  "summary": [
+    "Testing Generated CSS is useful when it solves the specific organization or reuse problem described in this lesson.",
+    "Keep compile-time Sass behavior distinct from browser-time CSS behavior.",
+    "Validate both source intent and generated CSS before relying on the pattern in a larger project."
+  ],
+  "sources": [
+    {
+      "title": "Sass documentation",
+      "url": "https://sass-lang.com/documentation/",
+      "publisher": "Sass",
+      "supports": [
+        "Reference for lesson 145: Testing Generated CSS"
+      ]
+    }
+  ],
+  "run_mode": "static-validation",
+  "status_note": "Draft lesson generated from the attached Sass.pdf curriculum and aligned to modern Dart Sass documentation; subject-matter and compiled-example review is required before publishing.",
+  "exercise_ids": []
+}

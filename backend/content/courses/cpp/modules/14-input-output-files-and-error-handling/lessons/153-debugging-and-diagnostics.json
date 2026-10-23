@@ -1,0 +1,200 @@
+{
+  "id": "cpp-lesson-153",
+  "slug": "debugging-and-diagnostics",
+  "title": "Debugging and Diagnostics",
+  "sequence": 153,
+  "module_id": "cpp-module-14",
+  "module_slug": "input-output-files-and-error-handling",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "cpp-lesson-152"
+  ],
+  "previous_lesson_id": "cpp-lesson-152",
+  "next_lesson_id": "cpp-lesson-154",
+  "keywords": [
+    "debugging-and-diagnostics",
+    "reading-error-messages",
+    "using-breakpoints",
+    "stepping-through-execution",
+    "inspecting-variables",
+    "debugging-call-stacks",
+    "logging-and-diagnostic-messages",
+    "reproducing-bugs-reliably"
+  ],
+  "source_syllabus_number": 153,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Reading Error Messages",
+    "Using Breakpoints",
+    "Stepping Through Execution",
+    "Inspecting Variables",
+    "Debugging Call Stacks",
+    "Logging and Diagnostic Messages",
+    "Reproducing Bugs Reliably"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and core rule of debugging and diagnostics using at least one example.",
+    "Trace or adapt a minimal C++ example related to debugging and diagnostics and state its expected result.",
+    "Identify one precondition, error case, lifetime issue, portability assumption or version constraint relevant to the topic."
+  ],
+  "content": {
+    "intro": "Debugging and Diagnostics focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Debugging and Diagnostics matters because try missing files, malformed input and empty data, and verify both the result and the failure path. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Debugging and Diagnostics: visual trace",
+        "asset_path": "diagrams/lessons/lesson-153.svg",
+        "alt_text": "Lesson 153 visual for Debugging and Diagnostics; concept: Reading Error Messages; apply: Using Breakpoints; verify: Stepping Through Execution.",
+        "caption": "Original lesson-specific overview: understand reading error messages, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "I/O can fail because of stream state, filesystem conditions or malformed data. Robust programs check operations and report errors without leaving state half-updated.\n\nDebugging and Diagnostics focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nTry missing files, malformed input and empty data, and verify both the result and the failure path."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Debugging and Diagnostics",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <cassert>\n#include <iostream>\n\nint clamp_score(int value) { assert(value >= 0 && value <= 100); return value; }\nint main() { std::cout << clamp_score(85) << '\\n'; }\n",
+        "expected_output": "85",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "A debugger inspects program state; assertions document assumptions during development. Assertions are disabled when NDEBUG is defined, so do not use them for required runtime input validation."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Reading Error Messages",
+            "text": "Identify how reading error messages can fail, what diagnostic evidence to collect, and which validation or design choice reduces the risk."
+          },
+          {
+            "title": "Using Breakpoints",
+            "text": "Apply Breakpoints with explicit preconditions, clear naming and a small test for an ordinary and boundary case."
+          },
+          {
+            "title": "Stepping Through Execution",
+            "text": "Explain stepping through execution in the context of Debugging and Diagnostics: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Inspecting Variables",
+            "text": "Explain inspecting variables in the context of Debugging and Diagnostics: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Debugging Call Stacks",
+            "text": "Explain debugging call stacks in the context of Debugging and Diagnostics: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Logging and Diagnostic Messages",
+            "text": "Explain logging and diagnostic messages in the context of Debugging and Diagnostics: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Reproducing Bugs Reliably",
+            "text": "Explain reproducing bugs reliably in the context of Debugging and Diagnostics: identify the rule, trace a minimal example, and check one boundary or failure case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate reading error messages, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "Use standard C++ rather than compiler-specific behavior unless the lesson explicitly labels the dependency. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-153-questions.json",
+    "task": "Extend the example for Debugging and Diagnostics with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+    "task_acceptance_criteria": [
+      "The code compiles in the documented standard mode with warnings enabled.",
+      "The predicted output matches the actual result for the added case.",
+      "One relevant boundary, lifetime, portability or error case is tested or documented."
+    ],
+    "hints": [
+      "Start by isolating the central rule from Debugging and Diagnostics.",
+      "Trace values or object lifetimes before changing the program.",
+      "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+    ],
+    "summary": [
+      "Debugging and Diagnostics is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying debugging and diagnostics.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "85"
+  },
+  "task": "Extend the example for Debugging and Diagnostics with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+  "hints": [
+    "Start by isolating the central rule from Debugging and Diagnostics.",
+    "Trace values or object lifetimes before changing the program.",
+    "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+  ],
+  "expected_output": "85",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Debugging and Diagnostics is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying debugging and diagnostics.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 14, lesson 153: Debugging and Diagnostics.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

@@ -1,0 +1,145 @@
+{
+  "id": "git-lesson-015",
+  "slug": "git-configuration-files",
+  "title": "Git Configuration Files",
+  "sequence": 15,
+  "module_id": "git-module-02",
+  "module_slug": "git-installation-and-configuration",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "primary_service": "Git version control",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "git-lesson-014"
+  ],
+  "previous_lesson_id": "git-lesson-014",
+  "next_lesson_id": "git-lesson-016",
+  "keywords": [
+    "git-automation-scripting-and-production-workflows",
+    "git-installation-and-configuration",
+    "git",
+    "configuration-file-locations",
+    "reading-configuration-values",
+    "adding-modifying-and-removing-settings",
+    "understanding-configuration-precedence"
+  ],
+  "source_syllabus_number": 15,
+  "subtopics": [
+    "Configuration file locations",
+    "Reading configuration values",
+    "Adding, modifying, and removing settings",
+    "Understanding configuration precedence"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and boundaries of git configuration files.",
+    "Choose and interpret a Git command relevant to git configuration files using a disposable repository.",
+    "Verify the result with repository state or history and identify one safety limitation."
+  ],
+  "content": {
+    "intro": "This lesson introduces git configuration files as part of Git Installation and Configuration. It follows the supplied Git curriculum and adds an original explanation, an inspectable command example, troubleshooting notes, and a practice task.",
+    "why_it_matters": "Git configuration determines per-user and per-repository behavior. Inspecting the effective scope helps explain why a setting applies and makes team setup reproducible.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 2: Git Installation and Configuration",
+        "asset_path": "diagrams/module-02-overview.svg",
+        "alt_text": "Four-step view of Git Installation and Configuration, with key syllabus checkpoints and a verification reminder.",
+        "caption": "Original CodeLeaf diagram. Review labels as well as the explanatory text; color is not the only signal."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "**Core idea.** Git configuration determines per-user and per-repository behavior. Inspecting the effective scope helps explain why a setting applies and makes team setup reproducible.\n\nFor **Git Configuration Files**, keep the named subtopics in view: Configuration file locations; Reading configuration values; Adding, modifying, and removing settings; Understanding configuration precedence. Treat those as the scope of this lesson, then practise the smallest workflow that demonstrates the idea."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "**Before you run a command:** decide what state you are inspecting or changing, identify whether the effect is local or remote, and write down what evidence would count as success. Inspect before changing settings. Never place credentials or access tokens in Git config."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered",
+        "items": [
+          "Configuration file locations",
+          "Reading configuration values",
+          "Adding, modifying, and removing settings",
+          "Understanding configuration precedence"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Command example: Git Configuration Files",
+        "language": "bash",
+        "code": "git config --show-origin --list",
+        "expected_output": "Existing settings with the source configuration file shown where supported",
+        "run_instructions": "Inspect before changing settings. Never place credentials or access tokens in Git config.",
+        "reset_steps": "Use a disposable repository. If the exercise changes state, check git status and git log before and after; discard the practice directory only after confirming it contains no valuable work.",
+        "execution_mode": "static-validation",
+        "limitations": "The CodeLeaf web lesson page does not execute arbitrary Git commands. Run commands locally in a disposable repository with a Git version appropriate to your task. Placeholder paths, branches, commit IDs and repository URLs must be replaced with values from that practice repository."
+      },
+      {
+        "type": "callout",
+        "title": "Safety and verification checkpoint",
+        "text": "Start with git status --short --branch. For destructive or history-rewriting operations, review the exact target, create a recovery reference when appropriate, and keep valuable work backed up. Never put credentials, access tokens or private keys in course submissions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-015-questions.json"
+  },
+  "task": "In a new practice folder, verify that Git is installed, inspect the relevant configuration scope, and record the command output and the version assumption for your environment.",
+  "hints": [
+    "Start by reviewing: Configuration file locations.",
+    "Use a read-only inspection command before any operation that changes files, refs or remote state.",
+    "After the example, verify with git status --short --branch and/or git log --oneline --graph as appropriate."
+  ],
+  "expected_output": "Existing settings with the source configuration file shown where supported",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Running a state-changing command without confirming the target repository or branch.",
+      "why": "A command may affect the wrong working tree or move a reference that other work depends on.",
+      "fix": "Check git rev-parse --show-toplevel and git status --short --branch before proceeding."
+    },
+    {
+      "problem": "Assuming a command succeeded because no error was visible.",
+      "why": "Some Git commands are silent on success, and some expected actions are blocked by repository state or permissions.",
+      "fix": "Verify status, log, references, remote state or the named output explicitly."
+    },
+    {
+      "problem": "Using an example placeholder literally or applying a destructive example to valuable work.",
+      "why": "Paths, branch names and object IDs depend on the current repository; restore/reset/clean operations can discard work.",
+      "fix": "Substitute real practice values, use a disposable repository, and preview changes before proceeding."
+    }
+  ],
+  "summary": [
+    "Git Configuration Files is covered through these syllabus topics: Configuration file locations; Reading configuration values; Adding, modifying, and removing settings; Understanding configuration precedence.",
+    "Choose the command for the intended effect; understand whether it changes files, the index, local references, or remote state.",
+    "Verify the result, record unexpected output, and retain a recovery path for risky operations."
+  ],
+  "references": [
+    "references/reference-index.json",
+    "https://git-scm.com/docs",
+    "https://git-scm.com/book/en/v2"
+  ],
+  "sources": [
+    {
+      "title": "Git Reference Documentation",
+      "url": "https://git-scm.com/docs",
+      "publisher": "Git project",
+      "checked_on": "2026-10-15",
+      "source_type": "official-reference"
+    },
+    {
+      "title": "Pro Git Book, 2nd Edition",
+      "url": "https://git-scm.com/book/en/v2",
+      "publisher": "Git project / Pro Git",
+      "checked_on": "2026-10-15",
+      "source_type": "officially-hosted-book"
+    }
+  ],
+  "exercise_files": [],
+  "technical_review_date": "2026-10-15",
+  "status": "draft",
+  "status_note": "Generated from the supplied Git syllabus. Content and commands need editorial/technical review before publication."
+}

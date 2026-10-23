@@ -1,0 +1,202 @@
+{
+  "id": "django-lesson-149",
+  "slug": "the-django-messages-framework",
+  "title": "The Django Messages Framework",
+  "sequence": 149,
+  "module_id": "django-module-14",
+  "module_slug": "middleware-cookies-sessions-and-messaging",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "optional-specialization",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "django-lesson-148"
+  ],
+  "previous_lesson_id": "django-lesson-148",
+  "next_lesson_id": "django-lesson-150",
+  "keywords": [
+    "the-django-messages-framework",
+    "middleware-cookies-sessions-and-messaging",
+    "django",
+    "success-information-warning-and-error-messages",
+    "flash-style-messages",
+    "message-storage-backends",
+    "displaying-messages-in-templates",
+    "avoiding-duplicated-or-stale-messages"
+  ],
+  "source_syllabus_number": 149,
+  "subtopics": [
+    "Success, information, warning, and error messages",
+    "Flash-style messages",
+    "Message storage backends",
+    "Displaying messages in templates",
+    "Avoiding duplicated or stale messages"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of the django messages framework and at least two listed subtopics.",
+    "Interpret the the django messages framework example and predict its expected result.",
+    "Choose a verification step and identify one version, security, data, or troubleshooting consideration."
+  ],
+  "content": {
+    "intro": "Learn the django messages framework through a compact visual, an inspectable Django example, and a practical verification task.",
+    "why_it_matters": "The Django Messages Framework matters because a Django project has to behave predictably across requests, database state, configuration, and deployments. Understanding this piece makes the surrounding application easier to test, maintain, and secure.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Visual guide: The Django Messages Framework",
+        "asset_path": "diagrams/module-14-overview.svg",
+        "alt_text": "Overview visual for module 14, Middleware, Cookies, Sessions, and Messaging; use it as a roadmap for the lesson topic The Django Messages Framework.",
+        "caption": "Use this visual to connect The Django Messages Framework to the broader flow; it is an overview, not a substitute for the worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "This lesson examines the django messages framework as part of middleware, cookies, sessions, and messaging. The objective is to understand the behavior, connect it to the listed subtopics, and verify it with a small example rather than relying on memorized syntax."
+      },
+      {
+        "type": "paragraph",
+        "title": "What to cover",
+        "text": "The source syllabus for this lesson names: Success, information, warning, and error messages; Flash-style messages; Message storage backends; Displaying messages in templates; Avoiding duplicated or stale messages. Keep these distinct concepts together: know what each item does, when it applies, and what assumption must be verified in your project."
+      },
+      {
+        "type": "list",
+        "title": "Lesson concepts and practical notes",
+        "items": [
+          {
+            "title": "Success, information, warning, and error messages",
+            "text": "Treat Success, information, warning, and error messages as a reproducible diagnostic: capture the exact input and observed result, isolate one hypothesis, and add a regression test once the cause is fixed. Avoid exposing internal stack traces or secrets to public users."
+          },
+          {
+            "title": "Flash-style messages",
+            "text": "Flash-style messages shapes the presentation layer. Separate layout from business logic, escape untrusted output, provide meaningful empty/error states, and check semantic structure and keyboard usability."
+          },
+          {
+            "title": "Message storage backends",
+            "text": "Message storage backends shapes the presentation layer. Separate layout from business logic, escape untrusted output, provide meaningful empty/error states, and check semantic structure and keyboard usability."
+          },
+          {
+            "title": "Displaying messages in templates",
+            "text": "Displaying messages in templates shapes the presentation layer. Separate layout from business logic, escape untrusted output, provide meaningful empty/error states, and check semantic structure and keyboard usability."
+          },
+          {
+            "title": "Avoiding duplicated or stale messages",
+            "text": "Avoiding duplicated or stale messages shapes the presentation layer. Separate layout from business logic, escape untrusted output, provide meaningful empty/error states, and check semantic structure and keyboard usability."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: The Django Messages Framework",
+        "language": "python",
+        "code": "from django.shortcuts import render\n\ndef home(request):\n    return render(request, \"catalog/home.html\", {\"title\": \"Catalog\"})",
+        "expected_output": "Django searches configured template directories for the named template.",
+        "execution_mode": "server-runner",
+        "run_instructions": "Open a local project using the documented Django 6.1-compatible Python environment. If this snippet depends on model names, URL configuration, settings, or an optional package, add those prerequisites before running it. Otherwise inspect it as a static example. CodeLeaf browser preview does not execute Django/Python server code.",
+        "troubleshooting": "Check APP_DIRS, INSTALLED_APPS, TEMPLATES[\"DIRS\"], namespace paths and context keys if a template is missing."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "First identify the input and the responsible Django component. Next trace how the example moves through “The Django Messages Framework” and the related concept “Success, information, warning, and error messages”. Predict the result before running or inspecting it. Finally compare the observed behavior with the expected result and the cited official documentation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Change one input or configuration choice related to Success, information, warning, and error messages. Write down the expected outcome, test one normal case and one invalid or boundary case, then record what changed. Do not add real credentials or sensitive production data."
+      },
+      {
+        "type": "paragraph",
+        "title": "Common mistakes and fixes",
+        "text": "Common pitfalls include skipping a required configuration/import, copying a fragment without its model or URL context, trusting client input, or treating a development-only behavior as production-ready. Check the earliest failing assumption, consult the version-specific docs, and add a regression test for the failure you found."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to describe the django messages framework, explain the listed topics, inspect the example, and choose an appropriate verification step. Keep the scope and version caveat visible when sharing your solution."
+      }
+    ],
+    "execution_mode": "server-runner",
+    "expected_result": "Django searches configured template directories for the named template.",
+    "run_instructions": "Use an isolated local project and synthetic data. Follow the code block instructions; setup-dependent fragments must be integrated into the relevant app. Static examples can be reviewed without execution.",
+    "troubleshooting": [
+      "Check APP_DIRS, INSTALLED_APPS, TEMPLATES[\"DIRS\"], namespace paths and context keys if a template is missing.",
+      "Confirm the active Python virtual environment, settings module, app registration, URL routing, dependencies, and database migrations before debugging application behavior."
+    ],
+    "reset_steps": "Reset only local practice data or recreate the disposable development database as documented for your project. Never delete production data or migration history to reset an exercise.",
+    "try_it_yourself": "Apply Success, information, warning, and error messages to a small local example, then record a normal case, an invalid/boundary case, and the expected versus observed result.",
+    "progressive_hints": [
+      "Identify which Django component owns this behavior.",
+      "Trace a single request or object through the example before adding more features.",
+      "Use the relevant linked official documentation and a test for the failure case."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Copying a framework fragment without its imports, configuration, model, or URL context.",
+        "why": "The snippet may be incomplete when separated from a Django project.",
+        "fix": "Use the stated prerequisites and run the relevant management check or focused test."
+      },
+      {
+        "problem": "Trusting input or relying only on a happy-path example.",
+        "why": "Invalid values, unauthorized requests, or concurrent activity can violate assumptions.",
+        "fix": "Validate on the server and add a negative or boundary test."
+      },
+      {
+        "problem": "Treating the development sample as production-ready.",
+        "why": "Production hosting, secrets, storage, monitoring and resource limits differ from local use.",
+        "fix": "Follow the current deployment/security references and document untested areas."
+      }
+    ],
+    "recap": "The Django Messages Framework connects Success, information, warning, and error messages; Flash-style messages; Message storage backends; Displaying messages in templates; Avoiding duplicated or stale messages. Verify behavior in your project and keep any version-specific assumption documented.",
+    "knowledge_check_file": "exams/question-files/lesson-149-questions.json",
+    "content_review_status": "draft",
+    "accessibility_notes": "Use descriptive headings, meaningful labels/alt text, keyboard-accessible interactions, and text explanations alongside the diagram. Never rely on color alone.",
+    "version_notes": "Examples target Django 6.1 concepts and must be checked against the installed supported patch release. Optional third-party integrations are labelled separately; snippets with dependencies are not claimed to have been executed.",
+    "source_syllabus_topics_reviewed": true,
+    "topic_explanations_count": 5,
+    "run_mode": "static-validation",
+    "task": "Apply Success, information, warning, and error messages to a small local example, then record a normal case, an invalid/boundary case, and the expected versus observed result.",
+    "task_acceptance_criteria": [
+      "Record a predicted result before running or inspecting the example.",
+      "Include one normal case and one invalid or boundary case.",
+      "State the Python/Django version and verification method used."
+    ],
+    "hints": [
+      "Identify which Django component owns this behavior.",
+      "Trace a single request or object through the example before adding more features.",
+      "Use the relevant linked official documentation and a test for the failure case."
+    ],
+    "solution_notes": "Suggested approach: identify the responsible Django component, keep input validation and authorization at the server boundary where relevant, then verify the django messages framework with a focused test. This is a learning hint, not a claim that code was executed.",
+    "summary": [
+      "The Django Messages Framework is part of middleware cookies sessions and messaging and should be understood alongside its listed subtopics.",
+      "The worked example is a starting point; review its prerequisites and version notes before local execution.",
+      "Verify the expected behavior with normal and failure cases and keep the result reproducible."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "django-middleware",
+      "title": "Middleware",
+      "url": "https://docs.djangoproject.com/en/6.1/topics/http/middleware/",
+      "publisher": "Django Software Foundation",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "middleware order",
+        "request-response hooks"
+      ]
+    },
+    {
+      "id": "django-sessions",
+      "title": "How to use sessions",
+      "url": "https://docs.djangoproject.com/en/6.1/topics/http/sessions/",
+      "publisher": "Django Software Foundation",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "session lifecycle",
+        "cookie-backed identifiers"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Django curriculum; pending Django-specialist and instructional review before publication."
+}

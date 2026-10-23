@@ -1,0 +1,173 @@
+{
+  "id": "asp-lesson-067",
+  "slug": "the-ado-connection-object",
+  "title": "The ADO Connection Object",
+  "sequence": 67,
+  "module_id": "asp-module-10",
+  "module_slug": "databases-and-ado",
+  "level": "Intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "asp-lesson-066"
+  ],
+  "previous_lesson_id": "asp-lesson-066",
+  "next_lesson_id": "asp-lesson-068",
+  "keywords": [
+    "the-ado-connection-object",
+    "creating-an-adodb.connection",
+    "opening-a-database-connection",
+    "connection-string-configuration",
+    "connection-timeout-settings"
+  ],
+  "source_syllabus_number": 67,
+  "subtopics": [
+    "Creating an ADODB.Connection",
+    "Opening a database connection",
+    "Connection string configuration",
+    "Connection timeout settings",
+    "Handling connection errors",
+    "Closing connections",
+    "Managing connection lifetime"
+  ],
+  "learning_outcomes": [
+    "Explain the role of the ado connection object in a Classic ASP application.",
+    "Identify and describe at least two syllabus subtopics: Creating an ADODB.Connection and Opening a database connection.",
+    "Inspect a minimal example and define a reproducible normal-case and failure-case test."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study the ado connection object as part of Classic ASP development and legacy maintenance. The lesson follows the attached ASP curriculum topic 67 and uses the syllabus subtopics as the coverage checklist.",
+    "why_it_matters": "The ADO Connection Object matters because Classic ASP behavior crosses a server-side scripting engine, IIS configuration, request/response boundaries, and often COM or ADO dependencies. A small, explicit test helps distinguish intended behavior from runtime-specific behavior.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "The ADO Connection Object: concept map",
+        "asset_path": "diagrams/lessons/lesson-067-the-ado-connection-object.svg",
+        "alt_text": "Concept map for The ADO Connection Object; steps include Creating an ADODB.Connection, Opening a database connection, Connection timeout settings, Managing connection lifetime.",
+        "caption": "The visual introduces the idea; use the subtopic list and inspectable example to verify each step."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Classic ASP applications commonly use ADO to access relational databases through a provider. For 'The ADO Connection Object', validate inputs, prefer `ADODB.Command` parameters for values, close Recordsets and Connections, and handle failures without exposing the query, connection string, or database details. Parameter syntax, supported types, cursor behavior, and connection string details can vary by provider; verify them against the installed driver and database."
+      },
+      {
+        "type": "paragraph",
+        "title": "Syllabus coverage",
+        "text": "The lesson explicitly covers: Creating an ADODB.Connection; Opening a database connection; Connection string configuration; Connection timeout settings; Handling connection errors; Closing connections; Managing connection lifetime. Treat these subtopics as connected requirements. For each one, be able to define the concept, identify where it appears in a Classic ASP application, and name one test or diagnostic that would verify it."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: The ADO Connection Object",
+        "language": "asp",
+        "code": "<%\nDim conn\nSet conn = Server.CreateObject(\"ADODB.Connection\")\nconn.ConnectionTimeout = 10\n' conn.ConnectionString = ReadProtectedConnectionString()  ' application-defined\n' conn.Open\n' ... use the connection ...\n' conn.Close\nSet conn = Nothing\n%>",
+        "expected_output": "A Connection object is created with a bounded connection timeout.",
+        "run_instructions": "The protected-configuration accessor is application-specific and intentionally not supplied. Close connections on every error path. The standard CodeLeaf browser playground previews HTML/CSS/JavaScript only; it does not execute Classic ASP, VBScript, ADO, IIS commands, PowerShell, or SQL. This block is therefore marked for static inspection unless you run it in the clearly identified local tool.",
+        "reset_steps": "Restore the original sample and test data. Change one condition, input, provider setting, or runtime option at a time, then compare observed behavior with the expected result.",
+        "execution_mode": "static-validation",
+        "limitations": "Not executed during course generation. Classic ASP examples require a configured Windows/IIS environment with the matching ASP scripting engine and any required COM/ADO providers. Provider-specific and IIS-version-specific behavior must be verified locally."
+      },
+      {
+        "type": "callout",
+        "title": "Runtime and safety checkpoint",
+        "text": "Use synthetic records in a local test database and a least-privilege database account. Record the database/provider version and verify both success and failure cases. The source syllabus treats Classic ASP as a legacy maintenance technology, not as ASP.NET or a default choice for new web projects."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided workflow",
+        "text": "1. Start with a minimal local example of the ado connection object. 2. Trace its inputs, state changes, dependencies, and output. 3. Test a normal case, a missing/malformed case, and one permission/provider/runtime failure. 4. Write down the exact expected and observed result before changing another variable."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a small, reviewable demonstration of the ado connection object using synthetic data. Include at least one of these syllabus concepts: Creating an ADODB.Connection. State the expected result first, then add one invalid or boundary case and explain how your program should behave."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-067-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating legacy runtime behavior as universal.",
+        "why": "IIS versions, Windows lifecycle, COM registration/bitness, and ADO providers can change behavior.",
+        "fix": "Write down the actual server/provider versions and validate on a disposable test site."
+      },
+      {
+        "problem": "Testing only a successful path.",
+        "why": "Empty input, missing records, expired sessions, permissions, timeouts, and malformed data reveal different failure modes.",
+        "fix": "Add normal, negative, and boundary cases with expected outcomes."
+      },
+      {
+        "problem": "Exposing internal details while debugging.",
+        "why": "Detailed errors can reveal paths, SQL text, configuration, and component information.",
+        "fix": "Keep diagnostics in restricted server-side logs and return a generic message with a reference ID."
+      }
+    ]
+  },
+  "task": "Build a short demonstration of the ado connection object using synthetic data. Demonstrate “Creating an ADODB.Connection”, state the expected result, and document one edge/failure case.",
+  "task_acceptance_criteria": [
+    "The artifact demonstrates Creating an ADODB.Connection.",
+    "Expected result is written before verification.",
+    "At least one invalid or boundary case is documented.",
+    "Runtime/provider/version assumptions and security limits are recorded."
+  ],
+  "hints": [
+    "Start with the smallest example for creating an adodb.connection.",
+    "Keep the sample synthetic and change one thing at a time.",
+    "Compare observed behavior against a written expectation and consult the linked official reference if the runtime differs."
+  ],
+  "summary": [
+    "The ADO Connection Object is one step in the larger Classic ASP request, state, data, security, or maintenance workflow.",
+    "The syllabus coverage includes Creating an ADODB.Connection; Opening a database connection; Connection string configuration; Connection timeout settings; Handling connection errors; Closing connections; Managing connection lifetime.",
+    "A reproducible legacy-code example records input, environment/version, expected outcome, observed outcome, and a meaningful failure case."
+  ],
+  "run_mode": "static-validation",
+  "expected_output": "A Connection object is created with a bounded connection timeout.",
+  "common_mistakes": [
+    {
+      "problem": "Assuming syntax alone proves the application works.",
+      "why": "IIS configuration, permissions, COM activation, database providers, and response behavior are external dependencies.",
+      "fix": "Run against the documented local test host and record exact evidence."
+    },
+    {
+      "problem": "Trusting browser-supplied values.",
+      "why": "Query strings, form fields, cookies, and hidden controls remain client-controlled.",
+      "fix": "Validate on the server and apply authorization and output encoding at the appropriate boundary."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "id": "asp-ref-ado-command",
+      "title": "Command object (ADO)",
+      "url": "https://learn.microsoft.com/en-us/office/client-developer/access/desktop-database-reference/command-object-ado",
+      "publisher": "Microsoft Learn",
+      "checked_on": "2026-10-15",
+      "concepts": [
+        "ADO Command",
+        "CommandText",
+        "Parameters collection",
+        "Execute"
+      ],
+      "source_type": "official API reference"
+    },
+    {
+      "id": "asp-ref-sql-injection",
+      "title": "SQL Injection Prevention Cheat Sheet",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+      "publisher": "OWASP Cheat Sheet Series",
+      "checked_on": "2026-10-15",
+      "concepts": [
+        "parameterized queries",
+        "least privilege",
+        "allow-list validation"
+      ],
+      "source_type": "security guidance"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Draft generated from the attached ASP (Classic Active Server Pages) curriculum. Requires technical review and target-IIS/provider verification before publication.",
+  "exercise_files": []
+}

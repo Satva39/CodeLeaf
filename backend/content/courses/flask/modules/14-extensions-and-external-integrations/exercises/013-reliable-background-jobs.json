@@ -1,0 +1,57 @@
+{
+  "id": "flask-exercise-013",
+  "slug": "reliable-background-jobs",
+  "title": "Reliable Background Jobs",
+  "type": "practical",
+  "lesson_id": "flask-lesson-155",
+  "module_id": "flask-module-14",
+  "difficulty": "advanced",
+  "sequence": 1,
+  "prompt": "Move an expensive synthetic task to a separate task queue. Include task identity, duplicate-submission protection, bounded retries, failure state, logging and idempotent effects.\n\nSubmission: provide the implementation or design, a relevant test, expected outputs, one failure/boundary case, and version/runtime notes. Flask server code is not executed inside the CodeLeaf browser preview; local verification or human review is required.",
+  "objective": "Reliable Background Jobs",
+  "target_skills": [
+    "task queues",
+    "idempotency",
+    "retry policy",
+    "durable state",
+    "observability"
+  ],
+  "starter": {
+    "language": "python",
+    "content": "# Specify a task contract before choosing an external queue library.\n# The queue/broker/worker are separate infrastructure components.",
+    "code": "# Specify a task contract before choosing an external queue library.\n# The queue/broker/worker are separate infrastructure components."
+  },
+  "expected_output": "A duplicate request does not duplicate the side effect; retries are bounded; failures can be inspected and a task’s final state is recorded.",
+  "public_tests": [
+    {
+      "name": "Static concept smoke check",
+      "required_strings": [
+        "idempotent",
+        "retry"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "A duplicate request does not duplicate the side effect; retries are bounded; failures can be inspected and a task’s final state is recorded.",
+    "Document setup/run steps and mark whether verification was static, local, or human-reviewed.",
+    "Do not include private credentials or use real personal data.",
+    "Include a negative/boundary case and explain the expected status/result."
+  ],
+  "hints": [
+    "Do not spawn an untracked asyncio task from a normal Flask view for durable work.",
+    "Use a persisted idempotency key or unique task identity.",
+    "Set connection/task timeouts and define poison-job handling."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "idempotent",
+      "retry"
+    ]
+  },
+  "grading_method": "Static required-string smoke check plus human review of implementation correctness, tests, validation/security boundaries and reproducibility. The platform does not execute arbitrary Python/Flask code.",
+  "retry_policy": "Retries are allowed after reviewing feedback; the platform backend controls its uniform reward and idempotency rules.",
+  "solution_file": "../../../solutions/exercises/013-reliable-background-jobs-solution.json",
+  "status": "draft",
+  "status_note": "Practice assignment mapped to the supplied Flask PDF. Needs subject-matter review before publication."
+}

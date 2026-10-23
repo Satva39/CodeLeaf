@@ -1,0 +1,61 @@
+{
+  "id": "web-application-security-exercise-024",
+  "slug": "review-an-ssrf-safe-fetch-policy",
+  "title": "Review an SSRF-Safe Fetch Policy",
+  "type": "short_answer",
+  "lesson_id": "web-application-security-lesson-093",
+  "module_id": "web-application-security-module-13",
+  "difficulty": "advanced",
+  "sequence": 24,
+  "prompt": "Design allowlisted URL-fetching behavior for a local service using test-only hostnames, DNS/address checks, redirect policy, and egress limits.",
+  "objective": "Apply Server-Side Request Forgery (SSRF) through a safe, repeatable defensive review or test.",
+  "target_skills": [
+    "security reasoning",
+    "control selection",
+    "negative testing",
+    "sanitized evidence"
+  ],
+  "starter": {
+    "format": "markdown",
+    "template": "## Scope and assumptions\n- Local/owned/authorized system:\n- Asset and trust boundary:\n\n## Expected secure behavior\n\n## Test cases (include one denied/failure case)\n\n## Evidence and result\n\n## Root cause and remediation\n\n## Regression test\n"
+  },
+  "expected_output": "A decision table that denies unapproved schemes/destinations and records how resolved addresses are constrained.",
+  "public_tests": [
+    {
+      "name": "Required evidence terms (static check only)",
+      "required_strings": [
+        "scheme allowlist",
+        "DNS resolution",
+        "private address ranges",
+        "egress controls"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Uses synthetic data and remains inside an owned, local, or explicitly authorized test scope.",
+    "States the expected secure behavior and a relevant negative/failure case.",
+    "Includes sanitized, reproducible evidence and a root-cause-oriented remediation.",
+    "Adds a regression test or a concrete verification step.",
+    "Separates observations from confirmed findings and calls out the static grader’s limitations."
+  ],
+  "hints": [
+    "Validate the actual connection destination, not only the URL text.",
+    "Use mock endpoints and synthetic DNS cases; do not query internal production services.",
+    "Keep credentials, session values, private data, and unrelated host details out of the submission.",
+    "The current static grader checks required terms only; a qualified human must review security correctness before the exercise is published."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "scheme allowlist",
+      "DNS resolution",
+      "private address ranges",
+      "egress controls"
+    ]
+  },
+  "grading_method": "Static required-term smoke check only. This does not validate real system behavior, prove a vulnerability, or establish exploitability. Human review plus local/isolated tests are required before publication.",
+  "retry_policy": "Allow retries. Completion and rewards remain governed by platform backend rules; this file defines no per-exercise reward override.",
+  "solution_file": "../../../solutions/exercises/web-application-security-exercise-024-solution.json",
+  "status": "draft",
+  "status_note": "Draft practice item from the attached PDF Section C or a clearly labeled course extension; do not publish without human review of prompt, rubric, grading limitations, and fix correctness."
+}

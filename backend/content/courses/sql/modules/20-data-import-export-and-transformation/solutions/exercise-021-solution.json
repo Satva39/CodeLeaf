@@ -1,0 +1,10 @@
+{
+  "id": "sql-exercise-solution-021",
+  "exercise_id": "sql-exercise-021",
+  "title": "Data Cleaning reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "SELECT LOWER(TRIM(email)) AS normalized_email, COUNT(*) AS duplicate_count FROM customers GROUP BY LOWER(TRIM(email)) HAVING COUNT(*) > 1 ORDER BY duplicate_count DESC;",
+  "explanation": "Potential duplicate emails are identified after basic normalization; review before changing stored records. Review the query against the lab data and explain why the chosen joins, filters, aggregation grain, ordering, or transaction boundary is correct.",
+  "review_notes": "Repository-only illustration. Do not expose this file through public content endpoints; replace token-only grading with engine-backed tests before publishing."
+}

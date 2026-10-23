@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-142",
+  "slug": "building-and-operating-a-cluster",
+  "title": "Building and Operating a Cluster",
+  "sequence": 142,
+  "module_id": "redis-module-18",
+  "module_slug": "high-availability-sentinel-and-redis-cluster",
+  "level": "advanced to professional",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-141"
+  ],
+  "previous_lesson_id": "redis-lesson-141",
+  "next_lesson_id": "redis-lesson-143",
+  "keywords": [
+    "building-and-operating-a-cluster",
+    "initial-cluster-formation",
+    "node-roles",
+    "cluster-health",
+    "replica-configuration",
+    "cluster-aware-connection-handling",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 142,
+  "subtopics": [
+    "Initial cluster formation",
+    "Node roles",
+    "Cluster health",
+    "Replica configuration",
+    "Cluster-aware connection handling"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Building and Operating a Cluster and distinguish it from a related Redis concept.",
+    "Apply or trace Building and Operating a Cluster in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Building and Operating a Cluster and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Building and Operating a Cluster in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Building and Operating a Cluster is an operational design choice: state the workload’s durability, recovery, freshness, availability and capacity requirements before selecting settings.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Building and Operating a Cluster",
+        "asset_path": "diagrams/lesson-142-building-and-operating-a-cluster.svg",
+        "alt_text": "Concept diagram for Building and Operating a Cluster, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Building and Operating a Cluster; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Building and Operating a Cluster is an operational design choice: state the workload’s durability, recovery, freshness, availability and capacity requirements before selecting settings."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Building and Operating a Cluster, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Initial cluster formation",
+            "text": "Connect Initial cluster formation to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Node roles",
+            "text": "Connect Node roles to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Cluster health",
+            "text": "Connect Cluster health to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Replica configuration",
+            "text": "Connect Replica configuration to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Cluster-aware connection handling",
+            "text": "Connect Cluster-aware connection handling to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Building and Operating a Cluster",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "INFO replication\nROLE",
+        "expected_output": "Reports replication role and connected replica/primary details for the active node.",
+        "run_instructions": "Topology commands and fields depend on the deployment. Do not reconfigure a production primary for a tutorial.",
+        "reset_steps": "Read-only inspection.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Building and Operating a Cluster. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Building and Operating a Cluster in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Building and Operating a Cluster.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "Reports replication role and connected replica/primary details for the active node.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-142-questions.json",
+    "recap": [
+      "Building and Operating a Cluster is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "High availability with Redis Sentinel",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "monitoring, quorum, failover and client discovery"
+      ]
+    },
+    {
+      "title": "Scale with Redis Cluster",
+      "url": "https://redis.io/docs/latest/management/scaling/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "sharding, cluster behavior, availability and operating topology"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

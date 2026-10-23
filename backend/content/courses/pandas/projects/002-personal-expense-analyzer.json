@@ -1,0 +1,130 @@
+{
+  "id": "pandas-project-02",
+  "slug": "personal-expense-analyzer",
+  "title": "Personal Expense Analyzer",
+  "sequence": 2,
+  "tier": "beginner",
+  "objective": "Organize expense records and produce spending summaries.",
+  "prerequisite_lesson_ids": [
+    "pandas-lesson-042",
+    "pandas-lesson-075",
+    "pandas-lesson-090",
+    "pandas-lesson-097",
+    "pandas-lesson-124",
+    "pandas-lesson-149",
+    "pandas-lesson-157",
+    "pandas-lesson-163"
+  ],
+  "recommended_module_range": [
+    5,
+    20
+  ],
+  "recommended_lesson_range": [
+    42,
+    163
+  ],
+  "skills": [
+    "Pandas data manipulation",
+    "data-quality validation",
+    "reproducible reporting",
+    "tests and documentation"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Import a synthetic expense ledger.",
+      "acceptance_criteria": [
+        "Demonstrate: import a synthetic expense ledger.",
+        "Keep the output schema documented and verify at least one expected result.",
+        "Record a relevant assumption or edge case."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Normalize categories and parse dates/amounts.",
+      "acceptance_criteria": [
+        "Demonstrate: normalize categories and parse dates/amounts.",
+        "Keep the output schema documented and verify at least one expected result.",
+        "Record a relevant assumption or edge case."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Calculate monthly and category summaries.",
+      "acceptance_criteria": [
+        "Demonstrate: calculate monthly and category summaries.",
+        "Keep the output schema documented and verify at least one expected result.",
+        "Record a relevant assumption or edge case."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Create a labeled spending visualization and export a summary.",
+      "acceptance_criteria": [
+        "Demonstrate: create a labeled spending visualization and export a summary.",
+        "Keep the output schema documented and verify at least one expected result.",
+        "Record a relevant assumption or edge case."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "src/analysis.py",
+      "language": "python",
+      "contents": "\"\"\"Synthetic Pandas analysis project starter.\"\"\"\nimport pandas as pd\n\ndef load_data(path):\n    \"\"\"Load inputs and validate schema before returning a DataFrame.\"\"\"\n    raise NotImplementedError\n\ndef transform(frame):\n    \"\"\"Return validated, analysis-ready data without mutating unrelated inputs.\"\"\"\n    raise NotImplementedError\n\ndef summarize(frame):\n    \"\"\"Return concise, reproducible summary tables.\"\"\"\n    raise NotImplementedError\n"
+    },
+    {
+      "path": "data/sample_data.py",
+      "language": "python",
+      "contents": "\"\"\"Small fictional dataset; replace with additional synthetic cases for tests.\"\"\"\nORDERS = [\n    {\"order_id\": 1001, \"customer_id\": 201, \"product\": \"Tea\", \"category\": \"Drink\", \"units\": 2, \"unit_price\": 12.0, \"date\": \"2026-01-02\"},\n    {\"order_id\": 1002, \"customer_id\": 202, \"product\": \"Juice\", \"category\": \"Fruit\", \"units\": 1, \"unit_price\": 25.0, \"date\": \"2026-01-03\"},\n    {\"order_id\": 1003, \"customer_id\": 201, \"product\": \"Coffee\", \"category\": \"Drink\", \"units\": 3, \"unit_price\": 45.0, \"date\": \"2026-02-01\"},\n]\n"
+    },
+    {
+      "path": "tests/test_analysis.py",
+      "language": "python",
+      "contents": "\"\"\"Add checks for normal cases, invalid data, missing values, duplicates, and stable output schemas.\"\"\"\nimport pandas as pd\n\ndef test_summary_schema():\n    expected = [\"category\", \"revenue\"]\n    # Replace with the output of summarize(...) after implementing it.\n    assert expected == [\"category\", \"revenue\"]\n"
+    }
+  ],
+  "required_features": [
+    "Import a synthetic expense ledger.",
+    "Normalize categories and parse dates/amounts.",
+    "Calculate monthly and category summaries.",
+    "Create a labeled spending visualization and export a summary."
+  ],
+  "stretch_features": [
+    "Add a reviewed regression-test dataset.",
+    "Compare two appropriate methods with correctness and performance measurements.",
+    "Document where Pandas is or is not an appropriate architecture."
+  ],
+  "tests_and_validation": [
+    "Required columns are present and have appropriate data types.",
+    "Identifiers and join cardinality are checked where required.",
+    "Missing and invalid values are reported rather than silently ignored.",
+    "Outputs can be regenerated from synthetic inputs and pass documented tests."
+  ],
+  "rubric": [
+    {
+      "criterion": "Correctness of calculations and transformations",
+      "points": 30
+    },
+    {
+      "criterion": "Schema, missing-value, duplicate, and join validation",
+      "points": 25
+    },
+    {
+      "criterion": "Reproducibility, tests, and error handling",
+      "points": 20
+    },
+    {
+      "criterion": "Visual/report clarity and justified interpretation",
+      "points": 15
+    },
+    {
+      "criterion": "Documentation, privacy, and limitations",
+      "points": 10
+    }
+  ],
+  "review_method": "human_review",
+  "reference_solution_file": "projects/solutions/002-personal-expense-analyzer-reference-solution.json",
+  "status": "draft",
+  "status_note": "Synthetic project blueprint generated from Section D of the supplied PDF. Starter tests and project-specific rubric require instructor review before publication."
+}

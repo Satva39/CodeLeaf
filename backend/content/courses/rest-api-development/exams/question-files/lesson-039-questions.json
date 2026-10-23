@@ -1,0 +1,49 @@
+{
+  "id": "rest-api-development-knowledge-check-039",
+  "lesson_id": "rest-api-development-lesson-039",
+  "lesson_slug": "understanding-http-methods",
+  "title": "Knowledge check: Understanding HTTP Methods",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "questions": [
+    {
+      "id": "rest-api-development-q-039-01",
+      "type": "single_choice",
+      "prompt": "How should an API choose an HTTP method?",
+      "options": [
+        "Choose any method as long as the backend route handler can parse it.",
+        "Use GET for payments because caches automatically make it safe.",
+        "Assume every PATCH request is idempotent without examining its defined behavior.",
+        "Match the method to its defined semantics, including safety and idempotency; do not hide state-changing work in GET."
+      ],
+      "answer_key": "Match the method to its defined semantics, including safety and idempotency; do not hide state-changing work in GET.",
+      "explanation": "Match the method to its defined semantics, including safety and idempotency; do not hide state-changing work in GET. This is especially relevant to “Understanding HTTP Methods” because the API contract must remain explicit and reviewable."
+    },
+    {
+      "id": "rest-api-development-q-039-02",
+      "type": "single_choice",
+      "prompt": "For the lesson “Understanding HTTP Methods”, which check provides the strongest practical evidence?",
+      "options": [
+        "Run one happy-path call and skip invalid, denied, and failure scenarios.",
+        "Test against production records so the exercise cannot be repeated safely.",
+        "Repeat representative requests and inspect side effects to verify the selected method semantics.",
+        "Rely on a code review comment without running any representative check."
+      ],
+      "answer_key": "Repeat representative requests and inspect side effects to verify the selected method semantics.",
+      "explanation": "A useful check is repeatable, tied to an observable contract, and includes an important negative or boundary scenario."
+    },
+    {
+      "id": "rest-api-development-q-039-03",
+      "type": "single_choice",
+      "prompt": "Which review warning is most relevant to “Understanding HTTP Methods”?",
+      "options": [
+        "The API avoids exposing internal secrets and personal data.",
+        "Method semantics are misleading or retries may repeat a non-idempotent side effect.",
+        "The expected behavior and relevant failure cases are documented.",
+        "A representative test can reproduce the result."
+      ],
+      "answer_key": "Method semantics are misleading or retries may repeat a non-idempotent side effect.",
+      "explanation": "This finding weakens a core API guarantee and should be treated as a design or release issue, not only a style concern."
+    }
+  ]
+}

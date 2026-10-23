@@ -1,0 +1,150 @@
+{
+  "id": "rest-api-development-lesson-104",
+  "slug": "database-fundamentals-for-api-developers",
+  "title": "Database Fundamentals for API Developers",
+  "sequence": 104,
+  "module_id": "rest-api-development-module-12",
+  "module_slug": "databases-and-persistence",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "rest-api-development-lesson-103"
+  ],
+  "previous_lesson_id": "rest-api-development-lesson-103",
+  "next_lesson_id": "rest-api-development-lesson-105",
+  "keywords": [
+    "rest-api-development",
+    "database-fundamentals-for-api-developers",
+    "databases-and-persistence",
+    "relational-and-non-relational-databases",
+    "tables-documents-and-records"
+  ],
+  "source_syllabus_number": 104,
+  "subtopics": [
+    "Relational and non-relational databases",
+    "Tables, documents, and records",
+    "Keys and relationships",
+    "Persistence and data ownership"
+  ],
+  "learning_outcomes": [
+    "Explain how database fundamentals for api developers affects an API contract or implementation.",
+    "Apply the key ideas from relational and non-relational databases to a concrete API example.",
+    "Identify one failure, security, or compatibility risk and describe how to verify it."
+  ],
+  "content": {
+    "intro": "This lesson focuses on database fundamentals for api developers in databases and persistence. You will connect relational and non-relational databases to a concrete API contract decision, inspect a small example, and decide what evidence proves the behavior is correct.",
+    "why_it_matters": "Database Fundamentals for API Developers matters because API consumers depend on predictable behavior even when clients, servers, networks, and stored data evolve independently. Applying relational and non-relational databases deliberately reduces ambiguity, makes failures easier to diagnose, and gives tests a clear expectation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Lesson 104 concept map",
+        "asset_path": "diagrams/lesson-104-concept-map.svg",
+        "alt_text": "Lesson 104: Relational and non-relational databases → Tables, documents, and records → Keys and relationships → Persistence and data ownership.",
+        "caption": "Follow the 4 syllabus topics in order, then inspect the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Database constraints and transaction boundaries protect data integrity when requests fail or race with one another. In this lesson, treat “Database Fundamentals for API Developers” as a design or implementation decision: name the expected behavior, identify its boundary, and verify it with a representative request or test."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          "Relational and non-relational databases",
+          "Tables, documents, and records",
+          "Keys and relationships",
+          "Persistence and data ownership",
+          "Model keys and constraints explicitly"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Inspect the pattern: Database Fundamentals for API Developers",
+        "language": "sql",
+        "execution_mode": "static-validation",
+        "code": "CREATE TABLE tasks (\n  id BIGSERIAL PRIMARY KEY,\n  owner_id BIGINT NOT NULL,\n  title TEXT NOT NULL CHECK (length(title) BETWEEN 1 AND 200),\n  completed BOOLEAN NOT NULL DEFAULT FALSE\n);\n\n-- Bind values as query parameters; do not concatenate user input.",
+        "expected_output": "Database constraints enforce invariants even if an application path accidentally omits a validation check."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walkthrough",
+        "text": "Start with “Relational and non-relational databases”; it establishes the vocabulary for this topic. Next, compare it with “Tables, documents, and records” and “Persistence and data ownership”. In a real API, write down the observable behavior first, then test one normal request and one invalid or unauthorized request. Keep resource state, caller identity, and internal implementation details separate."
+      },
+      {
+        "type": "callout",
+        "title": "Professional review check",
+        "text": "Use database constraints and transactions to protect invariants under concurrent requests. The worked snippet is intentionally inspectable, not an executable hosted API. Replace example.test and placeholder identifiers with local test data only when you implement the lesson project."
+      }
+    ],
+    "task": "Create a small design note or request/response example demonstrating database fundamentals for api developers. Use the subtopics above to explain the intended behavior, the main edge case, and the evidence you would use to verify it.",
+    "task_acceptance_criteria": [
+      "Explain the role of “Relational and non-relational databases” in this API topic.",
+      "Provide a concrete resource, request, response, schema, test, or operational example as appropriate.",
+      "Identify one failure/security/compatibility edge case and a test or check for it."
+    ],
+    "expected_output": "A reviewable example for Database Fundamentals for API Developers with a clear expected behavior and at least one verifiable edge case.",
+    "run_instructions": "Execution mode: static-validation. This lesson example is a protocol, schema, SQL, or code fragment for inspection; it is not submitted to a production server and CodeLeaf does not execute arbitrary learner code. Validate JSON/YAML with a local linter or run the relevant HTTP request against the isolated service you implement for a project. Do not send illustrative example.test requests to a real service.",
+    "reset_steps": "Use a disposable local database or test fixture for implementation work. Restore seed data between runs; never point exercises at production customer data or live payment endpoints.",
+    "troubleshooting": [
+      "Check the exact HTTP method, path, status, header, media type, and payload before changing implementation code.",
+      "Separate a transport failure from an application validation failure, authorization denial, and dependency/database failure.",
+      "Confirm the example and its client tooling version are compatible; consult the linked standard or official guidance when behavior is ambiguous."
+    ],
+    "common_mistakes": [
+      "Treating database fundamentals for api developers as an implementation detail rather than a documented behavior.",
+      "Testing only the happy path and ignoring malformed, unauthorized, conflicting, duplicate, or dependency-failure cases.",
+      "Publishing an example without checking version assumptions, sensitive-data exposure, and the expected output."
+    ],
+    "summary": [
+      "Database constraints and transaction boundaries protect data integrity when requests fail or race with one another. In this lesson, treat “Database Fundamentals for API Developers” as a design or implementation decision: name the expected behavior, identify its boundary, and verify it with a representative request or test.",
+      "Next, connect this idea to Lesson 105: Data Modeling for API Resources."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-104-questions.json",
+    "solution_notes": "Knowledge-check answer keys and explanations remain in repository-side question files. The public lesson API strips this file reference and serves only prompts/options from the protected endpoint.",
+    "references": [
+      {
+        "title": "Microsoft REST API Guidelines",
+        "url": "https://github.com/microsoft/api-guidelines/blob/vNext/Guidelines.md"
+      },
+      {
+        "title": "Google SRE Books",
+        "url": "https://sre.google/books/"
+      }
+    ],
+    "run_mode": "static-validation"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Microsoft REST API Guidelines",
+      "url": "https://github.com/microsoft/api-guidelines/blob/vNext/Guidelines.md",
+      "publisher": "Microsoft",
+      "checked_on": "2026-10-19",
+      "source_type": "API design guidelines",
+      "supports": [
+        "resource and URL design",
+        "API evolution",
+        "error conventions",
+        "idempotency and retry design"
+      ]
+    },
+    {
+      "title": "Google SRE Books",
+      "url": "https://sre.google/books/",
+      "publisher": "Google",
+      "checked_on": "2026-10-19",
+      "source_type": "Reliability engineering reference",
+      "supports": [
+        "SLIs and SLOs",
+        "incident response",
+        "error budgets and operational resilience"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Unreviewed educational draft based on the attached REST API syllabus; verify the technical framing, worked example, and assessment before publication."
+}

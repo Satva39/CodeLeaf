@@ -1,0 +1,189 @@
+{
+  "id": "r-lesson-022",
+  "slug": "special-values-in-r",
+  "title": "Special Values in R",
+  "sequence": 22,
+  "module_id": "r-module-03",
+  "module_slug": "data-types-values-and-basic-objects",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "r-lesson-021"
+  ],
+  "previous_lesson_id": "r-lesson-021",
+  "next_lesson_id": "r-lesson-023",
+  "keywords": [
+    "special-values-in-r",
+    "data-types-values-and-basic-objects",
+    "null",
+    "na",
+    "nan",
+    "inf-and-inf",
+    "testing-special-values",
+    "differences-between-missing-empty-and-undefined-values",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 22,
+  "subtopics": [
+    "NULL",
+    "NA",
+    "NaN",
+    "Inf and -Inf",
+    "Testing Special Values",
+    "Differences Between Missing, Empty, and Undefined Values"
+  ],
+  "learning_outcomes": [
+    "Explain the role of special values in r and identify its main inputs, outputs or constraints.",
+    "Apply null in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Special Values in R is part of Data Types, Values, and Basic Objects. Start with null and connect it to the worked example and expected result.",
+    "why_it_matters": "R values have storage types and sometimes class-specific behavior; inspect both before converting or calculating.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Special Values in R",
+        "asset_path": "diagrams/module-03-overview.svg",
+        "alt_text": "Concept visual supporting lesson 22, Special Values in R. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "R values have storage types and sometimes class-specific behavior; inspect both before converting or calculating. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "NULL",
+            "text": "Explain null in the context of special values in r, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "NA",
+            "text": "Explain na in the context of special values in r, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "NaN",
+            "text": "Explain nan in the context of special values in r, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Inf and -Inf",
+            "text": "Explain inf and -inf in the context of special values in r, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Testing Special Values",
+            "text": "Turn testing special values into a check with a clear condition, expected result and an example that should fail."
+          },
+          {
+            "title": "Differences Between Missing, Empty, and Undefined Values",
+            "text": "For differences between missing, empty, and undefined values, include a failing or boundary case and explain how it should be detected without silently losing information."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Compare the input type with the returned type, then test an empty or missing value. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Special Values in R",
+        "language": "r",
+        "code": "# Lesson 22: Special Values in R\nexample_values <- c(3, NA, 5)\nis.na(example_values)",
+        "expected_output": "[1] FALSE TRUE FALSE",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "Inspect type and missingness explicitly before converting or summarizing values. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For special values in r, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-022-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply special values in r to a small synthetic example. Start with null, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the null idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible special values in r example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “NULL” and identify the input and output before coding.",
+      "Inspect with str(), typeof(), class(), names() or dim() as appropriate.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: R values have storage types and sometimes class-specific behavior; inspect both before converting or calculating.",
+      "Practice: Compare the input type with the returned type, then test an empty or missing value.",
+      "Source syllabus focus: NULL. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply special values in r to a small synthetic example. Start with null, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible special values in r example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “NULL” and identify the input and output before coding.",
+    "Inspect with str(), typeof(), class(), names() or dim() as appropriate.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: R values have storage types and sometimes class-specific behavior; inspect both before converting or calculating.",
+    "Practice: Compare the input type with the returned type, then test an empty or missing value.",
+    "Source syllabus focus: NULL. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 3 — Data Types, Values, and Basic Objects, lesson 22: Special Values in R.",
+    "Official documentation: https://cran.r-project.org/doc/manuals/r-release/R-intro.html",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

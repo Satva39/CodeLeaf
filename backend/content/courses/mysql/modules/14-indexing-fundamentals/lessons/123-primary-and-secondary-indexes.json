@@ -1,0 +1,175 @@
+{
+  "id": "mysql-lesson-123",
+  "slug": "primary-and-secondary-indexes",
+  "title": "Primary and Secondary Indexes",
+  "sequence": 123,
+  "module_id": "mysql-module-14",
+  "module_slug": "indexing-fundamentals",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "mysql-lesson-122"
+  ],
+  "previous_lesson_id": "mysql-lesson-122",
+  "next_lesson_id": "mysql-lesson-124",
+  "keywords": [
+    "primary-and-secondary-indexes",
+    "indexing-fundamentals",
+    "mysql",
+    "database"
+  ],
+  "source_syllabus_number": 123,
+  "source_module_number": 14,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the purpose of primary and secondary indexes in MySQL and when it is useful.",
+    "Interpret or adapt the supplied sql example and predict its expected behavior.",
+    "Verify one relevant boundary, safety requirement, or version-specific assumption."
+  ],
+  "content": {
+    "intro": "Learn primary and secondary indexes in the context of indexing fundamentals. This lesson covers the supplied syllabus topic, demonstrates a representative MySQL example, and finishes with a verification task.",
+    "why_it_matters": "Performance work begins with a measured query and an execution plan. Indexes can reduce reads when their column order matches filtering and sorting patterns, but they add storage and write-maintenance cost; benchmark before and after.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Primary and Secondary Indexes",
+        "asset_path": "diagrams/lesson-123-primary-and-secondary-indexes.svg",
+        "alt_text": "Concept flow for Primary and Secondary Indexes: understand the MySQL concept, inspect the example, verify its behavior, and apply it safely.",
+        "caption": "Primary and Secondary Indexes: connect the concept to a concrete example, verify the result, and apply it in a disposable lab."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Performance work begins with a measured query and an execution plan. Indexes can reduce reads when their column order matches filtering and sorting patterns, but they add storage and write-maintenance cost; benchmark before and after."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics to master",
+        "items": [
+          {
+            "title": "Core concept",
+            "text": "Performance work begins with a measured query and an execution plan. Indexes can reduce reads when their column order matches filtering and sorting patterns, but they add storage and write-maintenance cost; benchmark before and after."
+          },
+          {
+            "title": "Practical verification",
+            "text": "Predict the outcome, check the result against the selected MySQL version, and record an edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Apply the idea",
+        "text": "Capture an execution plan, record the starting query and result, change one index or query decision, and compare measurements. Write down the expected result before running the snippet. Compare actual output with the reference, then try one normal case and one edge case."
+      },
+      {
+        "type": "code",
+        "language": "sql",
+        "execution_mode": "static-validation",
+        "code": "CREATE INDEX idx_orders_customer ON orders (customer_id);\nSHOW INDEX FROM orders;",
+        "expected_output": "The index definition appears in SHOW INDEX; index usefulness depends on the real workload and data distribution.",
+        "run_instructions": "Run in a dedicated local MySQL lab using the stated MySQL release track. For schema-changing or administrative snippets, inspect every statement and use only a disposable schema; the in-page editor shows reference output and does not execute SQL.",
+        "reset_steps": "Remove only objects created for this lesson from the disposable schema/session, or restore the lab snapshot. Never run reset or destructive commands against production."
+      },
+      {
+        "type": "callout",
+        "title": "Version, security, and safety note",
+        "text": "Use MySQL 9.7 LTS documentation as the default stable-track reference; verify behavior against MySQL 26.7 documentation when relevant and label any MySQL 8.4-specific fact. Examples are static references, not executed by CodeLeaf. Run mutation, privilege, replication, backup, and recovery examples only in an isolated lab."
+      }
+    ],
+    "task": "Try it yourself: Capture an execution plan, record the starting query and result, change one index or query decision, and compare measurements. Submit the query, result or decision record, plus one edge case and one verification step.",
+    "task_acceptance_criteria": [
+      "Address the core behavior in primary and secondary indexes using a MySQL-specific example or a clear operational plan.",
+      "State the expected result and demonstrate how it would be verified in the selected environment.",
+      "Identify one relevant edge case, permissions boundary, operational risk, or version assumption."
+    ],
+    "hints": [
+      "Start by identifying the question that primary and secondary indexes needs to answer.",
+      "Reduce the example to the smallest meaningful row set or operational change, then write down the result you expect.",
+      "Check the applicable official manual and version note before treating the reference output as guaranteed."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming that a sample result proves the whole design is correct.",
+        "why": "Edge cases such as NULLs, duplicate matches, concurrency, privileges, or version differences may change behavior.",
+        "fix": "Add a targeted boundary case and record the server version, schema and expected result."
+      },
+      {
+        "problem": "Running a mutating or administrative example in the wrong environment.",
+        "why": "DDL, data changes, access grants, and recovery commands may have persistent impact.",
+        "fix": "Use a disposable lab, preview targets and permissions, and write a reset/recovery plan before executing."
+      }
+    ],
+    "summary": [
+      "Performance work begins with a measured query and an execution plan. Indexes can reduce reads when their column order matches filtering and sorting patterns, but they add storage and write-maintenance cost; benchmark before and after.",
+      "Use the PDF subtopics for primary and secondary indexes as a checklist, then validate behavior in the chosen MySQL version.",
+      "Keep the example, assumptions, expected output, and recovery steps together."
+    ],
+    "references": [
+      {
+        "title": "MySQL 9.7 Reference Manual",
+        "url": "https://dev.mysql.com/doc/refman/9.7/en/",
+        "publisher": "Oracle / MySQL",
+        "checked_on": "2026-10-12",
+        "supports": [
+          "core SQL syntax",
+          "data types",
+          "DDL and DML",
+          "query optimization",
+          "security",
+          "administration"
+        ]
+      },
+      {
+        "title": "MySQL Optimization and Indexes",
+        "url": "https://dev.mysql.com/doc/refman/9.7/en/optimization-indexes.html",
+        "publisher": "Oracle / MySQL",
+        "checked_on": "2026-10-12",
+        "supports": [
+          "index selection",
+          "execution plans",
+          "query optimization",
+          "indexing trade-offs"
+        ]
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-123-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "Draft authored from the supplied MySQL curriculum outline. Code samples require technical review and do not execute in the browser."
+  },
+  "exercise_files": [
+    "../exercises/123-primary-and-secondary-indexes-practice.json"
+  ],
+  "sources": [
+    {
+      "title": "MySQL 9.7 Reference Manual",
+      "url": "https://dev.mysql.com/doc/refman/9.7/en/",
+      "publisher": "Oracle / MySQL",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "core SQL syntax",
+        "data types",
+        "DDL and DML",
+        "query optimization",
+        "security",
+        "administration"
+      ]
+    },
+    {
+      "title": "MySQL Optimization and Indexes",
+      "url": "https://dev.mysql.com/doc/refman/9.7/en/optimization-indexes.html",
+      "publisher": "Oracle / MySQL",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "index selection",
+        "execution plans",
+        "query optimization",
+        "indexing trade-offs"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft: verify the lesson, example, expected output, references, and version notes before publishing."
+}

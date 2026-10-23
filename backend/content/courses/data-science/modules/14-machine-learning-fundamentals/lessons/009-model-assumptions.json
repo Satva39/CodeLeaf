@@ -1,0 +1,150 @@
+{
+  "id": "data-science-lesson-150",
+  "slug": "model-assumptions",
+  "title": "Model Assumptions",
+  "sequence": 150,
+  "module_id": "data-science-module-14",
+  "module_slug": "machine-learning-fundamentals",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "machine-learning",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "data-science-lesson-149"
+  ],
+  "previous_lesson_id": "data-science-lesson-149",
+  "next_lesson_id": "data-science-lesson-151",
+  "keywords": [
+    "model-assumptions",
+    "assumptions-about-input-data",
+    "linear-and-nonlinear-relationships",
+    "independence-and-distribution-assumptions",
+    "sensitivity-to-scaling-and-outliers",
+    "checking-assumptions-in-practice"
+  ],
+  "source_syllabus_number": 150,
+  "subtopics": [
+    "Assumptions about input data",
+    "Linear and nonlinear relationships",
+    "Independence and distribution assumptions",
+    "Sensitivity to scaling and outliers",
+    "Checking assumptions in practice"
+  ],
+  "learning_outcomes": [
+    "Explain model assumptions and accurately refer to at least two syllabus subtopics.",
+    "Apply the main idea of model assumptions to a small example, trace, calculation, or scenario.",
+    "Identify one important assumption or failure mode and describe how to check it."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study model assumptions in the context of machine learning fundamentals. You will connect the PDF subtopics to a small example and practice describing what the evidence does—and does not—support.",
+    "why_it_matters": "Model Assumptions matters because it affects how data is collected, represented, analyzed, interpreted, or used in a decision. Check the task and assumptions before choosing a method.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual overview: Model Assumptions",
+        "asset_path": "diagrams/lesson-150-overview.svg",
+        "alt_text": "Lesson 150: Model Assumptions; a three-stage visual for understanding the topic, applying it to a small example, and validating assumptions.",
+        "caption": "Use the overview to connect model assumptions to a concrete example and a responsible check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The central idea",
+        "text": "Machine learning estimates patterns from examples. Training is only one step: a robust workflow defines splits, baselines, metrics, assumptions, and monitoring."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered",
+        "items": [
+          {
+            "title": "Assumptions about input data",
+            "text": "Define assumptions about input data in relation to model assumptions; identify the input, output, assumptions, and who uses the result."
+          },
+          {
+            "title": "Linear and nonlinear relationships",
+            "text": "Work through linear and nonlinear relationships using a small, synthetic example before scaling up. State what the calculation or method returns and why that result is useful."
+          },
+          {
+            "title": "Independence and distribution assumptions",
+            "text": "Check the edge cases for independence and distribution assumptions: missing values, unusual ranges, different groups, time boundaries, or a changed input can affect the conclusion."
+          },
+          {
+            "title": "Sensitivity to scaling and outliers",
+            "text": "Document the rule or choice for sensitivity to scaling and outliers so another learner can reproduce the analysis and understand its limitations."
+          },
+          {
+            "title": "Checking assumptions in practice",
+            "text": "Define checking assumptions in practice in relation to model assumptions; identify the input, output, assumptions, and who uses the result."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "1. Restate the question addressed by model assumptions. 2. Identify the input data, intended output, and assumptions. 3. Predict what the small example should show before reading its output. 4. Change one input or assumption, compare the result, and document what remains uncertain."
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "execution_mode": "static-validation",
+        "code": "training_size = 80\ntest_size = 20\nprint(\"train share:\", training_size/(training_size+test_size))",
+        "expected_output": "train share: 0.8",
+        "run_instructions": "For Python, copy the snippet into a local file and run with Python 3. This CodeLeaf block is static and does not execute inside the browser. For SQL, adapt the query to an approved local schema; the stated result is a conceptual query simulation, not a live database result.",
+        "reset_steps": "Restore the provided synthetic input, rerun or retrace the example, and change one value at a time. Do not use personal records, credentials, or data you are not authorized to access."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistakes and fixes",
+        "text": "Keep the question, data grain, units, and assumptions explicit. If a result differs, inspect the input and steps in order. Avoid turning an observed association into a causal claim, treating a sample as the population, or assuming a small demonstration guarantees production behavior. Hold-out evaluation must reflect the data-generation process and prediction setting."
+      },
+      {
+        "type": "callout",
+        "title": "Responsible interpretation",
+        "text": "This example is a teaching aid. It is static in the CodeLeaf lesson and is not executed in the browser. It uses small synthetic values; validate any real workflow in a separate, appropriate local environment and protect sensitive data."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap and next step",
+        "text": "Recap: Machine learning estimates patterns from examples. Training is only one step: a robust workflow defines splits, baselines, metrics, assumptions, and monitoring. Next, connect this lesson to the linked prerequisite or following lesson. Record the method, input assumptions, observed result, and one limitation so another person can reproduce and review the work."
+      }
+    ],
+    "task": "Try it yourself: create a small synthetic example for model assumptions. State a question, make a prediction, trace or run an appropriate calculation, then write one finding and one limitation.",
+    "task_acceptance_criteria": [
+      "Refer accurately to the topic and its syllabus subtopics.",
+      "Record a reproducible example or a complete manual trace with an expected result.",
+      "Document at least one assumption, limitation, data-quality issue, or evaluation check."
+    ],
+    "hints": [
+      "Write down the input, expected result, units, and assumptions first.",
+      "Change only one condition when testing a revised example.",
+      "Ask whether the data and method represent the real decision; do not infer causality or production readiness from a toy example."
+    ],
+    "expected_output": "train share: 0.8",
+    "run_mode": "static-validation",
+    "troubleshooting": [
+      "Check input values, path assumptions, package versions, indentation, and units.",
+      "For SQL, use a local schema and read-only test data; this page does not provide a live database.",
+      "For package-dependent work, create an isolated environment and use the relevant official documentation."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-150-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "sklearn",
+      "title": "scikit-learn User Guide",
+      "url": "https://scikit-learn.org/stable/user_guide.html",
+      "publisher": "scikit-learn developers",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "preprocessing",
+        "machine learning",
+        "model evaluation"
+      ],
+      "source_type": "official documentation",
+      "notes": "Official source entry point. Verify current API signatures and version notes before implementation."
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft authored against Data Science.pdf lesson 150; preserves the source title/subtopics. Review technical accuracy, example behavior, and assessment wording before publication."
+}

@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-161",
+  "slug": "database-inspection-and-cleanup",
+  "title": "Database Inspection and Cleanup",
+  "sequence": 161,
+  "module_id": "redis-module-20",
+  "module_slug": "redis-administration-and-configuration",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-160"
+  ],
+  "previous_lesson_id": "redis-lesson-160",
+  "next_lesson_id": "redis-lesson-162",
+  "keywords": [
+    "database-inspection-and-cleanup",
+    "key-counting",
+    "iterative-scans",
+    "key-pattern-analysis",
+    "controlled-cleanup-operations",
+    "avoiding-disruptive-production-commands",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 161,
+  "subtopics": [
+    "Key counting",
+    "Iterative scans",
+    "Key-pattern analysis",
+    "Controlled cleanup operations",
+    "Avoiding disruptive production commands"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Database Inspection and Cleanup and distinguish it from a related Redis concept.",
+    "Apply or trace Database Inspection and Cleanup in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Database Inspection and Cleanup and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Database Inspection and Cleanup in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Database Inspection and Cleanup helps implement inspect and change operational settings without disrupting production workloads. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Database Inspection and Cleanup",
+        "asset_path": "diagrams/lesson-161-database-inspection-and-cleanup.svg",
+        "alt_text": "Concept diagram for Database Inspection and Cleanup, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Database Inspection and Cleanup; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Database Inspection and Cleanup helps implement inspect and change operational settings without disrupting production workloads. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Database Inspection and Cleanup, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Key counting",
+            "text": "Connect Key counting to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Iterative scans",
+            "text": "Connect Iterative scans to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Key-pattern analysis",
+            "text": "Connect Key-pattern analysis to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Controlled cleanup operations",
+            "text": "Connect Controlled cleanup operations to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Avoiding disruptive production commands",
+            "text": "Connect Avoiding disruptive production commands to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Database Inspection and Cleanup",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "TYPE demo:key\nTTL demo:key\nSCAN 0 MATCH demo:* COUNT 20",
+        "expected_output": "Returns a type, remaining TTL (or -1/-2 where applicable), and a cursor/key page.",
+        "run_instructions": "SCAN COUNT is a hint; continue while the cursor is non-zero and do not assume one page is complete.",
+        "reset_steps": "Read-only inspection; no key is created.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Database Inspection and Cleanup. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Database Inspection and Cleanup in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Database Inspection and Cleanup.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "Returns a type, remaining TTL (or -1/-2 where applicable), and a cursor/key page.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-161-questions.json",
+    "recap": [
+      "Database Inspection and Cleanup is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Redis commands reference",
+      "url": "https://redis.io/docs/latest/commands/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "command syntax, return values, complexity, compatibility and command history"
+      ]
+    },
+    {
+      "title": "Memory optimization",
+      "url": "https://redis.io/docs/latest/management/optimization/memory-optimization/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "compact encodings, memory trade-offs and optimization"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

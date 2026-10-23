@@ -1,0 +1,191 @@
+{
+  "id": "jquery-lesson-113",
+  "slug": "working-with-api-authentication",
+  "title": "Working With API Authentication",
+  "sequence": 113,
+  "module_id": "jquery-module-12",
+  "module_slug": "ajax-and-http-communication",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "jquery-lesson-112"
+  ],
+  "previous_lesson_id": "jquery-lesson-112",
+  "next_lesson_id": "jquery-lesson-114",
+  "keywords": [
+    "working with api authentication",
+    "jquery",
+    "javascript",
+    "ajax and http communication",
+    "request authorization headers",
+    "session cookies",
+    "csrf-related request headers",
+    "handling authentication failures"
+  ],
+  "source_syllabus_number": 113,
+  "subtopics": [
+    "Request authorization headers",
+    "Session cookies",
+    "CSRF-related request headers",
+    "Handling authentication failures",
+    "Avoiding the exposure of secrets in frontend code"
+  ],
+  "learning_outcomes": [
+    "Explain the role of working with api authentication in a jQuery application.",
+    "Apply request authorization headers in a small example and describe its expected result.",
+    "Verify session cookies with an explicit test or browser observation."
+  ],
+  "exercise_files": [
+    "../exercises/113-working-with-api-authentication.json"
+  ],
+  "sources": [
+    {
+      "title": "jQuery.ajax() API",
+      "url": "https://api.jquery.com/jQuery.ajax/",
+      "publisher": "jQuery API documentation",
+      "checked_on": "2026-10-12",
+      "source_type": "official_api_reference",
+      "supports": [
+        "AJAX options",
+        "Success and error callbacks",
+        "Request lifecycle"
+      ]
+    },
+    {
+      "title": "MDN: CORS",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-12",
+      "source_type": "platform_security_reference",
+      "supports": [
+        "Browser cross-origin request rules",
+        "Server CORS configuration"
+      ]
+    },
+    {
+      "title": "MDN: Fetch API",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-12",
+      "source_type": "platform_reference",
+      "supports": [
+        "Native fetch interoperability",
+        "Request and response workflows"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the attached syllabus and official references; requires lesson-by-lesson technical review, local execution, accessibility checks, and editorial approval.",
+  "content": {
+    "intro": "In this lesson, you will work through working with api authentication with a focused jQuery example. The subtopics below preserve the supplied curriculum coverage and connect the API idea to a small browser interface.",
+    "why_it_matters": "This topic is useful because it turns request authorization headers into a repeatable implementation choice. AJAX sends HTTP requests without requiring a full-page navigation. Treat network errors, HTTP failures, CORS policy, authentication, timeouts, and malformed response data as distinct cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 12 overview",
+        "asset_path": "diagrams/module-12-overview.svg",
+        "alt_text": "Overview of AJAX and HTTP Communication, illustrating the sequence from understanding the concept to implementing and checking it.",
+        "caption": "Use this module map to place working with api authentication within the wider learning path."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "AJAX sends HTTP requests without requiring a full-page navigation. Treat network errors, HTTP failures, CORS policy, authentication, timeouts, and malformed response data as distinct cases."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the supplied syllabus",
+        "items": [
+          "Request authorization headers",
+          "Session cookies",
+          "CSRF-related request headers",
+          "Handling authentication failures",
+          "Avoiding the exposure of secrets in frontend code"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "$.ajax({ url: \"/api/private\", method: \"GET\", dataType: \"json\", timeout: 8000 })\n  .done(renderPrivateData)\n  .fail(showRequestError);",
+        "expected_output": "The server authorizes access; client code handles the response but does not create permissions.",
+        "run_instructions": "Use a local HTML page with jQuery 4.0.0 loaded before app.js for JavaScript snippets. HTML and package-manager snippets can be checked as configuration examples. Run the interaction in browser DevTools, inspect the DOM/Network panel, and compare actual behavior with the expected result. Do not submit learner code to the production API for arbitrary execution.",
+        "reset_steps": "Restore the original markup and code, clear console/network filters, reload the local page, and repeat the same interaction. For a request example, return the mock endpoint to its original response before retrying."
+      },
+      {
+        "type": "callout",
+        "title": "Guided example",
+        "text": "Start with a known DOM structure, apply the pattern for working with api authentication, and test one normal case plus one edge case. Keep selectors scoped to the intended component and verify the real browser result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Implement a request scenario for working with api authentication against a local or mock endpoint. Demonstrate loading, empty, success, HTTP failure, and network-failure behavior as applicable."
+      }
+    ],
+    "task": "Implement a request scenario for working with api authentication against a local or mock endpoint. Demonstrate loading, empty, success, HTTP failure, and network-failure behavior as applicable.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates working with api authentication using a current, documented approach.",
+      "The learner records the expected and actual behavior and checks at least one edge case.",
+      "The example preserves semantic HTML and does not render untrusted data as HTML.",
+      "The test setup and any runtime limitation are documented honestly."
+    ],
+    "hints": [
+      "First identify which DOM nodes and runtime state are involved in working with api authentication.",
+      "Make one small change, inspect the resulting element or request, and compare it with the expected result.",
+      "If the result differs, check the selector, script order, browser console, event target, and relevant API documentation before adding more code."
+    ],
+    "expected_output": "The server authorizes access; client code handles the response but does not create permissions.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-113-questions.json",
+    "common_mistakes": [
+      "Assuming a selector matched an element without checking the collection length.",
+      "Confusing jQuery collections with native DOM elements or live properties with markup attributes.",
+      "Using .html() with untrusted data or assuming client-side validation enforces server rules.",
+      "Treating a demo snippet as production-ready without testing failure and accessibility states."
+    ],
+    "summary": [
+      "Working With API Authentication is one part of the ajax and http communication workflow.",
+      "AJAX sends HTTP requests without requiring a full-page navigation. Treat network errors, HTTP failures, CORS policy, authentication, timeouts, and malformed response data as distinct cases.",
+      "Use the official API or upgrade guide for version-specific behavior and verify an example locally before relying on it."
+    ],
+    "references": [
+      {
+        "title": "jQuery.ajax() API",
+        "url": "https://api.jquery.com/jQuery.ajax/",
+        "publisher": "jQuery API documentation",
+        "checked_on": "2026-10-12",
+        "source_type": "official_api_reference",
+        "supports": [
+          "AJAX options",
+          "Success and error callbacks",
+          "Request lifecycle"
+        ]
+      },
+      {
+        "title": "MDN: CORS",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS",
+        "publisher": "MDN Web Docs",
+        "checked_on": "2026-10-12",
+        "source_type": "platform_security_reference",
+        "supports": [
+          "Browser cross-origin request rules",
+          "Server CORS configuration"
+        ]
+      },
+      {
+        "title": "MDN: Fetch API",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
+        "publisher": "MDN Web Docs",
+        "checked_on": "2026-10-12",
+        "source_type": "platform_reference",
+        "supports": [
+          "Native fetch interoperability",
+          "Request and response workflows"
+        ]
+      }
+    ]
+  }
+}

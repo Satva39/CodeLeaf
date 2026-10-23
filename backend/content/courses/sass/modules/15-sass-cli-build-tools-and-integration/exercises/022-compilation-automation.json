@@ -1,0 +1,52 @@
+{
+  "id": "sass-exercise-022",
+  "lesson_id": "sass-lesson-135",
+  "slug": "compilation-automation",
+  "title": "Compilation Automation",
+  "type": "code",
+  "difficulty": "advanced",
+  "sequence": 22,
+  "prompt": "Create repeatable build and watch scripts, compile each required entrypoint, and make compilation failure visible in local automation.",
+  "starter": {
+    "language": "scss",
+    "code": "{\n  \"scripts\": {\n    \"sass:build\": \"sass src/scss/main.scss public/css/main.css\",\n    \"sass:watch\": \"sass --watch src/scss:public/css\"\n  }\n}"
+  },
+  "public_tests": [
+    {
+      "name": "Expected behavior",
+      "mode": "manual_or_text_check",
+      "note": "This starter grader checks required terms only; compile and inspect the real CSS before considering the work correct."
+    }
+  ],
+  "acceptance_criteria": [
+    "Implements the requested Sass pattern for compilation automation.",
+    "Includes a repeatable command or source-to-output check.",
+    "Documents one edge case, assumption, accessibility concern, or maintenance trade-off."
+  ],
+  "hints": [
+    "Add compilation to the project’s existing build or CI workflow.",
+    "Compile a minimal source file with `npx sass input.scss output.css` and inspect the generated CSS.",
+    "Compare the source and expected output; refine the pattern before adding more components."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "sass:build",
+      "sass:watch",
+      "sass"
+    ]
+  },
+  "retry_policy": {
+    "allow_retries": true,
+    "guidance": "Use the feedback to improve the source and resubmit; the platform controls activity completion and its standard reward policy."
+  },
+  "solution_file": "solutions/022-compilation-automation-solution.json",
+  "target_skills": [
+    "Compilation Automation",
+    "npm Scripts for Sass",
+    "SCSS output inspection"
+  ],
+  "expected_output": "A documented build command produces the output file; a deliberately broken fixture causes the build command to fail instead of being ignored.",
+  "status": "draft",
+  "status_note": "Draft exercise. The automatic grader is a lightweight submission gate; technical correctness requires compilation and/or human review."
+}

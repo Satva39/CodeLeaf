@@ -1,0 +1,67 @@
+{
+  "id": "pandas-exercise-17",
+  "slug": "multi-format-import",
+  "title": "Multi-Format Import",
+  "sequence": 17,
+  "lesson_id": "pandas-lesson-137",
+  "lesson_slug": "designing-reliable-i-o-pipelines",
+  "module_id": "pandas-module-16",
+  "difficulty": "intermediate",
+  "type": "code",
+  "prompt": "Load CSV and Excel data, validate the schemas, and export the results.",
+  "scenario": "Use the synthetic data described below to practise r, e, l, i, a, b, l, e,  , i, /, o,  , p, i, p, e, l, i, n, e. Do not assume the input is correct without validating it.",
+  "skills": "Reliable I/O pipeline",
+  "starter": {
+    "language": "python",
+    "code": "import pandas as pd\n\nfrom io import StringIO\nraw = StringIO(\"id,amount\\n1,12.5\\n2,8.0\\n\")\nloaded = pd.read_csv(raw, dtype={\"id\": \"int64\", \"amount\": \"float64\"})\nassert list(loaded.columns) == [\"id\", \"amount\"]\nprint(loaded[\"amount\"].sum())",
+    "dataset_note": "Use small synthetic in-memory data; do not place private or real customer data in exercises."
+  },
+  "input_schema": {
+    "description": "Create or use a synthetic DataFrame with only the columns needed for this exercise.",
+    "validation": [
+      "Document expected columns and data types.",
+      "State how missing values or duplicates should be treated."
+    ]
+  },
+  "expected_output": [
+    "Read CSV with explicit relevant options and required-column checks.",
+    "Describe an Excel import with an installed engine and selected sheet.",
+    "Export a validated dataset and re-read a small output to verify it."
+  ],
+  "public_tests": [
+    {
+      "name": "normal-case",
+      "description": "The solution returns the required columns and correctly computes the stated result."
+    },
+    {
+      "name": "edge-case",
+      "description": "The solution documents behavior for a missing value, duplicate key, empty input, invalid value, or other relevant edge case."
+    }
+  ],
+  "hints": [
+    "Write down the expected result before coding.",
+    "Use Pandas operations that preserve labels unless position-based behavior is intended.",
+    "Add a small assertion for the most important property."
+  ],
+  "acceptance_criteria": [
+    "Read CSV with explicit relevant options and required-column checks.",
+    "Describe an Excel import with an installed engine and selected sheet.",
+    "Export a validated dataset and re-read a small output to verify it."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "r"
+    ],
+    "case_sensitive": false,
+    "note": "The generic short-response grader is only an initial scaffold; a reviewed isolated Python grader is required for automatic execution of arbitrary learner code."
+  },
+  "solution_file": "solutions/017-multi-format-import-solution.json",
+  "solution": {},
+  "retry_policy": {
+    "max_attempts": null,
+    "allow_retry_after_feedback": true
+  },
+  "status": "draft",
+  "status_note": "Review prompt, starter, rubric, and server-side grading before publication."
+}

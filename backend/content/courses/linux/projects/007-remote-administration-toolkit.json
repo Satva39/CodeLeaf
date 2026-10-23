@@ -1,0 +1,139 @@
+{
+  "id": "linux-project-007",
+  "slug": "remote-administration-toolkit",
+  "title": "Remote Administration Toolkit",
+  "sequence": 7,
+  "tier": "intermediate",
+  "objective": "Perform routine tasks across explicitly authorized practice Linux machines.",
+  "prerequisite_lesson_ids": [
+    "linux-lesson-100"
+  ],
+  "recommended_module_ranges": [
+    12,
+    13,
+    14,
+    15,
+    18
+  ],
+  "skills": [
+    "Verified SSH host keys",
+    "SSH client config",
+    "Connectivity checks",
+    "Remote commands and file transfers with structured logs"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Milestone 1: Verified SSH host keys",
+      "acceptance_criteria": [
+        "Demonstrate verified ssh host keys using synthetic data or a disposable Linux environment.",
+        "Record repeatable verification steps and expected/observed results.",
+        "Document one failure mode, safety boundary, and recovery approach."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Milestone 2: SSH client config",
+      "acceptance_criteria": [
+        "Demonstrate ssh client config using synthetic data or a disposable Linux environment.",
+        "Record repeatable verification steps and expected/observed results.",
+        "Document one failure mode, safety boundary, and recovery approach."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Milestone 3: Connectivity checks",
+      "acceptance_criteria": [
+        "Demonstrate connectivity checks using synthetic data or a disposable Linux environment.",
+        "Record repeatable verification steps and expected/observed results.",
+        "Document one failure mode, safety boundary, and recovery approach."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Milestone 4: Remote commands and file transfers with structured logs",
+      "acceptance_criteria": [
+        "Demonstrate remote commands and file transfers with structured logs using synthetic data or a disposable Linux environment.",
+        "Record repeatable verification steps and expected/observed results.",
+        "Document one failure mode, safety boundary, and recovery approach."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "contents": "# Remote Administration Toolkit\n\nPerform routine tasks across explicitly authorized practice Linux machines.\n\n## Required features\n- [ ] Verified SSH host keys\n- [ ] SSH client config\n- [ ] Connectivity checks\n- [ ] Remote commands and file transfers with structured logs\n\nUse synthetic data and a disposable VM. Do not place passwords, private keys, or production data in this project. Document setup, tests, distribution/kernel assumptions, limitations, and recovery. State whether a check was run locally; CodeLeaf does not execute arbitrary Linux/Bash commands inside the FastAPI web process.\n"
+    },
+    {
+      "path": "bin/main.sh",
+      "language": "bash",
+      "contents": "#!/usr/bin/env bash\n# Remote Administration Toolkit\n# Safe draft scaffold; fill in behavior only after defining inputs and expected results.\nset -u\n\nusage() {\n  printf 'Usage: %s [--dry-run] [--help]\\n' \"${0##*/}\"\n}\n\nmain() {\n  case ${1:-help} in\n    help|-h|--help) usage ;;\n    --dry-run) printf 'Dry run: no system changes requested.\\n' ;;\n    *) printf 'Unsupported option: %s\\n' \"$1\" >&2; return 2 ;;\n  esac\n}\n\nmain \"${1:-help}\"\n"
+    }
+  ],
+  "required_features": [
+    "Verified SSH host keys",
+    "SSH client config",
+    "Connectivity checks",
+    "Remote commands and file transfers with structured logs"
+  ],
+  "stretch_features": [
+    "Add automated tests over fixtures and boundary cases.",
+    "Add structured logs and machine-readable output.",
+    "Add a documented dry-run and rollback/recovery path.",
+    "Run static checks such as ShellCheck where applicable."
+  ],
+  "tests": [
+    {
+      "name": "Functional behavior",
+      "mode": "human_review",
+      "criteria": [
+        "Required behavior works on synthetic inputs.",
+        "Expected output and exit status are documented."
+      ]
+    },
+    {
+      "name": "Safety and recovery",
+      "mode": "human_review",
+      "criteria": [
+        "Dry-run or safe preview is available where state changes are possible.",
+        "No private credentials are committed.",
+        "A tested backup or rollback procedure is documented where relevant."
+      ]
+    },
+    {
+      "name": "Compatibility",
+      "mode": "human_review",
+      "criteria": [
+        "Distribution and tool versions are identified.",
+        "Missing dependencies and unsupported cases have actionable messages."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correctness and required features",
+      "points": 30
+    },
+    {
+      "criterion": "Tests and reproducible evidence",
+      "points": 25
+    },
+    {
+      "criterion": "Safety, security, and recovery",
+      "points": 20
+    },
+    {
+      "criterion": "Design, maintainability, and documentation",
+      "points": 15
+    },
+    {
+      "criterion": "Compatibility and stated limitations",
+      "points": 10
+    }
+  ],
+  "review_method": "Human review or execution in a separately isolated runner; the platform web process must not execute arbitrary Bash/Linux commands.",
+  "reference_solution_file": "projects/solutions/007-remote-administration-toolkit-reference.json",
+  "status": "draft",
+  "notes": "Draft project based on Linux.pdf Section D. Relevant module numbers are 12, 13, 14, 15, 18; require actual evidence of verification and recovery rather than claiming completion from a successful first run."
+}

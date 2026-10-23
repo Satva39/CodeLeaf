@@ -1,0 +1,32 @@
+{
+  "id": "java-exercise-solution-032",
+  "exercise_id": "java-exercise-032",
+  "title": "Multithreaded File Processor reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "language": "java",
+  "answer": "import java.nio.file.Files;\nimport java.nio.file.Path;\nimport java.util.List;\nimport java.util.concurrent.Callable;\nimport java.util.concurrent.ExecutorService;\nimport java.util.concurrent.Executors;\nimport java.util.concurrent.Future;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        List<Path> files = List.of(Path.of(\"a.txt\"), Path.of(\"b.txt\"));\n        try (ExecutorService pool = Executors.newFixedThreadPool(2)) {\n            List<Future<Long>> counts = new java.util.ArrayList<>();\n            for (Path file : files) {\n                Callable<Long> task = () -> { try (var lines = Files.lines(file)) { return lines.count(); } };\n                counts.add(pool.submit(task));\n            }\n            for (int i = 0; i < counts.size(); i++) System.out.println(files.get(i) + \": \" + counts.get(i).get());\n        }\n    }\n}",
+  "explanation": "Submit one independent task per file and gather each Future result. Each task must close its stream; missing files should be reported per task rather than silently ignored.",
+  "hidden_tests": [
+    {
+      "case": "normal case",
+      "input_or_setup": "Use the deterministic sample data or representative valid input described in the exercise.",
+      "expected_behavior": "Prints a line count for a.txt and b.txt if those files exist",
+      "purpose": "Verify the main behavior and the output contract."
+    },
+    {
+      "case": "boundary case",
+      "input_or_setup": "Test empty, zero, minimum/maximum, duplicate, or end-of-range input as appropriate to the exercise.",
+      "expected_behavior": "The result matches the documented boundary rule and does not silently corrupt state.",
+      "purpose": "Check a boundary or invariant."
+    },
+    {
+      "case": "invalid or failure case",
+      "input_or_setup": "Provide malformed input or simulate a missing file, unavailable endpoint, missing configuration, or database failure where relevant.",
+      "expected_behavior": "The operation fails clearly or returns a safe result; resources are released and secrets are not printed.",
+      "purpose": "Check explicit error behavior and cleanup."
+    }
+  ],
+  "review_notes": "Repository-only reference material. Keep it out of public API responses and frontend bundles. The platform grader is only a required-token smoke check; complete task-specific execution tests in an isolated Java runner before publication.",
+  "sample_expected_result": "Prints a line count for a.txt and b.txt if those files exist"
+}

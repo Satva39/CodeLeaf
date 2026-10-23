@@ -1,0 +1,171 @@
+{
+  "id": "php-lesson-063",
+  "slug": "combining-and-comparing-arrays",
+  "title": "Combining and Comparing Arrays",
+  "sequence": 63,
+  "module_id": "php-module-07",
+  "module_slug": "arrays-and-collection-handling",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 11,
+  "prerequisites": [
+    "php-lesson-062"
+  ],
+  "previous_lesson_id": "php-lesson-062",
+  "next_lesson_id": "php-lesson-064",
+  "keywords": [
+    "combining and comparing arrays",
+    "arrays and collection handling",
+    "merging arrays",
+    "array union",
+    "intersections and differences",
+    "key collisions",
+    "choosing the correct operation",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 63,
+  "subtopics": [
+    "Merging arrays.",
+    "Array union.",
+    "Intersections and differences.",
+    "Key collisions.",
+    "Choosing the correct operation."
+  ],
+  "learning_outcomes": [
+    "Explain what combining and comparing arrays contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: merging arrays.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "PHP arrays are ordered maps that can represent lists, keyed records, and nested collections. Keys, missing values, sorting, and transformation order all affect the resulting data. In this lesson, focus on merging arrays; then compare it with array union. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use combining and comparing arrays when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 7 overview: Arrays and Collection Handling",
+        "asset_path": "diagrams/module-07-overview.svg",
+        "alt_text": "Four-stage overview for module 7, Arrays and Collection Handling, grouping lesson topics in order.",
+        "caption": "Use this overview to place combining and comparing arrays in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "PHP arrays are ordered maps that can represent lists, keyed records, and nested collections. Keys, missing values, sorting, and transformation order all affect the resulting data. For combining and comparing arrays, begin with merging arrays. Also distinguish array union; intersections and differences; key collisions. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Merging arrays",
+            "text": "Trace the input keys and values, then verify the resulting order and shape, including empty collections and missing keys."
+          },
+          {
+            "title": "Array union",
+            "text": "Trace the input keys and values, then verify the resulting order and shape, including empty collections and missing keys."
+          },
+          {
+            "title": "Intersections and differences",
+            "text": "State which values are accepted and what contract the declaration enforces; include a case that should be rejected or handled explicitly."
+          },
+          {
+            "title": "Key collisions",
+            "text": "Trace the input keys and values, then verify the resulting order and shape, including empty collections and missing keys."
+          },
+          {
+            "title": "Choosing the correct operation",
+            "text": "Know when to use choosing the correct operation, what input or program state it changes, and which boundary case is worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Combining and Comparing Arrays",
+        "language": "php",
+        "code": "<?php\n$values = [1, 2, 3];\n$doubled = array_map(static fn (int $n): int => $n * 2, $values);\necho implode(\",\", $doubled) . PHP_EOL;",
+        "expected_output": "2,4,6",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for combining and comparing arrays from top to bottom. Start by identifying merging arrays, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for combining and comparing arrays that demonstrates \"merging arrays\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of merging arrays.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "2,4,6",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-063-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Combining and Comparing Arrays is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+    ],
+    "references": [
+      {
+        "title": "Arrays",
+        "url": "https://www.php.net/manual/en/language.types.array.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "indexed arrays",
+          "associative arrays",
+          "array operations"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Arrays",
+      "url": "https://www.php.net/manual/en/language.types.array.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "indexed arrays",
+        "associative arrays",
+        "array operations"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

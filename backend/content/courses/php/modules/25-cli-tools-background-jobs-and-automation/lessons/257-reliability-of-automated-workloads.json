@@ -1,0 +1,195 @@
+{
+  "id": "php-lesson-257",
+  "slug": "reliability-of-automated-workloads",
+  "title": "Reliability of Automated Workloads",
+  "sequence": 257,
+  "module_id": "php-module-25",
+  "module_slug": "cli-tools-background-jobs-and-automation",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 13,
+  "prerequisites": [
+    "php-lesson-256"
+  ],
+  "previous_lesson_id": "php-lesson-256",
+  "next_lesson_id": "php-lesson-258",
+  "keywords": [
+    "reliability of automated workloads",
+    "cli tools, background jobs, and automation",
+    "timeouts",
+    "retries",
+    "logging",
+    "monitoring",
+    "safe interruption and restart behavior",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 257,
+  "subtopics": [
+    "Timeouts.",
+    "Retries.",
+    "Logging.",
+    "Monitoring.",
+    "Safe interruption and restart behavior."
+  ],
+  "learning_outcomes": [
+    "Explain what reliability of automated workloads contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: timeouts.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "CLI scripts and background jobs need explicit inputs, predictable exit behavior, bounded resource use, observable failures, and safe retry semantics. Long-running work should not rely on a browser request staying open. In this lesson, focus on timeouts; then compare it with retries. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use reliability of automated workloads when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 25 overview: CLI Tools, Background Jobs, and Automation",
+        "asset_path": "diagrams/module-25-overview.svg",
+        "alt_text": "Four-stage overview for module 25, CLI Tools, Background Jobs, and Automation, grouping lesson topics in order.",
+        "caption": "Use this overview to place reliability of automated workloads in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "CLI scripts and background jobs need explicit inputs, predictable exit behavior, bounded resource use, observable failures, and safe retry semantics. Long-running work should not rely on a browser request staying open. For reliability of automated workloads, begin with timeouts. Also distinguish retries; logging; monitoring. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Timeouts",
+            "text": "Know when to use timeouts, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Retries",
+            "text": "Know when to use retries, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Logging",
+            "text": "Know when to use logging, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Monitoring",
+            "text": "Know when to use monitoring, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Safe interruption and restart behavior",
+            "text": "Know when to use safe interruption and restart behavior, what input or program state it changes, and which boundary case is worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Reliability of Automated Workloads",
+        "language": "php",
+        "code": "<?php\n$args = [\"tasks.php\", \"--help\"];\necho implode(\" \", $args) . PHP_EOL;",
+        "expected_output": "tasks.php --help",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Bound retries and resource use, log failures without secrets, and make jobs safe to resume after interruption."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for reliability of automated workloads from top to bottom. Start by identifying timeouts, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for reliability of automated workloads that demonstrates \"timeouts\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of timeouts.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "tasks.php --help",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-257-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Reliability of Automated Workloads is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Bound retries and resource use, log failures without secrets, and make jobs safe to resume after interruption."
+    ],
+    "references": [
+      {
+        "title": "PHP Manual",
+        "url": "https://www.php.net/manual/en/",
+        "publisher": "PHP Documentation Group",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "language syntax",
+          "built-in functions",
+          "runtime behavior",
+          "classes and objects"
+        ]
+      },
+      {
+        "title": "Composer basic usage",
+        "url": "https://getcomposer.org/doc/01-basic-usage.md",
+        "publisher": "Composer",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "composer install",
+          "lockfiles",
+          "autoloading"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "PHP Manual",
+      "url": "https://www.php.net/manual/en/",
+      "publisher": "PHP Documentation Group",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "language syntax",
+        "built-in functions",
+        "runtime behavior",
+        "classes and objects"
+      ]
+    },
+    {
+      "title": "Composer basic usage",
+      "url": "https://getcomposer.org/doc/01-basic-usage.md",
+      "publisher": "Composer",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "composer install",
+        "lockfiles",
+        "autoloading"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

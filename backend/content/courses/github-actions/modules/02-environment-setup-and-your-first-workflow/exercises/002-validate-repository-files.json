@@ -1,0 +1,63 @@
+{
+  "id": "github-actions-exercise-002",
+  "slug": "validate-repository-files",
+  "title": "Validate repository files",
+  "type": "coding",
+  "lesson_id": "github-actions-lesson-015",
+  "module_id": "github-actions-module-02",
+  "difficulty": "easy",
+  "sequence": 2,
+  "prompt": "Check that a required file exists and make the job fail clearly if it is missing.",
+  "objective": "Demonstrate the behavior of validate repository files and capture verifiable evidence.",
+  "target_skills": [
+    "beginner",
+    "workflow YAML",
+    "validation",
+    "safe automation"
+  ],
+  "starter": {
+    "language": "yaml",
+    "code": "steps:\n  - name: Check required file\n    run: |\n      if test -f README.md; then\n        echo \"README exists\"\n      else\n        echo \"README.md is missing\" >&2\n        exit 1\n      fi",
+    "execution_mode": "workflow-fragment"
+  },
+  "expected_output": "A reviewed workflow or design note satisfying: test -f, README.md, exit 1. Verify behavior on a disposable repository where execution is required; a static sketch is not proof of a live deployment.",
+  "public_tests": [
+    {
+      "name": "Required evidence check",
+      "required_strings": [
+        "test -f",
+        "README.md",
+        "exit 1"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Include or explain `test -f`.",
+    "Include or explain `README.md`.",
+    "Include or explain `exit 1`.",
+    "Explain one validation result or limitation.",
+    "Do not include a real secret or use production resources."
+  ],
+  "hints": [
+    "First identify the trigger, input, and expected result.",
+    "Start with read-only permissions and a disposable branch or test environment.",
+    "Compare your result with the linked lesson and official documentation; distinguish a configuration sketch from a live integration."
+  ],
+  "solution": {
+    "answer": null,
+    "explanation": "The detailed reference solution is stored in a protected repository-only JSON file; it is not intended for a learner-facing response."
+  },
+  "solution_file": "../solutions/002-validate-repository-files-solution.json",
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "test -f",
+      "README.md",
+      "exit 1"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus human review for workflow semantics and security boundaries.",
+  "retry_policy": "Allow retries; incorrect submissions do not award XP. The platform awards exercise XP only after server-verified successful completion and applies idempotency per activity.",
+  "status": "draft",
+  "status_note": "Source mapping: Section C: Practical Exercises; original learning task adapted to CodeLeaf structure."
+}

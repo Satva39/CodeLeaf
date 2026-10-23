@@ -1,0 +1,192 @@
+{
+  "id": "json-yaml-lesson-122",
+  "slug": "comments-and-metadata-preservation",
+  "title": "Comments and Metadata Preservation",
+  "sequence": 122,
+  "module_id": "json-yaml-module-12",
+  "module_slug": "json-and-yaml-comparison-and-interoperability",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "json-yaml-lesson-121"
+  ],
+  "previous_lesson_id": "json-yaml-lesson-121",
+  "next_lesson_id": "json-yaml-lesson-123",
+  "keywords": [
+    "comments-and-metadata-preservation",
+    "why-comments-are-not-ordinary-json-data-yaml-comments-and-their-relationship-to-parsing-conversion-related-comment-loss",
+    "separating-documentation-from-data-schema-annotations-external-metadata-strategies"
+  ],
+  "source_syllabus_number": 122,
+  "subtopics": [
+    "Why comments are not ordinary JSON data. YAML comments and their relationship to parsing. Conversion-related comment loss.",
+    "Separating documentation from data. Schema annotations. External metadata strategies."
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of comments and metadata preservation and identify at least one related syllabus concept.",
+    "Interpret the example for comments and metadata preservation and describe its expected result.",
+    "Choose a relevant syntax, type, compatibility, security, or troubleshooting check for the example."
+  ],
+  "content": {
+    "intro": "This lesson focuses on comments and metadata preservation and connects the PDF syllabus topics to a small, inspectable example. Work from the intended data model, write down the expected result, then verify syntax and semantics with the target tool.",
+    "why_it_matters": "Comments and Metadata Preservation matters because structured-data files sit between people, tools, services, and deployment systems. A clear contract and repeatable checks make the result easier to maintain and safer to consume.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Comments and Metadata Preservation: visual explanation",
+        "asset_path": "diagrams/lessons/lesson-122-comments-and-metadata-preservation.svg",
+        "alt_text": "Comments and Metadata Preservation: Why comments are not ordinary JSON data. YAML comments and their relationship to parsing. Conversion-related comment loss. leads to Interpret / validate, then Expected structure.",
+        "caption": "Use this concept flow to predict the result for Comments and Metadata Preservation before you test the snippet."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "JSON and YAML can often represent equivalent mappings, sequences, and scalar values, but conversion can change types, omit comments, expose duplicate keys, or alter formatting. Compare parsed values and document what the target tools preserve."
+      },
+      {
+        "type": "paragraph",
+        "title": "What you will cover",
+        "text": "This lesson explicitly addresses: Why comments are not ordinary JSON data. YAML comments and their relationship to parsing. Conversion-related comment loss.; Separating documentation from data. Schema annotations. External metadata strategies.. Treat each as part of a workflow: define what the data should mean, represent it consistently, and test how the chosen implementation interprets it."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Comments and Metadata Preservation",
+        "language": "yaml",
+        "code": "# This comment may be lost in a plain data conversion\nname: Field Notes\n# A reviewer-friendly note\nenabled: true",
+        "expected_output": "Converting through a data model typically preserves values, not YAML comments or original formatting; comment-preserving tools require separate testing.",
+        "run_instructions": "Save as example.yaml and validate it with the exact parser/linter used by the target application. For Python experiments, use an isolated environment and safe loading for untrusted content. Do not assume every parser resolves ambiguous scalars identically.",
+        "reset_steps": "Restore the starting fixture before each test. Change one field, indentation level, parser option, or schema constraint at a time, then compare the result with the prediction.",
+        "execution_mode": "static-validation",
+        "limitations": "This snippet is a reference/example, not evidence that the CodeLeaf browser executes JSON/YAML parsing, shell commands, or Python. Validate locally with a named parser or tool before relying on it."
+      },
+      {
+        "type": "list",
+        "title": "A reliable working sequence",
+        "items": [
+          {
+            "title": "1. State the contract",
+            "text": "Write down the expected root type, required fields, scalar types, and any compatibility assumptions."
+          },
+          {
+            "title": "2. Validate before use",
+            "text": "Parse the document and run the applicable schema or policy checks; syntax success alone is not full correctness."
+          },
+          {
+            "title": "3. Test a boundary",
+            "text": "Include at least one missing, malformed, ambiguous, or unexpected input and record the desired behavior."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety checkpoint",
+        "text": "Do not judge a conversion only by how the text looks. Parse both documents, compare values and types, and record features that cannot be represented on both sides. Confirm implementation-specific behavior against the target parser, tool version, and standards documentation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second synthetic fixture for “Why comments are not ordinary JSON data. YAML comments and their relationship to parsing. Conversion-related comment loss.”. Predict the parsed types/result, change one relevant detail, and record whether the target tool behaved as expected. Include one invalid or boundary case."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-122-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating readable text as proof of correctness.",
+        "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+        "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+      },
+      {
+        "problem": "Assuming every parser interprets the feature identically.",
+        "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+        "fix": "Record the exact parser/version and test the target environment."
+      },
+      {
+        "problem": "Testing only a happy path.",
+        "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+        "fix": "Keep valid, invalid, and boundary fixtures in version control."
+      }
+    ],
+    "task": "Prepare a brief, reviewable demonstration of Comments and Metadata Preservation. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+    "task_acceptance_criteria": [
+      "The artifact clearly demonstrates Why comments are not ordinary JSON data. YAML comments and their relationship to parsing. Conversion-related comment loss..",
+      "Expected behavior is written before verification.",
+      "One invalid or boundary case is documented.",
+      "The relevant format, parser/version, and any security or interoperability limits are recorded."
+    ],
+    "hints": [
+      "Start with the smallest valid example that demonstrates Why comments are not ordinary JSON data. YAML comments and their relationship to parsing. Conversion-related comment loss..",
+      "Change one thing at a time and compare parsed values, not only visual formatting.",
+      "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+    ],
+    "summary": [
+      "Comments and Metadata Preservation fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+      "Topics retained from the source PDF include Why comments are not ordinary JSON data. YAML comments and their relationship to parsing. Conversion-related comment loss.; Separating documentation from data. Schema annotations. External metadata strategies..",
+      "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "Converting through a data model typically preserves values, not YAML comments or original formatting; comment-preserving tools require separate testing."
+  },
+  "task": "Prepare a brief, reviewable demonstration of Comments and Metadata Preservation. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+  "task_acceptance_criteria": [
+    "The artifact clearly demonstrates Why comments are not ordinary JSON data. YAML comments and their relationship to parsing. Conversion-related comment loss..",
+    "Expected behavior is written before verification.",
+    "One invalid or boundary case is documented.",
+    "The relevant format, parser/version, and any security or interoperability limits are recorded."
+  ],
+  "hints": [
+    "Start with the smallest valid example that demonstrates Why comments are not ordinary JSON data. YAML comments and their relationship to parsing. Conversion-related comment loss..",
+    "Change one thing at a time and compare parsed values, not only visual formatting.",
+    "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+  ],
+  "summary": [
+    "Comments and Metadata Preservation fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+    "Topics retained from the source PDF include Why comments are not ordinary JSON data. YAML comments and their relationship to parsing. Conversion-related comment loss.; Separating documentation from data. Schema annotations. External metadata strategies..",
+    "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+  ],
+  "run_mode": "static-validation",
+  "expected_output": "Converting through a data model typically preserves values, not YAML comments or original formatting; comment-preserving tools require separate testing.",
+  "common_mistakes": [
+    {
+      "problem": "Treating readable text as proof of correctness.",
+      "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+      "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+    },
+    {
+      "problem": "Assuming every parser interprets the feature identically.",
+      "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+      "fix": "Record the exact parser/version and test the target environment."
+    },
+    {
+      "problem": "Testing only a happy path.",
+      "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+      "fix": "Keep valid, invalid, and boundary fixtures in version control."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "id": "json-yaml-ref-rfc8259",
+      "title": "RFC 8259 — The JavaScript Object Notation (JSON) Data Interchange Format",
+      "url": "https://www.rfc-editor.org/rfc/rfc8259",
+      "publisher": "IETF / RFC Editor",
+      "checked_on": "2026-10-20"
+    },
+    {
+      "id": "json-yaml-ref-ecma404",
+      "title": "ECMA-404 — The JSON Data Interchange Syntax",
+      "url": "https://ecma-international.org/publications-and-standards/standards/ecma-404/",
+      "publisher": "Ecma International",
+      "checked_on": "2026-10-20"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Generated from the attached JSON and YAML syllabus; requires technical review and target-tool validation before publication.",
+  "exercise_files": [
+    "../exercises/027-round-trip-conversion.json"
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "id": "pytorch-lesson-145",
+  "slug": "inference-optimization",
+  "title": "Inference Optimization",
+  "sequence": 145,
+  "module_id": "pytorch-module-18",
+  "module_slug": "export-deployment-and-inference",
+  "level": "Professional",
+  "difficulty": "advanced",
+  "track": "deployment",
+  "estimated_minutes": 25,
+  "prerequisites": [
+    "pytorch-lesson-144"
+  ],
+  "previous_lesson_id": "pytorch-lesson-144",
+  "next_lesson_id": "pytorch-lesson-146",
+  "keywords": [
+    "inference-optimization",
+    "batch-inference",
+    "latency-and-throughput",
+    "reducing-unnecessary-preprocessing-costs",
+    "compilation-for-inference",
+    "measuring-model-performance-in-its-target-environment",
+    "pytorch",
+    "deep-learning"
+  ],
+  "learning_outcomes": [
+    "Explain the role of inference optimization in a PyTorch workflow.",
+    "Apply a small example of inference optimization and interpret the output.",
+    "Identify a relevant limitation, debugging check, or reproducibility concern."
+  ],
+  "content": {
+    "intro": "Inference Optimization: Inference loads a trained artifact, enters evaluation mode, preprocesses inputs, runs the model without unnecessary gradient tracking, and postprocesses outputs. Export adds a target-format compatibility boundary. In this lesson, use a small example to make the inputs, outputs, and boundary conditions explicit.",
+    "why_it_matters": "A model becomes usable when callers can send validated inputs and receive stable outputs with known dependency, latency, and failure behavior. For this lesson, focus on batch inference and the evidence you can collect from a controlled example.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 18 roadmap",
+        "asset_path": "diagrams/module-18-overview.svg",
+        "alt_text": "Overview diagram of the ordered lessons in module 18: Export, Deployment, and Inference. This lesson is item 145 in the 164-lesson course.",
+        "caption": "Orientation map for Export, Deployment, and Inference; use the list below to connect this lesson to related ideas."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Separate artifact loading from per-request inference; validate input size/type/range, avoid loading weights on every request, and verify exported outputs against eager execution. The source topics for this lesson are: Batch inference, Latency and throughput, Reducing unnecessary preprocessing costs. Keep each topic connected to a checkable input/output behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "Read the example",
+        "text": "Call a reusable inference function on one item and a batch, then inspect output shape and error handling. Export is successful only if the target runtime supports the model’s operators and constraints. The example is a teaching-scale check, not evidence of a trained model score or a hardware-independent performance claim."
+      },
+      {
+        "type": "list",
+        "title": "Source-aligned topic checklist",
+        "items": [
+          {
+            "title": "Batch inference",
+            "text": "Inspect one sample before batching, verify feature/label alignment, and confirm that preprocessing and split boundaries fit the intended stage."
+          },
+          {
+            "title": "Latency and throughput",
+            "text": "Measure a representative baseline with warm-up and repeated trials, change one factor, and re-check output quality before claiming improvement."
+          },
+          {
+            "title": "Reducing unnecessary preprocessing costs",
+            "text": "Inspect one sample before batching, verify feature/label alignment, and confirm that preprocessing and split boundaries fit the intended stage."
+          },
+          {
+            "title": "Compilation for inference",
+            "text": "Define the artifact/input/output contract and verify it end-to-end, including invalid input, runtime compatibility, and useful failure responses."
+          },
+          {
+            "title": "Measuring model performance in its target environment",
+            "text": "Measure a representative baseline with warm-up and repeated trials, change one factor, and re-check output quality before claiming improvement."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Guided PyTorch example",
+        "language": "python",
+        "code": "import torch\nfrom torch import nn\nmodel = nn.Linear(16, 4).eval()\nx = torch.randn(64, 16)\nwith torch.inference_mode(): y = model(x)\nprint(y.shape)",
+        "expected_output": "torch.Size([64, 4])",
+        "run_instructions": "Save as example.py in a Python environment with a compatible PyTorch installation, then run `python example.py`. PyTorch snippets are not executed in the browser. For GPU- or package-specific snippets, install the matching supported dependencies first.",
+        "reset_steps": "Restore the code block, rerun it, and compare both the printed output and tensor metadata.",
+        "run_mode": "server-runner"
+      },
+      {
+        "type": "callout",
+        "title": "Version and execution note",
+        "text": "The code block is a local Python example, not a browser execution promise. CodeLeaf does not currently provide an isolated general-purpose Python runner; use a virtual environment. Installation commands, optional packages, hardware behavior, and rapidly evolving specialist APIs must be checked against the linked official documentation."
+      }
+    ],
+    "task": "Try it yourself: Wrap a small model in a validated single/batch inference function and write one valid-input and one invalid-input test. Record the observed result and one limitation; do not report an unrun training or performance result as measured.",
+    "task_acceptance_criteria": [
+      "The experiment demonstrates at least one relevant aspect of inference optimization.",
+      "Record the expected and observed result, including shape/dtype/device information when relevant.",
+      "Explain one common failure mode, compatibility limitation, or evaluation caveat."
+    ],
+    "hints": [
+      "Begin with the smallest working example for inference optimization and keep input shapes explicit.",
+      "Change only one variable at a time; compare a tensor property, a printed value, or a test assertion.",
+      "Use the linked official reference for any hardware-specific, optional-package, or version-sensitive behavior."
+    ],
+    "expected_output": "torch.Size([64, 4])",
+    "troubleshooting": [
+      {
+        "symptom": "A tensor operation raises a shape, dtype, or device mismatch.",
+        "check": "Print .shape, .dtype, and .device for each input. Resolve the mismatch intentionally instead of changing dimensions blindly."
+      },
+      {
+        "symptom": "The example fails because an optional package or accelerator is unavailable.",
+        "check": "Check the installed PyTorch/package versions and device availability. Use the official installation selector and run the CPU-compatible path where appropriate."
+      },
+      {
+        "symptom": "The result differs across runs or machines.",
+        "check": "Fix the seed where useful, record versions and inputs, and document operations that remain nondeterministic or hardware dependent."
+      }
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Relying on assumptions instead of inspecting the data or output.",
+        "why": "Many ML failures come from incorrect shapes, labels, preprocessing, or execution mode rather than a syntax error.",
+        "fix": "Inspect representative inputs and add assertions for the expected shape, dtype, range, or behavior."
+      },
+      {
+        "problem": "Mixing training-time behavior with inference-time behavior.",
+        "why": "Dropout, normalization, gradient tracking, and optimizer updates can change how a model behaves.",
+        "fix": "Do not expose arbitrary file loading or accept unlimited request sizes in an inference endpoint."
+      },
+      {
+        "problem": "Using a current or experimental API without recording its version assumptions.",
+        "why": "Hardware support and ecosystem APIs can change independently of the core package.",
+        "fix": "Pin compatible dependencies, record the environment, and test after upgrades."
+      }
+    ],
+    "summary": [
+      "Inference Optimization belongs to the Export, Deployment, and Inference learning path.",
+      "Practice batch inference, latency and throughput, reducing unnecessary preprocessing costs using the source-aligned checklist and read-example explanation.",
+      "Do not expose arbitrary file loading or accept unlimited request sizes in an inference endpoint."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-145-questions.json",
+    "solution_notes": "The linked lesson knowledge-check answers and exercise reference solutions are kept in protected backend content files. A published endpoint must return learner-safe prompts only.",
+    "run_mode": "server-runner",
+    "execution_note": "Requires a local or separately isolated Python runner. Do not execute learner-supplied Python inside the FastAPI process or the production web container.",
+    "references": [
+      {
+        "title": "torch.export Documentation",
+        "url": "https://docs.pytorch.org/docs/stable/export.html",
+        "publisher": "PyTorch",
+        "checked_on": "2026-10-20",
+        "supports": [
+          "ExportedProgram",
+          "ahead-of-time graph capture",
+          "constraints"
+        ]
+      },
+      {
+        "title": "ONNX Export",
+        "url": "https://docs.pytorch.org/docs/stable/onnx.html",
+        "publisher": "PyTorch",
+        "checked_on": "2026-10-20",
+        "supports": [
+          "ONNX export",
+          "runtime interoperability"
+        ]
+      },
+      {
+        "title": "torchao Documentation",
+        "url": "https://docs.pytorch.org/ao/stable/",
+        "publisher": "torchao",
+        "checked_on": "2026-10-20",
+        "supports": [
+          "quantization workflows",
+          "reduced-precision model inference"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "torch.export Documentation",
+      "url": "https://docs.pytorch.org/docs/stable/export.html",
+      "publisher": "PyTorch",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "ExportedProgram",
+        "ahead-of-time graph capture",
+        "constraints"
+      ]
+    },
+    {
+      "title": "ONNX Export",
+      "url": "https://docs.pytorch.org/docs/stable/onnx.html",
+      "publisher": "PyTorch",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "ONNX export",
+        "runtime interoperability"
+      ]
+    },
+    {
+      "title": "torchao Documentation",
+      "url": "https://docs.pytorch.org/ao/stable/",
+      "publisher": "torchao",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "quantization workflows",
+        "reduced-precision model inference"
+      ]
+    }
+  ],
+  "status": "draft"
+}

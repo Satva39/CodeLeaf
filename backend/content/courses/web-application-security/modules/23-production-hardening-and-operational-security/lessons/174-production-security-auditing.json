@@ -1,0 +1,184 @@
+{
+  "id": "web-application-security-lesson-174",
+  "slug": "production-security-auditing",
+  "title": "Production Security Auditing",
+  "sequence": 174,
+  "module_id": "web-application-security-module-23",
+  "module_slug": "production-hardening-and-operational-security",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional-practice",
+  "curriculum_tier": "core",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "web-application-security-lesson-173"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-173",
+  "next_lesson_id": "web-application-security-lesson-175",
+  "keywords": [
+    "production",
+    "security",
+    "auditing",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 174,
+  "source_syllabus_title": "Production Security Auditing",
+  "source_subtopics": [
+    {
+      "number": "174.1",
+      "title": "Configuration and permission audits"
+    },
+    {
+      "number": "174.2",
+      "title": "Dependency and vulnerability review"
+    },
+    {
+      "number": "174.3",
+      "title": "Security event sampling"
+    },
+    {
+      "number": "174.4",
+      "title": "Evidence retention and privacy"
+    },
+    {
+      "number": "174.5",
+      "title": "Follow-up actions and periodic reassessment"
+    }
+  ],
+  "subtopics": [
+    "Configuration and permission audits",
+    "Dependency and vulnerability review",
+    "Security event sampling",
+    "Evidence retention and privacy",
+    "Follow-up actions and periodic reassessment"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in Production Security Auditing.",
+    "Choose an appropriate defensive control for Production Security Auditing and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for Production Security Auditing, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 23: Production Hardening and Operational Security. It builds practical understanding of Production Security Auditing with the syllabus subtopics retained below.",
+    "why_it_matters": "Production Security Auditing turns a security intention into evidence, an operational owner, and a repeatable control. Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Production Security Auditing",
+        "asset_path": "diagrams/lesson-174-production-security-auditing.svg",
+        "alt_text": "Four-stage visual model for Production Security Auditing: Capture operational signal; Protect sensitive context; Assign accountable owner; Review and improve.",
+        "caption": "Concept map for Production Security Auditing. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Production Security Auditing can be understood through this sequence: Capture operational signal → Protect sensitive context → Assign accountable owner → Review and improve. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 174.1 Configuration and permission audits; 174.2 Dependency and vulnerability review; 174.3 Security event sampling; 174.4 Evidence retention and privacy; 174.5 Follow-up actions and periodic reassessment. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "text",
+        "execution_mode": "human-review",
+        "title": "Safe reference example: Production Security Auditing",
+        "code": "Topic: Production Security Auditing\nReview artifact: define scope, assumptions, control owner, expected secure behavior, failure behavior, and a reproducible verification step.",
+        "expected_output": "A written review artifact names the control and the evidence needed to verify it.",
+        "run_instructions": "Use a local/owned application or explicitly authorized test target. Record only sanitized synthetic evidence; use human review for behavior that a static snippet cannot prove.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “Production Security Auditing”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for Production Security Auditing in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "human-review",
+    "knowledge_check_file": "exams/question-files/lesson-174-questions.json",
+    "recap": [
+      "Production Security Auditing is a security boundary/control topic, not a standalone checklist item.",
+      "Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "OWASP Top 10:2025",
+      "url": "https://owasp.org/www-project-top-ten/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "web application risk categories",
+        "OWASP A01-A10:2025"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

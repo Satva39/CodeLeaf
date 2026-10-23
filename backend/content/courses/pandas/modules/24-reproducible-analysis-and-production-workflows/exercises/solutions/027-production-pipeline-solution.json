@@ -1,0 +1,11 @@
+{
+  "id": "pandas-exercise-27-solution",
+  "exercise_id": "pandas-exercise-27",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": {
+    "approach": "Use R, e, u, s, a, b, l, e,  , p, r, o, d, u, c, t, i, o, n,  , d, a, t, a,  , p, i, p, e, l, i, n, e; keep schema checks, expected values, and edge cases explicit.",
+    "reference_code": "import pandas as pd\n\ndef summarize(frame):\n    required = {\"category\", \"units\", \"price\"}\n    missing = required - set(frame.columns)\n    if missing: raise ValueError(f\"Missing columns: {sorted(missing)}\")\n    work = frame.assign(revenue=frame[\"units\"] * frame[\"price\"])\n    return work.groupby(\"category\", as_index=False)[\"revenue\"].sum()\n\nexample = pd.DataFrame({\"category\": [\"A\", \"A\"], \"units\": [2, 3], \"price\": [10, 5]})\nprint(summarize(example).to_dict(\"records\"))"
+  },
+  "explanation": "Compare the result with the written acceptance criteria, include at least one automated check, and explain the relevant assumption. This reference is for reviewer use and is not meant to be returned by a public exercise API."
+}

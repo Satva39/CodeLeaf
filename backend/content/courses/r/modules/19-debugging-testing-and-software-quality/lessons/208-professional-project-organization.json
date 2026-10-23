@@ -1,0 +1,189 @@
+{
+  "id": "r-lesson-208",
+  "slug": "professional-project-organization",
+  "title": "Professional Project Organization",
+  "sequence": 208,
+  "module_id": "r-module-19",
+  "module_slug": "debugging-testing-and-software-quality",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "r-lesson-207"
+  ],
+  "previous_lesson_id": "r-lesson-207",
+  "next_lesson_id": "r-lesson-209",
+  "keywords": [
+    "professional-project-organization",
+    "debugging-testing-and-software-quality",
+    "organizing-source-code-and-data",
+    "separating-configuration-from-logic",
+    "creating-a-project-readme",
+    "documenting-setup-and-execution",
+    "data-and-output-folder-conventions",
+    "establishing-a-maintenance-workflow",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 208,
+  "subtopics": [
+    "Organizing Source Code and Data",
+    "Separating Configuration from Logic",
+    "Creating a Project README",
+    "Documenting Setup and Execution",
+    "Data and Output Folder Conventions",
+    "Establishing a Maintenance Workflow"
+  ],
+  "learning_outcomes": [
+    "Explain the role of professional project organization and identify its main inputs, outputs or constraints.",
+    "Apply organizing source code and data in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Professional Project Organization is part of Debugging, Testing, and Software Quality. Start with organizing source code and data and connect it to the worked example and expected result.",
+    "why_it_matters": "Professional Project Organization is one step in Debugging, Testing, and Software Quality; errors, warnings, assertions and tests provide distinct signals. Reproducible failing cases help isolate defects.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Professional Project Organization",
+        "asset_path": "diagrams/module-19-overview.svg",
+        "alt_text": "Concept visual supporting lesson 208, Professional Project Organization. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Professional Project Organization is one step in Debugging, Testing, and Software Quality; errors, warnings, assertions and tests provide distinct signals. Reproducible failing cases help isolate defects. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Organizing Source Code and Data",
+            "text": "Explain organizing source code and data in the context of professional project organization, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Separating Configuration from Logic",
+            "text": "Explain separating configuration from logic in the context of professional project organization, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Creating a Project README",
+            "text": "Build the smallest example for creating a project readme, inspect the returned object, and confirm its names, type and shape before using it downstream."
+          },
+          {
+            "title": "Documenting Setup and Execution",
+            "text": "Explain documenting setup and execution in the context of professional project organization, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Data and Output Folder Conventions",
+            "text": "Explain data and output folder conventions in the context of professional project organization, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Establishing a Maintenance Workflow",
+            "text": "Explain establishing a maintenance workflow in the context of professional project organization, connect it to the example, and verify one expected result or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Test expected behavior and edge cases, avoid leaking sensitive values in logs, and run checks in a clean environment. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Professional Project Organization",
+        "language": "r",
+        "code": "safe_divide <- function(a, b) { if (b == 0) stop(\"b must not be zero\"); a / b }\nsafe_divide(6, 2)",
+        "expected_output": "[1] 3",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "Validate invalid inputs and return predictable errors instead of silent bad values. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For professional project organization, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-208-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply professional project organization to a small synthetic example. Start with organizing source code and data, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the organizing source code and data idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible professional project organization example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Organizing Source Code and Data” and identify the input and output before coding.",
+      "Prefer a small repeatable test and capture the result before changing the implementation.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: Professional Project Organization is one step in Debugging, Testing, and Software Quality; errors, warnings, assertions and tests provide distinct signals. Reproducible failing cases help isolate defects.",
+      "Practice: Test expected behavior and edge cases, avoid leaking sensitive values in logs, and run checks in a clean environment.",
+      "Source syllabus focus: Organizing Source Code and Data. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply professional project organization to a small synthetic example. Start with organizing source code and data, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible professional project organization example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Organizing Source Code and Data” and identify the input and output before coding.",
+    "Prefer a small repeatable test and capture the result before changing the implementation.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: Professional Project Organization is one step in Debugging, Testing, and Software Quality; errors, warnings, assertions and tests provide distinct signals. Reproducible failing cases help isolate defects.",
+    "Practice: Test expected behavior and edge cases, avoid leaking sensitive values in logs, and run checks in a clean environment.",
+    "Source syllabus focus: Organizing Source Code and Data. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 19 — Debugging, Testing, and Software Quality, lesson 208: Professional Project Organization.",
+    "Official documentation: https://testthat.r-lib.org/",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

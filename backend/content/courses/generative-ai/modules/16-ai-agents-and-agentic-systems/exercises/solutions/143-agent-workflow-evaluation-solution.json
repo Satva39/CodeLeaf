@@ -1,0 +1,47 @@
+{
+  "id": "genai-exercise-solution-143",
+  "exercise_id": "genai-exercise-143",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": {
+    "objective": "Agent workflow evaluation",
+    "implementation_plan": [
+      "Define task cases and expected outcome before comparing systems; keep the task set identical for both approaches.",
+      "Build deterministic workflow with explicit states, then a bounded agent that can select only an allow-listed tool.",
+      "Mock provider/tool responses to test normal, invalid, timeout, and recovery paths without external load.",
+      "Measure task success, invalid/unauthorized tool proposals, retries, latency, token/call cost, and human escalation.",
+      "Set maximum steps, wall-clock time, tool permissions, and stop conditions; report cases where the agent adds no value."
+    ],
+    "reference_test_cases": [
+      {
+        "case": "Happy path",
+        "input": "Known task requiring one read-only tool",
+        "expected": "Both systems complete or explain differences reproducibly."
+      },
+      {
+        "case": "Tool error",
+        "input": "Mock tool returns timeout",
+        "expected": "Bounded recovery or controlled failure; no infinite loop."
+      },
+      {
+        "case": "Unsafe proposal",
+        "input": "Agent suggests an unlisted/destructive tool",
+        "expected": "Proposal rejected by application policy."
+      }
+    ],
+    "recommended_metrics": [
+      "Task success rate",
+      "Invalid tool proposals",
+      "Latency and cost per task",
+      "Recovery/escalation rate"
+    ],
+    "expected_artifacts": [
+      "Shared task set",
+      "Trace comparison",
+      "Decision on when deterministic workflow is preferable"
+    ],
+    "review_gate": "Do not publish until a reviewer inspects the actual submitted implementation/results and confirms the acceptance criteria; outline completion alone is not completion."
+  },
+  "explanation": "Reference solution outline for Agent workflow evaluation. It specifies a defensible implementation path, representative tests, and evaluation evidence. It is not a universally executable implementation: provider APIs, deployment environments, permissions, and available hardware vary. Use synthetic/test data, mock external services first, and keep credentials server-side. The exercise's current contains_all grader only checks required keywords and is a preliminary scaffold check, not a correctness/security evaluator; human review is required.",
+  "solution_quality_note": "Design outline only; no solution implementation was run in this build."
+}

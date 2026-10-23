@@ -1,0 +1,56 @@
+{
+  "id": "django-exercise-014",
+  "slug": "implement-a-multi-tenant-data-model",
+  "title": "Implement a Multi-Tenant Data Model",
+  "type": "practical",
+  "lesson_id": "django-lesson-169",
+  "module_id": "django-module-16",
+  "difficulty": "advanced",
+  "sequence": 14,
+  "prompt": "Separate tenant-owned records, enforce authorization boundaries, and test that one tenant cannot access another tenant’s data.\n\nSubmission: a small reviewable artifact, relevant tests, expected outputs, one failure/boundary case, and version/environment notes. Use synthetic data. Django/Python server code is not executed by CodeLeaf browser preview; local or human review is required.",
+  "objective": "Implement a Multi-Tenant Data Model",
+  "target_skills": [
+    "Model tenant ownership explicitly.",
+    "Apply tenant scope in every query/update/delete and API path.",
+    "Test malicious identifier substitution across tenants."
+  ],
+  "starter": {
+    "language": "text",
+    "content": "def visible_to_tenant(queryset, tenant):\n    return queryset.filter(tenant=tenant)",
+    "code": "def visible_to_tenant(queryset, tenant):\n    return queryset.filter(tenant=tenant)"
+  },
+  "expected_output": "Treat this as a query-scoping helper only; application authorization and every access path require review.",
+  "public_tests": [
+    {
+      "name": "Required-concept smoke check",
+      "required_strings": [
+        "tenant=",
+        "is_authenticated"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Users in tenant A cannot read or mutate tenant B’s records.",
+    "Tests cover direct object URLs, lists, exports, and background tasks.",
+    "Tenant-scoped cache/storage keys are documented.",
+    "State whether verification was local, static, or human-reviewed.",
+    "Do not claim a build/deployment or external integration was tested unless it was actually run."
+  ],
+  "hints": [
+    "Tenant filters are authorization boundaries, not optional UI filters.",
+    "Use uniqueness constraints that include tenant scope where needed.",
+    "Consider transactions and audit logs for membership changes."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "tenant=",
+      "is_authenticated"
+    ]
+  },
+  "grading_method": "Required-string smoke check plus human review of technical correctness, tests, safe handling, expected result and reproducibility. This does not execute arbitrary Python/Django code.",
+  "retry_policy": "Retries are allowed after reviewing feedback; the platform backend owns its uniform XP/idempotency rules.",
+  "solution_file": "../solutions/014-implement-a-multi-tenant-data-model-solution.json",
+  "status": "draft",
+  "status_note": "Practical exercise from Section C of the supplied Django curriculum; content and grading need review before publication."
+}

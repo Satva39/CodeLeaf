@@ -1,0 +1,145 @@
+{
+  "id": "git-lesson-184",
+  "slug": "removing-sensitive-data-from-history",
+  "title": "Removing Sensitive Data from History",
+  "sequence": 184,
+  "module_id": "git-module-17",
+  "module_slug": "git-security-and-professional-best-practices",
+  "level": "professional",
+  "difficulty": "professional",
+  "track": "professional",
+  "primary_service": "Git version control",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "git-lesson-183"
+  ],
+  "previous_lesson_id": "git-lesson-183",
+  "next_lesson_id": "git-lesson-185",
+  "keywords": [
+    "git-automation-scripting-and-production-workflows",
+    "git-security-and-professional-best-practices",
+    "git",
+    "why-deleting-a-file-in-a-new-commit-is-insufficient",
+    "history-rewriting-concepts",
+    "coordinating-rewritten-history-with-collaborators",
+    "rotating-exposed-credentials"
+  ],
+  "source_syllabus_number": 184,
+  "subtopics": [
+    "Why deleting a file in a new commit is insufficient",
+    "History-rewriting concepts",
+    "Coordinating rewritten history with collaborators",
+    "Rotating exposed credentials"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and boundaries of removing sensitive data from history.",
+    "Choose and interpret a Git command relevant to removing sensitive data from history using a disposable repository.",
+    "Verify the result with repository state or history and identify one safety limitation."
+  ],
+  "content": {
+    "intro": "This lesson introduces removing sensitive data from history as part of Git Security and Professional Best Practices. It follows the supplied Git curriculum and adds an original explanation, an inspectable command example, troubleshooting notes, and a practice task.",
+    "why_it_matters": "History rewriting can remove sensitive content from reachable history in a carefully controlled process, but it cannot guarantee deletion from every clone, cache or backup. Credential rotation and incident response remain essential.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 17: Git Security and Professional Best Practices",
+        "asset_path": "diagrams/module-17-overview.svg",
+        "alt_text": "Four-step view of Git Security and Professional Best Practices, with key syllabus checkpoints and a verification reminder.",
+        "caption": "Original CodeLeaf diagram. Review labels as well as the explanatory text; color is not the only signal."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "**Core idea.** History rewriting can remove sensitive content from reachable history in a carefully controlled process, but it cannot guarantee deletion from every clone, cache or backup. Credential rotation and incident response remain essential.\n\nFor **Removing Sensitive Data from History**, keep the named subtopics in view: Why deleting a file in a new commit is insufficient; History-rewriting concepts; Coordinating rewritten history with collaborators; Rotating exposed credentials. Treat those as the scope of this lesson, then practise the smallest workflow that demonstrates the idea."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "**Before you run a command:** decide what state you are inspecting or changing, identify whether the effect is local or remote, and write down what evidence would count as success. Use a fake sample filename. If a real secret was exposed, revoke/rotate it first; later deletion does not erase older copies, clones or remote refs."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered",
+        "items": [
+          "Why deleting a file in a new commit is insufficient",
+          "History-rewriting concepts",
+          "Coordinating rewritten history with collaborators",
+          "Rotating exposed credentials"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Command example: Removing Sensitive Data from History",
+        "language": "bash",
+        "code": "git log --all -- path/to/secret.txt",
+        "expected_output": "History entries affecting the named path, if that path appears in the checked refs.",
+        "run_instructions": "Use a fake sample filename. If a real secret was exposed, revoke/rotate it first; later deletion does not erase older copies, clones or remote refs.",
+        "reset_steps": "Use a disposable repository. If the exercise changes state, check git status and git log before and after; discard the practice directory only after confirming it contains no valuable work.",
+        "execution_mode": "static-validation",
+        "limitations": "The CodeLeaf web lesson page does not execute arbitrary Git commands. Run commands locally in a disposable repository with a Git version appropriate to your task. Placeholder paths, branches, commit IDs and repository URLs must be replaced with values from that practice repository."
+      },
+      {
+        "type": "callout",
+        "title": "Safety and verification checkpoint",
+        "text": "Start with git status --short --branch. For destructive or history-rewriting operations, review the exact target, create a recovery reference when appropriate, and keep valuable work backed up. Never put credentials, access tokens or private keys in course submissions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-184-questions.json"
+  },
+  "task": "In a disposable practice repository, follow the command example, capture the result, and write one sentence explaining how the result verifies the lesson’s concept. Keep unrelated changes out of the exercise.",
+  "hints": [
+    "Start by reviewing: Why deleting a file in a new commit is insufficient.",
+    "Use a read-only inspection command before any operation that changes files, refs or remote state.",
+    "After the example, verify with git status --short --branch and/or git log --oneline --graph as appropriate."
+  ],
+  "expected_output": "History entries affecting the named path, if that path appears in the checked refs.",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Running a state-changing command without confirming the target repository or branch.",
+      "why": "A command may affect the wrong working tree or move a reference that other work depends on.",
+      "fix": "Check git rev-parse --show-toplevel and git status --short --branch before proceeding."
+    },
+    {
+      "problem": "Assuming a command succeeded because no error was visible.",
+      "why": "Some Git commands are silent on success, and some expected actions are blocked by repository state or permissions.",
+      "fix": "Verify status, log, references, remote state or the named output explicitly."
+    },
+    {
+      "problem": "Using an example placeholder literally or applying a destructive example to valuable work.",
+      "why": "Paths, branch names and object IDs depend on the current repository; restore/reset/clean operations can discard work.",
+      "fix": "Substitute real practice values, use a disposable repository, and preview changes before proceeding."
+    }
+  ],
+  "summary": [
+    "Removing Sensitive Data from History is covered through these syllabus topics: Why deleting a file in a new commit is insufficient; History-rewriting concepts; Coordinating rewritten history with collaborators; Rotating exposed credentials.",
+    "Choose the command for the intended effect; understand whether it changes files, the index, local references, or remote state.",
+    "Verify the result, record unexpected output, and retain a recovery path for risky operations."
+  ],
+  "references": [
+    "references/reference-index.json",
+    "https://git-scm.com/docs",
+    "https://git-scm.com/book/en/v2"
+  ],
+  "sources": [
+    {
+      "title": "Git Reference Documentation",
+      "url": "https://git-scm.com/docs",
+      "publisher": "Git project",
+      "checked_on": "2026-10-15",
+      "source_type": "official-reference"
+    },
+    {
+      "title": "Pro Git Book, 2nd Edition",
+      "url": "https://git-scm.com/book/en/v2",
+      "publisher": "Git project / Pro Git",
+      "checked_on": "2026-10-15",
+      "source_type": "officially-hosted-book"
+    }
+  ],
+  "exercise_files": [],
+  "technical_review_date": "2026-10-15",
+  "status": "draft",
+  "status_note": "Generated from the supplied Git syllabus. Content and commands need editorial/technical review before publication."
+}

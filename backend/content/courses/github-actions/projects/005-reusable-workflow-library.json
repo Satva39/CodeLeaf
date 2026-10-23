@@ -1,0 +1,134 @@
+{
+  "id": "github-actions-project-05",
+  "slug": "reusable-workflow-library",
+  "title": "Reusable Workflow Library",
+  "sequence": 5,
+  "tier": "intermediate",
+  "objective": "Create reusable validation workflows shared by multiple repositories.",
+  "prerequisite_lesson_ids": [
+    "github-actions-lesson-098",
+    "github-actions-lesson-099",
+    "github-actions-lesson-162"
+  ],
+  "recommended_lesson_range": [
+    98,
+    162
+  ],
+  "skills": [
+    "Reusable Workflows and Custom Actions",
+    "Enterprise Governance and Advanced Workflow Architecture",
+    "Capstone Preparation and Professional Workflow Design",
+    "workflow YAML",
+    "CI/CD design",
+    "security review",
+    "testing and operations"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Inputs and output contracts",
+      "acceptance_criteria": [
+        "Demonstrate inputs and output contracts.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Versioned reusable workflow references",
+      "acceptance_criteria": [
+        "Demonstrate versioned reusable workflow references.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Documentation and test repository",
+      "acceptance_criteria": [
+        "Demonstrate documentation and test repository.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Centralized ownership",
+      "acceptance_criteria": [
+        "Demonstrate centralized ownership.",
+        "Record a repeatable validation result.",
+        "Document limitations or required repository settings."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "contents": "# Reusable Workflow Library\n\nCreate reusable validation workflows shared by multiple repositories.\n\n## Verification record\n\n- Trigger tested:\n- Checks that passed:\n- Failure path checked:\n- Permission review:\n- Remaining limitations:\n"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "language": "yaml",
+      "contents": "name: CI\non: [push, pull_request]\npermissions:\n  contents: read\njobs:\n  checks:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Repository check\n        run: test -f README.md\n"
+    }
+  ],
+  "required_features": [
+    "Inputs and output contracts",
+    "Versioned reusable workflow references",
+    "Documentation and test repository",
+    "Centralized ownership"
+  ],
+  "stretch_features": [
+    "Add an explicit cancellation/timeout policy and test it.",
+    "Pin third-party action dependencies to verified immutable references per repository policy.",
+    "Add a troubleshooting guide with sanitized logs and a rollback or recovery plan."
+  ],
+  "tests": [
+    {
+      "name": "Required workflow evidence",
+      "mode": "human_review",
+      "criteria": [
+        "Workflow triggers match the documented intent.",
+        "Required jobs and checks actually run.",
+        "No production secret is exposed.",
+        "Permissions are limited to required operations.",
+        "Failure and recovery behavior is documented."
+      ]
+    },
+    {
+      "name": "Safe execution",
+      "mode": "human_review",
+      "criteria": [
+        "Validate in a disposable repository/environment.",
+        "Do not deploy real resources until configuration, access, and rollback are reviewed."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Correct behavior and completion criteria",
+      "points": 30
+    },
+    {
+      "criterion": "Workflow design, clarity, and maintainability",
+      "points": 20
+    },
+    {
+      "criterion": "Permissions, credential handling, and trust boundaries",
+      "points": 25
+    },
+    {
+      "criterion": "Testing, failure handling, and traceable evidence",
+      "points": 15
+    },
+    {
+      "criterion": "Documentation and operational handover",
+      "points": 10
+    }
+  ],
+  "rubric_total": 100,
+  "review_method": "Human review against the rubric and recorded workflow-run evidence; local static checks do not replace a live GitHub Actions run.",
+  "reference_solution_file": "projects/solutions/005-reusable-workflow-library-solution.json",
+  "status": "draft"
+}

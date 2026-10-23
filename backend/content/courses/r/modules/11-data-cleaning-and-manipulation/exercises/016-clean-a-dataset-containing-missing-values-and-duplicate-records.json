@@ -1,0 +1,56 @@
+{
+  "id": "r-exercise-016",
+  "slug": "clean-a-dataset-containing-missing-values-and-duplicate-records",
+  "title": "Clean a dataset containing missing values and duplicate records",
+  "type": "short_answer",
+  "lesson_id": "r-lesson-113",
+  "module_id": "r-module-11",
+  "sequence": 16,
+  "difficulty": "intermediate",
+  "prompt": "Profile missingness and duplicates, apply a documented rule, and report row counts before and after.",
+  "objective": "Practice data quality, indexing, validation with explicit acceptance criteria and a reproducible result.",
+  "target_skills": [
+    "Data quality",
+    "indexing",
+    "validation"
+  ],
+  "starter": {
+    "language": "r",
+    "source_code": "before_n <- nrow(df)\nmissing_by_col <- colSums(is.na(df))\nclean_df <- unique(df)\nafter_n <- nrow(clean_df)",
+    "mode": "static-validation"
+  },
+  "expected_output": "Do not delete rows before measuring their impact; distinguish exact duplicates from repeated real events.",
+  "public_tests": [
+    {
+      "name": "Includes core concept",
+      "description": "The submission demonstrates unique(."
+    },
+    {
+      "name": "Includes validation or outcome",
+      "description": "The submission also demonstrates is.na."
+    }
+  ],
+  "acceptance_criteria": [
+    "The submission addresses the task and all required core concepts.",
+    "Expected behavior and an edge case are described and checked.",
+    "Input assumptions, missing-value handling and output shape are documented where relevant.",
+    "Code is readable, uses appropriate R constructs and avoids destructive/external side effects.",
+    "Any result derived from statistics includes assumptions and relevant limitations."
+  ],
+  "hints": [
+    "Identify the input, output and key R concept: Data quality, indexing, validation.",
+    "Do not delete rows before measuring their impact; distinguish exact duplicates from repeated real events.",
+    "Test a normal case, a boundary/failure case, and verify the output independently."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "unique(",
+      "is.na"
+    ]
+  },
+  "grading_method": "Draft/static token check only. The current platform grader can check whether the submitted text contains these strings, but it cannot execute R or prove program correctness. Keep unpublished and use human review or a separately isolated R runner before enabling XP-bearing completion.",
+  "retry_policy": "Allow learner retries in a reviewed course policy; this content file does not override platform retry or XP policy.",
+  "solution_file": "../solutions/016-clean-a-dataset-containing-missing-values-and-duplicate-records-solution.json",
+  "status": "draft"
+}

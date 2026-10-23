@@ -1,0 +1,157 @@
+{
+  "id": "numpy-lesson-084",
+  "slug": "broadcasting-and-memory-efficiency",
+  "title": "Broadcasting and Memory Efficiency",
+  "sequence": 84,
+  "module_id": "numpy-module-09",
+  "module_slug": "broadcasting-and-vectorization",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 8,
+  "prerequisites": [
+    "numpy-lesson-083"
+  ],
+  "previous_lesson_id": "numpy-lesson-083",
+  "next_lesson_id": "numpy-lesson-085",
+  "keywords": [
+    "broadcasting and memory efficiency",
+    "broadcasting and vectorization",
+    "Broadcasting without explicitly repeating data",
+    "Temporary arrays",
+    "Memory-intensive expressions",
+    "When to reconsider an array expression",
+    "NumPy",
+    "ndarray"
+  ],
+  "source_syllabus_number": 84,
+  "subtopics": [
+    "Broadcasting without explicitly repeating data",
+    "Temporary arrays",
+    "Memory-intensive expressions",
+    "When to reconsider an array expression"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of broadcasting and memory efficiency and name one situation where it is useful.",
+    "Apply broadcasting without explicitly repeating data to a small NumPy example and inspect the resulting values, shape, or dtype.",
+    "Identify one important limitation, boundary case, or validation check for broadcasting and memory efficiency."
+  ],
+  "content": {
+    "intro": "This lesson develops topic 84 of the supplied curriculum: **Broadcasting and Memory Efficiency**. The main starting point is **Broadcasting without explicitly repeating data**. You will connect the idea to a small, synthetic example, then use the result to reason about shape, dtype, accuracy, or memory as appropriate.",
+    "why_it_matters": "Broadcasting allows compatible shapes to operate without explicitly copying repeated values. Reason about the dimensions from the rightmost side before changing the arrays.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Broadcasting and Memory Efficiency",
+        "asset_path": "diagrams/lesson-084-broadcasting-and-memory-efficiency.svg",
+        "alt_text": "Teaching visual for lesson 84, Broadcasting and Memory Efficiency. It illustrates Input shapes, then Align dimensions from right, leading to Compatible output shape.",
+        "caption": "Visual model for Broadcasting and Memory Efficiency. Synthetic conceptual diagram; inspect shape, dtype, and assumptions as relevant."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Treat **Broadcasting and Memory Efficiency** as an explicit step in an array workflow. This lesson centers on **Broadcasting without explicitly repeating data** and the source syllabus's related subtopics. Before trusting a result, identify the input shape and dtype, perform the smallest useful operation, and inspect the output. The example uses synthetic data so you can change one value and observe what changes."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics from the supplied curriculum",
+        "items": [
+          "Broadcasting without explicitly repeating data",
+          "Temporary arrays",
+          "Memory-intensive expressions",
+          "When to reconsider an array expression"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "import numpy as np\n\nbase = np.array([1, 2, 3])\nprint(np.broadcast_to(base, (2, 3)).shape)\nprint(base.nbytes)",
+        "expected_output": "Observed output in the available validation environment (Python 3.13.5, NumPy 2.3.5):\n(2, 3)\n24",
+        "execution_mode": "static-validation",
+        "run_instructions": "Save this snippet as a .py file inside the intended Python environment, then run `python filename.py`. Install NumPy in that same environment first. This learning page displays the sample; it does not execute arbitrary Python on the web server.",
+        "reset_steps": "For examples that create files, use a temporary working directory and remove its outputs after reviewing them. The memory-map example already uses a temporary directory."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "Broadcasting generally avoids creating tiled copies of operands, but the operation can still allocate a large output or many temporary arrays. Consider the output size as well as input size."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          "Write the input shapes beside each other and predict whether broadcasting will work before running the expression.",
+          "Change one input value or parameter and predict the output before running the example.",
+          "Record one edge case and explain how your code should respond."
+        ]
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          "Topic 84: Broadcasting and Memory Efficiency.",
+          "Core focus: Broadcasting without explicitly repeating data.",
+          "Check the official reference when signatures or version-specific behavior matter."
+        ]
+      }
+    ],
+    "expected_output": "Observed output in the available validation environment (Python 3.13.5, NumPy 2.3.5):\n(2, 3)\n24",
+    "run_instructions": "Run Python examples locally in the same environment where NumPy is installed; no embedded server-side Python execution is assumed.",
+    "reset_steps": "Use temporary paths for file-writing experiments. Restore modified arrays by recreating the example input. No platform progress or rewards are created by viewing the lesson.",
+    "hints": [
+      "First identify the input values and their shape/dtype.",
+      "Run the smallest complete example and compare the actual output with the expected behavior.",
+      "Change one variable at a time; if the result differs, inspect shape, dtype, finite values, and version-specific behavior before changing the algorithm."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-084-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Aligning shapes from the left",
+        "why": "Broadcasting compares dimensions from the right.",
+        "fix": "Write the shapes side by side and align their rightmost dimensions."
+      },
+      {
+        "problem": "Repeating arrays unnecessarily",
+        "why": "Explicit tiling can allocate extra memory.",
+        "fix": "Try broadcasting with singleton dimensions first."
+      }
+    ],
+    "summary": [
+      "Topic 84 covers broadcasting and memory efficiency and the subtopics listed in the curriculum.",
+      "Align dimensions from the right and allow equal dimensions or dimensions of length one.",
+      "Examples and assessments are draft and require subject-matter review before publication."
+    ],
+    "references": [
+      {
+        "title": "Broadcasting",
+        "url": "https://numpy.org/doc/stable/user/basics.broadcasting.html",
+        "publisher": "NumPy project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "Broadcasting and Memory Efficiency",
+          "Broadcasting without explicitly repeating data",
+          "Temporary arrays"
+        ]
+      }
+    ],
+    "accessibility_notes": "Every visual has descriptive SVG title/description and adjacent text explaining the concept. The diagram does not rely on color alone; text labels state each stage.",
+    "version_notes": "Written against the NumPy 2.5 stable documentation checked 2026-10-13. Example outputs that were executed were observed in an available NumPy 2.3.5 environment; release-specific formatting or pseudorandom streams may vary."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Broadcasting",
+      "url": "https://numpy.org/doc/stable/user/basics.broadcasting.html",
+      "publisher": "NumPy project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Broadcasting and Memory Efficiency",
+        "Broadcasting without explicitly repeating data",
+        "Temporary arrays"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the supplied syllabus with original explanations and examples. Subject-matter review, learner testing, and publication approval are still required."
+}

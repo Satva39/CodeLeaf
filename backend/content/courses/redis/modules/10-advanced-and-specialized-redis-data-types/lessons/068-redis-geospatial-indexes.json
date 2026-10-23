@@ -1,0 +1,152 @@
+{
+  "id": "redis-lesson-068",
+  "slug": "redis-geospatial-indexes",
+  "title": "Redis Geospatial Indexes",
+  "sequence": 68,
+  "module_id": "redis-module-10",
+  "module_slug": "advanced-and-specialized-redis-data-types",
+  "level": "intermediate to advanced",
+  "difficulty": "intermediate",
+  "track": "version-dependent-specialist",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-067"
+  ],
+  "previous_lesson_id": "redis-lesson-067",
+  "next_lesson_id": "redis-lesson-069",
+  "keywords": [
+    "redis-geospatial-indexes",
+    "geoadd",
+    "geosearch",
+    "geosearchstore",
+    "distance-and-coordinate-retrieval",
+    "nearby-location-applications",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 68,
+  "subtopics": [
+    "GEOADD",
+    "GEOSEARCH",
+    "GEOSEARCHSTORE",
+    "Distance and coordinate retrieval",
+    "Nearby-location applications"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Redis Geospatial Indexes and distinguish it from a related Redis concept.",
+    "Apply or trace Redis Geospatial Indexes in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Redis Geospatial Indexes and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Redis Geospatial Indexes in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Redis Geospatial Indexes belongs to Redis specialized data-type capabilities. First check whether the target server and hosting plan support the relevant commands.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Redis Geospatial Indexes",
+        "asset_path": "diagrams/lesson-068-redis-geospatial-indexes.svg",
+        "alt_text": "Concept diagram for Redis Geospatial Indexes, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Redis Geospatial Indexes; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Redis Geospatial Indexes belongs to Redis specialized data-type capabilities. First check whether the target server and hosting plan support the relevant commands."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Redis Geospatial Indexes, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "GEOADD",
+            "text": "Connect GEOADD to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "GEOSEARCH",
+            "text": "Connect GEOSEARCH to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "GEOSEARCHSTORE",
+            "text": "Connect GEOSEARCHSTORE to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Distance and coordinate retrieval",
+            "text": "Connect Distance and coordinate retrieval to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Nearby-location applications",
+            "text": "Connect Nearby-location applications to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Redis Geospatial Indexes",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "GEOADD demo:shops 72.5714 23.0225 shop-a\nGEOSEARCH demo:shops FROMLONLAT 72.5714 23.0225 BYRADIUS 5 km",
+        "expected_output": "1\nshop-a",
+        "run_instructions": "Coordinates are synthetic and approximate; confirm the command form against the deployed Redis version.",
+        "reset_steps": "DEL demo:shops",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Redis Geospatial Indexes. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Redis Geospatial Indexes in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Redis Geospatial Indexes.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "1\nshop-a",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-068-questions.json",
+    "recap": [
+      "Redis Geospatial Indexes is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Redis data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "strings, hashes, lists, sets, sorted sets, streams, geospatial indexes, bitmaps, bitfields, JSON, arrays, time series, probabilistic structures, vector sets"
+      ]
+    },
+    {
+      "title": "Compare data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/compare-data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "data-type selection and use-case trade-offs"
+      ]
+    },
+    {
+      "title": "Redis commands reference",
+      "url": "https://redis.io/docs/latest/commands/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "command syntax, return values, complexity, compatibility and command history"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

@@ -1,0 +1,8 @@
+{
+  "id": "go-exercise-solution-021",
+  "exercise_id": "go-exercise-021",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "package main\nimport (\"fmt\"; \"net/http\"; \"net/http/httptest\")\n// ServeMux implements http.Handler.\nfunc main(){mux:=http.NewServeMux();mux.HandleFunc(\"GET /health\",func(w http.ResponseWriter,r *http.Request){w.Header().Set(\"Content-Type\",\"application/json\");fmt.Fprintln(w,`{\"status\":\"ok\"}`)});r:=httptest.NewRequest(\"GET\",\"/health\",nil);rec:=httptest.NewRecorder();mux.ServeHTTP(rec,r);fmt.Println(rec.Code,rec.Body.String())}",
+  "explanation": "This protected reference solution for REST API demonstrates the central idea (http, api, validation). Complete the stated edge cases, add tests, and validate with a Go toolchain matching the course version before publication."
+}

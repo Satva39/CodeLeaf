@@ -1,0 +1,215 @@
+{
+  "id": "sqlite-lesson-057",
+  "slug": "extracting-json-values",
+  "title": "Extracting JSON Values",
+  "sequence": 57,
+  "module_id": "sqlite-module-05",
+  "module_slug": "functions-aggregates-dates-and-json",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "optional-json-capability",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "sqlite-lesson-056"
+  ],
+  "previous_lesson_id": "sqlite-lesson-056",
+  "next_lesson_id": "sqlite-lesson-058",
+  "keywords": [
+    "Extracting",
+    "JSON",
+    "Values",
+    "json_extract",
+    "The",
+    "and",
+    "operators",
+    "paths",
+    "Nested",
+    "objects",
+    "arrays",
+    "Handling",
+    "missing",
+    "or",
+    "invalid",
+    "values"
+  ],
+  "source_syllabus_number": 57,
+  "learning_outcomes": [
+    "Describe the main purpose and behavior of extracting json values.",
+    "Apply a small SQLite example involving json_extract() and verify the result.",
+    "Identify one failure mode, compatibility constraint, or data-integrity concern related to this topic."
+  ],
+  "content": {
+    "intro": "This lesson covers extracting json values as part of SQLite’s embedded relational database model. Work through one small example, verify the output, and then connect the result to the listed subtopics from the supplied curriculum.",
+    "why_it_matters": "JSON support is version/build-aware; JSONB is available from SQLite 3.45.0.",
+    "run_mode": "static-validation",
+    "task": "Create a second example for extracting json values. Use at least one of these subtopics: json_extract(), The -> and ->> operators, JSON paths. Predict the result, run it in a local SQLite environment or supported language binding, and document one boundary case.",
+    "task_acceptance_criteria": [
+      "Include a minimal reproducible SQL statement or application snippet.",
+      "State the expected result before execution and compare it to the observed result.",
+      "Document one boundary/error case and the SQLite runtime assumptions."
+    ],
+    "hints": [
+      "Start from the smallest subtopic and a fixture with only a few known rows.",
+      "Write the expected output before running the example; then change one input or predicate and compare.",
+      "If a feature fails, verify the linked SQLite version/build and isolate the failing statement before changing the schema."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming generic SQL behavior",
+        "why": "SQLite has specific type-affinity, NULL, configuration and version behavior.",
+        "fix": "Check SQLite’s official documentation and the actual linked runtime; reduce to a small fixture."
+      },
+      {
+        "problem": "Skipping result verification",
+        "why": "A query can run successfully while returning incorrect rows or an inflated aggregate.",
+        "fix": "Compare output to a hand-calculated expected result and test an edge case."
+      },
+      {
+        "problem": "Testing on valuable data",
+        "why": "Destructive SQL and migration experiments can permanently change a database.",
+        "fix": "Use a disposable file or in-memory database and verify backups before destructive operations."
+      }
+    ],
+    "summary": [
+      "Check the runtime and build, validate input, and keep keys used for relationships or constraints in relational columns.",
+      "Record SELECT sqlite_version() and the relevant feature/build assumptions.",
+      "Keep a reproducible example and expected output so later changes can be regression-tested."
+    ],
+    "expected_output": "sqlite",
+    "run_instructions": "Save the SQL to `lesson.sql`; run `sqlite3 -batch practice.db < lesson.sql`. For simple tabular output, add `.headers off` and `.mode list` in the shell or compare the returned rows in your API. Work only in a disposable practice database. CodeLeaf’s browser preview does not execute SQL.",
+    "troubleshooting": "Check that the intended database file is open, statement terminators are present, the SQLite version supports the feature, and foreign-key settings are applied on the same connection. Run one statement at a time to isolate errors.",
+    "reset_steps": "Close the shell and delete only the disposable `practice.db` file, or use a fresh `:memory:` connection. Never reset a production database.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "JSON Query Workflow",
+        "asset_path": "diagrams/09-json-path.svg",
+        "alt_text": "Sequence diagram of JSON Query Workflow: Choose relational vs JSON field; Validate input JSON; Store JSON text or JSONB; Use paths to read values; Handle missing or malformed values; Test runtime version and build",
+        "caption": "Original visual aid. Read the labels in order; the diagram complements rather than replaces the written explanation."
+      },
+      {
+        "type": "paragraph",
+        "text": "Core idea. Check the runtime and build, validate input, and keep keys used for relationships or constraints in relational columns."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus coverage from the PDF",
+        "items": [
+          {
+            "title": "json_extract()",
+            "text": "Keep stable keys, relationships and constraints in relational columns; validate JSON and use paths for optional structured attributes. JSON functions are built in by default in 3.38.0+ but can be omitted; JSONB needs 3.45.0+."
+          },
+          {
+            "title": "The -> and ->> operators",
+            "text": "Write a small query with known input values; state the expected result first and verify how SQLite-specific type, NULL, expression or function behavior affects it."
+          },
+          {
+            "title": "JSON paths",
+            "text": "Keep stable keys, relationships and constraints in relational columns; validate JSON and use paths for optional structured attributes. JSON functions are built in by default in 3.38.0+ but can be omitted; JSONB needs 3.45.0+."
+          },
+          {
+            "title": "Nested objects and arrays",
+            "text": "Write a small query with known input values; state the expected result first and verify how SQLite-specific type, NULL, expression or function behavior affects it."
+          },
+          {
+            "title": "Handling missing or invalid values",
+            "text": "Write a small query with known input values; state the expected result first and verify how SQLite-specific type, NULL, expression or function behavior affects it."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "sql",
+        "execution_mode": "query-simulation",
+        "run_instructions": "Save the SQL to `lesson.sql`; run `sqlite3 -batch practice.db < lesson.sql`. For simple tabular output, add `.headers off` and `.mode list` in the shell or compare the returned rows in your API. Work only in a disposable practice database. CodeLeaf’s browser preview does not execute SQL.",
+        "troubleshooting": "Check that the intended database file is open, statement terminators are present, the SQLite version supports the feature, and foreign-key settings are applied on the same connection. Run one statement at a time to isolate errors.",
+        "reset_steps": "Close the shell and delete only the disposable `practice.db` file, or use a fresh `:memory:` connection. Never reset a production database.",
+        "runtime_note": "JSON functions are built in by default from SQLite 3.38.0 but can be omitted from custom builds; JSONB requires SQLite 3.45.0+. Verify the linked runtime before use.",
+        "title": "Example: Extracting JSON Values",
+        "code": "SELECT json_extract('{\"topic\":\"sqlite\"}', '$.topic');",
+        "expected_output": "sqlite"
+      },
+      {
+        "type": "paragraph",
+        "text": "Guided example. First run the code without modifying it. Record the exact result. Change one input or condition, predict the effect, and run it again. For schema or transaction examples, use a disposable database so resets never affect valuable data."
+      },
+      {
+        "type": "paragraph",
+        "text": "Run and reset. Save the SQL to `lesson.sql`; run `sqlite3 -batch practice.db < lesson.sql`. For simple tabular output, add `.headers off` and `.mode list` in the shell or compare the returned rows in your API. Work only in a disposable practice database. CodeLeaf’s browser preview does not execute SQL. Troubleshooting: Check that the intended database file is open, statement terminators are present, the SQLite version supports the feature, and foreign-key settings are applied on the same connection. Run one statement at a time to isolate errors. Reset: Close the shell and delete only the disposable `practice.db` file, or use a fresh `:memory:` connection. Never reset a production database."
+      },
+      {
+        "type": "paragraph",
+        "text": "Next step. Continue to Creating and Modifying JSON and reuse the same verify-before-assuming workflow."
+      },
+      {
+        "type": "callout",
+        "title": "Version and runtime note",
+        "text": "JSON functions are built in by default from SQLite 3.38.0 but can be omitted from custom builds; JSONB requires SQLite 3.45.0+. Verify the linked runtime before use."
+      },
+      {
+        "type": "task",
+        "title": "Try it yourself",
+        "prompt": "Create a second example for extracting json values. Use at least one of these subtopics: json_extract(), The -> and ->> operators, JSON paths. Predict its result, run it on a disposable database, and write down one boundary case.",
+        "execution_mode": "query-simulation",
+        "acceptance_criteria": [
+          "A minimal reproducible SQL statement or application snippet is included.",
+          "The expected result is stated before execution.",
+          "The observed result and one boundary/error case are documented."
+        ]
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming generic SQL behavior",
+            "text": "Check SQLite’s own documentation and the actual linked runtime; standards-compliant engines can still differ in type handling, SQL extensions, and configuration."
+          },
+          {
+            "title": "Skipping verification",
+            "text": "Reduce the example to the smallest fixture, inspect the schema and result rows, and repeat after changing one thing at a time."
+          },
+          {
+            "title": "Testing on valuable data",
+            "text": "Use a disposable file or an in-memory database and a verified backup before destructive operations."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "text": "Recap. Check the runtime and build, validate input, and keep keys used for relationships or constraints in relational columns. Keep the extracting json values behavior explicit in code and document assumptions that a future maintainer would otherwise have to guess."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-057-questions.json",
+    "references": [
+      {
+        "title": "SQLite Documentation Index",
+        "url": "https://sqlite.org/docs.html",
+        "publisher": "SQLite Project"
+      }
+    ],
+    "subtopics": [
+      "json_extract()",
+      "The -> and ->> operators",
+      "JSON paths",
+      "Nested objects and arrays",
+      "Handling missing or invalid values"
+    ],
+    "example_expected_output": "sqlite"
+  },
+  "exercise_files": [
+    "../exercises/exercise-11-store-and-query-json.json"
+  ],
+  "sources": [
+    {
+      "title": "SQLite Documentation Index",
+      "url": "https://sqlite.org/docs.html",
+      "publisher": "SQLite Project"
+    }
+  ],
+  "status": "draft",
+  "review_status": "unreviewed",
+  "accessibility_notes": "Use text labels and expected-output text rather than relying on diagram colors alone. SQL output is provided as text; enlarge type or use a screen reader as needed.",
+  "version_notes": "SQLite feature availability varies with the library version and compile-time options. Verify SELECT sqlite_version() and the application binding before relying on newer features."
+}

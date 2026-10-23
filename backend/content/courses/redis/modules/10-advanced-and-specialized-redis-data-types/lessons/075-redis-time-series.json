@@ -1,0 +1,149 @@
+{
+  "id": "redis-lesson-075",
+  "slug": "redis-time-series",
+  "title": "Redis Time Series",
+  "sequence": 75,
+  "module_id": "redis-module-10",
+  "module_slug": "advanced-and-specialized-redis-data-types",
+  "level": "intermediate to advanced",
+  "difficulty": "intermediate",
+  "track": "version-dependent-specialist",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-074"
+  ],
+  "previous_lesson_id": "redis-lesson-074",
+  "next_lesson_id": "redis-lesson-076",
+  "keywords": [
+    "redis-time-series",
+    "timestamped-numeric-samples",
+    "ts-create",
+    "ts-add",
+    "ts-madd",
+    "timestamp-ranges-and-aggregation",
+    "retention-and-downsampling-concepts",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 75,
+  "subtopics": [
+    "Timestamped numeric samples",
+    "TS.CREATE",
+    "TS.ADD",
+    "TS.MADD",
+    "Timestamp ranges and aggregation",
+    "Retention and downsampling concepts"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Redis Time Series and distinguish it from a related Redis concept.",
+    "Apply or trace Redis Time Series in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Redis Time Series and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Redis Time Series in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Redis Time Series belongs to Redis specialized data-type capabilities. First check whether the target server and hosting plan support the relevant commands.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Redis Time Series",
+        "asset_path": "diagrams/lesson-075-redis-time-series.svg",
+        "alt_text": "Concept diagram for Redis Time Series, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Redis Time Series; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Redis Time Series belongs to Redis specialized data-type capabilities. First check whether the target server and hosting plan support the relevant commands."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Redis Time Series, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Timestamped numeric samples",
+            "text": "Connect Timestamped numeric samples to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "TS.CREATE",
+            "text": "Connect TS.CREATE to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "TS.ADD",
+            "text": "Connect TS.ADD to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "TS.MADD",
+            "text": "Connect TS.MADD to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Timestamp ranges and aggregation",
+            "text": "Connect Timestamp ranges and aggregation to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Retention and downsampling concepts",
+            "text": "Connect Retention and downsampling concepts to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Redis Time Series",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "TS.CREATE demo:temperature\nTS.ADD demo:temperature * 21.5\nTS.RANGE demo:temperature - +",
+        "expected_output": "OK\n<timestamp>\n<timestamp>\n21.5",
+        "run_instructions": "The Time Series commands require a compatible Redis distribution/version. Treat the timestamp as server-generated.",
+        "reset_steps": "DEL demo:temperature",
+        "note": "Compatibility checkpoint: verify the exact Redis version and service capability before running this optional/specialist example."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Redis Time Series. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Redis Time Series in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Redis Time Series.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "OK\n<timestamp>\n<timestamp>\n21.5",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-075-questions.json",
+    "recap": [
+      "Redis Time Series is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Redis time series",
+      "url": "https://redis.io/docs/latest/develop/data-types/timeseries/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "timestamped samples, retention and aggregation"
+      ]
+    },
+    {
+      "title": "Redis data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "strings, hashes, lists, sets, sorted sets, streams, geospatial indexes, bitmaps, bitfields, JSON, arrays, time series, probabilistic structures, vector sets"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

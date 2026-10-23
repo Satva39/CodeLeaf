@@ -1,0 +1,49 @@
+{
+  "id": "sass-lesson-159-knowledge-check",
+  "lesson_id": "sass-lesson-159",
+  "lesson_slug": "migrating-legacy-division",
+  "title": "Migrating Legacy Division knowledge check",
+  "status": "draft",
+  "question_count": 3,
+  "questions": [
+    {
+      "id": "sass-l159-q1",
+      "type": "single_choice",
+      "prompt": "Which mental model best explains “Migrating Legacy Division” in Dart Sass?",
+      "options": [
+        "The best solution is always to replace native CSS behavior with a new Sass abstraction.",
+        "SassScript evaluates expressions while compiling. Use explicit parentheses for order, compatible units for arithmetic, and interpolation only where a value must become part of a selector, property name, or string.",
+        "The browser executes Sass source directly, so a compilation step is unnecessary.",
+        "Readable SCSS guarantees correct browser rendering, accessibility, and performance without output review."
+      ],
+      "answer_key": "SassScript evaluates expressions while compiling. Use explicit parentheses for order, compatible units for arithmetic, and interpolation only where a value must become part of a selector, property name, or string.",
+      "explanation": "SassScript evaluates expressions while compiling. Use explicit parentheses for order, compatible units for arithmetic, and interpolation only where a value must become part of a selector, property name, or string. The alternative choices confuse Sass compilation with browser execution or claim guarantees that require independent tests."
+    },
+    {
+      "id": "sass-l159-q2",
+      "type": "single_choice",
+      "prompt": "When applying “Identifying division expressions”, which approach is the most reliable?",
+      "options": [
+        "Check the type and unit of each operand and decide whether the calculation belongs in Sass at build time or in CSS at browser runtime.",
+        "Skip compilation and infer the final selector list and property values from the source file alone.",
+        "Prefer deeply nested selectors because fewer source lines always mean simpler and safer CSS.",
+        "Silence every warning before determining whether it identifies a deprecated or incorrect construct."
+      ],
+      "answer_key": "Check the type and unit of each operand and decide whether the calculation belongs in Sass at build time or in CSS at browser runtime.",
+      "explanation": "Check the type and unit of each operand and decide whether the calculation belongs in Sass at build time or in CSS at browser runtime. Compare the compiled output with the stated intent and preserve browser-native behavior where it is required."
+    },
+    {
+      "id": "sass-l159-q3",
+      "type": "single_choice",
+      "prompt": "Which review decision most directly supports maintainability for “Migrating Legacy Division”?",
+      "options": [
+        "Generate every possible selector or theme combination, even when most variants are never used.",
+        "Treat successful compilation as proof that the interface is accessible and behaves correctly in every browser.",
+        "Expose internal implementation details as public API and postpone documentation until after release.",
+        "Modern CSS uses slash syntax in several properties, so do not assume every slash is Sass division. Use `sass:math` and `math.div()` where arithmetic is intended, then check the emitted CSS."
+      ],
+      "answer_key": "Modern CSS uses slash syntax in several properties, so do not assume every slash is Sass division. Use `sass:math` and `math.div()` where arithmetic is intended, then check the emitted CSS.",
+      "explanation": "Modern CSS uses slash syntax in several properties, so do not assume every slash is Sass division. Use `sass:math` and `math.div()` where arithmetic is intended, then check the emitted CSS. The other choices increase output, assume unverified behavior, or make the public interface harder to maintain."
+    }
+  ]
+}

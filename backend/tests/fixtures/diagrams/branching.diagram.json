@@ -1,0 +1,90 @@
+{
+  "renderer": "codeleaf-native-dynamic-diagram",
+  "schema_version": 1,
+  "title": "Branching choice fixture",
+  "description": "A small decision splits into two paths.",
+  "layout": {
+    "kind": "branching",
+    "columns": 2,
+    "rows": 2
+  },
+  "nodes": [
+    {
+      "id": "start",
+      "title": "Input received",
+      "row": 0,
+      "column": 0,
+      "sourceTextIndices": [
+        0
+      ]
+    },
+    {
+      "id": "check",
+      "title": "Is input valid?",
+      "row": 1,
+      "column": 0,
+      "sourceTextIndices": [
+        1
+      ]
+    },
+    {
+      "id": "good",
+      "title": "Continue",
+      "row": 1,
+      "column": 1,
+      "sourceTextIndices": [
+        2
+      ],
+      "explanation": "The valid path can continue."
+    },
+    {
+      "id": "bad",
+      "title": "Show error",
+      "row": 2,
+      "column": 0,
+      "sourceTextIndices": [
+        3
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "from": "start",
+      "to": "check",
+      "label": "evaluate"
+    },
+    {
+      "id": "e2",
+      "from": "check",
+      "to": "good",
+      "label": "yes"
+    },
+    {
+      "id": "e3",
+      "from": "check",
+      "to": "bad",
+      "label": "no"
+    }
+  ],
+  "source_text": [
+    {
+      "index": 0,
+      "text": "Input received"
+    },
+    {
+      "index": 1,
+      "text": "Is input valid?"
+    },
+    {
+      "index": 2,
+      "text": "Continue"
+    },
+    {
+      "index": 3,
+      "text": "Show error"
+    }
+  ],
+  "source_text_count": 4,
+  "text_mapping_complete": true
+}

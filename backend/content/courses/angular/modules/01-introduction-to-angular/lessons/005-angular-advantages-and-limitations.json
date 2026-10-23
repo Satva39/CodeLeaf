@@ -1,0 +1,157 @@
+{
+  "id": "angular-lesson-005",
+  "slug": "005-angular-advantages-and-limitations",
+  "title": "Angular Advantages and Limitations",
+  "sequence": 5,
+  "module_id": "angular-module-01",
+  "module_slug": "introduction-to-angular",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "angular-lesson-004"
+  ],
+  "previous_lesson_id": "angular-lesson-004",
+  "next_lesson_id": "angular-lesson-006",
+  "keywords": [
+    "angular-advantages-and-limitations",
+    "introduction-to-angular",
+    "framework-conventions-and-built-in-features",
+    "maintainability-and-scalability",
+    "initial-bundle-size-and-learning-curve",
+    "choosing-angular-for-a-project"
+  ],
+  "source_syllabus_number": 5,
+  "subtopics": [
+    "Framework conventions and built-in features",
+    "Maintainability and scalability",
+    "Initial bundle size and learning curve",
+    "Choosing Angular for a project"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of angular advantages and limitations and name the relevant Angular concepts.",
+    "Apply at least one syllabus item from this lesson in a focused Angular example.",
+    "Verify expected behavior and identify one compatibility, failure or trust-boundary limitation."
+  ],
+  "content": {
+    "intro": "This lesson focuses on angular advantages and limitations inside Introduction to Angular. Begin with the syllabus anchor “Framework conventions and built-in features”, name the data or UI behavior involved, and then verify the result with a focused example. The goal is to make one clear engineering decision rather than memorize an isolated API.",
+    "why_it_matters": "Angular Advantages and Limitations helps keep Angular features understandable as the application grows. A small explicit pattern is easier to reuse, test and review than scattered UI-specific logic.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Angular Advantages and Limitations concept map",
+        "asset_path": "diagrams/lessons/005-angular-advantages-and-limitations.svg",
+        "alt_text": "Lesson 5: Angular Advantages and Limitations. Four numbered stages connect the concept, its model, a practical application and verification.",
+        "caption": "Visual path for Angular Advantages and Limitations: use the numbered stages and the labels to connect framework conventions and built-in features to a practical implementation and evidence."
+      },
+      {
+        "type": "paragraph",
+        "title": "Mental model",
+        "text": "**Angular Advantages and Limitations.** This is part of **Introduction to Angular**. Start from the concrete question “what changes in the application when this concept is used?” Then map the supplied syllabus terms to a small behavior, keep dependencies and trust boundaries visible, and verify what the example does. Angular Advantages and Limitations helps keep Angular features understandable as the application grows. A small explicit pattern is easier to reuse, test and review than scattered UI-specific logic."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics to connect",
+        "items": [
+          {
+            "title": "Framework conventions and built-in features",
+            "text": "Identify what “Framework conventions and built-in features” contributes to angular advantages and limitations; write down its inputs, outputs or state changes before coding."
+          },
+          {
+            "title": "Maintainability and scalability",
+            "text": "Connect “Maintainability and scalability” to one small user-visible behavior. Keep the boundary explicit and consider empty, invalid or failure states."
+          },
+          {
+            "title": "Initial bundle size and learning curve",
+            "text": "Use “Initial bundle size and learning curve” as a checkpoint: verify the relevant behavior with a test, compiler diagnostic, browser inspection or documented human review."
+          },
+          {
+            "title": "Choosing Angular for a project",
+            "text": "Identify what “Choosing Angular for a project” contributes to angular advantages and limitations; write down its inputs, outputs or state changes before coding."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Angular Advantages and Limitations",
+        "language": "typescript",
+        "code": "import { Component } from '@angular/core';\n\n@Component({\n  selector: 'app-root',\n  standalone: true,\n  template: '<main><h1>{{ title }}</h1><p>Start small, verify each change.</p></main>',\n})\nexport class AppComponent {\n  title = 'My first Angular app';\n}",
+        "expected_output": "Expected UI: a heading, “My first Angular app”, and a short supporting paragraph after the root component is bootstrapped.",
+        "run_instructions": "Create or use a disposable Angular CLI workspace with a compatible Angular/Node/TypeScript version. Put the snippet in the matching component, template, stylesheet or project configuration; satisfy imports and providers from the surrounding lesson context. Run `ng serve` for browser behavior and the project test command for assertions. Shell examples should be run from the stated workspace directory.",
+        "reset_steps": "Save or commit your starting point before changing configuration. Revert only files created or edited for this lesson; do not delete a shared workspace or production data.",
+        "execution_mode": "static-validation",
+        "limitations": "This is a source/example inspection, not a live Angular compiler or arbitrary-code runner. Resource and Signal Forms examples are version-sensitive; check official docs and the installed package signatures."
+      },
+      {
+        "type": "callout",
+        "title": "Engineering note",
+        "text": "Execution note: this CodeLeaf course presents Angular and TypeScript snippets as static teaching material. The browser playground does not compile Angular TypeScript; run examples in a locally generated Angular workspace and verify them with the matching CLI, tests and browser."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-005-knowledge-check.json",
+    "task": "Apply angular advantages and limitations to a small feature in a disposable Angular learning project. Demonstrate at least one supplied subtopic (Framework conventions and built-in features), record the expected UI or console result, and include one test, failure case or version note.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates “Framework conventions and built-in features” in the context of Angular Advantages and Limitations.",
+      "The learner explains the expected result and includes an empty, invalid or failure case where appropriate.",
+      "Verification evidence matches the actual environment; a static CodeLeaf snippet is not described as a successfully executed Angular build."
+    ],
+    "hints": [
+      "Start with the syllabus item “Framework conventions and built-in features” and write down the expected behavior before changing code.",
+      "Keep the example small; include only dependencies, inputs, providers and state that the example actually needs.",
+      "Reproduce the intended behavior in a pinned local Angular workspace and inspect both normal and failure paths."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Copying a snippet without checking its surrounding context.",
+        "why": "Angular examples can depend on imports, providers, template context or a particular framework version.",
+        "fix": "Use the run instructions and validate against the exact generated workspace."
+      },
+      {
+        "problem": "Treating an attractive UI result as proof of correctness.",
+        "why": "Accessibility, boundary cases, failures and server-side rules may not be visible in the happy path.",
+        "fix": "Add a focused assertion and test at least one realistic failure state."
+      },
+      {
+        "problem": "Assuming client code guarantees authorization or validates all external data.",
+        "why": "Browser code is controlled by the client and can receive unexpected network responses.",
+        "fix": "Validate external values and enforce protected business rules on the backend."
+      }
+    ],
+    "summary": [
+      "Angular Advantages and Limitations has a concrete purpose within Introduction to Angular.",
+      "Use “Framework conventions and built-in features” in a small example and verify the behavior.",
+      "Check version compatibility, failure states and trust boundaries before reusing the pattern."
+    ],
+    "run_mode": "static-validation",
+    "execution_mode": "static-validation",
+    "run_instructions": "Create or use a disposable Angular CLI workspace with a compatible Angular/Node/TypeScript version. Put the snippet in the matching component, template, stylesheet or project configuration; satisfy imports and providers from the surrounding lesson context. Run `ng serve` for browser behavior and the project test command for assertions. Shell examples should be run from the stated workspace directory.",
+    "reset_steps": "Save or commit your starting point before changing configuration. Revert only files created or edited for this lesson; do not delete a shared workspace or production data.",
+    "version_notes": "Version-sensitive topics require checking the official Angular version compatibility and release documentation at the time of use."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Angular version compatibility",
+      "url": "https://angular.dev/reference/versions",
+      "publisher": "Angular documentation",
+      "checked_on": "2026-10-14"
+    },
+    {
+      "title": "Angular versioning and release schedule",
+      "url": "https://angular.dev/reference/releases",
+      "publisher": "Angular documentation",
+      "checked_on": "2026-10-14"
+    },
+    {
+      "title": "Angular essentials",
+      "url": "https://angular.dev/essentials",
+      "publisher": "Angular documentation",
+      "checked_on": "2026-10-14"
+    }
+  ],
+  "technical_review_date": "2026-10-14",
+  "status": "draft",
+  "status_note": "Complete syllabus-aligned draft generated from the attached curriculum. Technical examples and version-sensitive APIs require human review and local execution before publication."
+}

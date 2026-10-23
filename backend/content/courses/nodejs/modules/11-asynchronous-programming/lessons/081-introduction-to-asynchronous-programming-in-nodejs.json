@@ -1,0 +1,153 @@
+{
+  "id": "nodejs-lesson-081",
+  "slug": "introduction-to-asynchronous-programming-in-nodejs",
+  "title": "Introduction to Asynchronous Programming in Node.js",
+  "sequence": 81,
+  "module_id": "nodejs-module-11",
+  "module_slug": "asynchronous-programming",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "nodejs-lesson-080"
+  ],
+  "previous_lesson_id": "nodejs-lesson-080",
+  "next_lesson_id": "nodejs-lesson-082",
+  "keywords": [
+    "Introduction to Asynchronous Programming in Node.js",
+    "Blocking and non-blocking work",
+    "I/O-bound operations",
+    "Concurrent operations",
+    "Synchronous execution versus asynchronous completion",
+    "Node.js",
+    "JavaScript runtime"
+  ],
+  "source_syllabus_number": 81,
+  "subtopics": [
+    "Blocking and non-blocking work",
+    "I/O-bound operations",
+    "Concurrent operations",
+    "Synchronous execution versus asynchronous completion"
+  ],
+  "learning_outcomes": [
+    "Describe Blocking and non-blocking work and explain how it relates to Introduction to Asynchronous Programming in Node.js.",
+    "Demonstrate I/O-bound operations in a small Node.js example and predict the observable result.",
+    "Test a failure, boundary, lifecycle, or version-compatibility case involving Concurrent operations."
+  ],
+  "content": {
+    "intro": "Introduction to Asynchronous Programming in Node.js is part of asynchronous programming. This lesson connects Blocking and non-blocking work, I/O-bound operations, Concurrent operations to a concrete Node.js example. Focus on the behavior you can observe, the assumptions the API makes, and one failure or boundary case.",
+    "why_it_matters": "Promises and async/await express asynchronous completion and error propagation; they do not automatically make CPU-bound work parallel. Test successful completion, rejection, timeout/cancellation, partial failure, and cleanup.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Introduction to Asynchronous Programming in Node.js: concept map",
+        "asset_path": "diagrams/lessons/lesson-081-introduction-to-asynchronous-programming-in-nodejs.svg",
+        "alt_text": "Concept map for lesson 81: Introduction to Asynchronous Programming in Node.js. It shows representative syllabus concepts in a Concept → Example → Verification sequence.",
+        "caption": "Read the three labeled cards from left to right; the lesson steps connect the concept to a practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Promises and async/await express asynchronous completion and error propagation; they do not automatically make CPU-bound work parallel. Use await with try/catch, run independent tasks concurrently with bounded concurrency, and make cancellation/retries explicit."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Blocking and non-blocking work",
+            "text": "Non-blocking APIs let other JavaScript work proceed while eligible I/O is pending, but synchronous CPU-heavy work still occupies the event-loop thread."
+          },
+          {
+            "title": "I/O-bound operations",
+            "text": "For I/O-bound operations, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Concurrent operations",
+            "text": "For Concurrent operations, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Synchronous execution versus asynchronous completion",
+            "text": "For Synchronous execution versus asynchronous completion, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "const a = Promise.resolve(2);\nconst b = Promise.resolve(3);\nconst [left, right] = await Promise.all([a, b]);\nconsole.log(left + right);",
+        "expected_output": "5",
+        "run_instructions": "Inspect this JavaScript in a local Node.js project. It is a static-validation teaching example: CodeLeaf does not run this arbitrary example in the API process. If it needs a package, file, server, database, or external service, provision that dependency in a separate local project and follow its official setup instructions. Run with `node example.mjs` when the example is self-contained, or adapt the required imports/inputs first.",
+        "reset_steps": "Restore the starting snippet and inputs. Repeat with one different valid value and one invalid, missing, empty, or failure input appropriate to the example.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Start with the code shown above. Predict the result before running it, then verify it against: 5 Change one input or simulate one failure and describe how the behavior should change. Test successful completion, rejection, timeout/cancellation, partial failure, and cleanup."
+      },
+      {
+        "type": "callout",
+        "title": "Runtime and safety note",
+        "text": "Teaching baseline: use a supported Node.js LTS release (Node.js 24 LTS as checked on 2026-10-13). The official releases page lists Node.js 26 as Current and Node.js 24/22 as LTS. Some advanced APIs, flags, permission behavior, embedded SQLite capabilities, module-loader hooks, and TypeScript integration are version-sensitive; verify the exact installed runtime. The Node.js 22 runtime available in the build-check environment is used only for syntax checks. This example is for learning and static validation, not for executing untrusted learner code inside CodeLeaf."
+      }
+    ],
+    "task": "Create or inspect a small Node.js example for Introduction to Asynchronous Programming in Node.js. Include at least one listed subtopic, document the expected result, and verify a normal case plus a boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates a named lesson concept, rather than only mentioning the title.",
+      "Expected output or observable behavior is documented and reproducible.",
+      "At least one invalid, empty, timeout, resource, or failure case is handled or explained.",
+      "The solution does not put secrets in source code and does not execute untrusted code inside the production API process."
+    ],
+    "hints": [
+      "Start with Blocking and non-blocking work; identify the input, operation, and observable result.",
+      "Run the smallest relevant example in the selected Node.js release before adding frameworks or external services.",
+      "Test one failure or boundary case for I/O-bound operations, then explain why the outcome is expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Awaiting independent tasks one by one or launching unlimited concurrent operations.",
+        "why": "The code may pass a simple demonstration yet fail with real inputs, resource limits, timing, or runtime differences.",
+        "fix": "Choose sequential or concurrent flow deliberately and cap work according to resource limits."
+      },
+      {
+        "problem": "Copying a snippet without checking its runtime, dependencies, input assumptions, or cleanup behavior.",
+        "why": "Node.js APIs and surrounding ecosystem tools have explicit version, trust, and resource boundaries.",
+        "fix": "State the environment and dependency assumptions, then rerun the example from a clean starting state."
+      }
+    ],
+    "summary": [
+      "Non-blocking APIs let other JavaScript work proceed while eligible I/O is pending, but synchronous CPU-heavy work still occupies the event-loop thread.",
+      "This lesson covers: Blocking and non-blocking work, I/O-bound operations, Concurrent operations, Synchronous execution versus asynchronous completion.",
+      "Verify both normal and failure behavior, and document runtime, dependency, and resource assumptions."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-081-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Learn Node.js",
+      "url": "https://nodejs.org/learn",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "getting started",
+        "CLI",
+        "HTTP"
+      ]
+    },
+    {
+      "title": "Node.js API Reference",
+      "url": "https://nodejs.org/api/",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "core modules and runtime APIs; confirm version-specific stability labels"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Source-derived syllabus; educational draft requiring technical/instructional review before publication."
+}

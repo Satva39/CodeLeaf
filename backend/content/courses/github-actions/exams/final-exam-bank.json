@@ -1,0 +1,849 @@
+{
+  "id": "github-actions-final-exam-question-bank",
+  "title": "GitHub Actions final exam question bank",
+  "question_count": 60,
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "questions": [
+    {
+      "id": "github-actions-final-q-001",
+      "topic": "workflow structure",
+      "type": "single_choice",
+      "prompt": "Which statement about workflow structure is the most accurate?",
+      "options": [
+        "Store credentials in repository files so every runner can read them.",
+        "A workflow file is stored under `.github/workflows/` and defines events, jobs, and steps.",
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct."
+      ],
+      "answer_key": "A workflow file is stored under `.github/workflows/` and defines events, jobs, and steps.",
+      "explanation": "The key principle for workflow structure is to make behavior explicit, scope trust and permissions, and verify observable results. A workflow file is stored under `.github/workflows/` and defines events, jobs, and steps."
+    },
+    {
+      "id": "github-actions-final-q-002",
+      "topic": "workflow structure",
+      "type": "single_choice",
+      "prompt": "A team committed a YAML file under `scripts/ci.yml` but no workflow appears. What is the best next step?",
+      "options": [
+        "Move the file under `.github/workflows/`, then validate its event and syntax.",
+        "Increase token permissions globally and expose credentials to simplify the workflow.",
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload."
+      ],
+      "answer_key": "Move the file under `.github/workflows/`, then validate its event and syntax.",
+      "explanation": "This scenario is about workflow structure. Move the file under `.github/workflows/`, then validate its event and syntax. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-003",
+      "topic": "workflow structure",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of workflow structure?",
+      "options": [
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run.",
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for workflow structure."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for workflow structure.",
+      "explanation": "Review evidence for workflow structure should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-004",
+      "topic": "events and triggers",
+      "type": "single_choice",
+      "prompt": "Which statement about events and triggers is the most accurate?",
+      "options": [
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct.",
+        "Store credentials in repository files so every runner can read them.",
+        "Choose the event and filters that match the desired lifecycle, then test positive and negative filter cases."
+      ],
+      "answer_key": "Choose the event and filters that match the desired lifecycle, then test positive and negative filter cases.",
+      "explanation": "The key principle for events and triggers is to make behavior explicit, scope trust and permissions, and verify observable results. Choose the event and filters that match the desired lifecycle, then test positive and negative filter cases."
+    },
+    {
+      "id": "github-actions-final-q-005",
+      "topic": "events and triggers",
+      "type": "single_choice",
+      "prompt": "A required check does not run when a developer changes a shared package outside the listed paths. What is the best next step?",
+      "options": [
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload.",
+        "Review path filters and include shared dependencies so required validation cannot be skipped.",
+        "Increase token permissions globally and expose credentials to simplify the workflow."
+      ],
+      "answer_key": "Review path filters and include shared dependencies so required validation cannot be skipped.",
+      "explanation": "This scenario is about events and triggers. Review path filters and include shared dependencies so required validation cannot be skipped. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-006",
+      "topic": "events and triggers",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of events and triggers?",
+      "options": [
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for events and triggers.",
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for events and triggers.",
+      "explanation": "Review evidence for events and triggers should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-007",
+      "topic": "runners",
+      "type": "single_choice",
+      "prompt": "Which statement about runners is the most accurate?",
+      "options": [
+        "Store credentials in repository files so every runner can read them.",
+        "Each job selects an execution environment and should be routed according to required tools, trust, and network access.",
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct."
+      ],
+      "answer_key": "Each job selects an execution environment and should be routed according to required tools, trust, and network access.",
+      "explanation": "The key principle for runners is to make behavior explicit, scope trust and permissions, and verify observable results. Each job selects an execution environment and should be routed according to required tools, trust, and network access."
+    },
+    {
+      "id": "github-actions-final-q-008",
+      "topic": "runners",
+      "type": "single_choice",
+      "prompt": "A privileged self-hosted runner also accepts code from unknown forks. What is the best next step?",
+      "options": [
+        "Restrict runner-group access and separate untrusted jobs from privileged persistent machines.",
+        "Increase token permissions globally and expose credentials to simplify the workflow.",
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload."
+      ],
+      "answer_key": "Restrict runner-group access and separate untrusted jobs from privileged persistent machines.",
+      "explanation": "This scenario is about runners. Restrict runner-group access and separate untrusted jobs from privileged persistent machines. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-009",
+      "topic": "runners",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of runners?",
+      "options": [
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run.",
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for runners."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for runners.",
+      "explanation": "Review evidence for runners should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-010",
+      "topic": "actions and scripts",
+      "type": "single_choice",
+      "prompt": "Which statement about actions and scripts is the most accurate?",
+      "options": [
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct.",
+        "Store credentials in repository files so every runner can read them.",
+        "Use `run` for shell commands and `uses` for actions; validate inputs and review action source/permissions."
+      ],
+      "answer_key": "Use `run` for shell commands and `uses` for actions; validate inputs and review action source/permissions.",
+      "explanation": "The key principle for actions and scripts is to make behavior explicit, scope trust and permissions, and verify observable results. Use `run` for shell commands and `uses` for actions; validate inputs and review action source/permissions."
+    },
+    {
+      "id": "github-actions-final-q-011",
+      "topic": "actions and scripts",
+      "type": "single_choice",
+      "prompt": "A workflow has 80 lines of repeated shell setup copied across repositories. What is the best next step?",
+      "options": [
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload.",
+        "Extract a reusable workflow, composite action, or tested script based on whether the shared unit is jobs, steps, or a command.",
+        "Increase token permissions globally and expose credentials to simplify the workflow."
+      ],
+      "answer_key": "Extract a reusable workflow, composite action, or tested script based on whether the shared unit is jobs, steps, or a command.",
+      "explanation": "This scenario is about actions and scripts. Extract a reusable workflow, composite action, or tested script based on whether the shared unit is jobs, steps, or a command. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-012",
+      "topic": "actions and scripts",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of actions and scripts?",
+      "options": [
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for actions and scripts.",
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for actions and scripts.",
+      "explanation": "Review evidence for actions and scripts should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-013",
+      "topic": "contexts and expressions",
+      "type": "single_choice",
+      "prompt": "Which statement about contexts and expressions is the most accurate?",
+      "options": [
+        "Store credentials in repository files so every runner can read them.",
+        "Use expressions and contexts in supported workflow fields, and pass untrusted event text as quoted data rather than shell source.",
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct."
+      ],
+      "answer_key": "Use expressions and contexts in supported workflow fields, and pass untrusted event text as quoted data rather than shell source.",
+      "explanation": "The key principle for contexts and expressions is to make behavior explicit, scope trust and permissions, and verify observable results. Use expressions and contexts in supported workflow fields, and pass untrusted event text as quoted data rather than shell source."
+    },
+    {
+      "id": "github-actions-final-q-014",
+      "topic": "contexts and expressions",
+      "type": "single_choice",
+      "prompt": "A PR title is interpolated directly into a `run:` command. What is the best next step?",
+      "options": [
+        "Move the title into an environment variable, quote it, and validate it before use.",
+        "Increase token permissions globally and expose credentials to simplify the workflow.",
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload."
+      ],
+      "answer_key": "Move the title into an environment variable, quote it, and validate it before use.",
+      "explanation": "This scenario is about contexts and expressions. Move the title into an environment variable, quote it, and validate it before use. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-015",
+      "topic": "contexts and expressions",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of contexts and expressions?",
+      "options": [
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run.",
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for contexts and expressions."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for contexts and expressions.",
+      "explanation": "Review evidence for contexts and expressions should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-016",
+      "topic": "job dependencies",
+      "type": "single_choice",
+      "prompt": "Which statement about job dependencies is the most accurate?",
+      "options": [
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct.",
+        "Store credentials in repository files so every runner can read them.",
+        "Use `needs` for prerequisites and outputs; separate jobs do not share their runner workspace automatically."
+      ],
+      "answer_key": "Use `needs` for prerequisites and outputs; separate jobs do not share their runner workspace automatically.",
+      "explanation": "The key principle for job dependencies is to make behavior explicit, scope trust and permissions, and verify observable results. Use `needs` for prerequisites and outputs; separate jobs do not share their runner workspace automatically."
+    },
+    {
+      "id": "github-actions-final-q-017",
+      "topic": "job dependencies",
+      "type": "single_choice",
+      "prompt": "A deploy job expects a file created on the test job’s runner. What is the best next step?",
+      "options": [
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload.",
+        "Upload the file as an artifact or pass a small value through declared job outputs.",
+        "Increase token permissions globally and expose credentials to simplify the workflow."
+      ],
+      "answer_key": "Upload the file as an artifact or pass a small value through declared job outputs.",
+      "explanation": "This scenario is about job dependencies. Upload the file as an artifact or pass a small value through declared job outputs. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-018",
+      "topic": "job dependencies",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of job dependencies?",
+      "options": [
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for job dependencies.",
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for job dependencies.",
+      "explanation": "Review evidence for job dependencies should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-019",
+      "topic": "artifacts and caches",
+      "type": "single_choice",
+      "prompt": "Which statement about artifacts and caches is the most accurate?",
+      "options": [
+        "Store credentials in repository files so every runner can read them.",
+        "Artifacts preserve files from a run; caches accelerate restoration of rebuildable dependencies.",
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct."
+      ],
+      "answer_key": "Artifacts preserve files from a run; caches accelerate restoration of rebuildable dependencies.",
+      "explanation": "The key principle for artifacts and caches is to make behavior explicit, scope trust and permissions, and verify observable results. Artifacts preserve files from a run; caches accelerate restoration of rebuildable dependencies."
+    },
+    {
+      "id": "github-actions-final-q-020",
+      "topic": "artifacts and caches",
+      "type": "single_choice",
+      "prompt": "A team stores release binaries in a dependency cache and assumes they are immutable deployment inputs. What is the best next step?",
+      "options": [
+        "Upload versioned build outputs as artifacts and use cache only to speed dependency reconstruction.",
+        "Increase token permissions globally and expose credentials to simplify the workflow.",
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload."
+      ],
+      "answer_key": "Upload versioned build outputs as artifacts and use cache only to speed dependency reconstruction.",
+      "explanation": "This scenario is about artifacts and caches. Upload versioned build outputs as artifacts and use cache only to speed dependency reconstruction. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-021",
+      "topic": "artifacts and caches",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of artifacts and caches?",
+      "options": [
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run.",
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for artifacts and caches."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for artifacts and caches.",
+      "explanation": "Review evidence for artifacts and caches should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-022",
+      "topic": "secrets and permissions",
+      "type": "single_choice",
+      "prompt": "Which statement about secrets and permissions is the most accurate?",
+      "options": [
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct.",
+        "Store credentials in repository files so every runner can read them.",
+        "Grant each job the smallest token scope it needs and pass protected secrets only to trusted steps."
+      ],
+      "answer_key": "Grant each job the smallest token scope it needs and pass protected secrets only to trusted steps.",
+      "explanation": "The key principle for secrets and permissions is to make behavior explicit, scope trust and permissions, and verify observable results. Grant each job the smallest token scope it needs and pass protected secrets only to trusted steps."
+    },
+    {
+      "id": "github-actions-final-q-023",
+      "topic": "secrets and permissions",
+      "type": "single_choice",
+      "prompt": "A read-only unit test workflow requests contents-write and packages-write permissions. What is the best next step?",
+      "options": [
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload.",
+        "Reduce permissions to the read scopes required by checkout and tests.",
+        "Increase token permissions globally and expose credentials to simplify the workflow."
+      ],
+      "answer_key": "Reduce permissions to the read scopes required by checkout and tests.",
+      "explanation": "This scenario is about secrets and permissions. Reduce permissions to the read scopes required by checkout and tests. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-024",
+      "topic": "secrets and permissions",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of secrets and permissions?",
+      "options": [
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for secrets and permissions.",
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for secrets and permissions.",
+      "explanation": "Review evidence for secrets and permissions should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-025",
+      "topic": "CI pipelines",
+      "type": "single_choice",
+      "prompt": "Which statement about CI pipelines is the most accurate?",
+      "options": [
+        "Store credentials in repository files so every runner can read them.",
+        "Run relevant lint, test, and build checks with clear pass/fail semantics and configure required status checks.",
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct."
+      ],
+      "answer_key": "Run relevant lint, test, and build checks with clear pass/fail semantics and configure required status checks.",
+      "explanation": "The key principle for CI pipelines is to make behavior explicit, scope trust and permissions, and verify observable results. Run relevant lint, test, and build checks with clear pass/fail semantics and configure required status checks."
+    },
+    {
+      "id": "github-actions-final-q-026",
+      "topic": "CI pipelines",
+      "type": "single_choice",
+      "prompt": "A lint command returns exit code 1 but a later shell command masks the failure. What is the best next step?",
+      "options": [
+        "Preserve failure exit codes and require the correct stable status check before merging.",
+        "Increase token permissions globally and expose credentials to simplify the workflow.",
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload."
+      ],
+      "answer_key": "Preserve failure exit codes and require the correct stable status check before merging.",
+      "explanation": "This scenario is about CI pipelines. Preserve failure exit codes and require the correct stable status check before merging. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-027",
+      "topic": "CI pipelines",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of CI pipelines?",
+      "options": [
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run.",
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for CI pipelines."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for CI pipelines.",
+      "explanation": "Review evidence for CI pipelines should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-028",
+      "topic": "deployment",
+      "type": "single_choice",
+      "prompt": "Which statement about deployment is the most accurate?",
+      "options": [
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct.",
+        "Store credentials in repository files so every runner can read them.",
+        "Promote one verified artifact through protected environments, check health, and define recovery steps."
+      ],
+      "answer_key": "Promote one verified artifact through protected environments, check health, and define recovery steps.",
+      "explanation": "The key principle for deployment is to make behavior explicit, scope trust and permissions, and verify observable results. Promote one verified artifact through protected environments, check health, and define recovery steps."
+    },
+    {
+      "id": "github-actions-final-q-029",
+      "topic": "deployment",
+      "type": "single_choice",
+      "prompt": "Staging rebuilds source independently and produces a different image from the one validated in CI. What is the best next step?",
+      "options": [
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload.",
+        "Promote the same identified artifact through environments and verify its digest/source revision.",
+        "Increase token permissions globally and expose credentials to simplify the workflow."
+      ],
+      "answer_key": "Promote the same identified artifact through environments and verify its digest/source revision.",
+      "explanation": "This scenario is about deployment. Promote the same identified artifact through environments and verify its digest/source revision. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-030",
+      "topic": "deployment",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of deployment?",
+      "options": [
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for deployment.",
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for deployment.",
+      "explanation": "Review evidence for deployment should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-031",
+      "topic": "workflow reuse",
+      "type": "single_choice",
+      "prompt": "Which statement about workflow reuse is the most accurate?",
+      "options": [
+        "Store credentials in repository files so every runner can read them.",
+        "Reusable workflows compose jobs; composite actions package steps within a job.",
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct."
+      ],
+      "answer_key": "Reusable workflows compose jobs; composite actions package steps within a job.",
+      "explanation": "The key principle for workflow reuse is to make behavior explicit, scope trust and permissions, and verify observable results. Reusable workflows compose jobs; composite actions package steps within a job."
+    },
+    {
+      "id": "github-actions-final-q-032",
+      "topic": "workflow reuse",
+      "type": "single_choice",
+      "prompt": "A team wants one standardized set of lint/test/build jobs shared across repositories. What is the best next step?",
+      "options": [
+        "Create a versioned reusable workflow with explicit inputs, outputs, secrets, and permissions.",
+        "Increase token permissions globally and expose credentials to simplify the workflow.",
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload."
+      ],
+      "answer_key": "Create a versioned reusable workflow with explicit inputs, outputs, secrets, and permissions.",
+      "explanation": "This scenario is about workflow reuse. Create a versioned reusable workflow with explicit inputs, outputs, secrets, and permissions. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-033",
+      "topic": "workflow reuse",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of workflow reuse?",
+      "options": [
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run.",
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for workflow reuse."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for workflow reuse.",
+      "explanation": "Review evidence for workflow reuse should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-034",
+      "topic": "package and container release",
+      "type": "single_choice",
+      "prompt": "Which statement about package and container release is the most accurate?",
+      "options": [
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct.",
+        "Store credentials in repository files so every runner can read them.",
+        "Use narrowly scoped registry permissions and identifiable versions; validate and trace artifacts before promotion."
+      ],
+      "answer_key": "Use narrowly scoped registry permissions and identifiable versions; validate and trace artifacts before promotion.",
+      "explanation": "The key principle for package and container release is to make behavior explicit, scope trust and permissions, and verify observable results. Use narrowly scoped registry permissions and identifiable versions; validate and trace artifacts before promotion."
+    },
+    {
+      "id": "github-actions-final-q-035",
+      "topic": "package and container release",
+      "type": "single_choice",
+      "prompt": "A workflow publishes every branch build as `latest` and consumers cannot trace the source revision. What is the best next step?",
+      "options": [
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload.",
+        "Use a commit- or release-based immutable tag/digest, and keep publishing permissions separate from validation.",
+        "Increase token permissions globally and expose credentials to simplify the workflow."
+      ],
+      "answer_key": "Use a commit- or release-based immutable tag/digest, and keep publishing permissions separate from validation.",
+      "explanation": "This scenario is about package and container release. Use a commit- or release-based immutable tag/digest, and keep publishing permissions separate from validation. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-036",
+      "topic": "package and container release",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of package and container release?",
+      "options": [
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for package and container release.",
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for package and container release.",
+      "explanation": "Review evidence for package and container release should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-037",
+      "topic": "APIs and external integrations",
+      "type": "single_choice",
+      "prompt": "Which statement about APIs and external integrations is the most accurate?",
+      "options": [
+        "Store credentials in repository files so every runner can read them.",
+        "Use scoped authentication, validate payloads, handle pagination/rate limits, and deduplicate external events.",
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct."
+      ],
+      "answer_key": "Use scoped authentication, validate payloads, handle pagination/rate limits, and deduplicate external events.",
+      "explanation": "The key principle for APIs and external integrations is to make behavior explicit, scope trust and permissions, and verify observable results. Use scoped authentication, validate payloads, handle pagination/rate limits, and deduplicate external events."
+    },
+    {
+      "id": "github-actions-final-q-038",
+      "topic": "APIs and external integrations",
+      "type": "single_choice",
+      "prompt": "A webhook sender retries the same event and creates duplicate issues. What is the best next step?",
+      "options": [
+        "Validate the sender and payload and persist an idempotency key/event ID before processing.",
+        "Increase token permissions globally and expose credentials to simplify the workflow.",
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload."
+      ],
+      "answer_key": "Validate the sender and payload and persist an idempotency key/event ID before processing.",
+      "explanation": "This scenario is about APIs and external integrations. Validate the sender and payload and persist an idempotency key/event ID before processing. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-039",
+      "topic": "APIs and external integrations",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of APIs and external integrations?",
+      "options": [
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run.",
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for APIs and external integrations."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for APIs and external integrations.",
+      "explanation": "Review evidence for APIs and external integrations should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-040",
+      "topic": "debugging",
+      "type": "single_choice",
+      "prompt": "Which statement about debugging is the most accurate?",
+      "options": [
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct.",
+        "Store credentials in repository files so every runner can read them.",
+        "Start with the first failed step, exit status, event/filter match, permissions, and runner diagnostics."
+      ],
+      "answer_key": "Start with the first failed step, exit status, event/filter match, permissions, and runner diagnostics.",
+      "explanation": "The key principle for debugging is to make behavior explicit, scope trust and permissions, and verify observable results. Start with the first failed step, exit status, event/filter match, permissions, and runner diagnostics."
+    },
+    {
+      "id": "github-actions-final-q-041",
+      "topic": "debugging",
+      "type": "single_choice",
+      "prompt": "A dependent job is skipped although its command is correct. What is the best next step?",
+      "options": [
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload.",
+        "Inspect `needs` results, `if` conditions, outputs, and implicit status functions before changing code.",
+        "Increase token permissions globally and expose credentials to simplify the workflow."
+      ],
+      "answer_key": "Inspect `needs` results, `if` conditions, outputs, and implicit status functions before changing code.",
+      "explanation": "This scenario is about debugging. Inspect `needs` results, `if` conditions, outputs, and implicit status functions before changing code. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-042",
+      "topic": "debugging",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of debugging?",
+      "options": [
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for debugging.",
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for debugging.",
+      "explanation": "Review evidence for debugging should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-043",
+      "topic": "performance and cost",
+      "type": "single_choice",
+      "prompt": "Which statement about performance and cost is the most accurate?",
+      "options": [
+        "Store credentials in repository files so every runner can read them.",
+        "Measure queue/run time and usage, cache rebuildable dependencies, and parallelize independent jobs within resource limits.",
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct."
+      ],
+      "answer_key": "Measure queue/run time and usage, cache rebuildable dependencies, and parallelize independent jobs within resource limits.",
+      "explanation": "The key principle for performance and cost is to make behavior explicit, scope trust and permissions, and verify observable results. Measure queue/run time and usage, cache rebuildable dependencies, and parallelize independent jobs within resource limits."
+    },
+    {
+      "id": "github-actions-final-q-044",
+      "topic": "performance and cost",
+      "type": "single_choice",
+      "prompt": "The matrix duplicates all OS/runtime pairs even though half are unsupported. What is the best next step?",
+      "options": [
+        "Remove unsupported combinations, cap parallelism where helpful, and compare duration and cost before/after.",
+        "Increase token permissions globally and expose credentials to simplify the workflow.",
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload."
+      ],
+      "answer_key": "Remove unsupported combinations, cap parallelism where helpful, and compare duration and cost before/after.",
+      "explanation": "This scenario is about performance and cost. Remove unsupported combinations, cap parallelism where helpful, and compare duration and cost before/after. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-045",
+      "topic": "performance and cost",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of performance and cost?",
+      "options": [
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run.",
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for performance and cost."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for performance and cost.",
+      "explanation": "Review evidence for performance and cost should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-046",
+      "topic": "self-hosted runners",
+      "type": "single_choice",
+      "prompt": "Which statement about self-hosted runners is the most accurate?",
+      "options": [
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct.",
+        "Store credentials in repository files so every runner can read them.",
+        "Self-hosted runners require controlled access, hardened images, patching, isolation, and cleanup."
+      ],
+      "answer_key": "Self-hosted runners require controlled access, hardened images, patching, isolation, and cleanup.",
+      "explanation": "The key principle for self-hosted runners is to make behavior explicit, scope trust and permissions, and verify observable results. Self-hosted runners require controlled access, hardened images, patching, isolation, and cleanup."
+    },
+    {
+      "id": "github-actions-final-q-047",
+      "topic": "self-hosted runners",
+      "type": "single_choice",
+      "prompt": "A runner retains workspaces and credentials across jobs from different trust levels. What is the best next step?",
+      "options": [
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload.",
+        "Use ephemeral/isolated runners or clean the environment robustly, and separate untrusted workloads.",
+        "Increase token permissions globally and expose credentials to simplify the workflow."
+      ],
+      "answer_key": "Use ephemeral/isolated runners or clean the environment robustly, and separate untrusted workloads.",
+      "explanation": "This scenario is about self-hosted runners. Use ephemeral/isolated runners or clean the environment robustly, and separate untrusted workloads. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-048",
+      "topic": "self-hosted runners",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of self-hosted runners?",
+      "options": [
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for self-hosted runners.",
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for self-hosted runners.",
+      "explanation": "Review evidence for self-hosted runners should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-049",
+      "topic": "governance",
+      "type": "single_choice",
+      "prompt": "Which statement about governance is the most accurate?",
+      "options": [
+        "Store credentials in repository files so every runner can read them.",
+        "Admin policies and shared workflows standardize approved actions, permissions, and review requirements across repositories.",
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct."
+      ],
+      "answer_key": "Admin policies and shared workflows standardize approved actions, permissions, and review requirements across repositories.",
+      "explanation": "The key principle for governance is to make behavior explicit, scope trust and permissions, and verify observable results. Admin policies and shared workflows standardize approved actions, permissions, and review requirements across repositories."
+    },
+    {
+      "id": "github-actions-final-q-050",
+      "topic": "governance",
+      "type": "single_choice",
+      "prompt": "A repository uses unreviewed external actions even though the organization policy allows only approved sources. What is the best next step?",
+      "options": [
+        "Enforce organization/enterprise action policy and audit repository workflows for compliance.",
+        "Increase token permissions globally and expose credentials to simplify the workflow.",
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload."
+      ],
+      "answer_key": "Enforce organization/enterprise action policy and audit repository workflows for compliance.",
+      "explanation": "This scenario is about governance. Enforce organization/enterprise action policy and audit repository workflows for compliance. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-051",
+      "topic": "governance",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of governance?",
+      "options": [
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run.",
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for governance."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for governance.",
+      "explanation": "Review evidence for governance should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-052",
+      "topic": "migration and maintenance",
+      "type": "single_choice",
+      "prompt": "Which statement about migration and maintenance is the most accurate?",
+      "options": [
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct.",
+        "Store credentials in repository files so every runner can read them.",
+        "Inventory triggers, permissions, dependencies, runner assumptions, required checks, and rollback before workflow migration."
+      ],
+      "answer_key": "Inventory triggers, permissions, dependencies, runner assumptions, required checks, and rollback before workflow migration.",
+      "explanation": "The key principle for migration and maintenance is to make behavior explicit, scope trust and permissions, and verify observable results. Inventory triggers, permissions, dependencies, runner assumptions, required checks, and rollback before workflow migration."
+    },
+    {
+      "id": "github-actions-final-q-053",
+      "topic": "migration and maintenance",
+      "type": "single_choice",
+      "prompt": "A runtime/action migration is merged without tests against supported versions. What is the best next step?",
+      "options": [
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload.",
+        "Stage the upgrade, validate the supported matrix, inspect action/runtime release notes, and keep a rollback plan.",
+        "Increase token permissions globally and expose credentials to simplify the workflow."
+      ],
+      "answer_key": "Stage the upgrade, validate the supported matrix, inspect action/runtime release notes, and keep a rollback plan.",
+      "explanation": "This scenario is about migration and maintenance. Stage the upgrade, validate the supported matrix, inspect action/runtime release notes, and keep a rollback plan. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-054",
+      "topic": "migration and maintenance",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of migration and maintenance?",
+      "options": [
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for migration and maintenance.",
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for migration and maintenance.",
+      "explanation": "Review evidence for migration and maintenance should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-055",
+      "topic": "CodeQL and dependency security",
+      "type": "single_choice",
+      "prompt": "Which statement about CodeQL and dependency security is the most accurate?",
+      "options": [
+        "Store credentials in repository files so every runner can read them.",
+        "Security scanning supplies findings for triage; it complements but does not replace review, remediation, and supply-chain controls.",
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct."
+      ],
+      "answer_key": "Security scanning supplies findings for triage; it complements but does not replace review, remediation, and supply-chain controls.",
+      "explanation": "The key principle for CodeQL and dependency security is to make behavior explicit, scope trust and permissions, and verify observable results. Security scanning supplies findings for triage; it complements but does not replace review, remediation, and supply-chain controls."
+    },
+    {
+      "id": "github-actions-final-q-056",
+      "topic": "CodeQL and dependency security",
+      "type": "single_choice",
+      "prompt": "A clean CodeQL run is treated as proof that a dependency is not vulnerable. What is the best next step?",
+      "options": [
+        "Review dependency alerts/review output and scanner coverage; triage results and use separate dependency/security checks.",
+        "Increase token permissions globally and expose credentials to simplify the workflow.",
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload."
+      ],
+      "answer_key": "Review dependency alerts/review output and scanner coverage; triage results and use separate dependency/security checks.",
+      "explanation": "This scenario is about CodeQL and dependency security. Review dependency alerts/review output and scanner coverage; triage results and use separate dependency/security checks. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-057",
+      "topic": "CodeQL and dependency security",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of CodeQL and dependency security?",
+      "options": [
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run.",
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for CodeQL and dependency security."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for CodeQL and dependency security.",
+      "explanation": "Review evidence for CodeQL and dependency security should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    },
+    {
+      "id": "github-actions-final-q-058",
+      "topic": "capstone and professional readiness",
+      "type": "single_choice",
+      "prompt": "Which statement about capstone and professional readiness is the most accurate?",
+      "options": [
+        "Grant every job write access and trust all event payload values.",
+        "Treat a green YAML parse as proof that the workflow’s remote behavior is correct.",
+        "Store credentials in repository files so every runner can read them.",
+        "A production-minded capstone shows workflow code, test evidence, permissions, provenance, deployment control, and recovery documentation."
+      ],
+      "answer_key": "A production-minded capstone shows workflow code, test evidence, permissions, provenance, deployment control, and recovery documentation.",
+      "explanation": "The key principle for capstone and professional readiness is to make behavior explicit, scope trust and permissions, and verify observable results. A production-minded capstone shows workflow code, test evidence, permissions, provenance, deployment control, and recovery documentation."
+    },
+    {
+      "id": "github-actions-final-q-059",
+      "topic": "capstone and professional readiness",
+      "type": "single_choice",
+      "prompt": "A portfolio shows only a passing green badge with no artifact identity or rollback design. What is the best next step?",
+      "options": [
+        "Skip tests and promote a separately rebuilt artifact directly to production.",
+        "Retry repeatedly without recording the initial failure or validating the event payload.",
+        "Provide source-to-artifact traceability, successful and selected failure-path evidence, security decisions, and handover/runbook details.",
+        "Increase token permissions globally and expose credentials to simplify the workflow."
+      ],
+      "answer_key": "Provide source-to-artifact traceability, successful and selected failure-path evidence, security decisions, and handover/runbook details.",
+      "explanation": "This scenario is about capstone and professional readiness. Provide source-to-artifact traceability, successful and selected failure-path evidence, security decisions, and handover/runbook details. Validate the fix against the repository’s actual configuration and current GitHub documentation."
+    },
+    {
+      "id": "github-actions-final-q-060",
+      "topic": "capstone and professional readiness",
+      "type": "single_choice",
+      "prompt": "What evidence best supports a review of capstone and professional readiness?",
+      "options": [
+        "Document only the intended design, without showing any result from a test or workflow run.",
+        "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for capstone and professional readiness.",
+        "The green badge alone is sufficient; no workflow configuration or run evidence is needed.",
+        "Record actual secret values and raw customer payloads so reviewers can reproduce the run."
+      ],
+      "answer_key": "Record the relevant workflow configuration, run/test evidence (including one expected failure or skip case), and the least-privilege or recovery decision for capstone and professional readiness.",
+      "explanation": "Review evidence for capstone and professional readiness should connect the configuration to observed results, trust boundaries, and a recovery decision. It must remain sanitized."
+    }
+  ]
+}

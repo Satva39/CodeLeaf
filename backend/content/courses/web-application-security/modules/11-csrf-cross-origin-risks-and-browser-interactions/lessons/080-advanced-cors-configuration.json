@@ -1,0 +1,187 @@
+{
+  "id": "web-application-security-lesson-080",
+  "slug": "advanced-cors-configuration",
+  "title": "Advanced CORS Configuration",
+  "sequence": 80,
+  "module_id": "web-application-security-module-11",
+  "module_slug": "csrf-cross-origin-risks-and-browser-interactions",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-security",
+  "curriculum_tier": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "web-application-security-lesson-079"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-079",
+  "next_lesson_id": "web-application-security-lesson-081",
+  "keywords": [
+    "advanced",
+    "cors",
+    "configuration",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 80,
+  "source_syllabus_title": "Advanced CORS Configuration",
+  "source_subtopics": [
+    {
+      "number": "80.1",
+      "title": "Origin allowlists and environment configuration"
+    },
+    {
+      "number": "80.2",
+      "title": "Credentialed cross-origin requests"
+    },
+    {
+      "number": "80.3",
+      "title": "Preflight handling"
+    },
+    {
+      "number": "80.4",
+      "title": "Dynamic origin reflection risks"
+    },
+    {
+      "number": "80.5",
+      "title": "Coordinating CORS with authentication and authorization"
+    }
+  ],
+  "subtopics": [
+    "Origin allowlists and environment configuration",
+    "Credentialed cross-origin requests",
+    "Preflight handling",
+    "Dynamic origin reflection risks",
+    "Coordinating CORS with authentication and authorization"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in Advanced CORS Configuration.",
+    "Choose an appropriate defensive control for Advanced CORS Configuration and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for Advanced CORS Configuration, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 11: CSRF, Cross-Origin Risks, and Browser Interactions. It builds practical understanding of Advanced CORS Configuration with the syllabus subtopics retained below.",
+    "why_it_matters": "Advanced CORS Configuration addresses how untrusted data or requests cross a boundary and may influence application behavior. The safe fix should address the root cause and remain testable. Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Advanced CORS Configuration",
+        "asset_path": "diagrams/lesson-080-advanced-cors-configuration.svg",
+        "alt_text": "Four-stage visual model for Advanced CORS Configuration: Identify browser origin; Understand credentials; Narrow cross-origin policy; Test expected requests.",
+        "caption": "Concept map for Advanced CORS Configuration. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Advanced CORS Configuration can be understood through this sequence: Identify browser origin → Understand credentials → Narrow cross-origin policy → Test expected requests. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 80.1 Origin allowlists and environment configuration; 80.2 Credentialed cross-origin requests; 80.3 Preflight handling; 80.4 Dynamic origin reflection risks; 80.5 Coordinating CORS with authentication and authorization. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "execution_mode": "static-validation",
+        "title": "Safe reference example: Advanced CORS Configuration",
+        "code": "app.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"https://app.example.test\"],\n    allow_credentials=True,\n    allow_methods=[\"GET\", \"POST\"],\n    allow_headers=[\"Content-Type\", \"X-CSRF-Token\"],\n)",
+        "expected_output": "Only the listed frontend origin is allowed by this example; configure the production origin list separately.",
+        "run_instructions": "Illustrative FastAPI configuration. Do not combine credentialed requests with a permissive wildcard origin; CORS is not authorization.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “Advanced CORS Configuration”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for Advanced CORS Configuration in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-080-questions.json",
+    "recap": [
+      "Advanced CORS Configuration is a security boundary/control topic, not a standalone checklist item.",
+      "Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [
+    "../exercises/022-review-a-cors-policy.json"
+  ],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "MDN Web Security",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "same-origin policy",
+        "browser security boundaries",
+        "web security features"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

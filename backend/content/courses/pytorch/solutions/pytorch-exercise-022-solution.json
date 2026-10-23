@@ -1,0 +1,16 @@
+{
+  "id": "pytorch-exercise-022-reference-solution",
+  "exercise_id": "pytorch-exercise-022",
+  "title": "Reference approach: Profiling Investigation",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Implement profiling investigation in a small isolated script. Required implementation evidence includes: torch.profiler.profile, record_function. Use a reproducible seed, report observed output, and explain relevant edge cases.",
+  "explanation": "This exercise consolidates the topic from lesson 125. The list of required strings is only a minimal static signal; inspect numerical correctness, error handling, and test outcomes manually.",
+  "example_code": "import torch\nwith torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU]) as prof:\n    x=torch.randn(128,128); y=x @ x\nprint(len(prof.key_averages())>0)",
+  "reference_code": "import torch\nwith torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU]) as prof:\n    x=torch.randn(128,128); y=x @ x\nprint(len(prof.key_averages())>0)",
+  "review_notes": [
+    "Do not treat source-string grading as proof that numerical behavior is correct.",
+    "Run in a supported local environment or isolated runner.",
+    "Keep input data synthetic unless a dataset has an appropriate license and documented provenance."
+  ]
+}

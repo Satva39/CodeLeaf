@@ -1,0 +1,32 @@
+{
+  "id": "java-exercise-solution-012",
+  "exercise_id": "java-exercise-012",
+  "title": "Palindrome Checker reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "language": "java",
+  "answer": "public class Main {\n    public static boolean isPalindrome(String text) {\n        String normalized = text.replaceAll(\"[^\\\\p{Alnum}]\", \"\").toLowerCase(java.util.Locale.ROOT);\n        return normalized.equals(new StringBuilder(normalized).reverse().toString());\n    }\n    public static void main(String[] args) {\n        System.out.println(isPalindrome(\"Never odd or even\"));\n    }\n}",
+  "explanation": "Normalize case and remove separators before comparing with the reversed text. If the product must handle every writing system, define the Unicode normalization and character policy explicitly.",
+  "hidden_tests": [
+    {
+      "case": "normal case",
+      "input_or_setup": "Use the deterministic sample data or representative valid input described in the exercise.",
+      "expected_behavior": "true",
+      "purpose": "Verify the main behavior and the output contract."
+    },
+    {
+      "case": "boundary case",
+      "input_or_setup": "Test empty, zero, minimum/maximum, duplicate, or end-of-range input as appropriate to the exercise.",
+      "expected_behavior": "The result matches the documented boundary rule and does not silently corrupt state.",
+      "purpose": "Check a boundary or invariant."
+    },
+    {
+      "case": "invalid or failure case",
+      "input_or_setup": "Provide malformed input or simulate a missing file, unavailable endpoint, missing configuration, or database failure where relevant.",
+      "expected_behavior": "The operation fails clearly or returns a safe result; resources are released and secrets are not printed.",
+      "purpose": "Check explicit error behavior and cleanup."
+    }
+  ],
+  "review_notes": "Repository-only reference material. Keep it out of public API responses and frontend bundles. The platform grader is only a required-token smoke check; complete task-specific execution tests in an isolated Java runner before publication.",
+  "sample_expected_result": "true"
+}

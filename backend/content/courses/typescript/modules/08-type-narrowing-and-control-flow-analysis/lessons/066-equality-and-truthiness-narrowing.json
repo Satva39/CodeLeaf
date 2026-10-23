@@ -1,0 +1,136 @@
+{
+  "id": "typescript-lesson-066",
+  "slug": "066-equality-and-truthiness-narrowing",
+  "title": "Equality and Truthiness Narrowing",
+  "sequence": 66,
+  "module_id": "typescript-module-08",
+  "module_slug": "type-narrowing-and-control-flow-analysis",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "typescript-lesson-065"
+  ],
+  "previous_lesson_id": "typescript-lesson-065",
+  "next_lesson_id": "typescript-lesson-067",
+  "keywords": [
+    "equality-and-truthiness-narrowing",
+    "type-narrowing-and-control-flow-analysis",
+    "equality-checks",
+    "truthiness-checks",
+    "avoiding-mistaken-assumptions-about-falsy-values"
+  ],
+  "source_syllabus_number": 66,
+  "subtopics": [
+    "Equality checks",
+    "Truthiness checks",
+    "Avoiding mistaken assumptions about falsy values"
+  ],
+  "learning_outcomes": [
+    "Explain equality checks in the context of equality and truthiness narrowing.",
+    "Apply the lesson concept in a small TypeScript example and describe what the compiler can check.",
+    "Identify one limitation or failure case and choose an appropriate runtime check or test when needed."
+  ],
+  "content": {
+    "intro": "Learn equality and truthiness narrowing through a compact mental model, syllabus-aligned subtopics, a worked example and a practical task. The goal is not to memorize syntax but to know what the type contract guarantees and what evidence is still needed.",
+    "why_it_matters": "Model the narrowest honest type contract. Prefer inference where it is clear, use unknown at untrusted boundaries, and use control-flow checks before performing operations that depend on a value’s shape.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Equality and Truthiness Narrowing concept map",
+        "asset_path": "diagrams/lessons/066-equality-and-truthiness-narrowing.svg",
+        "alt_text": "Lesson 66: Equality and Truthiness Narrowing. Understand the concept, model its contract, and verify expected behavior.",
+        "caption": "Concept map for Equality and Truthiness Narrowing; use the numbered stages rather than relying on color."
+      },
+      {
+        "type": "paragraph",
+        "title": "Mental model",
+        "text": "**Equality and Truthiness Narrowing.** This lesson belongs to **Type Narrowing and Control-Flow Analysis**. Start by identifying the problem that equality and truthiness narrowing solves. In TypeScript, separate three questions: what values your program intends to accept, what the compiler can prove from the code, and what must still be checked while the program runs. The last category matters whenever data comes from a user, file, API, storage layer, or an untyped JavaScript dependency."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics and how to use them",
+        "items": [
+          {
+            "title": "Equality checks",
+            "text": "For equality checks, define observable acceptance criteria and test both expected behavior and a failure case. Preserve a small regression test for any bug or inference problem you fix."
+          },
+          {
+            "title": "Truthiness checks",
+            "text": "For truthiness checks, connect the concept to a small concrete example, state the assumption it relies on, and verify the result with a compiler diagnostic or a runtime test as appropriate."
+          },
+          {
+            "title": "Avoiding mistaken assumptions about falsy values",
+            "text": "For avoiding mistaken assumptions about falsy values, connect the concept to a small concrete example, state the assumption it relies on, and verify the result with a compiler diagnostic or a runtime test as appropriate."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Equality and Truthiness Narrowing",
+        "language": "typescript",
+        "code": "function toLabel(value: string | number | null): string {\n  if (typeof value === \"string\") return value.toUpperCase();\n  if (typeof value === \"number\") return value.toFixed(0);\n  return \"Missing\";\n}\nconsole.log(toLabel(12));",
+        "expected_output": "Runtime output: 12. Each branch narrows the possible value before using it.",
+        "run_instructions": "This course displays TypeScript examples as static teaching text. The CodeLeaf web playground currently previews HTML/CSS/JavaScript only; TypeScript is not compiled or executed in the browser preview. For actual compiler feedback, create a local project with a pinned TypeScript version and run `npx tsc --noEmit`. For snippets requiring a browser, Node.js, React/JSX or a test runner, use the matching environment and dependencies.",
+        "reset_steps": "The lesson example does not modify files or remote systems. If you run it locally, use a disposable project directory, keep package versions recorded, and remove only the generated output you created.",
+        "execution_mode": "static-validation",
+        "limitations": "Static lesson example only. The browser preview is not a TypeScript compiler and does not execute backend, Node.js, React/TSX, test-runner, network or filesystem examples."
+      },
+      {
+        "type": "callout",
+        "title": "Compile-time versus runtime",
+        "text": "Type annotations and most type declarations are erased when TypeScript emits JavaScript. They do not validate external JSON, authorize a user, sanitize HTML, or prevent runtime failures by themselves. Validate trust-boundary inputs and test the behavior."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-066-knowledge-check.json",
+    "task": "Create a small TypeScript example for “Equality and Truthiness Narrowing”. Demonstrate equality checks, explain your assumption, and include one check that shows the expected behavior. Do not treat a type annotation as runtime validation for external input.",
+    "task_acceptance_criteria": [
+      "The example demonstrates at least one syllabus subtopic named in this lesson.",
+      "The type contract is explicit enough that another learner can explain what it accepts and rejects.",
+      "The learner records a failure case and distinguishes compile-time checks from runtime validation."
+    ],
+    "hints": [
+      "Start with the syllabus item “Equality checks” and define the smallest example that demonstrates it.",
+      "Ask which part is checked by TypeScript and which part depends on runtime data, the environment or a test.",
+      "For external input, start with unknown and validate the required shape before using a domain type."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Treating a successful type check as a runtime guarantee.",
+        "why": "Type annotations do not generally validate data after JavaScript starts running.",
+        "fix": "Add runtime checks for external input and tests for meaningful failure cases."
+      },
+      {
+        "problem": "Using any or an assertion to silence a useful diagnostic.",
+        "why": "That can hide the exact mismatch the type system would otherwise report.",
+        "fix": "Prefer a more precise type or unknown plus narrowing; use assertions only when a verified invariant justifies them."
+      },
+      {
+        "problem": "Copying a compiler setting or runtime example without checking the project environment.",
+        "why": "Module resolution, DOM/Node globals, JSX and tool behavior depend on the configured versions and environment.",
+        "fix": "Pin the toolchain, match tsconfig to the runtime/bundler, and run the actual project's typecheck and tests."
+      }
+    ],
+    "summary": [
+      "Equality and Truthiness Narrowing is taught through the subtopics listed in the source syllabus: Equality checks, Truthiness checks, Avoiding mistaken assumptions about falsy values.",
+      "Prefer precise contracts and use compiler diagnostics as evidence, not as a replacement for runtime tests.",
+      "Validate untrusted data and describe environment/version assumptions explicitly."
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation",
+    "solution_notes": "The lesson provides progressive hints, not a hidden single correct implementation. Compare your example against the stated learning outcomes and acceptance criteria."
+  },
+  "exercise_files": [],
+  "sources": [
+    "PDF: Complete TypeScript Curriculum — Beginner to Professional, Section B, topic 66.",
+    "TypeScript Handbook — https://www.typescriptlang.org/docs/handbook/intro.html",
+    "Narrowing — https://www.typescriptlang.org/docs/handbook/2/narrowing.html"
+  ],
+  "technical_review_date": "2026-10-14",
+  "status": "draft",
+  "status_note": "Generated as a complete curriculum draft from the PDF syllabus; review all technical examples against the configured compiler/runtime before publication."
+}

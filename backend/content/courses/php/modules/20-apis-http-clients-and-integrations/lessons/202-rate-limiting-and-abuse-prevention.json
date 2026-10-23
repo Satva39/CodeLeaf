@@ -1,0 +1,195 @@
+{
+  "id": "php-lesson-202",
+  "slug": "rate-limiting-and-abuse-prevention",
+  "title": "Rate Limiting and Abuse Prevention",
+  "sequence": 202,
+  "module_id": "php-module-20",
+  "module_slug": "apis-http-clients-and-integrations",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "php-lesson-201"
+  ],
+  "previous_lesson_id": "php-lesson-201",
+  "next_lesson_id": "php-lesson-203",
+  "keywords": [
+    "rate limiting and abuse prevention",
+    "apis, http clients, and integrations",
+    "request quotas",
+    "per-user and per-ip limitations",
+    "shared counters",
+    "returning rate-limit responses",
+    "handling distributed deployments",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 202,
+  "subtopics": [
+    "Request quotas.",
+    "Per-user and per-IP limitations.",
+    "Shared counters.",
+    "Returning rate-limit responses.",
+    "Handling distributed deployments."
+  ],
+  "learning_outcomes": [
+    "Explain what rate limiting and abuse prevention contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: request quotas.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "API integrations cross a network boundary where responses can be slow, malformed, unauthorized, duplicated, or unavailable. Check status and content, set timeouts, and make retries and webhook processing safe to repeat. In this lesson, focus on request quotas; then compare it with per-user and per-ip limitations. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use rate limiting and abuse prevention when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 20 overview: APIs, HTTP Clients, and Integrations",
+        "asset_path": "diagrams/module-20-overview.svg",
+        "alt_text": "Four-stage overview for module 20, APIs, HTTP Clients, and Integrations, grouping lesson topics in order.",
+        "caption": "Use this overview to place rate limiting and abuse prevention in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "API integrations cross a network boundary where responses can be slow, malformed, unauthorized, duplicated, or unavailable. Check status and content, set timeouts, and make retries and webhook processing safe to repeat. For rate limiting and abuse prevention, begin with request quotas. Also distinguish per-user and per-ip limitations; shared counters; returning rate-limit responses. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Request quotas",
+            "text": "Track where this value enters the request lifecycle and where it affects the response; client-provided data must be treated as untrusted."
+          },
+          {
+            "title": "Per-user and per-IP limitations",
+            "text": "Know when to use per-user and per-ip limitations, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Shared counters",
+            "text": "Know when to use shared counters, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Returning rate-limit responses",
+            "text": "Track where this value enters the request lifecycle and where it affects the response; client-provided data must be treated as untrusted."
+          },
+          {
+            "title": "Handling distributed deployments",
+            "text": "Know when to use handling distributed deployments, what input or program state it changes, and which boundary case is worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Rate Limiting and Abuse Prevention",
+        "language": "php",
+        "code": "<?php\n$json = \"{\\\"items\\\":[1,2,3]}\";\n$payload = json_decode($json, true, flags: JSON_THROW_ON_ERROR);\necho count($payload[\"items\"]) . \" items\" . PHP_EOL;",
+        "expected_output": "3 items",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Set timeouts, validate remote responses, verify webhook authenticity, and make retries idempotent."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for rate limiting and abuse prevention from top to bottom. Start by identifying request quotas, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for rate limiting and abuse prevention that demonstrates \"request quotas\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of request quotas.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "3 items",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-202-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Rate Limiting and Abuse Prevention is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Set timeouts, validate remote responses, verify webhook authenticity, and make retries idempotent."
+    ],
+    "references": [
+      {
+        "title": "cURL",
+        "url": "https://www.php.net/manual/en/book.curl.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "HTTP requests",
+          "timeouts",
+          "response status and errors"
+        ]
+      },
+      {
+        "title": "JSON",
+        "url": "https://www.php.net/manual/en/book.json.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "json_encode",
+          "json_decode",
+          "JSON errors"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [
+    "../exercises/024-api-rate-limiter.json"
+  ],
+  "sources": [
+    {
+      "title": "cURL",
+      "url": "https://www.php.net/manual/en/book.curl.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "HTTP requests",
+        "timeouts",
+        "response status and errors"
+      ]
+    },
+    {
+      "title": "JSON",
+      "url": "https://www.php.net/manual/en/book.json.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "json_encode",
+        "json_decode",
+        "JSON errors"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

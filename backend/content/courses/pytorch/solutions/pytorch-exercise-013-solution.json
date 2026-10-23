@@ -1,0 +1,16 @@
+{
+  "id": "pytorch-exercise-013-reference-solution",
+  "exercise_id": "pytorch-exercise-013",
+  "title": "Reference approach: Scheduler Experiment",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Implement scheduler experiment in a small isolated script. Required implementation evidence includes: StepLR, get_last_lr. Use a reproducible seed, report observed output, and explain relevant edge cases.",
+  "explanation": "This exercise consolidates the topic from lesson 062. The list of required strings is only a minimal static signal; inspect numerical correctness, error handling, and test outcomes manually.",
+  "example_code": "import torch\nfrom torch import nn\nm=nn.Linear(1,1); opt=torch.optim.SGD(m.parameters(),lr=0.1); scheduler=torch.optim.lr_scheduler.StepLR(opt,step_size=1,gamma=0.5)\nfor epoch in range(3): print(epoch, opt.param_groups[0]['lr']); scheduler.step()",
+  "reference_code": "import torch\nfrom torch import nn\nm=nn.Linear(1,1); opt=torch.optim.SGD(m.parameters(),lr=0.1); scheduler=torch.optim.lr_scheduler.StepLR(opt,step_size=1,gamma=0.5)\nfor epoch in range(3): print(epoch, opt.param_groups[0]['lr']); scheduler.step()",
+  "review_notes": [
+    "Do not treat source-string grading as proof that numerical behavior is correct.",
+    "Run in a supported local environment or isolated runner.",
+    "Keep input data synthetic unless a dataset has an appropriate license and documented provenance."
+  ]
+}

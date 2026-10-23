@@ -1,0 +1,162 @@
+{
+  "id": "data-science-lesson-240",
+  "slug": "experiment-tracking",
+  "title": "Experiment Tracking",
+  "sequence": 240,
+  "module_id": "data-science-module-23",
+  "module_slug": "production-data-science-and-mlops",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "production",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "data-science-lesson-239"
+  ],
+  "previous_lesson_id": "data-science-lesson-239",
+  "next_lesson_id": "data-science-lesson-241",
+  "keywords": [
+    "experiment-tracking",
+    "recording-parameters",
+    "recording-evaluation-metrics",
+    "comparing-model-runs",
+    "tracking-code-and-artifacts",
+    "reproducing-experiments"
+  ],
+  "source_syllabus_number": 240,
+  "subtopics": [
+    "Recording parameters",
+    "Recording evaluation metrics",
+    "Comparing model runs",
+    "Tracking code and artifacts",
+    "Reproducing experiments"
+  ],
+  "learning_outcomes": [
+    "Explain experiment tracking and accurately refer to at least two syllabus subtopics.",
+    "Apply the main idea of experiment tracking to a small example, trace, calculation, or scenario.",
+    "Identify one important assumption or failure mode and describe how to check it."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study experiment tracking in the context of production data science and mlops. You will connect the PDF subtopics to a small example and practice describing what the evidence does—and does not—support.",
+    "why_it_matters": "Experiment Tracking matters because it affects how data is collected, represented, analyzed, interpreted, or used in a decision. Check the task and assumptions before choosing a method.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual overview: Experiment Tracking",
+        "asset_path": "diagrams/lesson-240-overview.svg",
+        "alt_text": "Lesson 240: Experiment Tracking; a three-stage visual for understanding the topic, applying it to a small example, and validating assumptions.",
+        "caption": "Use the overview to connect experiment tracking to a concrete example and a responsible check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The central idea",
+        "text": "Production data science joins model artifacts to tested software, deployment, monitoring, access control, and rollback. Offline performance does not guarantee reliable real-world behavior."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered",
+        "items": [
+          {
+            "title": "Recording parameters",
+            "text": "Define recording parameters in relation to experiment tracking; identify the input, output, assumptions, and who uses the result."
+          },
+          {
+            "title": "Recording evaluation metrics",
+            "text": "Work through recording evaluation metrics using a small, synthetic example before scaling up. State what the calculation or method returns and why that result is useful."
+          },
+          {
+            "title": "Comparing model runs",
+            "text": "Check the edge cases for comparing model runs: missing values, unusual ranges, different groups, time boundaries, or a changed input can affect the conclusion."
+          },
+          {
+            "title": "Tracking code and artifacts",
+            "text": "Document the rule or choice for tracking code and artifacts so another learner can reproduce the analysis and understand its limitations."
+          },
+          {
+            "title": "Reproducing experiments",
+            "text": "Define reproducing experiments in relation to experiment tracking; identify the input, output, assumptions, and who uses the result."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "1. Restate the question addressed by experiment tracking. 2. Identify the input data, intended output, and assumptions. 3. Predict what the small example should show before reading its output. 4. Change one input or assumption, compare the result, and document what remains uncertain."
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "execution_mode": "static-validation",
+        "code": "checks = {\"unit_test\": True, \"schema_check\": True, \"monitoring\": False}\nprint(\"release ready:\", all(checks.values()))",
+        "expected_output": "release ready: False",
+        "run_instructions": "For Python, copy the snippet into a local file and run with Python 3. This CodeLeaf block is static and does not execute inside the browser. For SQL, adapt the query to an approved local schema; the stated result is a conceptual query simulation, not a live database result.",
+        "reset_steps": "Restore the provided synthetic input, rerun or retrace the example, and change one value at a time. Do not use personal records, credentials, or data you are not authorized to access."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistakes and fixes",
+        "text": "Keep the question, data grain, units, and assumptions explicit. If a result differs, inspect the input and steps in order. Avoid turning an observed association into a causal claim, treating a sample as the population, or assuming a small demonstration guarantees production behavior. A model release also requires operational ownership, rollback plans, privacy/security review, and monitoring."
+      },
+      {
+        "type": "callout",
+        "title": "Responsible interpretation",
+        "text": "This example is a teaching aid. It is static in the CodeLeaf lesson and is not executed in the browser. It uses small synthetic values; validate any real workflow in a separate, appropriate local environment and protect sensitive data."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap and next step",
+        "text": "Recap: Production data science joins model artifacts to tested software, deployment, monitoring, access control, and rollback. Offline performance does not guarantee reliable real-world behavior. Next, connect this lesson to the linked prerequisite or following lesson. Record the method, input assumptions, observed result, and one limitation so another person can reproduce and review the work."
+      }
+    ],
+    "task": "Try it yourself: create a small synthetic example for experiment tracking. State a question, make a prediction, trace or run an appropriate calculation, then write one finding and one limitation.",
+    "task_acceptance_criteria": [
+      "Refer accurately to the topic and its syllabus subtopics.",
+      "Record a reproducible example or a complete manual trace with an expected result.",
+      "Document at least one assumption, limitation, data-quality issue, or evaluation check."
+    ],
+    "hints": [
+      "Write down the input, expected result, units, and assumptions first.",
+      "Change only one condition when testing a revised example.",
+      "Ask whether the data and method represent the real decision; do not infer causality or production readiness from a toy example."
+    ],
+    "expected_output": "release ready: False",
+    "run_mode": "static-validation",
+    "troubleshooting": [
+      "Check input values, path assumptions, package versions, indentation, and units.",
+      "For SQL, use a local schema and read-only test data; this page does not provide a live database.",
+      "For package-dependent work, create an isolated environment and use the relevant official documentation."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-240-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "mlflow",
+      "title": "MLflow Tracking Documentation",
+      "url": "https://mlflow.org/docs/latest/ml/tracking/",
+      "publisher": "MLflow project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "experiment tracking",
+        "model lifecycle"
+      ],
+      "source_type": "official documentation",
+      "notes": "Official source entry point. Verify current API signatures and version notes before implementation."
+    },
+    {
+      "id": "fastapi",
+      "title": "FastAPI Tutorial",
+      "url": "https://fastapi.tiangolo.com/tutorial/",
+      "publisher": "FastAPI project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "API serving",
+        "input validation"
+      ],
+      "source_type": "official documentation",
+      "notes": "Official source entry point. Verify current API signatures and version notes before implementation."
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft authored against Data Science.pdf lesson 240; preserves the source title/subtopics. Review technical accuracy, example behavior, and assessment wording before publication."
+}

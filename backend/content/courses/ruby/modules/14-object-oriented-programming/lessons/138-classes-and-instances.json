@@ -1,0 +1,153 @@
+{
+  "id": "ruby-lesson-138",
+  "slug": "classes-and-instances",
+  "title": "Classes and Instances",
+  "sequence": 138,
+  "module_id": "ruby-module-14",
+  "module_slug": "object-oriented-programming",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-foundations",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "ruby-lesson-120"
+  ],
+  "previous_lesson_id": "ruby-lesson-137",
+  "next_lesson_id": "ruby-lesson-139",
+  "keywords": [
+    "classes-and-instances",
+    "object-oriented-programming",
+    "ruby",
+    "class-definitions",
+    "creating-instances",
+    "defining-object-behavior"
+  ],
+  "source_syllabus_number": 138,
+  "subtopics": [
+    "Class definitions",
+    "Creating instances",
+    "Defining object behavior"
+  ],
+  "learning_outcomes": [
+    "Explain the role of classes and instances in a Ruby program and name the key rule involved.",
+    "Apply classes and instances in a small example and predict its result before running it.",
+    "Identify one boundary or failure case related to defining object behavior and verify the intended behavior."
+  ],
+  "content": {
+    "intro": "Learn Classes and Instances through a visual model, a minimal Ruby example, and a practical check.",
+    "why_it_matters": "Understanding classes and instances helps you write code that is easier to explain, test, and maintain. It also helps separate Ruby language guarantees from runtime assumptions, dependency behavior, and application-specific rules.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Classes and Instances",
+        "asset_path": "diagrams/lesson-138-classes-and-instances.svg",
+        "alt_text": "Three-stage concept diagram for Classes and Instances.",
+        "caption": "Use this diagram to plan a small example, then verify exact behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Classes and Instances helps you reason about class definitions. In Ruby, prefer a small example whose inputs and expected result are easy to explain. This lesson connects the syllabus topic to practical code and highlights where assumptions or edge cases matter."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to think about it",
+        "text": "Begin by identifying the key rule: Class definitions. Then connect it to Creating instances. The remaining syllabus points—Defining object behavior—are useful checks before applying this in a larger project."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to cover",
+        "items": [
+          {
+            "title": "Class definitions",
+            "text": "Explain how class definitions affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Creating instances",
+            "text": "Explain how creating instances affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Defining object behavior",
+            "text": "Explain how defining object behavior affects the example, the public interface, or the behavior learners need to verify."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Classes and Instances",
+        "language": "ruby",
+        "code": "class Greeter\n  def initialize(name)\n    @name = name\n  end\n  def greet\n    \"Hello, #{@name}!\"\n  end\nend\nputs Greeter.new(\"Mina\").greet",
+        "expected_output": "Hello, Mina!",
+        "execution_mode": "server-runner",
+        "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+        "dependencies": "Ruby standard library",
+        "notes": "Local Ruby execution is required. CodeLeaf’s existing playground only previews HTML/CSS/JavaScript; do not run arbitrary Ruby inside the FastAPI process."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming the happy path is enough",
+            "text": "Test an empty value, a boundary value, and one invalid value before depending on the behavior."
+          },
+          {
+            "title": "Treating an example as a universal rule",
+            "text": "Check Ruby version, runtime implementation, and third-party library documentation when behavior is version-sensitive."
+          },
+          {
+            "title": "Mixing too many concerns",
+            "text": "Separate input parsing, domain behavior, and output so each piece is easier to test."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Run the example as written, compare it with the expected result, and explain why each line supports classes and instances. Next change one input or condition and predict the result before running it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second example for classes and instances using a different input. Add one edge case from the syllabus list (Defining object behavior), state the expected behavior, and write a small test or manual check that would catch a regression."
+      },
+      {
+        "type": "paragraph",
+        "title": "Run, troubleshoot, and reset",
+        "text": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed. If the command fails, confirm `ruby --version`, inspect the full error message, and verify that required standard-library or gem dependencies are installed. Reset by removing temporary files created by your experiment and returning the code to the smallest reproducible example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain classes and instances, identify its place in object-oriented programming, run a focused example, and verify an important boundary. Revisit the linked exercise if this is a core topic; advanced runtime or framework examples remain draft until reviewed in a suitable environment."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-138-questions.json",
+    "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+    "reset_steps": [
+      "Restore the original minimal example before trying another variation.",
+      "Remove only temporary sample data created for the lesson.",
+      "Keep credentials and personal data out of logs, fixtures, and screenshots."
+    ],
+    "guided_example": "Predict the output, run the example, and explain the relationship between class definitions and creating instances.",
+    "try_it_yourself": "Create one variation of classes and instances, test a normal input and one boundary input, and note any version or dependency assumptions.",
+    "progressive_hints": [
+      "Write down the input and output contract first.",
+      "Reduce the task to one relevant Ruby method or construct.",
+      "Add the boundary case and verify it independently."
+    ],
+    "accessibility_notes": "The diagram includes a text alternative and the lesson explains the flow in prose. Do not use color alone to infer the correct sequence.",
+    "execution_mode": "server-runner",
+    "execution_note": "CodeLeaf does not currently provide an isolated Ruby runner. Run Ruby examples locally; a production runner needs a separate sandbox with time, memory, filesystem, and network limits."
+  },
+  "exercise_files": [
+    "../exercises/015-library-inventory-system.json"
+  ],
+  "sources": [
+    "https://docs.ruby-lang.org/en/4.0/",
+    "https://www.ruby-lang.org/en/documentation/"
+  ],
+  "status": "draft",
+  "status_note": "Original lesson authored from the listed PDF syllabus topics; requires technical and editorial review before publication."
+}

@@ -1,0 +1,50 @@
+{
+  "id": "sqlite-l024-question-set",
+  "lesson_id": "sqlite-lesson-024",
+  "lesson_slug": "sqlite-storage-classes",
+  "title": "Knowledge check: SQLite Storage Classes",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "question_count": 3,
+  "questions": [
+    {
+      "id": "sqlite-l024-q01",
+      "type": "single_choice",
+      "prompt": "Which practice best applies to “SQLite Storage Classes”?",
+      "options": [
+        "Use IS NULL or IS NOT NULL for null checks; ordinary equality with NULL evaluates to unknown.",
+        "Rely on undocumented behavior and skip checking the actual SQLite runtime.",
+        "Concatenate untrusted input directly into SQL and suppress errors.",
+        "Assume the result is correct without checking the schema, data or expected output."
+      ],
+      "answer_key": "Use IS NULL or IS NOT NULL for null checks; ordinary equality with NULL evaluates to unknown.",
+      "explanation": "SQLite Storage Classes: Use IS NULL or IS NOT NULL for null checks; ordinary equality with NULL evaluates to unknown. NULL is distinct from zero, empty text and false."
+    },
+    {
+      "id": "sqlite-l024-q02",
+      "type": "single_choice",
+      "prompt": "When a minimal example for “SQLite Storage Classes” behaves unexpectedly, what is the best next step?",
+      "options": [
+        "Reduce it to a reproducible fixture, inspect schema and values, and verify the expected result.",
+        "Change several unrelated statements at once and rerun against important production data.",
+        "Ignore the runtime version and assume every SQLite build includes every optional feature.",
+        "Disable constraints so the current test always passes."
+      ],
+      "answer_key": "Reduce it to a reproducible fixture, inspect schema and values, and verify the expected result.",
+      "explanation": "A controlled fixture helps isolate behavior and makes the test repeatable. Preserve constraints and state the assumptions you verified."
+    },
+    {
+      "id": "sqlite-l024-q03",
+      "type": "single_choice",
+      "prompt": "What should be recorded before depending on an SQLite capability related to “SQLite Storage Classes”?",
+      "options": [
+        "The installed CLI only; the linked library and build options never differ.",
+        "The library version linked into the application, relevant feature/build support, and a small compatibility test.",
+        "Only the operating system name.",
+        "Nothing, because SQLite automatically upgrades the application runtime."
+      ],
+      "answer_key": "The library version linked into the application, relevant feature/build support, and a small compatibility test.",
+      "explanation": "The CLI and application may be linked to different SQLite versions, and some capabilities depend on compile-time options or loaded extensions."
+    }
+  ]
+}

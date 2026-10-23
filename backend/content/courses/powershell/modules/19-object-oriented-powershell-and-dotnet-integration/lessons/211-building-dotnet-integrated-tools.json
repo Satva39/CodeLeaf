@@ -1,0 +1,141 @@
+{
+  "id": "powershell-lesson-211",
+  "slug": "building-dotnet-integrated-tools",
+  "title": "Building .NET-Integrated Tools",
+  "sequence": 211,
+  "module_id": "powershell-module-19",
+  "module_slug": "object-oriented-powershell-and-dotnet-integration",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "powershell-lesson-210"
+  ],
+  "previous_lesson_id": "powershell-lesson-210",
+  "next_lesson_id": "powershell-lesson-212",
+  "keywords": [
+    "building",
+    "net",
+    "integrated",
+    "tools",
+    "powershell",
+    "module-19"
+  ],
+  "source_syllabus_number": 211,
+  "subtopics": [
+    "Calling existing assemblies",
+    "Interacting with .NET APIs",
+    "Dependency and runtime management",
+    "Deciding whether a compiled component is justified"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose of Building .NET-Integrated Tools and define its core vocabulary.",
+    "Apply building .net-integrated tools in a small PowerShell example and predict its result.",
+    "Identify one relevant edge case, version constraint, or troubleshooting step."
+  ],
+  "content": {
+    "intro": "This lesson covers Building .NET-Integrated Tools in the PowerShell learning path. It expands the supplied syllabus heading into an actionable draft with a visual, a worked example, and a short knowledge check.",
+    "why_it_matters": "PowerShell objects often wrap .NET types. Use methods and strongly typed collections when they make the contract clearer, but avoid adding class or interop complexity when a simple function and custom object solve the problem.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Lesson 211 visual map",
+        "asset_path": "diagrams/lesson-211-building-dotnet-integrated-tools.svg",
+        "alt_text": "Lesson 211 concept map for Building .NET-Integrated Tools: concept and purpose, a local example and result, followed by practice and verification.",
+        "caption": "Follow the concept → example → verification path for Building .NET-Integrated Tools."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Building .NET-Integrated Tools belongs to Object-Oriented PowerShell and .NET Integration. Focus on the rule or workflow this lesson introduces, work through a small example, and explain the expected result and one boundary case."
+      },
+      {
+        "type": "paragraph",
+        "title": "Build understanding step by step",
+        "text": "Start with the syllabus concepts: Calling existing assemblies; Interacting with .NET APIs; Dependency and runtime management; Deciding whether a compiled component is justified. Separate the input, the operation and the expected result. Use a disposable local workspace for file or system examples, and verify platform-specific behavior against the active runtime."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Calling existing assemblies",
+            "text": "Calling existing assemblies is one part of Building .NET-Integrated Tools. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Interacting with .NET APIs",
+            "text": "Interacting with .NET APIs is one part of Building .NET-Integrated Tools. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Dependency and runtime management",
+            "text": "Dependency and runtime management is one part of Building .NET-Integrated Tools. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Deciding whether a compiled component is justified",
+            "text": "Deciding whether a compiled component is justified is one part of Building .NET-Integrated Tools. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "powershell",
+        "execution_mode": "static-validation",
+        "code": "$sample = [pscustomobject]@{ Topic = 'Building .NET-Integrated Tools'; Verified = $true }\n$sample | Format-List Topic, Verified",
+        "expected_output": "A formatted list showing Topic = 'Building .NET-Integrated Tools' and Verified = True.",
+        "run_instructions": "Review this snippet as a static teaching example. In a local PowerShell 7.6 session, save a copy under your course workspace, run it manually, and compare the result with the stated expectation. CodeLeaf’s current course preview does not execute PowerShell. Adjust environment-dependent output to your machine.",
+        "troubleshooting": "Check command availability with Get-Command, inspect values with Get-Member, consult Get-Help -Full, and verify PowerShell version/platform before assuming identical output. Do not run examples that change system state without adapting and reviewing them.",
+        "reset_steps": "Restore the original snippet and use synthetic values. If you created test files, delete only those files within the dedicated practice folder after checking their paths."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety note",
+        "text": "The main path targets modern PowerShell 7.6 LTS. Windows PowerShell 5.1 compatibility is labeled separately. Some providers, admin cmdlets and APIs depend on OS, module version, permissions or tenant access; the examples are static references, not proof of execution."
+      }
+    ],
+    "task": "Try it yourself: apply the concept to a small reproducible automation task. Use synthetic data or a disposable practice folder, write down your predicted result, check it locally, and explain one boundary case.",
+    "task_acceptance_criteria": [
+      "Explain the central idea in Building .NET-Integrated Tools in your own words.",
+      "Verify the expected result using a local session or a documented manual check.",
+      "Describe one relevant edge case, limitation or troubleshooting step."
+    ],
+    "hints": [
+      "Predict the output before changing the example.",
+      "Change one input or condition at a time and compare the results.",
+      "Use Get-Help and official versioned documentation when behavior differs; do not treat a static preview as execution."
+    ],
+    "expected_output": "A formatted list showing Topic = 'Building .NET-Integrated Tools' and Verified = True.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-211-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "What is PowerShell?",
+      "url": "https://learn.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7.6",
+      "publisher": "Microsoft Learn",
+      "supports": [
+        "PowerShell overview",
+        "shell and scripting concepts",
+        "cross-platform scope"
+      ],
+      "checked_on": "2026-10-20",
+      "source_type": "official_documentation"
+    },
+    {
+      "title": "Getting Started with PowerShell",
+      "url": "https://learn.microsoft.com/en-us/powershell/scripting/learn/ps101/01-getting-started?view=powershell-7.6",
+      "publisher": "Microsoft Learn",
+      "supports": [
+        "first commands",
+        "help and discovery",
+        "interactive sessions"
+      ],
+      "checked_on": "2026-10-20",
+      "source_type": "official_documentation"
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson expanded from the numbered PowerShell PDF syllabus. Static examples, answers, version details and technical phrasing need subject-matter review before publication."
+}

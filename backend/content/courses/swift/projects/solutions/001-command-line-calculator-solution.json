@@ -1,0 +1,26 @@
+{
+  "id": "swift-project-001-reference-solution",
+  "project_id": "swift-project-001",
+  "title": "Reference approach: Command-Line Calculator",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "approach": "The reference implements arithmetic and safe number parsing. The full project should add a readLine-driven menu loop, clear user-facing errors, and tests for every operation and division by zero.",
+  "reference_snippets": [
+    {
+      "purpose": "Runnable core-logic reference (not a complete production application)",
+      "language": "swift",
+      "code": "import Foundation\n\nenum Operation: String { case add, subtract, multiply, divide }\nenum CalculatorError: Error { case divisionByZero }\n\nfunc calculate(_ left: Double, _ operation: Operation, _ right: Double) throws -> Double {\n    switch operation {\n    case .add: return left + right\n    case .subtract: return left - right\n    case .multiply: return left * right\n    case .divide:\n        guard right != 0 else { throw CalculatorError.divisionByZero }\n        return left / right\n    }\n}\n\nfunc parseNumber(_ text: String) -> Double? { Double(text.trimmingCharacters(in: .whitespacesAndNewlines)) }\nprint(try calculate(8, .divide, 2))\nprint(parseNumber(\"not a number\") == nil ? \"Invalid number handled\" : \"Unexpected input\")\n"
+    },
+    {
+      "purpose": "Next implementation and verification steps",
+      "language": "text",
+      "code": "The reference implements arithmetic and safe number parsing. The full project should add a readLine-driven menu loop, clear user-facing errors, and tests for every operation and division by zero. Run in the stated toolchain, then add tests for normal, boundary, invalid-input, and failure cases before considering the project complete."
+    }
+  ],
+  "review_notes": [
+    "This protected code is a compact reference for the central business rule, not proof of a finished production app.",
+    "Compile and run the snippet with the intended Swift version and target.",
+    "Add automated tests, persistence/network/UI integration as specified in the project milestones.",
+    "Keep credentials out of source files and validate external input."
+  ]
+}

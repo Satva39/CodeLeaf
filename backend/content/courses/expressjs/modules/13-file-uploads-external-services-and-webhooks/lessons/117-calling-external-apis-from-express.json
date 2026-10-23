@@ -1,0 +1,192 @@
+{
+  "id": "expressjs-lesson-117",
+  "slug": "calling-external-apis-from-express",
+  "title": "Calling External APIs from Express",
+  "sequence": 117,
+  "module_id": "expressjs-module-13",
+  "module_slug": "file-uploads-external-services-and-webhooks",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "expressjs-lesson-116"
+  ],
+  "previous_lesson_id": "expressjs-lesson-116",
+  "next_lesson_id": "expressjs-lesson-118",
+  "keywords": [
+    "calling-external-apis-from-express",
+    "file-uploads-external-services-and-webhooks",
+    "http-clients-available-in-node-js",
+    "requesting-data-from-another-service",
+    "authentication-to-external-services",
+    "validating-third-party-responses",
+    "avoiding-assumptions-about-external-data"
+  ],
+  "source_syllabus_number": 117,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "HTTP clients available in Node.js",
+    "Requesting data from another service",
+    "Authentication to external services",
+    "Validating third-party responses",
+    "Avoiding assumptions about external data"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and terminology of Calling External APIs from Express.",
+    "Apply or interpret one Express.js 5 pattern related to http clients available in node.js.",
+    "Identify a meaningful edge case and choose a repeatable local test for it."
+  ],
+  "execution_mode": "server-runner",
+  "status": "draft",
+  "content": {
+    "intro": "In this lesson, you will learn calling external apis from express and connect the named syllabus points to a small Express.js example. The course baseline is Express 5.x on a supported Node.js LTS release; the page shows reference output, not execution of Node.js code.",
+    "why_it_matters": "Calling External APIs from Express matters because it helps keep the request/response contract explicit and the application maintainable as inputs, users and dependencies become less predictable. Bounded and verifiable integrations.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Concept map: Calling External APIs from Express",
+        "asset_path": "diagrams/lesson-117-visual.svg",
+        "alt_text": "A conceptual three-stage flow for Calling External APIs from Express: context or input, the Express.js concept, and verification of expected behavior with an edge case.",
+        "caption": "Use this visual to connect http clients available in node.js to calling external apis from express; the final step is to verify both normal and boundary behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Calling External APIs from Express is part of file uploads, external services, and webhooks. Uploads, API calls, and webhooks cross trust boundaries. Limit file sizes, verify content and signatures, use timeouts, retry only safe operations, and make duplicate webhook delivery idempotent. For this topic, make the observable behavior explicit, then check what happens when an input is missing, malformed, unauthorized, or a dependency fails (choose the relevant cases for this lesson)."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the attached syllabus",
+        "items": [
+          {
+            "title": "HTTP clients available in Node.js",
+            "text": "Keep the interface predictable for its client: use clear resource boundaries, explicit request/response formats, correct status codes, validation and tests for failure cases."
+          },
+          {
+            "title": "Requesting data from another service",
+            "text": "Connect this syllabus point to Calling External APIs from Express: state the expected behavior, identify a realistic edge case, and choose a test or observation that proves the behavior instead of relying on assumptions."
+          },
+          {
+            "title": "Authentication to external services",
+            "text": "Authentication verifies an identity. Store password hashes with an established password-hashing library, rate-limit sensitive endpoints, and never log or return credentials."
+          },
+          {
+            "title": "Validating third-party responses",
+            "text": "Connect this syllabus point to Calling External APIs from Express: state the expected behavior, identify a realistic edge case, and choose a test or observation that proves the behavior instead of relying on assumptions."
+          },
+          {
+            "title": "Avoiding assumptions about external data",
+            "text": "Connect this syllabus point to Calling External APIs from Express: state the expected behavior, identify a realistic edge case, and choose a test or observation that proves the behavior instead of relying on assumptions."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Read the example carefully",
+        "text": "A useful way to study calling external apis from express is to start from the first syllabus point — http clients available in node.js — and follow it through a small request or application example. Keep Express's built-in behavior separate from optional packages and your own application policy."
+      },
+      {
+        "type": "code",
+        "title": "Worked example (reference only)",
+        "language": "javascript",
+        "code": "app.get('/api/external-status', async (_req, res, next) => {\n  try {\n    const response = await fetch('https://api.example.com/status', { signal: AbortSignal.timeout(3000) });\n    if (!response.ok) return res.status(502).json({ error: 'Upstream service failed' });\n    const data = await response.json();\n    if (typeof data.status !== 'string') return res.status(502).json({ error: 'Unexpected upstream response' });\n    res.json({ status: data.status });\n  } catch (error) { next(error); }\n});",
+        "expected_output": "A successful upstream JSON response produces a normalized status field; timeout/unavailable/malformed responses are handled explicitly.",
+        "notes": "Use a real, documented upstream API in a lab. Do not hard-code credentials, retry every failed write, or trust a third-party response without checking its shape."
+      },
+      {
+        "type": "callout",
+        "title": "Safety / production rule",
+        "text": "Module rule — Uploads, API calls, and webhooks cross trust boundaries. Limit file sizes, verify content and signatures, use timeouts, retry only safe operations, and make duplicate webhook delivery idempotent."
+      }
+    ],
+    "expected_output": "A successful upstream JSON response produces a normalized status field; timeout/unavailable/malformed responses are handled explicitly.",
+    "task": "Try it yourself: adapt the worked example to demonstrate calling external apis from express. Write down the exact request or command, expected status/body, one boundary case, and how you would reset the local lab. CodeLeaf does not execute Express code in this lesson page; run Node.js server examples locally.",
+    "task_acceptance_criteria": [
+      "The example has a clear local run or inspection path and the required dependencies are named.",
+      "A normal request and a malformed/edge/failure request have documented expected outcomes.",
+      "No credentials, production data, or claim of successful runtime execution is included."
+    ],
+    "hints": [
+      "Hint 1: identify which part of calling external apis from express is supplied by Express and which part belongs to your own application or another package.",
+      "Hint 2: check the official Express 5 guide/API reference and isolate the smallest example that proves one behavior.",
+      "Hint 3: verify a success case, a boundary case and the expected status/response; restart from a clean state before repeating."
+    ],
+    "solution_notes": "Suggested approach: Uploads, API calls, and webhooks cross trust boundaries. Limit file sizes, verify content and signatures, use timeouts, retry only safe operations, and make duplicate webhook delivery idempotent. The sample is a focused reference fragment. Review all dependency, schema, proxy and runtime assumptions before using it in an application.",
+    "common_mistakes": [
+      {
+        "problem": "Copying an example without checking its assumptions",
+        "why": "A fragment may omit route setup, middleware order, external packages, database schema or production configuration.",
+        "fix": "State the runtime/dependency assumptions, run the focused example locally, and test a success path plus one failure path."
+      },
+      {
+        "problem": "Treating all request values as trusted",
+        "why": "Parameters, query values, body properties, files and upstream responses can be missing or malicious.",
+        "fix": "Validate schema, type and bounds at the boundary; keep authorization and database constraints as separate checks."
+      },
+      {
+        "problem": "Assuming the demo output means the server executed",
+        "why": "The course page shows reference output for Node.js/Express code; it is not an isolated Node runtime.",
+        "fix": "Run the example locally with the documented Node.js version and record actual command/output and test results."
+      }
+    ],
+    "summary": [
+      "Explain the central idea behind calling external apis from express.",
+      "Connect the relevant subtopics to the request/response or application boundary.",
+      "Verify one normal outcome and one edge/error case with repeatable evidence."
+    ],
+    "run_mode": "static-validation",
+    "execution_mode": "server-runner",
+    "run_instructions": [
+      "Open a terminal in the lesson lab directory.",
+      "Install dependencies for the sample if required; use a supported Node.js LTS release.",
+      "Run the documented file with node, send the stated request with curl or an API client, and compare the actual status/body with the reference."
+    ],
+    "reset_steps": [
+      "Stop the local process with Ctrl+C.",
+      "Clear only temporary/synthetic records or files created by the lab.",
+      "Restart the server before repeating the example."
+    ],
+    "troubleshooting": [
+      "If node reports a module-syntax error, check package.json module type or use the matching CommonJS syntax.",
+      "If a package cannot be resolved, install the named dependency in the local lab and verify the lockfile.",
+      "If output differs, verify middleware order, the request path/method, environment variables and the expected runtime version."
+    ],
+    "accessibility_notes": "The lesson diagram has an explicit title, description and textual labels; color is supplementary and not the only way to distinguish stages.",
+    "version_notes": "Express 5.x teaching baseline. Check the official migration guide before applying these examples to Express 4 projects.",
+    "knowledge_check_file": "exams/question-files/lesson-117-questions.json"
+  },
+  "sources": [
+    {
+      "title": "Error handling (5.x)",
+      "url": "https://expressjs.com/en/5x/guide/error-handling.html",
+      "publisher": "OpenJS Foundation / Express.js",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "Error middleware signature, forwarding errors, rejected promises and headers-sent behavior."
+      ]
+    },
+    {
+      "title": "Express.js security best practices",
+      "url": "https://expressjs.com/en/advanced/best-practice-security.html",
+      "publisher": "OpenJS Foundation / Express.js",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "TLS, secure cookies, dependency hygiene, Helmet, input validation and production security."
+      ]
+    },
+    {
+      "title": "Express.js API reference",
+      "url": "https://expressjs.com/en/5x/api.html",
+      "publisher": "OpenJS Foundation / Express.js",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "Application, request, response, Router, built-in middleware APIs and current signatures."
+      ]
+    }
+  ],
+  "exercise_files": [
+    "../exercises/018-external-api-integration.json"
+  ]
+}

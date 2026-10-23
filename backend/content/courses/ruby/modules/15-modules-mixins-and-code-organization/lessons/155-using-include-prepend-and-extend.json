@@ -1,0 +1,151 @@
+{
+  "id": "ruby-lesson-155",
+  "slug": "using-include-prepend-and-extend",
+  "title": "Using include, prepend, and extend",
+  "sequence": 155,
+  "module_id": "ruby-module-15",
+  "module_slug": "modules-mixins-and-code-organization",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-foundations",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "ruby-lesson-154"
+  ],
+  "previous_lesson_id": "ruby-lesson-154",
+  "next_lesson_id": "ruby-lesson-156",
+  "keywords": [
+    "using-include-prepend-and-extend",
+    "modules-mixins-and-code-organization",
+    "ruby",
+    "instance-behavior-through-include",
+    "method-lookup-changes-through-prepend",
+    "object-level-behavior-through-extend"
+  ],
+  "source_syllabus_number": 155,
+  "subtopics": [
+    "Instance behavior through include",
+    "Method lookup changes through prepend",
+    "Object-level behavior through extend"
+  ],
+  "learning_outcomes": [
+    "Explain the role of using include, prepend, and extend in a Ruby program and name the key rule involved.",
+    "Apply using include, prepend, and extend in a small example and predict its result before running it.",
+    "Identify one boundary or failure case related to object-level behavior through extend and verify the intended behavior."
+  ],
+  "content": {
+    "intro": "Learn Using include, prepend, and extend through a visual model, a minimal Ruby example, and a practical check.",
+    "why_it_matters": "Understanding using include, prepend, and extend helps you write code that is easier to explain, test, and maintain. It also helps separate Ruby language guarantees from runtime assumptions, dependency behavior, and application-specific rules.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Using include, prepend, and extend",
+        "asset_path": "diagrams/lesson-155-using-include-prepend-and-extend.svg",
+        "alt_text": "Three-stage concept diagram for Using include, prepend, and extend.",
+        "caption": "Use this diagram to plan a small example, then verify exact behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Using include, prepend, and extend helps you reason about instance behavior through include. In Ruby, prefer a small example whose inputs and expected result are easy to explain. This lesson connects the syllabus topic to practical code and highlights where assumptions or edge cases matter."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to think about it",
+        "text": "Begin by identifying the key rule: Instance behavior through include. Then connect it to Method lookup changes through prepend. The remaining syllabus points—Object-level behavior through extend—are useful checks before applying this in a larger project."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to cover",
+        "items": [
+          {
+            "title": "Instance behavior through include",
+            "text": "Explain how instance behavior through include affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Method lookup changes through prepend",
+            "text": "Explain how method lookup changes through prepend affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Object-level behavior through extend",
+            "text": "Explain how object-level behavior through extend affects the example, the public interface, or the behavior learners need to verify."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Using include, prepend, and extend",
+        "language": "ruby",
+        "code": "module Prefix\n  def greet\n    \"[#{super}]\"\n  end\nend\nclass Hello\n  def greet = \"hello\"\n  prepend Prefix\nend\nputs Hello.new.greet",
+        "expected_output": "[hello]",
+        "execution_mode": "server-runner",
+        "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+        "dependencies": "Ruby standard library",
+        "notes": "Local Ruby execution is required. CodeLeaf’s existing playground only previews HTML/CSS/JavaScript; do not run arbitrary Ruby inside the FastAPI process."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming the happy path is enough",
+            "text": "Test an empty value, a boundary value, and one invalid value before depending on the behavior."
+          },
+          {
+            "title": "Treating an example as a universal rule",
+            "text": "Check Ruby version, runtime implementation, and third-party library documentation when behavior is version-sensitive."
+          },
+          {
+            "title": "Mixing too many concerns",
+            "text": "Separate input parsing, domain behavior, and output so each piece is easier to test."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Run the example as written, compare it with the expected result, and explain why each line supports using include, prepend, and extend. Next change one input or condition and predict the result before running it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second example for using include, prepend, and extend using a different input. Add one edge case from the syllabus list (Object-level behavior through extend), state the expected behavior, and write a small test or manual check that would catch a regression."
+      },
+      {
+        "type": "paragraph",
+        "title": "Run, troubleshoot, and reset",
+        "text": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed. If the command fails, confirm `ruby --version`, inspect the full error message, and verify that required standard-library or gem dependencies are installed. Reset by removing temporary files created by your experiment and returning the code to the smallest reproducible example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain using include, prepend, and extend, identify its place in modules, mixins, and code organization, run a focused example, and verify an important boundary. Revisit the linked exercise if this is a core topic; advanced runtime or framework examples remain draft until reviewed in a suitable environment."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-155-questions.json",
+    "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+    "reset_steps": [
+      "Restore the original minimal example before trying another variation.",
+      "Remove only temporary sample data created for the lesson.",
+      "Keep credentials and personal data out of logs, fixtures, and screenshots."
+    ],
+    "guided_example": "Predict the output, run the example, and explain the relationship between instance behavior through include and method lookup changes through prepend.",
+    "try_it_yourself": "Create one variation of using include, prepend, and extend, test a normal input and one boundary input, and note any version or dependency assumptions.",
+    "progressive_hints": [
+      "Write down the input and output contract first.",
+      "Reduce the task to one relevant Ruby method or construct.",
+      "Add the boundary case and verify it independently."
+    ],
+    "accessibility_notes": "The diagram includes a text alternative and the lesson explains the flow in prose. Do not use color alone to infer the correct sequence.",
+    "execution_mode": "server-runner",
+    "execution_note": "CodeLeaf does not currently provide an isolated Ruby runner. Run Ruby examples locally; a production runner needs a separate sandbox with time, memory, filesystem, and network limits."
+  },
+  "exercise_files": [],
+  "sources": [
+    "https://docs.ruby-lang.org/en/4.0/",
+    "https://www.ruby-lang.org/en/documentation/"
+  ],
+  "status": "draft",
+  "status_note": "Original lesson authored from the listed PDF syllabus topics; requires technical and editorial review before publication."
+}

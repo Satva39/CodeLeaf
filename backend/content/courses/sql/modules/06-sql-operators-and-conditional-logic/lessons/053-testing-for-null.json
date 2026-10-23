@@ -1,0 +1,185 @@
+{
+  "id": "sql-lesson-053",
+  "slug": "testing-for-null",
+  "title": "Testing for NULL",
+  "sequence": 53,
+  "module_id": "sql-module-06",
+  "module_slug": "sql-operators-and-conditional-logic",
+  "level": "intermediate",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "sql-lesson-052"
+  ],
+  "previous_lesson_id": "sql-lesson-052",
+  "next_lesson_id": "sql-lesson-054",
+  "keywords": [
+    "testing for null",
+    "is null",
+    "is not null",
+    "nullable values in complex conditions",
+    "null tests in joins",
+    "troubleshooting missing results"
+  ],
+  "source_syllabus_number": 53,
+  "source_module_number": 6,
+  "subtopics": [
+    "IS NULL",
+    "IS NOT NULL",
+    "Nullable values in complex conditions",
+    "NULL tests in joins",
+    "Troubleshooting missing results"
+  ],
+  "subtopic_source_numbers": [
+    "53.1",
+    "53.2",
+    "53.3",
+    "53.4",
+    "53.5"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and key terms of testing for null.",
+    "Apply is null in a small PostgreSQL-oriented example or design decision.",
+    "Validate the result against the expected behavior and identify one portability, safety, or edge-case consideration."
+  ],
+  "content": {
+    "intro": "Learn testing for null through a short explanation, a concept diagram, and a PostgreSQL-oriented example. Focus on the reason for the query or design decision before memorizing syntax.",
+    "why_it_matters": "Testing for NULL matters because database behavior becomes more reliable when the intended row meaning, data shape, and edge cases are explicit. This lesson follows the SQL curriculum's listed subtopics and calls out PostgreSQL-specific behavior when it matters.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Testing for NULL",
+        "asset_path": "diagrams/lesson-053-testing-for-null.svg",
+        "alt_text": "Original SQL concept diagram for Testing for NULL; shows four steps based on the lesson subtopics.",
+        "caption": "Use this four-step visual to connect the question, the relevant SQL idea, its application, and a verification check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "The practical goal of testing for null is to produce a result set whose meaning is clear. Confirm which rows enter the query, how values are transformed or combined, and whether NULLs, duplicates, ties, or one-to-many relationships change the output."
+      },
+      {
+        "type": "paragraph",
+        "title": "Apply the idea",
+        "text": "Start with the subtopics: IS NULL, IS NOT NULL, Nullable values in complex conditions, NULL tests in joins. Define the result you expect, run or inspect the small example in your own disposable PostgreSQL lab, and change one assumption at a time. The embedded lesson editor is a demonstration shell: the current project shows the sample expected output and does not execute arbitrary SQL on the server."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics to master",
+        "items": [
+          {
+            "title": "IS NULL",
+            "text": "IS NULL requires deliberate handling of absent or unknown values. In SQL, NULL is not the same as zero or an empty string; use IS NULL / IS NOT NULL for direct tests and check how expressions and aggregates propagate unknowns."
+          },
+          {
+            "title": "IS NOT NULL",
+            "text": "IS NOT NULL requires deliberate handling of absent or unknown values. In SQL, NULL is not the same as zero or an empty string; use IS NULL / IS NOT NULL for direct tests and check how expressions and aggregates propagate unknowns."
+          },
+          {
+            "title": "Nullable values in complex conditions",
+            "text": "Nullable values in complex conditions requires deliberate handling of absent or unknown values. In SQL, NULL is not the same as zero or an empty string; use IS NULL / IS NOT NULL for direct tests and check how expressions and aggregates propagate unknowns."
+          },
+          {
+            "title": "NULL tests in joins",
+            "text": "NULL tests in joins requires deliberate handling of absent or unknown values. In SQL, NULL is not the same as zero or an empty string; use IS NULL / IS NOT NULL for direct tests and check how expressions and aggregates propagate unknowns."
+          },
+          {
+            "title": "Troubleshooting missing results",
+            "text": "Troubleshooting missing results requires deliberate handling of absent or unknown values. In SQL, NULL is not the same as zero or an empty string; use IS NULL / IS NOT NULL for direct tests and check how expressions and aggregates propagate unknowns."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "sql",
+        "execution_mode": "static-validation",
+        "code": "SELECT customer_id,\n       COALESCE(phone, 'not provided') AS phone_display\nFROM customers\nORDER BY customer_id;",
+        "expected_output": "The query replaces NULL only for display; it does not alter stored phone values.",
+        "run_instructions": "Run in a disposable local PostgreSQL database such as codeleaf_sql_lab after loading datasets/postgresql-lab-setup.sql. Do not use production credentials or a production database. Some specialist examples require optional extensions or a specific PostgreSQL version, as stated in the lesson. The CodeLeaf lesson Run button in this scaffold only previews the documented expected output; it is not a SQL execution service.",
+        "reset_steps": "For queries, restore the original text and compare results. For statements that change data, use the transaction and rollback shown in the example, or recreate the disposable lab from the included setup instructions. Do not reset production data."
+      },
+      {
+        "type": "callout",
+        "title": "Remember",
+        "text": "SQL correctness depends on data shape, constraints, NULL behavior, row counts, and the target database dialect—not just whether a statement parses."
+      }
+    ],
+    "task": "Try it yourself: demonstrate testing for null using the sample schema. State what each returned row represents, test one edge case related to the lesson, and record the result.",
+    "task_acceptance_criteria": [
+      "The query or design example matches the lesson's intended behavior.",
+      "The expected row grain and relevant NULL, duplicate, boundary, or permission behavior are explained.",
+      "The test is performed only in the local disposable lab, or clearly marked as a static inspection when a real runner is unavailable."
+    ],
+    "hints": [
+      "Begin with the subtopic is null and write down the result you expect.",
+      "Use the smallest valid example; verify table and column names before adding complexity.",
+      "Inspect one edge case: missing values, duplicate matches, tied sort values, a constraint violation, or an engine-specific syntax difference."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming a query is correct because it returns some rows.",
+        "why": "A result can omit valid records, multiply joined rows, mishandle NULLs, or rely on a non-deterministic order.",
+        "fix": "Check the expected row grain, add targeted edge cases, and use a stable tie-breaker whenever order or pagination matters."
+      },
+      {
+        "problem": "Copying PostgreSQL syntax into another SQL engine without checking support.",
+        "why": "PostgreSQL, MySQL, SQLite, SQL Server, and Oracle differ in types, functions, row limits, procedural features, and transaction behavior.",
+        "fix": "Label the target engine/version and verify the relevant official reference before adapting the query."
+      },
+      {
+        "problem": "Testing with production data or credentials.",
+        "why": "Practice statements can change rows or expose sensitive information if run against the wrong connection.",
+        "fix": "Use a dedicated disposable lab, check current_database() and current_user, and review all changes before committing."
+      }
+    ],
+    "summary": [
+      "Testing for NULL is about making the database behavior and the expected result explicit.",
+      "Use the provided subtopics as a review checklist and validate a small test case.",
+      "Keep vendor-specific syntax, access assumptions, and production-safety boundaries visible."
+    ],
+    "references": [
+      {
+        "title": "SELECT",
+        "url": "https://www.postgresql.org/docs/current/sql-select.html"
+      },
+      {
+        "title": "Comparison Functions and Operators",
+        "url": "https://www.postgresql.org/docs/current/functions-comparison.html"
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-053-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "Generated draft content. Review the query and expected output against the selected PostgreSQL version before publication."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "SELECT",
+      "url": "https://www.postgresql.org/docs/current/sql-select.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "SELECT syntax",
+        "CTEs",
+        "grouping",
+        "set operations"
+      ]
+    },
+    {
+      "title": "Comparison Functions and Operators",
+      "url": "https://www.postgresql.org/docs/current/functions-comparison.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "comparison operators",
+        "IS NULL",
+        "IS DISTINCT FROM",
+        "comparison predicates"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached SQL curriculum outline and official references; requires technical/editorial review before publication."
+}

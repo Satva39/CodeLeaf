@@ -1,0 +1,152 @@
+{
+  "id": "redis-lesson-038",
+  "slug": "modeling-application-data-with-hashes",
+  "title": "Modeling Application Data with Hashes",
+  "sequence": 38,
+  "module_id": "redis-module-05",
+  "module_slug": "redis-hashes-and-record-modeling",
+  "level": "beginner to intermediate",
+  "difficulty": "intermediate",
+  "track": "core-redis",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "redis-lesson-037"
+  ],
+  "previous_lesson_id": "redis-lesson-037",
+  "next_lesson_id": "redis-lesson-039",
+  "keywords": [
+    "modeling-application-data-with-hashes",
+    "user-profiles",
+    "product-records",
+    "session-metadata",
+    "inventory-information",
+    "separating-mutable-and-immutable-fields",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 38,
+  "subtopics": [
+    "User profiles",
+    "Product records",
+    "Session metadata",
+    "Inventory information",
+    "Separating mutable and immutable fields"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Modeling Application Data with Hashes and distinguish it from a related Redis concept.",
+    "Apply or trace Modeling Application Data with Hashes in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Modeling Application Data with Hashes and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Modeling Application Data with Hashes in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Modeling Application Data with Hashes helps implement model field-oriented records and update only the fields that change. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Modeling Application Data with Hashes",
+        "asset_path": "diagrams/lesson-038-modeling-application-data-with-hashes.svg",
+        "alt_text": "Concept diagram for Modeling Application Data with Hashes, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Modeling Application Data with Hashes; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Modeling Application Data with Hashes helps implement model field-oriented records and update only the fields that change. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Modeling Application Data with Hashes, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "User profiles",
+            "text": "Connect User profiles to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Product records",
+            "text": "Connect Product records to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Session metadata",
+            "text": "Connect Session metadata to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Inventory information",
+            "text": "Connect Inventory information to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Separating mutable and immutable fields",
+            "text": "Connect Separating mutable and immutable fields to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Modeling Application Data with Hashes",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "HSET user:demo name \"Asha\" tier \"free\"\nHGETALL user:demo",
+        "expected_output": "2\n1) \"name\" 2) \"Asha\" 3) \"tier\" 4) \"free\"",
+        "run_instructions": "Redis hashes store field/value pairs; validate fields in application code.",
+        "reset_steps": "DEL user:demo",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Modeling Application Data with Hashes. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Modeling Application Data with Hashes in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Modeling Application Data with Hashes.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "2\n1) \"name\" 2) \"Asha\" 3) \"tier\" 4) \"free\"",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-038-questions.json",
+    "recap": [
+      "Modeling Application Data with Hashes is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Redis data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "strings, hashes, lists, sets, sorted sets, streams, geospatial indexes, bitmaps, bitfields, JSON, arrays, time series, probabilistic structures, vector sets"
+      ]
+    },
+    {
+      "title": "Compare data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/compare-data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "data-type selection and use-case trade-offs"
+      ]
+    },
+    {
+      "title": "Redis commands reference",
+      "url": "https://redis.io/docs/latest/commands/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "command syntax, return values, complexity, compatibility and command history"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

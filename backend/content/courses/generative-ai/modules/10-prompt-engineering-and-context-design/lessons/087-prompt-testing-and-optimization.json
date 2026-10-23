@@ -1,0 +1,165 @@
+{
+  "id": "genai-lesson-087",
+  "slug": "prompt-testing-and-optimization",
+  "title": "Prompt Testing and Optimization",
+  "sequence": 87,
+  "module_id": "genai-module-10",
+  "module_slug": "prompt-engineering-and-context-design",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-application-development",
+  "estimated_minutes": 12,
+  "prerequisites": [],
+  "previous_lesson_id": "genai-lesson-086",
+  "next_lesson_id": "genai-lesson-088",
+  "keywords": [
+    "Prompt Testing and Optimization",
+    "Creating a prompt test set",
+    "Defining expected output characteristics",
+    "Comparing prompt variations",
+    "Evaluating consistency and failure modes",
+    "Tracking prompt versions",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 87,
+  "subtopics": [
+    "Creating a prompt test set",
+    "Defining expected output characteristics",
+    "Comparing prompt variations",
+    "Evaluating consistency and failure modes",
+    "Tracking prompt versions",
+    "Knowing when prompting is insufficient"
+  ],
+  "learning_outcomes": [
+    "Explain creating a prompt test set and how it connects to prompt testing and optimization.",
+    "Apply defining expected output characteristics in the example and predict the output before running it.",
+    "Test one realistic edge case for prompt testing and optimization and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers prompt testing and optimization through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Turn requests into explicit instructions and testable output contracts. Version prompts and treat examples, retrieved documents, and user inputs as untrusted data when appropriate.",
+    "why_it_matters": "Treat creating a prompt test set as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Prompt Testing and Optimization: concept map",
+        "asset_path": "diagrams/lessons/lesson-087-prompt-testing-and-optimization.svg",
+        "alt_text": "Diagram for Prompt Testing and Optimization: understand Creating a prompt test set, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Creating a prompt test set, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Treat creating a prompt test set as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Creating a prompt test set",
+            "text": "Treat creating a prompt test set as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs."
+          },
+          {
+            "title": "Defining expected output characteristics",
+            "text": "Use defining expected output characteristics as a lens for understanding prompt testing and optimization. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Comparing prompt variations",
+            "text": "Treat comparing prompt variations as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs."
+          },
+          {
+            "title": "Evaluating consistency and failure modes",
+            "text": "Use evaluating consistency and failure modes as a lens for understanding prompt testing and optimization. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Tracking prompt versions",
+            "text": "Treat tracking prompt versions as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs."
+          },
+          {
+            "title": "Knowing when prompting is insufficient",
+            "text": "Treat knowing when prompting is insufficient as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Prompt Testing and Optimization\ncases = [{\"id\": \"normal\", \"input\": \"where is my order\"}, {\"id\": \"ambiguous\", \"input\": \"it is late\"}, {\"id\": \"empty\", \"input\": \"\"}]\nprint({\"case_ids_unique\": len({c[\"id\"] for c in cases}) == len(cases), \"test_cases\": len(cases)})",
+        "expected_output": "{'case_ids_unique': True, 'test_cases': 3}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice creating a prompt test set within prompt testing and optimization: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'case_ids_unique': True, 'test_cases': 3}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-087-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Prompt Testing and Optimization is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/prompt-templates-and-variables",
+      "https://developers.openai.com/api/docs/guides/text"
+    ]
+  },
+  "exercise_files": [
+    "../exercises/087-evaluate-prompt-and-model-variations.json"
+  ],
+  "sources": [
+    {
+      "title": "Prompting best practices",
+      "url": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/prompt-templates-and-variables",
+      "publisher": "Anthropic Claude Platform documentation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "clear instructions"
+      ]
+    },
+    {
+      "title": "Text generation",
+      "url": "https://developers.openai.com/api/docs/guides/text",
+      "publisher": "OpenAI API documentation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "text generation API patterns"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

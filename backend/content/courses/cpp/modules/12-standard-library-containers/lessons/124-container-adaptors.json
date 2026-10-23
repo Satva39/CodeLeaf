@@ -1,0 +1,197 @@
+{
+  "id": "cpp-lesson-124",
+  "slug": "container-adaptors",
+  "title": "Container Adaptors",
+  "sequence": 124,
+  "module_id": "cpp-module-12",
+  "module_slug": "standard-library-containers",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "cpp-lesson-123"
+  ],
+  "previous_lesson_id": "cpp-lesson-123",
+  "next_lesson_id": "cpp-lesson-125",
+  "keywords": [
+    "container-adaptors",
+    "std-stack",
+    "std-queue",
+    "std-priority-queue",
+    "underlying-containers",
+    "stack-and-queue-operations",
+    "choosing-a-container-adaptor"
+  ],
+  "source_syllabus_number": 124,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "std::stack",
+    "std::queue",
+    "std::priority_queue",
+    "Underlying Containers",
+    "Stack and Queue Operations",
+    "Choosing a Container Adaptor"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and core rule of container adaptors using at least one example.",
+    "Trace or adapt a minimal C++ example related to container adaptors and state its expected result.",
+    "Identify one precondition, error case, lifetime issue, portability assumption or version constraint relevant to the topic."
+  ],
+  "content": {
+    "intro": "Container Adaptors focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Container Adaptors matters because choose a container based on required operations and data semantics, then consult its complexity and invalidation guarantees. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Container Adaptors: visual trace",
+        "asset_path": "diagrams/lessons/lesson-124.svg",
+        "alt_text": "Lesson 124 visual for Container Adaptors; concept: std::stack; apply: std::queue; verify: std::priority_queue.",
+        "caption": "Original lesson-specific overview: understand std::stack, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Standard containers encode common storage and lookup strategies. Their complexity, ordering and invalidation rules matter more than memorizing every member function.\n\nContainer Adaptors focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nChoose a container based on required operations and data semantics, then consult its complexity and invalidation guarantees."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Container Adaptors",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <iostream>\n#include <queue>\n#include <stack>\n\nint main() {\n    std::stack<int> undo; undo.push(2); undo.push(7);\n    std::queue<int> jobs; jobs.push(10); jobs.push(20);\n    std::cout << undo.top() << ' ' << jobs.front() << '\\n';\n}\n",
+        "expected_output": "7 10",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "Container adaptors expose restricted interfaces: stack is last-in-first-out and queue is first-in-first-out."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "std::stack",
+            "text": "Explain std::stack in the context of Container Adaptors: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "std::queue",
+            "text": "Explain std::queue in the context of Container Adaptors: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "std::priority_queue",
+            "text": "Explain std::priority_queue in the context of Container Adaptors: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Underlying Containers",
+            "text": "Explain underlying containers in the context of Container Adaptors: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Stack and Queue Operations",
+            "text": "Explain stack and queue operations in the context of Container Adaptors: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Choosing a Container Adaptor",
+            "text": "Compare the alternatives in Choosing a Container Adaptor by their semantics, constraints and trade-offs; use the simpler option that satisfies the real requirement."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate std::stack, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "Use standard C++ rather than compiler-specific behavior unless the lesson explicitly labels the dependency. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-124-questions.json",
+    "task": "Extend the example for Container Adaptors with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+    "task_acceptance_criteria": [
+      "The code compiles in the documented standard mode with warnings enabled.",
+      "The predicted output matches the actual result for the added case.",
+      "One relevant boundary, lifetime, portability or error case is tested or documented."
+    ],
+    "hints": [
+      "Start by isolating the central rule from Container Adaptors.",
+      "Trace values or object lifetimes before changing the program.",
+      "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+    ],
+    "summary": [
+      "Container Adaptors is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying container adaptors.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "7 10"
+  },
+  "task": "Extend the example for Container Adaptors with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+  "hints": [
+    "Start by isolating the central rule from Container Adaptors.",
+    "Trace values or object lifetimes before changing the program.",
+    "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+  ],
+  "expected_output": "7 10",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Container Adaptors is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying container adaptors.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [
+    "../exercises/004-expression-evaluator.json",
+    "../exercises/005-task-scheduler.json"
+  ],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 12, lesson 124: Container Adaptors.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

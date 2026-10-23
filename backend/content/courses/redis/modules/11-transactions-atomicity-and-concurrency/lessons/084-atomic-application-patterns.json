@@ -1,0 +1,145 @@
+{
+  "id": "redis-lesson-084",
+  "slug": "atomic-application-patterns",
+  "title": "Atomic Application Patterns",
+  "sequence": 84,
+  "module_id": "redis-module-11",
+  "module_slug": "transactions-atomicity-and-concurrency",
+  "level": "intermediate to advanced",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-083"
+  ],
+  "previous_lesson_id": "redis-lesson-083",
+  "next_lesson_id": "redis-lesson-085",
+  "keywords": [
+    "atomic-application-patterns",
+    "counters-and-inventory-updates",
+    "conditional-writes",
+    "multi-key-update-design",
+    "atomicity-boundaries",
+    "idempotent-operations",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 84,
+  "subtopics": [
+    "Counters and inventory updates",
+    "Conditional writes",
+    "Multi-key update design",
+    "Atomicity boundaries",
+    "Idempotent operations"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Atomic Application Patterns and distinguish it from a related Redis concept.",
+    "Apply or trace Atomic Application Patterns in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Atomic Application Patterns and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Atomic Application Patterns in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Atomic Application Patterns helps implement make compound state changes predictable under concurrent requests. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Atomic Application Patterns",
+        "asset_path": "diagrams/lesson-084-atomic-application-patterns.svg",
+        "alt_text": "Concept diagram for Atomic Application Patterns, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Atomic Application Patterns; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Atomic Application Patterns helps implement make compound state changes predictable under concurrent requests. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Atomic Application Patterns, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Counters and inventory updates",
+            "text": "Connect Counters and inventory updates to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Conditional writes",
+            "text": "Connect Conditional writes to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Multi-key update design",
+            "text": "Connect Multi-key update design to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Atomicity boundaries",
+            "text": "Connect Atomicity boundaries to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Idempotent operations",
+            "text": "Connect Idempotent operations to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Atomic Application Patterns",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "MULTI\nSET demo:txn status ready\nINCR demo:txn:count\nEXEC",
+        "expected_output": "OK\nQUEUED\nQUEUED\n1) OK 2) (integer) 1",
+        "run_instructions": "This illustrates command grouping. Redis transactions do not offer relational-style rollback for runtime command errors; handle those explicitly.",
+        "reset_steps": "DEL demo:txn demo:txn:count",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Atomic Application Patterns. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Atomic Application Patterns in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Atomic Application Patterns.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "OK\nQUEUED\nQUEUED\n1) OK 2) (integer) 1",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-084-questions.json",
+    "recap": [
+      "Atomic Application Patterns is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [
+    "../exercises/013-atomic-counter.json"
+  ],
+  "sources": [
+    {
+      "title": "Transactions",
+      "url": "https://redis.io/docs/latest/develop/interact/transactions/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "MULTI, EXEC, WATCH and transaction semantics"
+      ]
+    },
+    {
+      "title": "Using Redis commands",
+      "url": "https://redis.io/docs/latest/develop/use/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "keys, command usage, transactions, pipelining and round-trip reduction"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

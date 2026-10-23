@@ -1,0 +1,190 @@
+{
+  "id": "vue-lesson-015",
+  "slug": "text-interpolation",
+  "title": "Text Interpolation",
+  "sequence": 15,
+  "module_id": "vue-module-03",
+  "module_slug": "vue-template-syntax",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "vue-lesson-014"
+  ],
+  "previous_lesson_id": "vue-lesson-014",
+  "next_lesson_id": "vue-lesson-016",
+  "keywords": [
+    "Text Interpolation",
+    "Vue Template Syntax",
+    "Double-curly-brace syntax",
+    "Rendering strings and numbers",
+    "Evaluating simple expressions",
+    "Handling missing and nullish values",
+    "Vue 3",
+    "Composition API"
+  ],
+  "source_syllabus_number": 15,
+  "subtopics": [
+    "Double-curly-brace syntax",
+    "Rendering strings and numbers",
+    "Evaluating simple expressions",
+    "Handling missing and nullish values"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Text Interpolation in a Vue 3 application.",
+    "Apply at least one of the syllabus subtopics in a small, inspectable example.",
+    "Verify one expected behavior and identify a relevant edge case."
+  ],
+  "content": {
+    "intro": "This lesson studies Text Interpolation within Vue Template Syntax. The source PDF subtopics are preserved below and connected to an original working-style example.",
+    "why_it_matters": "Templates keep intent visible: the UI describes what should appear for the current state instead of manually editing the DOM.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Text Interpolation: Declarative template rendering",
+        "asset_path": "diagrams/lessons/lesson-015-text-interpolation.svg",
+        "alt_text": "Declarative template rendering diagram for lesson 15: Text Interpolation. Keep template expressions small and readable → Choose conditions, lists, attributes, or events → Use stable keys and predictable output",
+        "caption": "Template flow: bind application state declaratively and select directives according to the desired DOM behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "The idea in context",
+        "text": "Vue templates bind readable HTML-like markup to data and events, using expressions and directives for dynamic behavior. This lesson focuses on Text Interpolation. Start by naming the state, component, browser behavior, or deployment boundary involved; then predict what should change and test the smallest example."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Double-curly-brace syntax",
+            "text": "For Double-curly-brace syntax, connect the term to a visible behavior in a small Vue 3 example. State what input or reactive dependency changes, predict the UI result, and verify the prediction with a normal case plus a boundary case."
+          },
+          {
+            "title": "Rendering strings and numbers",
+            "text": "For Rendering strings and numbers, express the intended DOM result through a Vue template binding instead of directly manipulating the DOM. Keep template expressions small, use stable keys for stateful list items, and choose directives based on whether content should be created, removed, or merely hidden."
+          },
+          {
+            "title": "Evaluating simple expressions",
+            "text": "For Evaluating simple expressions, express the intended DOM result through a Vue template binding instead of directly manipulating the DOM. Keep template expressions small, use stable keys for stateful list items, and choose directives based on whether content should be created, removed, or merely hidden."
+          },
+          {
+            "title": "Handling missing and nullish values",
+            "text": "For Handling missing and nullish values, connect the term to a visible behavior in a small Vue 3 example. State what input or reactive dependency changes, predict the UI result, and verify the prediction with a normal case plus a boundary case."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "vue",
+        "code": "<script setup>\nimport { ref } from 'vue'\nconst name = ref('Ada')\n</script>\n<template><p>Hello, {{ name }}.</p></template>",
+        "expected_output": "The paragraph shows “Hello, Ada.”; changing name updates the text without manual DOM edits.",
+        "run_instructions": "Use as App.vue in a local Vue 3 project and change the initial name to inspect the reactive result.",
+        "reset_steps": "Restore the initial values or original code, reload the development app/test, and repeat once with a boundary or failure case. Remove temporary logs and test data before committing.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Work through Text Interpolation with a predict–change–verify loop. First state the expected UI or console output. Change only the relevant input/state value, then observe the result. Compare it with the expected output in the code block; if it differs, check the exact file, runtime/version, browser Console, and network response before widening the investigation."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Extend the example to include “Rendering strings and numbers”. Keep the same behavior for the ordinary input, then try an empty, invalid, repeated, or failure condition that makes sense for the example. Record the expected result before testing."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming behavior instead of checking it",
+            "text": "Write down the expected result and reproduce the issue in the smallest possible example; inspect the browser Console and the exact reactive value or request."
+          },
+          {
+            "title": "Ignoring an edge case",
+            "text": "Try empty input, a missing item, repeated interaction, a failed request, or unmounting while work is pending; handle the case explicitly."
+          },
+          {
+            "title": "Putting every responsibility in one component",
+            "text": "Separate display, reusable logic, API service, and shared state when that boundary makes the behavior easier to test and explain."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "Remember: Vue templates bind readable HTML-like markup to data and events, using expressions and directives for dynamic behavior. For Text Interpolation, keep the example small, verify the rendered or logged result, and consult the official references when behavior depends on a specific Vue or ecosystem version."
+      },
+      {
+        "type": "callout",
+        "title": "Accessibility, version, and runtime notes",
+        "text": "Use semantic HTML, readable labels, keyboard-operable controls, and visible errors where the example interacts with users. Vue examples are intended for Vue 3.x with create-vue/Vite unless a legacy or specialist lesson explicitly says otherwise. This CodeLeaf playground does not execute arbitrary Vue code; the snippets are labeled for static validation and should be run in a separate local project."
+      }
+    ],
+    "task": "Create a small example for “Text Interpolation” that applies “Double-curly-brace syntax”, predicts the expected result, and verifies a relevant boundary case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named Vue concept rather than only mentioning it.",
+      "The expected output or observable behavior is written down and can be checked locally.",
+      "At least one boundary, loading, invalid-input, or failure case is tested or explicitly reasoned about.",
+      "The example uses semantic/accessible interaction patterns and does not treat frontend state as authoritative security."
+    ],
+    "hints": [
+      "Start with the smallest observable part of “Double-curly-brace syntax”.",
+      "Predict the output before changing one input at a time.",
+      "Use the browser Console, Vue DevTools, or the appropriate test runner to isolate a mismatch."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "The example only covers the happy path.",
+        "why": "Real interfaces receive empty values, delayed responses, invalid input, and failed requests.",
+        "fix": "Add one realistic edge/failure case and state its expected behavior."
+      },
+      {
+        "problem": "The code assumes an API or feature exists in every runtime.",
+        "why": "Tool and API support depends on Vue, the build tool, or the chosen SSR/test framework.",
+        "fix": "Check the linked official reference and record the runtime/version assumption."
+      }
+    ],
+    "summary": [
+      "Text Interpolation belongs to the broader area Vue Template Syntax.",
+      "The main concept to practice is Double-curly-brace syntax.",
+      "Verify a normal result and one meaningful boundary case before using the pattern in a production feature."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-015-questions.json",
+    "references": [
+      "https://vuejs.org/guide/essentials/template-syntax.html",
+      "https://vuejs.org/guide/essentials/reactivity-fundamentals.html"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Vue Template Syntax",
+      "url": "https://vuejs.org/guide/essentials/template-syntax.html",
+      "publisher": "Vue.js core team",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Text Interpolation",
+        "Double-curly-brace syntax",
+        "Rendering strings and numbers",
+        "Evaluating simple expressions"
+      ]
+    },
+    {
+      "title": "Vue Reactivity Fundamentals",
+      "url": "https://vuejs.org/guide/essentials/reactivity-fundamentals.html",
+      "publisher": "Vue.js core team",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Text Interpolation",
+        "Double-curly-brace syntax",
+        "Rendering strings and numbers",
+        "Evaluating simple expressions"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Authored as a syllabus-complete educational draft. Technical and instructional review required before publication."
+}

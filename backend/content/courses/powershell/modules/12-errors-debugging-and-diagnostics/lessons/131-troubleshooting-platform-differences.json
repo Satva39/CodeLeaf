@@ -1,0 +1,140 @@
+{
+  "id": "powershell-lesson-131",
+  "slug": "troubleshooting-platform-differences",
+  "title": "Troubleshooting Platform Differences",
+  "sequence": 131,
+  "module_id": "powershell-module-12",
+  "module_slug": "errors-debugging-and-diagnostics",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "powershell-lesson-130"
+  ],
+  "previous_lesson_id": "powershell-lesson-130",
+  "next_lesson_id": "powershell-lesson-132",
+  "keywords": [
+    "troubleshooting",
+    "platform",
+    "differences",
+    "powershell",
+    "module-12"
+  ],
+  "source_syllabus_number": 131,
+  "subtopics": [
+    "Windows-specific commands",
+    "Linux and macOS permissions",
+    "Paths and executable resolution",
+    "Encoding and line endings"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose of Troubleshooting Platform Differences and define its core vocabulary.",
+    "Apply troubleshooting platform differences in a small PowerShell example and predict its result.",
+    "Identify one relevant edge case, version constraint, or troubleshooting step."
+  ],
+  "content": {
+    "intro": "This lesson covers Troubleshooting Platform Differences in the PowerShell learning path. It expands the supplied syllabus heading into an actionable draft with a visual, a worked example, and a short knowledge check.",
+    "why_it_matters": "PowerShell can report both non-terminating and terminating errors. Use `-ErrorAction Stop` when a command must enter a `catch` block, log useful diagnostic context without secrets, and use `finally` to release temporary resources consistently.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Lesson 131 visual map",
+        "asset_path": "diagrams/lesson-131-troubleshooting-platform-differences.svg",
+        "alt_text": "Lesson 131 concept map for Troubleshooting Platform Differences: concept and purpose, a local example and result, followed by practice and verification.",
+        "caption": "Follow the concept → example → verification path for Troubleshooting Platform Differences."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Troubleshooting Platform Differences belongs to Errors, Debugging, and Diagnostics. Focus on the rule or workflow this lesson introduces, work through a small example, and explain the expected result and one boundary case."
+      },
+      {
+        "type": "paragraph",
+        "title": "Build understanding step by step",
+        "text": "Start with the syllabus concepts: Windows-specific commands; Linux and macOS permissions; Paths and executable resolution; Encoding and line endings. Separate the input, the operation and the expected result. Use a disposable local workspace for file or system examples, and verify platform-specific behavior against the active runtime."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Windows-specific commands",
+            "text": "Windows-specific commands is one part of Troubleshooting Platform Differences. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Linux and macOS permissions",
+            "text": "Linux and macOS permissions is one part of Troubleshooting Platform Differences. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Paths and executable resolution",
+            "text": "Paths and executable resolution is one part of Troubleshooting Platform Differences. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Encoding and line endings",
+            "text": "Encoding and line endings is one part of Troubleshooting Platform Differences. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "powershell",
+        "execution_mode": "static-validation",
+        "code": "$sample = [pscustomobject]@{ Topic = 'Troubleshooting Platform Differences'; Verified = $true }\n$sample | Format-List Topic, Verified",
+        "expected_output": "A formatted list showing Topic = 'Troubleshooting Platform Differences' and Verified = True.",
+        "run_instructions": "Review this snippet as a static teaching example. In a local PowerShell 7.6 session, save a copy under your course workspace, run it manually, and compare the result with the stated expectation. CodeLeaf’s current course preview does not execute PowerShell. Adjust environment-dependent output to your machine.",
+        "troubleshooting": "Check command availability with Get-Command, inspect values with Get-Member, consult Get-Help -Full, and verify PowerShell version/platform before assuming identical output. Do not run examples that change system state without adapting and reviewing them.",
+        "reset_steps": "Restore the original snippet and use synthetic values. If you created test files, delete only those files within the dedicated practice folder after checking their paths."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety note",
+        "text": "The main path targets modern PowerShell 7.6 LTS. Windows PowerShell 5.1 compatibility is labeled separately. Some providers, admin cmdlets and APIs depend on OS, module version, permissions or tenant access; the examples are static references, not proof of execution."
+      }
+    ],
+    "task": "Try it yourself: reproduce a failure and produce actionable diagnostics. Use synthetic data or a disposable practice folder, write down your predicted result, check it locally, and explain one boundary case.",
+    "task_acceptance_criteria": [
+      "Explain the central idea in Troubleshooting Platform Differences in your own words.",
+      "Verify the expected result using a local session or a documented manual check.",
+      "Describe one relevant edge case, limitation or troubleshooting step."
+    ],
+    "hints": [
+      "Predict the output before changing the example.",
+      "Change one input or condition at a time and compare the results.",
+      "Use Get-Help and official versioned documentation when behavior differs; do not treat a static preview as execution."
+    ],
+    "expected_output": "A formatted list showing Topic = 'Troubleshooting Platform Differences' and Verified = True.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-131-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "PowerShell language documentation",
+      "url": "https://learn.microsoft.com/en-us/powershell/scripting/lang-spec/chapter-01?view=powershell-7.6",
+      "publisher": "Microsoft Learn",
+      "supports": [
+        "syntax",
+        "expressions",
+        "types and language semantics"
+      ],
+      "checked_on": "2026-10-20",
+      "source_type": "official_documentation"
+    },
+    {
+      "title": "Getting Started with PowerShell",
+      "url": "https://learn.microsoft.com/en-us/powershell/scripting/learn/ps101/01-getting-started?view=powershell-7.6",
+      "publisher": "Microsoft Learn",
+      "supports": [
+        "first commands",
+        "help and discovery",
+        "interactive sessions"
+      ],
+      "checked_on": "2026-10-20",
+      "source_type": "official_documentation"
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson expanded from the numbered PowerShell PDF syllabus. Static examples, answers, version details and technical phrasing need subject-matter review before publication."
+}

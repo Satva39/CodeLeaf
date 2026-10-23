@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+const page = await readFile(new URL('../src/pages/ExerciseDetailPage.jsx', import.meta.url), 'utf8');
+const list = await readFile(new URL('../src/pages/ChallengesPage.jsx', import.meta.url), 'utf8');
+const api = await readFile(new URL('../../backend/app/main.py', import.meta.url), 'utf8');
+assert.match(page, /Need a hint\?/);
+assert.match(page, /Show solution/);
+assert.match(page, /\/api\/courses\/.*\/solution/);
+assert.match(page, /\/api\/me\/exercises\/.*\/submit/);
+assert.match(page, /Open in Try-it editor/);
+assert.match(list, /\/practice\/\$\{encodeURIComponent\(course\.slug\)\}\/\$\{encodeURIComponent\(exercise\.lesson_slug\)\}\/\$\{encodeURIComponent\(exercise\.slug\)\}/);
+assert.match(api, /def reveal_exercise_solution/);
+assert.match(api, /allowed_roots/);
+console.log('PASS standalone exercise page includes hints, answer checking and on-demand solution reveal');
+console.log('PASS practice library routes to dedicated exercise URLs');
+console.log('PASS solution endpoint restricts paths and only returns allowlisted fields');

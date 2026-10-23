@@ -1,0 +1,6 @@
+-- Backup/recovery lab plan (do not run against production).
+-- 1. Record server version, schema and recovery target.
+-- 2. Create a logical dump using the versioned mysqldump guide.
+-- 3. Restore to an isolated target.
+-- 4. Compare row counts and integrity checks; record elapsed restore time.
+-- 5. If using binary logs, rehearse recovery to a chosen time in a disposable environment.

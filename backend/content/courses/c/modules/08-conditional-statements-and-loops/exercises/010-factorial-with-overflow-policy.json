@@ -1,0 +1,56 @@
+{
+  "id": "c-exercise-010",
+  "slug": "factorial-with-overflow-policy",
+  "title": "Factorial with overflow policy",
+  "type": "coding",
+  "lesson_id": "c-lesson-085",
+  "module_id": "c-module-08",
+  "difficulty": "intermediate",
+  "sequence": 1,
+  "prompt": "Compute factorial for a small documented range and reject inputs beyond that range. Include a short explanation and test at least one boundary/failure case. The configured string smoke-check is not a compiler or correctness proof; code review is required.",
+  "objective": "Compute factorial for a small documented range and reject inputs beyond that range.",
+  "target_skills": [
+    "C syntax and semantics",
+    "input/edge-case reasoning",
+    "compiler diagnostics and code review"
+  ],
+  "starter": {
+    "language": "c",
+    "code": "#include <stdio.h>\n\nint main(void) {\n    /* TODO: implement the requirements and check edge cases. */\n    return 0;\n}\n"
+  },
+  "expected_output": "A C source file that meets the written acceptance criteria, builds under the selected compiler mode with reviewed warnings, and includes a brief explanation of edge cases.",
+  "public_tests": [
+    {
+      "name": "Required token smoke-check",
+      "required_strings": [
+        "ULLONG_MAX",
+        "result>ULLONG_MAX/i",
+        "result*=i"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Implement the written behavior and document any preconditions.",
+    "Compile locally using an explicit standard and warnings; report compiler and flags.",
+    "Test an ordinary case, a boundary case, and an invalid/failure case where applicable.",
+    "Explain one relevant portability or safety consideration."
+  ],
+  "hints": [
+    "Write a contract for input, output and failure cases before coding.",
+    "Build the smallest complete implementation and compile with warnings.",
+    "Use the required strings as a weak smoke check only; test program behavior separately."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "ULLONG_MAX",
+      "result>ULLONG_MAX/i",
+      "result*=i"
+    ]
+  },
+  "grading_method": "Static required-string smoke check plus human review. This is not an isolated C compiler or runtime grader.",
+  "retry_policy": "Retries are permitted; only platform-verified correctness can complete the exercise. XP remains controlled by CodeLeaf backend policy.",
+  "status": "draft",
+  "status_note": "Draft until the reference implementation and tests are reviewed on supported compilers.",
+  "solution_file": "../solutions/010-factorial-with-overflow-policy-solution.json"
+}

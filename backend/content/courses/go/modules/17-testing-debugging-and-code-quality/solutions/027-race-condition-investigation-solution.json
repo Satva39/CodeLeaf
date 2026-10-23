@@ -1,0 +1,8 @@
+{
+  "id": "go-exercise-solution-027",
+  "exercise_id": "go-exercise-027",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "package counter\n\nimport (\"sync\"; \"testing\")\n\ntype Counter struct{mu sync.Mutex;value int}\nfunc(c *Counter)Inc(){c.mu.Lock();c.value++;c.mu.Unlock()}\nfunc(c *Counter)Value()int{c.mu.Lock();defer c.mu.Unlock();return c.value}\nfunc TestConcurrentCounter(t *testing.T){var c Counter;var wg sync.WaitGroup;for i:=0;i<20;i++{wg.Add(1);go func(){defer wg.Done();for j:=0;j<100;j++{c.Inc()}}()};wg.Wait();if got:=c.Value();got!=2000{t.Fatalf(\"got %d; want 2000\",got)}}\n// Verify with: go test -race ./...",
+  "explanation": "This protected reference solution for Race-Condition Investigation demonstrates the central idea (race detector, synchronization). Complete the stated edge cases, add tests, and validate with a Go toolchain matching the course version before publication."
+}

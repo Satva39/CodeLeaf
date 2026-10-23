@@ -1,0 +1,244 @@
+{
+  "id": "go-lesson-201",
+  "slug": "connecting-with-database-sql",
+  "title": "Connecting with database/sql",
+  "sequence": 201,
+  "module_id": "go-module-20",
+  "module_slug": "databases-and-data-persistence",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "go-lesson-200"
+  ],
+  "previous_lesson_id": "go-lesson-200",
+  "next_lesson_id": "go-lesson-202",
+  "keywords": [
+    "connecting with database sql",
+    "opening database connections",
+    "configuring connection pools",
+    "verifying connectivity",
+    "driver selection",
+    "closing and reusing database handles correctly",
+    "Go",
+    "Golang"
+  ],
+  "source_syllabus_number": 201,
+  "subtopics": [
+    "Opening database connections",
+    "Configuring connection pools",
+    "Verifying connectivity",
+    "Driver selection",
+    "Closing and reusing database handles correctly"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and behavior of connecting with database/sql.",
+    "Apply at least one lesson concept—opening database connections—in a small Go example or workflow.",
+    "Predict a representative result, then test a boundary case and explain any difference."
+  ],
+  "exercise_files": [],
+  "content": {
+    "intro": "Connecting with database/sql is part of the boundary between a Go application and an external system. Validate and authorize inputs, use contexts and deadlines, check status/error results, close resources, and keep external protocol or SQL details behind a small interface where that reduces coupling.",
+    "why_it_matters": "Network and database failures are normal operating conditions. Clear boundaries make timeouts, invalid data, partial failures, and retries manageable.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 20 overview: Databases and Data Persistence",
+        "asset_path": "diagrams/module-20-overview.svg",
+        "alt_text": "Overview of Module 20, Databases and Data Persistence; this lesson is lesson 201 in the ordered module sequence.",
+        "caption": "Use the module map to place “Connecting with database/sql” within the larger sequence, then return to the individual code and practice below."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Connecting with database/sql is part of the boundary between a Go application and an external system. Validate and authorize inputs, use contexts and deadlines, check status/error results, close resources, and keep external protocol or SQL details behind a small interface where that reduces coupling."
+      },
+      {
+        "type": "list",
+        "title": "Topics covered in this lesson",
+        "items": [
+          {
+            "title": "Opening database connections",
+            "text": "Be able to explain opening database connections, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Configuring connection pools",
+            "text": "Be able to explain configuring connection pools, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Verifying connectivity",
+            "text": "Be able to explain verifying connectivity, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Driver selection",
+            "text": "Be able to explain driver selection, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Closing and reusing database handles correctly",
+            "text": "Be able to explain closing and reusing database handles correctly, identify the inputs or program state it affects, and name one boundary case worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Connecting with database/sql",
+        "language": "go",
+        "code": "package main\n\nimport \"fmt\"\n\n// Placeholders are driver-specific (? or $1, for example).\nconst query = \"SELECT name FROM products WHERE id = ?\"\n\nfunc main() {\n    fmt.Println(query)\n    // In an application, pass values separately: db.QueryContext(ctx, query, productID).\n    // Never concatenate untrusted input into SQL text.\n}\n",
+        "expected_output": "SELECT name FROM products WHERE id = ?",
+        "run_mode": "static-validation",
+        "run_instructions": "This example prints the query text only; it does not connect to a database. Add a driver and local/test database to run a QueryContext example, and use that driver’s placeholder syntax."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through the example",
+        "text": "First, identify the input or initial state in the example for connecting with database/sql. Next, trace the operation or contract that matters, and predict the result before running it. If the example depends on a version-specific feature, a driver, or an external service, follow the stated prerequisites rather than assuming it works in a browser preview."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to one subtopic—Opening database connections—and add a second case that could fail or behave differently. Write down the expected result before testing."
+      }
+    ],
+    "task": "Create a small example connected to “Connecting with database/sql”. Use Opening database connections as the starting point, predict the output, then add one invalid, empty, or boundary case and document its result.",
+    "task_acceptance_criteria": [
+      "The example demonstrates opening database connections or a closely related concept.",
+      "Inputs, relevant state changes, and expected output are clear.",
+      "At least one boundary case is deliberately tested or documented.",
+      "Errors are handled honestly and no success state is reported when the operation fails."
+    ],
+    "hints": [
+      "Start from the simplest example related to opening database connections.",
+      "Predict the result manually and annotate the value that changes at each step.",
+      "Run `gofmt` and the appropriate local `go run`, `go test`, `go vet`, or inspection command when prerequisites are available."
+    ],
+    "expected_output": "SELECT name FROM products WHERE id = ?",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-201-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the happy-path output proves all inputs are safe.",
+        "why": "Empty, malformed, boundary, or concurrent cases may follow different paths.",
+        "fix": "Add focused tests for a normal input and at least one relevant edge case."
+      },
+      {
+        "problem": "Ignoring returned errors or external-system status.",
+        "why": "Go APIs commonly report expected failures as explicit error values.",
+        "fix": "Check errors close to the operation, add useful context when propagating, and clean up resources."
+      },
+      {
+        "problem": "Using an API or syntax without checking the selected Go version.",
+        "why": "Language and standard-library capabilities can change between releases.",
+        "fix": "Record `go version`, inspect the `go` directive, and read official release notes for version-specific topics."
+      }
+    ],
+    "summary": [
+      "Connecting with database/sql provides a reusable rule or workflow for Go programs.",
+      "The subtopics to revisit are: Opening database connections; Configuring connection pools; Verifying connectivity; Driver selection; Closing and reusing database handles correctly.",
+      "Prefer a small reproducible example, explicit errors, appropriate tests, and version-matched official documentation."
+    ],
+    "references": [
+      {
+        "title": "Go Documentation",
+        "url": "https://go.dev/doc/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "tutorials",
+          "language concepts",
+          "tooling",
+          "application development"
+        ]
+      },
+      {
+        "title": "The Go Programming Language Specification",
+        "url": "https://go.dev/ref/spec",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "syntax",
+          "types",
+          "control flow",
+          "interfaces"
+        ]
+      },
+      {
+        "title": "database/sql Package",
+        "url": "https://pkg.go.dev/database/sql",
+        "publisher": "Go standard library",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "SQL connections",
+          "queries",
+          "transactions",
+          "resource lifecycle"
+        ]
+      },
+      {
+        "title": "encoding/json Package",
+        "url": "https://pkg.go.dev/encoding/json",
+        "publisher": "Go standard library",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "JSON encoding",
+          "decoding",
+          "validation boundaries"
+        ]
+      }
+    ],
+    "accessibility_note": "The diagram includes descriptive alt text and a text caption. Code examples are also described in prose; do not rely on color alone to understand a sequence.",
+    "execution_note": "This example prints the query text only; it does not connect to a database. Add a driver and local/test database to run a QueryContext example, and use that driver’s placeholder syntax. Examples that need a database driver, external service, isolated execution environment, or version-specific feature are labeled as static examples and should not be treated as already executed."
+  },
+  "sources": [
+    {
+      "title": "Go Documentation",
+      "url": "https://go.dev/doc/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tutorials",
+        "language concepts",
+        "tooling",
+        "application development"
+      ]
+    },
+    {
+      "title": "The Go Programming Language Specification",
+      "url": "https://go.dev/ref/spec",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "syntax",
+        "types",
+        "control flow",
+        "interfaces"
+      ]
+    },
+    {
+      "title": "database/sql Package",
+      "url": "https://pkg.go.dev/database/sql",
+      "publisher": "Go standard library",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "SQL connections",
+        "queries",
+        "transactions",
+        "resource lifecycle"
+      ]
+    },
+    {
+      "title": "encoding/json Package",
+      "url": "https://pkg.go.dev/encoding/json",
+      "publisher": "Go standard library",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "JSON encoding",
+        "decoding",
+        "validation boundaries"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied Go.pdf syllabus mapping. Human review and local runtime verification are required before publication."
+}

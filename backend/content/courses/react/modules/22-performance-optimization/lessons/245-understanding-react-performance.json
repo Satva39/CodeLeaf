@@ -1,0 +1,181 @@
+{
+  "id": "react-lesson-245",
+  "slug": "understanding-react-performance",
+  "title": "Understanding React Performance",
+  "sequence": 245,
+  "module_id": "react-module-22",
+  "module_slug": "performance-optimization",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "react-lesson-244"
+  ],
+  "previous_lesson_id": "react-lesson-244",
+  "next_lesson_id": "react-lesson-246",
+  "keywords": [
+    "Understanding React Performance",
+    "Performance Optimization",
+    "Render frequency",
+    "Expensive computations",
+    "DOM updates",
+    "Network and bundle costs",
+    "User-perceived performance",
+    "performance"
+  ],
+  "source_syllabus_number": 245,
+  "subtopics": [
+    "Render frequency",
+    "Expensive computations",
+    "DOM updates",
+    "Network and bundle costs",
+    "User-perceived performance"
+  ],
+  "learning_outcomes": [
+    "Explain how Understanding React Performance relates to Performance Optimization.",
+    "Apply Render frequency in a small React or JavaScript example and describe the expected result.",
+    "Test one edge/failure case and identify a maintainable, accessible fix."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study Understanding React Performance as part of Performance Optimization. The syllabus topics are kept below, then connected to a small example you can inspect and adapt.",
+    "why_it_matters": "Render frequency should be applied only when it addresses a measured cost. Profile a representative workflow, change one factor, and compare correctness and performance against the baseline.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Understanding React Performance: concept map",
+        "asset_path": "diagrams/lessons/lesson-245-understanding-react-performance.svg",
+        "alt_text": "Concept map for Understanding React Performance: Render frequency, Expensive computations, DOM updates.",
+        "caption": "A visual scaffold for the idea; the code and verification steps below provide the practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Render frequency should be applied only when it addresses a measured cost. Profile a representative workflow, change one factor, and compare correctness and performance against the baseline. Start with one responsibility at a time: identify the data, describe the expected interface, then decide which event, state update, request, or runtime boundary changes the result."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Render frequency",
+            "text": "Render frequency should be applied only when it addresses a measured cost. Profile a representative workflow, change one factor, and compare correctness and performance against the baseline."
+          },
+          {
+            "title": "Expensive computations",
+            "text": "Expensive computations should be applied only when it addresses a measured cost. Profile a representative workflow, change one factor, and compare correctness and performance against the baseline."
+          },
+          {
+            "title": "DOM updates",
+            "text": "DOM updates should be applied only when it addresses a measured cost. Profile a representative workflow, change one factor, and compare correctness and performance against the baseline."
+          },
+          {
+            "title": "Network and bundle costs",
+            "text": "Network and bundle costs should be applied only when it addresses a measured cost. Profile a representative workflow, change one factor, and compare correctness and performance against the baseline."
+          },
+          {
+            "title": "User-perceived performance",
+            "text": "User-perceived performance should be applied only when it addresses a measured cost. Profile a representative workflow, change one factor, and compare correctness and performance against the baseline."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "jsx",
+        "code": "import { useMemo } from \"react\";\n\nconst visibleItems = useMemo(\n  () => items.filter(item => item.name.includes(query)),\n  [items, query]\n);",
+        "expected_output": "The filtered list is recalculated when its inputs change; profile before keeping manual memoization.",
+        "run_instructions": "This is an inspectable teaching example, not an arbitrary-code runner inside CodeLeaf. Place JSX in a React/Vite project (or the relevant CSS/HTML/config file), run the project with its documented toolchain, and compare the visible behavior with the expected result. Server rendering and framework APIs require their stated runtime.",
+        "reset_steps": "Restore the original snippet, reset the component/data to its starting state, and repeat with a different input or an edge/failure case.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Use the code as a small experiment for Understanding React Performance. First predict the result, then run or inspect it in the required runtime. Change one input and explain why the output changed. If the topic depends on React version or framework support, confirm that the project uses a compatible version before interpreting a result."
+      },
+      {
+        "type": "callout",
+        "title": "Version and environment note",
+        "text": "This course assumes the React 19.3 documentation snapshot dated 2026-10-12. Core component, JSX, props, state, and event concepts apply broadly; modern APIs and server rendering must be checked against the stated React version and the framework/runtime in use."
+      }
+    ],
+    "task": "Create a minimal example demonstrating Understanding React Performance. Include the relevant subtopic “Render frequency”, explain the expected UI/result, and verify one normal case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named concept rather than merely mentioning it.",
+      "The expected visible or logged result is documented and reproducible.",
+      "At least one boundary, empty, loading, or failure case is handled or explained.",
+      "The implementation remains accessible and does not introduce avoidable mutation, stale state, or insecure client-only trust."
+    ],
+    "hints": [
+      "Start with the smallest part of “Render frequency” that can be observed independently.",
+      "Write down what should appear before changing the code; then change one input at a time.",
+      "Use the browser console, React Developer Tools, or the appropriate test/runtime to isolate a mismatch."
+    ],
+    "expected_output": "The filtered list is recalculated when its inputs change; profile before keeping manual memoization.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-245-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "The example handles only the happy path.",
+        "why": "Real UI receives empty values, delayed responses, and invalid input.",
+        "fix": "Add one explicit edge/failure case and document the expected message or state."
+      },
+      {
+        "problem": "The example stores redundant data or mutates an existing array/object.",
+        "why": "The displayed result can drift from the source data or React may not observe the intended change.",
+        "fix": "Derive values where possible and create a new value when updating state."
+      },
+      {
+        "problem": "A browser or framework capability is assumed to exist everywhere.",
+        "why": "Availability can depend on the host runtime, React version, and framework.",
+        "fix": "Check the official reference, declare the runtime/version, and provide a fallback when appropriate."
+      }
+    ],
+    "summary": [
+      "Understanding React Performance fits into the broader Performance Optimization workflow.",
+      "The central concept is Render frequency; apply it with the smallest reproducible example.",
+      "Verify correctness with at least one normal input and one boundary or failure case."
+    ],
+    "references": [
+      "https://react.dev/learn",
+      "https://react.dev/reference/react",
+      "https://react.dev/blog/2026/09/09/react-19-3"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "React — Learn",
+      "url": "https://react.dev/learn",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "Understanding React Performance",
+        "Render frequency",
+        "Expensive computations"
+      ]
+    },
+    {
+      "title": "React Reference",
+      "url": "https://react.dev/reference/react",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "React APIs and behavior",
+        "Understanding React Performance"
+      ]
+    },
+    {
+      "title": "React 19.3 Release Notes",
+      "url": "https://react.dev/blog/2026/09/09/react-19-3",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "version-specific modern APIs and compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus and authored as an educational draft; technical/instructional review required before publication."
+}

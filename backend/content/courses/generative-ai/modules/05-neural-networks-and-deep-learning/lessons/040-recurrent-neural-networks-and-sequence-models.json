@@ -1,0 +1,173 @@
+{
+  "id": "genai-lesson-040",
+  "slug": "recurrent-neural-networks-and-sequence-models",
+  "title": "Recurrent Neural Networks and Sequence Models",
+  "sequence": 40,
+  "module_id": "genai-module-05",
+  "module_slug": "neural-networks-and-deep-learning",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-foundations",
+  "estimated_minutes": 12,
+  "prerequisites": [],
+  "previous_lesson_id": "genai-lesson-039",
+  "next_lesson_id": "genai-lesson-041",
+  "keywords": [
+    "Recurrent Neural Networks and Sequence Models",
+    "Sequence data and temporal dependencies",
+    "Recurrent neural networks",
+    "LSTM and GRU architectures",
+    "Sequence-to-sequence learning",
+    "Limitations of recurrent architectures",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 40,
+  "subtopics": [
+    "Sequence data and temporal dependencies",
+    "Recurrent neural networks",
+    "LSTM and GRU architectures",
+    "Sequence-to-sequence learning",
+    "Limitations of recurrent architectures",
+    "How attention and transformers changed sequence modeling"
+  ],
+  "learning_outcomes": [
+    "Explain sequence data and temporal dependencies and how it connects to recurrent neural networks and sequence models.",
+    "Apply recurrent neural networks in the example and predict the output before running it.",
+    "Test one realistic edge case for recurrent neural networks and sequence models and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers recurrent neural networks and sequence models through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Connect neurons, layers, activations, losses, gradients, and training loops with small numerical examples. Large-scale training requires separate compute and engineering resources.",
+    "why_it_matters": "Sequence data and temporal dependencies is part of the representation and generation mechanism. Follow the information flow from input representation to model computation to output selection, then distinguish the architecture's capabilities from limits caused by data, context, decoding choices, or compute.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Recurrent Neural Networks and Sequence Models: concept map",
+        "asset_path": "diagrams/lessons/lesson-040-recurrent-neural-networks-and-sequence-models.svg",
+        "alt_text": "Diagram for Recurrent Neural Networks and Sequence Models: understand Sequence data and temporal dependencies, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Sequence data and temporal dependencies, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Sequence data and temporal dependencies is part of the representation and generation mechanism. Follow the information flow from input representation to model computation to output selection, then distinguish the architecture's capabilities from limits caused by data, context, decoding choices, or compute."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Sequence data and temporal dependencies",
+            "text": "Sequence data and temporal dependencies is part of the representation and generation mechanism. Follow the information flow from input representation to model computation to output selection, then distinguish the architecture's capabilities from limits caused by data, context, decoding choices, or compute."
+          },
+          {
+            "title": "Recurrent neural networks",
+            "text": "Use recurrent neural networks as a lens for understanding recurrent neural networks and sequence models. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "LSTM and GRU architectures",
+            "text": "LSTM and GRU architectures is part of the representation and generation mechanism. Follow the information flow from input representation to model computation to output selection, then distinguish the architecture's capabilities from limits caused by data, context, decoding choices, or compute."
+          },
+          {
+            "title": "Sequence-to-sequence learning",
+            "text": "Sequence-to-sequence learning is part of the representation and generation mechanism. Follow the information flow from input representation to model computation to output selection, then distinguish the architecture's capabilities from limits caused by data, context, decoding choices, or compute."
+          },
+          {
+            "title": "Limitations of recurrent architectures",
+            "text": "Limitations of recurrent architectures is part of the representation and generation mechanism. Follow the information flow from input representation to model computation to output selection, then distinguish the architecture's capabilities from limits caused by data, context, decoding choices, or compute."
+          },
+          {
+            "title": "How attention and transformers changed sequence modeling",
+            "text": "How attention and transformers changed sequence modeling is part of the representation and generation mechanism. Follow the information flow from input representation to model computation to output selection, then distinguish the architecture's capabilities from limits caused by data, context, decoding choices, or compute."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Recurrent Neural Networks and Sequence Models\nvalues = [1, 2, 3]\nhidden = 0\ntrace = []\nfor value in values:\n    hidden = 0.5 * hidden + value\n    trace.append(hidden)\nprint(trace)\n# A toy recurrence illustrates state across a sequence; it is not a trained RNN.",
+        "expected_output": "[1.0, 2.5, 4.25]",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice sequence data and temporal dependencies within recurrent neural networks and sequence models: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "[1.0, 2.5, 4.25]",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-040-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Recurrent Neural Networks and Sequence Models is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://developers.google.com/machine-learning/crash-course/",
+      "https://docs.pytorch.org/tutorials/beginner/basics/intro",
+      "https://docs.python.org/3/tutorial/"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Machine Learning Crash Course",
+      "url": "https://developers.google.com/machine-learning/crash-course/",
+      "publisher": "Google for Developers",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "AI and machine learning foundations"
+      ]
+    },
+    {
+      "title": "Learn the Basics: PyTorch Tutorials",
+      "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro",
+      "publisher": "PyTorch",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tensors"
+      ]
+    },
+    {
+      "title": "The Python Tutorial",
+      "url": "https://docs.python.org/3/tutorial/",
+      "publisher": "Python Software Foundation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Python fundamentals"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

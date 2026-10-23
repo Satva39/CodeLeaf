@@ -1,0 +1,56 @@
+{
+  "id": "r-exercise-026",
+  "slug": "read-json-returned-by-a-public-api",
+  "title": "Read JSON returned by a public API",
+  "type": "short_answer",
+  "lesson_id": "r-lesson-170",
+  "module_id": "r-module-16",
+  "sequence": 26,
+  "difficulty": "intermediate",
+  "prompt": "Design a safe workflow that requests an authorized public endpoint, checks status/content type and validates the decoded shape.",
+  "objective": "Practice http, json parsing, data conversion with explicit acceptance criteria and a reproducible result.",
+  "target_skills": [
+    "HTTP",
+    "JSON parsing",
+    "data conversion"
+  ],
+  "starter": {
+    "language": "r",
+    "source_code": "# Static example only; endpoint must be reviewed and authorized\n# response <- httr2::request(endpoint) |> httr2::req_timeout(10) |> httr2::req_perform()\n# payload <- jsonlite::fromJSON(httr2::resp_body_string(response))",
+    "mode": "static-validation"
+  },
+  "expected_output": "No request is made by this exercise. Document rate limits, errors, schema checks and where secrets must not be stored.",
+  "public_tests": [
+    {
+      "name": "Includes core concept",
+      "description": "The submission demonstrates req_timeout."
+    },
+    {
+      "name": "Includes validation or outcome",
+      "description": "The submission also demonstrates fromJSON."
+    }
+  ],
+  "acceptance_criteria": [
+    "The submission addresses the task and all required core concepts.",
+    "Expected behavior and an edge case are described and checked.",
+    "Input assumptions, missing-value handling and output shape are documented where relevant.",
+    "Code is readable, uses appropriate R constructs and avoids destructive/external side effects.",
+    "Any result derived from statistics includes assumptions and relevant limitations."
+  ],
+  "hints": [
+    "Identify the input, output and key R concept: HTTP, JSON parsing, data conversion.",
+    "No request is made by this exercise. Document rate limits, errors, schema checks and where secrets must not be stored.",
+    "Test a normal case, a boundary/failure case, and verify the output independently."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "req_timeout",
+      "fromJSON"
+    ]
+  },
+  "grading_method": "Draft/static token check only. The current platform grader can check whether the submitted text contains these strings, but it cannot execute R or prove program correctness. Keep unpublished and use human review or a separately isolated R runner before enabling XP-bearing completion.",
+  "retry_policy": "Allow learner retries in a reviewed course policy; this content file does not override platform retry or XP policy.",
+  "solution_file": "../solutions/026-read-json-returned-by-a-public-api-solution.json",
+  "status": "draft"
+}

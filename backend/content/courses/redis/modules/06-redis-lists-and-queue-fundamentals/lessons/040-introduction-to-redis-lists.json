@@ -1,0 +1,146 @@
+{
+  "id": "redis-lesson-040",
+  "slug": "introduction-to-redis-lists",
+  "title": "Introduction to Redis Lists",
+  "sequence": 40,
+  "module_id": "redis-module-06",
+  "module_slug": "redis-lists-and-queue-fundamentals",
+  "level": "beginner to intermediate",
+  "difficulty": "intermediate",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-039"
+  ],
+  "previous_lesson_id": "redis-lesson-039",
+  "next_lesson_id": "redis-lesson-041",
+  "keywords": [
+    "introduction-to-redis-lists",
+    "ordered-collections",
+    "head-and-tail-operations",
+    "list-indexes",
+    "common-queue-and-list-use-cases",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 40,
+  "subtopics": [
+    "Ordered collections",
+    "Head and tail operations",
+    "List indexes",
+    "Common queue and list use cases"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Introduction to Redis Lists and distinguish it from a related Redis concept.",
+    "Apply or trace Introduction to Redis Lists in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Introduction to Redis Lists and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Introduction to Redis Lists in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Introduction to Redis Lists helps implement use lists for ordered work while recognizing the delivery and retry limits of basic queues. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Introduction to Redis Lists",
+        "asset_path": "diagrams/lesson-040-introduction-to-redis-lists.svg",
+        "alt_text": "Concept diagram for Introduction to Redis Lists, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Introduction to Redis Lists; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Introduction to Redis Lists helps implement use lists for ordered work while recognizing the delivery and retry limits of basic queues. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Introduction to Redis Lists, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Ordered collections",
+            "text": "Connect Ordered collections to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Head and tail operations",
+            "text": "Connect Head and tail operations to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "List indexes",
+            "text": "Connect List indexes to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Common queue and list use cases",
+            "text": "Connect Common queue and list use cases to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Introduction to Redis Lists",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "LPUSH demo:jobs job-1\nLPUSH demo:jobs job-2\nLRANGE demo:jobs 0 -1",
+        "expected_output": "1\n2\n1) \"job-2\" 2) \"job-1\"",
+        "run_instructions": "LPUSH adds at the head. Pair the producer/consumer ends deliberately to achieve the intended FIFO/LIFO behavior.",
+        "reset_steps": "DEL demo:jobs",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Introduction to Redis Lists. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Introduction to Redis Lists in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Introduction to Redis Lists.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "1\n2\n1) \"job-2\" 2) \"job-1\"",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-040-questions.json",
+    "recap": [
+      "Introduction to Redis Lists is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Redis data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "strings, hashes, lists, sets, sorted sets, streams, geospatial indexes, bitmaps, bitfields, JSON, arrays, time series, probabilistic structures, vector sets"
+      ]
+    },
+    {
+      "title": "Compare data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/compare-data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "data-type selection and use-case trade-offs"
+      ]
+    },
+    {
+      "title": "Redis commands reference",
+      "url": "https://redis.io/docs/latest/commands/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "command syntax, return values, complexity, compatibility and command history"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

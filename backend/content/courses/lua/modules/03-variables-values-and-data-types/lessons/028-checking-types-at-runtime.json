@@ -1,0 +1,157 @@
+{
+  "id": "lua-lesson-028",
+  "slug": "checking-types-at-runtime",
+  "title": "Checking Types at Runtime",
+  "sequence": 28,
+  "module_id": "lua-module-03",
+  "module_slug": "variables-values-and-data-types",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 8,
+  "prerequisites": [
+    "lua-lesson-027"
+  ],
+  "previous_lesson_id": "lua-lesson-027",
+  "next_lesson_id": "lua-lesson-029",
+  "keywords": [
+    "checking-types-at-runtime",
+    "using-type",
+    "understanding-lua-s-eight-basic-types-nil-boolean-number-string-function-userdata-thread",
+    "and-table"
+  ],
+  "source_syllabus_number": 28,
+  "subtopics": [
+    "Using type()",
+    "Understanding Lua's eight basic types: nil , boolean, number, string, function, userdata, thread,",
+    "and table"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of checking Types at Runtime and the key behavior described in this lesson.",
+    "Apply checking Types at Runtime in a small Lua example and predict its result.",
+    "Identify a relevant edge case, version constraint, or host-runtime limitation for checking Types at Runtime."
+  ],
+  "content": {
+    "intro": "Lua has eight basic value types: nil, boolean, number, string, function, userdata, thread, and table. Prefer `local` for implementation variables; assigning a table copies a reference, not the table contents.",
+    "why_it_matters": "Lua has eight basic value types: nil, boolean, number, string, function, userdata, thread, and table. Prefer `local` for implementation variables; assigning a table copies a reference, not the table contents. This concept appears in the supplied syllabus; keep the scope and assumptions visible in your implementation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual map: Checking Types at Runtime",
+        "asset_path": "diagrams/lessons/lesson-028.svg",
+        "alt_text": "Concept map for Checking Types at Runtime; understand the concept, inspect a Lua example, and verify behavior and edge cases.",
+        "caption": "Visual summary of Checking Types at Runtime; use the three-step path while working through the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Checking Types at Runtime is part of Variables, Values, and Data Types. Start with the exact rule or capability, identify what the example assumes, and note what changes on another Lua version or in a host application."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core explanation",
+        "text": "Lua has eight basic value types: nil, boolean, number, string, function, userdata, thread, and table. Prefer `local` for implementation variables; assigning a table copies a reference, not the table contents."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics to cover",
+        "items": [
+          {
+            "title": "Using type()",
+            "text": "Understand Using type(); connect it to Checking Types at Runtime, then state one useful example or boundary case."
+          },
+          {
+            "title": "Understanding Lua's eight basic types: nil , boolean, number, string, function, userdata, thread,",
+            "text": "Understand Understanding Lua's eight basic types: nil , boolean, number, string, function, userdata, thread,; connect it to Checking Types at Runtime, then state one useful example or boundary case."
+          },
+          {
+            "title": "and table",
+            "text": "Understand and table; connect it to Checking Types at Runtime, then state one useful example or boundary case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through the example",
+        "text": "Read the small example, predict every output line, then run it locally with a compatible runtime. Run with the Lua 5.5 interpreter unless the example explicitly names a host API or another runtime. Keep the smallest reproducible case if the observed behavior differs."
+      },
+      {
+        "type": "code",
+        "language": "lua",
+        "execution_mode": "static-validation",
+        "code": "local message = \"Lua makes text tools practical\"\nlocal changed, count = message:gsub(\"text\", \"string\")\nprint(changed)\nprint(count)",
+        "expected_output": "Lua makes string tools practical\n1",
+        "caption": "Static reference example for local verification; CodeLeaf does not execute this snippet unless a dedicated isolated runner is explicitly provided.",
+        "run_instructions": "Save the code in a local file with the correct language extension and test it using the runtime noted in the lesson. Run with the Lua 5.5 interpreter unless the example explicitly names a host API or another runtime. Compare the exact output to the documented result.",
+        "reset_steps": "Restore the original snippet, remove generated test files if any, and repeat from a clean local test state."
+      },
+      {
+        "type": "callout",
+        "title": "Version, host, and safety note",
+        "text": "Run with the Lua 5.5 interpreter unless the example explicitly names a host API or another runtime."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Mistake 1",
+            "text": "Confusing Checking Types at Runtime with a similarly named feature in another language or runtime. Fix: follow the version-matched reference and test the smallest example."
+          },
+          {
+            "title": "Mistake 2",
+            "text": "Relying on an output order or environment capability that the language/host does not guarantee. Fix: document assumptions and make order/capabilities explicit."
+          },
+          {
+            "title": "Mistake 3",
+            "text": "Skipping a boundary test or failing to check error-return values. Fix: test invalid and boundary inputs and inspect failure values."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Recap and next step",
+        "text": "Recap: explain Checking Types at Runtime without the example, predict its behavior, and name one limit. Next: Arithmetic Operators."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate “Checking Types at Runtime” with a different input or boundary case. Predict the result before running it, record what you observe, and explain one limitation.",
+    "task_acceptance_criteria": [
+      "Explain the central behavior of Checking Types at Runtime in your own words.",
+      "Verify the result using a supported local runtime or clearly state why the host/tooling prevents a full run.",
+      "Identify a boundary case or compatibility/security limit relevant to the lesson."
+    ],
+    "hints": [
+      "First identify the input, output, and any assumed runtime or host feature.",
+      "Reduce the problem to the smallest example that exposes the relevant rule.",
+      "Test one normal case and one boundary/failure case; inspect error output without leaking secrets."
+    ],
+    "expected_output": "Lua makes string tools practical\n1",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-028-knowledge-check.json",
+    "references": [
+      {
+        "title": "Lua 5.5 Reference Manual",
+        "url": "https://www.lua.org/manual/5.5/",
+        "publisher": "Lua.org",
+        "checked_on": "2026-10-20"
+      }
+    ]
+  },
+  "exercise_files": [
+    "../exercises/028-variables-and-types.json"
+  ],
+  "sources": [
+    "references/reference-index.json"
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Lua curriculum; requires expert technical, grading, accessibility, and runtime review before publication.",
+  "common_mistakes": [
+    "Confusing Checking Types at Runtime with a similarly named feature in another language or runtime.",
+    "Relying on an output order or environment capability that the language/host does not guarantee.",
+    "Skipping a boundary test or failing to check error-return values."
+  ],
+  "next_steps": [
+    "Continue with Arithmetic Operators."
+  ]
+}

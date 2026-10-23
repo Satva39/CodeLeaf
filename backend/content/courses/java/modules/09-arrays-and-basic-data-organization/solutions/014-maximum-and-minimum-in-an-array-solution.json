@@ -1,0 +1,32 @@
+{
+  "id": "java-exercise-solution-014",
+  "exercise_id": "java-exercise-014",
+  "title": "Maximum and Minimum in an Array reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "language": "java",
+  "answer": "public class Main {\n    public static void main(String[] args) {\n        int[] values = {8, -3, 21, 4};\n        if (values.length == 0) throw new IllegalArgumentException(\"Array must not be empty\");\n        int minimum = values[0], maximum = values[0];\n        for (int value : values) {\n            minimum = Math.min(minimum, value);\n            maximum = Math.max(maximum, value);\n        }\n        System.out.println(\"min=\" + minimum + \", max=\" + maximum);\n    }\n}",
+  "explanation": "Initialize both extrema from the first element instead of an arbitrary sentinel. Reject empty arrays before reading index zero.",
+  "hidden_tests": [
+    {
+      "case": "normal case",
+      "input_or_setup": "Use the deterministic sample data or representative valid input described in the exercise.",
+      "expected_behavior": "min=-3, max=21",
+      "purpose": "Verify the main behavior and the output contract."
+    },
+    {
+      "case": "boundary case",
+      "input_or_setup": "Test empty, zero, minimum/maximum, duplicate, or end-of-range input as appropriate to the exercise.",
+      "expected_behavior": "The result matches the documented boundary rule and does not silently corrupt state.",
+      "purpose": "Check a boundary or invariant."
+    },
+    {
+      "case": "invalid or failure case",
+      "input_or_setup": "Provide malformed input or simulate a missing file, unavailable endpoint, missing configuration, or database failure where relevant.",
+      "expected_behavior": "The operation fails clearly or returns a safe result; resources are released and secrets are not printed.",
+      "purpose": "Check explicit error behavior and cleanup."
+    }
+  ],
+  "review_notes": "Repository-only reference material. Keep it out of public API responses and frontend bundles. The platform grader is only a required-token smoke check; complete task-specific execution tests in an isolated Java runner before publication.",
+  "sample_expected_result": "min=-3, max=21"
+}

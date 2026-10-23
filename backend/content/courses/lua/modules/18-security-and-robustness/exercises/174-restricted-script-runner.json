@@ -1,0 +1,59 @@
+{
+  "id": "lua-exercise-174",
+  "slug": "restricted-script-runner",
+  "title": "Restricted Script Runner",
+  "sequence": 174,
+  "module_id": "lua-module-18",
+  "lesson_id": "lua-lesson-174",
+  "lesson_slug": "designing-restricted-environments",
+  "difficulty": "advanced",
+  "prompt": "Design a local-only demonstration that compiles a trusted snippet with a constrained environment and documents what it does not protect against.",
+  "target_skills": [
+    "load",
+    "explicit environment",
+    "sandbox limitations"
+  ],
+  "starter_code": "-- Complete this Lua exercise: Restricted Script Runner\n-- Add your solution below.\n",
+  "expected_output_or_acceptance_criteria": [
+    "load",
+    "environment",
+    "trust boundary",
+    "isolation"
+  ],
+  "hints": [
+    "Specify a text-only load mode on Lua 5.2+.",
+    "Supply an explicit environment.",
+    "Do not execute untrusted code in the application process; document OS-level isolation requirements."
+  ],
+  "acceptance_criteria": [
+    "The example is restricted to intended names.",
+    "Limitations and host-enforced sandbox requirements are explicit."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "load(",
+      "assert("
+    ]
+  },
+  "grading_method": "Server-side source-token checks are a draft heuristic, not execution of Lua. Review false positives/negatives and replace with isolated execution or instructor review before publication.",
+  "test_cases": [
+    {
+      "name": "normal case",
+      "input": "Use the fixture and inputs described in the prompt.",
+      "expected": "Meets all acceptance criteria."
+    },
+    {
+      "name": "boundary or invalid case",
+      "input": "Use an empty, missing, or boundary value relevant to the prompt.",
+      "expected": "Failure or boundary behavior is explicit and safe."
+    }
+  ],
+  "retry_policy": {
+    "unlimited_for_learning": true,
+    "feedback": "Show progressive hints before presenting any reference solution."
+  },
+  "solution_file": "solutions/174-restricted-script-runner-solution.json",
+  "status": "draft",
+  "status_note": "Needs subject-matter review and automated grader calibration before publication."
+}

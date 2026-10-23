@@ -1,0 +1,145 @@
+{
+  "id": "git-lesson-117",
+  "slug": "safe-force-pushing",
+  "title": "Safe Force-Pushing",
+  "sequence": 117,
+  "module_id": "git-module-11",
+  "module_slug": "rebasing-and-history-management",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "primary_service": "Git version control",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "git-lesson-116"
+  ],
+  "previous_lesson_id": "git-lesson-116",
+  "next_lesson_id": "git-lesson-118",
+  "keywords": [
+    "git-automation-scripting-and-production-workflows",
+    "rebasing-and-history-management",
+    "git",
+    "understanding-non-fast-forward-updates",
+    "using-force-with-lease",
+    "checking-the-destination-branch",
+    "avoiding-accidental-overwrites-of-collaborators-changes"
+  ],
+  "source_syllabus_number": 117,
+  "subtopics": [
+    "Understanding non-fast-forward updates",
+    "Using --force-with-lease",
+    "Checking the destination branch",
+    "Avoiding accidental overwrites of collaborators' changes"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and boundaries of safe force-pushing.",
+    "Choose and interpret a Git command relevant to safe force-pushing using a disposable repository.",
+    "Verify the result with repository state or history and identify one safety limitation."
+  ],
+  "content": {
+    "intro": "This lesson introduces safe force-pushing as part of Rebasing and History Management. It follows the supplied Git curriculum and adds an original explanation, an inspectable command example, troubleshooting notes, and a practice task.",
+    "why_it_matters": "`git push --force-with-lease` adds a check against unexpectedly changed remote state, but it can still replace published branch history. Confirm the destination and collaborate with the team; it is not a general safety switch for main.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 11: Rebasing and History Management",
+        "asset_path": "diagrams/module-11-overview.svg",
+        "alt_text": "Four-step view of Rebasing and History Management, with key syllabus checkpoints and a verification reminder.",
+        "caption": "Original CodeLeaf diagram. Review labels as well as the explanatory text; color is not the only signal."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "**Core idea.** `git push --force-with-lease` adds a check against unexpectedly changed remote state, but it can still replace published branch history. Confirm the destination and collaborate with the team; it is not a general safety switch for main.\n\nFor **Safe Force-Pushing**, keep the named subtopics in view: Understanding non-fast-forward updates; Using --force-with-lease; Checking the destination branch; Avoiding accidental overwrites of collaborators' changes. Treat those as the scope of this lesson, then practise the smallest workflow that demonstrates the idea."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "**Before you run a command:** decide what state you are inspecting or changing, identify whether the effect is local or remote, and write down what evidence would count as success. This can still overwrite remote branch history if the lease conditions hold. Verify the destination, fetch recent updates and use only with explicit team agreement; never assume it is safe for a shared main branch."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered",
+        "items": [
+          "Understanding non-fast-forward updates",
+          "Using --force-with-lease",
+          "Checking the destination branch",
+          "Avoiding accidental overwrites of collaborators' changes"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Command example: Safe Force-Pushing",
+        "language": "bash",
+        "code": "git push --force-with-lease origin feature/example",
+        "expected_output": "The remote branch is updated only if the lease check still matches the expected remote-tracking state and the server accepts the update.",
+        "run_instructions": "This can still overwrite remote branch history if the lease conditions hold. Verify the destination, fetch recent updates and use only with explicit team agreement; never assume it is safe for a shared main branch.",
+        "reset_steps": "Use a disposable repository. If the exercise changes state, check git status and git log before and after; discard the practice directory only after confirming it contains no valuable work.",
+        "execution_mode": "human-review",
+        "limitations": "The CodeLeaf web lesson page does not execute arbitrary Git commands. Run commands locally in a disposable repository with a Git version appropriate to your task. Placeholder paths, branches, commit IDs and repository URLs must be replaced with values from that practice repository."
+      },
+      {
+        "type": "callout",
+        "title": "Safety and verification checkpoint",
+        "text": "Start with git status --short --branch. For destructive or history-rewriting operations, review the exact target, create a recovery reference when appropriate, and keep valuable work backed up. Never put credentials, access tokens or private keys in course submissions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-117-questions.json"
+  },
+  "task": "Using a repository you own or are authorized to access, record the remote URLs, fetch or inspect remote history, compare it with the local branch, and document what would change before pushing or opening a review.",
+  "hints": [
+    "Start by reviewing: Understanding non-fast-forward updates.",
+    "Use a read-only inspection command before any operation that changes files, refs or remote state.",
+    "After the example, verify with git status --short --branch and/or git log --oneline --graph as appropriate."
+  ],
+  "expected_output": "The remote branch is updated only if the lease check still matches the expected remote-tracking state and the server accepts the update.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Running a state-changing command without confirming the target repository or branch.",
+      "why": "A command may affect the wrong working tree or move a reference that other work depends on.",
+      "fix": "Check git rev-parse --show-toplevel and git status --short --branch before proceeding."
+    },
+    {
+      "problem": "Assuming a command succeeded because no error was visible.",
+      "why": "Some Git commands are silent on success, and some expected actions are blocked by repository state or permissions.",
+      "fix": "Verify status, log, references, remote state or the named output explicitly."
+    },
+    {
+      "problem": "Using an example placeholder literally or applying a destructive example to valuable work.",
+      "why": "Paths, branch names and object IDs depend on the current repository; restore/reset/clean operations can discard work.",
+      "fix": "Substitute real practice values, use a disposable repository, and preview changes before proceeding."
+    }
+  ],
+  "summary": [
+    "Safe Force-Pushing is covered through these syllabus topics: Understanding non-fast-forward updates; Using --force-with-lease; Checking the destination branch; Avoiding accidental overwrites of collaborators' changes.",
+    "Choose the command for the intended effect; understand whether it changes files, the index, local references, or remote state.",
+    "Verify the result, record unexpected output, and retain a recovery path for risky operations."
+  ],
+  "references": [
+    "references/reference-index.json",
+    "https://git-scm.com/docs",
+    "https://git-scm.com/book/en/v2"
+  ],
+  "sources": [
+    {
+      "title": "Git Reference Documentation",
+      "url": "https://git-scm.com/docs",
+      "publisher": "Git project",
+      "checked_on": "2026-10-15",
+      "source_type": "official-reference"
+    },
+    {
+      "title": "Pro Git Book, 2nd Edition",
+      "url": "https://git-scm.com/book/en/v2",
+      "publisher": "Git project / Pro Git",
+      "checked_on": "2026-10-15",
+      "source_type": "officially-hosted-book"
+    }
+  ],
+  "exercise_files": [],
+  "technical_review_date": "2026-10-15",
+  "status": "draft",
+  "status_note": "Generated from the supplied Git syllabus. Content and commands need editorial/technical review before publication."
+}

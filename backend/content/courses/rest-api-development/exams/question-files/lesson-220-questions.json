@@ -1,0 +1,49 @@
+{
+  "id": "rest-api-development-knowledge-check-220",
+  "lesson_id": "rest-api-development-lesson-220",
+  "lesson_slug": "distributed-system-design-considerations",
+  "title": "Knowledge check: Distributed System Design Considerations",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "questions": [
+    {
+      "id": "rest-api-development-q-220-01",
+      "type": "single_choice",
+      "prompt": "How can a service reliably publish an event related to a database transaction?",
+      "options": [
+        "Require the client to infer private database changes from response timing.",
+        "Delete the event record as soon as a publisher begins a network call.",
+        "Use an outbox record committed with the business change, then publish it asynchronously with deduplication.",
+        "Publish before the database transaction and assume the commit cannot fail."
+      ],
+      "answer_key": "Use an outbox record committed with the business change, then publish it asynchronously with deduplication.",
+      "explanation": "Use an outbox record committed with the business change, then publish it asynchronously with deduplication. This is especially relevant to “Distributed System Design Considerations” because the API contract must remain explicit and reviewable."
+    },
+    {
+      "id": "rest-api-development-q-220-02",
+      "type": "single_choice",
+      "prompt": "For the lesson “Distributed System Design Considerations”, which check provides the strongest practical evidence?",
+      "options": [
+        "Test against production records so the exercise cannot be repeated safely.",
+        "Simulate partial failure between a database commit and event publication, then recover.",
+        "Rely on a code review comment without running any representative check.",
+        "Run one happy-path call and skip invalid, denied, and failure scenarios."
+      ],
+      "answer_key": "Simulate partial failure between a database commit and event publication, then recover.",
+      "explanation": "A useful check is repeatable, tied to an observable contract, and includes an important negative or boundary scenario."
+    },
+    {
+      "id": "rest-api-development-q-220-03",
+      "type": "single_choice",
+      "prompt": "Which review warning is most relevant to “Distributed System Design Considerations”?",
+      "options": [
+        "A multi-service workflow assumes remote actions and local database writes are atomic.",
+        "The expected behavior and relevant failure cases are documented.",
+        "A representative test can reproduce the result.",
+        "The API avoids exposing internal secrets and personal data."
+      ],
+      "answer_key": "A multi-service workflow assumes remote actions and local database writes are atomic.",
+      "explanation": "This finding weakens a core API guarantee and should be treated as a design or release issue, not only a style concern."
+    }
+  ]
+}

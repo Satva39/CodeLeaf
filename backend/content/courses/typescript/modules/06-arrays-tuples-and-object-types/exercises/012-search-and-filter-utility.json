@@ -1,0 +1,60 @@
+{
+  "id": "typescript-exercise-012",
+  "slug": "search-and-filter-utility",
+  "title": "Search and Filter Utility",
+  "sequence": 12,
+  "lesson_id": "typescript-lesson-046",
+  "lesson_slug": "046-array-methods-and-type-safety",
+  "module_id": "typescript-module-06",
+  "type": "coding",
+  "difficulty": "intermediate",
+  "status": "draft",
+  "prompt": "Create a generic filter function that returns elements matching a predicate.",
+  "starter": {
+    "code": "// TODO: define function filterItems<T>(items: readonly T[], predicate: (item: T) => boolean): T[]\n// TODO: use Array.filter\n",
+    "language": "typescript",
+    "file_name": "search-and-filter-utility.ts",
+    "execution_mode": "static-validation"
+  },
+  "public_tests": [
+    {
+      "name": "Required type contract",
+      "description": "Review that the submission contains the required declarations and preserves the stated input/output relationship.",
+      "mode": "static-token-check",
+      "required_strings": [
+        "function filterItems<T>",
+        "readonly T[]",
+        "predicate: (item: T) => boolean",
+        ".filter("
+      ]
+    },
+    {
+      "name": "Runtime and boundary review",
+      "description": "Explain one failure case and add a real runtime check when data crosses an external trust boundary.",
+      "mode": "human-review"
+    }
+  ],
+  "acceptance_criteria": [
+    "The result contains only matching values and preserves T.",
+    "Submit code with the required type declarations and add an explanation or test for one meaningful boundary/failure case.",
+    "Do not claim that the code has been executed by the CodeLeaf browser playground."
+  ],
+  "hints": [
+    "Type the callback in terms of the same generic type as the array.",
+    "TypeScript checks assignability but does not validate external data at runtime.",
+    "Use the local TypeScript compiler and an appropriate test runner to verify behavior; the course grader checks only the documented text markers."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "function filterItems<T>",
+      "readonly T[]",
+      "predicate: (item: T) => boolean",
+      ".filter("
+    ]
+  },
+  "grading_method": "Server-side static token check for the required declarations plus human review of runtime tests. This is not a TypeScript compiler or arbitrary-code runner.",
+  "retry_policy": "Unlimited practice retries; platform XP is awarded once only after a correct server-side grade.",
+  "solution_file": "solutions/012-search-and-filter-utility-solution.json",
+  "status_note": "Draft until exercise instructions, starter, and static grader are reviewed. No course-authored XP override is used."
+}

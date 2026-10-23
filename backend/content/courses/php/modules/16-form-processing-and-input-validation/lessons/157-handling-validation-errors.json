@@ -1,0 +1,193 @@
+{
+  "id": "php-lesson-157",
+  "slug": "handling-validation-errors",
+  "title": "Handling Validation Errors",
+  "sequence": 157,
+  "module_id": "php-module-16",
+  "module_slug": "form-processing-and-input-validation",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "php-lesson-156"
+  ],
+  "previous_lesson_id": "php-lesson-156",
+  "next_lesson_id": "php-lesson-158",
+  "keywords": [
+    "handling validation errors",
+    "form processing and input validation",
+    "field-specific errors",
+    "preserving safe form values",
+    "clear feedback",
+    "multiple validation failures",
+    "avoiding disclosure of internal information",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 157,
+  "subtopics": [
+    "Field-specific errors.",
+    "Preserving safe form values.",
+    "Clear feedback.",
+    "Multiple validation failures.",
+    "Avoiding disclosure of internal information."
+  ],
+  "learning_outcomes": [
+    "Explain what handling validation errors contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: field-specific errors.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Form values arrive as untrusted strings and may be absent, malformed, or repeated. Normalize them, validate business rules on the server, preserve safe user input when showing errors, and escape values on output. In this lesson, focus on field-specific errors; then compare it with preserving safe form values. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use handling validation errors when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 16 overview: Form Processing and Input Validation",
+        "asset_path": "diagrams/module-16-overview.svg",
+        "alt_text": "Four-stage overview for module 16, Form Processing and Input Validation, grouping lesson topics in order.",
+        "caption": "Use this overview to place handling validation errors in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Form values arrive as untrusted strings and may be absent, malformed, or repeated. Normalize them, validate business rules on the server, preserve safe user input when showing errors, and escape values on output. For handling validation errors, begin with field-specific errors. Also distinguish preserving safe form values; clear feedback; multiple validation failures. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Field-specific errors",
+            "text": "Know when to use field-specific errors, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Preserving safe form values",
+            "text": "Know when to use preserving safe form values, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Clear feedback",
+            "text": "Know when to use clear feedback, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Multiple validation failures",
+            "text": "Know when to use multiple validation failures, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Avoiding disclosure of internal information",
+            "text": "Know when to use avoiding disclosure of internal information, what input or program state it changes, and which boundary case is worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Handling Validation Errors",
+        "language": "php",
+        "code": "<?php\nfunction label(string $name = \"learner\"): string { return \"Hello, \" . $name; }\necho label() . PHP_EOL;",
+        "expected_output": "Hello, learner",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Validate data at system boundaries and encode output for the target context; validation and escaping solve different problems."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for handling validation errors from top to bottom. Start by identifying field-specific errors, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for handling validation errors that demonstrates \"field-specific errors\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of field-specific errors.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "Hello, learner",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-157-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating input validation as output escaping.",
+        "why": "A value can be valid data and still be unsafe in an HTML or JavaScript output context.",
+        "fix": "Validate shape and business rules at input boundaries, then apply context-appropriate output encoding."
+      },
+      {
+        "problem": "Trusting client-side checks alone.",
+        "why": "A request can be sent without the original form or browser UI.",
+        "fix": "Repeat all security-relevant validation and authorization on the server."
+      },
+      {
+        "problem": "Returning internal error details to the browser.",
+        "why": "Stack traces and configuration values may expose sensitive information.",
+        "fix": "Log safe diagnostics server-side and return a generic, useful response."
+      }
+    ],
+    "summary": [
+      "Handling Validation Errors is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Validate data at system boundaries and encode output for the target context; validation and escaping solve different problems."
+    ],
+    "references": [
+      {
+        "title": "Filter functions",
+        "url": "https://www.php.net/manual/en/book.filter.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "input validation",
+          "filter_var",
+          "filter_input"
+        ]
+      },
+      {
+        "title": "OWASP Cross-Site Request Forgery Prevention Cheat Sheet",
+        "url": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
+        "publisher": "OWASP",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "CSRF tokens",
+          "origin checks",
+          "safe state-changing requests"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Filter functions",
+      "url": "https://www.php.net/manual/en/book.filter.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "input validation",
+        "filter_var",
+        "filter_input"
+      ]
+    },
+    {
+      "title": "OWASP Cross-Site Request Forgery Prevention Cheat Sheet",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
+      "publisher": "OWASP",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "CSRF tokens",
+        "origin checks",
+        "safe state-changing requests"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

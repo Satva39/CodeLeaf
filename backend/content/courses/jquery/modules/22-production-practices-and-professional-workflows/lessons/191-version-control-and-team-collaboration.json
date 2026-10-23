@@ -1,0 +1,203 @@
+{
+  "id": "jquery-lesson-191",
+  "slug": "version-control-and-team-collaboration",
+  "title": "Version Control and Team Collaboration",
+  "sequence": 191,
+  "module_id": "jquery-module-22",
+  "module_slug": "production-practices-and-professional-workflows",
+  "level": "professional",
+  "difficulty": "advanced",
+  "track": "professional",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "jquery-lesson-190"
+  ],
+  "previous_lesson_id": "jquery-lesson-190",
+  "next_lesson_id": "jquery-lesson-192",
+  "keywords": [
+    "version control and team collaboration",
+    "jquery",
+    "javascript",
+    "production practices and professional workflows",
+    "maintaining code in git",
+    "reviewing changes",
+    "coordinating shared selectors and css classes",
+    "documenting plugin interfaces"
+  ],
+  "source_syllabus_number": 191,
+  "subtopics": [
+    "Maintaining code in Git",
+    "Reviewing changes",
+    "Coordinating shared selectors and CSS classes",
+    "Documenting plugin interfaces",
+    "Managing library and plugin upgrades"
+  ],
+  "learning_outcomes": [
+    "Explain the role of version control and team collaboration in a jQuery application.",
+    "Apply maintaining code in git in a small example and describe its expected result.",
+    "Verify reviewing changes with an explicit test or browser observation."
+  ],
+  "exercise_files": [
+    "../exercises/191-version-control-and-team-collaboration.json"
+  ],
+  "sources": [
+    {
+      "title": "jQuery Core 4.0 Upgrade Guide",
+      "url": "https://jquery.com/upgrade-guide/4.0/",
+      "publisher": "jQuery project",
+      "checked_on": "2026-10-12",
+      "source_type": "official_upgrade_guide",
+      "supports": [
+        "Breaking changes",
+        "Removed APIs",
+        "AJAX security behavior",
+        "Migration decisions"
+      ]
+    },
+    {
+      "title": "jQuery 4.0.0 release notes",
+      "url": "https://blog.jquery.com/2026/01/17/jquery-4-0-0/",
+      "publisher": "Official jQuery Blog",
+      "checked_on": "2026-10-12",
+      "source_type": "official_release_notes",
+      "supports": [
+        "jQuery 4.0.0 release",
+        "Removed APIs",
+        "Browser support",
+        "Slim build scope",
+        "ES module and build notes"
+      ]
+    },
+    {
+      "title": "Download jQuery",
+      "url": "https://jquery.com/download/",
+      "publisher": "jQuery project",
+      "checked_on": "2026-10-12",
+      "source_type": "official_release_page",
+      "supports": [
+        "Current stable version",
+        "Full and slim builds",
+        "Compressed and development builds",
+        "CDN and npm distribution"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the attached syllabus and official references; requires lesson-by-lesson technical review, local execution, accessibility checks, and editorial approval.",
+  "content": {
+    "intro": "Use this lesson on version control and team collaboration as a professional review habit: identify the relevant behavior, make one controlled change, and verify its outcome.",
+    "why_it_matters": "This topic is useful because it turns maintaining code in git into a repeatable implementation choice. A production review covers version pinning, script integrity where applicable, useful errors, accessible behavior, tested performance, dependency updates, deployment checks, and maintainable documentation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 22 overview",
+        "asset_path": "diagrams/module-22-overview.svg",
+        "alt_text": "Overview of Production Practices and Professional Workflows, illustrating the sequence from understanding the concept to implementing and checking it.",
+        "caption": "Use this module map to place version control and team collaboration within the wider learning path."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "A production review covers version pinning, script integrity where applicable, useful errors, accessible behavior, tested performance, dependency updates, deployment checks, and maintainable documentation."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the supplied syllabus",
+        "items": [
+          "Maintaining code in Git",
+          "Reviewing changes",
+          "Coordinating shared selectors and CSS classes",
+          "Documenting plugin interfaces",
+          "Managing library and plugin upgrades"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "bash",
+        "code": "git status --short\ngit diff --check\ngit diff --stat",
+        "expected_output": "The commands show changed files, whitespace errors, and a concise diff summary before review.",
+        "run_instructions": "Use a local HTML page with jQuery 4.0.0 loaded before app.js for JavaScript snippets. HTML and package-manager snippets can be checked as configuration examples. Run the interaction in browser DevTools, inspect the DOM/Network panel, and compare actual behavior with the expected result. Do not submit learner code to the production API for arbitrary execution.",
+        "reset_steps": "Restore the original markup and code, clear console/network filters, reload the local page, and repeat the same interaction. For a request example, return the mock endpoint to its original response before retrying."
+      },
+      {
+        "type": "callout",
+        "title": "Guided example",
+        "text": "Start with a known DOM structure, apply the pattern for version control and team collaboration, and test one normal case plus one edge case. Keep selectors scoped to the intended component and verify the real browser result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Include version control and team collaboration in a release-readiness checklist. Produce evidence from a repeatable check rather than treating the code example as proof of production readiness."
+      }
+    ],
+    "task": "Include version control and team collaboration in a release-readiness checklist. Produce evidence from a repeatable check rather than treating the code example as proof of production readiness.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates version control and team collaboration using a current, documented approach.",
+      "The learner records the expected and actual behavior and checks at least one edge case.",
+      "The example preserves semantic HTML and does not render untrusted data as HTML.",
+      "The test setup and any runtime limitation are documented honestly."
+    ],
+    "hints": [
+      "First identify which DOM nodes and runtime state are involved in version control and team collaboration.",
+      "Make one small change, inspect the resulting element or request, and compare it with the expected result.",
+      "If the result differs, check the selector, script order, browser console, event target, and relevant API documentation before adding more code."
+    ],
+    "expected_output": "The commands show changed files, whitespace errors, and a concise diff summary before review.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-191-questions.json",
+    "common_mistakes": [
+      "Assuming a selector matched an element without checking the collection length.",
+      "Confusing jQuery collections with native DOM elements or live properties with markup attributes.",
+      "Using .html() with untrusted data or assuming client-side validation enforces server rules.",
+      "Treating a demo snippet as production-ready without testing failure and accessibility states."
+    ],
+    "summary": [
+      "Version Control and Team Collaboration is one part of the production practices and professional workflows workflow.",
+      "A production review covers version pinning, script integrity where applicable, useful errors, accessible behavior, tested performance, dependency updates, deployment checks, and maintainable documentation.",
+      "Use the official API or upgrade guide for version-specific behavior and verify an example locally before relying on it."
+    ],
+    "references": [
+      {
+        "title": "jQuery Core 4.0 Upgrade Guide",
+        "url": "https://jquery.com/upgrade-guide/4.0/",
+        "publisher": "jQuery project",
+        "checked_on": "2026-10-12",
+        "source_type": "official_upgrade_guide",
+        "supports": [
+          "Breaking changes",
+          "Removed APIs",
+          "AJAX security behavior",
+          "Migration decisions"
+        ]
+      },
+      {
+        "title": "jQuery 4.0.0 release notes",
+        "url": "https://blog.jquery.com/2026/01/17/jquery-4-0-0/",
+        "publisher": "Official jQuery Blog",
+        "checked_on": "2026-10-12",
+        "source_type": "official_release_notes",
+        "supports": [
+          "jQuery 4.0.0 release",
+          "Removed APIs",
+          "Browser support",
+          "Slim build scope",
+          "ES module and build notes"
+        ]
+      },
+      {
+        "title": "Download jQuery",
+        "url": "https://jquery.com/download/",
+        "publisher": "jQuery project",
+        "checked_on": "2026-10-12",
+        "source_type": "official_release_page",
+        "supports": [
+          "Current stable version",
+          "Full and slim builds",
+          "Compressed and development builds",
+          "CDN and npm distribution"
+        ]
+      }
+    ]
+  }
+}

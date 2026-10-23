@@ -1,0 +1,183 @@
+{
+  "id": "r-lesson-136",
+  "slug": "eda-with-base-r-and-tidyverse",
+  "title": "EDA with Base R and Tidyverse",
+  "sequence": 136,
+  "module_id": "r-module-13",
+  "module_slug": "exploratory-data-analysis-and-descriptive-statistics",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "r-lesson-135"
+  ],
+  "previous_lesson_id": "r-lesson-135",
+  "next_lesson_id": "r-lesson-137",
+  "keywords": [
+    "eda-with-base-r-and-tidyverse",
+    "exploratory-data-analysis-and-descriptive-statistics",
+    "summary-functions",
+    "grouped-summaries-with-dplyr",
+    "visual-exploration-with-ggplot2",
+    "profiling-data-frames",
+    "automating-exploratory-summaries",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 136,
+  "subtopics": [
+    "Summary Functions",
+    "Grouped Summaries with dplyr",
+    "Visual Exploration with ggplot2",
+    "Profiling Data Frames",
+    "Automating Exploratory Summaries"
+  ],
+  "learning_outcomes": [
+    "Explain the role of eda with base r and tidyverse and identify its main inputs, outputs or constraints.",
+    "Apply summary functions in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "EDA with Base R and Tidyverse is part of Exploratory Data Analysis and Descriptive Statistics. Start with summary functions and connect it to the worked example and expected result.",
+    "why_it_matters": "EDA with Base R and Tidyverse is one step in Exploratory Data Analysis and Descriptive Statistics; exploratory data analysis generates questions and checks assumptions; descriptive summaries alone do not prove causality.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: EDA with Base R and Tidyverse",
+        "asset_path": "diagrams/module-13-overview.svg",
+        "alt_text": "Concept visual supporting lesson 136, EDA with Base R and Tidyverse. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "EDA with Base R and Tidyverse is one step in Exploratory Data Analysis and Descriptive Statistics; exploratory data analysis generates questions and checks assumptions; descriptive summaries alone do not prove causality. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Summary Functions",
+            "text": "Use summary functions to make input, output and scope explicit, then test both a typical call and one edge case."
+          },
+          {
+            "title": "Grouped Summaries with dplyr",
+            "text": "Explain grouped summaries with dplyr in the context of eda with base r and tidyverse, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Visual Exploration with ggplot2",
+            "text": "For visual exploration with ggplot2, label the variables and units, check the visual scale, and state what the graphic cannot prove."
+          },
+          {
+            "title": "Profiling Data Frames",
+            "text": "Explain profiling data frames in the context of eda with base r and tidyverse, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Automating Exploratory Summaries",
+            "text": "Explain automating exploratory summaries in the context of eda with base r and tidyverse, connect it to the example, and verify one expected result or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Use robust summaries and visual inspection, record exclusions, and keep the analysis reproducible. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: EDA with Base R and Tidyverse",
+        "language": "r",
+        "code": "table(c(\"A\", \"B\", \"A\", \"C\", \"A\"))",
+        "expected_output": "A B C; 3 1 1",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "Frequency tables make category counts explicit. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For eda with base r and tidyverse, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-136-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply eda with base r and tidyverse to a small synthetic example. Start with summary functions, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the summary functions idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible eda with base r and tidyverse example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Summary Functions” and identify the input and output before coding.",
+      "Check labels, units, assumptions, diagnostics and uncertainty before interpreting the output.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: EDA with Base R and Tidyverse is one step in Exploratory Data Analysis and Descriptive Statistics; exploratory data analysis generates questions and checks assumptions; descriptive summaries alone do not prove causality.",
+      "Practice: Use robust summaries and visual inspection, record exclusions, and keep the analysis reproducible.",
+      "Source syllabus focus: Summary Functions. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply eda with base r and tidyverse to a small synthetic example. Start with summary functions, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible eda with base r and tidyverse example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Summary Functions” and identify the input and output before coding.",
+    "Check labels, units, assumptions, diagnostics and uncertainty before interpreting the output.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: EDA with Base R and Tidyverse is one step in Exploratory Data Analysis and Descriptive Statistics; exploratory data analysis generates questions and checks assumptions; descriptive summaries alone do not prove causality.",
+    "Practice: Use robust summaries and visual inspection, record exclusions, and keep the analysis reproducible.",
+    "Source syllabus focus: Summary Functions. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 13 — Exploratory Data Analysis and Descriptive Statistics, lesson 136: EDA with Base R and Tidyverse.",
+    "Official documentation: https://cran.r-project.org/doc/manuals/r-release/R-intro.html",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

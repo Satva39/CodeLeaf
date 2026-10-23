@@ -1,0 +1,153 @@
+{
+  "id": "kotlin-lesson-175",
+  "slug": "dispatchers-and-background-execution",
+  "title": "Dispatchers and Background Execution",
+  "sequence": 175,
+  "module_id": "kotlin-module-17",
+  "module_slug": "coroutines-asynchronous-programming-and-concurrency",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "kotlin-lesson-174"
+  ],
+  "previous_lesson_id": "kotlin-lesson-174",
+  "next_lesson_id": "kotlin-lesson-176",
+  "keywords": [
+    "dispatchers-and-background-exe",
+    "main-default-and-i-o-dispatche",
+    "selecting-the-appropriate-disp",
+    "avoiding-blocking-work-on-inap"
+  ],
+  "source_syllabus_number": 175,
+  "subtopics": [
+    "Main, Default, and I/O Dispatchers",
+    "Selecting the Appropriate Dispatcher",
+    "Avoiding Blocking Work on Inappropriate Threads"
+  ],
+  "learning_outcomes": [
+    "Explain the central rule or purpose of dispatchers and background execution using at least one correct term from the lesson.",
+    "Interpret or adapt a small Kotlin example that demonstrates dispatchers and background execution.",
+    "Identify one relevant edge case, debugging step, or version/platform constraint."
+  ],
+  "content": {
+    "intro": "In this lesson, you will learn **Dispatchers and Background Execution** as part of **Coroutines, Asynchronous Programming, and Concurrency**. A coroutine can suspend without blocking the thread, but it still runs on threads; scope lifetime, dispatcher choice, cancellation, and shared state remain important. Use the subtopics—Main, Default, and I/O Dispatchers, Selecting the Appropriate Dispatcher, Avoiding Blocking Work on Inappropriate Threads—as a checklist: predict what the example will do, then verify it in a project configured for the target platform.",
+    "why_it_matters": "Asynchronous code introduces lifecycle, cancellation, and shared-state concerns. Structured concurrency and explicit data flow make these concerns easier to reason about.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Concept visual",
+        "asset_path": "diagrams/lesson-175-dispatchers-and-background-execution.svg",
+        "alt_text": "Concept diagram for lesson 175, Dispatchers and Background Execution: connects Main, Default, and I/O Dispatchers with Selecting the Appropriate Dispatcher and a practice/check step.",
+        "caption": "Lesson 175: Dispatchers and Background Execution. Use this concept map to connect the syllabus subtopics to the small example and test task."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "A coroutine can suspend without blocking the thread, but it still runs on threads; scope lifetime, dispatcher choice, cancellation, and shared state remain important."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with main, default, and i/o dispatchers. Then compare it with selecting the appropriate dispatcher. Identify the input, state, dependency, or branch that determines the result. The snippet is a static reference for CodeLeaf and is not executed in the lesson page."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the syllabus",
+        "items": [
+          {
+            "title": "Main, Default, and I/O Dispatchers",
+            "text": "Main, Default, and I/O Dispatchers depends on task lifetime and execution context. Keep child tasks inside an owning scope, handle cancellation cooperatively, and avoid unsynchronized shared mutable state."
+          },
+          {
+            "title": "Selecting the Appropriate Dispatcher",
+            "text": "Selecting the Appropriate Dispatcher depends on task lifetime and execution context. Keep child tasks inside an owning scope, handle cancellation cooperatively, and avoid unsynchronized shared mutable state."
+          },
+          {
+            "title": "Avoiding Blocking Work on Inappropriate Threads",
+            "text": "Avoiding Blocking Work on Inappropriate Threads is one part of dispatchers and background execution. Connect its definition to the example, identify the input/state it changes, and verify the expected behavior with a small test case."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "kotlin",
+        "execution_mode": "static-validation",
+        "code": "import kotlinx.coroutines.delay\nimport kotlinx.coroutines.launch\nimport kotlinx.coroutines.runBlocking\n\nfun main() = runBlocking {\n    val job = launch {\n        delay(10)\n        println(\"child complete\")\n    }\n    job.join()\n}",
+        "expected_output": "child complete",
+        "run_instructions": "This example requires kotlinx-coroutines-core (and the matching Flow APIs where used). Run it in a Kotlin/JVM Gradle project; do not paste it into a plain browser preview.",
+        "reset_steps": "Restore the documented starting values, rerun the smallest test, and compare the result with the expected output. If behavior differs, check the compiler/plugin/runtime versions and the active target before changing more than one thing."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake to avoid",
+        "text": "Dispatchers and Background Execution removes the need to test boundary conditions or verify the chosen runtime/library version."
+      },
+      {
+        "type": "paragraph",
+        "title": "Troubleshooting and reset",
+        "text": "If the example fails, first confirm which runtime/project type the snippet requires. Read the first useful compiler or runtime message, check imports and declared dependencies, reduce the example to a minimal case, and rerun. For target-specific code, use the target toolchain rather than assuming a console or browser runner can execute it."
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          {
+            "title": "Explain",
+            "text": "Describe the main rule of dispatchers and background execution in your own words."
+          },
+          {
+            "title": "Apply",
+            "text": "Change one input or condition and predict the result before running it."
+          },
+          {
+            "title": "Verify",
+            "text": "Check one edge case and the official reference for the selected Kotlin/runtime version."
+          }
+        ]
+      }
+    ],
+    "task": "Try it yourself: create a small variation that demonstrates dispatchers and background execution. Write down your predicted result first, run it in the correct local project, then explain one boundary case involving main, default, and i/o dispatchers.",
+    "task_acceptance_criteria": [
+      "Explain dispatchers and background execution without copying the lesson wording.",
+      "Demonstrate the concept with a small code/configuration change and state the expected result.",
+      "Test one boundary case or explain a relevant platform/version limitation."
+    ],
+    "hints": [
+      "Begin with the first syllabus subtopic: Main, Default, and I/O Dispatchers. What input or state does it act on?",
+      "Change only one value, branch, declaration, or dependency at a time. Predict what should happen before running the code.",
+      "Compare your observed result with the expected output and the official reference; verify that you are using the required project type and dependency set."
+    ],
+    "expected_output": "child complete",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-175-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Kotlin Documentation",
+      "url": "https://kotlinlang.org/docs/home.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Dispatchers and Background Execution",
+        "Main, Default, and I/O Dispatchers",
+        "Selecting the Appropriate Dispatcher"
+      ]
+    },
+    {
+      "title": "Kotlin Language Features and Proposals",
+      "url": "https://kotlinlang.org/docs/kotlin-language-features-and-proposals.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "language feature stability",
+        "compiler version compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson derived from the numbered syllabus entry 175 in Kotlin.pdf. Review example compatibility and question alignment before publishing."
+}

@@ -1,0 +1,167 @@
+{
+  "id": "fastapi-lesson-087",
+  "slug": "asynchronous-i-o",
+  "title": "Asynchronous I/O",
+  "sequence": 87,
+  "module_id": "fastapi-module-14",
+  "module_slug": "asynchronous-programming-and-concurrency",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "fastapi-lesson-086"
+  ],
+  "previous_lesson_id": "fastapi-lesson-086",
+  "next_lesson_id": "fastapi-lesson-088",
+  "keywords": [
+    "asynchronous-i-o",
+    "asynchronous-programming-and-concurrency",
+    "fastapi",
+    "python",
+    "api",
+    "async-http-requests",
+    "async-database-drivers",
+    "managing-connections"
+  ],
+  "source_syllabus_number": 87,
+  "subtopics": [
+    "Async HTTP requests",
+    "Async database drivers",
+    "Managing connections",
+    "Concurrent I/O operations",
+    "Cancellation and timeouts"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of asynchronous i/o in a FastAPI application.",
+    "Apply or interpret one example related to async http requests.",
+    "Identify one limitation or failure case and describe how to verify it."
+  ],
+  "content": {
+    "intro": "This lesson covers asynchronous i/o within asynchronous programming and concurrency. Use the supplied syllabus topics as the coverage checklist, then connect them to the worked example and the verification task.",
+    "why_it_matters": "You will use asynchronous i/o to build APIs whose contracts and behavior are understandable to both clients and maintainers. The practical aim is resource lifecycle, cancellation, concurrency limits and observable I/O behavior.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Asynchronous I/O: concept map",
+        "asset_path": "diagrams/lesson-087-concept.svg",
+        "alt_text": "Four-step flow for Asynchronous I/O: Async HTTP requests, Async database drivers, Managing connections, Concurrent I/O operations",
+        "caption": "Visual-first overview before the worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Asynchronous I/O matters because it is part of asynchronous programming and concurrency. In practice, focus on resource lifecycle, cancellation, concurrency limits and observable I/O behavior. A framework feature only helps when its assumptions match the application; keep input validation, business policy and side effects distinguishable."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus coverage",
+        "items": [
+          {
+            "title": "Async HTTP requests",
+            "text": "For async http requests, identify which operation waits on I/O, which resources remain open, and what happens on timeout or disconnect. Async syntax does not make CPU-bound work faster or durable background jobs reliable by itself."
+          },
+          {
+            "title": "Async database drivers",
+            "text": "Apply async database drivers against a disposable database and synthetic data first. Make transaction ownership and cleanup explicit, parameterize values, and verify constraints and behavior after failures before considering a deployment."
+          },
+          {
+            "title": "Managing connections",
+            "text": "Use managing connections as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Concurrent I/O operations",
+            "text": "For concurrent i/o operations, identify which operation waits on I/O, which resources remain open, and what happens on timeout or disconnect. Async syntax does not make CPU-bound work faster or durable background jobs reliable by itself."
+          },
+          {
+            "title": "Cancellation and timeouts",
+            "text": "For cancellation and timeouts, identify which operation waits on I/O, which resources remain open, and what happens on timeout or disconnect. Async syntax does not make CPU-bound work faster or durable background jobs reliable by itself."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Asynchronous I/O",
+        "language": "python",
+        "code": "from sqlalchemy import create_engine, text\n\nengine = create_engine(\"sqlite:///./lab.db\")\nwith engine.begin() as connection:\n    result = connection.execute(text(\"SELECT 1 AS ok\"))\n    print(result.scalar_one())",
+        "expected_output": "1",
+        "run_instructions": "This tiny SQLAlchemy connection smoke test uses local SQLite. Use parameterized statements for values; place real credentials in environment configuration.",
+        "reset_steps": "For read-only examples, no reset is needed. For any example that writes state, use a disposable local database/test fixture; record the starting state and clean up only lab data. Never use production credentials or real personal data.",
+        "execution_mode": "human-review",
+        "limitations": "This code is inspectable lesson material, not executed by CodeLeaf. Run it only in a local virtual environment or a separately isolated runner with resource/time/network limits. Security examples are sketches, not complete production authentication or authorization systems."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to cover “Async HTTP requests”. Write down the expected success result and one invalid, missing, duplicate, timeout or permission-boundary case that matters for this topic."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-087-questions.json"
+  },
+  "task": "Create a small reviewable artifact for “Asynchronous I/O”: explain its goal, cover the listed subtopics, show an example with expected result, then include one edge case and how you would verify it.",
+  "hints": [
+    "Start with “Async HTTP requests” and state the required inputs, output and assumptions.",
+    "Change one thing at a time; check the official reference and capture the actual response/error instead of guessing.",
+    "Include a negative/edge-case check and document which behavior remains untested."
+  ],
+  "expected_output": "A reviewable example or design note for Asynchronous I/O, covering the PDF subtopics, expected behavior and at least one verification check.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Copying a code fragment without checking its assumptions.",
+      "why": "Installed versions, imported types, application structure and external services affect behavior.",
+      "fix": "State assumptions; check the versioned official docs; run a minimal local test and add one failure case."
+    },
+    {
+      "problem": "Treating one happy-path response as proof of correctness.",
+      "why": "Invalid input, permissions, concurrency, timeouts and cleanup are not exercised by a single request.",
+      "fix": "Add focused normal and negative tests and record exact expected status/body."
+    },
+    {
+      "problem": "Running examples against production resources.",
+      "why": "Even short examples may mutate records, reveal data or affect availability.",
+      "fix": "Use synthetic inputs and a disposable environment; review security, cleanup and rollback before promotion."
+    }
+  ],
+  "summary": [
+    "Asynchronous I/O belongs to the broader goal of resource lifecycle, cancellation, concurrency limits and observable I/O behavior.",
+    "Use the source subtopics as the completeness checklist and verify expected results rather than relying on intuition.",
+    "Examples in this course are illustrative until technically reviewed and executed on a supported local environment."
+  ],
+  "sources": [
+    {
+      "title": "FastAPI Async",
+      "url": "https://fastapi.tiangolo.com/async/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "sync/async trade-offs and I/O vs CPU-bound work"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Deployment Concepts",
+      "url": "https://fastapi.tiangolo.com/deployment/concepts/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "HTTPS, startup, replication, memory and pre-start steps"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Deployment with Docker",
+      "url": "https://fastapi.tiangolo.com/deployment/docker/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "container image and production start command"
+      ],
+      "source_type": "official documentation"
+    }
+  ],
+  "exercise_files": [],
+  "status": "draft",
+  "status_note": "Draft expansion from the numbered topics in FastAPI.pdf. Content structure, file references and SVGs are validated locally; code snippets and integration behavior still require technical review and targeted tests before publication."
+}

@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-05",
+  "exercise_id": "dsa-exercise-pdf-05",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\ndef deduplicate_sorted_in_place(values):\n    if not values:\n        return 0\n    write = 1\n    for read in range(1, len(values)):\n        if values[read] != values[write - 1]:\n            values[write] = values[read]\n            write += 1\n    return write  # Unique values are now values[:write].\n\nitems = [1, 1, 2, 2, 3]\nlength = deduplicate_sorted_in_place(items)\nassert items[:length] == [1, 2, 3]\n```",
+  "explanation": "The read/write pointers retain one copy of each sorted value. Time O(n), auxiliary space O(1); values beyond the returned logical length should be ignored.",
+  "tested_reference_code": "def deduplicate_sorted_in_place(values):\n    if not values:\n        return 0\n    write = 1\n    for read in range(1, len(values)):\n        if values[read] != values[write - 1]:\n            values[write] = values[read]\n            write += 1\n    return write  # Unique values are now values[:write].\n\nitems = [1, 1, 2, 2, 3]\nlength = deduplicate_sorted_in_place(items)\nassert items[:length] == [1, 2, 3]",
+  "language": "python"
+}

@@ -1,0 +1,194 @@
+{
+  "id": "cpp-lesson-157",
+  "slug": "non-type-template-parameters",
+  "title": "Non-Type Template Parameters",
+  "sequence": 157,
+  "module_id": "cpp-module-15",
+  "module_slug": "templates-and-generic-programming",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 17,
+  "prerequisites": [
+    "cpp-lesson-156"
+  ],
+  "previous_lesson_id": "cpp-lesson-156",
+  "next_lesson_id": "cpp-lesson-158",
+  "keywords": [
+    "non-type-template-parameters",
+    "integral-template-parameters",
+    "boolean-template-parameters",
+    "enumeration-parameters",
+    "pointer-and-reference-parameters",
+    "structural-class-type-parameters-cpp20",
+    "compile-time-configuration"
+  ],
+  "source_syllabus_number": 157,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Integral Template Parameters",
+    "Boolean Template Parameters",
+    "Enumeration Parameters",
+    "Pointer and Reference Parameters",
+    "Structural Class-Type Parameters (C++20)",
+    "Compile-Time Configuration"
+  ],
+  "learning_outcomes": [
+    "Describe when non-type template parameters is useful and what problem it does not solve.",
+    "Evaluate a small example against its stated constraints, standard version and implementation assumptions.",
+    "Select a test or tool that can provide evidence of correctness without treating one successful run as proof."
+  ],
+  "content": {
+    "intro": "Non-Type Template Parameters focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Non-Type Template Parameters matters because test templates with multiple types and choose constraints that state the operations the implementation actually needs. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Non-Type Template Parameters: visual trace",
+        "asset_path": "diagrams/lessons/lesson-157.svg",
+        "alt_text": "Lesson 157 visual for Non-Type Template Parameters; concept: Integral Template Parameters; apply: Boolean Template Parameters; verify: Enumeration Parameters.",
+        "caption": "Original lesson-specific overview: understand integral template parameters, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Generic programming describes reusable operations in terms of requirements on types. Concepts and constraints make those requirements more visible at the interface.\n\nNon-Type Template Parameters focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nTest templates with multiple types and choose constraints that state the operations the implementation actually needs."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Non-Type Template Parameters",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <array>\n#include <iostream>\n\ntemplate<std::size_t N>\nint sum(const std::array<int, N>& values) {\n    int total = 0; for (int value : values) total += value; return total;\n}\nint main() { std::cout << sum(std::array{1, 2, 3, 4}) << '\\n'; }\n",
+        "expected_output": "10",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "A non-type template parameter can represent a compile-time value such as an array extent. The function still requires valid storage and appropriate arithmetic ranges."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Integral Template Parameters",
+            "text": "Explain integral template parameters in the context of Non-Type Template Parameters: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Boolean Template Parameters",
+            "text": "Explain boolean template parameters in the context of Non-Type Template Parameters: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Enumeration Parameters",
+            "text": "An enumeration names a finite set of values; scoped enum class avoids implicit conversions to integers and accidental name leakage."
+          },
+          {
+            "title": "Pointer and Reference Parameters",
+            "text": "A reference aliases an existing object and must not outlive that object; references are not reseatable after initialization."
+          },
+          {
+            "title": "Structural Class-Type Parameters (C++20)",
+            "text": "A struct groups related data under one type; in C++, its default member access is public, unlike class."
+          },
+          {
+            "title": "Compile-Time Configuration",
+            "text": "Explain compile-time configuration in the context of Non-Type Template Parameters: identify the rule, trace a minimal example, and check one boundary or failure case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate integral template parameters, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "This topic may depend on newer C++ language or library support; this example uses a C++20-compatible illustration. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-157-questions.json",
+    "task": "Extend the example for Non-Type Template Parameters with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+    "task_acceptance_criteria": [
+      "The code compiles in the documented standard mode with warnings enabled.",
+      "The predicted output matches the actual result for the added case.",
+      "One relevant boundary, lifetime, portability or error case is tested or documented."
+    ],
+    "hints": [
+      "Start by isolating the central rule from Non-Type Template Parameters.",
+      "Trace values or object lifetimes before changing the program.",
+      "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+    ],
+    "summary": [
+      "Non-Type Template Parameters is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying non-type template parameters.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "10"
+  },
+  "task": "Extend the example for Non-Type Template Parameters with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+  "hints": [
+    "Start by isolating the central rule from Non-Type Template Parameters.",
+    "Trace values or object lifetimes before changing the program.",
+    "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+  ],
+  "expected_output": "10",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Non-Type Template Parameters is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying non-type template parameters.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 15, lesson 157: Non-Type Template Parameters.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

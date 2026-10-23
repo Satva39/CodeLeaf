@@ -1,0 +1,50 @@
+{
+  "id": "pytorch-lesson-083-knowledge-check",
+  "lesson_id": "pytorch-lesson-083",
+  "lesson_slug": "reproducible-experiments",
+  "title": "Reproducible Experiments knowledge check",
+  "question_count": 3,
+  "questions": [
+    {
+      "id": "pytorch-q-083-01",
+      "type": "single_choice",
+      "prompt": "Which statement best describes “Random seeds” in this lesson?",
+      "options": [
+        "This topic makes every serialized checkpoint safe to load from an unknown source.",
+        "Record the artifact state and environment assumptions, restore it in a clean model, and verify behavior on a fixed input before trusting the result.",
+        "This topic removes the need to validate inputs or inspect model outputs.",
+        "This topic guarantees identical results across all devices and package versions."
+      ],
+      "answer_key": "Record the artifact state and environment assumptions, restore it in a clean model, and verify behavior on a fixed input before trusting the result.",
+      "explanation": "Random seeds: Record the artifact state and environment assumptions, restore it in a clean model, and verify behavior on a fixed input before trusting the result."
+    },
+    {
+      "id": "pytorch-q-083-02",
+      "type": "single_choice",
+      "prompt": "Before relying on “Fixed evaluation splits”, what should a learner verify?",
+      "options": [
+        "verify class/target shapes, threshold choices, split independence, and that model selection did not repeatedly use test results.",
+        "Assume all tensor dimensions and devices are interchangeable without checking them.",
+        "Use the held-out test split repeatedly to tune the model and report that score as unbiased.",
+        "Skip recording package versions because they cannot affect API or device behavior."
+      ],
+      "answer_key": "verify class/target shapes, threshold choices, split independence, and that model selection did not repeatedly use test results.",
+      "explanation": "This lesson recommends the following check: verify class/target shapes, threshold choices, split independence, and that model selection did not repeatedly use test results."
+    },
+    {
+      "id": "pytorch-q-083-03",
+      "type": "single_choice",
+      "prompt": "Which pitfall matters when applying “Configuration tracking”?",
+      "options": [
+        "Change several unrelated settings at once and infer which change fixed the result.",
+        "Treat successful imports as proof that the full model and evaluation pipeline are correct.",
+        "Catch every exception and silently replace failed results with zeros.",
+        "Do not use the test split to tune a model and then present the same score as an unbiased final test."
+      ],
+      "answer_key": "Do not use the test split to tune a model and then present the same score as an unbiased final test.",
+      "explanation": "This topic-specific caution is important: Do not use the test split to tune a model and then present the same score as an unbiased final test."
+    }
+  ],
+  "status": "draft",
+  "visibility": "protected_content_repository_only"
+}

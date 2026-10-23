@@ -1,0 +1,241 @@
+{
+  "id": "angularjs-lesson-112",
+  "slug": "deploying-an-angularjs-application",
+  "title": "Deploying an AngularJS Application",
+  "sequence": 112,
+  "module_id": "angularjs-module-20",
+  "module_slug": "build-tools-deployment-and-production-maintenance",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 16,
+  "prerequisites": [],
+  "previous_lesson_id": "angularjs-lesson-111",
+  "next_lesson_id": "angularjs-lesson-113",
+  "keywords": [
+    "deploying",
+    "an",
+    "angularjs",
+    "application",
+    "serving",
+    "the",
+    "built",
+    "configuring",
+    "static",
+    "hosting",
+    "spa",
+    "route",
+    "fallback",
+    "handling",
+    "asset",
+    "paths",
+    "https",
+    "configuration"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and boundary of deploying an angularjs application in an AngularJS 1.x application.",
+    "Apply at least one relevant API or practice from deploying an angularjs application to a small example.",
+    "Verify expected behavior with a repeatable check and identify one compatibility or failure condition."
+  ],
+  "content": {
+    "intro": "Represent each request as a state transition: loading, success (including an empty response), or failure. Keep HTTP logic in a data service, handle rejected promises, avoid duplicate requests, and never interpret a client-side route guard as server authorization.",
+    "why_it_matters": "Deploying an AngularJS Application helps maintain an existing AngularJS application without mixing API assumptions, UI behavior and operational risks.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Deploying an AngularJS Application: visual map",
+        "asset_path": "diagrams/lesson-112.svg",
+        "alt_text": "Three-stage concept diagram for Deploying an AngularJS Application, with labels Serving the built application, Configuring static hosting, Configuring SPA route fallback.",
+        "caption": "Concept-to-verification map for Deploying an AngularJS Application."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Represent each request as a state transition: loading, success (including an empty response), or failure. Keep HTTP logic in a data service, handle rejected promises, avoid duplicate requests, and never interpret a client-side route guard as server authorization."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics from the supplied curriculum",
+        "items": [
+          {
+            "title": "Serving the built application",
+            "text": "Treat “Serving the built application” as a concrete checkpoint within Deploying an AngularJS Application. Identify the relevant AngularJS API or application boundary, check the version-specific behavior, and verify it with a reproducible example."
+          },
+          {
+            "title": "Configuring static hosting",
+            "text": "Treat “Configuring static hosting” as a concrete checkpoint within Deploying an AngularJS Application. Identify the relevant AngularJS API or application boundary, check the version-specific behavior, and verify it with a reproducible example."
+          },
+          {
+            "title": "Configuring SPA route fallback",
+            "text": "Treat “Configuring SPA route fallback” as a concrete checkpoint within Deploying an AngularJS Application. Identify the relevant AngularJS API or application boundary, check the version-specific behavior, and verify it with a reproducible example."
+          },
+          {
+            "title": "Handling asset paths",
+            "text": "Treat “Handling asset paths” as a concrete checkpoint within Deploying an AngularJS Application. Identify the relevant AngularJS API or application boundary, check the version-specific behavior, and verify it with a reproducible example."
+          },
+          {
+            "title": "HTTPS configuration",
+            "text": "Treat “HTTPS configuration” as a concrete checkpoint within Deploying an AngularJS Application. Identify the relevant AngularJS API or application boundary, check the version-specific behavior, and verify it with a reproducible example."
+          },
+          {
+            "title": "Environment variables and public configuration",
+            "text": "Treat “Environment variables and public configuration” as a concrete checkpoint within Deploying an AngularJS Application. Identify the relevant AngularJS API or application boundary, check the version-specific behavior, and verify it with a reproducible example."
+          },
+          {
+            "title": "Checking production network requests",
+            "text": "Treat “Checking production network requests” as a concrete checkpoint within Deploying an AngularJS Application. Identify the relevant AngularJS API or application boundary, check the version-specific behavior, and verify it with a reproducible example."
+          },
+          {
+            "title": "Smoke testing a deployed release",
+            "text": "Treat “Smoke testing a deployed release” as a concrete checkpoint within Deploying an AngularJS Application. Identify the relevant AngularJS API or application boundary, check the version-specific behavior, and verify it with a reproducible example."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Minimal example",
+        "language": "javascript",
+        "code": "angular.module('legacyApp', ['ngRoute']).config(['$routeProvider', function ($routeProvider) {\n  $routeProvider\n    .when('/', { template: '<h1>Home</h1>' })\n    .when('/students/:id', { template: '<h1>Student details</h1>' })\n    .otherwise({ redirectTo: '/' });\n}]);",
+        "expected_output": "The route table maps the home and student URL patterns, with a fallback for unknown routes.",
+        "execution_mode": "static-validation",
+        "run_instructions": "CodeLeaf stores this example for inspection and static validation; it does not execute AngularJS snippets on the FastAPI server. To run a full browser example, use a local, isolated project with the AngularJS version recorded by the target application and serve it over HTTP.",
+        "reset_steps": "Return to the starter page or reset the sample data; clear the browser console and reload before reproducing the test."
+      },
+      {
+        "type": "ordered_list",
+        "title": "Guided walkthrough",
+        "items": [
+          "Locate the template, controller/component, service or route involved in this behavior.",
+          "Trace one input to the resulting model, DOM or HTTP behavior.",
+          "Repeat with a boundary case, a missing value, an error response or teardown case relevant to this feature.",
+          "Record the observed result and add a regression check before changing legacy code."
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Build a tiny local example that demonstrates deploying an angularjs application. Keep the example within AngularJS 1.x, include one normal and one edge/failure case, and write down the expected browser or test output."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming the framework version",
+            "text": "Read package manifests and lockfiles before applying a documented API; record version-specific differences."
+          },
+          {
+            "title": "Mixing concerns",
+            "text": "Keep view state, data-access logic and security decisions in their appropriate layers."
+          },
+          {
+            "title": "Testing only the happy path",
+            "text": "Include empty, invalid, failed-request or teardown behavior where it applies."
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "title": "Recap",
+        "items": [
+          {
+            "title": "Know the boundary",
+            "text": "Explain what Deploying an AngularJS Application owns and what it does not own."
+          },
+          {
+            "title": "Verify the behavior",
+            "text": "Use a repeatable local test, observable output or code review checklist."
+          },
+          {
+            "title": "Maintain safely",
+            "text": "Document compatibility concerns and avoid presenting an unsupported framework as a new production default."
+          }
+        ]
+      }
+    ],
+    "execution_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-112-questions.json",
+    "run_mode": "static-validation",
+    "task": "Build a tiny local example that demonstrates deploying an angularjs application. Include a normal case and a relevant edge/failure/cleanup case, then record the expected result.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the target behavior and uses the API documented for the application version.",
+      "The normal and edge/failure/cleanup behaviors can be repeated with documented steps.",
+      "No client-only authorization or unsafe untrusted-HTML assumptions are introduced."
+    ],
+    "hints": [
+      "Start with the smallest observable behavior, then add the supporting controller, component, directive, service or route only if needed.",
+      "Read the actual package lockfile and API contract before applying a code pattern.",
+      "Use browser console/network evidence and a regression test rather than guessing."
+    ],
+    "solution_notes": "Use the reference snippet as a starting point, not a complete production implementation. Keep the code in the correct layer, test a failure path, and document any compatibility or security trade-off.",
+    "summary": [
+      "Explain what Deploying an AngularJS Application owns and the boundary it should not cross.",
+      "Verify the normal case and at least one relevant edge/error/cleanup case.",
+      "Keep the exact AngularJS version, security, accessibility and maintenance constraints visible."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming the AngularJS version or API behavior",
+        "why": "Legacy applications may use different 1.x versions and old third-party modules.",
+        "fix": "Check the lockfile/package manifest and version-specific official reference before editing."
+      },
+      {
+        "problem": "Mixing view, data and authorization responsibilities",
+        "why": "It makes behavior difficult to test and can incorrectly treat client checks as security boundaries.",
+        "fix": "Keep reusable data access in services and enforce permissions/validation on the server."
+      },
+      {
+        "problem": "Testing only the happy path",
+        "why": "Empty results, request rejection, invalid input or scope teardown may behave differently.",
+        "fix": "Add a repeatable edge/error/cleanup check and retain it as a regression test."
+      }
+    ],
+    "how_to_run": [
+      "Use the existing project setup and pinned framework version.",
+      "Serve browser-based examples over HTTP rather than opening files directly when route/template loading requires it.",
+      "Use the project test runner for automated tests; do not execute arbitrary learner code in the API server."
+    ],
+    "troubleshooting": [
+      "Check the browser console for module/provider/template errors.",
+      "Check the network panel for failed script, template and API requests.",
+      "Compare the failing behavior with a minimal example and add a regression test after the repair."
+    ],
+    "accessibility_notes": "Use semantic HTML, keyboard-operable controls, accessible names, visible focus, and status/error messages that do not rely on color alone.",
+    "version_notes": "AngularJS is end-of-support. Confirm the application’s exact 1.x version and dependency lockfile before using an API or changing a package."
+  },
+  "exercise_files": [
+    "../exercises/029-production-deployment.json"
+  ],
+  "sources": [
+    {
+      "title": "AngularJS API Reference",
+      "url": "https://docs.angularjs.org/api",
+      "publisher": "AngularJS project documentation",
+      "checked_on": "2026-10-15",
+      "supports": [
+        "Deploying an AngularJS Application"
+      ]
+    },
+    {
+      "title": "AngularJS Developer Guide",
+      "url": "https://docs.angularjs.org/guide",
+      "publisher": "AngularJS project documentation",
+      "checked_on": "2026-10-15",
+      "supports": [
+        "Deploying an AngularJS Application"
+      ]
+    },
+    {
+      "title": "AngularJS end-of-support notice",
+      "url": "https://docs.angularjs.org/",
+      "publisher": "AngularJS project documentation",
+      "checked_on": "2026-10-15",
+      "supports": [
+        "legacy maintenance and version context"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied AngularJS curriculum PDF; requires technical/editorial review before publication."
+}

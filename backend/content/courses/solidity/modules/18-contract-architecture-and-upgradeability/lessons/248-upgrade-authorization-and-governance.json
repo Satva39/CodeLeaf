@@ -1,0 +1,124 @@
+{
+  "id": "solidity-lesson-248",
+  "slug": "upgrade-authorization-and-governance",
+  "title": "Upgrade Authorization and Governance",
+  "sequence": 248,
+  "module_id": "solidity-module-18",
+  "module_slug": "contract-architecture-and-upgradeability",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "solidity-lesson-247"
+  ],
+  "previous_lesson_id": "solidity-lesson-247",
+  "next_lesson_id": "solidity-lesson-249",
+  "keywords": [
+    "upgrade",
+    "authorization",
+    "and",
+    "governance",
+    "solidity",
+    "smart-contracts"
+  ],
+  "source_syllabus_number": 248,
+  "subtopics": [
+    "Upgrade Authorization and Governance"
+  ],
+  "learning_outcomes": [
+    "Explain Upgrade Authorization and Governance and relate it to the contract execution model.",
+    "Analyze or implement a small Solidity example involving Upgrade Authorization and Governance.",
+    "Test at least one normal case and one edge, failure, security, or version-compatibility case."
+  ],
+  "content": {
+    "intro": "This lesson turns the syllabus topic “Upgrade Authorization and Governance” into a small, inspectable example. You will work from an expected behavior, run a local check, and record the assumptions behind the result.",
+    "why_it_matters": "Start with a threat model: identify who controls each input, who may call the function, what external code can do, and what happens when a call fails. Demonstrate the expected behavior and a denied or adversarial case in a controlled local test.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 18 roadmap",
+        "asset_path": "diagrams/module-18-overview.svg",
+        "alt_text": "A two-column ordered roadmap for Module 18: Contract Architecture and Upgradeability; it lists all 13 source-syllabus lesson topics by number.",
+        "caption": "Use this map to locate “Upgrade Authorization and Governance” within the ordered module."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Upgradeable architecture separates a proxy address from implementation logic but introduces storage-layout and privileged-role risks. Initializers, compatibility tests, and governance matter."
+      },
+      {
+        "type": "paragraph",
+        "title": "Focus: Upgrade Authorization and Governance",
+        "text": "Start with a threat model: identify who controls each input, who may call the function, what external code can do, and what happens when a call fails. Demonstrate the expected behavior and a denied or adversarial case in a controlled local test."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus points to keep in view",
+        "items": [
+          {
+            "title": "Upgrade Authorization and Governance",
+            "text": "For this lesson, explain the term in your own words, identify where it affects contract behavior, and note one assumption or edge case to test."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "1. Predict how the example should behave in relation to Upgrade Authorization and Governance. 2. Compile it with the pinned compiler and inspect warnings. 3. Test one normal case and one boundary or failure case in a local EVM. 4. Record what the result demonstrates and what it does not establish about production safety."
+      },
+      {
+        "type": "code",
+        "language": "solidity",
+        "execution_mode": "static-validation",
+        "code": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.37;\n\ncontract InitializableTeachingExample {\n    bool private initialized;\n    uint256 public value;\n    function initialize(uint256 initialValue) external {\n        require(!initialized, \"already initialized\");\n        initialized = true; value = initialValue;\n    }\n}\n",
+        "expected_output": "The example accepts only one initialization call. It is a teaching sketch, not an upgrade framework or production-ready proxy.",
+        "run_instructions": "Use a local EVM test environment and pin the compiler, EVM target, optimizer settings, and tool versions. This is static lesson content; CodeLeaf does not run arbitrary Solidity in the web app. Do not test contracts or vulnerabilities on systems you do not own or have permission to assess.",
+        "reset_steps": "Reset the local VM or restart the test fixture, redeploy the example, and repeat the same tests. Restore the original compiler, optimizer, and EVM-target settings before comparing results. Never add keys or other secrets to source files."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistakes and fixes",
+        "text": "A snippet that compiles is not automatically correct or secure. Check the selected compiler version, read every warning, assert preconditions, test reverting and edge cases, and inspect external-call assumptions. If a tool or opcode is unsupported, verify the compiler release and target-chain support instead of weakening checks."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Extend the small example to demonstrate Upgrade Authorization and Governance. Write down the expected result before running it, add a normal test and a failure/boundary test, then note one design trade-off or security concern."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap and next step",
+        "text": "Recap: Upgrade Authorization and Governance should be understood alongside the module principle: Upgradeable architecture separates a proxy address from implementation logic but introduces storage-layout and privileged-role risks. Initializers, compatibility tests, and governance matter. Continue to the next lesson only after you can explain the behavior, reproduce the result locally, and state the important limitations."
+      }
+    ],
+    "task": "Create a small local-only example that demonstrates Upgrade Authorization and Governance. Define a normal case and a boundary/failure case, predict the result, test both, and explain one limitation. Do not deploy this teaching exercise with real funds.",
+    "task_acceptance_criteria": [
+      "State the expected behavior before testing and describe the observed result.",
+      "Include a repeatable test or manual trace covering a boundary or failure case.",
+      "Document one assumption, security concern, or version constraint rather than claiming production readiness."
+    ],
+    "hints": [
+      "Start with the simplest behavior related to Upgrade Authorization and Governance and make the input and expected result explicit.",
+      "Change one condition or input at a time and rerun the same test to isolate the effect.",
+      "Read compiler warnings and error details; do not treat deployment success as a security review."
+    ],
+    "expected_output": "The example accepts only one initialization call. It is a teaching sketch, not an upgrade framework or production-ready proxy.",
+    "run_mode": "static-validation",
+    "troubleshooting": [
+      "Confirm that the compiler version is 0.8.37 and that build settings are recorded.",
+      "For a revert, inspect the precondition and test both allowed and denied inputs.",
+      "For external calls or network-specific features, confirm the local chain's behavior and the target-network assumptions."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-248-questions.json",
+    "accessibility_note": "The accompanying SVG includes a text alternative and caption. Code examples use labeled snippets and do not rely on color to convey meaning."
+  },
+  "exercise_files": [],
+  "sources": [
+    "openzeppelin-contracts",
+    "solidity-security"
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Solidity course blueprint; review the full technical example and question key before publication."
+}

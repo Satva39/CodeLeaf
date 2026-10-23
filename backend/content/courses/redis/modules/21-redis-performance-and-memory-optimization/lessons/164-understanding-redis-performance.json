@@ -1,0 +1,161 @@
+{
+  "id": "redis-lesson-164",
+  "slug": "understanding-redis-performance",
+  "title": "Understanding Redis Performance",
+  "sequence": 164,
+  "module_id": "redis-module-21",
+  "module_slug": "redis-performance-and-memory-optimization",
+  "level": "advanced to professional",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-163"
+  ],
+  "previous_lesson_id": "redis-lesson-163",
+  "next_lesson_id": "redis-lesson-165",
+  "keywords": [
+    "understanding-redis-performance",
+    "latency-and-throughput",
+    "requests-per-second",
+    "network-round-trips",
+    "server-processing-time",
+    "application-level-performance-bottlenecks",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 164,
+  "subtopics": [
+    "Latency and throughput",
+    "Requests per second",
+    "Network round trips",
+    "Server processing time",
+    "Application-level performance bottlenecks"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Understanding Redis Performance and distinguish it from a related Redis concept.",
+    "Apply or trace Understanding Redis Performance in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Understanding Redis Performance and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Understanding Redis Performance in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Understanding Redis Performance helps implement measure latency, complexity, memory, and workload shape before optimizing. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Understanding Redis Performance",
+        "asset_path": "diagrams/lesson-164-understanding-redis-performance.svg",
+        "alt_text": "Concept diagram for Understanding Redis Performance, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Understanding Redis Performance; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Understanding Redis Performance helps implement measure latency, complexity, memory, and workload shape before optimizing. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Understanding Redis Performance, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Latency and throughput",
+            "text": "Connect Latency and throughput to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Requests per second",
+            "text": "Connect Requests per second to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Network round trips",
+            "text": "Connect Network round trips to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Server processing time",
+            "text": "Connect Server processing time to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Application-level performance bottlenecks",
+            "text": "Connect Application-level performance bottlenecks to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Understanding Redis Performance",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "INFO memory\nSLOWLOG GET 5",
+        "expected_output": "Returns memory counters followed by up to five recorded slow commands, if available.",
+        "run_instructions": "Start with read-only measurements and representative data before changing maxmemory, eviction, or latency settings.",
+        "reset_steps": "Read-only inspection.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Understanding Redis Performance. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Understanding Redis Performance in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Understanding Redis Performance.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "Returns memory counters followed by up to five recorded slow commands, if available.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-164-questions.json",
+    "recap": [
+      "Understanding Redis Performance is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Diagnosing latency issues",
+      "url": "https://redis.io/docs/latest/management/optimization/latency/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "latency sources, slow commands, round trips and diagnosis"
+      ]
+    },
+    {
+      "title": "Redis latency monitoring",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/latency-monitor/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "SLOWLOG, LATENCY and operational diagnostics"
+      ]
+    },
+    {
+      "title": "Memory optimization",
+      "url": "https://redis.io/docs/latest/management/optimization/memory-optimization/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "compact encodings, memory trade-offs and optimization"
+      ]
+    },
+    {
+      "title": "Redis benchmarks",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/benchmarks/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "repeatable benchmarking methodology"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

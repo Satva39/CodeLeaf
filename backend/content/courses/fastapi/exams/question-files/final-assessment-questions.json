@@ -1,0 +1,514 @@
+{
+  "id": "fastapi-final-assessment-question-set",
+  "title": "FastAPI final assessment - draft question bank",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "question_count": 36,
+  "questions": [
+    {
+      "id": "fastapi-exam-q-001",
+      "type": "single_choice",
+      "topic": "Routing",
+      "prompt": "A route declares `item_id: int`. What does FastAPI do if a non-integer path value is sent?",
+      "options": [
+        "Returns a request validation error before the path function receives a valid integer.",
+        "Converts every invalid path to zero.",
+        "Always returns HTTP 404 regardless of route matching.",
+        "Runs a database migration automatically."
+      ],
+      "answer_key": "Returns a request validation error before the path function receives a valid integer.",
+      "explanation": "Typed path values are validated; malformed values are distinct from a valid ID whose resource does not exist."
+    },
+    {
+      "id": "fastapi-exam-q-002",
+      "type": "single_choice",
+      "topic": "Request schemas",
+      "prompt": "Where should an API define field constraints such as a positive price and maximum string length?",
+      "options": [
+        "In an explicit request schema, such as a Pydantic model using Field constraints.",
+        "Only in frontend form validation.",
+        "Inside a log message after saving.",
+        "In a README paragraph with no server validation."
+      ],
+      "answer_key": "In an explicit request schema, such as a Pydantic model using Field constraints.",
+      "explanation": "Validate at the trust boundary because clients can bypass browser-side checks."
+    },
+    {
+      "id": "fastapi-exam-q-003",
+      "type": "single_choice",
+      "topic": "Response contracts",
+      "prompt": "What is a key benefit of a FastAPI `response_model`?",
+      "options": [
+        "It validates/documents the response shape and can filter fields to the public contract.",
+        "It automatically encrypts the database.",
+        "It creates a PostgreSQL migration.",
+        "It authorizes all users as administrators."
+      ],
+      "answer_key": "It validates/documents the response shape and can filter fields to the public contract.",
+      "explanation": "Response models help keep output shape stable and reduce accidental field exposure."
+    },
+    {
+      "id": "fastapi-exam-q-004",
+      "type": "single_choice",
+      "topic": "Errors",
+      "prompt": "An authenticated client requests a resource ID that does not exist. Which response is usually appropriate?",
+      "options": [
+        "HTTP 404 Not Found with a safe, consistent detail.",
+        "HTTP 200 with a fabricated object.",
+        "HTTP 500 for every missing record.",
+        "HTTP 301 to the login page in all cases."
+      ],
+      "answer_key": "HTTP 404 Not Found with a safe, consistent detail.",
+      "explanation": "A missing resource is typically a client-visible not-found condition, not an internal server failure."
+    },
+    {
+      "id": "fastapi-exam-q-005",
+      "type": "single_choice",
+      "topic": "OpenAPI",
+      "prompt": "Which built-in URL commonly opens FastAPI interactive Swagger documentation?",
+      "options": [
+        "/docs",
+        "/swagger.json only, on every deployment",
+        "/admin",
+        "/database"
+      ],
+      "answer_key": "/docs",
+      "explanation": "FastAPI provides interactive OpenAPI docs at `/docs` by default, unless configured differently."
+    },
+    {
+      "id": "fastapi-exam-q-006",
+      "type": "single_choice",
+      "topic": "Dependencies",
+      "prompt": "What is a main reason to use `Depends`?",
+      "options": [
+        "Share and compose request-related logic/resources such as validation, sessions or current-user retrieval.",
+        "Run every dependency in a separate server process.",
+        "Make every result globally cached forever.",
+        "Skip return-type validation."
+      ],
+      "answer_key": "Share and compose request-related logic/resources such as validation, sessions or current-user retrieval.",
+      "explanation": "Dependencies make shared logic explicit and can manage nested dependency lifecycles."
+    },
+    {
+      "id": "fastapi-exam-q-007",
+      "type": "single_choice",
+      "topic": "Lifespan",
+      "prompt": "Which pattern is recommended for resources that should be initialized at app startup and cleaned up at shutdown?",
+      "options": [
+        "A lifespan context manager with setup before `yield` and cleanup afterward.",
+        "Calling an init function manually from every endpoint.",
+        "A global timer that runs without cleanup.",
+        "A deprecated startup hook copied without checking current docs."
+      ],
+      "answer_key": "A lifespan context manager with setup before `yield` and cleanup afterward.",
+      "explanation": "Current FastAPI guidance uses lifespan to define managed application startup/shutdown behavior."
+    },
+    {
+      "id": "fastapi-exam-q-008",
+      "type": "single_choice",
+      "topic": "Application structure",
+      "prompt": "A large app has separate product, user and order routes. What improves organization?",
+      "options": [
+        "Use feature-oriented APIRouter modules and compose them into the app.",
+        "Put all endpoints in one massive function.",
+        "Import routers in circular loops.",
+        "Duplicate configuration in every route."
+      ],
+      "answer_key": "Use feature-oriented APIRouter modules and compose them into the app.",
+      "explanation": "Routers separate endpoint groups and allow prefixes, tags and shared dependencies."
+    },
+    {
+      "id": "fastapi-exam-q-009",
+      "type": "single_choice",
+      "topic": "Database safety",
+      "prompt": "What is the purpose of a transaction boundary for a multi-step order write?",
+      "options": [
+        "Make related changes succeed or roll back together according to the database transaction.",
+        "Make a failed write silently succeed.",
+        "Replace all uniqueness/foreign-key constraints.",
+        "Guarantee no query ever takes time."
+      ],
+      "answer_key": "Make related changes succeed or roll back together according to the database transaction.",
+      "explanation": "Transactions protect data integrity across related operations; constraints remain important."
+    },
+    {
+      "id": "fastapi-exam-q-010",
+      "type": "single_choice",
+      "topic": "Migrations",
+      "prompt": "Why should an autogenerated Alembic migration be reviewed before applying it?",
+      "options": [
+        "Autogeneration can miss intent or generate unsafe changes; review and test the migration first.",
+        "Alembic always knows the production data-retention policy.",
+        "A migration file is equivalent to a backup.",
+        "It avoids needing a test database."
+      ],
+      "answer_key": "Autogeneration can miss intent or generate unsafe changes; review and test the migration first.",
+      "explanation": "Migrations should be treated as reviewed code and tested against representative schema/data."
+    },
+    {
+      "id": "fastapi-exam-q-011",
+      "type": "single_choice",
+      "topic": "Password safety",
+      "prompt": "How should user passwords normally be stored?",
+      "options": [
+        "Using an appropriate password-hashing algorithm with per-password salts, never plaintext.",
+        "As reversible plaintext so staff can recover them.",
+        "As a frontend local-storage value.",
+        "As a shared hard-coded hash for all users."
+      ],
+      "answer_key": "Using an appropriate password-hashing algorithm with per-password salts, never plaintext.",
+      "explanation": "Password hashes are designed for verification without retaining the original password."
+    },
+    {
+      "id": "fastapi-exam-q-012",
+      "type": "single_choice",
+      "topic": "Bearer tokens",
+      "prompt": "Does declaring `OAuth2PasswordBearer` by itself validate a JWT signature and permissions?",
+      "options": [
+        "No; application code or a trusted auth component must validate token integrity, expiry and relevant claims, then enforce permissions.",
+        "Yes, it accepts every decoded JSON value safely.",
+        "Yes, it creates roles in the database.",
+        "No, because FastAPI cannot read Authorization headers."
+      ],
+      "answer_key": "No; application code or a trusted auth component must validate token integrity, expiry and relevant claims, then enforce permissions.",
+      "explanation": "The security dependency extracts the bearer token; it is not a complete token-validation/authorization system."
+    },
+    {
+      "id": "fastapi-exam-q-013",
+      "type": "single_choice",
+      "topic": "Resource ownership",
+      "prompt": "A user can access another tenant’s resource by changing the ID in the URL. What is missing?",
+      "options": [
+        "Server-side resource ownership/tenant checks on every relevant operation.",
+        "A prettier frontend route.",
+        "A larger access token string.",
+        "A wildcard CORS origin."
+      ],
+      "answer_key": "Server-side resource ownership/tenant checks on every relevant operation.",
+      "explanation": "Authorization must be checked on the requested resource, not inferred from the UI or ID obscurity."
+    },
+    {
+      "id": "fastapi-exam-q-014",
+      "type": "single_choice",
+      "topic": "File upload",
+      "prompt": "Which controls belong in a secure file-upload path?",
+      "options": [
+        "Enforce size and allowed content, use safe server-generated names/paths, and apply access controls to downloads.",
+        "Trust the filename and extension sent by the client.",
+        "Read every upload entirely into memory without limits.",
+        "Store public uploads alongside application source files by default."
+      ],
+      "answer_key": "Enforce size and allowed content, use safe server-generated names/paths, and apply access controls to downloads.",
+      "explanation": "Upload metadata and content are untrusted; enforce bounds and store files in controlled locations."
+    },
+    {
+      "id": "fastapi-exam-q-015",
+      "type": "single_choice",
+      "topic": "External HTTP",
+      "prompt": "Why configure an explicit timeout for an external HTTPX request?",
+      "options": [
+        "To bound how long a dependency may consume request resources and handle slow/unavailable services.",
+        "To guarantee the remote service will succeed.",
+        "To enable automatic token validation.",
+        "To disable connection errors."
+      ],
+      "answer_key": "To bound how long a dependency may consume request resources and handle slow/unavailable services.",
+      "explanation": "Timeouts support predictable failure handling; they do not guarantee a success response."
+    },
+    {
+      "id": "fastapi-exam-q-016",
+      "type": "single_choice",
+      "topic": "Background tasks",
+      "prompt": "When should a durable queue/worker be considered instead of only FastAPI BackgroundTasks?",
+      "options": [
+        "For heavy, retryable or durable work that must survive process restarts and needs job state/monitoring.",
+        "For every short log line regardless of requirements.",
+        "Never; BackgroundTasks is a distributed durable queue.",
+        "Only to render `/docs`."
+      ],
+      "answer_key": "For heavy, retryable or durable work that must survive process restarts and needs job state/monitoring.",
+      "explanation": "In-process background tasks are useful for lightweight work, but are not a substitute for durable job processing."
+    },
+    {
+      "id": "fastapi-exam-q-017",
+      "type": "single_choice",
+      "topic": "CORS",
+      "prompt": "Why is CORS configured with explicit origins for a credentialed frontend?",
+      "options": [
+        "The browser origin policy should be deliberate; wildcard origins cannot be indiscriminately combined with credentialed requests.",
+        "CORS encrypts the HTTP connection.",
+        "CORS verifies passwords.",
+        "CORS replaces CSRF protection."
+      ],
+      "answer_key": "The browser origin policy should be deliberate; wildcard origins cannot be indiscriminately combined with credentialed requests.",
+      "explanation": "CORS controls which browser origins may read cross-origin responses; it is not authentication or transport security."
+    },
+    {
+      "id": "fastapi-exam-q-018",
+      "type": "single_choice",
+      "topic": "Async endpoints",
+      "prompt": "When is `async def` most useful in a FastAPI path operation?",
+      "options": [
+        "When awaited work uses non-blocking async I/O and the handler can yield while waiting.",
+        "Whenever the function performs CPU-heavy pure-Python computation.",
+        "To make synchronous blocking calls non-blocking automatically.",
+        "To skip handling exceptions."
+      ],
+      "answer_key": "When awaited work uses non-blocking async I/O and the handler can yield while waiting.",
+      "explanation": "Async improves I/O concurrency with compatible libraries but does not automatically accelerate CPU-bound code."
+    },
+    {
+      "id": "fastapi-exam-q-019",
+      "type": "single_choice",
+      "topic": "CPU-bound work",
+      "prompt": "A route performs expensive CPU computation that blocks the event loop. What is the right principle?",
+      "options": [
+        "Measure and offload appropriate CPU-bound work to a thread/process/worker strategy with resource limits.",
+        "Add `await` to any ordinary Python expression.",
+        "Start unlimited tasks inside the request.",
+        "Increase HTTP status codes."
+      ],
+      "answer_key": "Measure and offload appropriate CPU-bound work to a thread/process/worker strategy with resource limits.",
+      "explanation": "CPU work can block other requests; use a measured offloading strategy suited to the workload."
+    },
+    {
+      "id": "fastapi-exam-q-020",
+      "type": "single_choice",
+      "topic": "WebSockets",
+      "prompt": "What should a WebSocket connection manager do when a client disconnects?",
+      "options": [
+        "Remove the connection, handle disconnection, and enforce message/room authorization boundaries.",
+        "Keep sending messages to the closed connection forever.",
+        "Assume all clients in a room are administrators.",
+        "Store private messages in an unbounded process-global list indefinitely."
+      ],
+      "answer_key": "Remove the connection, handle disconnection, and enforce message/room authorization boundaries.",
+      "explanation": "Real-time connections need cleanup and explicit authorization as well as message validation."
+    },
+    {
+      "id": "fastapi-exam-q-021",
+      "type": "single_choice",
+      "topic": "Pagination",
+      "prompt": "What makes pagination safe and predictable for an API?",
+      "options": [
+        "Bound page size and use a stable, deterministic ordering; choose offset/cursor strategy for the workload.",
+        "Accept any requested limit even if it is millions.",
+        "Return the full database table for every query.",
+        "Sort randomly so repeated requests distribute load."
+      ],
+      "answer_key": "Bound page size and use a stable, deterministic ordering; choose offset/cursor strategy for the workload.",
+      "explanation": "Bounds protect resource consumption and deterministic order prevents confusing results across pages."
+    },
+    {
+      "id": "fastapi-exam-q-022",
+      "type": "single_choice",
+      "topic": "API versioning",
+      "prompt": "What is a safer way to evolve a public response schema?",
+      "options": [
+        "Prefer additive/backward-compatible changes, document deprecations and plan client migration before removals.",
+        "Rename every field silently.",
+        "Remove fields immediately when one server implementation changes.",
+        "Depend on undocumented response ordering."
+      ],
+      "answer_key": "Prefer additive/backward-compatible changes, document deprecations and plan client migration before removals.",
+      "explanation": "API clients can update at different times; compatibility and deprecation plans reduce breakage."
+    },
+    {
+      "id": "fastapi-exam-q-023",
+      "type": "single_choice",
+      "topic": "Webhooks",
+      "prompt": "How should an incoming payment webhook be processed?",
+      "options": [
+        "Verify the provider signature, validate the payload, and process the event idempotently with durable duplicate protection.",
+        "Trust any request that contains `event_id`.",
+        "Apply its amount before signature verification.",
+        "Retry duplicate events as new payments without checking state."
+      ],
+      "answer_key": "Verify the provider signature, validate the payload, and process the event idempotently with durable duplicate protection.",
+      "explanation": "Authenticity and idempotency reduce forged-event and duplicate-side-effect risks."
+    },
+    {
+      "id": "fastapi-exam-q-024",
+      "type": "single_choice",
+      "topic": "TestClient",
+      "prompt": "What should an endpoint test assert besides a successful status code?",
+      "options": [
+        "The relevant response shape/data, and negative cases such as invalid input or denied access.",
+        "Only that the Python interpreter exists.",
+        "The production database’s exact row count at all times.",
+        "That every endpoint returns HTTP 200."
+      ],
+      "answer_key": "The relevant response shape/data, and negative cases such as invalid input or denied access.",
+      "explanation": "Assertions should verify the contract, not merely that a response arrived."
+    },
+    {
+      "id": "fastapi-exam-q-025",
+      "type": "single_choice",
+      "topic": "Async tests",
+      "prompt": "Which client is commonly appropriate for async FastAPI integration tests that need ASGI transport?",
+      "options": [
+        "HTTPX AsyncClient with ASGITransport, coordinated with the app lifespan requirements.",
+        "A browser iframe as a Python runtime.",
+        "A SQLite command-line prompt without a test client.",
+        "A production payment webhook."
+      ],
+      "answer_key": "HTTPX AsyncClient with ASGITransport, coordinated with the app lifespan requirements.",
+      "explanation": "Async route/test lifecycles need compatible clients and deliberate lifespan handling."
+    },
+    {
+      "id": "fastapi-exam-q-026",
+      "type": "single_choice",
+      "topic": "Test isolation",
+      "prompt": "Why use a separate test database/transaction strategy and synthetic fixtures?",
+      "options": [
+        "To keep tests repeatable, avoid production side effects and clean up state predictably.",
+        "To avoid asserting the expected result.",
+        "To make test failures invisible.",
+        "To share a single user’s real records among all test runs."
+      ],
+      "answer_key": "To keep tests repeatable, avoid production side effects and clean up state predictably.",
+      "explanation": "Isolation improves reproducibility and limits risks from destructive test operations."
+    },
+    {
+      "id": "fastapi-exam-q-027",
+      "type": "single_choice",
+      "topic": "Injection",
+      "prompt": "How should SQL queries incorporate untrusted values?",
+      "options": [
+        "Use parameterized statements/ORM expression APIs, not string concatenation of user input.",
+        "Paste input into SQL text after removing one quote.",
+        "Trust values because Pydantic checked their type.",
+        "Run every query as a database superuser."
+      ],
+      "answer_key": "Use parameterized statements/ORM expression APIs, not string concatenation of user input.",
+      "explanation": "Parameterization separates SQL structure from data and is a key defense against injection."
+    },
+    {
+      "id": "fastapi-exam-q-028",
+      "type": "single_choice",
+      "topic": "Rate limiting",
+      "prompt": "What is the purpose of rate limiting on sensitive endpoints such as login?",
+      "options": [
+        "Reduce brute-force/abuse risks and protect capacity with suitable identity/IP-aware limits and monitoring.",
+        "Make valid requests impossible.",
+        "Replace password hashing.",
+        "Remove the need for authorization."
+      ],
+      "answer_key": "Reduce brute-force/abuse risks and protect capacity with suitable identity/IP-aware limits and monitoring.",
+      "explanation": "Limits should be appropriate to the threat and should complement, not replace, other security controls."
+    },
+    {
+      "id": "fastapi-exam-q-029",
+      "type": "single_choice",
+      "topic": "Performance",
+      "prompt": "What is a defensible performance optimization workflow?",
+      "options": [
+        "Measure a representative baseline, locate the bottleneck, make a small change and compare repeatable measurements.",
+        "Guess from code length and report invented latency.",
+        "Add a cache to every route before measuring.",
+        "Assume one local run predicts production traffic."
+      ],
+      "answer_key": "Measure a representative baseline, locate the bottleneck, make a small change and compare repeatable measurements.",
+      "explanation": "Optimization should be evidence-led and should retain correctness/security constraints."
+    },
+    {
+      "id": "fastapi-exam-q-030",
+      "type": "single_choice",
+      "topic": "Logging",
+      "prompt": "What should structured application logs avoid?",
+      "options": [
+        "Passwords, access tokens, API secrets and unnecessary sensitive personal information.",
+        "A request ID and elapsed time where appropriate.",
+        "A sanitized error class.",
+        "A useful severity level."
+      ],
+      "answer_key": "Passwords, access tokens, API secrets and unnecessary sensitive personal information.",
+      "explanation": "Logs help debug and correlate events, but sensitive fields and credentials must be redacted."
+    },
+    {
+      "id": "fastapi-exam-q-031",
+      "type": "single_choice",
+      "topic": "Health checks",
+      "prompt": "How do liveness and readiness normally differ?",
+      "options": [
+        "Liveness indicates the process is alive; readiness indicates it can currently accept work/dependencies are ready.",
+        "They must both always return success even during failure.",
+        "Readiness is a user password reset endpoint.",
+        "Liveness proves every business workflow succeeds."
+      ],
+      "answer_key": "Liveness indicates the process is alive; readiness indicates it can currently accept work/dependencies are ready.",
+      "explanation": "Separating the checks supports more accurate orchestration and safe traffic routing."
+    },
+    {
+      "id": "fastapi-exam-q-032",
+      "type": "single_choice",
+      "topic": "Deployment command",
+      "prompt": "What is the distinction between `fastapi dev` and a production startup command?",
+      "options": [
+        "`fastapi dev` is development-oriented with reload; choose a production command/configuration appropriate to the hosting platform.",
+        "They are identical in every operational detail.",
+        "The dev command automatically migrates the database safely.",
+        "Production should expose secrets in console arguments."
+      ],
+      "answer_key": "`fastapi dev` is development-oriented with reload; choose a production command/configuration appropriate to the hosting platform.",
+      "explanation": "Development reload improves iteration but is not a deployment strategy by itself."
+    },
+    {
+      "id": "fastapi-exam-q-033",
+      "type": "single_choice",
+      "topic": "Container security",
+      "prompt": "Which containerization approach is safer?",
+      "options": [
+        "Build reproducibly, run with least privilege where practical and inject secrets at runtime.",
+        "Bake production credentials into the image layer.",
+        "Copy `.env` into a public image.",
+        "Run as root without considering permissions."
+      ],
+      "answer_key": "Build reproducibly, run with least privilege where practical and inject secrets at runtime.",
+      "explanation": "Images can be distributed widely; credentials belong in managed runtime configuration and privileges should be limited."
+    },
+    {
+      "id": "fastapi-exam-q-034",
+      "type": "single_choice",
+      "topic": "Retries",
+      "prompt": "When is retrying an external operation dangerous?",
+      "options": [
+        "When the operation may have already succeeded and is not idempotent or deduplicated.",
+        "When a safe GET request encounters a brief timeout and policy allows it.",
+        "When the timeout is bounded.",
+        "When an operation has a well-defined idempotency key."
+      ],
+      "answer_key": "When the operation may have already succeeded and is not idempotent or deduplicated.",
+      "explanation": "Retries can duplicate side effects; use controlled backoff, idempotency and explicit retryable-error rules."
+    },
+    {
+      "id": "fastapi-exam-q-035",
+      "type": "single_choice",
+      "topic": "Release and recovery",
+      "prompt": "What evidence should accompany a production release?",
+      "options": [
+        "Automated test results, migration/rollback plan, health/logging checks, configuration review and known limitations.",
+        "Only a screenshot of the root endpoint.",
+        "A claim that unrun external integrations passed.",
+        "A copy of the secret environment file."
+      ],
+      "answer_key": "Automated test results, migration/rollback plan, health/logging checks, configuration review and known limitations.",
+      "explanation": "Production readiness should be based on traceable evidence and a practical recovery path, not a single screenshot."
+    },
+    {
+      "id": "fastapi-exam-q-036",
+      "type": "single_choice",
+      "topic": "Dependency overrides",
+      "prompt": "A route depends on a real database session, but endpoint tests should not connect to the real database. What is a suitable FastAPI testing approach?",
+      "options": [
+        "Override the database dependency with an isolated test fixture or mock, and restore overrides after the test",
+        "Disable every assertion and trust the production database",
+        "Hard-code production credentials into the test file",
+        "Skip the route test because dependencies cannot be changed"
+      ],
+      "answer_key": "Override the database dependency with an isolated test fixture or mock, and restore overrides after the test",
+      "explanation": "FastAPI dependency overrides allow tests to replace infrastructure dependencies, improving isolation and avoiding accidental production side effects."
+    }
+  ],
+  "notes": "36 distinct scenario-based questions. Answer keys and explanations are held in the backend content repository and must remain protected by the exam delivery API."
+}

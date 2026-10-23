@@ -1,0 +1,175 @@
+{
+  "id": "react-lesson-166",
+  "slug": "dynamic-route-parameters",
+  "title": "Dynamic Route Parameters",
+  "sequence": 166,
+  "module_id": "react-module-15",
+  "module_slug": "routing-and-navigation",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "react-lesson-165"
+  ],
+  "previous_lesson_id": "react-lesson-165",
+  "next_lesson_id": "react-lesson-167",
+  "keywords": [
+    "Dynamic Route Parameters",
+    "Routing and Navigation",
+    "Parameterized paths",
+    "Reading route parameters",
+    "Validating identifiers",
+    "Rendering resource-specific pages",
+    "routing"
+  ],
+  "source_syllabus_number": 166,
+  "subtopics": [
+    "Parameterized paths",
+    "Reading route parameters",
+    "Validating identifiers",
+    "Rendering resource-specific pages"
+  ],
+  "learning_outcomes": [
+    "Explain how Dynamic Route Parameters relates to Routing and Navigation.",
+    "Apply Parameterized paths in a small React or JavaScript example and describe the expected result.",
+    "Test one edge/failure case and identify a maintainable, accessible fix."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study Dynamic Route Parameters as part of Routing and Navigation. The syllabus topics are kept below, then connected to a small example you can inspect and adapt.",
+    "why_it_matters": "Parameterized paths makes application location part of a navigable URL. Use real links for navigation, preserve back/forward behavior, and handle unknown routes and pending/error states.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Dynamic Route Parameters: concept map",
+        "asset_path": "diagrams/lessons/lesson-166-dynamic-route-parameters.svg",
+        "alt_text": "Concept map for Dynamic Route Parameters: Parameterized paths, Reading route parameters, Validating identifiers.",
+        "caption": "A visual scaffold for the idea; the code and verification steps below provide the practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Parameterized paths makes application location part of a navigable URL. Use real links for navigation, preserve back/forward behavior, and handle unknown routes and pending/error states. Start with one responsibility at a time: identify the data, describe the expected interface, then decide which event, state update, request, or runtime boundary changes the result."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Parameterized paths",
+            "text": "Parameterized paths makes application location part of a navigable URL. Use real links for navigation, preserve back/forward behavior, and handle unknown routes and pending/error states."
+          },
+          {
+            "title": "Reading route parameters",
+            "text": "Reading route parameters makes application location part of a navigable URL. Use real links for navigation, preserve back/forward behavior, and handle unknown routes and pending/error states."
+          },
+          {
+            "title": "Validating identifiers",
+            "text": "Validating identifiers makes application location part of a navigable URL. Use real links for navigation, preserve back/forward behavior, and handle unknown routes and pending/error states."
+          },
+          {
+            "title": "Rendering resource-specific pages",
+            "text": "Rendering resource-specific pages makes application location part of a navigable URL. Use real links for navigation, preserve back/forward behavior, and handle unknown routes and pending/error states."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "jsx",
+        "code": "import { Routes, Route } from \"react-router\";\n\n<Routes>\n  <Route path=\"/products/:productId\" element={<ProductPage />} />\n  <Route path=\"*\" element={<NotFound />} />\n</Routes>",
+        "expected_output": "The router matches a dynamic product URL and provides a fallback for unmatched paths.",
+        "run_instructions": "This is an inspectable teaching example, not an arbitrary-code runner inside CodeLeaf. Place JSX in a React/Vite project (or the relevant CSS/HTML/config file), run the project with its documented toolchain, and compare the visible behavior with the expected result. Server rendering and framework APIs require their stated runtime.",
+        "reset_steps": "Restore the original snippet, reset the component/data to its starting state, and repeat with a different input or an edge/failure case.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Use the code as a small experiment for Dynamic Route Parameters. First predict the result, then run or inspect it in the required runtime. Change one input and explain why the output changed. If the topic depends on React version or framework support, confirm that the project uses a compatible version before interpreting a result."
+      },
+      {
+        "type": "callout",
+        "title": "Version and environment note",
+        "text": "This course assumes the React 19.3 documentation snapshot dated 2026-10-12. Core component, JSX, props, state, and event concepts apply broadly; modern APIs and server rendering must be checked against the stated React version and the framework/runtime in use."
+      }
+    ],
+    "task": "Create a minimal example demonstrating Dynamic Route Parameters. Include the relevant subtopic “Parameterized paths”, explain the expected UI/result, and verify one normal case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named concept rather than merely mentioning it.",
+      "The expected visible or logged result is documented and reproducible.",
+      "At least one boundary, empty, loading, or failure case is handled or explained.",
+      "The implementation remains accessible and does not introduce avoidable mutation, stale state, or insecure client-only trust."
+    ],
+    "hints": [
+      "Start with the smallest part of “Parameterized paths” that can be observed independently.",
+      "Write down what should appear before changing the code; then change one input at a time.",
+      "Use the browser console, React Developer Tools, or the appropriate test/runtime to isolate a mismatch."
+    ],
+    "expected_output": "The router matches a dynamic product URL and provides a fallback for unmatched paths.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-166-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "The example handles only the happy path.",
+        "why": "Real UI receives empty values, delayed responses, and invalid input.",
+        "fix": "Add one explicit edge/failure case and document the expected message or state."
+      },
+      {
+        "problem": "The example stores redundant data or mutates an existing array/object.",
+        "why": "The displayed result can drift from the source data or React may not observe the intended change.",
+        "fix": "Derive values where possible and create a new value when updating state."
+      },
+      {
+        "problem": "A browser or framework capability is assumed to exist everywhere.",
+        "why": "Availability can depend on the host runtime, React version, and framework.",
+        "fix": "Check the official reference, declare the runtime/version, and provide a fallback when appropriate."
+      }
+    ],
+    "summary": [
+      "Dynamic Route Parameters fits into the broader Routing and Navigation workflow.",
+      "The central concept is Parameterized paths; apply it with the smallest reproducible example.",
+      "Verify correctness with at least one normal input and one boundary or failure case."
+    ],
+    "references": [
+      "https://react.dev/learn",
+      "https://react.dev/reference/react",
+      "https://react.dev/blog/2026/09/09/react-19-3"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "React — Learn",
+      "url": "https://react.dev/learn",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "Dynamic Route Parameters",
+        "Parameterized paths",
+        "Reading route parameters"
+      ]
+    },
+    {
+      "title": "React Reference",
+      "url": "https://react.dev/reference/react",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "React APIs and behavior",
+        "Dynamic Route Parameters"
+      ]
+    },
+    {
+      "title": "React 19.3 Release Notes",
+      "url": "https://react.dev/blog/2026/09/09/react-19-3",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "version-specific modern APIs and compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus and authored as an educational draft; technical/instructional review required before publication."
+}

@@ -1,0 +1,89 @@
+CodeLeaf Privacy Settings + Production Deploy Prep Patch
+======================================================
+
+Purpose
+-------
+- Replaces the misleading "Privacy controls — Not available yet" placeholder with a real link to the existing account-backed analytics consent and learning-review preferences.
+- Opens the Learning Hub directly at the privacy preferences section and scrolls to it after the API-backed page loads.
+- Fixes Vercel's production `/api/*` rewrite so it reaches the included same-origin proxy function instead of a placeholder Render hostname.
+- Adds required SMTP and frontend-origin fields to Render's Blueprint so production startup config can be supplied securely during deployment.
+- Adds focused privacy-link and deployment-config contract tests plus a step-by-step deployment guide.
+
+This patch does not add public-profile/certificate visibility toggles, deploy services, publish courses, apply database migrations, or activate live Razorpay payments.
+
+Apply on Windows PowerShell
+---------------------------
+1. Stop the frontend dev server with Ctrl+C.
+2. From the CodeLeaf root, make a backup:
+
+   $root = 'E:\Code_Leaf'
+   $backup = Join-Path $root '.patch-backups\privacy-deploy-20261023'
+   $modified = @(
+     'frontend\src\pages\ProfilePage.jsx',
+     'frontend\src\pages\LearningHubPage.jsx',
+     'frontend\src\styles\phase5.css',
+     'frontend\package.json',
+     'frontend\vercel.json',
+     'render.yaml'
+   )
+   foreach ($relative in $modified) {
+     $source = Join-Path $root $relative
+     $destination = Join-Path $backup $relative
+     if (Test-Path $source) {
+       New-Item -ItemType Directory -Force -Path (Split-Path $destination) | Out-Null
+       Copy-Item $source $destination -Force
+     }
+   }
+
+3. Extract this ZIP into E:\Code_Leaf, preserving folder structure and allowing overwrite of the six modified files.
+4. Do not add real secrets to the repository. render.yaml declares secrets as sync:false prompts; put their real values into Render's private environment settings.
+
+Verify
+------
+From E:\Code_Leaf\frontend:
+
+   npm run test:privacy-settings
+   npm run test:deployment-config
+   node scripts/test_api_proxy.mjs
+   npm run test:ui-polish
+   npm run test:workspace
+   npm run test:exercise-ui
+   npm run test:catalog
+   npm run test:api-cache
+   npm run test:api-client
+   npm run test:auth-ui
+   npm run test:course-overview
+   npm run test:lesson-timeout
+   npm run build
+
+From E:\Code_Leaf\backend (with the backend venv active), also run the project's existing production configuration checks before deployment:
+
+   python scripts/check_alembic_heads.py
+   python scripts/check_repository_hygiene.py
+   python scripts/test_phase1_config.py
+   python scripts/check_release_readiness.py --production
+
+Review release-readiness output; do not add --check-db or run write/publish commands unless you explicitly intend to test against the configured database/content.
+
+Rollback
+--------
+From PowerShell:
+
+   $root = 'E:\Code_Leaf'
+   $backup = Join-Path $root '.patch-backups\privacy-deploy-20261023'
+   $modified = @(
+     'frontend\src\pages\ProfilePage.jsx',
+     'frontend\src\pages\LearningHubPage.jsx',
+     'frontend\src\styles\phase5.css',
+     'frontend\package.json',
+     'frontend\vercel.json',
+     'render.yaml'
+   )
+   foreach ($relative in $modified) {
+     $source = Join-Path $backup $relative
+     if (Test-Path $source) { Copy-Item $source (Join-Path $root $relative) -Force }
+   }
+   Remove-Item (Join-Path $root 'frontend\scripts\test_privacy_settings_link.mjs') -ErrorAction SilentlyContinue
+   Remove-Item (Join-Path $root 'frontend\scripts\test_deployment_config.mjs') -ErrorAction SilentlyContinue
+
+Retain the backup until the privacy links and deployment configuration have been checked locally.

@@ -1,0 +1,13 @@
+{
+  "id": "github-actions-exercise-solution-046",
+  "exercise_id": "github-actions-exercise-046",
+  "title": "Advanced Release Engineering practice reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": {
+    "approach": "A complete response for advanced release engineering practice should include: version, changelog, rollback.",
+    "example": "name: Prepare tagged release\non:\n  push:\n    tags: [\"v*.*.*\"]\npermissions:\n  contents: write\njobs:\n  release:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: Create release notes from tag\n        env:\n          GH_TOKEN: ${{ github.token }}\n        run: gh release create \"$GITHUB_REF_NAME\" --generate-notes",
+    "verification": "A matching tag triggers the GitHub CLI release creation command. This requires an authorized token and a valid tag, so use only a controlled test release."
+  },
+  "explanation": "Reason about the trigger, permission boundary, expected observable result, and failure path for advanced release engineering practice. Use a disposable branch or repository, compare the behavior with the official reference linked in this lesson, and reset any temporary changes afterwards. Adapt action references and runtime details against the official docs checked on 2026-10-20. Reference snippet updated to align with the linked lesson; adapt it to the exact exercise acceptance criteria before applying it."
+}

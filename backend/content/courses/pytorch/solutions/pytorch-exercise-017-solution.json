@@ -1,0 +1,16 @@
+{
+  "id": "pytorch-exercise-017-reference-solution",
+  "exercise_id": "pytorch-exercise-017",
+  "title": "Reference approach: Transfer Learning",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Implement transfer learning in a small isolated script. Required implementation evidence includes: ResNet18_Weights, requires_grad, fc. Use a reproducible seed, report observed output, and explain relevant edge cases.",
+  "explanation": "This exercise consolidates the topic from lesson 088. The list of required strings is only a minimal static signal; inspect numerical correctness, error handling, and test outcomes manually.",
+  "example_code": "import torch\nfrom torch import nn\n# Offline-safe transfer-learning pattern; avoids downloading pretrained weights.\nbackbone=nn.Sequential(nn.Linear(8,16),nn.ReLU());\nfor p in backbone.parameters(): p.requires_grad=False\nhead=nn.Linear(16,3); print(all(not p.requires_grad for p in backbone.parameters()), head.out_features)\n# For torchvision ResNet18, replace model.fc (not model.classifier).",
+  "reference_code": "import torch\nfrom torch import nn\n# Offline-safe transfer-learning pattern; avoids downloading pretrained weights.\nbackbone=nn.Sequential(nn.Linear(8,16),nn.ReLU());\nfor p in backbone.parameters(): p.requires_grad=False\nhead=nn.Linear(16,3); print(all(not p.requires_grad for p in backbone.parameters()), head.out_features)\n# For torchvision ResNet18, replace model.fc (not model.classifier).",
+  "review_notes": [
+    "Do not treat source-string grading as proof that numerical behavior is correct.",
+    "Run in a supported local environment or isolated runner.",
+    "Keep input data synthetic unless a dataset has an appropriate license and documented provenance."
+  ]
+}

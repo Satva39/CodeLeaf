@@ -1,0 +1,204 @@
+{
+  "id": "django-lesson-260",
+  "slug": "static-media-and-deployment-failures",
+  "title": "Static, Media, and Deployment Failures",
+  "sequence": 260,
+  "module_id": "django-module-23",
+  "module_slug": "troubleshooting-and-legacy-compatibility",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "optional-specialization",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "django-lesson-259"
+  ],
+  "previous_lesson_id": "django-lesson-259",
+  "next_lesson_id": "django-lesson-261",
+  "keywords": [
+    "static-media-and-deployment-failures",
+    "troubleshooting-and-legacy-compatibility",
+    "django",
+    "static-file-discovery",
+    "missing-media-root-or-static-root-configuration",
+    "storage-permission-problems",
+    "incorrect-proxy-configuration",
+    "environment-variable-mismatches"
+  ],
+  "source_syllabus_number": 260,
+  "subtopics": [
+    "Static file discovery",
+    "Missing MEDIA_ROOT or STATIC_ROOT configuration",
+    "Storage permission problems",
+    "Incorrect proxy configuration",
+    "Environment variable mismatches"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of static, media, and deployment failures and at least two listed subtopics.",
+    "Interpret the static, media, and deployment failures example and predict its expected result.",
+    "Choose a verification step and identify one version, security, data, or troubleshooting consideration."
+  ],
+  "content": {
+    "intro": "Learn static, media, and deployment failures through a compact visual, an inspectable Django example, and a practical verification task.",
+    "why_it_matters": "Static, Media, and Deployment Failures matters because a Django project has to behave predictably across requests, database state, configuration, and deployments. Understanding this piece makes the surrounding application easier to test, maintain, and secure.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Visual guide: Static, Media, and Deployment Failures",
+        "asset_path": "diagrams/module-23-overview.svg",
+        "alt_text": "Overview visual for module 23, Troubleshooting and Legacy Compatibility; use it as a roadmap for the lesson topic Static, Media, and Deployment Failures.",
+        "caption": "Use this visual to connect Static, Media, and Deployment Failures to the broader flow; it is an overview, not a substitute for the worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "This lesson examines static, media, and deployment failures as part of troubleshooting and legacy compatibility. The objective is to understand the behavior, connect it to the listed subtopics, and verify it with a small example rather than relying on memorized syntax."
+      },
+      {
+        "type": "paragraph",
+        "title": "What to cover",
+        "text": "The source syllabus for this lesson names: Static file discovery; Missing MEDIA_ROOT or STATIC_ROOT configuration; Storage permission problems; Incorrect proxy configuration; Environment variable mismatches. Keep these distinct concepts together: know what each item does, when it applies, and what assumption must be verified in your project."
+      },
+      {
+        "type": "list",
+        "title": "Lesson concepts and practical notes",
+        "items": [
+          {
+            "title": "Static file discovery",
+            "text": "For Static file discovery, identify the Django component responsible, the inputs and outputs it owns, and the boundary conditions that matter. Use the accompanying example as a starting point, verify it with the official versioned documentation, and record one test demonstrating expected behavior."
+          },
+          {
+            "title": "Missing MEDIA_ROOT or STATIC_ROOT configuration",
+            "text": "Configuration for Missing MEDIA_ROOT or STATIC_ROOT configuration should be explicit, environment-aware, and validated before serving requests. Record defaults and deploy-specific values, keep secrets outside committed content, and test the setting that changes behavior."
+          },
+          {
+            "title": "Storage permission problems",
+            "text": "Storage permission problems is a server-side responsibility where applicable. Define who may perform the action and on which object, validate untrusted input, test denied cases, and document sensitive-data handling."
+          },
+          {
+            "title": "Incorrect proxy configuration",
+            "text": "Configuration for Incorrect proxy configuration should be explicit, environment-aware, and validated before serving requests. Record defaults and deploy-specific values, keep secrets outside committed content, and test the setting that changes behavior."
+          },
+          {
+            "title": "Environment variable mismatches",
+            "text": "For Environment variable mismatches, identify the Django component responsible, the inputs and outputs it owns, and the boundary conditions that matter. Use the accompanying example as a starting point, verify it with the official versioned documentation, and record one test demonstrating expected behavior."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Static, Media, and Deployment Failures",
+        "language": "bash",
+        "code": "python manage.py collectstatic --noinput",
+        "expected_output": "Static files are collected into the configured STATIC_ROOT for the deployment’s serving strategy.",
+        "execution_mode": "static-validation",
+        "run_instructions": "Open a local project using the documented Django 6.1-compatible Python environment. If this snippet depends on model names, URL configuration, settings, or an optional package, add those prerequisites before running it. Otherwise inspect it as a static example. CodeLeaf browser preview does not execute Django/Python server code.",
+        "troubleshooting": "Configure STATIC_ROOT and a static host/storage strategy. User media is not the same as static assets."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "First identify the input and the responsible Django component. Next trace how the example moves through “Static, Media, and Deployment Failures” and the related concept “Static file discovery”. Predict the result before running or inspecting it. Finally compare the observed behavior with the expected result and the cited official documentation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Change one input or configuration choice related to Static file discovery. Write down the expected outcome, test one normal case and one invalid or boundary case, then record what changed. Do not add real credentials or sensitive production data."
+      },
+      {
+        "type": "paragraph",
+        "title": "Common mistakes and fixes",
+        "text": "Common pitfalls include skipping a required configuration/import, copying a fragment without its model or URL context, trusting client input, or treating a development-only behavior as production-ready. Check the earliest failing assumption, consult the version-specific docs, and add a regression test for the failure you found."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to describe static, media, and deployment failures, explain the listed topics, inspect the example, and choose an appropriate verification step. Keep the scope and version caveat visible when sharing your solution."
+      }
+    ],
+    "execution_mode": "static-validation",
+    "expected_result": "Static files are collected into the configured STATIC_ROOT for the deployment’s serving strategy.",
+    "run_instructions": "Use an isolated local project and synthetic data. Follow the code block instructions; setup-dependent fragments must be integrated into the relevant app. Static examples can be reviewed without execution.",
+    "troubleshooting": [
+      "Configure STATIC_ROOT and a static host/storage strategy. User media is not the same as static assets.",
+      "Confirm the active Python virtual environment, settings module, app registration, URL routing, dependencies, and database migrations before debugging application behavior."
+    ],
+    "reset_steps": "Reset only local practice data or recreate the disposable development database as documented for your project. Never delete production data or migration history to reset an exercise.",
+    "try_it_yourself": "Apply Static file discovery to a small local example, then record a normal case, an invalid/boundary case, and the expected versus observed result.",
+    "progressive_hints": [
+      "Identify which Django component owns this behavior.",
+      "Trace a single request or object through the example before adding more features.",
+      "Use the relevant linked official documentation and a test for the failure case."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Copying a framework fragment without its imports, configuration, model, or URL context.",
+        "why": "The snippet may be incomplete when separated from a Django project.",
+        "fix": "Use the stated prerequisites and run the relevant management check or focused test."
+      },
+      {
+        "problem": "Trusting input or relying only on a happy-path example.",
+        "why": "Invalid values, unauthorized requests, or concurrent activity can violate assumptions.",
+        "fix": "Validate on the server and add a negative or boundary test."
+      },
+      {
+        "problem": "Treating the development sample as production-ready.",
+        "why": "Production hosting, secrets, storage, monitoring and resource limits differ from local use.",
+        "fix": "Follow the current deployment/security references and document untested areas."
+      }
+    ],
+    "recap": "Static, Media, and Deployment Failures connects Static file discovery; Missing MEDIA_ROOT or STATIC_ROOT configuration; Storage permission problems; Incorrect proxy configuration; Environment variable mismatches. Verify behavior in your project and keep any version-specific assumption documented.",
+    "knowledge_check_file": "exams/question-files/lesson-260-questions.json",
+    "content_review_status": "draft",
+    "accessibility_notes": "Use descriptive headings, meaningful labels/alt text, keyboard-accessible interactions, and text explanations alongside the diagram. Never rely on color alone.",
+    "version_notes": "Examples target Django 6.1 concepts and must be checked against the installed supported patch release. Optional third-party integrations are labelled separately; snippets with dependencies are not claimed to have been executed.",
+    "source_syllabus_topics_reviewed": true,
+    "topic_explanations_count": 5,
+    "run_mode": "static-validation",
+    "task": "Apply Static file discovery to a small local example, then record a normal case, an invalid/boundary case, and the expected versus observed result.",
+    "task_acceptance_criteria": [
+      "Record a predicted result before running or inspecting the example.",
+      "Include one normal case and one invalid or boundary case.",
+      "State the Python/Django version and verification method used."
+    ],
+    "hints": [
+      "Identify which Django component owns this behavior.",
+      "Trace a single request or object through the example before adding more features.",
+      "Use the relevant linked official documentation and a test for the failure case."
+    ],
+    "solution_notes": "Suggested approach: identify the responsible Django component, keep input validation and authorization at the server boundary where relevant, then verify static, media, and deployment failures with a focused test. This is a learning hint, not a claim that code was executed.",
+    "summary": [
+      "Static, Media, and Deployment Failures is part of troubleshooting and legacy compatibility and should be understood alongside its listed subtopics.",
+      "The worked example is a starting point; review its prerequisites and version notes before local execution.",
+      "Verify the expected behavior with normal and failure cases and keep the result reproducible."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "django-release-612",
+      "title": "Django 6.1.2 release notes",
+      "url": "https://docs.djangoproject.com/en/6.1/releases/6.1.2/",
+      "publisher": "Django Software Foundation",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "security maintenance",
+        "patch release behavior"
+      ]
+    },
+    {
+      "id": "django-release-61",
+      "title": "Django 6.1 release notes",
+      "url": "https://docs.djangoproject.com/en/6.1/releases/6.1/",
+      "publisher": "Django Software Foundation",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Python compatibility",
+        "new features",
+        "deprecations",
+        "fetch modes"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Django curriculum; pending Django-specialist and instructional review before publication."
+}

@@ -1,0 +1,162 @@
+{
+  "id": "excel-lesson-240",
+  "slug": "script-inputs-outputs-and-reuse",
+  "title": "Script Inputs, Outputs, and Reuse",
+  "sequence": 240,
+  "module_id": "excel-module-25",
+  "module_slug": "office-scripts-and-power-automate",
+  "level": "professional",
+  "difficulty": "advanced",
+  "track": "optional-specialization",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "excel-lesson-239"
+  ],
+  "previous_lesson_id": "excel-lesson-239",
+  "next_lesson_id": "excel-lesson-241",
+  "keywords": [
+    "script inputs, outputs, and reuse",
+    "excel",
+    "parameters and return values",
+    "reusable automation routines",
+    "error checks",
+    "testing scripts against different workbooks"
+  ],
+  "source_syllabus_number": 240,
+  "subtopics": [
+    "Parameters and return values",
+    "Reusable automation routines",
+    "Error checks",
+    "Testing scripts against different workbooks"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of script inputs, outputs, and reuse and identify when it is useful.",
+    "Apply the lesson pattern to a small Excel example using the stated assumptions.",
+    "Check the result against an expected output and test one relevant edge case."
+  ],
+  "exercise_files": [
+    "../exercises/240-script-inputs-outputs-and-reuse.json"
+  ],
+  "sources": [
+    {
+      "title": "Office Scripts documentation",
+      "url": "https://learn.microsoft.com/en-us/office/dev/scripts/",
+      "publisher": "Microsoft Learn",
+      "checked_on": "2026-10-12",
+      "source_type": "official_product_documentation",
+      "supports": [
+        "Office Scripts",
+        "Script APIs and automation workflow"
+      ]
+    },
+    {
+      "title": "Office Scripts best practices",
+      "url": "https://learn.microsoft.com/en-us/office/dev/scripts/develop/best-practices",
+      "publisher": "Microsoft Learn",
+      "checked_on": "2026-10-12",
+      "source_type": "official_best_practices",
+      "supports": [
+        "Validate workbook state",
+        "Defensive script design"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the attached Excel curriculum and current official documentation. Requires editorial review, version-specific verification, and practical execution in a supported Excel environment before publication.",
+  "content": {
+    "intro": "This lesson covers Script Inputs, Outputs, and Reuse as part of Office Scripts and Power Automate. It follows the attached Excel curriculum, with an emphasis on small examples and verification.",
+    "why_it_matters": "Script Inputs, Outputs, and Reuse contributes to reliable business reporting and professional spreadsheet delivery. Document assumptions, verify results independently, and separate optional platform tools from core Excel behavior. Compatibility: Office Scripts and Power Automate require a supported Microsoft 365 environment and tenant configuration. Do not assume a desktop macro or a browser-hosted script will be available on every account.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 25 overview",
+        "asset_path": "diagrams/module-25-overview.svg",
+        "alt_text": "A four-stage labeled map for Module 25: Office Scripts and Power Automate, guiding the learner from concept to practice and verification.",
+        "caption": "This visual locates Script Inputs, Outputs, and Reuse inside Module 25, then connects understanding with application and checking."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Script Inputs, Outputs, and Reuse focuses on the following parts of the supplied syllabus: Parameters and return values; Reusable automation routines; Error checks; Testing scripts against different workbooks. Keep the underlying source data visible and make each assumption explicit."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus coverage",
+        "items": [
+          "Parameters and return values",
+          "Reusable automation routines",
+          "Error checks",
+          "Testing scripts against different workbooks"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "typescript",
+        "code": "function main(workbook: ExcelScript.Workbook) {\n  const sheet = workbook.getActiveWorksheet();\n  sheet.getRange(\"A1\").setValue(\"Report ready\");\n}",
+        "expected_output": "Sets cell A1 on the active worksheet to Report ready. This is an illustrative Office Script; availability and tenant policy must be checked.",
+        "run_instructions": "Use the Office Scripts editor in a supported Microsoft 365 environment. Validate workbook/sheet assumptions first; this snippet is not run by the CodeLeaf lesson page.",
+        "reset_steps": "Work in a duplicate workbook or a scratch sheet. Restore the input range and formula/code to the original state, clear filters or selections, then rerun the same test cases. Record expected and actual behavior rather than assuming a successful result."
+      },
+      {
+        "type": "callout",
+        "title": "Guided example",
+        "text": "Start with a small, known dataset for script inputs, outputs, and reuse. Apply the example above, compute or inspect at least one result independently, then deliberately try a blank, duplicate, boundary, or not-found case where relevant."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a small worksheet or workbook section that demonstrates script inputs, outputs, and reuse. Use clear headers, label units and assumptions, and capture expected versus actual output for a normal case and an edge case. Where the concept requires a specialized Excel feature, first verify that feature is available in your Excel edition."
+      }
+    ],
+    "task": "Build or inspect an Excel example that demonstrates script inputs, outputs, and reuse; use the example to verify one normal and one edge case, and write down any version or tool dependency.",
+    "task_acceptance_criteria": [
+      "The worksheet/workflow uses a clear, labeled source range and explicit assumptions.",
+      "The learner records an expected output and independently compares it with the actual result.",
+      "At least one relevant edge case is checked; data and formula errors are not silently concealed.",
+      "The workbook is saved as a copy and compatibility/security/accessibility notes are followed where relevant."
+    ],
+    "hints": [
+      "Reduce the problem to a small range with known values before scaling it up.",
+      "Inspect cell values and formulas, not only displayed formatting; verify data types, references and range boundaries.",
+      "Compare expected versus actual results and check the Microsoft documentation for version-specific functions or tools."
+    ],
+    "expected_output": "Sets cell A1 on the active worksheet to Report ready. This is an illustrative Office Script; availability and tenant policy must be checked.",
+    "run_mode": "human-review",
+    "knowledge_check_file": "exams/question-files/lesson-240-questions.json",
+    "common_mistakes": [
+      "Assuming the displayed format is the same as the stored value or data type.",
+      "Using an incorrect range boundary, a mismatched lookup key, or an unverified assumption.",
+      "Trusting a result without comparing it with a known calculation or checking a failure/edge case."
+    ],
+    "summary": [
+      "Script Inputs, Outputs, and Reuse supports the workflow in Office Scripts and Power Automate.",
+      "Use a small example, make assumptions visible, and verify the result against the source.",
+      "Check target-version availability and keep a clean copy before making high-impact changes."
+    ],
+    "references": [
+      {
+        "title": "Office Scripts documentation",
+        "url": "https://learn.microsoft.com/en-us/office/dev/scripts/",
+        "publisher": "Microsoft Learn",
+        "checked_on": "2026-10-12",
+        "source_type": "official_product_documentation",
+        "supports": [
+          "Office Scripts",
+          "Script APIs and automation workflow"
+        ]
+      },
+      {
+        "title": "Office Scripts best practices",
+        "url": "https://learn.microsoft.com/en-us/office/dev/scripts/develop/best-practices",
+        "publisher": "Microsoft Learn",
+        "checked_on": "2026-10-12",
+        "source_type": "official_best_practices",
+        "supports": [
+          "Validate workbook state",
+          "Defensive script design"
+        ]
+      }
+    ]
+  }
+}

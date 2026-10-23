@@ -1,0 +1,60 @@
+{
+  "id": "css-exercise-014",
+  "slug": "dark-mode",
+  "title": "Dark Mode",
+  "type": "coding",
+  "lesson_id": "css-lesson-181",
+  "module_id": "css-module-18",
+  "difficulty": "intermediate",
+  "sequence": 14,
+  "prompt": "Use a small set of custom properties for a light and dark theme. Make the text and surface tokens change together, and preserve readable contrast in both states.",
+  "objective": "Demonstrate custom properties, themes, color-scheme in a small stylesheet and explain the behavior.",
+  "target_skills": [
+    "custom properties",
+    "themes",
+    "color-scheme"
+  ],
+  "starter": {
+    "language": "css",
+    "code": ":root { /* add --color-text and --color-surface */ }\n.card { color: var(--color-text); background: var(--color-surface); }\n[data-theme=\"dark\"] { /* override tokens */ }\n"
+  },
+  "expected_output": "A stylesheet that meets the acceptance criteria for Dark Mode and passes manual browser checks.",
+  "public_tests": [
+    {
+      "name": "Required CSS evidence",
+      "required_strings": [
+        "--color-text",
+        "--color-surface",
+        "var(",
+        "[data-theme=\"dark\"]"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Include `--color-text` where appropriate.",
+    "Include `--color-surface` where appropriate.",
+    "Include `var(` where appropriate.",
+    "Include `[data-theme=\"dark\"]` where appropriate.",
+    "Test the interface at a narrow and wide viewport where relevant.",
+    "Record one explanation of why the CSS produces the observed result."
+  ],
+  "hints": [
+    "Identify the smallest selector that needs to change.",
+    "Add one property or state at a time, then inspect the result.",
+    "Use browser developer tools and an official reference to resolve unexpected behavior."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "--color-text",
+      "--color-surface",
+      "var(",
+      "[data-theme=\"dark\"]"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus human review. This does not prove that a rendered page is visually or accessibly correct.",
+  "retry_policy": "Allow retries. Only a correct server-side check may complete the activity; XP is controlled by CodeLeaf backend rules and is not configured in this file.",
+  "status": "draft",
+  "status_note": "Draft until the starter, expected behavior, browser compatibility, and manual review rubric are verified.",
+  "solution_file": "../solutions/014-dark-mode-solution.json"
+}

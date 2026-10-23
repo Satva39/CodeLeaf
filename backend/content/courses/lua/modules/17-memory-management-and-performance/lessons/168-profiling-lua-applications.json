@@ -1,0 +1,149 @@
+{
+  "id": "lua-lesson-168",
+  "slug": "profiling-lua-applications",
+  "title": "Profiling Lua Applications",
+  "sequence": 168,
+  "module_id": "lua-module-17",
+  "module_slug": "memory-management-and-performance",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "lua-lesson-167"
+  ],
+  "previous_lesson_id": "lua-lesson-167",
+  "next_lesson_id": "lua-lesson-169",
+  "keywords": [
+    "profiling-lua-applications",
+    "timing-functions-and-code-paths",
+    "measuring-cpu-time-elapsed-time-and-memory-use"
+  ],
+  "source_syllabus_number": 168,
+  "subtopics": [
+    "Timing functions and code paths",
+    "Measuring CPU time, elapsed time, and memory use"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of profiling Lua Applications and the key behavior described in this lesson.",
+    "Apply profiling Lua Applications in a small Lua example and predict its result.",
+    "Identify a relevant edge case, version constraint, or host-runtime limitation for profiling Lua Applications."
+  ],
+  "content": {
+    "intro": "Measure before optimizing. Garbage collection handles reachable-object lifetimes, but allocations, references, weak tables, and external resources have different lifetime rules. Benchmark equivalent workloads repeatedly.",
+    "why_it_matters": "Measure before optimizing. Garbage collection handles reachable-object lifetimes, but allocations, references, weak tables, and external resources have different lifetime rules. Benchmark equivalent workloads repeatedly. This concept appears in the supplied syllabus; keep the scope and assumptions visible in your implementation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual map: Profiling Lua Applications",
+        "asset_path": "diagrams/lessons/lesson-168.svg",
+        "alt_text": "Concept map for Profiling Lua Applications; understand the concept, inspect a Lua example, and verify behavior and edge cases.",
+        "caption": "Visual summary of Profiling Lua Applications; use the three-step path while working through the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Profiling Lua Applications is part of Memory Management and Performance. Start with the exact rule or capability, identify what the example assumes, and note what changes on another Lua version or in a host application."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core explanation",
+        "text": "Measure before optimizing. Garbage collection handles reachable-object lifetimes, but allocations, references, weak tables, and external resources have different lifetime rules. Benchmark equivalent workloads repeatedly."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics to cover",
+        "items": [
+          {
+            "title": "Timing functions and code paths",
+            "text": "Understand Timing functions and code paths; connect it to Profiling Lua Applications, then state one useful example or boundary case."
+          },
+          {
+            "title": "Measuring CPU time, elapsed time, and memory use",
+            "text": "Understand Measuring CPU time, elapsed time, and memory use; connect it to Profiling Lua Applications, then state one useful example or boundary case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through the example",
+        "text": "Read the small example, predict every output line, then run it locally with a compatible runtime. `os.clock` measures CPU time on supported runtimes; repeat benchmarks and do not rely on a single measurement. Keep the smallest reproducible case if the observed behavior differs."
+      },
+      {
+        "type": "code",
+        "language": "lua",
+        "execution_mode": "static-validation",
+        "code": "local started = os.clock()\nlocal total = 0\nfor i = 1, 1000 do total = total + i end\nlocal elapsed = os.clock() - started\nprint(total)\nprint(elapsed >= 0)",
+        "expected_output": "500500\ntrue",
+        "caption": "Static reference example for local verification; CodeLeaf does not execute this snippet unless a dedicated isolated runner is explicitly provided.",
+        "run_instructions": "Save the code in a local file with the correct language extension and test it using the runtime noted in the lesson. `os.clock` measures CPU time on supported runtimes; repeat benchmarks and do not rely on a single measurement. Compare the exact output to the documented result.",
+        "reset_steps": "Restore the original snippet, remove generated test files if any, and repeat from a clean local test state."
+      },
+      {
+        "type": "callout",
+        "title": "Version, host, and safety note",
+        "text": "`os.clock` measures CPU time on supported runtimes; repeat benchmarks and do not rely on a single measurement."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Mistake 1",
+            "text": "Confusing Profiling Lua Applications with a similarly named feature in another language or runtime. Fix: follow the version-matched reference and test the smallest example."
+          },
+          {
+            "title": "Mistake 2",
+            "text": "Relying on an output order or environment capability that the language/host does not guarantee. Fix: document assumptions and make order/capabilities explicit."
+          },
+          {
+            "title": "Mistake 3",
+            "text": "Skipping a boundary test or failing to check error-return values. Fix: test invalid and boundary inputs and inspect failure values."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Recap and next step",
+        "text": "Recap: explain Profiling Lua Applications without the example, predict its behavior, and name one limit. Next: Optimizing Tables and Strings."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate “Profiling Lua Applications” with a different input or boundary case. Predict the result before running it, record what you observe, and explain one limitation.",
+    "task_acceptance_criteria": [
+      "Explain the central behavior of Profiling Lua Applications in your own words.",
+      "Verify the result using a supported local runtime or clearly state why the host/tooling prevents a full run.",
+      "Identify a boundary case or compatibility/security limit relevant to the lesson."
+    ],
+    "hints": [
+      "First identify the input, output, and any assumed runtime or host feature.",
+      "Reduce the problem to the smallest example that exposes the relevant rule.",
+      "Test one normal case and one boundary/failure case; inspect error output without leaking secrets."
+    ],
+    "expected_output": "500500\ntrue",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-168-knowledge-check.json",
+    "references": [
+      {
+        "title": "Lua 5.5 Reference Manual",
+        "url": "https://www.lua.org/manual/5.5/",
+        "publisher": "Lua.org",
+        "checked_on": "2026-10-20"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    "references/reference-index.json"
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Lua curriculum; requires expert technical, grading, accessibility, and runtime review before publication.",
+  "common_mistakes": [
+    "Confusing Profiling Lua Applications with a similarly named feature in another language or runtime.",
+    "Relying on an output order or environment capability that the language/host does not guarantee.",
+    "Skipping a boundary test or failing to check error-return values."
+  ],
+  "next_steps": [
+    "Continue with Optimizing Tables and Strings."
+  ]
+}

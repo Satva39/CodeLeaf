@@ -1,0 +1,149 @@
+{
+  "id": "postgresql-lesson-184",
+  "slug": "restoring-with-pg-restore-and-psql",
+  "title": "Restoring with pg_restore and psql",
+  "sequence": 184,
+  "module_id": "postgresql-module-20",
+  "module_slug": "backup-restore-and-disaster-recovery",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "postgresql-lesson-183"
+  ],
+  "previous_lesson_id": "postgresql-lesson-183",
+  "next_lesson_id": "postgresql-lesson-185",
+  "keywords": [
+    "restoring-with-pg-restore-and-psql",
+    "backup-restore-and-disaster-recovery",
+    "restoring-sql-dumps",
+    "restoring-archive-format-backups",
+    "selecting-objects-for-restoration",
+    "handling-dependency-and-ownership-issues"
+  ],
+  "source_syllabus_number": 184,
+  "subtopics": [
+    "Restoring SQL dumps",
+    "Restoring archive-format backups",
+    "Selecting objects for restoration",
+    "Handling dependency and ownership issues",
+    "Verifying restored data"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose and main terms of Restoring with pg_restore and psql.",
+    "Use or interpret an appropriate PostgreSQL example connected to restoring sql dumps.",
+    "Identify one edge case and select a safe way to verify the expected result."
+  ],
+  "content": {
+    "intro": "This lesson focuses on Restoring with pg_restore and psql. Its primary job is to help you set recovery objectives, choose an appropriate backup type, restore into isolation and verify recoverability. The listed PDF subtopics define the coverage expected here; work through them in order and connect each one to an example, edge case and checkable result.",
+    "why_it_matters": "This topic matters because PostgreSQL systems must preserve correct results as data grows and more sessions or services interact with it. Practicing restoring with pg_restore and psql teaches you to make assumptions explicit, apply the right SQL or operational tool, and verify behavior instead of relying on a demonstration that only worked once.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 20 Overview",
+        "asset_path": "diagrams/module-20-overview.svg",
+        "alt_text": "Four-step overview for module 20, Backup, Restore, and Disaster Recovery: Database Backup Strategies, Logical Backups with pg_dump, Restoring with pg_restore and psql, and verify/test/document.",
+        "caption": "Visual aid for Restoring with pg_restore and psql. Use it alongside the subtopics and worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Keep the problem small: set recovery objectives, choose an appropriate backup type, restore into isolation and verify recoverability. A PostgreSQL feature should be chosen for the semantics it provides, not just because it is available. Before executing a change, state the inputs, expected output and boundary conditions. The example below is intentionally small enough to inspect; it illustrates the idea but is not a substitute for a test against your schema and PostgreSQL version."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the attached curriculum",
+        "items": [
+          {
+            "title": "Restoring SQL dumps",
+            "text": "Relate this point to restoring with pg_restore and psql: define the expected behavior, one edge case, and a query or check that would provide evidence."
+          },
+          {
+            "title": "Restoring archive-format backups",
+            "text": "Write down the recovery objective and confirm it by restoring into an isolated target; a successful dump alone is not a restore test."
+          },
+          {
+            "title": "Selecting objects for restoration",
+            "text": "Relate this point to restoring with pg_restore and psql: define the expected behavior, one edge case, and a query or check that would provide evidence."
+          },
+          {
+            "title": "Handling dependency and ownership issues",
+            "text": "Relate this point to restoring with pg_restore and psql: define the expected behavior, one edge case, and a query or check that would provide evidence."
+          },
+          {
+            "title": "Verifying restored data",
+            "text": "Write down the recovery objective and confirm it by restoring into an isolated target; a successful dump alone is not a restore test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Restoring with pg_restore and psql",
+        "language": "psql",
+        "code": "\\conninfo",
+        "expected_output": "psql reports the current connection information.",
+        "safety_note": "Connection metadata can include host details; redact it before sharing.",
+        "run_instructions": "Run inside an interactive psql session.",
+        "reset_steps": "For a read-only SELECT or inspection command, no reset is needed. For DDL/DML, use a disposable database; capture the starting state, run the example, inspect the result, and ROLLBACK or drop the lab objects as appropriate. Do not use production data or credentials.",
+        "execution_mode": "static-validation",
+        "limitations": "CodeLeaf currently previews HTML/CSS/JavaScript only; it does not execute PostgreSQL queries, shell commands or Python in the lesson page. Treat the sample as inspectable code unless you run it yourself in an approved isolated environment. Python examples require a separate isolated runner.",
+        "schema_assumptions": "Run inside an interactive psql session."
+      },
+      {
+        "type": "callout",
+        "title": "Practical checkpoint",
+        "text": "A backup has value only when restore is rehearsed and verified. Keep backup artifacts protected, restore to a separate target, and record the recovery point and limitations."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-184-questions.json"
+  },
+  "task": "Create a short practice artifact for “Restoring with pg_restore and psql”: explain its goal, show one example linked to “Restoring SQL dumps”, state the expected result, and include one edge/failure case and verification method. Use a disposable database or static artifact as appropriate.",
+  "hints": [
+    "Start with the listed subtopics, especially “Restoring SQL dumps”, and describe the expected behavior in your own words.",
+    "Run or inspect the smallest example that demonstrates the behavior; do not add unrelated features before it is verified.",
+    "When the result surprises you, capture the exact SQL/error, check version and permissions, and change one assumption at a time."
+  ],
+  "expected_output": "A reviewable note or query for Restoring with pg_restore and psql, with an explanation of “Restoring SQL dumps”, expected behavior, and a documented edge-case check.",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Copying the example without checking its assumptions.",
+      "why": "Object names, data types, privileges, extensions and data distribution affect database behavior.",
+      "fix": "List schema/version assumptions and test with a tiny synthetic dataset first."
+    },
+    {
+      "problem": "Treating a single successful query as proof of production readiness.",
+      "why": "A happy-path result does not test invalid input, concurrent sessions, permissions, recovery or query performance.",
+      "fix": "Add one negative/edge case and record the evidence that confirms the expected behavior."
+    },
+    {
+      "problem": "Making a production change directly from a lesson.",
+      "why": "DDL, data updates, role changes and operational commands can affect data or availability.",
+      "fix": "Use an isolated lab, reviewed migration, least privilege, rollback/recovery plan and a second-person review for production."
+    }
+  ],
+  "summary": [
+    "Restoring with pg_restore and psql fits into the broader goal to set recovery objectives, choose an appropriate backup type, restore into isolation and verify recoverability.",
+    "Use the curriculum subtopics as a completeness checklist: Restoring SQL dumps, Restoring archive-format backups, Selecting objects for restoration.",
+    "State the schema/version assumptions and verify one normal case plus an edge case before trusting the result."
+  ],
+  "sources": [
+    {
+      "title": "Backup and Restore",
+      "url": "https://www.postgresql.org/docs/18/backup.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-15",
+      "supports": [
+        "Backup and Restore; lesson 184 is a teaching adaptation and should be checked against this official reference."
+      ],
+      "source_type": "official documentation"
+    }
+  ],
+  "exercise_files": [
+    "../exercises/018-backup-and-restore.json"
+  ],
+  "status": "draft",
+  "status_note": "Draft teaching content generated from the full PostgreSQL.pdf syllabus. Examples and operational advice require technical review and PostgreSQL 18.6 test validation before publication."
+}

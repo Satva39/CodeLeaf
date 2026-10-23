@@ -1,0 +1,59 @@
+{
+  "id": "flask-exercise-002",
+  "slug": "dynamic-template-practice",
+  "title": "Dynamic Template Practice",
+  "type": "practical",
+  "lesson_id": "flask-lesson-043",
+  "module_id": "flask-module-05",
+  "difficulty": "beginner",
+  "sequence": 1,
+  "prompt": "Render a synthetic product collection with Jinja, conditional messages, reusable template layout, loops and filters. Include an empty state and test one product name containing HTML-like characters.\n\nSubmission: provide the implementation or design, a relevant test, expected outputs, one failure/boundary case, and version/runtime notes. Flask server code is not executed inside the CodeLeaf browser preview; local verification or human review is required.",
+  "objective": "Dynamic Template Practice",
+  "target_skills": [
+    "render_template",
+    "Jinja expressions",
+    "loops and conditionals",
+    "template inheritance",
+    "escaping"
+  ],
+  "starter": {
+    "language": "python",
+    "content": "from flask import Flask, render_template_string\n\napp = Flask(__name__)\n\nproducts = [{\"name\": \"Notebook\", \"price\": 4.5}]",
+    "code": "from flask import Flask, render_template_string\n\napp = Flask(__name__)\n\nproducts = [{\"name\": \"Notebook\", \"price\": 4.5}]"
+  },
+  "expected_output": "The page renders products and a visible empty state when the collection is empty; ordinary untrusted values remain escaped in HTML templates.",
+  "public_tests": [
+    {
+      "name": "Static concept smoke check",
+      "required_strings": [
+        "render_template",
+        "for",
+        "if"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "The page renders products and a visible empty state when the collection is empty; ordinary untrusted values remain escaped in HTML templates.",
+    "Document setup/run steps and mark whether verification was static, local, or human-reviewed.",
+    "Do not include private credentials or use real personal data.",
+    "Include a negative/boundary case and explain the expected status/result."
+  ],
+  "hints": [
+    "Pass data from the view instead of embedding it in the template.",
+    "Use a base template for shared layout and a child block for page content.",
+    "Do not use safe/Markup for untrusted values."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "render_template",
+      "for",
+      "if"
+    ]
+  },
+  "grading_method": "Static required-string smoke check plus human review of implementation correctness, tests, validation/security boundaries and reproducibility. The platform does not execute arbitrary Python/Flask code.",
+  "retry_policy": "Retries are allowed after reviewing feedback; the platform backend controls its uniform reward and idempotency rules.",
+  "solution_file": "../../../solutions/exercises/002-dynamic-template-practice-solution.json",
+  "status": "draft",
+  "status_note": "Practice assignment mapped to the supplied Flask PDF. Needs subject-matter review before publication."
+}

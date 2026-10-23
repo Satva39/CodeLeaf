@@ -1,0 +1,174 @@
+{
+  "id": "web-application-security-lesson-084",
+  "slug": "sql-injection-fundamentals",
+  "title": "SQL Injection Fundamentals",
+  "sequence": 84,
+  "module_id": "web-application-security-module-12",
+  "module_slug": "database-and-server-side-injection-vulnerabilities",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-security",
+  "curriculum_tier": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "web-application-security-lesson-083"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-083",
+  "next_lesson_id": "web-application-security-lesson-085",
+  "keywords": [
+    "sql",
+    "injection",
+    "fundamentals",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 84,
+  "source_syllabus_title": "SQL Injection Fundamentals",
+  "source_subtopics": [
+    {
+      "number": "84.1",
+      "title": "SQL parsing and query construction"
+    },
+    {
+      "number": "84.2",
+      "title": "Trusted code versus untrusted data"
+    },
+    {
+      "number": "84.3",
+      "title": "Injection risks in read and write operations"
+    },
+    {
+      "number": "84.4",
+      "title": "Potential database and application impact"
+    },
+    {
+      "number": "84.5",
+      "title": "Identifying unsafe query patterns in code"
+    }
+  ],
+  "subtopics": [
+    "SQL parsing and query construction",
+    "Trusted code versus untrusted data",
+    "Injection risks in read and write operations",
+    "Potential database and application impact",
+    "Identifying unsafe query patterns in code"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in SQL Injection Fundamentals.",
+    "Choose an appropriate defensive control for SQL Injection Fundamentals and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for SQL Injection Fundamentals, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 12: Database and Server-Side Injection Vulnerabilities. It builds practical understanding of SQL Injection Fundamentals with the syllabus subtopics retained below.",
+    "why_it_matters": "SQL Injection Fundamentals addresses how untrusted data or requests cross a boundary and may influence application behavior. The safe fix should address the root cause and remain testable. Use parameterized queries or safe ORM APIs so user-controlled values remain data, then add regression tests and restrict database privileges.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: SQL Injection Fundamentals",
+        "asset_path": "diagrams/lesson-084-sql-injection-fundamentals.svg",
+        "alt_text": "Four-stage visual model for SQL Injection Fundamentals: Receive untrusted data; Keep data separate; Validate safe interface; Regression test.",
+        "caption": "Concept map for SQL Injection Fundamentals. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "SQL Injection Fundamentals can be understood through this sequence: Receive untrusted data → Keep data separate → Validate safe interface → Regression test. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 84.1 SQL parsing and query construction; 84.2 Trusted code versus untrusted data; 84.3 Injection risks in read and write operations; 84.4 Potential database and application impact; 84.5 Identifying unsafe query patterns in code. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Use parameterized queries or safe ORM APIs so user-controlled values remain data, then add regression tests and restrict database privileges."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "execution_mode": "static-validation",
+        "title": "Safe reference example: SQL Injection Fundamentals",
+        "code": "import sqlite3\n\nconnection = sqlite3.connect(\":memory:\")\nconnection.execute(\"CREATE TABLE users (email TEXT)\")\nemail = \"student@example.test\"  # treat this as untrusted input\nrows = connection.execute(\n    \"SELECT email FROM users WHERE email = ?\", (email,)\n).fetchall()\nprint(rows)",
+        "expected_output": "[]",
+        "run_instructions": "Save as a Python script and run with Python 3. The `?` placeholder binds the value separately from SQL syntax; do not interpolate input into the query string.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Use parameterized queries or safe ORM APIs so user-controlled values remain data, then add regression tests and restrict database privileges. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “SQL Injection Fundamentals”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for SQL Injection Fundamentals in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-084-questions.json",
+    "recap": [
+      "SQL Injection Fundamentals is a security boundary/control topic, not a standalone checklist item.",
+      "Use parameterized queries or safe ORM APIs so user-controlled values remain data, then add regression tests and restrict database privileges.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

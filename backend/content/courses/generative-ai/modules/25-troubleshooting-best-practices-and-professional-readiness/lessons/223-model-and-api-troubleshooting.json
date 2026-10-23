@@ -1,0 +1,175 @@
+{
+  "id": "genai-lesson-223",
+  "slug": "model-and-api-troubleshooting",
+  "title": "Model and API Troubleshooting",
+  "sequence": 223,
+  "module_id": "genai-module-25",
+  "module_slug": "troubleshooting-best-practices-and-professional-readiness",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "professional-practice",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "genai-lesson-093"
+  ],
+  "previous_lesson_id": "genai-lesson-222",
+  "next_lesson_id": "genai-lesson-224",
+  "keywords": [
+    "Model and API Troubleshooting",
+    "Authentication failures",
+    "Rate limits and quota exhaustion",
+    "Unsupported parameters and model capabilities",
+    "Context-length errors",
+    "Timeouts and interrupted streams",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 223,
+  "subtopics": [
+    "Authentication failures",
+    "Rate limits and quota exhaustion",
+    "Unsupported parameters and model capabilities",
+    "Context-length errors",
+    "Timeouts and interrupted streams",
+    "Provider outages and fallback strategies"
+  ],
+  "learning_outcomes": [
+    "Explain authentication failures and how it connects to model and api troubleshooting.",
+    "Apply rate limits and quota exhaustion in the example and predict the output before running it.",
+    "Test one realistic edge case for model and api troubleshooting and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers model and api troubleshooting through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Use structured debugging and professional practices to diagnose failure modes, document limits, and present a portfolio with repeatable test evidence.",
+    "why_it_matters": "Authentication failures belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Model and API Troubleshooting: concept map",
+        "asset_path": "diagrams/lessons/lesson-223-model-and-api-troubleshooting.svg",
+        "alt_text": "Diagram for Model and API Troubleshooting: understand Authentication failures, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Authentication failures, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Authentication failures belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Authentication failures",
+            "text": "Authentication failures belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation."
+          },
+          {
+            "title": "Rate limits and quota exhaustion",
+            "text": "Rate limits and quota exhaustion belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation."
+          },
+          {
+            "title": "Unsupported parameters and model capabilities",
+            "text": "Use unsupported parameters and model capabilities as a lens for understanding model and api troubleshooting. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Context-length errors",
+            "text": "Treat context-length errors as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs."
+          },
+          {
+            "title": "Timeouts and interrupted streams",
+            "text": "Timeouts and interrupted streams belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation."
+          },
+          {
+            "title": "Provider outages and fallback strategies",
+            "text": "Use provider outages and fallback strategies as a lens for understanding model and api troubleshooting. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Model and API Troubleshooting\nstatus_code = 401\nnext_step = {401: \"check server-side credential configuration\", 429: \"check quota and bounded backoff\", 400: \"validate request schema\", 500: \"inspect provider status and retry policy\"}.get(status_code, \"capture request ID and reproduce\")\nprint(next_step)",
+        "expected_output": "check server-side credential configuration",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice authentication failures within model and api troubleshooting: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "check server-side credential configuration",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-223-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Model and API Troubleshooting is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://genai.owasp.org/initiative/owasp-top-10-for-llm-and-genai/",
+      "https://developers.openai.com/api/docs/guides/text",
+      "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Top 10 for LLM and GenAI",
+      "url": "https://genai.owasp.org/initiative/owasp-top-10-for-llm-and-genai/",
+      "publisher": "OWASP GenAI Security Project",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "prompt injection"
+      ]
+    },
+    {
+      "title": "Text generation",
+      "url": "https://developers.openai.com/api/docs/guides/text",
+      "publisher": "OpenAI API documentation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "text generation API patterns"
+      ]
+    },
+    {
+      "title": "Design and develop a RAG solution",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide",
+      "publisher": "Microsoft Learn / Azure Architecture Center",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "RAG architecture"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

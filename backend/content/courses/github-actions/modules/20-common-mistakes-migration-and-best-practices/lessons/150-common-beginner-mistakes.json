@@ -1,0 +1,231 @@
+{
+  "id": "github-actions-lesson-150",
+  "slug": "common-beginner-mistakes",
+  "title": "Common Beginner Mistakes",
+  "sequence": 150,
+  "module_id": "github-actions-module-20",
+  "module_slug": "common-mistakes-migration-and-best-practices",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "github-actions-lesson-149"
+  ],
+  "previous_lesson_id": "github-actions-lesson-149",
+  "next_lesson_id": "github-actions-lesson-151",
+  "keywords": [
+    "common-beginner-mistakes",
+    "common-mistakes-migration-and-best-practices",
+    "incorrect-workflow-directory",
+    "invalid-yaml-indentation",
+    "misconfigured-event-filters",
+    "incorrect-runs-on-values",
+    "missing-checkout-steps",
+    "incorrect-action-inputs",
+    "confusing-environment-variables-with-contexts"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of common beginner mistakes and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to common beginner mistakes.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on common beginner mistakes. Beginner mistakes include putting workflows outside the required directory, misunderstanding `run` versus `uses`, ignoring failing exit codes, and granting excess permissions. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "Common Beginner Mistakes matters because it affects correctness, security, maintainability, or operating cost. Beginner mistakes include putting workflows outside the required directory, misunderstanding `run` versus `uses`, ignoring failing exit codes, and granting excess permissions. Migrations and maintenance should preserve observable behavior while removing legacy assumptions. Inventory triggers, permissions, dependencies, runner assumptions, and rollback needs before changing workflows.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 20 visual map",
+        "asset_path": "diagrams/module-20-overview.svg",
+        "alt_text": "Ordered overview of module 20: Common Beginner Mistakes; Common Intermediate Mistakes; Common Security Mistakes; Common Deployment Mistakes; Legacy Workflow Migration; Workflow Quality and Maintainability; Maintaining Current GitHub Actions Knowledge.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Beginner mistakes include putting workflows outside the required directory, misunderstanding `run` versus `uses`, ignoring failing exit codes, and granting excess permissions. Migrations and maintenance should preserve observable behavior while removing legacy assumptions. Inventory triggers, permissions, dependencies, runner assumptions, and rollback needs before changing workflows. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "Incorrect workflow directory",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Invalid YAML indentation",
+            "text": "YAML is indentation-sensitive. Check that nested values are aligned, values have the expected type, special strings are quoted when needed, and the workflow schema accepts the key at that level."
+          },
+          {
+            "title": "Misconfigured event filters",
+            "text": "Match the event to the intended lifecycle, then test positive and negative branch/path/activity cases. Event payloads may be attacker-controlled, and scheduled jobs use UTC rather than a guaranteed exact start time."
+          },
+          {
+            "title": "Incorrect runs-on values",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Missing checkout steps",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Incorrect action inputs",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Confusing environment variables with contexts",
+            "text": "Use `${{ ... }}` for workflow expressions and the correct context for the field. Treat event-derived values as data: pass untrusted text through an environment variable and quote it instead of inserting it into shell source."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "name: Controlled workflow review\non: workflow_dispatch\npermissions:\n  contents: read\njobs:\n  review:\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo \"Review permissions, triggers, artifacts, and recovery evidence\"",
+        "expected_output": "The manually started job prints a checklist reminder; a real review must validate the actual workflow and retain reviewed evidence.",
+        "run_instructions": "Use a test repository or static validation first. Confirm the snippet matches the repository, runner, permissions, and current GitHub documentation.",
+        "reset_steps": "Remove temporary test workflows and never carry test credentials or sample outputs into production.",
+        "execution_mode": "workflow-fragment"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to common beginner mistakes. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain common beginner mistakes, read the example, and identify a way to validate it. The wider system goal remains: Recognize common failure patterns, migrate safely, and keep knowledge current as platform behavior evolves."
+      }
+    ],
+    "task": "Apply common beginner mistakes to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: Beginner mistakes include putting workflows outside the required directory, misunderstanding `run` versus `uses`, ignoring failing exit codes, and granting excess permissions.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: Beginner mistakes include putting workflows outside the required directory, misunderstanding `run` versus `uses`, ignoring failing exit codes, and granting excess permissions. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "Beginner mistakes include putting workflows outside the required directory, misunderstanding `run` versus `uses`, ignoring failing exit codes, and granting excess permissions.",
+      "Migrations and maintenance should preserve observable behavior while removing legacy assumptions. Inventory triggers, permissions, dependencies, runner assumptions, and rollback needs before changing workflows.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-150-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "workflow-fragment",
+    "references": [
+      {
+        "title": "Secure use reference",
+        "url": "https://docs.github.com/en/actions/reference/security/secure-use",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "security_guidance",
+        "supports": [
+          "least privilege",
+          "third-party actions",
+          "full SHA pinning",
+          "untrusted input",
+          "privileged workflow triggers",
+          "cache security"
+        ]
+      },
+      {
+        "title": "Troubleshooting workflows",
+        "url": "https://docs.github.com/en/actions/how-tos/troubleshoot-workflows",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "troubleshooting_guide",
+        "supports": [
+          "workflow triggers",
+          "execution failures",
+          "runner issues",
+          "network diagnostics",
+          "debug logs"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Secure use reference",
+      "url": "https://docs.github.com/en/actions/reference/security/secure-use",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "security_guidance",
+      "supports": [
+        "least privilege",
+        "third-party actions",
+        "full SHA pinning",
+        "untrusted input",
+        "privileged workflow triggers",
+        "cache security"
+      ]
+    },
+    {
+      "title": "Troubleshooting workflows",
+      "url": "https://docs.github.com/en/actions/how-tos/troubleshoot-workflows",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "troubleshooting_guide",
+      "supports": [
+        "workflow triggers",
+        "execution failures",
+        "runner issues",
+        "network diagnostics",
+        "debug logs"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "150",
+    "module_title": "Common Mistakes, Migration, and Best Practices",
+    "subtopics": [
+      "Incorrect workflow directory",
+      "Invalid YAML indentation",
+      "Misconfigured event filters",
+      "Incorrect runs-on values",
+      "Missing checkout steps",
+      "Incorrect action inputs",
+      "Confusing environment variables with contexts"
+    ]
+  }
+}

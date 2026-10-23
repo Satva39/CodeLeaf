@@ -1,0 +1,190 @@
+{
+  "id": "java-lesson-234",
+  "slug": "thread-lifecycle-and-interruption",
+  "title": "Thread Lifecycle and Interruption",
+  "sequence": 234,
+  "module_id": "java-module-23",
+  "module_slug": "multithreading-and-concurrency",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional",
+  "estimated_minutes": 13,
+  "prerequisites": [],
+  "previous_lesson_id": "java-lesson-233",
+  "next_lesson_id": "java-lesson-235",
+  "keywords": [
+    "thread",
+    "lifecycle",
+    "and",
+    "interruption",
+    "states",
+    "sleeping",
+    "joining",
+    "cooperative",
+    "cancellation",
+    "avoiding",
+    "unreliable",
+    "patterns"
+  ],
+  "source_syllabus_number": 234,
+  "subtopics": [
+    "Thread states",
+    "Sleeping and joining",
+    "Interruption",
+    "Cooperative cancellation",
+    "Avoiding unreliable cancellation patterns"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of thread lifecycle and interruption and identify when it is appropriate in a Java program.",
+    "Apply at least one of the lesson topics—thread states—in a small, readable example.",
+    "Identify one failure, compatibility, security, or resource-management concern and describe a safe response."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study thread lifecycle and interruption with a short explanation, an original visual map, a Java example, and a check you can perform yourself. Focus on the relationship between the rule and the behavior rather than memorizing isolated syntax.",
+    "why_it_matters": "This concept matters because it helps you coordinate tasks without depending on unpredictable scheduling or shared mutable state. In this lesson, focus on thread states and use a minimal example to check what the rule actually guarantees.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Thread Lifecycle and Interruption: concept map",
+        "asset_path": "diagrams/lesson-234.svg",
+        "alt_text": "Four-stage diagram for Thread Lifecycle and Interruption: Thread states; Sleeping and joining; Interruption; Cooperative cancellation.",
+        "caption": "Visual summary of Thread Lifecycle and Interruption; use it as a map while reading the explanation and testing the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Concurrency introduces shared-state ordering and cancellation concerns. Prefer task abstractions and immutable data where possible, coordinate access explicitly, and always define shutdown, timeout, and failure behavior. The important habit is to make the assumptions explicit and use the code example as a small experiment."
+      },
+      {
+        "type": "paragraph",
+        "title": "How the pieces fit",
+        "text": "Connect thread states with sleeping and joining before choosing an implementation. The example is a small, observable case; extend it by changing one input and checking a boundary, invalid value, or compatibility limit where relevant."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Thread states",
+            "text": "Concurrency introduces shared-state ordering and cancellation concerns. Prefer task abstractions and immutable data where possible, coordinate access explicitly, and always define shutdown, timeout, and failure behavior."
+          },
+          {
+            "title": "Sleeping and joining",
+            "text": "Concurrency creates ordering, cancellation, and shared-state concerns. Define task lifetime, synchronization and shutdown behavior; never rely on thread scheduling to produce a particular print order. Apply that reasoning specifically to sleeping and joining and confirm the result with the example or a targeted test."
+          },
+          {
+            "title": "Interruption",
+            "text": "Primitive variables store values of the eight primitive types. Choose a type that represents the domain and range required; use exact decimal arithmetic for monetary values when appropriate."
+          },
+          {
+            "title": "Cooperative cancellation",
+            "text": "Use Path and Files for modern file operations, choose byte or character APIs based on the data, and close resources reliably. Parse external files defensively because their contents may be incomplete or malformed."
+          },
+          {
+            "title": "Avoiding unreliable cancellation patterns",
+            "text": "Use Path and Files for modern file operations, choose byte or character APIs based on the data, and close resources reliably. Parse external files defensively because their contents may be incomplete or malformed."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "java",
+        "code": "import java.util.concurrent.Executors;\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        try (var executor = Executors.newFixedThreadPool(2)) {\n            var result = executor.submit(() -> 6 * 7);\n            System.out.println(result.get());\n        }\n    }\n}\n",
+        "expected_output": "42",
+        "run_instructions": "Submit independent work to an executor and always define its lifetime. For ordinary Java SE examples, use JDK 25, save a complete class as Main.java, and run `javac Main.java` followed by `java Main`. CodeLeaf does not execute Java in the browser; use a local JDK for these examples. Preview-only and configuration-file examples have their own version or filename notes.",
+        "reset_steps": "Restore the original example, remove any temporary output files it created, and rerun the baseline case. Do not leave credentials, generated private data, or large test files in the project directory."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Keep one clear hypothesis per experiment. Check the version, read the error message, test boundaries, and record what evidence supports your conclusion."
+      }
+    ],
+    "task": "Try it yourself: write a small experiment for thread lifecycle and interruption with at least two tasks. Repeat it, observe output order, and document cancellation, failure, and shutdown behavior.",
+    "task_acceptance_criteria": [
+      "The example demonstrates at least one listed topic from Thread Lifecycle and Interruption.",
+      "The learner states the expected result before running or inspecting the example.",
+      "At least one boundary, failure, compatibility, or maintainability consideration is documented where relevant."
+    ],
+    "hints": [
+      "Start by identifying the contract or rule behind thread states.",
+      "Reduce the example to the smallest input that makes the behavior visible.",
+      "Test one boundary or failure case and compare the result with the expected behavior."
+    ],
+    "expected_output": "42",
+    "run_mode": "server-runner",
+    "execution_notes": "Java requires a JDK or a separate isolated server runner. No Java sandbox is bundled with this content; never execute learner code inside the FastAPI process or public production container.",
+    "knowledge_check_file": "exams/question-files/lesson-234-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming one timing or memory observation proves a performance conclusion.",
+        "why": "JIT warm-up, scheduling, allocation, and workload changes can distort single measurements.",
+        "fix": "Use repeatable workloads and appropriate JDK diagnostics, and record the environment."
+      },
+      {
+        "problem": "Testing only a single happy path.",
+        "why": "Boundary values and failures often reveal assumptions hidden by the simplest example.",
+        "fix": "Add an empty, boundary, or invalid case and state the expected behavior before running it."
+      },
+      {
+        "problem": "Changing several things between runs.",
+        "why": "It becomes difficult to identify the actual cause of a different result.",
+        "fix": "Change one factor at a time and keep a short record of observed behavior."
+      }
+    ],
+    "summary": [
+      "Thread Lifecycle and Interruption is best understood by connecting its contract to a small observable example.",
+      "Key syllabus points: Thread states, Sleeping and joining, Interruption.",
+      "Use official versioned documentation and tests to confirm assumptions before relying on behavior in a larger application."
+    ],
+    "references": [
+      {
+        "title": "Learn Java",
+        "url": "https://dev.java/learn/"
+      },
+      {
+        "title": "Java SE 25 API Specification",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Learn Java",
+      "url": "https://dev.java/learn/",
+      "publisher": "Oracle / dev.java",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "getting started",
+        "language basics",
+        "object-oriented programming",
+        "generics",
+        "lambdas",
+        "collections",
+        "streams",
+        "modules",
+        "JVM tools",
+        "security"
+      ]
+    },
+    {
+      "title": "Java SE 25 API Specification",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "standard-library types and methods",
+        "API contracts",
+        "java.base",
+        "java.sql",
+        "java.net.http",
+        "java.nio.file",
+        "java.util.concurrent"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Java curriculum outline and current official references; requires Java subject-matter review and local verification before publication."
+}

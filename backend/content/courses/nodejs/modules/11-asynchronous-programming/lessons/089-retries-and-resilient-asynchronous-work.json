@@ -1,0 +1,160 @@
+{
+  "id": "nodejs-lesson-089",
+  "slug": "retries-and-resilient-asynchronous-work",
+  "title": "Retries and Resilient Asynchronous Work",
+  "sequence": 89,
+  "module_id": "nodejs-module-11",
+  "module_slug": "asynchronous-programming",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "nodejs-lesson-088"
+  ],
+  "previous_lesson_id": "nodejs-lesson-088",
+  "next_lesson_id": "nodejs-lesson-090",
+  "keywords": [
+    "Retries and Resilient Asynchronous Work",
+    "Retry conditions",
+    "Exponential backoff",
+    "Jitter",
+    "Idempotent operations",
+    "Node.js",
+    "JavaScript runtime"
+  ],
+  "source_syllabus_number": 89,
+  "subtopics": [
+    "Retry conditions",
+    "Exponential backoff",
+    "Jitter",
+    "Idempotent operations",
+    "Avoiding unlimited retries and retry storms"
+  ],
+  "learning_outcomes": [
+    "Describe Retry conditions and explain how it relates to Retries and Resilient Asynchronous Work.",
+    "Demonstrate Exponential backoff in a small Node.js example and predict the observable result.",
+    "Test a failure, boundary, lifecycle, or version-compatibility case involving Jitter."
+  ],
+  "content": {
+    "intro": "Retries and Resilient Asynchronous Work is part of asynchronous programming. This lesson connects Retry conditions, Exponential backoff, Jitter to a concrete Node.js example. Focus on the behavior you can observe, the assumptions the API makes, and one failure or boundary case.",
+    "why_it_matters": "Database clients manage queries and connections; transactions and parameterized queries protect data integrity. Test concurrent updates, rollback behavior, connection failures, invalid input, and query plans as appropriate.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Retries and Resilient Asynchronous Work: concept map",
+        "asset_path": "diagrams/lessons/lesson-089-retries-and-resilient-asynchronous-work.svg",
+        "alt_text": "Concept map for lesson 89: Retries and Resilient Asynchronous Work. It shows representative syllabus concepts in a Concept → Example → Verification sequence.",
+        "caption": "Read the three labeled cards from left to right; the lesson steps connect the concept to a practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Database clients manage queries and connections; transactions and parameterized queries protect data integrity. Use parameterized SQL, a managed connection pool, bounded transactions, and reviewed schema migrations."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Retry conditions",
+            "text": "Retries need a finite limit, backoff, jitter, and a clear retryable-error policy. Use idempotency for operations that could otherwise create duplicate effects."
+          },
+          {
+            "title": "Exponential backoff",
+            "text": "For Exponential backoff, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Jitter",
+            "text": "For Jitter, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Idempotent operations",
+            "text": "Retries need a finite limit, backoff, jitter, and a clear retryable-error policy. Use idempotency for operations that could otherwise create duplicate effects."
+          },
+          {
+            "title": "Avoiding unlimited retries and retry storms",
+            "text": "Retries need a finite limit, backoff, jitter, and a clear retryable-error policy. Use idempotency for operations that could otherwise create duplicate effects."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "function shouldRetry(attempt, maxAttempts, retryable) { return retryable && attempt < maxAttempts; }\nconsole.log(shouldRetry(1, 3, true), shouldRetry(3, 3, true));",
+        "expected_output": "true false",
+        "run_instructions": "Inspect this JavaScript in a local Node.js project. It is a static-validation teaching example: CodeLeaf does not run this arbitrary example in the API process. If it needs a package, file, server, database, or external service, provision that dependency in a separate local project and follow its official setup instructions. Run with `node example.mjs` when the example is self-contained, or adapt the required imports/inputs first.",
+        "reset_steps": "Restore the starting snippet and inputs. Repeat with one different valid value and one invalid, missing, empty, or failure input appropriate to the example.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Start with the code shown above. Predict the result before running it, then verify it against: 42; the placeholder is bound separately from the SQL text. Change one input or simulate one failure and describe how the behavior should change. Test concurrent updates, rollback behavior, connection failures, invalid input, and query plans as appropriate."
+      },
+      {
+        "type": "callout",
+        "title": "Runtime and safety note",
+        "text": "Teaching baseline: use a supported Node.js LTS release (Node.js 24 LTS as checked on 2026-10-13). The official releases page lists Node.js 26 as Current and Node.js 24/22 as LTS. Some advanced APIs, flags, permission behavior, embedded SQLite capabilities, module-loader hooks, and TypeScript integration are version-sensitive; verify the exact installed runtime. The Node.js 22 runtime available in the build-check environment is used only for syntax checks. This example is for learning and static validation, not for executing untrusted learner code inside CodeLeaf."
+      }
+    ],
+    "task": "Create or inspect a small Node.js example for Retries and Resilient Asynchronous Work. Include at least one listed subtopic, document the expected result, and verify a normal case plus a boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates a named lesson concept, rather than only mentioning the title.",
+      "Expected output or observable behavior is documented and reproducible.",
+      "At least one invalid, empty, timeout, resource, or failure case is handled or explained.",
+      "The solution does not put secrets in source code and does not execute untrusted code inside the production API process."
+    ],
+    "hints": [
+      "Start with Retry conditions; identify the input, operation, and observable result.",
+      "Run the smallest relevant example in the selected Node.js release before adding frameworks or external services.",
+      "Test one failure or boundary case for Exponential backoff, then explain why the outcome is expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Concatenating user input into SQL or holding transactions open while waiting for unrelated network work.",
+        "why": "The code may pass a simple demonstration yet fail with real inputs, resource limits, timing, or runtime differences.",
+        "fix": "Bind values through the database driver and keep transaction boundaries short and explicit."
+      },
+      {
+        "problem": "Copying a snippet without checking its runtime, dependencies, input assumptions, or cleanup behavior.",
+        "why": "Node.js APIs and surrounding ecosystem tools have explicit version, trust, and resource boundaries.",
+        "fix": "State the environment and dependency assumptions, then rerun the example from a clean starting state."
+      }
+    ],
+    "summary": [
+      "Retries need a finite limit, backoff, jitter, and a clear retryable-error policy. Use idempotency for operations that could otherwise create duplicate effects.",
+      "This lesson covers: Retry conditions, Exponential backoff, Jitter, Idempotent operations.",
+      "Verify both normal and failure behavior, and document runtime, dependency, and resource assumptions."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-089-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "node-postgres documentation",
+      "url": "https://node-postgres.com/",
+      "publisher": "node-postgres maintainers",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "PostgreSQL clients",
+        "parameterized queries",
+        "connection pooling"
+      ]
+    },
+    {
+      "title": "Security best practices for Node.js applications",
+      "url": "https://nodejs.org/en/learn/getting-started/security-best-practices",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "production security",
+        "dependency risk",
+        "untrusted input and process isolation"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Source-derived syllabus; educational draft requiring technical/instructional review before publication."
+}

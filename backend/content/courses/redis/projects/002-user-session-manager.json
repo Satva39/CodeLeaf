@@ -1,0 +1,131 @@
+{
+  "id": "redis-project-002",
+  "slug": "user-session-manager",
+  "title": "User Session Manager",
+  "sequence": 2,
+  "tier": "beginner",
+  "objective": "Session lookup, expiration, invalidation, key isolation, and secret-safe logging.",
+  "prerequisite_lesson_ids": [
+    "redis-lesson-017"
+  ],
+  "recommended_lesson_range": [
+    17,
+    154
+  ],
+  "recommended_module_ranges": [
+    [
+      1,
+      1
+    ],
+    [
+      3,
+      3
+    ],
+    [
+      5,
+      5
+    ],
+    [
+      14,
+      14
+    ],
+    [
+      15,
+      15
+    ],
+    [
+      19,
+      19
+    ]
+  ],
+  "skills": [
+    "Redis data modeling and command semantics",
+    "version compatibility and configuration",
+    "testing boundary and failure cases",
+    "technical documentation and reproducible verification"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Model the problem and guarantees",
+      "acceptance_criteria": [
+        "List inputs, data types, key names, and source-of-truth choice.",
+        "Document relevant version/provider assumptions."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Implement a minimal vertical slice",
+      "acceptance_criteria": [
+        "Implement the smallest useful behavior with synthetic data.",
+        "Keep connection details in environment configuration, not source-controlled secrets."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Test normal and failure cases",
+      "acceptance_criteria": [
+        "Test missing data, retries or duplicate operations, and cleanup.",
+        "Document any static-only check that does not execute Redis."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Operational readiness review",
+      "acceptance_criteria": [
+        "Describe monitoring, persistence and security requirements that apply.",
+        "Provide a reproducible runbook and limitations."
+      ]
+    }
+  ],
+  "required_features": [
+    "A readable data model and a clearly stated consistency/source-of-truth decision.",
+    "A local configuration path that does not commit secrets.",
+    "Tests or documented checks for expected behavior and meaningful boundary cases.",
+    "A runbook covering version compatibility, safe cleanup, and failure handling."
+  ],
+  "stretch_features": [
+    "Add measured cache/latency metrics without inventing data.",
+    "Add structured logs with credentials and personal data redacted.",
+    "Add resilience behavior only where it is justified by the stated requirements."
+  ],
+  "starter_files": [
+    "projects/starters/002-user-session-manager/README.md",
+    "projects/starters/002-user-session-manager/app.py",
+    "projects/starters/002-user-session-manager/requirements.txt",
+    "projects/starters/002-user-session-manager/starter-metadata.json"
+  ],
+  "starter_readme": "projects/starters/002-user-session-manager/README.md",
+  "tests": [
+    "Unit tests for pure business logic.",
+    "Integration tests against a disposable Redis instance, skipped unless REDIS_URL is deliberately configured.",
+    "Manual verification of error paths, resource cleanup, and version-specific commands."
+  ],
+  "rubric": [
+    {
+      "criterion": "Correctness and required features",
+      "points": 30
+    },
+    {
+      "criterion": "Data model, architecture and usability",
+      "points": 20
+    },
+    {
+      "criterion": "Error handling, security and durability boundaries",
+      "points": 20
+    },
+    {
+      "criterion": "Tests, documentation and reproducibility",
+      "points": 20
+    },
+    {
+      "criterion": "Reflection and maintainability",
+      "points": 10
+    }
+  ],
+  "rubric_total": 100,
+  "review_method": "Human-reviewed project plus locally executed tests. CodeLeaf’s static exercise grader is not a Redis execution environment; do not execute learner code in the FastAPI process or production web container.",
+  "reference_solution_file": "solutions/projects/002-user-session-manager-reference.json",
+  "status": "draft",
+  "status_note": "Project starter is provided for local development only; no server runner or live deployment was exercised during generation."
+}

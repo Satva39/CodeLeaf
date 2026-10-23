@@ -1,0 +1,175 @@
+{
+  "id": "xml-lesson-130",
+  "slug": "xml-base",
+  "title": "XML Base",
+  "sequence": 130,
+  "module_id": "xml-module-15",
+  "module_slug": "advanced-xml-specifications-and-technologies",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "optional",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "xml-lesson-129"
+  ],
+  "previous_lesson_id": "xml-lesson-129",
+  "next_lesson_id": "xml-lesson-131",
+  "keywords": [
+    "xml-base",
+    "advanced-xml-specifications-and-technologies",
+    "base-uri-semantics",
+    "resolving-relative-references",
+    "nested-base-uri-settings",
+    "uri-resolution-in-xml-applications"
+  ],
+  "source_syllabus_number": 130,
+  "subtopics": [
+    "Base URI semantics",
+    "Resolving relative references",
+    "Nested base URI settings",
+    "URI resolution in XML applications"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose of xml base and explain at least one listed subtopic.",
+    "Interpret the example related to xml base and predict its expected result.",
+    "Identify one validation, compatibility, security, or troubleshooting consideration relevant to the example."
+  ],
+  "content": {
+    "intro": "In this lesson, you will explore xml base within Advanced XML Specifications and Technologies. You will connect its syllabus topics to an inspectable example, check the expected result, and note tool/version limits.",
+    "why_it_matters": "XML Base matters because XML workflows rely on explicit structure and predictable processing. The lesson helps you reason about base uri semantics, avoid a common misunderstanding, and make a result reproducible for another developer.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "XML Base: concept map",
+        "asset_path": "diagrams/lessons/lesson-130-xml-base.svg",
+        "alt_text": "Concept flow covering Base URI semantics, Resolving relative references, Nested base URI settings, URI resolution in XML applications.",
+        "caption": "The visual introduces xml base; inspect the worked example and then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "These related specifications extend how XML documents refer to external resources, address fragments, represent links, or define a logical information model. They are optional specialist tools rather than requirements for every XML application."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the subtopics",
+        "text": "This lesson explicitly covers: Base URI semantics; Resolving relative references; Nested base URI settings; URI resolution in XML applications. Treat these as connected parts of one workflow: define the structure, make the relevant assumptions explicit, and verify a result with a small known input."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: XML Base",
+        "language": "xml",
+        "code": "<document xml:base=\"https://example.org/manual/\">\n  <chapter href=\"chapter-1.xml\"/>\n</document>",
+        "expected_output": "A relative reference can be resolved using the inherited base URI; exact resolution follows the XML Base and URI rules.",
+        "run_instructions": "Inspect this example as text. Run it only in a processor that supports the shown language/version; the standard CodeLeaf playground previews HTML/CSS/JavaScript only and does not execute XML, XSD, XPath, XSLT, XQuery, Python, or SQL. Confirm support in the intended processor and treat all external references as policy-controlled inputs. For signature or encryption workflows, use standards-based cryptographic libraries and validate the complete protocol, not a hand-written fragment.",
+        "reset_steps": "Restore the sample to its exact starting state before each experiment. Change one element, attribute, expression, or constraint at a time, then compare the result with the expected behavior.",
+        "execution_mode": "static-validation",
+        "limitations": "This snippet is an inspectable example, not an XML execution service. Validate it with a standards-compatible XML processor; feature support depends on the processor/version."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety checkpoint",
+        "text": "Distinguish well-formedness, schema validity, and application-level correctness; they are different checks."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a small synthetic example that demonstrates “Base URI semantics”. Then add one boundary case involving “Resolving relative references”. Write down what should happen before testing, and record the exact output or processor message afterward."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-130-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming a document is correct because it looks readable.",
+        "why": "Visual appearance does not prove well-formedness, schema validity, correct namespace handling, or application-level meaning.",
+        "fix": "Parse and validate the document with the intended processor, then assert its meaning using a focused test."
+      },
+      {
+        "problem": "Mixing specification features with processor support.",
+        "why": "A standard may define features that a specific runtime does not implement.",
+        "fix": "Record the version and feature support; test with the actual target processor."
+      },
+      {
+        "problem": "Testing only one happy-path example.",
+        "why": "Missing values, wrong types, namespace differences, or boundary inputs can expose failures.",
+        "fix": "Add a valid case, an invalid case, and an edge case to the verification notes."
+      }
+    ],
+    "task": "Build a short demonstration of xml base using synthetic data. Include the concept “Base URI semantics”, a known expected result, and a short note explaining one edge case.",
+    "task_acceptance_criteria": [
+      "The artifact clearly demonstrates Base URI semantics.",
+      "The expected result is written before verification.",
+      "One invalid or boundary case is documented.",
+      "Processor/version assumptions and relevant security limits are recorded."
+    ],
+    "hints": [
+      "Start with the exact definition or construct associated with base uri semantics.",
+      "Keep the example minimal and change one thing at a time.",
+      "Compare the observed result with the expected behavior and consult the linked specification if they differ."
+    ],
+    "summary": [
+      "XML Base contributes to the larger XML workflow of creating, checking, querying, transforming, or maintaining structured documents.",
+      "The listed syllabus concepts include Base URI semantics, Resolving relative references, Nested base URI settings.",
+      "A reproducible XML example includes the input, processor/version assumptions, expected result, and a meaningful failure case."
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "A relative reference can be resolved using the inherited base URI; exact resolution follows the XML Base and URI rules."
+  },
+  "task": "Build a short demonstration of xml base using synthetic data. Include the concept “Base URI semantics”, a known expected result, and a short note explaining one edge case.",
+  "task_acceptance_criteria": [
+    "The artifact clearly demonstrates Base URI semantics.",
+    "The expected result is written before verification.",
+    "One invalid or boundary case is documented.",
+    "Processor/version assumptions and relevant security limits are recorded."
+  ],
+  "hints": [
+    "Start with the exact definition or construct associated with base uri semantics.",
+    "Keep the example minimal and change one thing at a time.",
+    "Compare the observed result with the expected behavior and consult the linked specification if they differ."
+  ],
+  "summary": [
+    "XML Base contributes to the larger XML workflow of creating, checking, querying, transforming, or maintaining structured documents.",
+    "The listed syllabus concepts include Base URI semantics, Resolving relative references, Nested base URI settings.",
+    "A reproducible XML example includes the input, processor/version assumptions, expected result, and a meaningful failure case."
+  ],
+  "run_mode": "static-validation",
+  "expected_output": "A relative reference can be resolved using the inherited base URI; exact resolution follows the XML Base and URI rules.",
+  "common_mistakes": [
+    {
+      "problem": "Assuming a document is correct because it looks readable.",
+      "why": "Visual appearance does not prove well-formedness, schema validity, correct namespace handling, or application-level meaning.",
+      "fix": "Parse and validate the document with the intended processor, then assert its meaning using a focused test."
+    },
+    {
+      "problem": "Mixing specification features with processor support.",
+      "why": "A standard may define features that a specific runtime does not implement.",
+      "fix": "Record the version and feature support; test with the actual target processor."
+    },
+    {
+      "problem": "Testing only one happy-path example.",
+      "why": "Missing values, wrong types, namespace differences, or boundary inputs can expose failures.",
+      "fix": "Add a valid case, an invalid case, and an edge case to the verification notes."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "title": "XML Base (Second Edition)",
+      "url": "https://www.w3.org/TR/xmlbase/",
+      "publisher": "W3C",
+      "checked_on": "2026-10-12"
+    },
+    {
+      "title": "Extensible Markup Language (XML) 1.0, Fifth Edition",
+      "url": "https://www.w3.org/TR/xml/",
+      "publisher": "W3C",
+      "checked_on": "2026-10-12"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Generated from the attached XML syllabus; requires technical review and validation in the target XML processor before publication.",
+  "exercise_files": []
+}

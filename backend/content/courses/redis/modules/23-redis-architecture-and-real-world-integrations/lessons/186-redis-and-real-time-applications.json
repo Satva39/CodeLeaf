@@ -1,0 +1,152 @@
+{
+  "id": "redis-lesson-186",
+  "slug": "redis-and-real-time-applications",
+  "title": "Redis and Real-Time Applications",
+  "sequence": 186,
+  "module_id": "redis-module-23",
+  "module_slug": "redis-architecture-and-real-world-integrations",
+  "level": "advanced to professional",
+  "difficulty": "professional",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-185"
+  ],
+  "previous_lesson_id": "redis-lesson-185",
+  "next_lesson_id": "redis-lesson-187",
+  "keywords": [
+    "redis-and-real-time-applications",
+    "live-notifications",
+    "presence-indicators",
+    "real-time-counters",
+    "broadcast-updates",
+    "durable-event-processing-where-required",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 186,
+  "subtopics": [
+    "Live notifications",
+    "Presence indicators",
+    "Real-time counters",
+    "Broadcast updates",
+    "Durable event processing where required"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Redis and Real-Time Applications and distinguish it from a related Redis concept.",
+    "Apply or trace Redis and Real-Time Applications in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Redis and Real-Time Applications and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Redis and Real-Time Applications in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Redis and Real-Time Applications helps implement integrate Redis as one component in a broader backend and distributed architecture. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Redis and Real-Time Applications",
+        "asset_path": "diagrams/lesson-186-redis-and-real-time-applications.svg",
+        "alt_text": "Concept diagram for Redis and Real-Time Applications, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Redis and Real-Time Applications; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Redis and Real-Time Applications helps implement integrate Redis as one component in a broader backend and distributed architecture. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Redis and Real-Time Applications, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Live notifications",
+            "text": "Connect Live notifications to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Presence indicators",
+            "text": "Connect Presence indicators to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Real-time counters",
+            "text": "Connect Real-time counters to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Broadcast updates",
+            "text": "Connect Broadcast updates to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Durable event processing where required",
+            "text": "Connect Durable event processing where required to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Redis and Real-Time Applications",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "TYPE demo:key\nTTL demo:key\nSCAN 0 MATCH demo:* COUNT 20",
+        "expected_output": "Returns a type, remaining TTL (or -1/-2 where applicable), and a cursor/key page.",
+        "run_instructions": "SCAN COUNT is a hint; continue while the cursor is non-zero and do not assume one page is complete.",
+        "reset_steps": "Read-only inspection; no key is created.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Redis and Real-Time Applications. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Redis and Real-Time Applications in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Redis and Real-Time Applications.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "Returns a type, remaining TTL (or -1/-2 where applicable), and a cursor/key page.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-186-questions.json",
+    "recap": [
+      "Redis and Real-Time Applications is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Connect with Redis client libraries",
+      "url": "https://redis.io/docs/latest/connect/clients/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "supported client libraries, protocols and integrations"
+      ]
+    },
+    {
+      "title": "Using Redis commands",
+      "url": "https://redis.io/docs/latest/develop/use/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "keys, command usage, transactions, pipelining and round-trip reduction"
+      ]
+    },
+    {
+      "title": "Redis data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "strings, hashes, lists, sets, sorted sets, streams, geospatial indexes, bitmaps, bitfields, JSON, arrays, time series, probabilistic structures, vector sets"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

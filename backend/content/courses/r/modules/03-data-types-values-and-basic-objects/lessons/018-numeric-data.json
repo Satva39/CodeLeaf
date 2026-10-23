@@ -1,0 +1,189 @@
+{
+  "id": "r-lesson-018",
+  "slug": "numeric-data",
+  "title": "Numeric Data",
+  "sequence": 18,
+  "module_id": "r-module-03",
+  "module_slug": "data-types-values-and-basic-objects",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "r-lesson-017"
+  ],
+  "previous_lesson_id": "r-lesson-017",
+  "next_lesson_id": "r-lesson-019",
+  "keywords": [
+    "numeric-data",
+    "data-types-values-and-basic-objects",
+    "integer-values",
+    "double-precision-numeric-values",
+    "creating-integers",
+    "decimal-numbers",
+    "floating-point-precision",
+    "numeric-overflow-and-special-values",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 18,
+  "subtopics": [
+    "Integer Values",
+    "Double-Precision Numeric Values",
+    "Creating Integers",
+    "Decimal Numbers",
+    "Floating-Point Precision",
+    "Numeric Overflow and Special Values"
+  ],
+  "learning_outcomes": [
+    "Explain the role of numeric data and identify its main inputs, outputs or constraints.",
+    "Apply integer values in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Numeric Data is part of Data Types, Values, and Basic Objects. Start with integer values and connect it to the worked example and expected result.",
+    "why_it_matters": "Numeric Data is one step in Data Types, Values, and Basic Objects; r objects have types and classes. Missingness (NA), undefined numeric results (NaN), infinities, and NULL are distinct.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Numeric Data",
+        "asset_path": "diagrams/module-03-overview.svg",
+        "alt_text": "Concept visual supporting lesson 18, Numeric Data. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Numeric Data is one step in Data Types, Values, and Basic Objects; r objects have types and classes. Missingness (NA), undefined numeric results (NaN), infinities, and NULL are distinct. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Integer Values",
+            "text": "Explain integer values in the context of numeric data, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Double-Precision Numeric Values",
+            "text": "Explain double-precision numeric values in the context of numeric data, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Creating Integers",
+            "text": "Build the smallest example for creating integers, inspect the returned object, and confirm its names, type and shape before using it downstream."
+          },
+          {
+            "title": "Decimal Numbers",
+            "text": "Explain decimal numbers in the context of numeric data, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Floating-Point Precision",
+            "text": "Explain floating-point precision in the context of numeric data, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Numeric Overflow and Special Values",
+            "text": "Explain numeric overflow and special values in the context of numeric data, connect it to the example, and verify one expected result or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Inspect with str(), typeof(), class(), is.na(), and explicit assertions before transforming data. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Numeric Data",
+        "language": "r",
+        "code": "x <- c(4, NA, 9)\nis.na(x)",
+        "expected_output": "[1] FALSE TRUE FALSE",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "Missing values must be handled intentionally before analysis. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For numeric data, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-018-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply numeric data to a small synthetic example. Start with integer values, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the integer values idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible numeric data example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Integer Values” and identify the input and output before coding.",
+      "Inspect with str(), typeof(), class(), names() or dim() as appropriate.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: Numeric Data is one step in Data Types, Values, and Basic Objects; r objects have types and classes. Missingness (NA), undefined numeric results (NaN), infinities, and NULL are distinct.",
+      "Practice: Inspect with str(), typeof(), class(), is.na(), and explicit assertions before transforming data.",
+      "Source syllabus focus: Integer Values. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply numeric data to a small synthetic example. Start with integer values, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible numeric data example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Integer Values” and identify the input and output before coding.",
+    "Inspect with str(), typeof(), class(), names() or dim() as appropriate.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: Numeric Data is one step in Data Types, Values, and Basic Objects; r objects have types and classes. Missingness (NA), undefined numeric results (NaN), infinities, and NULL are distinct.",
+    "Practice: Inspect with str(), typeof(), class(), is.na(), and explicit assertions before transforming data.",
+    "Source syllabus focus: Integer Values. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 3 — Data Types, Values, and Basic Objects, lesson 18: Numeric Data.",
+    "Official documentation: https://cran.r-project.org/doc/manuals/r-release/R-intro.html",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

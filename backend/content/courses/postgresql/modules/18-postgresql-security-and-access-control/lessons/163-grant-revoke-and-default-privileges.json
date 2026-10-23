@@ -1,0 +1,159 @@
+{
+  "id": "postgresql-lesson-163",
+  "slug": "grant-revoke-and-default-privileges",
+  "title": "GRANT, REVOKE, and Default Privileges",
+  "sequence": 163,
+  "module_id": "postgresql-module-18",
+  "module_slug": "postgresql-security-and-access-control",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "postgresql-lesson-162"
+  ],
+  "previous_lesson_id": "postgresql-lesson-162",
+  "next_lesson_id": "postgresql-lesson-164",
+  "keywords": [
+    "grant-revoke-and-default-privileges",
+    "postgresql-security-and-access-control",
+    "database-privileges",
+    "schema-privileges",
+    "table-and-sequence-privileges",
+    "function-privileges"
+  ],
+  "source_syllabus_number": 163,
+  "subtopics": [
+    "Database privileges",
+    "Schema privileges",
+    "Table and sequence privileges",
+    "Function privileges",
+    "Default privileges for future objects"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose and main terms of GRANT, REVOKE, and Default Privileges.",
+    "Use or interpret an appropriate PostgreSQL example connected to database privileges.",
+    "Identify one edge case and select a safe way to verify the expected result."
+  ],
+  "content": {
+    "intro": "This lesson focuses on GRANT, REVOKE, and Default Privileges. Its primary job is to help you design least-privilege access, secure connections, prevent injection and test row-level security explicitly. The listed PDF subtopics define the coverage expected here; work through them in order and connect each one to an example, edge case and checkable result.",
+    "why_it_matters": "This topic matters because PostgreSQL systems must preserve correct results as data grows and more sessions or services interact with it. Practicing grant, revoke, and default privileges teaches you to make assumptions explicit, apply the right SQL or operational tool, and verify behavior instead of relying on a demonstration that only worked once.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 18 Overview",
+        "asset_path": "diagrams/module-18-overview.svg",
+        "alt_text": "Four-step overview for module 18, PostgreSQL Security and Access Control: Roles, Users, and Role Membership, GRANT, REVOKE, and Default Privileges, Client Authentication, and verify/test/document.",
+        "caption": "Visual aid for GRANT, REVOKE, and Default Privileges. Use it alongside the subtopics and worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Keep the problem small: design least-privilege access, secure connections, prevent injection and test row-level security explicitly. A PostgreSQL feature should be chosen for the semantics it provides, not just because it is available. Before executing a change, state the inputs, expected output and boundary conditions. The example below is intentionally small enough to inspect; it illustrates the idea but is not a substitute for a test against your schema and PostgreSQL version."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the attached curriculum",
+        "items": [
+          {
+            "title": "Database privileges",
+            "text": "Use a dedicated least-privilege role, verify effective privileges, and keep credentials outside course content and source control."
+          },
+          {
+            "title": "Schema privileges",
+            "text": "Use a dedicated least-privilege role, verify effective privileges, and keep credentials outside course content and source control."
+          },
+          {
+            "title": "Table and sequence privileges",
+            "text": "Use a dedicated least-privilege role, verify effective privileges, and keep credentials outside course content and source control."
+          },
+          {
+            "title": "Function privileges",
+            "text": "Use a dedicated least-privilege role, verify effective privileges, and keep credentials outside course content and source control."
+          },
+          {
+            "title": "Default privileges for future objects",
+            "text": "Use a dedicated least-privilege role, verify effective privileges, and keep credentials outside course content and source control."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: GRANT, REVOKE, and Default Privileges",
+        "language": "sql",
+        "code": "GRANT SELECT ON TABLE products TO app_reader;\nREVOKE INSERT, UPDATE, DELETE ON TABLE products FROM app_reader;",
+        "expected_output": "The app_reader role is granted read access and explicitly loses the listed write privileges, assuming the role and table exist.",
+        "safety_note": "Do not grant application roles superuser or broad schema privileges just to make a demo pass.",
+        "run_instructions": "Requires an authorized owner/admin in a disposable database; inspect effective privileges afterward.",
+        "reset_steps": "For a read-only SELECT or inspection command, no reset is needed. For DDL/DML, use a disposable database; capture the starting state, run the example, inspect the result, and ROLLBACK or drop the lab objects as appropriate. Do not use production data or credentials.",
+        "execution_mode": "query-simulation",
+        "limitations": "CodeLeaf currently previews HTML/CSS/JavaScript only; it does not execute PostgreSQL queries, shell commands or Python in the lesson page. Treat the sample as inspectable code unless you run it yourself in an approved isolated environment. Python examples require a separate isolated runner.",
+        "schema_assumptions": "Requires an authorized owner/admin in a disposable database; inspect effective privileges afterward."
+      },
+      {
+        "type": "callout",
+        "title": "Practical checkpoint",
+        "text": "Security checkpoint: database privileges and row-level security are separate controls. Test as the real restricted application role; owners and roles with BYPASSRLS may behave differently."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-163-questions.json"
+  },
+  "task": "Create a short practice artifact for “GRANT, REVOKE, and Default Privileges”: explain its goal, show one example linked to “Database privileges”, state the expected result, and include one edge/failure case and verification method. Use a disposable database or static artifact as appropriate.",
+  "hints": [
+    "Start with the listed subtopics, especially “Database privileges”, and describe the expected behavior in your own words.",
+    "Run or inspect the smallest example that demonstrates the behavior; do not add unrelated features before it is verified.",
+    "When the result surprises you, capture the exact SQL/error, check version and permissions, and change one assumption at a time."
+  ],
+  "expected_output": "A reviewable note or query for GRANT, REVOKE, and Default Privileges, with an explanation of “Database privileges”, expected behavior, and a documented edge-case check.",
+  "run_mode": "query-simulation",
+  "common_mistakes": [
+    {
+      "problem": "Copying the example without checking its assumptions.",
+      "why": "Object names, data types, privileges, extensions and data distribution affect database behavior.",
+      "fix": "List schema/version assumptions and test with a tiny synthetic dataset first."
+    },
+    {
+      "problem": "Treating a single successful query as proof of production readiness.",
+      "why": "A happy-path result does not test invalid input, concurrent sessions, permissions, recovery or query performance.",
+      "fix": "Add one negative/edge case and record the evidence that confirms the expected behavior."
+    },
+    {
+      "problem": "Making a production change directly from a lesson.",
+      "why": "DDL, data updates, role changes and operational commands can affect data or availability.",
+      "fix": "Use an isolated lab, reviewed migration, least privilege, rollback/recovery plan and a second-person review for production."
+    }
+  ],
+  "summary": [
+    "GRANT, REVOKE, and Default Privileges fits into the broader goal to design least-privilege access, secure connections, prevent injection and test row-level security explicitly.",
+    "Use the curriculum subtopics as a completeness checklist: Database privileges, Schema privileges, Table and sequence privileges.",
+    "State the schema/version assumptions and verify one normal case plus an edge case before trusting the result."
+  ],
+  "sources": [
+    {
+      "title": "Database Roles and Row Security",
+      "url": "https://www.postgresql.org/docs/18/user-manag.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-15",
+      "supports": [
+        "Database Roles and Row Security; lesson 163 is a teaching adaptation and should be checked against this official reference."
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "Row Security Policies",
+      "url": "https://www.postgresql.org/docs/18/ddl-rowsecurity.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-15",
+      "supports": [
+        "Table row-level security policies and role-sensitive behavior."
+      ],
+      "source_type": "official documentation"
+    }
+  ],
+  "exercise_files": [
+    "../exercises/016-access-control-design.json"
+  ],
+  "status": "draft",
+  "status_note": "Draft teaching content generated from the full PostgreSQL.pdf syllabus. Examples and operational advice require technical review and PostgreSQL 18.6 test validation before publication."
+}

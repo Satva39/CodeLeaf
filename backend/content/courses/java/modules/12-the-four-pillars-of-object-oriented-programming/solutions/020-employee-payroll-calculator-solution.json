@@ -1,0 +1,32 @@
+{
+  "id": "java-exercise-solution-020",
+  "exercise_id": "java-exercise-020",
+  "title": "Employee Payroll Calculator reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "language": "java",
+  "answer": "public class Main {\n    interface Employee { String name(); double monthlyPay(); }\n    record SalariedEmployee(String name, double annualSalary) implements Employee {\n        public double monthlyPay() {\n            if (annualSalary < 0) throw new IllegalArgumentException(\"Salary cannot be negative\");\n            return annualSalary / 12.0;\n        }\n    }\n    public static void main(String[] args) {\n        Employee employee = new SalariedEmployee(\"Ravi\", 600000.0);\n        System.out.printf(\"%s: %.2f per month%n\", employee.name(), employee.monthlyPay());\n    }\n}",
+  "explanation": "Call a common interface rather than branching on concrete employee types throughout payroll code. A real payroll domain needs precise decimal/currency and jurisdiction rules.",
+  "hidden_tests": [
+    {
+      "case": "normal case",
+      "input_or_setup": "Use the deterministic sample data or representative valid input described in the exercise.",
+      "expected_behavior": "Ravi: 50000.00 per month",
+      "purpose": "Verify the main behavior and the output contract."
+    },
+    {
+      "case": "boundary case",
+      "input_or_setup": "Test empty, zero, minimum/maximum, duplicate, or end-of-range input as appropriate to the exercise.",
+      "expected_behavior": "The result matches the documented boundary rule and does not silently corrupt state.",
+      "purpose": "Check a boundary or invariant."
+    },
+    {
+      "case": "invalid or failure case",
+      "input_or_setup": "Provide malformed input or simulate a missing file, unavailable endpoint, missing configuration, or database failure where relevant.",
+      "expected_behavior": "The operation fails clearly or returns a safe result; resources are released and secrets are not printed.",
+      "purpose": "Check explicit error behavior and cleanup."
+    }
+  ],
+  "review_notes": "Repository-only reference material. Keep it out of public API responses and frontend bundles. The platform grader is only a required-token smoke check; complete task-specific execution tests in an isolated Java runner before publication.",
+  "sample_expected_result": "Ravi: 50000.00 per month"
+}

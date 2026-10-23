@@ -1,0 +1,191 @@
+{
+  "id": "r-lesson-111",
+  "slug": "reshaping-data",
+  "title": "Reshaping Data",
+  "sequence": 111,
+  "module_id": "r-module-11",
+  "module_slug": "data-cleaning-and-manipulation",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "r-lesson-110"
+  ],
+  "previous_lesson_id": "r-lesson-110",
+  "next_lesson_id": "r-lesson-112",
+  "keywords": [
+    "reshaping-data",
+    "data-cleaning-and-manipulation",
+    "wide-and-long-formats",
+    "pivot-longer",
+    "pivot-wider",
+    "splitting-columns-into-variables",
+    "combining-multiple-variables",
+    "handling-repeated-measurements",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 111,
+  "subtopics": [
+    "Wide and Long Formats",
+    "pivot_longer()",
+    "pivot_wider()",
+    "Splitting Columns into Variables",
+    "Combining Multiple Variables",
+    "Handling Repeated Measurements"
+  ],
+  "learning_outcomes": [
+    "Explain the role of reshaping data and identify its main inputs, outputs or constraints.",
+    "Apply wide and long formats in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Reshaping Data is part of Data Cleaning and Manipulation. Start with wide and long formats and connect it to the worked example and expected result.",
+    "why_it_matters": "Data transformations should be explicit and auditable: define the rule, check row counts and keys, and preserve the reason for each cleaning choice.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Reshaping Data",
+        "asset_path": "diagrams/module-11-overview.svg",
+        "alt_text": "Concept visual supporting lesson 111, Reshaping Data. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Data transformations should be explicit and auditable: define the rule, check row counts and keys, and preserve the reason for each cleaning choice. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Wide and Long Formats",
+            "text": "Explain wide and long formats in the context of reshaping data, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "pivot_longer()",
+            "text": "Explain pivot_longer() in the context of reshaping data, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "pivot_wider()",
+            "text": "Explain pivot_wider() in the context of reshaping data, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Splitting Columns into Variables",
+            "text": "Explain splitting columns into variables in the context of reshaping data, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Combining Multiple Variables",
+            "text": "Explain combining multiple variables in the context of reshaping data, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Handling Repeated Measurements",
+            "text": "Explain handling repeated measurements in the context of reshaping data, connect it to the example, and verify one expected result or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Compare before/after row counts, check a key or range invariant, and record how missing or duplicate records were handled. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Reshaping Data",
+        "language": "r",
+        "code": "# Lesson 111: Reshaping Data\nexample_rows <- data.frame(group = c(\"A\", \"B\", \"A\"), amount = c(8, 9, 10))\naggregate(amount ~ group, data = example_rows, sum)",
+        "expected_output": "  group amount\n1     A      18\n2     B      9",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "Synthetic grouping demonstrates a transformation; validate key relationships and row counts in a real workflow. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For reshaping data, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-111-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply reshaping data to a small synthetic example. Start with wide and long formats, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the wide and long formats idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible reshaping data example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Wide and Long Formats” and identify the input and output before coding.",
+      "Check file existence, column types, row counts, keys and missing-value counts.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming external services always return valid data.",
+        "why": "Timeouts, authorization failures, rate limits and schema changes are normal failure cases.",
+        "fix": "Add timeouts, status/schema validation, least-privilege access and bounded retries."
+      },
+      {
+        "problem": "Embedding credentials or sensitive rows in examples or logs.",
+        "why": "Secrets and private data can leak through source control or diagnostic output.",
+        "fix": "Use environment-based secret handling and synthetic examples; redact logs."
+      },
+      {
+        "problem": "Leaving resources open after an error.",
+        "why": "Unclosed connections and files can leak resources or lock outputs.",
+        "fix": "Use reliable cleanup patterns and test both success and failure paths."
+      }
+    ],
+    "summary": [
+      "Key idea: Data transformations should be explicit and auditable: define the rule, check row counts and keys, and preserve the reason for each cleaning choice.",
+      "Practice: Compare before/after row counts, check a key or range invariant, and record how missing or duplicate records were handled.",
+      "Source syllabus focus: Wide and Long Formats. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply reshaping data to a small synthetic example. Start with wide and long formats, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible reshaping data example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Wide and Long Formats” and identify the input and output before coding.",
+    "Check file existence, column types, row counts, keys and missing-value counts.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Assuming external services always return valid data.",
+      "why": "Timeouts, authorization failures, rate limits and schema changes are normal failure cases.",
+      "fix": "Add timeouts, status/schema validation, least-privilege access and bounded retries."
+    },
+    {
+      "problem": "Embedding credentials or sensitive rows in examples or logs.",
+      "why": "Secrets and private data can leak through source control or diagnostic output.",
+      "fix": "Use environment-based secret handling and synthetic examples; redact logs."
+    },
+    {
+      "problem": "Leaving resources open after an error.",
+      "why": "Unclosed connections and files can leak resources or lock outputs.",
+      "fix": "Use reliable cleanup patterns and test both success and failure paths."
+    }
+  ],
+  "summary": [
+    "Key idea: Data transformations should be explicit and auditable: define the rule, check row counts and keys, and preserve the reason for each cleaning choice.",
+    "Practice: Compare before/after row counts, check a key or range invariant, and record how missing or duplicate records were handled.",
+    "Source syllabus focus: Wide and Long Formats. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 11 — Data Cleaning and Manipulation, lesson 111: Reshaping Data.",
+    "Official documentation: https://dplyr.tidyverse.org/",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [
+    "../exercises/019-reshape-a-wide-dataset-into-a-long-format.json"
+  ],
+  "status": "draft"
+}

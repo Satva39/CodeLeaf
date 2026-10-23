@@ -1,0 +1,186 @@
+{
+  "id": "css-lesson-124",
+  "slug": "introduction-to-responsive-design",
+  "title": "Introduction to Responsive Design",
+  "sequence": 124,
+  "module_id": "css-module-13",
+  "module_slug": "responsive-web-design-and-media-queries",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 9,
+  "prerequisites": [
+    "css-lesson-123"
+  ],
+  "previous_lesson_id": "css-lesson-123",
+  "next_lesson_id": "css-lesson-125",
+  "keywords": [
+    "introduction",
+    "responsive",
+    "design",
+    "versus",
+    "fixed",
+    "layouts",
+    "fluid",
+    "adaptive",
+    "interfaces",
+    "mobile-first",
+    "desktop-first",
+    "approaches",
+    "content-driven",
+    "responsiveness"
+  ],
+  "source_syllabus_number": 124,
+  "subtopics": [
+    "Responsive versus fixed layouts",
+    "Fluid and adaptive interfaces",
+    "Mobile-first and desktop-first approaches",
+    "Content-driven responsiveness",
+    "Responsive design principles"
+  ],
+  "learning_outcomes": [
+    "Describe the role of Introduction to Responsive Design and recognize when it is useful.",
+    "Apply a relevant property, selector, or technique from this lesson in a small stylesheet.",
+    "Inspect the browser result and explain one behavior, limitation, or compatibility consideration."
+  ],
+  "content": {
+    "intro": "In this lesson, you will explore Introduction to Responsive Design through a small CSS example, a visual guide, and one practical check. You do not need to memorize every property at once; focus on the decision the browser is making.",
+    "why_it_matters": "Introduction to Responsive Design helps you build interfaces that remain understandable, maintainable, and usable as content and viewport conditions change.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Responsive layout decisions",
+        "asset_path": "diagrams/responsive-breakpoints.svg",
+        "alt_text": "Let content determine layout changes; do not design only for named devices. Labels show the concept flow.",
+        "caption": "Use the labeled steps as a reasoning guide; detailed behavior is described in the lesson."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Responsive design adapts to available space and user preferences, not to a list of device names. Start with content that fits, add breakpoints only when the layout needs them, and test zoom, orientation, and narrow widths."
+      },
+      {
+        "type": "paragraph",
+        "title": "A useful way to practice",
+        "text": "Start with one element or component. Use the concepts in this lesson—responsive versus fixed layouts, fluid and adaptive interfaces, mobile-first and desktop-first approaches—and change one declaration at a time. Compare the page before and after the change."
+      },
+      {
+        "type": "list",
+        "title": "What to look for",
+        "items": [
+          {
+            "title": "Responsive versus fixed layouts",
+            "text": "Base the change on the content’s needs and user preferences, then test widths around the chosen threshold."
+          },
+          {
+            "title": "Fluid and adaptive interfaces",
+            "text": "Connect fluid and adaptive interfaces to the main idea in introduction to responsive design, then verify it in a minimal browser example."
+          },
+          {
+            "title": "Mobile-first and desktop-first approaches",
+            "text": "Connect mobile-first and desktop-first approaches to the main idea in introduction to responsive design, then verify it in a minimal browser example."
+          },
+          {
+            "title": "Content-driven responsiveness",
+            "text": "Base the change on the content’s needs and user preferences, then test widths around the chosen threshold."
+          },
+          {
+            "title": "Responsive design principles",
+            "text": "Base the change on the content’s needs and user preferences, then test widths around the chosen threshold."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "css",
+        "code": ".layout { display: grid; grid-template-columns: 1fr; gap: 1rem; }\n@media (min-width: 48rem) {\n  .layout { grid-template-columns: repeat(2, minmax(0, 1fr)); }\n}",
+        "expected_output": "The layout begins in one column and uses two columns when the viewport reaches the selected content breakpoint; test just below and above it.",
+        "run_instructions": "Put this snippet in styles.css and link it from a minimal index.html file with a viewport meta tag. Add elements whose classes match the selectors, open the page in a modern browser, and inspect computed styles. This lesson editor displays the expected result as a guide; it is not a server-side arbitrary-code runner.",
+        "reset_steps": "Restore the original CSS snippet, save the file, and repeat the test. Remove temporary debugging rules before keeping a final version."
+      },
+      {
+        "type": "callout",
+        "title": "Keep in mind",
+        "text": "Start with a fluid base layout and add a breakpoint only when the content needs a different arrangement."
+      }
+    ],
+    "task": "Try it yourself: build a small example that demonstrates Introduction to Responsive Design. Use the simplest relevant selector and one or more declarations, inspect the browser result, and explain it in your own words.",
+    "task_acceptance_criteria": [
+      "The stylesheet uses valid CSS syntax for the chosen feature.",
+      "The intended element or state visibly changes when the rule applies.",
+      "The behavior is checked with browser tools or a documented manual checklist."
+    ],
+    "hints": [
+      "Write the smallest rule that can demonstrate the concept.",
+      "Inspect which element matched and which declaration won before adding more selectors.",
+      "For a developing or optional feature, check browser support and preserve a useful fallback."
+    ],
+    "expected_output": "The layout begins in one column and uses two columns when the viewport reaches the selected content breakpoint; test just below and above it.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-124-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Changing several declarations at once.",
+        "why": "It becomes difficult to connect a visual change to its cause.",
+        "fix": "Change one property, save, and compare again."
+      },
+      {
+        "problem": "Assuming the last rule always wins.",
+        "why": "The cascade also considers origin, importance, layers and selector specificity; scope and source order may also matter.",
+        "fix": "Inspect matched declarations and computed styles before changing the stylesheet."
+      },
+      {
+        "problem": "Testing only one viewport or interaction state.",
+        "why": "A rule can work at one width and fail when content, focus, zoom or preferences change.",
+        "fix": "Repeat the check at narrow and wide widths and include keyboard focus or reduced-motion checks when relevant."
+      }
+    ],
+    "summary": [
+      "Introduction to Responsive Design is easiest to learn by connecting syntax to a rendered result.",
+      "Keep selectors readable and test the effect in the browser.",
+      "Verify compatibility and accessibility when the feature or interface requires it."
+    ],
+    "references": [
+      {
+        "title": "Responsive design",
+        "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Responsive_Design"
+      },
+      {
+        "title": "CSS reference",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference"
+      }
+    ]
+  },
+  "exercise_files": [
+    "../exercises/011-responsive-landing-page.json"
+  ],
+  "sources": [
+    {
+      "title": "Responsive design",
+      "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Responsive_Design",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "fluid layouts",
+        "media queries",
+        "breakpoints",
+        "responsive testing"
+      ]
+    },
+    {
+      "title": "CSS reference",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "properties",
+        "selectors",
+        "at-rules",
+        "values"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached CSS syllabus outline; requires subject-matter and browser QA review before publication."
+}

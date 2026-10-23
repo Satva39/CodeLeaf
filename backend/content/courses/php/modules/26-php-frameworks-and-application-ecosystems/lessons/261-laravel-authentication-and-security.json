@@ -1,0 +1,199 @@
+{
+  "id": "php-lesson-261",
+  "slug": "laravel-authentication-and-security",
+  "title": "Laravel Authentication and Security",
+  "sequence": 261,
+  "module_id": "php-module-26",
+  "module_slug": "php-frameworks-and-application-ecosystems",
+  "level": "specialization",
+  "difficulty": "specialization",
+  "track": "optional-specialization",
+  "estimated_minutes": 13,
+  "prerequisites": [
+    "php-lesson-260"
+  ],
+  "previous_lesson_id": "php-lesson-260",
+  "next_lesson_id": "php-lesson-262",
+  "keywords": [
+    "laravel authentication and security",
+    "php frameworks and application ecosystems",
+    "authentication options",
+    "authorization policies",
+    "middleware",
+    "csrf protection",
+    "secure validation and output handling",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 261,
+  "subtopics": [
+    "Authentication options.",
+    "Authorization policies.",
+    "Middleware.",
+    "CSRF protection.",
+    "Secure validation and output handling."
+  ],
+  "learning_outcomes": [
+    "Explain what laravel authentication and security contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: authentication options.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Frameworks provide conventions and reusable components for routing, dependency management, validation, persistence, and queues. Learn the underlying HTTP/security concepts first and verify the selected framework's supported versions. In this lesson, focus on authentication options; then compare it with authorization policies. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use laravel authentication and security when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 26 overview: PHP Frameworks and Application Ecosystems",
+        "asset_path": "diagrams/module-26-overview.svg",
+        "alt_text": "Four-stage overview for module 26, PHP Frameworks and Application Ecosystems, grouping lesson topics in order.",
+        "caption": "Use this overview to place laravel authentication and security in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Frameworks provide conventions and reusable components for routing, dependency management, validation, persistence, and queues. Learn the underlying HTTP/security concepts first and verify the selected framework's supported versions. For laravel authentication and security, begin with authentication options. Also distinguish authorization policies; middleware; csrf protection. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Authentication options",
+            "text": "Distinguish identity verification from resource permission, and test expiry, invalid credentials, and denied access as well as the success path."
+          },
+          {
+            "title": "Authorization policies",
+            "text": "Distinguish identity verification from resource permission, and test expiry, invalid credentials, and denied access as well as the success path."
+          },
+          {
+            "title": "Middleware",
+            "text": "Know when to use middleware, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "CSRF protection",
+            "text": "Treat the relevant value as untrusted, apply the defense at the correct boundary, and verify a deliberately invalid or hostile-looking input is rejected or encoded."
+          },
+          {
+            "title": "Secure validation and output handling",
+            "text": "Know when to use secure validation and output handling, what input or program state it changes, and which boundary case is worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Laravel Authentication and Security",
+        "language": "php",
+        "code": "<?php\n$route = [\"method\" => \"GET\", \"path\" => \"/health\"];\necho $route[\"method\"] . \" \" . $route[\"path\"] . PHP_EOL;",
+        "expected_output": "GET /health",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for laravel authentication and security from top to bottom. Start by identifying authentication options, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for laravel authentication and security that demonstrates \"authentication options\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of authentication options.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "GET /health",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-261-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Laravel Authentication and Security is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+    ],
+    "references": [
+      {
+        "title": "Laravel documentation",
+        "url": "https://laravel.com/docs",
+        "publisher": "Laravel",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "routing",
+          "validation",
+          "Eloquent",
+          "queues",
+          "authentication"
+        ]
+      },
+      {
+        "title": "Symfony documentation",
+        "url": "https://symfony.com/doc/current/index.html",
+        "publisher": "Symfony",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "routing",
+          "services",
+          "dependency injection",
+          "components"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Laravel documentation",
+      "url": "https://laravel.com/docs",
+      "publisher": "Laravel",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "routing",
+        "validation",
+        "Eloquent",
+        "queues",
+        "authentication"
+      ]
+    },
+    {
+      "title": "Symfony documentation",
+      "url": "https://symfony.com/doc/current/index.html",
+      "publisher": "Symfony",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "routing",
+        "services",
+        "dependency injection",
+        "components"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

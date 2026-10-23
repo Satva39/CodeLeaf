@@ -1,0 +1,177 @@
+{
+  "id": "xml-lesson-162",
+  "slug": "reliable-xml-pipelines",
+  "title": "Reliable XML Pipelines",
+  "sequence": 162,
+  "module_id": "xml-module-19",
+  "module_slug": "xml-performance-and-reliability",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "xml-lesson-161"
+  ],
+  "previous_lesson_id": "xml-lesson-161",
+  "next_lesson_id": "xml-lesson-163",
+  "keywords": [
+    "reliable-xml-pipelines",
+    "xml-performance-and-reliability",
+    "validation-before-processing",
+    "repeatable-transformations",
+    "error-recovery",
+    "atomic-file-output",
+    "monitoring-and-operational-logs"
+  ],
+  "source_syllabus_number": 162,
+  "subtopics": [
+    "Validation before processing",
+    "Repeatable transformations",
+    "Error recovery",
+    "Atomic file output",
+    "Monitoring and operational logs"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose of reliable xml pipelines and explain at least one listed subtopic.",
+    "Interpret the example related to reliable xml pipelines and predict its expected result.",
+    "Identify one validation, compatibility, security, or troubleshooting consideration relevant to the example."
+  ],
+  "content": {
+    "intro": "In this lesson, you will explore reliable xml pipelines within XML Performance and Reliability. You will connect its syllabus topics to an inspectable example, check the expected result, and note tool/version limits.",
+    "why_it_matters": "Reliable XML Pipelines matters because XML workflows rely on explicit structure and predictable processing. The lesson helps you reason about validation before processing, avoid a common misunderstanding, and make a result reproducible for another developer.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Reliable XML Pipelines: concept map",
+        "asset_path": "diagrams/lessons/lesson-162-reliable-xml-pipelines.svg",
+        "alt_text": "Concept flow covering Validation before processing, Repeatable transformations, Error recovery, Atomic file output.",
+        "caption": "The visual introduces reliable xml pipelines; inspect the worked example and then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "XML throughput and reliability depend on document size, parser strategy, query shape, transformation design, and error recovery. Measure using representative data rather than assuming that one parser style is always fastest."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the subtopics",
+        "text": "This lesson explicitly covers: Validation before processing; Repeatable transformations; Error recovery; Atomic file output; Monitoring and operational logs. Treat these as connected parts of one workflow: define the structure, make the relevant assumptions explicit, and verify a result with a small known input."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Reliable XML Pipelines",
+        "language": "python",
+        "code": "import xml.etree.ElementTree as ET\n\n# Use for trusted input only; configure a hardened parser for untrusted data.\nfor _event, elem in ET.iterparse(\"large-catalog.xml\", events=(\"end\",)):\n    if elem.tag == \"product\":\n        process_record = elem.findtext(\"name\")  # replace with application processing\n        print(process_record)\n        elem.clear()",
+        "expected_output": "Product names are processed one record at a time without retaining every completed product subtree.",
+        "run_instructions": "Inspect this example as text. Run it only in a processor that supports the shown language/version; the standard CodeLeaf playground previews HTML/CSS/JavaScript only and does not execute XML, XSD, XPath, XSLT, XQuery, Python, or SQL. For large record-oriented documents, consider incremental processing and clearing processed subtrees. Bound input size and depth, validate early when appropriate, and design retries so reprocessing does not create duplicate downstream effects.",
+        "reset_steps": "Restore the sample to its exact starting state before each experiment. Change one element, attribute, expression, or constraint at a time, then compare the result with the expected behavior.",
+        "execution_mode": "server-runner",
+        "limitations": "The file must exist and the function body must implement bounded processing. This is a streaming pattern for controlled input, not a complete hardened production parser."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety checkpoint",
+        "text": "Distinguish well-formedness, schema validity, and application-level correctness; they are different checks."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a small synthetic example that demonstrates “Validation before processing”. Then add one boundary case involving “Repeatable transformations”. Write down what should happen before testing, and record the exact output or processor message afterward."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-162-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming a document is correct because it looks readable.",
+        "why": "Visual appearance does not prove well-formedness, schema validity, correct namespace handling, or application-level meaning.",
+        "fix": "Parse and validate the document with the intended processor, then assert its meaning using a focused test."
+      },
+      {
+        "problem": "Mixing specification features with processor support.",
+        "why": "A standard may define features that a specific runtime does not implement.",
+        "fix": "Record the version and feature support; test with the actual target processor."
+      },
+      {
+        "problem": "Testing only one happy-path example.",
+        "why": "Missing values, wrong types, namespace differences, or boundary inputs can expose failures.",
+        "fix": "Add a valid case, an invalid case, and an edge case to the verification notes."
+      }
+    ],
+    "task": "Build a short demonstration of reliable xml pipelines using synthetic data. Include the concept “Validation before processing”, a known expected result, and a short note explaining one edge case.",
+    "task_acceptance_criteria": [
+      "The artifact clearly demonstrates Validation before processing.",
+      "The expected result is written before verification.",
+      "One invalid or boundary case is documented.",
+      "Processor/version assumptions and relevant security limits are recorded."
+    ],
+    "hints": [
+      "Start with the exact definition or construct associated with validation before processing.",
+      "Keep the example minimal and change one thing at a time.",
+      "Compare the observed result with the expected behavior and consult the linked specification if they differ."
+    ],
+    "summary": [
+      "Reliable XML Pipelines contributes to the larger XML workflow of creating, checking, querying, transforming, or maintaining structured documents.",
+      "The listed syllabus concepts include Validation before processing, Repeatable transformations, Error recovery.",
+      "A reproducible XML example includes the input, processor/version assumptions, expected result, and a meaningful failure case."
+    ],
+    "run_mode": "server-runner",
+    "expected_output": "Product names are processed one record at a time without retaining every completed product subtree."
+  },
+  "task": "Build a short demonstration of reliable xml pipelines using synthetic data. Include the concept “Validation before processing”, a known expected result, and a short note explaining one edge case.",
+  "task_acceptance_criteria": [
+    "The artifact clearly demonstrates Validation before processing.",
+    "The expected result is written before verification.",
+    "One invalid or boundary case is documented.",
+    "Processor/version assumptions and relevant security limits are recorded."
+  ],
+  "hints": [
+    "Start with the exact definition or construct associated with validation before processing.",
+    "Keep the example minimal and change one thing at a time.",
+    "Compare the observed result with the expected behavior and consult the linked specification if they differ."
+  ],
+  "summary": [
+    "Reliable XML Pipelines contributes to the larger XML workflow of creating, checking, querying, transforming, or maintaining structured documents.",
+    "The listed syllabus concepts include Validation before processing, Repeatable transformations, Error recovery.",
+    "A reproducible XML example includes the input, processor/version assumptions, expected result, and a meaningful failure case."
+  ],
+  "run_mode": "server-runner",
+  "expected_output": "Product names are processed one record at a time without retaining every completed product subtree.",
+  "common_mistakes": [
+    {
+      "problem": "Assuming a document is correct because it looks readable.",
+      "why": "Visual appearance does not prove well-formedness, schema validity, correct namespace handling, or application-level meaning.",
+      "fix": "Parse and validate the document with the intended processor, then assert its meaning using a focused test."
+    },
+    {
+      "problem": "Mixing specification features with processor support.",
+      "why": "A standard may define features that a specific runtime does not implement.",
+      "fix": "Record the version and feature support; test with the actual target processor."
+    },
+    {
+      "problem": "Testing only one happy-path example.",
+      "why": "Missing values, wrong types, namespace differences, or boundary inputs can expose failures.",
+      "fix": "Add a valid case, an invalid case, and an edge case to the verification notes."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "title": "Extensible Markup Language (XML) 1.0, Fifth Edition",
+      "url": "https://www.w3.org/TR/xml/",
+      "publisher": "W3C",
+      "checked_on": "2026-10-12"
+    },
+    {
+      "title": "Namespaces in XML 1.0, Third Edition",
+      "url": "https://www.w3.org/TR/xml-names/",
+      "publisher": "W3C",
+      "checked_on": "2026-10-12"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Generated from the attached XML syllabus; requires technical review and validation in the target XML processor before publication.",
+  "exercise_files": []
+}

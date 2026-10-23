@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-156",
+  "slug": "server-information-and-administration",
+  "title": "Server Information and Administration",
+  "sequence": 156,
+  "module_id": "redis-module-20",
+  "module_slug": "redis-administration-and-configuration",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-155"
+  ],
+  "previous_lesson_id": "redis-lesson-155",
+  "next_lesson_id": "redis-lesson-157",
+  "keywords": [
+    "server-information-and-administration",
+    "info",
+    "role",
+    "client-list",
+    "client-info",
+    "server-status-and-command-statistics",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 156,
+  "subtopics": [
+    "INFO",
+    "ROLE",
+    "CLIENT LIST",
+    "CLIENT INFO",
+    "Server status and command statistics"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Server Information and Administration and distinguish it from a related Redis concept.",
+    "Apply or trace Server Information and Administration in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Server Information and Administration and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Server Information and Administration in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Server Information and Administration helps implement inspect and change operational settings without disrupting production workloads. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Server Information and Administration",
+        "asset_path": "diagrams/lesson-156-server-information-and-administration.svg",
+        "alt_text": "Concept diagram for Server Information and Administration, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Server Information and Administration; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Server Information and Administration helps implement inspect and change operational settings without disrupting production workloads. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Server Information and Administration, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "INFO",
+            "text": "Connect INFO to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "ROLE",
+            "text": "Connect ROLE to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "CLIENT LIST",
+            "text": "Connect CLIENT LIST to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "CLIENT INFO",
+            "text": "Connect CLIENT INFO to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Server status and command statistics",
+            "text": "Connect Server status and command statistics to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Server Information and Administration",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "INFO server\nINFO clients\nINFO memory",
+        "expected_output": "Returns selected server, client and memory sections.",
+        "run_instructions": "Some administrative commands require elevated ACL permissions. Avoid CONFIG SET on shared/production systems during exercises.",
+        "reset_steps": "Read-only inspection.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Server Information and Administration. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Server Information and Administration in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Server Information and Administration.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "Returns selected server, client and memory sections.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-156-questions.json",
+    "recap": [
+      "Server Information and Administration is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Redis commands reference",
+      "url": "https://redis.io/docs/latest/commands/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "command syntax, return values, complexity, compatibility and command history"
+      ]
+    },
+    {
+      "title": "Memory optimization",
+      "url": "https://redis.io/docs/latest/management/optimization/memory-optimization/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "compact encodings, memory trade-offs and optimization"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

@@ -1,0 +1,179 @@
+{
+  "id": "mysql-lesson-079",
+  "slug": "group-concat",
+  "title": "GROUP_CONCAT",
+  "sequence": 79,
+  "module_id": "mysql-module-09",
+  "module_slug": "aggregate-functions-and-grouping",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "mysql-lesson-078"
+  ],
+  "previous_lesson_id": "mysql-lesson-078",
+  "next_lesson_id": "mysql-lesson-080",
+  "keywords": [
+    "group-concat",
+    "aggregate-functions-and-grouping",
+    "mysql",
+    "database"
+  ],
+  "source_syllabus_number": 79,
+  "source_module_number": 9,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the purpose of group_concat in MySQL and when it is useful.",
+    "Interpret or adapt the supplied sql example and predict its expected behavior.",
+    "Verify one relevant boundary, safety requirement, or version-specific assumption."
+  ],
+  "content": {
+    "intro": "Learn group_concat in the context of aggregate functions and grouping. This lesson covers the supplied syllabus topic, demonstrates a representative MySQL example, and finishes with a verification task.",
+    "why_it_matters": "Analytical queries define a row grain, compute metrics at that grain, and make ordering and tie behavior explicit. Aggregate queries collapse rows into groups; window functions calculate across related rows without collapsing the current row set.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "GROUP_CONCAT",
+        "asset_path": "diagrams/lesson-079-group-concat.svg",
+        "alt_text": "Concept flow for GROUP_CONCAT: understand the MySQL concept, inspect the example, verify its behavior, and apply it safely.",
+        "caption": "GROUP_CONCAT: connect the concept to a concrete example, verify the result, and apply it in a disposable lab."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Analytical queries define a row grain, compute metrics at that grain, and make ordering and tie behavior explicit. Aggregate queries collapse rows into groups; window functions calculate across related rows without collapsing the current row set."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics to master",
+        "items": [
+          {
+            "title": "Core concept",
+            "text": "Analytical queries define a row grain, compute metrics at that grain, and make ordering and tie behavior explicit. Aggregate queries collapse rows into groups; window functions calculate across related rows without collapsing the current row set."
+          },
+          {
+            "title": "Practical verification",
+            "text": "Predict the outcome, check the result against the selected MySQL version, and record an edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Apply the idea",
+        "text": "Calculate a small result by hand, run the grouped/windowed query, and check row grain, ties, and NULL behavior. Write down the expected result before running the snippet. Compare actual output with the reference, then try one normal case and one edge case."
+      },
+      {
+        "type": "code",
+        "language": "sql",
+        "execution_mode": "static-validation",
+        "code": "SELECT category, GROUP_CONCAT(item ORDER BY item SEPARATOR ', ') AS items FROM (SELECT 'books' AS category, 'Atlas' AS item UNION ALL SELECT 'books', 'Novel' UNION ALL SELECT 'pens', 'Gel') AS inventory GROUP BY category;",
+        "expected_output": "One row per category contains an ordered, comma-separated item list.",
+        "run_instructions": "Run in a dedicated local MySQL lab using the stated MySQL release track. For schema-changing or administrative snippets, inspect every statement and use only a disposable schema; the in-page editor shows reference output and does not execute SQL.",
+        "reset_steps": "Remove only objects created for this lesson from the disposable schema/session, or restore the lab snapshot. Never run reset or destructive commands against production."
+      },
+      {
+        "type": "callout",
+        "title": "Version, security, and safety note",
+        "text": "Use MySQL 9.7 LTS documentation as the default stable-track reference; verify behavior against MySQL 26.7 documentation when relevant and label any MySQL 8.4-specific fact. Examples are static references, not executed by CodeLeaf. Run mutation, privilege, replication, backup, and recovery examples only in an isolated lab."
+      }
+    ],
+    "task": "Try it yourself: Calculate a small result by hand, run the grouped/windowed query, and check row grain, ties, and NULL behavior. Submit the query, result or decision record, plus one edge case and one verification step.",
+    "task_acceptance_criteria": [
+      "Address the core behavior in group_concat using a MySQL-specific example or a clear operational plan.",
+      "State the expected result and demonstrate how it would be verified in the selected environment.",
+      "Identify one relevant edge case, permissions boundary, operational risk, or version assumption."
+    ],
+    "hints": [
+      "Start by identifying the question that group_concat needs to answer.",
+      "Reduce the example to the smallest meaningful row set or operational change, then write down the result you expect.",
+      "Check the applicable official manual and version note before treating the reference output as guaranteed."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming that a sample result proves the whole design is correct.",
+        "why": "Edge cases such as NULLs, duplicate matches, concurrency, privileges, or version differences may change behavior.",
+        "fix": "Add a targeted boundary case and record the server version, schema and expected result."
+      },
+      {
+        "problem": "Running a mutating or administrative example in the wrong environment.",
+        "why": "DDL, data changes, access grants, and recovery commands may have persistent impact.",
+        "fix": "Use a disposable lab, preview targets and permissions, and write a reset/recovery plan before executing."
+      }
+    ],
+    "summary": [
+      "Analytical queries define a row grain, compute metrics at that grain, and make ordering and tie behavior explicit. Aggregate queries collapse rows into groups; window functions calculate across related rows without collapsing the current row set.",
+      "Use the PDF subtopics for group_concat as a checklist, then validate behavior in the chosen MySQL version.",
+      "Keep the example, assumptions, expected output, and recovery steps together."
+    ],
+    "references": [
+      {
+        "title": "MySQL 9.7 Reference Manual",
+        "url": "https://dev.mysql.com/doc/refman/9.7/en/",
+        "publisher": "Oracle / MySQL",
+        "checked_on": "2026-10-12",
+        "supports": [
+          "core SQL syntax",
+          "data types",
+          "DDL and DML",
+          "query optimization",
+          "security",
+          "administration"
+        ]
+      },
+      {
+        "title": "MySQL Aggregate Functions",
+        "url": "https://dev.mysql.com/doc/refman/9.7/en/aggregate-functions.html",
+        "publisher": "Oracle / MySQL",
+        "checked_on": "2026-10-12",
+        "supports": [
+          "COUNT",
+          "SUM",
+          "AVG",
+          "MIN",
+          "MAX",
+          "GROUP_CONCAT"
+        ]
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-079-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "Draft authored from the supplied MySQL curriculum outline. Code samples require technical review and do not execute in the browser."
+  },
+  "exercise_files": [
+    "../exercises/079-group-concat-practice.json"
+  ],
+  "sources": [
+    {
+      "title": "MySQL 9.7 Reference Manual",
+      "url": "https://dev.mysql.com/doc/refman/9.7/en/",
+      "publisher": "Oracle / MySQL",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "core SQL syntax",
+        "data types",
+        "DDL and DML",
+        "query optimization",
+        "security",
+        "administration"
+      ]
+    },
+    {
+      "title": "MySQL Aggregate Functions",
+      "url": "https://dev.mysql.com/doc/refman/9.7/en/aggregate-functions.html",
+      "publisher": "Oracle / MySQL",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "COUNT",
+        "SUM",
+        "AVG",
+        "MIN",
+        "MAX",
+        "GROUP_CONCAT"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft: verify the lesson, example, expected output, references, and version notes before publishing."
+}

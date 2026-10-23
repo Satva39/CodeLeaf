@@ -1,0 +1,63 @@
+{
+  "id": "github-actions-exercise-004",
+  "slug": "filter-workflow-events",
+  "title": "Filter workflow events",
+  "type": "coding",
+  "lesson_id": "github-actions-lesson-023",
+  "module_id": "github-actions-module-04",
+  "difficulty": "easy",
+  "sequence": 4,
+  "prompt": "Configure one workflow for pushes to a chosen branch and pull-request validation.",
+  "objective": "Demonstrate the behavior of filter workflow events and capture verifiable evidence.",
+  "target_skills": [
+    "beginner",
+    "workflow YAML",
+    "validation",
+    "safe automation"
+  ],
+  "starter": {
+    "language": "yaml",
+    "code": "name: Scoped validation\non:\n  push:\n    branches: [main]\n    paths:\n      - \"src/**\"\n      - \"tests/**\"\n  pull_request:\n    branches: [main]\npermissions:\n  contents: read\njobs:\n  validate:\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo \"Run scoped validation here\"",
+    "execution_mode": "workflow-fragment"
+  },
+  "expected_output": "A reviewed workflow or design note satisfying: push:, branches:, pull_request:. Verify behavior on a disposable repository where execution is required; a static sketch is not proof of a live deployment.",
+  "public_tests": [
+    {
+      "name": "Required evidence check",
+      "required_strings": [
+        "push:",
+        "branches:",
+        "pull_request:"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Include or explain `push:`.",
+    "Include or explain `branches:`.",
+    "Include or explain `pull_request:`.",
+    "Explain one validation result or limitation.",
+    "Do not include a real secret or use production resources."
+  ],
+  "hints": [
+    "First identify the trigger, input, and expected result.",
+    "Start with read-only permissions and a disposable branch or test environment.",
+    "Compare your result with the linked lesson and official documentation; distinguish a configuration sketch from a live integration."
+  ],
+  "solution": {
+    "answer": null,
+    "explanation": "The detailed reference solution is stored in a protected repository-only JSON file; it is not intended for a learner-facing response."
+  },
+  "solution_file": "../solutions/004-filter-workflow-events-solution.json",
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "push:",
+      "branches:",
+      "pull_request:"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus human review for workflow semantics and security boundaries.",
+  "retry_policy": "Allow retries; incorrect submissions do not award XP. The platform awards exercise XP only after server-verified successful completion and applies idempotency per activity.",
+  "status": "draft",
+  "status_note": "Source mapping: Section C: Practical Exercises; original learning task adapted to CodeLeaf structure."
+}

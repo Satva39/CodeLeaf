@@ -1,0 +1,75 @@
+{
+  "id": "java-exercise-041",
+  "slug": "memory-leak-investigation",
+  "title": "Memory Leak Investigation",
+  "type": "coding",
+  "lesson_id": "java-lesson-252",
+  "module_id": "java-module-24",
+  "difficulty": "advanced",
+  "sequence": 41,
+  "prompt": "Build Memory Leak Investigation: create a small Java implementation that demonstrates heap analysis, diagnostics. Keep the design focused, validate input, and make normal and edge behavior observable. Use the acceptance criteria as the contract rather than matching a single hard-coded sample.",
+  "objective": "Demonstrate heap analysis, diagnostics in a maintainable Java program and explain the design choices.",
+  "target_skills": [
+    "heap analysis",
+    "diagnostics"
+  ],
+  "starter": {
+    "language": "java",
+    "filename": "Main.java",
+    "code": "public class Main {\n    public static void main(String[] args) throws Exception {\n        // TODO: Implement Memory Leak Investigation.\n        // Target skills: heap analysis, diagnostics.\n        // Add normal, boundary, and invalid-input tests before finishing.\n    }\n}",
+    "notes": "Compiling scaffold only; implement the requirements in the prompt. Do not submit the TODO scaffold unchanged."
+  },
+  "expected_output": "Retained buffers: 20, then an explanation that application references were cleared",
+  "public_tests": [
+    {
+      "name": "Required implementation evidence",
+      "required_strings": [
+        "RETAINED",
+        "byte[]"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "The solution compiles on the stated JDK or documents why a version-specific feature is required.",
+    "The implementation demonstrates heap analysis, diagnostics with clear names and focused methods.",
+    "Invalid or boundary input has defined behavior and does not silently corrupt the result.",
+    "At least three cases are tested and their expected outcomes are recorded.",
+    "The learner documents setup, run steps, and one limitation or trade-off."
+  ],
+  "hints": [
+    "Write down the input, output, and domain rule before choosing data structures.",
+    "Implement the smallest working path and add one boundary case.",
+    "Separate parsing, domain logic, and output so each part can be tested."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "RETAINED",
+      "byte[]"
+    ]
+  },
+  "grading_method": "The current CodeLeaf grader supports a server-side required-token smoke check for this exercise. Passing it is not proof of correctness; apply the acceptance rubric and run tests, including hidden tests, before treating the work as verified.",
+  "retry_policy": "Allow retries. Only a server-side correct grading result can complete the exercise; CodeLeaf applies XP once per activity and the course does not define XP.",
+  "solution_file": "../solutions/041-memory-leak-investigation-solution.json",
+  "status": "draft",
+  "status_note": "Draft challenge with task-specific protected reference implementation notes; required-token grading is a smoke check, not proof of behavioral correctness. Review and add execution-based tests before publication.",
+  "test_cases": [
+    {
+      "name": "normal case",
+      "purpose": "Verify the principal behavior with typical input or synthetic data.",
+      "expected_behavior": "Retained buffers: 20, then an explanation that application references were cleared"
+    },
+    {
+      "name": "boundary case",
+      "purpose": "Verify a documented boundary, empty collection, range limit, or concurrent completion condition.",
+      "expected_behavior": "Matches the declared contract and does not rely on undefined ordering."
+    },
+    {
+      "name": "invalid or failure case",
+      "purpose": "Verify malformed input, absent resources, invalid configuration, or an external failure.",
+      "expected_behavior": "Produces a clear error or safe fallback; no credentials or private data are disclosed."
+    }
+  ],
+  "run_mode": "server-runner",
+  "execution_notes": "Java requires a local JDK or a separately isolated Java runner. This package does not add a runner; never execute arbitrary learner code inside the FastAPI process or the public web container."
+}

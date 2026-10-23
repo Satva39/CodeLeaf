@@ -1,0 +1,217 @@
+{
+  "id": "mongodb-lesson-062",
+  "slug": "complex-filter-composition",
+  "title": "Complex Filter Composition",
+  "sequence": 62,
+  "module_id": "mongodb-module-06",
+  "module_slug": "mongodb-query-language-mql",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "mongodb-lesson-061"
+  ],
+  "previous_lesson_id": "mongodb-lesson-061",
+  "next_lesson_id": "mongodb-lesson-063",
+  "keywords": [
+    "complex",
+    "filter",
+    "composition",
+    "mongodb",
+    "database"
+  ],
+  "source_syllabus_number": 62,
+  "source_module_number": 6,
+  "subtopics": [
+    "Combining operators",
+    "Parenthesized logic expressed through query documents",
+    "Nested logical conditions",
+    "Translating business rules into filters"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and main trade-off of complex filter composition.",
+    "Apply complex filter composition to a small MongoDB data or operational scenario.",
+    "Verify the expected result, one edge case, and the relevant version/deployment assumption."
+  ],
+  "content": {
+    "intro": "Learn complex filter composition as part of MongoDB Query Language (MQL). The lesson preserves the PDF subtopics, connects them to a practical MongoDB pattern, and ends with a verification task.",
+    "why_it_matters": "Complex Filter Composition is a query or write-building block. Construct a narrow filter, predict the documents that should match, choose only the fields needed, and verify matched or modified counts before relying on a mutation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Complex Filter Composition",
+        "asset_path": "diagrams/lesson-062-complex-filter-composition.svg",
+        "alt_text": "Four-step learning diagram for Complex Filter Composition: Define target; Write filter/operation; Inspect effect; Verify edge case.",
+        "caption": "Visual guide to Complex Filter Composition: follow the concept, action, verification and application steps."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Complex Filter Composition is a query or write-building block. Construct a narrow filter, predict the documents that should match, choose only the fields needed, and verify matched or modified counts before relying on a mutation."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics to master",
+        "items": [
+          {
+            "title": "1. Combining operators",
+            "text": "Be able to explain or demonstrate combining operators in the context of complex filter composition, and document the relevant design or version assumption."
+          },
+          {
+            "title": "2. Parenthesized logic expressed through query documents",
+            "text": "Be able to explain or demonstrate parenthesized logic expressed through query documents in the context of complex filter composition, and document the relevant design or version assumption."
+          },
+          {
+            "title": "3. Nested logical conditions",
+            "text": "Be able to explain or demonstrate nested logical conditions in the context of complex filter composition, and document the relevant design or version assumption."
+          },
+          {
+            "title": "4. Translating business rules into filters",
+            "text": "Be able to explain or demonstrate translating business rules into filters in the context of complex filter composition, and document the relevant design or version assumption."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the behavior you want, identify the collection/document shape and access pattern involved, then select the smallest MongoDB operation that expresses the requirement. Run a read-only find with the same filter first and review the returned identifiers before mutating data."
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "execution_mode": "static-validation",
+        "code": "db.products.find({ price: { $gte: 10 }, active: true }).sort({ price: 1 }).limit(10);",
+        "expected_output": "The query filters active products by price and then returns the first ten in ascending price order.",
+        "run_instructions": "CodeLeaf displays this example as a reference and does not execute a MongoDB server or arbitrary driver code in the page. Run shell examples with mongosh, or driver examples in a separately configured Node.js/Python lab, against a disposable database. Verify installed server/driver versions and deployment feature availability first. Never place credentials in source files.",
+        "reset_steps": "Use a dedicated training database and synthetic fixtures. Remove only objects created by this lesson or recreate the disposable database after confirming the target; do not run destructive/reset commands against production."
+      },
+      {
+        "type": "callout",
+        "title": "Environment and safety note",
+        "text": "All examples are teaching references, not production-ready configuration. MongoDB Atlas-specific Search, Vector Search, monitoring, backup and automation features are marked as deployment-dependent. Server, driver, shell and managed-service capabilities differ; check the official documentation that matches your target."
+      }
+    ],
+    "task": "Try it yourself: Translate a business rule into an explicit MQL filter, predict which documents match, and test nested, array, type or boundary cases relevant to the operator. Submit your choice plus the expected result/evidence and one edge case.",
+    "task_acceptance_criteria": [
+      "Demonstrate the key idea in Complex Filter Composition.",
+      "Predict the result and state how you would verify it.",
+      "Name one boundary, risk or version/deployment assumption."
+    ],
+    "hints": [
+      "First, explain what “Complex Filter Composition” needs to accomplish in this scenario.",
+      "Write down the data shape, filter, expected output or operational evidence before running the example.",
+      "Test one normal case and one meaningful boundary/failure case; consult the matching official reference."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using a broad or incorrect filter",
+        "why": "A filter may match more documents than expected, especially when missing fields, arrays or implicit AND conditions are involved.",
+        "fix": "Run a read-only find with the same filter first and review the returned identifiers before mutating data."
+      },
+      {
+        "problem": "Assuming a static reference result proves the environment will behave identically.",
+        "why": "MongoDB server, shell, driver, managed service and permissions can affect the available behavior.",
+        "fix": "Record the target versions and privileges, run the smallest safe test, and keep expected and actual results side by side."
+      }
+    ],
+    "summary": [
+      "Complex Filter Composition is a query or write-building block. Construct a narrow filter, predict the documents that should match, choose only the fields needed, and verify matched or modified counts before relying on a mutation.",
+      "The supplied roadmap identifies these subtopics: Combining operators; Parenthesized logic expressed through query documents; Nested logical conditions; Translating business rules into filters.",
+      "Use a disposable practice environment, verify the result and keep operational assumptions explicit."
+    ],
+    "references": [
+      {
+        "title": "MongoDB Manual — Complete Documentation Index",
+        "url": "https://www.mongodb.com/docs/manual/contents/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "course-wide concepts",
+          "deployment and version navigation",
+          "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+        ]
+      },
+      {
+        "title": "MongoDB CRUD Operations",
+        "url": "https://www.mongodb.com/docs/manual/crud/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "insert",
+          "find",
+          "update",
+          "replace",
+          "delete",
+          "single-document atomicity"
+        ]
+      },
+      {
+        "title": "MongoDB Query Predicates",
+        "url": "https://www.mongodb.com/docs/manual/reference/operator/query/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "query operators",
+          "arrays",
+          "nested values",
+          "logical and comparison filters"
+        ]
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-062-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "MongoDB-specific examples are reference content. A separate isolated MongoDB server/driver runtime is required for execution; questions and solutions remain protected."
+  },
+  "exercise_files": [
+    "../exercises/062-complex-filter-composition-practice.json"
+  ],
+  "sources": [
+    {
+      "title": "MongoDB Manual — Complete Documentation Index",
+      "url": "https://www.mongodb.com/docs/manual/contents/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "course-wide concepts",
+        "deployment and version navigation",
+        "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+      ]
+    },
+    {
+      "title": "MongoDB CRUD Operations",
+      "url": "https://www.mongodb.com/docs/manual/crud/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "insert",
+        "find",
+        "update",
+        "replace",
+        "delete",
+        "single-document atomicity"
+      ]
+    },
+    {
+      "title": "MongoDB Query Predicates",
+      "url": "https://www.mongodb.com/docs/manual/reference/operator/query/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "query operators",
+        "arrays",
+        "nested values",
+        "logical and comparison filters"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson authored from the supplied MongoDB syllabus and original instructional material. Review examples against the target MongoDB release/deployment before publication."
+}

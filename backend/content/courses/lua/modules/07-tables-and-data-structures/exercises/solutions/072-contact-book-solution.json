@@ -1,0 +1,9 @@
+{
+  "id": "lua-exercise-solution-072",
+  "exercise_id": "lua-exercise-072",
+  "visibility": "protected_content_repository_only",
+  "answer": "local contacts = {}\nlocal function add(name, phone)\n    assert(type(name) == \"string\" and name ~= \"\", \"name required\")\n    contacts[name] = { name = name, phone = phone }\nend\nlocal function search(name) return contacts[name] end\nlocal function edit(name, phone)\n    local contact = contacts[name]\n    if not contact then return false end\n    contact.phone = phone; return true\nend\nlocal function delete(name) contacts[name] = nil end\nadd(\"Mina\", \"555-0100\")\nedit(\"Mina\", \"555-0101\")\nprint(search(\"Mina\").phone)\ndelete(\"Mina\")",
+  "explanation": "Reference implementation for Contact Book. Review it against the prompt, run under the supported runtime, and test normal plus boundary/error cases. This answer is repository-only and must never be returned by a public course API.",
+  "status": "draft",
+  "solution_code": "local contacts = {}\nlocal function add(name, phone)\n    assert(type(name) == \"string\" and name ~= \"\", \"name required\")\n    contacts[name] = { name = name, phone = phone }\nend\nlocal function search(name) return contacts[name] end\nlocal function edit(name, phone)\n    local contact = contacts[name]\n    if not contact then return false end\n    contact.phone = phone; return true\nend\nlocal function delete(name) contacts[name] = nil end\nadd(\"Mina\", \"555-0100\")\nedit(\"Mina\", \"555-0101\")\nprint(search(\"Mina\").phone)\ndelete(\"Mina\")"
+}

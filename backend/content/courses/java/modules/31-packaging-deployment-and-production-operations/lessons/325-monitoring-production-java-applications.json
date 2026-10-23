@@ -1,0 +1,210 @@
+{
+  "id": "java-lesson-325",
+  "slug": "monitoring-production-java-applications",
+  "title": "Monitoring Production Java Applications",
+  "sequence": 325,
+  "module_id": "java-module-31",
+  "module_slug": "packaging-deployment-and-production-operations",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "production",
+  "estimated_minutes": 13,
+  "prerequisites": [],
+  "previous_lesson_id": "java-lesson-324",
+  "next_lesson_id": "java-lesson-326",
+  "keywords": [
+    "monitoring",
+    "production",
+    "java",
+    "applications",
+    "health",
+    "checks",
+    "application",
+    "logs",
+    "metrics",
+    "resource",
+    "alerts",
+    "diagnostic"
+  ],
+  "source_syllabus_number": 325,
+  "subtopics": [
+    "Health checks",
+    "Application logs",
+    "JVM metrics",
+    "Resource monitoring",
+    "Alerts and diagnostic information"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of monitoring production java applications and identify when it is appropriate in a Java program.",
+    "Apply at least one of the lesson topics—health checks—in a small, readable example.",
+    "Identify one failure, compatibility, security, or resource-management concern and describe a safe response."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study monitoring production java applications with a short explanation, an original visual map, a Java example, and a check you can perform yourself. Focus on the relationship between the rule and the behavior rather than memorizing isolated syntax.",
+    "why_it_matters": "This concept matters because it helps you prepare an artifact and runtime for observable, recoverable production operation. In this lesson, focus on health checks and use a minimal example to check what the rule actually guarantees.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Monitoring Production Java Applications: concept map",
+        "asset_path": "diagrams/lesson-325.svg",
+        "alt_text": "Four-stage diagram for Monitoring Production Java Applications: Health checks; Application logs; JVM metrics; Resource monitoring.",
+        "caption": "Visual summary of Monitoring Production Java Applications; use it as a map while reading the explanation and testing the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Production readiness includes a reproducible artifact, explicit configuration, observability, graceful shutdown, compatibility checks, and a recovery plan—not just a successful local run. Apply that reasoning specifically to health checks and confirm the result with the example or a targeted test. The important habit is to make the assumptions explicit and use the code example as a small experiment."
+      },
+      {
+        "type": "paragraph",
+        "title": "How the pieces fit",
+        "text": "Connect health checks with application logs before choosing an implementation. The example is a small, observable case; extend it by changing one input and checking a boundary, invalid value, or compatibility limit where relevant."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Health checks",
+            "text": "Production readiness includes a reproducible artifact, explicit configuration, observability, graceful shutdown, compatibility checks, and a recovery plan—not just a successful local run. Apply that reasoning specifically to health checks and confirm the result with the example or a targeted test."
+          },
+          {
+            "title": "Application logs",
+            "text": "Use Path and Files for modern file operations, choose byte or character APIs based on the data, and close resources reliably. Parse external files defensively because their contents may be incomplete or malformed."
+          },
+          {
+            "title": "JVM metrics",
+            "text": "The JVM loads class files, verifies and executes bytecode, manages runtime memory, and may compile hot code for the host processor."
+          },
+          {
+            "title": "Resource monitoring",
+            "text": "Production readiness includes configuration, observability, reproducible artifacts, graceful shutdown, rollback planning, and compatibility checks—not just a successful local run."
+          },
+          {
+            "title": "Alerts and diagnostic information",
+            "text": "Use Path and Files for modern file operations, choose byte or character APIs based on the data, and close resources reliably. Parse external files defensively because their contents may be incomplete or malformed."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "java",
+        "code": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Java feature version: \" + Runtime.version().feature());\n        System.out.println(\"Process id: \" + ProcessHandle.current().pid());\n    }\n}\n",
+        "expected_output": "Prints runtime version and current process id.",
+        "run_instructions": "Keep runtime configuration outside source, document required environment values, and test graceful shutdown. For ordinary Java SE examples, use JDK 25, save a complete class as Main.java, and run `javac Main.java` followed by `java Main`. CodeLeaf does not execute Java in the browser; use a local JDK for these examples. Preview-only and configuration-file examples have their own version or filename notes.",
+        "reset_steps": "Restore the original example, remove any temporary output files it created, and rerun the baseline case. Do not leave credentials, generated private data, or large test files in the project directory."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Keep one clear hypothesis per experiment. Check the version, read the error message, test boundaries, and record what evidence supports your conclusion."
+      }
+    ],
+    "task": "Try it yourself: apply monitoring production java applications to a small project artifact. Record the trade-off, one verification step, and a rollback or recovery path where relevant.",
+    "task_acceptance_criteria": [
+      "The example demonstrates at least one listed topic from Monitoring Production Java Applications.",
+      "The learner states the expected result before running or inspecting the example.",
+      "At least one boundary, failure, compatibility, or maintainability consideration is documented where relevant."
+    ],
+    "hints": [
+      "Start by identifying the contract or rule behind health checks.",
+      "Reduce the example to the smallest input that makes the behavior visible.",
+      "Test one boundary or failure case and compare the result with the expected behavior."
+    ],
+    "expected_output": "Prints runtime version and current process id.",
+    "run_mode": "server-runner",
+    "execution_notes": "Java requires a JDK or a separate isolated server runner. No Java sandbox is bundled with this content; never execute learner code inside the FastAPI process or public production container.",
+    "knowledge_check_file": "exams/question-files/lesson-325-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Applying the rule from memory without checking its exact contract.",
+        "why": "Small differences in type, scope, API version, or input shape can change the result.",
+        "fix": "Inspect the relevant official API/language documentation and build a minimal reproducer."
+      },
+      {
+        "problem": "Testing only a single happy path.",
+        "why": "Boundary values and failures often reveal assumptions hidden by the simplest example.",
+        "fix": "Add an empty, boundary, or invalid case and state the expected behavior before running it."
+      },
+      {
+        "problem": "Changing several things between runs.",
+        "why": "It becomes difficult to identify the actual cause of a different result.",
+        "fix": "Change one factor at a time and keep a short record of observed behavior."
+      }
+    ],
+    "summary": [
+      "Monitoring Production Java Applications is best understood by connecting its contract to a small observable example.",
+      "Key syllabus points: Health checks, Application logs, JVM metrics.",
+      "Use official versioned documentation and tests to confirm assumptions before relying on behavior in a larger application."
+    ],
+    "references": [
+      {
+        "title": "Learn Java",
+        "url": "https://dev.java/learn/"
+      },
+      {
+        "title": "Java SE 25 API Specification",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html"
+      },
+      {
+        "title": "Java SE 25 Command-Line Tool Specifications",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/specs/man/index.html"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Learn Java",
+      "url": "https://dev.java/learn/",
+      "publisher": "Oracle / dev.java",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "getting started",
+        "language basics",
+        "object-oriented programming",
+        "generics",
+        "lambdas",
+        "collections",
+        "streams",
+        "modules",
+        "JVM tools",
+        "security"
+      ]
+    },
+    {
+      "title": "Java SE 25 API Specification",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "standard-library types and methods",
+        "API contracts",
+        "java.base",
+        "java.sql",
+        "java.net.http",
+        "java.nio.file",
+        "java.util.concurrent"
+      ]
+    },
+    {
+      "title": "Java SE 25 Command-Line Tool Specifications",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/specs/man/index.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "javac",
+        "java",
+        "javadoc",
+        "jdb",
+        "jcmd",
+        "jfr",
+        "jpackage",
+        "jlink"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Java curriculum outline and current official references; requires Java subject-matter review and local verification before publication."
+}

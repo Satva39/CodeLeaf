@@ -1,0 +1,52 @@
+{
+  "id": "sass-exercise-021",
+  "lesson_id": "sass-lesson-157",
+  "slug": "legacy-sass-migration",
+  "title": "Legacy Sass Migration",
+  "type": "code",
+  "difficulty": "advanced",
+  "sequence": 21,
+  "prompt": "Migrate a small @import-based project to the @use/@forward module system; compare CSS and resolve warnings in stages.",
+  "starter": {
+    "language": "scss",
+    "code": "@use \"sass:math\";\n$column: math.div(100%, 3);\n.grid-item { width: $column; }"
+  },
+  "public_tests": [
+    {
+      "name": "Expected behavior",
+      "mode": "manual_or_text_check",
+      "note": "This starter grader checks required terms only; compile and inspect the real CSS before considering the work correct."
+    }
+  ],
+  "acceptance_criteria": [
+    "Implements the requested Sass pattern for legacy sass migration.",
+    "Includes a repeatable command or source-to-output check.",
+    "Documents one edge case, assumption, accessibility concern, or maintenance trade-off."
+  ],
+  "hints": [
+    "Use Sass migrator on a clean branch and review each diff.",
+    "Compile a minimal source file with `npx sass input.scss output.css` and inspect the generated CSS.",
+    "Compare the source and expected output; refine the pattern before adding more components."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "@use",
+      "@forward",
+      "compile"
+    ]
+  },
+  "retry_policy": {
+    "allow_retries": true,
+    "guidance": "Use the feedback to improve the source and resubmit; the platform controls activity completion and its standard reward policy."
+  },
+  "solution_file": "solutions/021-legacy-sass-migration-solution.json",
+  "target_skills": [
+    "Legacy Sass Migration",
+    "Migrating @import to @use and @forward",
+    "SCSS output inspection"
+  ],
+  "expected_output": "The migrated stylesheet compiles with namespaced built-ins and the expected generated selector/value output.",
+  "status": "draft",
+  "status_note": "Draft exercise. The automatic grader is a lightweight submission gate; technical correctness requires compilation and/or human review."
+}

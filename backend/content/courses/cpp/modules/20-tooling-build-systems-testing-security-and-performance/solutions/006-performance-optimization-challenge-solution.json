@@ -1,0 +1,18 @@
+{
+  "id": "cpp-exercise-solution-044",
+  "exercise_id": "cpp-exercise-044",
+  "title": "Performance optimization challenge reference solution notes",
+  "language": "cpp",
+  "answer": "#include <iostream>\n#include <numeric>\n#include <vector>\nint main() {\n    std::vector<int> values; values.reserve(10000);\n    for (int i = 0; i < 10000; ++i) values.push_back(i);\n    const long long sum = std::accumulate(values.begin(), values.end(), 0LL);\n    std::cout << \"count=\" << values.size() << \", sum=\" << sum << '\\n';\n}\n",
+  "explanation": "count=10000, sum=49995000",
+  "manual_validation_checklist": [
+    "Compile locally with C++20 and -Wall -Wextra -Wpedantic (add the external library named in the solution when applicable).",
+    "Test normal inputs and at least one boundary/failure case named in the exercise prompt.",
+    "Check integer range, object lifetime, resource cleanup and error handling where relevant.",
+    "reserve can reduce vector reallocations during known growth. Use an equivalent benchmark and profile before claiming this optimization improves the real workload.",
+    "Keep this solution in repository-only protected content; do not include it in learner API responses."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only reference notes; replace with a reviewed implementation and test suite before publishing the exercise."
+}

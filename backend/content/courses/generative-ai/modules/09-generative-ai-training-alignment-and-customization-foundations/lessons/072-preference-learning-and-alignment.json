@@ -1,0 +1,165 @@
+{
+  "id": "genai-lesson-072",
+  "slug": "preference-learning-and-alignment",
+  "title": "Preference Learning and Alignment",
+  "sequence": 72,
+  "module_id": "genai-module-09",
+  "module_slug": "generative-ai-training-alignment-and-customization-foundations",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "advanced-specialization",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "genai-lesson-071"
+  ],
+  "previous_lesson_id": "genai-lesson-071",
+  "next_lesson_id": "genai-lesson-073",
+  "keywords": [
+    "Preference Learning and Alignment",
+    "Human feedback and preference datasets",
+    "Reward models",
+    "Reinforcement learning from human feedback",
+    "Direct preference optimization",
+    "Constitutional and rule-guided approaches",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 72,
+  "subtopics": [
+    "Human feedback and preference datasets",
+    "Reward models",
+    "Reinforcement learning from human feedback",
+    "Direct preference optimization",
+    "Constitutional and rule-guided approaches",
+    "Trade-offs in alignment methods"
+  ],
+  "learning_outcomes": [
+    "Explain human feedback and preference datasets and how it connects to preference learning and alignment.",
+    "Apply reward models in the example and predict the output before running it.",
+    "Test one realistic edge case for preference learning and alignment and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers preference learning and alignment through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Study how foundation models are trained and adapted, how human preferences influence alignment, and when prompting or retrieval is more appropriate than fine-tuning.",
+    "why_it_matters": "For human feedback and preference datasets, distinguish the training objective from the evaluation goal. Check provenance and data quality, keep validation/test examples isolated from training, record the baseline and configuration, and evaluate both improvement on the target task and possible regressions elsewhere.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Preference Learning and Alignment: concept map",
+        "asset_path": "diagrams/lessons/lesson-072-preference-learning-and-alignment.svg",
+        "alt_text": "Diagram for Preference Learning and Alignment: understand Human feedback and preference datasets, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Human feedback and preference datasets, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "For human feedback and preference datasets, distinguish the training objective from the evaluation goal. Check provenance and data quality, keep validation/test examples isolated from training, record the baseline and configuration, and evaluate both improvement on the target task and possible regressions elsewhere."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Human feedback and preference datasets",
+            "text": "For human feedback and preference datasets, distinguish the training objective from the evaluation goal. Check provenance and data quality, keep validation/test examples isolated from training, record the baseline and configuration, and evaluate both improvement on the target task and possible regressions elsewhere."
+          },
+          {
+            "title": "Reward models",
+            "text": "Use reward models as a lens for understanding preference learning and alignment. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Reinforcement learning from human feedback",
+            "text": "Use reinforcement learning from human feedback as a lens for understanding preference learning and alignment. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Direct preference optimization",
+            "text": "The purpose of direct preference optimization is to make model computations and uncertainty more precise. Track dimensions and assumptions, work through a small numerical example, and check whether the calculation and its interpretation match the task; mathematical familiarity helps explain behavior but does not by itself guarantee a good system."
+          },
+          {
+            "title": "Constitutional and rule-guided approaches",
+            "text": "Use constitutional and rule-guided approaches as a lens for understanding preference learning and alignment. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Trade-offs in alignment methods",
+            "text": "For trade-offs in alignment methods, distinguish the training objective from the evaluation goal. Check provenance and data quality, keep validation/test examples isolated from training, record the baseline and configuration, and evaluate both improvement on the target task and possible regressions elsewhere."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Preference Learning and Alignment\npreferences = [{\"prompt\": \"explain policy\", \"chosen\": \"supported answer with citation\", \"rejected\": \"uncited guess\"}]\nprint({\"pair_count\": len(preferences), \"chosen_is_distinct\": preferences[0][\"chosen\"] != preferences[0][\"rejected\"]})",
+        "expected_output": "{'pair_count': 1, 'chosen_is_distinct': True}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice human feedback and preference datasets within preference learning and alignment: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'pair_count': 1, 'chosen_is_distinct': True}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-072-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Preference Learning and Alignment is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://huggingface.co/learn/llm-course/en/chapter1/1",
+      "https://docs.pytorch.org/tutorials/beginner/basics/intro"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Hugging Face LLM Course",
+      "url": "https://huggingface.co/learn/llm-course/en/chapter1/1",
+      "publisher": "Hugging Face",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tokenization"
+      ]
+    },
+    {
+      "title": "Learn the Basics: PyTorch Tutorials",
+      "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro",
+      "publisher": "PyTorch",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tensors"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

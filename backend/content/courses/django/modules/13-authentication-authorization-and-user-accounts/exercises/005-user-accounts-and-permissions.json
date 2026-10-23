@@ -1,0 +1,56 @@
+{
+  "id": "django-exercise-005",
+  "slug": "user-accounts-and-permissions",
+  "title": "User Accounts and Permissions",
+  "type": "practical",
+  "lesson_id": "django-lesson-129",
+  "module_id": "django-module-13",
+  "difficulty": "intermediate",
+  "sequence": 5,
+  "prompt": "Implement registration, login, logout, password reset, and owner-only access to a private page. Test unauthorized requests.\n\nSubmission: a small reviewable artifact, relevant tests, expected outputs, one failure/boundary case, and version/environment notes. Use synthetic data. Django/Python server code is not executed by CodeLeaf browser preview; local or human review is required.",
+  "objective": "User Accounts and Permissions",
+  "target_skills": [
+    "Use Django authentication features instead of storing raw passwords.",
+    "Protect a private view and scope private objects to the current user.",
+    "Test anonymous and wrong-owner requests."
+  ],
+  "starter": {
+    "language": "text",
+    "content": "from django.contrib.auth.decorators import login_required\nfrom django.shortcuts import get_object_or_404\n\n@login_required\ndef private_task(request, task_id):\n    task = get_object_or_404(Task, pk=task_id, owner=request.user)\n    ...",
+    "code": "from django.contrib.auth.decorators import login_required\nfrom django.shortcuts import get_object_or_404\n\n@login_required\ndef private_task(request, task_id):\n    task = get_object_or_404(Task, pk=task_id, owner=request.user)\n    ..."
+  },
+  "expected_output": "Use Django’s built-in authentication views and tested forms rather than implementing password hashing yourself.",
+  "public_tests": [
+    {
+      "name": "Required-concept smoke check",
+      "required_strings": [
+        "login_required",
+        "request.user"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Anonymous access is redirected or denied according to policy.",
+    "A different user cannot access another user’s record.",
+    "Password reset does not disclose whether a private account exists.",
+    "State whether verification was local, static, or human-reviewed.",
+    "Do not claim a build/deployment or external integration was tested unless it was actually run."
+  ],
+  "hints": [
+    "Start with the built-in User model and auth views.",
+    "Use login_required for authentication and an owner filter for object scope.",
+    "Do not confuse login with authorization."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "login_required",
+      "request.user"
+    ]
+  },
+  "grading_method": "Required-string smoke check plus human review of technical correctness, tests, safe handling, expected result and reproducibility. This does not execute arbitrary Python/Django code.",
+  "retry_policy": "Retries are allowed after reviewing feedback; the platform backend owns its uniform XP/idempotency rules.",
+  "solution_file": "../solutions/005-user-accounts-and-permissions-solution.json",
+  "status": "draft",
+  "status_note": "Practical exercise from Section C of the supplied Django curriculum; content and grading need review before publication."
+}

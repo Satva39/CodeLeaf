@@ -1,0 +1,47 @@
+{
+  "id": "genai-exercise-solution-191",
+  "exercise_id": "genai-exercise-191",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": {
+    "objective": "Production load and reliability test",
+    "implementation_plan": [
+      "Implement a local mock provider that can return success, 429, timeout, 5xx, malformed output, and permanent auth failure.",
+      "Set a bounded concurrency and request rate; do not load-test a live third-party service.",
+      "Implement request deadlines, retryable-status allow-list, exponential backoff with jitter, and a circuit breaker/fallback where appropriate.",
+      "Track active work, queue lengths, successes/errors, retries, and latency; redact content and credentials from logs.",
+      "Assert all requests terminate within the limit and resources are released on cancellation."
+    ],
+    "reference_test_cases": [
+      {
+        "case": "Normal load",
+        "input": "Small bounded set of concurrent mock requests",
+        "expected": "All successful mock responses return within configured timeout."
+      },
+      {
+        "case": "Provider rate limit",
+        "input": "Mock 429 then recovery",
+        "expected": "Retry follows policy and stops at bounded attempt/deadline."
+      },
+      {
+        "case": "Permanent error",
+        "input": "Mock 401 or repeated 5xx",
+        "expected": "No endless retries; client returns controlled error/fallback."
+      }
+    ],
+    "recommended_metrics": [
+      "Success/error rate",
+      "Latency distribution",
+      "Retry/circuit-breaker count",
+      "Resource use and timeout behavior"
+    ],
+    "expected_artifacts": [
+      "Mock provider and load harness",
+      "Run configuration",
+      "Reliability report"
+    ],
+    "review_gate": "Do not publish until a reviewer inspects the actual submitted implementation/results and confirms the acceptance criteria; outline completion alone is not completion."
+  },
+  "explanation": "Reference solution outline for Production load and reliability test. It specifies a defensible implementation path, representative tests, and evaluation evidence. It is not a universally executable implementation: provider APIs, deployment environments, permissions, and available hardware vary. Use synthetic/test data, mock external services first, and keep credentials server-side. The exercise's current contains_all grader only checks required keywords and is a preliminary scaffold check, not a correctness/security evaluator; human review is required.",
+  "solution_quality_note": "Design outline only; no solution implementation was run in this build."
+}

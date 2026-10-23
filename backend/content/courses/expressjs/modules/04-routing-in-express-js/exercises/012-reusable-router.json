@@ -1,0 +1,53 @@
+{
+  "id": "expressjs-exercise-012",
+  "slug": "reusable-router",
+  "title": "Reusable Router",
+  "type": "practical",
+  "lesson_id": "expressjs-lesson-032",
+  "module_id": "expressjs-module-04",
+  "difficulty": "intermediate",
+  "sequence": 1,
+  "prompt": "Separate user and product endpoints into reusable routers. Submit a focused JavaScript/Express artifact and explain how you would run and verify it locally. Use synthetic data and test both a normal request and an invalid or failure case.",
+  "objective": "Reusable Router",
+  "target_skills": [
+    "express.Router()",
+    "modular organization"
+  ],
+  "starter": {
+    "language": "javascript",
+    "code": "// Reusable Router\n// TODO: implement the required behavior.\n// Lesson example reference:\nimport express from 'express';\nconst app = express();\nconst users = express.Router();\nusers.get('/:id', (req, res) => res.json({ id: req.params.id }));\napp.use('/api/users', users);\napp.listen(3000);"
+  },
+  "expected_output": "A reviewable implementation for Reusable Router with a documented expected response and a local test for one success case and one failure/edge case. CodeLeaf checks required strings only; it does not run submitted Node.js code in the browser.",
+  "public_tests": [
+    {
+      "name": "Required implementation markers (static smoke check)",
+      "required_strings": [
+        "express.Router",
+        "app.use"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Address the task: Separate user and product endpoints into reusable routers.",
+    "Use the Express.js 5 syntax and make the required status/response behavior explicit.",
+    "Document the local command and show a successful request plus one invalid or dependency-failure request.",
+    "Do not include credentials or production data; explain any remaining runtime or security review needed."
+  ],
+  "hints": [
+    "Start with the smallest route or middleware that demonstrates the requested concept, then add the validation/error path.",
+    "Check the relevant Express 5 guide and the expected status/response shape before changing the example.",
+    "Run the server locally and test both a valid request and an invalid/boundary request; capture the result rather than assuming it passed."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "express.Router",
+      "app.use"
+    ]
+  },
+  "grading_method": "Server-side case-sensitive required-string smoke check plus human/runtime review. It is not a Node.js sandbox and does not prove that submitted code executes correctly.",
+  "retry_policy": "Retries permitted after feedback; CodeLeaf records successful completion once. XP is controlled centrally by the backend; this content file defines no reward override.",
+  "solution_file": "../solutions/expressjs-exercise-012-reference.json",
+  "status": "draft",
+  "status_note": "Adapted from Section C of ExpressJS.pdf; static grading only checks markers, so manually run and review the implementation before publication."
+}

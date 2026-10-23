@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-17",
+  "exercise_id": "dsa-exercise-pdf-17",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\ndef evaluate_postfix(tokens):\n    stack = []\n    for token in tokens:\n        if token in {\"+\", \"-\", \"*\", \"/\"}:\n            if len(stack) < 2: raise ValueError(\"malformed expression\")\n            b, a = stack.pop(), stack.pop()\n            stack.append({\"+\": lambda: a+b, \"-\": lambda: a-b,\n                          \"*\": lambda: a*b, \"/\": lambda: a//b}[token]())\n        else: stack.append(int(token))\n    if len(stack) != 1: raise ValueError(\"malformed expression\")\n    return stack[0]\n\nassert evaluate_postfix([\"2\", \"3\", \"+\", \"4\", \"*\"]) == 20\n```",
+  "explanation": "Postfix evaluation uses a stack; pop the right operand before the left. Time O(n), auxiliary space O(n); integer division semantics are an explicit assumption.",
+  "tested_reference_code": "def evaluate_postfix(tokens):\n    stack = []\n    for token in tokens:\n        if token in {\"+\", \"-\", \"*\", \"/\"}:\n            if len(stack) < 2: raise ValueError(\"malformed expression\")\n            b, a = stack.pop(), stack.pop()\n            stack.append({\"+\": lambda: a+b, \"-\": lambda: a-b,\n                          \"*\": lambda: a*b, \"/\": lambda: a//b}[token]())\n        else: stack.append(int(token))\n    if len(stack) != 1: raise ValueError(\"malformed expression\")\n    return stack[0]\n\nassert evaluate_postfix([\"2\", \"3\", \"+\", \"4\", \"*\"]) == 20",
+  "language": "python"
+}

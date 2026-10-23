@@ -1,0 +1,175 @@
+{
+  "id": "genai-lesson-136",
+  "slug": "building-a-simple-agent",
+  "title": "Building a Simple Agent",
+  "sequence": 136,
+  "module_id": "genai-module-16",
+  "module_slug": "ai-agents-and-agentic-systems",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced-specialization",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "genai-lesson-135"
+  ],
+  "previous_lesson_id": "genai-lesson-135",
+  "next_lesson_id": "genai-lesson-137",
+  "keywords": [
+    "Building a Simple Agent",
+    "Defining a narrow task",
+    "Creating tool interfaces",
+    "Interpreting tool-call requests",
+    "Executing actions outside the model",
+    "Feeding results back into the workflow",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 136,
+  "subtopics": [
+    "Defining a narrow task",
+    "Creating tool interfaces",
+    "Interpreting tool-call requests",
+    "Executing actions outside the model",
+    "Feeding results back into the workflow",
+    "Testing errors and loop behavior"
+  ],
+  "learning_outcomes": [
+    "Explain defining a narrow task and how it connects to building a simple agent.",
+    "Apply creating tool interfaces in the example and predict the output before running it.",
+    "Test one realistic edge case for building a simple agent and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers building a simple agent through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Treat agentic systems as bounded loops over plans, state, tools, observations, and stopping conditions. Prefer deterministic workflows when they meet the need more reliably.",
+    "why_it_matters": "Use defining a narrow task as a lens for understanding building a simple agent. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Building a Simple Agent: concept map",
+        "asset_path": "diagrams/lessons/lesson-136-building-a-simple-agent.svg",
+        "alt_text": "Diagram for Building a Simple Agent: understand Defining a narrow task, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Defining a narrow task, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Use defining a narrow task as a lens for understanding building a simple agent. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Defining a narrow task",
+            "text": "Use defining a narrow task as a lens for understanding building a simple agent. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Creating tool interfaces",
+            "text": "Creating tool interfaces describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+          },
+          {
+            "title": "Interpreting tool-call requests",
+            "text": "Interpreting tool-call requests belongs to the application integration boundary. Validate inputs before sending them, keep credentials on the server, handle non-success responses and cancellation, and log request metadata without storing secrets or unnecessary personal content. Provider-specific payloads must be checked against the selected API's current documentation."
+          },
+          {
+            "title": "Executing actions outside the model",
+            "text": "Executing actions outside the model describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+          },
+          {
+            "title": "Feeding results back into the workflow",
+            "text": "Feeding results back into the workflow describes one part of a controlled action loop. The model may propose a step, but the application should independently validate the arguments, check the caller's permissions, enforce step/time limits, and record the actual tool result before deciding what happens next."
+          },
+          {
+            "title": "Testing errors and loop behavior",
+            "text": "Use testing errors and loop behavior as a lens for understanding building a simple agent. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Building a Simple Agent\ngoal = \"look up a synthetic order status\"\nallowed_tools = {\"lookup_demo_order\"}\nproposal = \"lookup_demo_order\"\nprint({\"goal\": goal, \"proposal_allowed\": proposal in allowed_tools, \"steps_limit\": 3})",
+        "expected_output": "{'goal': 'look up a synthetic order status', 'proposal_allowed': True, 'steps_limit': 3}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice defining a narrow task within building a simple agent: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'goal': 'look up a synthetic order status', 'proposal_allowed': True, 'steps_limit': 3}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-136-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Building a Simple Agent is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://huggingface.co/learn/agents-course/en/unit0/introduction",
+      "https://developers.openai.com/api/docs/guides/function-calling",
+      "https://modelcontextprotocol.io/specification/2026-07-28"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Hugging Face AI Agents Course",
+      "url": "https://huggingface.co/learn/agents-course/en/unit0/introduction",
+      "publisher": "Hugging Face",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "agent fundamentals"
+      ]
+    },
+    {
+      "title": "Function calling",
+      "url": "https://developers.openai.com/api/docs/guides/function-calling",
+      "publisher": "OpenAI API documentation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tool calling"
+      ]
+    },
+    {
+      "title": "Model Context Protocol specification",
+      "url": "https://modelcontextprotocol.io/specification/2026-07-28",
+      "publisher": "Model Context Protocol",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "external tools and resources"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

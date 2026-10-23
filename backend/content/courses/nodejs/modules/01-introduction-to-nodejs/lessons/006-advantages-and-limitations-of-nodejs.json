@@ -1,0 +1,142 @@
+{
+  "id": "nodejs-lesson-006",
+  "slug": "advantages-and-limitations-of-nodejs",
+  "title": "Advantages and Limitations of Node.js",
+  "sequence": 6,
+  "module_id": "nodejs-module-01",
+  "module_slug": "introduction-to-nodejs",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "nodejs-lesson-005"
+  ],
+  "previous_lesson_id": "nodejs-lesson-005",
+  "next_lesson_id": "nodejs-lesson-007",
+  "keywords": [
+    "Advantages and Limitations of Node.js",
+    "Strengths of event-driven I/O",
+    "CPU-intensive workload limitations",
+    "Dependency and ecosystem risks",
+    "Appropriate and inappropriate workloads",
+    "Node.js",
+    "JavaScript runtime"
+  ],
+  "source_syllabus_number": 6,
+  "subtopics": [
+    "Strengths of event-driven I/O",
+    "CPU-intensive workload limitations",
+    "Dependency and ecosystem risks",
+    "Appropriate and inappropriate workloads"
+  ],
+  "learning_outcomes": [
+    "Describe Strengths of event-driven I/O and explain how it relates to Advantages and Limitations of Node.js.",
+    "Demonstrate CPU-intensive workload limitations in a small Node.js example and predict the observable result.",
+    "Test a failure, boundary, lifecycle, or version-compatibility case involving Dependency and ecosystem risks."
+  ],
+  "content": {
+    "intro": "Advantages and Limitations of Node.js is part of introduction to nodejs. This lesson connects Strengths of event-driven I/O, CPU-intensive workload limitations, Dependency and ecosystem risks to a concrete Node.js example. Focus on the behavior you can observe, the assumptions the API makes, and one failure or boundary case.",
+    "why_it_matters": "Event-driven code separates the producer of a change from listeners that react to it. Test listener order, one-time listeners, duplicate subscriptions, and error-event behavior.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Advantages and Limitations of Node.js: concept map",
+        "asset_path": "diagrams/lessons/lesson-006-advantages-and-limitations-of-nodejs.svg",
+        "alt_text": "Concept map for lesson 6: Advantages and Limitations of Node.js. It shows representative syllabus concepts in a Concept → Example → Verification sequence.",
+        "caption": "Read the three labeled cards from left to right; the lesson steps connect the concept to a practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Event-driven code separates the producer of a change from listeners that react to it. Define stable event names and payload contracts, handle error events, and remove listeners when their work ends."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Strengths of event-driven I/O",
+            "text": "For Strengths of event-driven I/O, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "CPU-intensive workload limitations",
+            "text": "For CPU-intensive workload limitations, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Dependency and ecosystem risks",
+            "text": "For Dependency and ecosystem risks, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          },
+          {
+            "title": "Appropriate and inappropriate workloads",
+            "text": "For Appropriate and inappropriate workloads, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "import { EventEmitter } from 'node:events';\nconst events = new EventEmitter();\nevents.on('saved', (id) => console.log(`saved:${id}`));\nevents.emit('saved', 'task-7');",
+        "expected_output": "saved:task-7",
+        "run_instructions": "Inspect this JavaScript in a local Node.js project. It is a static-validation teaching example: CodeLeaf does not run this arbitrary example in the API process. If it needs a package, file, server, database, or external service, provision that dependency in a separate local project and follow its official setup instructions. Run with `node example.mjs` when the example is self-contained, or adapt the required imports/inputs first.",
+        "reset_steps": "Restore the starting snippet and inputs. Repeat with one different valid value and one invalid, missing, empty, or failure input appropriate to the example.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Start with the code shown above. Predict the result before running it, then verify it against: saved:task-7 Change one input or simulate one failure and describe how the behavior should change. Test listener order, one-time listeners, duplicate subscriptions, and error-event behavior."
+      },
+      {
+        "type": "callout",
+        "title": "Runtime and safety note",
+        "text": "Teaching baseline: use a supported Node.js LTS release (Node.js 24 LTS as checked on 2026-10-13). The official releases page lists Node.js 26 as Current and Node.js 24/22 as LTS. Some advanced APIs, flags, permission behavior, embedded SQLite capabilities, module-loader hooks, and TypeScript integration are version-sensitive; verify the exact installed runtime. The Node.js 22 runtime available in the build-check environment is used only for syntax checks. This example is for learning and static validation, not for executing untrusted learner code inside CodeLeaf."
+      }
+    ],
+    "task": "Create or inspect a small Node.js example for Advantages and Limitations of Node.js. Include at least one listed subtopic, document the expected result, and verify a normal case plus a boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates a named lesson concept, rather than only mentioning the title.",
+      "Expected output or observable behavior is documented and reproducible.",
+      "At least one invalid, empty, timeout, resource, or failure case is handled or explained.",
+      "The solution does not put secrets in source code and does not execute untrusted code inside the production API process."
+    ],
+    "hints": [
+      "Start with Strengths of event-driven I/O; identify the input, operation, and observable result.",
+      "Run the smallest relevant example in the selected Node.js release before adding frameworks or external services.",
+      "Test one failure or boundary case for CPU-intensive workload limitations, then explain why the outcome is expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming EventEmitter listeners are asynchronous or leaving listeners attached for longer than intended.",
+        "why": "The code may pass a simple demonstration yet fail with real inputs, resource limits, timing, or runtime differences.",
+        "fix": "Remember emission is synchronous by default and manage listener lifetime explicitly."
+      },
+      {
+        "problem": "Copying a snippet without checking its runtime, dependencies, input assumptions, or cleanup behavior.",
+        "why": "Node.js APIs and surrounding ecosystem tools have explicit version, trust, and resource boundaries.",
+        "fix": "State the environment and dependency assumptions, then rerun the example from a clean starting state."
+      }
+    ],
+    "summary": [
+      "For Strengths of event-driven I/O, identify the relevant Node.js API or runtime behavior, trace its inputs and observable result, then test one invalid input, failure, lifecycle edge, or version-dependent assumption. Avoid inferring correctness from a happy-path run alone.",
+      "This lesson covers: Strengths of event-driven I/O, CPU-intensive workload limitations, Dependency and ecosystem risks, Appropriate and inappropriate workloads.",
+      "Verify both normal and failure behavior, and document runtime, dependency, and resource assumptions."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-006-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Node.js API Reference",
+      "url": "https://nodejs.org/api/",
+      "publisher": "Node.js project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "core modules and runtime APIs; confirm version-specific stability labels"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Source-derived syllabus; educational draft requiring technical/instructional review before publication."
+}

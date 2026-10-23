@@ -1,0 +1,155 @@
+{
+  "id": "kotlin-lesson-229",
+  "slug": "persistence-libraries-and-repositories",
+  "title": "Persistence Libraries and Repositories",
+  "sequence": 229,
+  "module_id": "kotlin-module-22",
+  "module_slug": "serialization-networking-and-application-integration",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "kotlin-lesson-228"
+  ],
+  "previous_lesson_id": "kotlin-lesson-228",
+  "next_lesson_id": "kotlin-lesson-230",
+  "keywords": [
+    "persistence-libraries-and-repo",
+    "repository-abstractions",
+    "data-access-and-domain-models",
+    "testing-persistence-code"
+  ],
+  "source_syllabus_number": 229,
+  "subtopics": [
+    "Repository Abstractions",
+    "Data Access and Domain Models",
+    "Testing Persistence Code"
+  ],
+  "learning_outcomes": [
+    "Explain the central rule or purpose of persistence libraries and repositories using at least one correct term from the lesson.",
+    "Interpret or adapt a small Kotlin example that demonstrates persistence libraries and repositories.",
+    "Identify one relevant edge case, debugging step, or version/platform constraint."
+  ],
+  "content": {
+    "intro": "In this lesson, you will learn **Persistence Libraries and Repositories** as part of **Serialization, Networking, and Application Integration**. Integration code must validate external data, handle timeouts and failure states, keep credentials outside source control, and test boundary behavior. Use the subtopics—Repository Abstractions, Data Access and Domain Models, Testing Persistence Code—as a checklist: predict what the example will do, then verify it in a project configured for the target platform.",
+    "why_it_matters": "Professional applications need repeatable tests, clear APIs, dependable dependencies, security checks, and observable failures. Apply this concept in small steps before integrating it into a larger project.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Concept visual",
+        "asset_path": "diagrams/lesson-229-persistence-libraries-and-repositories.svg",
+        "alt_text": "Concept diagram for lesson 229, Persistence Libraries and Repositories: connects Repository Abstractions with Data Access and Domain Models and a practice/check step.",
+        "caption": "Lesson 229: Persistence Libraries and Repositories. Use this concept map to connect the syllabus subtopics to the small example and test task."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Integration code must validate external data, handle timeouts and failure states, keep credentials outside source control, and test boundary behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with repository abstractions. Then compare it with data access and domain models. Identify the input, state, dependency, or branch that determines the result. The snippet is a static reference for CodeLeaf and is not executed in the lesson page."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the syllabus",
+        "items": [
+          {
+            "title": "Repository Abstractions",
+            "text": "Repository Abstractions is part of reproducible project configuration. Declare the dependency or plugin where it belongs, preserve a compatible version set, and use the Gradle Wrapper for repeatable builds."
+          },
+          {
+            "title": "Data Access and Domain Models",
+            "text": "Data Access and Domain Models should support a clear object invariant: make valid states easy to represent, restrict mutation to the intended API, and keep initialization and dependencies explicit."
+          },
+          {
+            "title": "Testing Persistence Code",
+            "text": "Testing Persistence Code helps make behavior observable and repeatable. Define the expected result, include a boundary or failure case, and preserve enough diagnostic information to locate the cause without leaking sensitive data."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "kotlin",
+        "execution_mode": "static-validation",
+        "code": "data class ApiResult<T>(val value: T?, val error: String? = null)\n\nfun main() = println(ApiResult(value = \"ready\"))",
+        "expected_output": "ApiResult(value=ready, error=null)",
+        "run_instructions": "Run in the project that declares the necessary JVM, coroutine, networking, database, or serialization dependencies. Never commit real secrets.",
+        "reset_steps": "Restore the documented starting values, rerun the smallest test, and compare the result with the expected output. If behavior differs, check the compiler/plugin/runtime versions and the active target before changing more than one thing."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake to avoid",
+        "text": "Persistence Libraries and Repositories removes the need to test boundary conditions or verify the chosen runtime/library version."
+      },
+      {
+        "type": "paragraph",
+        "title": "Troubleshooting and reset",
+        "text": "If the example fails, first confirm which runtime/project type the snippet requires. Read the first useful compiler or runtime message, check imports and declared dependencies, reduce the example to a minimal case, and rerun. For target-specific code, use the target toolchain rather than assuming a console or browser runner can execute it."
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          {
+            "title": "Explain",
+            "text": "Describe the main rule of persistence libraries and repositories in your own words."
+          },
+          {
+            "title": "Apply",
+            "text": "Change one input or condition and predict the result before running it."
+          },
+          {
+            "title": "Verify",
+            "text": "Check one edge case and the official reference for the selected Kotlin/runtime version."
+          }
+        ]
+      }
+    ],
+    "task": "Try it yourself: create a small variation that demonstrates persistence libraries and repositories. Write down your predicted result first, run it in the correct local project, then explain one boundary case involving repository abstractions.",
+    "task_acceptance_criteria": [
+      "Explain persistence libraries and repositories without copying the lesson wording.",
+      "Demonstrate the concept with a small code/configuration change and state the expected result.",
+      "Test one boundary case or explain a relevant platform/version limitation."
+    ],
+    "hints": [
+      "Begin with the first syllabus subtopic: Repository Abstractions. What input or state does it act on?",
+      "Change only one value, branch, declaration, or dependency at a time. Predict what should happen before running the code.",
+      "Compare your observed result with the expected output and the official reference; verify that you are using the required project type and dependency set."
+    ],
+    "expected_output": "ApiResult(value=ready, error=null)",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-229-questions.json"
+  },
+  "exercise_files": [
+    "../exercises/029-implement-a-repository-with-a-persistent-data-source.json"
+  ],
+  "sources": [
+    {
+      "title": "Kotlin Documentation",
+      "url": "https://kotlinlang.org/docs/home.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Persistence Libraries and Repositories",
+        "Repository Abstractions",
+        "Data Access and Domain Models"
+      ]
+    },
+    {
+      "title": "Kotlin Language Features and Proposals",
+      "url": "https://kotlinlang.org/docs/kotlin-language-features-and-proposals.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "language feature stability",
+        "compiler version compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson derived from the numbered syllabus entry 229 in Kotlin.pdf. Review example compatibility and question alignment before publishing."
+}

@@ -1,0 +1,266 @@
+{
+  "id": "go-lesson-170",
+  "slug": "goroutines",
+  "title": "Goroutines",
+  "sequence": 170,
+  "module_id": "go-module-18",
+  "module_slug": "concurrency-and-parallelism",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "go-lesson-169"
+  ],
+  "previous_lesson_id": "go-lesson-169",
+  "next_lesson_id": "go-lesson-171",
+  "keywords": [
+    "goroutines",
+    "creating goroutines",
+    "goroutine execution",
+    "goroutine lifecycle",
+    "anonymous functions in goroutines",
+    "avoiding uncontrolled goroutine creation",
+    "Go",
+    "Golang"
+  ],
+  "source_syllabus_number": 170,
+  "subtopics": [
+    "Creating goroutines",
+    "Goroutine execution",
+    "Goroutine lifecycle",
+    "Anonymous functions in goroutines",
+    "Avoiding uncontrolled goroutine creation"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and behavior of goroutines.",
+    "Apply at least one lesson concept—creating goroutines—in a small Go example or workflow.",
+    "Predict a representative result, then test a boundary case and explain any difference."
+  ],
+  "exercise_files": [],
+  "content": {
+    "intro": "Goroutines concerns safe coordination among goroutines. Identify the shared state, decide which goroutine owns each value, and choose channels or synchronization primitives intentionally. Bound concurrent work, propagate cancellation with context where appropriate, and test exercised paths with the race detector.",
+    "why_it_matters": "Concurrent code can fail only under particular schedules; explicit ownership, bounded work, cancellation, and race-aware tests improve reliability.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 18 overview: Concurrency and Parallelism",
+        "asset_path": "diagrams/module-18-overview.svg",
+        "alt_text": "Overview of Module 18, Concurrency and Parallelism; this lesson is lesson 170 in the ordered module sequence.",
+        "caption": "Use the module map to place “Goroutines” within the larger sequence, then return to the individual code and practice below."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Goroutines concerns safe coordination among goroutines. Identify the shared state, decide which goroutine owns each value, and choose channels or synchronization primitives intentionally. Bound concurrent work, propagate cancellation with context where appropriate, and test exercised paths with the race detector."
+      },
+      {
+        "type": "list",
+        "title": "Topics covered in this lesson",
+        "items": [
+          {
+            "title": "Creating goroutines",
+            "text": "Be able to explain creating goroutines, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Goroutine execution",
+            "text": "Be able to explain goroutine execution, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Goroutine lifecycle",
+            "text": "Be able to explain goroutine lifecycle, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Anonymous functions in goroutines",
+            "text": "Be able to explain anonymous functions in goroutines, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Avoiding uncontrolled goroutine creation",
+            "text": "Be able to explain avoiding uncontrolled goroutine creation, identify the inputs or program state it affects, and name one boundary case worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Goroutines",
+        "language": "go",
+        "code": "package main\n\nimport \"fmt\"\n\nfunc double(n int) int { return n * 2 }\nfunc main() { fmt.Println(double(21)) }\n",
+        "expected_output": "42",
+        "run_mode": "server-runner",
+        "run_instructions": "Save as main.go and run `go run main.go`. Keep functions focused and make error results explicit where needed."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through the example",
+        "text": "First, identify the input or initial state in the example for goroutines. Next, trace the operation or contract that matters, and predict the result before running it. If the example depends on a version-specific feature, a driver, or an external service, follow the stated prerequisites rather than assuming it works in a browser preview."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to one subtopic—Creating goroutines—and add a second case that could fail or behave differently. Write down the expected result before testing."
+      }
+    ],
+    "task": "Create a small example connected to “Goroutines”. Use Creating goroutines as the starting point, predict the output, then add one invalid, empty, or boundary case and document its result.",
+    "task_acceptance_criteria": [
+      "The example demonstrates creating goroutines or a closely related concept.",
+      "Inputs, relevant state changes, and expected output are clear.",
+      "At least one boundary case is deliberately tested or documented.",
+      "Errors are handled honestly and no success state is reported when the operation fails."
+    ],
+    "hints": [
+      "Start from the simplest example related to creating goroutines.",
+      "Predict the result manually and annotate the value that changes at each step.",
+      "Run `gofmt` and the appropriate local `go run`, `go test`, `go vet`, or inspection command when prerequisites are available."
+    ],
+    "expected_output": "42",
+    "run_mode": "server-runner",
+    "knowledge_check_file": "exams/question-files/lesson-170-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the happy-path output proves all inputs are safe.",
+        "why": "Empty, malformed, boundary, or concurrent cases may follow different paths.",
+        "fix": "Add focused tests for a normal input and at least one relevant edge case."
+      },
+      {
+        "problem": "Ignoring returned errors or external-system status.",
+        "why": "Go APIs commonly report expected failures as explicit error values.",
+        "fix": "Check errors close to the operation, add useful context when propagating, and clean up resources."
+      },
+      {
+        "problem": "Using an API or syntax without checking the selected Go version.",
+        "why": "Language and standard-library capabilities can change between releases.",
+        "fix": "Record `go version`, inspect the `go` directive, and read official release notes for version-specific topics."
+      }
+    ],
+    "summary": [
+      "Goroutines provides a reusable rule or workflow for Go programs.",
+      "The subtopics to revisit are: Creating goroutines; Goroutine execution; Goroutine lifecycle; Anonymous functions in goroutines; Avoiding uncontrolled goroutine creation.",
+      "Prefer a small reproducible example, explicit errors, appropriate tests, and version-matched official documentation."
+    ],
+    "references": [
+      {
+        "title": "Go Documentation",
+        "url": "https://go.dev/doc/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "tutorials",
+          "language concepts",
+          "tooling",
+          "application development"
+        ]
+      },
+      {
+        "title": "The Go Programming Language Specification",
+        "url": "https://go.dev/ref/spec",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "syntax",
+          "types",
+          "control flow",
+          "interfaces"
+        ]
+      },
+      {
+        "title": "The Go Memory Model",
+        "url": "https://go.dev/ref/mem",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "happens-before",
+          "synchronization",
+          "data races"
+        ]
+      },
+      {
+        "title": "Go Race Detector Article",
+        "url": "https://go.dev/doc/articles/race_detector",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "race detection",
+          "concurrent tests",
+          "runtime race reports"
+        ]
+      },
+      {
+        "title": "net/http Package",
+        "url": "https://pkg.go.dev/net/http",
+        "publisher": "Go standard library",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "HTTP clients",
+          "servers",
+          "handlers",
+          "timeouts"
+        ]
+      }
+    ],
+    "accessibility_note": "The diagram includes descriptive alt text and a text caption. Code examples are also described in prose; do not rely on color alone to understand a sequence.",
+    "execution_note": "Save as main.go and run `go run main.go`. Keep functions focused and make error results explicit where needed. Examples that need a database driver, external service, isolated execution environment, or version-specific feature are labeled as static examples and should not be treated as already executed."
+  },
+  "sources": [
+    {
+      "title": "Go Documentation",
+      "url": "https://go.dev/doc/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tutorials",
+        "language concepts",
+        "tooling",
+        "application development"
+      ]
+    },
+    {
+      "title": "The Go Programming Language Specification",
+      "url": "https://go.dev/ref/spec",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "syntax",
+        "types",
+        "control flow",
+        "interfaces"
+      ]
+    },
+    {
+      "title": "The Go Memory Model",
+      "url": "https://go.dev/ref/mem",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "happens-before",
+        "synchronization",
+        "data races"
+      ]
+    },
+    {
+      "title": "Go Race Detector Article",
+      "url": "https://go.dev/doc/articles/race_detector",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "race detection",
+        "concurrent tests",
+        "runtime race reports"
+      ]
+    },
+    {
+      "title": "net/http Package",
+      "url": "https://pkg.go.dev/net/http",
+      "publisher": "Go standard library",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "HTTP clients",
+        "servers",
+        "handlers",
+        "timeouts"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied Go.pdf syllabus mapping. Human review and local runtime verification are required before publication."
+}

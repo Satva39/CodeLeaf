@@ -1,0 +1,187 @@
+{
+  "id": "pandas-lesson-136",
+  "slug": "file-i-o-errors-and-troubleshooting",
+  "title": "File I/O Errors and Troubleshooting",
+  "sequence": 136,
+  "module_id": "pandas-module-16",
+  "module_slug": "reading-and-writing-data",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "analysis",
+  "estimated_minutes": 12,
+  "prerequisites": [],
+  "previous_lesson_id": "pandas-lesson-135",
+  "next_lesson_id": "pandas-lesson-137",
+  "keywords": [
+    "file i/o errors and troubleshooting",
+    "file-not-found errors",
+    "encoding failures",
+    "invalid file formats",
+    "unexpected delimiters and headers",
+    "date and data-type inference problems",
+    "missing optional dependencies",
+    "pandas",
+    "data analysis"
+  ],
+  "source_syllabus_number": 136,
+  "subtopics": [
+    "File-not-found errors",
+    "Encoding failures",
+    "Invalid file formats",
+    "Unexpected delimiters and headers",
+    "Date and data-type inference problems",
+    "Missing optional dependencies"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of file i/o errors and troubleshooting and identify when the concept is useful.",
+    "Apply at least one method or decision from file i/o errors and troubleshooting to a small synthetic dataset.",
+    "Verify the result by checking relevant values, labels, row counts, dtypes, or assumptions."
+  ],
+  "content": {
+    "intro": "Learn file i/o errors and troubleshooting through a focused example and a checkable task. This lesson keeps the source syllabus subtopics visible and uses synthetic data so you can reproduce the behavior safely.",
+    "why_it_matters": "Import/export choices affect types, memory, missing-value interpretation, and whether a result can be reproduced.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: File I/O Errors and Troubleshooting",
+        "asset_path": "diagrams/lesson-136-file-i-o-errors-and-troubleshooting.svg",
+        "alt_text": "Diagram for File I/O Errors and Troubleshooting: input or question → Pandas concept → result validation.",
+        "caption": "Visual guide to File I/O Errors and Troubleshooting; the next blocks explain the decisions and example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Import/export choices affect types, memory, missing-value interpretation, and whether a result can be reproduced."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "This lesson focuses on **File I/O Errors and Troubleshooting**. Work through the listed subtopics (File-not-found errors, Encoding failures, Invalid file formats, Unexpected delimiters and headers) as decisions in one small data workflow: identify the input and its labels, choose the relevant Pandas operation, then inspect the output shape, values, and types. Do not assume the result is correct solely because the code ran."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "File-not-found errors",
+            "text": "File-not-found errors is one part of file i/o errors and troubleshooting. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Encoding failures",
+            "text": "Encoding failures is one part of file i/o errors and troubleshooting. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Invalid file formats",
+            "text": "Invalid file formats is one part of file i/o errors and troubleshooting. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Unexpected delimiters and headers",
+            "text": "Unexpected delimiters and headers is one part of file i/o errors and troubleshooting. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Date and data-type inference problems",
+            "text": "Date and data-type inference problems is one part of file i/o errors and troubleshooting. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Missing optional dependencies",
+            "text": "Missing optional dependencies is one part of file i/o errors and troubleshooting. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "from pathlib import Path\n\npath = Path(\"missing-input.csv\")\nif not path.exists():\n    print(\"Input file not found; check the path and working directory.\")",
+        "expected_output": "Input file not found; check the path and working directory. (unless the sample path exists in your environment)",
+        "execution_mode": "static-validation",
+        "run_instructions": "Run in a local Python environment after supplying the required workbook, file, optional engine, or database connection. The commented or outlined operations are intentionally not run against external resources in this course package.",
+        "reset_steps": "The example uses synthetic, in-memory values and does not modify project files. Restart the Python process or recreate the DataFrame to reset its state."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to interpret the result",
+        "text": "Compare the result with the task’s intended meaning. Check whether row order, labels, missing values, inferred dtypes, and duplicate keys should be preserved or changed. When the result depends on a library version or optional dependency, test against the environment you plan to use."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          {
+            "title": "Change one input",
+            "text": "Use a tiny synthetic dataset to practise file i/o errors and troubleshooting and change one value, label, or edge case."
+          },
+          {
+            "title": "Verify the invariant",
+            "text": "State the expected row count, key uniqueness, output dtype, or numerical result before running your solution."
+          },
+          {
+            "title": "Explain a limitation",
+            "text": "Write one sentence identifying an assumption, a missing-data rule, a version concern, or a case where this operation is not suitable."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Common mistakes and fixes",
+        "text": "Avoid assuming inferred types are always correct, treating every repeated record as an error, or overlooking alignment by labels. Check the actual API documentation for the target version and assert the properties that matter to the task."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-136-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Input/output tools",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html",
+      "publisher": "pandas project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "File I/O Errors and Troubleshooting"
+      ]
+    },
+    {
+      "title": "Pandas API Reference",
+      "url": "https://pandas.pydata.org/docs/reference/index.html",
+      "publisher": "pandas project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "File I/O Errors and Troubleshooting"
+      ]
+    }
+  ],
+  "run_mode": "static-validation",
+  "task": "Practise file i/o errors and troubleshooting with a small synthetic DataFrame. Keep the input, transformation, and expected result explicit.",
+  "task_acceptance_criteria": [
+    "The code uses an appropriate Pandas operation for the stated goal.",
+    "The result is checked for the expected values, labels, dtypes, row count, or alignment.",
+    "The solution documents a relevant edge case, assumption, or compatibility note."
+  ],
+  "hints": [
+    "Start by printing the relevant shape, labels, and dtypes.",
+    "Write down the expected result for a tiny example before applying the operation to larger data.",
+    "Use a small assertion or comparison to verify the outcome instead of relying only on visual inspection."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Assuming imported data already has the intended schema.",
+      "why": "I/O parsing can infer a wrong dtype, encoding, delimiter, date, or missing-value rule.",
+      "fix": "Declare or validate the schema after loading and record relevant reader options."
+    },
+    {
+      "problem": "Using the operation without considering missing values or duplicate keys.",
+      "why": "Those records may change totals, group sizes, or join cardinality.",
+      "fix": "State the policy and test an example containing the relevant edge case."
+    }
+  ],
+  "summary": [
+    "File I/O Errors and Troubleshooting supports one clearly defined part of a repeatable data workflow.",
+    "Check labels, dtypes, missing values, and row counts where they affect the result.",
+    "Record assumptions and consult the official reference when version-specific behavior matters."
+  ],
+  "next_steps": [
+    "Review the next topic after file i/o errors and troubleshooting and compare how it builds on the same data model."
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached syllabus and official documentation links; subject-matter review and target-version execution are required before publication."
+}

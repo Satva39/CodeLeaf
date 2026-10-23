@@ -1,0 +1,96 @@
+{
+  "id": "c-lesson-007",
+  "slug": "limitations-and-challenges-of-c",
+  "title": "Limitations and Challenges of C",
+  "sequence": 7,
+  "module_id": "c-module-01",
+  "module_slug": "introduction-to-c-programming",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 9,
+  "prerequisites": [
+    "c-lesson-006"
+  ],
+  "previous_lesson_id": "c-lesson-006",
+  "next_lesson_id": "c-lesson-008",
+  "keywords": [
+    "limitations-and-challenges-of-c",
+    "introduction-to-c-programming"
+  ],
+  "source_syllabus_number": 7,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the main idea behind limitations and challenges of c in your own words.",
+    "Apply limitations and challenges of c to a minimal C example and predict the result.",
+    "Identify a relevant boundary, portability assumption, or failure mode."
+  ],
+  "content": {
+    "intro": "This lesson explores Limitations and Challenges of C through an original visual, a compact C example and a check you can perform locally.",
+    "why_it_matters": "Understanding limitations and challenges of c helps you reason about C programs rather than relying on trial and error. It also helps you communicate assumptions, write safer code, and debug behavior across toolchains.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 1 roadmap",
+        "asset_path": "diagrams/module-01-overview.svg",
+        "alt_text": "Module 1 overview for Introduction to C Programming, showing this lesson in sequence with the surrounding syllabus topics.",
+        "caption": "Module visual overview; the numbered syllabus map remains the canonical order."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Limitations and Challenges of C is studied as part of **Introduction to C Programming**. Start with the contract: identify the inputs or program state, the rule C applies, and the observable result. Then check the behavior in a small, repeatable example.\n\nIn C, details can depend on the selected language standard and implementation. Distinguish defined behavior from unspecified, implementation-defined, or undefined behavior, and consult the cited standard/compiler references when portability matters."
+      },
+      {
+        "type": "paragraph",
+        "title": "Practical reasoning",
+        "text": "For “Limitations and Challenges of C”, write down the preconditions first. Identify valid inputs and boundaries, decide which C rule applies, then choose evidence that would falsify your assumption. Prefer a small test with a clear expected result and compile with diagnostics enabled."
+      },
+      {
+        "type": "code",
+        "title": "First program",
+        "language": "c",
+        "code": "#include <stdio.h>\n\nint main(void) {\n    puts(\"Hello, C!\");\n    return 0;\n}",
+        "expected_output": "Hello, C!",
+        "run_instructions": "Compile: `cc -std=c17 -Wall -Wextra -Wpedantic hello.c -o hello`. Run the executable. This lesson editor shows expected output but does not execute C on the server.",
+        "reset_steps": "Restore the original example, rebuild with the same compiler flags, rerun the same inputs, and compare actual output with the stated result. For time-, platform-, or input-dependent examples, record the environment and do not expect identical values everywhere.",
+        "execution_mode": "static-validation",
+        "limitations": "The CodeLeaf lesson page does not run C code. Compile locally or use a separately deployed, isolated C runner; do not execute arbitrary learner code inside FastAPI."
+      },
+      {
+        "type": "callout",
+        "title": "Portability and safety check",
+        "text": "Use a documented standard mode; treat compiler extensions as extensions, not ISO C guarantees. Check return values, buffer bounds, and object lifetime. This course example is draft material and needs code review on the target toolchain before publication."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-007-questions.json"
+  },
+  "task": "In a scratch file, create one small example that demonstrates limitations and challenges of c. Explain the expected result before running it, compile with warnings enabled, and record one boundary case or portability question.",
+  "hints": [
+    "Reduce the program to the smallest example that still shows the concept.",
+    "Write down the input, expected result, and assumptions before running it.",
+    "Check the official language/compiler reference and test a boundary case."
+  ],
+  "expected_output": "A short, reproducible C example and explanation showing limitations and challenges of c, plus a note about one boundary or portability consideration.",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    "Treating limitations and challenges of c as a rule to memorize rather than a behavior to test.",
+    "Ignoring compiler warnings, input validity, or object lifetime.",
+    "Assuming behavior observed on one compiler is guaranteed by every C implementation."
+  ],
+  "summary": [
+    "Limitations and Challenges of C belongs to Introduction to C Programming.",
+    "State the assumptions, verify the smallest example, and test boundaries.",
+    "Check the selected language standard and target compiler when portability matters."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C Language — Complete Learning Curriculum, Section B, module 1, topic 7.",
+    "Official and technical sources indexed in references/reference-index.json."
+  ],
+  "status": "draft"
+}

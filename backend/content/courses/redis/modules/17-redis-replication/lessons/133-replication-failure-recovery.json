@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-133",
+  "slug": "replication-failure-recovery",
+  "title": "Replication Failure Recovery",
+  "sequence": 133,
+  "module_id": "redis-module-17",
+  "module_slug": "redis-replication",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-132"
+  ],
+  "previous_lesson_id": "redis-lesson-132",
+  "next_lesson_id": "redis-lesson-134",
+  "keywords": [
+    "replication-failure-recovery",
+    "replica-disconnection",
+    "resynchronization",
+    "primary-restart-behavior",
+    "data-consistency-during-recovery",
+    "safe-maintenance-procedures",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 133,
+  "subtopics": [
+    "Replica disconnection",
+    "Resynchronization",
+    "Primary restart behavior",
+    "Data consistency during recovery",
+    "Safe maintenance procedures"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Replication Failure Recovery and distinguish it from a related Redis concept.",
+    "Apply or trace Replication Failure Recovery in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Replication Failure Recovery and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Replication Failure Recovery in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Replication Failure Recovery is an operational design choice: state the workload’s durability, recovery, freshness, availability and capacity requirements before selecting settings.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Replication Failure Recovery",
+        "asset_path": "diagrams/lesson-133-replication-failure-recovery.svg",
+        "alt_text": "Concept diagram for Replication Failure Recovery, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Replication Failure Recovery; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Replication Failure Recovery is an operational design choice: state the workload’s durability, recovery, freshness, availability and capacity requirements before selecting settings."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Replication Failure Recovery, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Replica disconnection",
+            "text": "Connect Replica disconnection to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Resynchronization",
+            "text": "Connect Resynchronization to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Primary restart behavior",
+            "text": "Connect Primary restart behavior to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Data consistency during recovery",
+            "text": "Connect Data consistency during recovery to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Safe maintenance procedures",
+            "text": "Connect Safe maintenance procedures to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Replication Failure Recovery",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "INFO persistence",
+        "expected_output": "Reports RDB/AOF status and last-save information for this server.",
+        "run_instructions": "Run read-only diagnostics on a test instance. Take and restore backups only as part of an isolated recovery drill.",
+        "reset_steps": "No data is modified.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Replication Failure Recovery. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Replication Failure Recovery in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Replication Failure Recovery.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "Reports RDB/AOF status and last-save information for this server.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-133-questions.json",
+    "recap": [
+      "Replication Failure Recovery is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "High availability with Redis Sentinel",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "monitoring, quorum, failover and client discovery"
+      ]
+    },
+    {
+      "title": "Scale with Redis Cluster",
+      "url": "https://redis.io/docs/latest/management/scaling/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "sharding, cluster behavior, availability and operating topology"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

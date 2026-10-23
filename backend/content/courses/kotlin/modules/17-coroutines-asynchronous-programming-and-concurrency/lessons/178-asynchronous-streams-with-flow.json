@@ -1,0 +1,155 @@
+{
+  "id": "kotlin-lesson-178",
+  "slug": "asynchronous-streams-with-flow",
+  "title": "Asynchronous Streams with Flow",
+  "sequence": 178,
+  "module_id": "kotlin-module-17",
+  "module_slug": "coroutines-asynchronous-programming-and-concurrency",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "kotlin-lesson-177"
+  ],
+  "previous_lesson_id": "kotlin-lesson-177",
+  "next_lesson_id": "kotlin-lesson-179",
+  "keywords": [
+    "asynchronous-streams-with-flow",
+    "the-flow-type",
+    "cold-flows-and-collection",
+    "emitting-and-transforming-valu"
+  ],
+  "source_syllabus_number": 178,
+  "subtopics": [
+    "The Flow Type",
+    "Cold Flows and Collection",
+    "Emitting and Transforming Values"
+  ],
+  "learning_outcomes": [
+    "Explain the central rule or purpose of asynchronous streams with flow using at least one correct term from the lesson.",
+    "Interpret or adapt a small Kotlin example that demonstrates asynchronous streams with flow.",
+    "Identify one relevant edge case, debugging step, or version/platform constraint."
+  ],
+  "content": {
+    "intro": "In this lesson, you will learn **Asynchronous Streams with Flow** as part of **Coroutines, Asynchronous Programming, and Concurrency**. Flow represents an asynchronous stream collected from a coroutine; flow operators, cancellation, buffering, and sharing determine behavior. Use the subtopics—The Flow Type, Cold Flows and Collection, Emitting and Transforming Values—as a checklist: predict what the example will do, then verify it in a project configured for the target platform.",
+    "why_it_matters": "Asynchronous code introduces lifecycle, cancellation, and shared-state concerns. Structured concurrency and explicit data flow make these concerns easier to reason about.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Concept visual",
+        "asset_path": "diagrams/lesson-178-asynchronous-streams-with-flow.svg",
+        "alt_text": "Concept diagram for lesson 178, Asynchronous Streams with Flow: connects The Flow Type with Cold Flows and Collection and a practice/check step.",
+        "caption": "Lesson 178: Asynchronous Streams with Flow. Use this concept map to connect the syllabus subtopics to the small example and test task."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Flow represents an asynchronous stream collected from a coroutine; flow operators, cancellation, buffering, and sharing determine behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the flow type. Then compare it with cold flows and collection. Identify the input, state, dependency, or branch that determines the result. The snippet is a static reference for CodeLeaf and is not executed in the lesson page."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the syllabus",
+        "items": [
+          {
+            "title": "The Flow Type",
+            "text": "The Flow Type depends on task lifetime and execution context. Keep child tasks inside an owning scope, handle cancellation cooperatively, and avoid unsynchronized shared mutable state."
+          },
+          {
+            "title": "Cold Flows and Collection",
+            "text": "Cold Flows and Collection depends on task lifetime and execution context. Keep child tasks inside an owning scope, handle cancellation cooperatively, and avoid unsynchronized shared mutable state."
+          },
+          {
+            "title": "Emitting and Transforming Values",
+            "text": "Emitting and Transforming Values is one part of asynchronous streams with flow. Connect its definition to the example, identify the input/state it changes, and verify the expected behavior with a small test case."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "kotlin",
+        "execution_mode": "static-validation",
+        "code": "fun main() {\n    val lines = listOf(\"Kotlin\", \"collections\")\n    println(lines.joinToString(separator = \" / \"))\n}",
+        "expected_output": "Kotlin / collections",
+        "run_instructions": "This example requires kotlinx-coroutines-core (and the matching Flow APIs where used). Run it in a Kotlin/JVM Gradle project; do not paste it into a plain browser preview.",
+        "reset_steps": "Restore the documented starting values, rerun the smallest test, and compare the result with the expected output. If behavior differs, check the compiler/plugin/runtime versions and the active target before changing more than one thing."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake to avoid",
+        "text": "A suspend function always runs on a background thread automatically."
+      },
+      {
+        "type": "paragraph",
+        "title": "Troubleshooting and reset",
+        "text": "If the example fails, first confirm which runtime/project type the snippet requires. Read the first useful compiler or runtime message, check imports and declared dependencies, reduce the example to a minimal case, and rerun. For target-specific code, use the target toolchain rather than assuming a console or browser runner can execute it."
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          {
+            "title": "Explain",
+            "text": "Describe the main rule of asynchronous streams with flow in your own words."
+          },
+          {
+            "title": "Apply",
+            "text": "Change one input or condition and predict the result before running it."
+          },
+          {
+            "title": "Verify",
+            "text": "Check one edge case and the official reference for the selected Kotlin/runtime version."
+          }
+        ]
+      }
+    ],
+    "task": "Try it yourself: create a small variation that demonstrates asynchronous streams with flow. Write down your predicted result first, run it in the correct local project, then explain one boundary case involving the flow type.",
+    "task_acceptance_criteria": [
+      "Explain asynchronous streams with flow without copying the lesson wording.",
+      "Demonstrate the concept with a small code/configuration change and state the expected result.",
+      "Test one boundary case or explain a relevant platform/version limitation."
+    ],
+    "hints": [
+      "Begin with the first syllabus subtopic: The Flow Type. What input or state does it act on?",
+      "Change only one value, branch, declaration, or dependency at a time. Predict what should happen before running the code.",
+      "Compare your observed result with the expected output and the official reference; verify that you are using the required project type and dependency set."
+    ],
+    "expected_output": "Kotlin / collections",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-178-questions.json"
+  },
+  "exercise_files": [
+    "../exercises/024-create-a-flow-based-event-processing-pipeline.json"
+  ],
+  "sources": [
+    {
+      "title": "Kotlin Documentation",
+      "url": "https://kotlinlang.org/docs/home.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Asynchronous Streams with Flow",
+        "The Flow Type",
+        "Cold Flows and Collection"
+      ]
+    },
+    {
+      "title": "Kotlin Language Features and Proposals",
+      "url": "https://kotlinlang.org/docs/kotlin-language-features-and-proposals.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "language feature stability",
+        "compiler version compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson derived from the numbered syllabus entry 178 in Kotlin.pdf. Review example compatibility and question alignment before publishing."
+}

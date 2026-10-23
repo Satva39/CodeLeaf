@@ -1,0 +1,200 @@
+{
+  "id": "cpp-lesson-183",
+  "slug": "modern-type-deduction-and-generic-code",
+  "title": "Modern Type Deduction and Generic Code",
+  "sequence": 183,
+  "module_id": "cpp-module-17",
+  "module_slug": "modern-cpp-practices-and-standard-features",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "cpp-lesson-182"
+  ],
+  "previous_lesson_id": "cpp-lesson-182",
+  "next_lesson_id": "cpp-lesson-184",
+  "keywords": [
+    "modern-type-deduction-and-generic-code",
+    "auto",
+    "decltype-auto",
+    "structured-bindings",
+    "generic-lambdas",
+    "concepts",
+    "constrained-templates",
+    "deduction-guides"
+  ],
+  "source_syllabus_number": 183,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "auto",
+    "decltype(auto)",
+    "Structured Bindings",
+    "Generic Lambdas",
+    "Concepts",
+    "Constrained Templates",
+    "Deduction Guides"
+  ],
+  "learning_outcomes": [
+    "Describe when modern type deduction and generic code is useful and what problem it does not solve.",
+    "Evaluate a small example against its stated constraints, standard version and implementation assumptions.",
+    "Select a test or tool that can provide evidence of correctness without treating one successful run as proof."
+  ],
+  "content": {
+    "intro": "Modern Type Deduction and Generic Code focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Modern Type Deduction and Generic Code matters because use the simplest supported standard feature that clarifies correctness; record the minimum standard and verify its support. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Modern Type Deduction and Generic Code: visual trace",
+        "asset_path": "diagrams/lessons/lesson-183.svg",
+        "alt_text": "Lesson 183 visual for Modern Type Deduction and Generic Code; concept: auto; apply: decltype(auto); verify: Structured Bindings.",
+        "caption": "Original lesson-specific overview: understand auto, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Modern C++ favors explicit ownership, generic library algorithms and features that remove common error patterns. Availability depends on the selected standard mode and library.\n\nModern Type Deduction and Generic Code focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nUse the simplest supported standard feature that clarifies correctness; record the minimum standard and verify its support."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Modern Type Deduction and Generic Code",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <iostream>\n#include <string>\n#include <type_traits>\n\nint main() {\n    auto value = 5;\n    const auto& view = value;\n    static_assert(std::is_same_v<decltype(value), int>);\n    std::cout << view << '\\n';\n}\n",
+        "expected_output": "5",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "Deduction is affected by value category and declarator form; auto, auto&, const auto& and decltype(auto) do not mean the same thing."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "auto",
+            "text": "Explain auto in the context of Modern Type Deduction and Generic Code: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "decltype(auto)",
+            "text": "decltype inspects an expression or entity to determine a type; its result depends on the expression form, not only the value stored."
+          },
+          {
+            "title": "Structured Bindings",
+            "text": "A struct groups related data under one type; in C++, its default member access is public, unlike class."
+          },
+          {
+            "title": "Generic Lambdas",
+            "text": "A lambda creates a callable object; its capture list determines how outside state is copied or referenced and therefore affects lifetime."
+          },
+          {
+            "title": "Concepts",
+            "text": "Concepts express named constraints on template arguments and can improve diagnostics by stating the operations a generic component requires."
+          },
+          {
+            "title": "Constrained Templates",
+            "text": "Templates describe families of functions or types instantiated for specific template arguments; errors may appear during instantiation."
+          },
+          {
+            "title": "Deduction Guides",
+            "text": "GUI systems are commonly event-driven and impose thread-affinity and lifecycle rules; concrete examples require the selected GUI toolkit."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate auto, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "This topic may depend on newer C++ language or library support; this example uses a C++20-compatible illustration. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-183-questions.json",
+    "task": "Extend the example for Modern Type Deduction and Generic Code with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+    "task_acceptance_criteria": [
+      "The code compiles in the documented standard mode with warnings enabled.",
+      "The predicted output matches the actual result for the added case.",
+      "One relevant boundary, lifetime, portability or error case is tested or documented."
+    ],
+    "hints": [
+      "Start by isolating the central rule from Modern Type Deduction and Generic Code.",
+      "Trace values or object lifetimes before changing the program.",
+      "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+    ],
+    "summary": [
+      "Modern Type Deduction and Generic Code is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying modern type deduction and generic code.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "5"
+  },
+  "task": "Extend the example for Modern Type Deduction and Generic Code with one additional valid case and one boundary or failure case. State your expected result first, then compile with the documented C++20 warning flags.",
+  "hints": [
+    "Start by isolating the central rule from Modern Type Deduction and Generic Code.",
+    "Trace values or object lifetimes before changing the program.",
+    "Use a small boundary test and check the compiler diagnostic rather than assuming the behavior."
+  ],
+  "expected_output": "5",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Modern Type Deduction and Generic Code is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying modern type deduction and generic code.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 17, lesson 183: Modern Type Deduction and Generic Code.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

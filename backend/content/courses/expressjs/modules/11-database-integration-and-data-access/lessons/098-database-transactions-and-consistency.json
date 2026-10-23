@@ -1,0 +1,181 @@
+{
+  "id": "expressjs-lesson-098",
+  "slug": "database-transactions-and-consistency",
+  "title": "Database Transactions and Consistency",
+  "sequence": 98,
+  "module_id": "expressjs-module-11",
+  "module_slug": "database-integration-and-data-access",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "expressjs-lesson-097"
+  ],
+  "previous_lesson_id": "expressjs-lesson-097",
+  "next_lesson_id": "expressjs-lesson-099",
+  "keywords": [
+    "database-transactions-and-consistency",
+    "database-integration-and-data-access",
+    "transaction-fundamentals",
+    "commit-and-rollback",
+    "multi-step-operations",
+    "handling-concurrent-updates",
+    "avoiding-partial-updates-in-critical-business-workflows"
+  ],
+  "source_syllabus_number": 98,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Transaction fundamentals",
+    "Commit and rollback",
+    "Multi-step operations",
+    "Handling concurrent updates",
+    "Avoiding partial updates in critical business workflows"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and terminology of Database Transactions and Consistency.",
+    "Apply or interpret one Express.js 5 pattern related to transaction fundamentals.",
+    "Identify a meaningful edge case and choose a repeatable local test for it."
+  ],
+  "execution_mode": "server-runner",
+  "status": "draft",
+  "content": {
+    "intro": "In this lesson, you will learn database transactions and consistency and connect the named syllabus points to a small Express.js example. The course baseline is Express 5.x on a supported Node.js LTS release; the page shows reference output, not execution of Node.js code.",
+    "why_it_matters": "Database Transactions and Consistency matters because it helps keep the request/response contract explicit and the application maintainable as inputs, users and dependencies become less predictable. A clear data-access boundary.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Concept map: Database Transactions and Consistency",
+        "asset_path": "diagrams/lesson-098-visual.svg",
+        "alt_text": "A conceptual three-stage flow for Database Transactions and Consistency: context or input, the Express.js concept, and verification of expected behavior with an edge case.",
+        "caption": "Use this visual to connect transaction fundamentals to database transactions and consistency; the final step is to verify both normal and boundary behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Database Transactions and Consistency is part of database integration and data access. Express does not include a database driver. Keep route matching, business services, and persistence separate; parameterize values, respect database constraints and transactions, and manage pooling and timeouts. For this topic, make the observable behavior explicit, then check what happens when an input is missing, malformed, unauthorized, or a dependency fails (choose the relevant cases for this lesson)."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the attached syllabus",
+        "items": [
+          {
+            "title": "Transaction fundamentals",
+            "text": "Express does not supply a database driver. Use an established driver or ORM, parameterize data values, preserve database constraints, manage connections and test rollback/error cases."
+          },
+          {
+            "title": "Commit and rollback",
+            "text": "Connect this syllabus point to Database Transactions and Consistency: state the expected behavior, identify a realistic edge case, and choose a test or observation that proves the behavior instead of relying on assumptions."
+          },
+          {
+            "title": "Multi-step operations",
+            "text": "Connect this syllabus point to Database Transactions and Consistency: state the expected behavior, identify a realistic edge case, and choose a test or observation that proves the behavior instead of relying on assumptions."
+          },
+          {
+            "title": "Handling concurrent updates",
+            "text": "Connect this syllabus point to Database Transactions and Consistency: state the expected behavior, identify a realistic edge case, and choose a test or observation that proves the behavior instead of relying on assumptions."
+          },
+          {
+            "title": "Avoiding partial updates in critical business workflows",
+            "text": "Connect this syllabus point to Database Transactions and Consistency: state the expected behavior, identify a realistic edge case, and choose a test or observation that proves the behavior instead of relying on assumptions."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Read the example carefully",
+        "text": "A useful way to study database transactions and consistency is to start from the first syllabus point — transaction fundamentals — and follow it through a small request or application example. Keep Express's built-in behavior separate from optional packages and your own application policy."
+      },
+      {
+        "type": "code",
+        "title": "Worked example (reference only)",
+        "language": "javascript",
+        "code": "import express from 'express';\nimport pg from 'pg';\nconst { Pool } = pg;\nconst pool = new Pool({ connectionString: process.env.DATABASE_URL });\nconst app = express();\napp.get('/api/products/:id', async (req, res) => {\n  const id = Number(req.params.id);\n  if (!Number.isSafeInteger(id) || id < 1) return res.status(400).json({ error: 'Invalid id' });\n  const result = await pool.query('SELECT id, name FROM products WHERE id = $1', [id]);\n  if (!result.rowCount) return res.status(404).json({ error: 'Not found' });\n  res.json(result.rows[0]);\n});\napp.listen(process.env.PORT || 3000);",
+        "expected_output": "The query uses a parameter placeholder ($1) and returns at most the matching product. Requires a PostgreSQL table and the external pg package.",
+        "notes": "The example omits application-wide startup/shutdown and error middleware to keep the query boundary visible. Never interpolate request values into SQL text."
+      },
+      {
+        "type": "callout",
+        "title": "Safety / production rule",
+        "text": "Module rule — Express does not include a database driver. Keep route matching, business services, and persistence separate; parameterize values, respect database constraints and transactions, and manage pooling and timeouts."
+      }
+    ],
+    "expected_output": "The query uses a parameter placeholder ($1) and returns at most the matching product. Requires a PostgreSQL table and the external pg package.",
+    "task": "Try it yourself: adapt the worked example to demonstrate database transactions and consistency. Write down the exact request or command, expected status/body, one boundary case, and how you would reset the local lab. CodeLeaf does not execute Express code in this lesson page; run Node.js server examples locally.",
+    "task_acceptance_criteria": [
+      "The example has a clear local run or inspection path and the required dependencies are named.",
+      "A normal request and a malformed/edge/failure request have documented expected outcomes.",
+      "No credentials, production data, or claim of successful runtime execution is included."
+    ],
+    "hints": [
+      "Hint 1: identify which part of database transactions and consistency is supplied by Express and which part belongs to your own application or another package.",
+      "Hint 2: check the official Express 5 guide/API reference and isolate the smallest example that proves one behavior.",
+      "Hint 3: verify a success case, a boundary case and the expected status/response; restart from a clean state before repeating."
+    ],
+    "solution_notes": "Suggested approach: Express does not include a database driver. Keep route matching, business services, and persistence separate; parameterize values, respect database constraints and transactions, and manage pooling and timeouts. The sample is a focused reference fragment. Review all dependency, schema, proxy and runtime assumptions before using it in an application.",
+    "common_mistakes": [
+      {
+        "problem": "Copying an example without checking its assumptions",
+        "why": "A fragment may omit route setup, middleware order, external packages, database schema or production configuration.",
+        "fix": "State the runtime/dependency assumptions, run the focused example locally, and test a success path plus one failure path."
+      },
+      {
+        "problem": "Treating all request values as trusted",
+        "why": "Parameters, query values, body properties, files and upstream responses can be missing or malicious.",
+        "fix": "Validate schema, type and bounds at the boundary; keep authorization and database constraints as separate checks."
+      },
+      {
+        "problem": "Assuming the demo output means the server executed",
+        "why": "The course page shows reference output for Node.js/Express code; it is not an isolated Node runtime.",
+        "fix": "Run the example locally with the documented Node.js version and record actual command/output and test results."
+      }
+    ],
+    "summary": [
+      "Explain the central idea behind database transactions and consistency.",
+      "Connect the relevant subtopics to the request/response or application boundary.",
+      "Verify one normal outcome and one edge/error case with repeatable evidence."
+    ],
+    "run_mode": "static-validation",
+    "execution_mode": "server-runner",
+    "run_instructions": [
+      "Open a terminal in the lesson lab directory.",
+      "Install dependencies for the sample if required; use a supported Node.js LTS release.",
+      "Run the documented file with node, send the stated request with curl or an API client, and compare the actual status/body with the reference."
+    ],
+    "reset_steps": [
+      "Stop the local process with Ctrl+C.",
+      "Clear only temporary/synthetic records or files created by the lab.",
+      "Restart the server before repeating the example."
+    ],
+    "troubleshooting": [
+      "If node reports a module-syntax error, check package.json module type or use the matching CommonJS syntax.",
+      "If a package cannot be resolved, install the named dependency in the local lab and verify the lockfile.",
+      "If output differs, verify middleware order, the request path/method, environment variables and the expected runtime version."
+    ],
+    "accessibility_notes": "The lesson diagram has an explicit title, description and textual labels; color is supplementary and not the only way to distinguish stages.",
+    "version_notes": "Express 5.x teaching baseline. Check the official migration guide before applying these examples to Express 4 projects.",
+    "knowledge_check_file": "exams/question-files/lesson-098-questions.json"
+  },
+  "sources": [
+    {
+      "title": "Express.js API reference",
+      "url": "https://expressjs.com/en/5x/api.html",
+      "publisher": "OpenJS Foundation / Express.js",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "Application, request, response, Router, built-in middleware APIs and current signatures."
+      ]
+    },
+    {
+      "title": "Node.js release schedule",
+      "url": "https://nodejs.org/en/about/previous-releases",
+      "publisher": "OpenJS Foundation / Node.js",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "Supported Node.js release lines and recommendation to use Active LTS or Maintenance LTS for production."
+      ]
+    }
+  ],
+  "exercise_files": []
+}

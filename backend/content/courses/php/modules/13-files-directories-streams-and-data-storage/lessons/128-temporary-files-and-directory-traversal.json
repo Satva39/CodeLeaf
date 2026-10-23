@@ -1,0 +1,195 @@
+{
+  "id": "php-lesson-128",
+  "slug": "temporary-files-and-directory-traversal",
+  "title": "Temporary Files and Directory Traversal",
+  "sequence": 128,
+  "module_id": "php-module-13",
+  "module_slug": "files-directories-streams-and-data-storage",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 11,
+  "prerequisites": [
+    "php-lesson-127"
+  ],
+  "previous_lesson_id": "php-lesson-127",
+  "next_lesson_id": "php-lesson-129",
+  "keywords": [
+    "temporary files and directory traversal",
+    "files, directories, streams, and data storage",
+    "temporary file creation",
+    "temporary directories",
+    "path normalization",
+    "restricting filesystem access",
+    "preventing path traversal vulnerabilities",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 128,
+  "subtopics": [
+    "Temporary file creation.",
+    "Temporary directories.",
+    "Path normalization.",
+    "Restricting filesystem access.",
+    "Preventing path traversal vulnerabilities."
+  ],
+  "learning_outcomes": [
+    "Explain what temporary files and directory traversal contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: temporary file creation.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "File and stream operations cross a storage boundary. Check operation results, constrain paths, account for permissions and concurrent access, and validate uploads before they become trusted data. In this lesson, focus on temporary file creation; then compare it with temporary directories. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use temporary files and directory traversal when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 13 overview: Files, Directories, Streams, and Data Storage",
+        "asset_path": "diagrams/module-13-overview.svg",
+        "alt_text": "Four-stage overview for module 13, Files, Directories, Streams, and Data Storage, grouping lesson topics in order.",
+        "caption": "Use this overview to place temporary files and directory traversal in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "File and stream operations cross a storage boundary. Check operation results, constrain paths, account for permissions and concurrent access, and validate uploads before they become trusted data. For temporary files and directory traversal, begin with temporary file creation. Also distinguish temporary directories; path normalization; restricting filesystem access. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Temporary file creation",
+            "text": "Check the operation result, use a known storage boundary, and consider empty files, permissions, invalid paths, and cleanup."
+          },
+          {
+            "title": "Temporary directories",
+            "text": "Know when to use temporary directories, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Path normalization",
+            "text": "Know when to use path normalization, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Restricting filesystem access",
+            "text": "Check the operation result, use a known storage boundary, and consider empty files, permissions, invalid paths, and cleanup."
+          },
+          {
+            "title": "Preventing path traversal vulnerabilities",
+            "text": "Treat the relevant value as untrusted, apply the defense at the correct boundary, and verify a deliberately invalid or hostile-looking input is rejected or encoded."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Temporary Files and Directory Traversal",
+        "language": "php",
+        "code": "<?php\n$file = tempnam(sys_get_temp_dir(), \"php-course-\");\nif ($file === false) { throw new RuntimeException(\"Cannot create temp file\"); }\nfile_put_contents($file, \"ready\\n\");\necho trim((string) file_get_contents($file)) . PHP_EOL;\nunlink($file);",
+        "expected_output": "ready",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Check file-operation results and permissions, keep paths inside intended storage areas, and validate uploads before storing them."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for temporary files and directory traversal from top to bottom. Start by identifying temporary file creation, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for temporary files and directory traversal that demonstrates \"temporary file creation\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of temporary file creation.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "ready",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-128-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Ignoring a failed read or write.",
+        "why": "Partial or missing data can be mistaken for successful completion.",
+        "fix": "Check return values and throw or report a controlled error when required."
+      },
+      {
+        "problem": "Using user-supplied paths directly.",
+        "why": "Paths can escape the intended directory.",
+        "fix": "Use a controlled storage root and reject paths outside it."
+      },
+      {
+        "problem": "Trusting an uploaded filename or extension.",
+        "why": "Names and client-provided content types can be forged.",
+        "fix": "Generate storage names, enforce size/type policy, and isolate uploaded files."
+      }
+    ],
+    "summary": [
+      "Temporary Files and Directory Traversal is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Check file-operation results and permissions, keep paths inside intended storage areas, and validate uploads before storing them."
+    ],
+    "references": [
+      {
+        "title": "Filesystem",
+        "url": "https://www.php.net/manual/en/book.filesystem.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "file operations",
+          "streams",
+          "directories",
+          "file locks"
+        ]
+      },
+      {
+        "title": "Handling file uploads",
+        "url": "https://www.php.net/manual/en/features.file-upload.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "upload handling",
+          "upload error codes",
+          "temporary upload files"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Filesystem",
+      "url": "https://www.php.net/manual/en/book.filesystem.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "file operations",
+        "streams",
+        "directories",
+        "file locks"
+      ]
+    },
+    {
+      "title": "Handling file uploads",
+      "url": "https://www.php.net/manual/en/features.file-upload.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "upload handling",
+        "upload error codes",
+        "temporary upload files"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

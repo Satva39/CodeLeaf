@@ -1,0 +1,183 @@
+{
+  "id": "xml-lesson-075",
+  "slug": "schema-composition-and-namespaces",
+  "title": "Schema Composition and Namespaces",
+  "sequence": 75,
+  "module_id": "xml-module-09",
+  "module_slug": "xml-schema-definition-xsd",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "xml-lesson-074"
+  ],
+  "previous_lesson_id": "xml-lesson-074",
+  "next_lesson_id": "xml-lesson-076",
+  "keywords": [
+    "schema-composition-and-namespaces",
+    "xml-schema-definition-xsd",
+    "xs-include",
+    "xs-import",
+    "target-namespaces",
+    "modular-schema-design",
+    "schema-dependency-management"
+  ],
+  "source_syllabus_number": 75,
+  "subtopics": [
+    "xs:include",
+    "xs:import",
+    "Target namespaces",
+    "Modular schema design",
+    "Schema dependency management"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose of schema composition and namespaces and explain at least one listed subtopic.",
+    "Interpret the example related to schema composition and namespaces and predict its expected result.",
+    "Identify one validation, compatibility, security, or troubleshooting consideration relevant to the example."
+  ],
+  "content": {
+    "intro": "In this lesson, you will explore schema composition and namespaces within XML Schema Definition (XSD). You will connect its syllabus topics to an inspectable example, check the expected result, and note tool/version limits.",
+    "why_it_matters": "Schema Composition and Namespaces matters because XML workflows rely on explicit structure and predictable processing. The lesson helps you reason about xs:include, avoid a common misunderstanding, and make a result reproducible for another developer.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Schema Composition and Namespaces: concept map",
+        "asset_path": "diagrams/lessons/lesson-075-schema-composition-and-namespaces.svg",
+        "alt_text": "Concept flow covering xs:include, xs:import, Target namespaces, Modular schema design.",
+        "caption": "The visual introduces schema composition and namespaces; inspect the worked example and then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "An XML Schema (XSD) defines a vocabulary contract: element and attribute declarations, types, cardinality, ordering, and constraints. A document can be well-formed yet fail schema validation because its data does not conform to the contract."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the subtopics",
+        "text": "This lesson explicitly covers: xs:include; xs:import; Target namespaces; Modular schema design; Schema dependency management. Treat these as connected parts of one workflow: define the structure, make the relevant assumptions explicit, and verify a result with a small known input."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Schema Composition and Namespaces",
+        "language": "xml",
+        "code": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n  <xs:element name=\"price\" type=\"xs:decimal\"/>\n</xs:schema>",
+        "expected_output": "Use this schema to validate a separate instance document such as <price>19.95</price>; a validating XSD processor rejects non-decimal text for this declared type. XSD 1.1-only features require a supporting processor.",
+        "run_instructions": "Inspect this example as text. Run it only in a processor that supports the shown language/version; the standard CodeLeaf playground previews HTML/CSS/JavaScript only and does not execute XML, XSD, XPath, XSLT, XQuery, Python, or SQL. Keep schema namespaces and targetNamespace choices consistent; validate representative valid and invalid instances. XSD 1.1 assertions and conditional type assignment are specification features but are not available in every validator.",
+        "reset_steps": "Restore the sample to its exact starting state before each experiment. Change one element, attribute, expression, or constraint at a time, then compare the result with the expected behavior.",
+        "execution_mode": "static-validation",
+        "limitations": "This snippet is an inspectable example, not an XML execution service. Validate it with a standards-compatible XML processor; feature support depends on the processor/version."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety checkpoint",
+        "text": "Distinguish well-formedness, schema validity, and application-level correctness; they are different checks."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a small synthetic example that demonstrates “xs:include”. Then add one boundary case involving “xs:import”. Write down what should happen before testing, and record the exact output or processor message afterward."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-075-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming a document is correct because it looks readable.",
+        "why": "Visual appearance does not prove well-formedness, schema validity, correct namespace handling, or application-level meaning.",
+        "fix": "Parse and validate the document with the intended processor, then assert its meaning using a focused test."
+      },
+      {
+        "problem": "Mixing specification features with processor support.",
+        "why": "A standard may define features that a specific runtime does not implement.",
+        "fix": "Record the version and feature support; test with the actual target processor."
+      },
+      {
+        "problem": "Testing only one happy-path example.",
+        "why": "Missing values, wrong types, namespace differences, or boundary inputs can expose failures.",
+        "fix": "Add a valid case, an invalid case, and an edge case to the verification notes."
+      }
+    ],
+    "task": "Build a short demonstration of schema composition and namespaces using synthetic data. Include the concept “xs:include”, a known expected result, and a short note explaining one edge case.",
+    "task_acceptance_criteria": [
+      "The artifact clearly demonstrates xs:include.",
+      "The expected result is written before verification.",
+      "One invalid or boundary case is documented.",
+      "Processor/version assumptions and relevant security limits are recorded."
+    ],
+    "hints": [
+      "Start with the exact definition or construct associated with xs:include.",
+      "Keep the example minimal and change one thing at a time.",
+      "Compare the observed result with the expected behavior and consult the linked specification if they differ."
+    ],
+    "summary": [
+      "Schema Composition and Namespaces contributes to the larger XML workflow of creating, checking, querying, transforming, or maintaining structured documents.",
+      "The listed syllabus concepts include xs:include, xs:import, Target namespaces.",
+      "A reproducible XML example includes the input, processor/version assumptions, expected result, and a meaningful failure case."
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "Use this schema to validate a separate instance document such as <price>19.95</price>; a validating XSD processor rejects non-decimal text for this declared type. XSD 1.1-only features require a supporting processor."
+  },
+  "task": "Build a short demonstration of schema composition and namespaces using synthetic data. Include the concept “xs:include”, a known expected result, and a short note explaining one edge case.",
+  "task_acceptance_criteria": [
+    "The artifact clearly demonstrates xs:include.",
+    "The expected result is written before verification.",
+    "One invalid or boundary case is documented.",
+    "Processor/version assumptions and relevant security limits are recorded."
+  ],
+  "hints": [
+    "Start with the exact definition or construct associated with xs:include.",
+    "Keep the example minimal and change one thing at a time.",
+    "Compare the observed result with the expected behavior and consult the linked specification if they differ."
+  ],
+  "summary": [
+    "Schema Composition and Namespaces contributes to the larger XML workflow of creating, checking, querying, transforming, or maintaining structured documents.",
+    "The listed syllabus concepts include xs:include, xs:import, Target namespaces.",
+    "A reproducible XML example includes the input, processor/version assumptions, expected result, and a meaningful failure case."
+  ],
+  "run_mode": "static-validation",
+  "expected_output": "Use this schema to validate a separate instance document such as <price>19.95</price>; a validating XSD processor rejects non-decimal text for this declared type. XSD 1.1-only features require a supporting processor.",
+  "common_mistakes": [
+    {
+      "problem": "Assuming a document is correct because it looks readable.",
+      "why": "Visual appearance does not prove well-formedness, schema validity, correct namespace handling, or application-level meaning.",
+      "fix": "Parse and validate the document with the intended processor, then assert its meaning using a focused test."
+    },
+    {
+      "problem": "Mixing specification features with processor support.",
+      "why": "A standard may define features that a specific runtime does not implement.",
+      "fix": "Record the version and feature support; test with the actual target processor."
+    },
+    {
+      "problem": "Testing only one happy-path example.",
+      "why": "Missing values, wrong types, namespace differences, or boundary inputs can expose failures.",
+      "fix": "Add a valid case, an invalid case, and an edge case to the verification notes."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "title": "Extensible Markup Language (XML) 1.0, Fifth Edition",
+      "url": "https://www.w3.org/TR/xml/",
+      "publisher": "W3C",
+      "checked_on": "2026-10-12"
+    },
+    {
+      "title": "XML Schema Definition Language (XSD) 1.1 Part 1: Structures",
+      "url": "https://www.w3.org/TR/xmlschema11-1/",
+      "publisher": "W3C",
+      "checked_on": "2026-10-12"
+    },
+    {
+      "title": "XML Schema Part 0: Primer Second Edition",
+      "url": "https://www.w3.org/TR/xmlschema-0/",
+      "publisher": "W3C",
+      "checked_on": "2026-10-12"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Generated from the attached XML syllabus; requires technical review and validation in the target XML processor before publication.",
+  "exercise_files": []
+}

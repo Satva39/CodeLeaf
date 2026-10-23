@@ -1,0 +1,253 @@
+{
+  "id": "github-actions-lesson-086",
+  "slug": "monorepo-and-change-aware-ci",
+  "title": "Monorepo and Change-Aware CI",
+  "sequence": 86,
+  "module_id": "github-actions-module-11",
+  "module_slug": "building-continuous-integration-pipelines",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "github-actions-lesson-085"
+  ],
+  "previous_lesson_id": "github-actions-lesson-085",
+  "next_lesson_id": "github-actions-lesson-087",
+  "keywords": [
+    "monorepo-and-change-aware-ci",
+    "building-continuous-integration-pipelines",
+    "monorepo-workflow-design",
+    "path-based-filtering",
+    "shared-dependency-detection",
+    "testing-only-affected-components",
+    "managing-shared-build-outputs",
+    "ensuring-change-filters-do-not-skip-necessary-validation"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of monorepo and change-aware ci and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to monorepo and change-aware ci.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on monorepo and change-aware ci. Monorepo workflows can select affected components by path, but shared packages, lockfiles, and root configuration must trigger all dependent validations. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "Monorepo and Change-Aware CI matters because it affects correctness, security, maintainability, or operating cost. Monorepo workflows can select affected components by path, but shared packages, lockfiles, and root configuration must trigger all dependent validations. A useful CI pipeline gives a clear pass/fail result for relevant quality checks. Keep fast checks early, use services only when tests need them, and ensure required checks cannot be skipped accidentally.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 11 visual map",
+        "asset_path": "diagrams/module-11-overview.svg",
+        "alt_text": "Ordered overview of module 11: Designing a CI Pipeline; Code Quality Automation; Automated Testing; Testing Different Language Versions; Testing Across Operating Systems; Database-Backed CI Tests; Build Automation; Pull Request Quality Gates; Monorepo and Change-Aware CI; CI Pipeline Optimization.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Monorepo workflows can select affected components by path, but shared packages, lockfiles, and root configuration must trigger all dependent validations. A useful CI pipeline gives a clear pass/fail result for relevant quality checks. Keep fast checks early, use services only when tests need them, and ensure required checks cannot be skipped accidentally. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "Monorepo workflow design",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Path-based filtering",
+            "text": "For path-based filtering, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Shared dependency detection",
+            "text": "Declare job dependencies with `needs` and read prerequisite results or outputs through `needs.<job>`. Separate jobs do not share a runner workspace automatically."
+          },
+          {
+            "title": "Testing only affected components",
+            "text": "Make the check deterministic and fail with a meaningful status when requirements are not met. Preserve reports where useful and configure required branch checks to match the checks the workflow actually emits."
+          },
+          {
+            "title": "Managing shared build outputs",
+            "text": "Use an artifact for a file produced by a run, choose exact upload/download paths, set retention intentionally, and verify the downloaded file is from the intended run/job."
+          },
+          {
+            "title": "Ensuring change filters do not skip necessary validation",
+            "text": "For ensuring change filters do not skip necessary validation, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "name: Web component checks\non:\n  pull_request:\n    paths:\n      - \"web/**\"\n      - \"shared/**\"\n      - \"package-lock.json\"\npermissions:\n  contents: read\njobs:\n  web-tests:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: echo \"Run web tests\"",
+        "expected_output": "The workflow reacts to changes in web code and its listed shared dependencies; update filters when dependency relationships change.",
+        "run_instructions": "Create synthetic changes to web code, shared code, and an unrelated directory; verify the intended workflow trigger behavior.",
+        "reset_steps": "Do not omit lockfiles or shared packages that can change the component’s behavior.",
+        "execution_mode": "workflow-fragment"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to monorepo and change-aware ci. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain monorepo and change-aware ci, read the example, and identify a way to validate it. The wider system goal remains: Build CI checks that produce repeatable evidence and protect merge quality."
+      }
+    ],
+    "task": "Apply monorepo and change-aware ci to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: Monorepo workflows can select affected components by path, but shared packages, lockfiles, and root configuration must trigger all dependent validations.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: Monorepo workflows can select affected components by path, but shared packages, lockfiles, and root configuration must trigger all dependent validations. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "Monorepo workflows can select affected components by path, but shared packages, lockfiles, and root configuration must trigger all dependent validations.",
+      "A useful CI pipeline gives a clear pass/fail result for relevant quality checks. Keep fast checks early, use services only when tests need them, and ensure required checks cannot be skipped accidentally.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-086-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "workflow-fragment",
+    "references": [
+      {
+        "title": "Workflow syntax for GitHub Actions",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "workflow files",
+          "jobs",
+          "steps",
+          "permissions",
+          "defaults",
+          "concurrency",
+          "matrix",
+          "environments"
+        ]
+      },
+      {
+        "title": "Workflow artifacts",
+        "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/workflow-artifacts",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "build outputs",
+          "test reports",
+          "inter-job data",
+          "artifact attestations"
+        ]
+      },
+      {
+        "title": "Dependency caching",
+        "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/dependency-caching",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "dependency cache",
+          "artifacts versus cache",
+          "cache security"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [
+    "../exercises/024-design-a-monorepo-pipeline.json"
+  ],
+  "sources": [
+    {
+      "title": "Workflow syntax for GitHub Actions",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "workflow files",
+        "jobs",
+        "steps",
+        "permissions",
+        "defaults",
+        "concurrency",
+        "matrix",
+        "environments"
+      ]
+    },
+    {
+      "title": "Workflow artifacts",
+      "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/workflow-artifacts",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "build outputs",
+        "test reports",
+        "inter-job data",
+        "artifact attestations"
+      ]
+    },
+    {
+      "title": "Dependency caching",
+      "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/dependency-caching",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "dependency cache",
+        "artifacts versus cache",
+        "cache security"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "86",
+    "module_title": "Building Continuous Integration Pipelines",
+    "subtopics": [
+      "Monorepo workflow design",
+      "Path-based filtering",
+      "Shared dependency detection",
+      "Testing only affected components",
+      "Managing shared build outputs",
+      "Ensuring change filters do not skip necessary validation"
+    ]
+  }
+}

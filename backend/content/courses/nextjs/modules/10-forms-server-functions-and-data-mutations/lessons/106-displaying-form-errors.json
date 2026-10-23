@@ -1,0 +1,164 @@
+{
+  "id": "nextjs-lesson-106",
+  "slug": "displaying-form-errors",
+  "title": "Displaying Form Errors",
+  "sequence": 106,
+  "module_id": "nextjs-module-10",
+  "module_slug": "forms-server-functions-and-data-mutations",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "nextjs-lesson-105"
+  ],
+  "previous_lesson_id": "nextjs-lesson-105",
+  "next_lesson_id": "nextjs-lesson-107",
+  "keywords": [
+    "Displaying Form Errors",
+    "Field-level validation messages",
+    "Server-returned errors",
+    "Accessible error announcements",
+    "Preserving submitted values",
+    "Next.js",
+    "JavaScript",
+    "App Router"
+  ],
+  "source_syllabus_number": 106,
+  "subtopics": [
+    "Field-level validation messages",
+    "Server-returned errors",
+    "Accessible error announcements",
+    "Preserving submitted values"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and boundaries of Displaying Form Errors in the context of Forms, Server Functions, and Data Mutations.",
+    "Apply Field-level validation messages in a minimal JavaScript/JSX or configuration example and describe its expected result.",
+    "Verify the example with one relevant edge or failure case and identify version/runtime assumptions."
+  ],
+  "content": {
+    "intro": "This lesson develops Displaying Form Errors in the supplied Next.js curriculum. The list below preserves its named syllabus subtopics and ties them to a small example you can inspect and adapt.",
+    "why_it_matters": "Treat every server mutation as a public boundary: validate submitted data, authenticate and authorize the caller, persist safely, then update relevant UI/cache state. In practice, field-level validation messages should be understood well enough to explain the expected behavior and how it can fail.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Displaying Form Errors: concept map",
+        "asset_path": "diagrams/lessons/lesson-106-displaying-form-errors.svg",
+        "alt_text": "Lesson 106: Displaying Form Errors: a four-step visual flow showing Field-level validation messages, Server-returned errors, Accessible error announcements, Preserving submitted values.",
+        "caption": "Concept map for Displaying Form Errors in Forms, Server Functions, and Data Mutations; understand the idea, inspect its convention, practice, and verify. The numbered steps communicate order independently of color."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Treat every server mutation as a public boundary: validate submitted data, authenticate and authorize the caller, persist safely, then update relevant UI/cache state. “Displaying Form Errors” is part of the lesson model for Displaying Form Errors. Describe its role, use the framework convention that applies to the selected Next.js version, and confirm the result with a focused example."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Field-level validation messages",
+            "text": "“Field-level validation messages” is part of the lesson model for Displaying Form Errors. Describe its role, use the framework convention that applies to the selected Next.js version, and confirm the result with a focused example."
+          },
+          {
+            "title": "Server-returned errors",
+            "text": "For server-returned errors, define a reproducible input, an expected outcome, and the evidence that distinguishes a product bug from an environment issue."
+          },
+          {
+            "title": "Accessible error announcements",
+            "text": "For accessible error announcements, define a reproducible input, an expected outcome, and the evidence that distinguishes a product bug from an environment issue."
+          },
+          {
+            "title": "Preserving submitted values",
+            "text": "“Preserving submitted values” is part of the lesson model for Displaying Form Errors. Describe its role, use the framework convention that applies to the selected Next.js version, and confirm the result with a focused example."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "filename": "app/example.js",
+        "code": "'use server';\n\nexport async function saveTitle(formData) {\n  const title = String(formData.get('title') || '').trim();\n  if (!title) return { error: 'Title is required.' };\n  // Check session, permission, and persist through the trusted data layer.\n  return { success: true };\n}",
+        "expected_output": "A missing title produces a validation result. Authentication, authorization and persistence must be implemented server-side in a real application.",
+        "run_instructions": "This is an inspectable example, not an arbitrary-code runner inside CodeLeaf. Start from a separate JavaScript App Router project created with `npx create-next-app@latest my-next-app --js --app`, put the snippet in the named or relevant file, and run `npm run dev`. Examples that call application-owned helpers, databases, authentication, or third-party APIs require those dependencies and appropriate environment variables. Use `npm run build` to validate a production build after adapting it.",
+        "reset_steps": "Restore the original snippet, reset the example data and request state, then rerun the same normal case and one empty, invalid, slow, denied, or failed case as relevant. Remove any test records and use non-production credentials.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Work through “Displaying Form Errors” by predicting the result before running the example. Identify which file convention or API creates the behavior, then vary one relevant input such as a route parameter, form value, request result, or viewport. Record the actual outcome and compare it with the expected result above."
+      },
+      {
+        "type": "callout",
+        "title": "Version and environment note",
+        "text": "This JavaScript-first course uses the Next.js 16 documentation snapshot checked on 2026-10-18. Security note: client-side hiding is not authorization. Check identity, ownership, role/permission, and untrusted input within the server operation itself. TypeScript is an optional parallel skill, not a requirement for these examples. Confirm any experimental or configuration-dependent API in the exact version installed in your learning project."
+      }
+    ],
+    "task": "Create or inspect a minimal example for “Displaying Form Errors”. Include the syllabus concept “Field-level validation messages”, state its expected output, and verify one normal and one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named concept rather than only mentioning it.",
+      "Expected output and the project/runtime needed to reproduce it are documented.",
+      "At least one boundary, empty, loading, denied, or failure case is tested or explicitly reasoned about.",
+      "Secrets and trusted server operations stay on the server; UI behavior remains semantic and accessible where relevant."
+    ],
+    "hints": [
+      "Start with the smallest observable part of “Field-level validation messages”.",
+      "Predict the output, change one input at a time, and compare the result with your expectation.",
+      "If results differ, check the route/file convention, current Next.js and Node.js versions, server logs, and whether the behavior is cache-dependent."
+    ],
+    "expected_output": "A missing title produces a validation result. Authentication, authorization and persistence must be implemented server-side in a real application.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-106-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating a development preview as proof that the production application is correct.",
+        "why": "Caching, environment configuration, deployment constraints, and error handling can differ between development and production.",
+        "fix": "Run the relevant targeted tests and a production build, then verify the deployed/runtime-specific behavior."
+      },
+      {
+        "problem": "Relying on client-only checks for sensitive data or mutations.",
+        "why": "Requests can be sent without using the visible UI.",
+        "fix": "Authenticate, authorize, validate inputs, and check resource ownership inside the trusted server operation."
+      },
+      {
+        "problem": "Assuming a Next.js behavior is universal across releases.",
+        "why": "Rendering, caching, config, and request processing APIs evolve between versions.",
+        "fix": "Name the target release and check its matching official docs before publishing or upgrading the example."
+      }
+    ],
+    "summary": [
+      "Displaying Form Errors fits into Forms, Server Functions, and Data Mutations and should be explained with the vocabulary in the syllabus subtopics.",
+      "Keep the implementation minimal, make its runtime boundary explicit, and document its expected output.",
+      "Verify at least one relevant edge/failure case before treating the example as correct."
+    ],
+    "references": [
+      "https://nextjs.org/docs/app/api-reference/directives/use-server",
+      "https://nextjs.org/docs/app/guides/data-security"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "use server",
+      "url": "https://nextjs.org/docs/app/api-reference/directives/use-server",
+      "publisher": "Vercel / Next.js documentation team",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "Server Functions and security considerations"
+      ]
+    },
+    {
+      "title": "Data Security",
+      "url": "https://nextjs.org/docs/app/guides/data-security",
+      "publisher": "Vercel / Next.js documentation team",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "trusted server data boundaries and validation"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Authored from the supplied syllabus and current official documentation links; instructor and technical review are required before publication."
+}

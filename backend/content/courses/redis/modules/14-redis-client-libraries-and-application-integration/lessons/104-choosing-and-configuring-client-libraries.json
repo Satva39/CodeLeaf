@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-104",
+  "slug": "choosing-and-configuring-client-libraries",
+  "title": "Choosing and Configuring Client Libraries",
+  "sequence": 104,
+  "module_id": "redis-module-14",
+  "module_slug": "redis-client-libraries-and-application-integration",
+  "level": "beginner to advanced",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-103"
+  ],
+  "previous_lesson_id": "redis-lesson-103",
+  "next_lesson_id": "redis-lesson-105",
+  "keywords": [
+    "choosing-and-configuring-client-libraries",
+    "python-redis-clients",
+    "node-js-redis-clients",
+    "java-and-go-clients",
+    "net-clients",
+    "version-compatibility-and-feature-support",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 104,
+  "subtopics": [
+    "Python Redis clients",
+    "Node.js Redis clients",
+    "Java and Go clients",
+    ".NET clients",
+    "Version compatibility and feature support"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Choosing and Configuring Client Libraries and distinguish it from a related Redis concept.",
+    "Apply or trace Choosing and Configuring Client Libraries in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Choosing and Configuring Client Libraries and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Choosing and Configuring Client Libraries in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Choosing and Configuring Client Libraries helps implement use supported client libraries with secure configuration, connection reuse, and controlled retries. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Choosing and Configuring Client Libraries",
+        "asset_path": "diagrams/lesson-104-choosing-and-configuring-client-libraries.svg",
+        "alt_text": "Concept diagram for Choosing and Configuring Client Libraries, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Choosing and Configuring Client Libraries; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Choosing and Configuring Client Libraries helps implement use supported client libraries with secure configuration, connection reuse, and controlled retries. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Choosing and Configuring Client Libraries, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Python Redis clients",
+            "text": "Connect Python Redis clients to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Node.js Redis clients",
+            "text": "Connect Node.js Redis clients to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Java and Go clients",
+            "text": "Connect Java and Go clients to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": ".NET clients",
+            "text": "Connect .NET clients to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Version compatibility and feature support",
+            "text": "Connect Version compatibility and feature support to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Choosing and Configuring Client Libraries",
+        "language": "Python (redis-py)",
+        "execution_mode": "static-validation",
+        "code": "import os\nimport redis\n\nr = redis.Redis.from_url(os.environ[\"REDIS_URL\"], decode_responses=True)\nprint(r.ping())",
+        "expected_output": "True",
+        "run_instructions": "Install redis-py in a local virtual environment, set REDIS_URL for a disposable development instance, and never commit credentials.",
+        "reset_steps": "The snippet performs a read-only ping; close the client or connection pool when the application shuts down.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Choosing and Configuring Client Libraries. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Choosing and Configuring Client Libraries in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Choosing and Configuring Client Libraries.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "True",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-104-questions.json",
+    "recap": [
+      "Choosing and Configuring Client Libraries is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Connect with Redis client libraries",
+      "url": "https://redis.io/docs/latest/connect/clients/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "supported client libraries, protocols and integrations"
+      ]
+    },
+    {
+      "title": "Connect to Redis with redis-py",
+      "url": "https://redis.io/docs/latest/develop/clients/redis-py/connect/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "Python connection configuration and TLS examples"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

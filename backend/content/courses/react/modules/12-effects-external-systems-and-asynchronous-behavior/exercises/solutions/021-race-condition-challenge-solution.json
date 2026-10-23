@@ -1,0 +1,19 @@
+{
+  "id": "react-exercise-solution-021",
+  "exercise_id": "react-exercise-021",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "useEffect(() => {\n  const controller = new AbortController();\n  fetch(`/api/search?q=${encodeURIComponent(query)}`, { signal: controller.signal }).then(checkResponse).then(setResults).catch(handleError);\n  return () => controller.abort();\n}, [query]);",
+  "expected_result": "Changing the query aborts the previous request when supported; stale results are not applied after cleanup.",
+  "test_cases": [
+    {
+      "input": "Typical valid input",
+      "expected": "Changing the query aborts the previous request when supported; stale results are not applied after cleanup."
+    },
+    {
+      "input": "Boundary or failure input",
+      "expected": "The application remains understandable and handles the case without assuming success."
+    }
+  ],
+  "explanation": "This reference approach demonstrates Async correctness. It is intentionally a small example: complete the surrounding component, run the app, and verify all acceptance criteria before review."
+}

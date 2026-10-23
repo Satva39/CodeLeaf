@@ -1,0 +1,60 @@
+{
+  "id": "github-actions-exercise-016",
+  "slug": "create-a-reusable-workflow",
+  "title": "Create a reusable workflow",
+  "type": "coding",
+  "lesson_id": "github-actions-lesson-099",
+  "module_id": "github-actions-module-13",
+  "difficulty": "medium",
+  "sequence": 16,
+  "prompt": "Move shared validation steps into a reusable workflow and call it from another workflow.",
+  "objective": "Demonstrate the behavior of create a reusable workflow and capture verifiable evidence.",
+  "target_skills": [
+    "intermediate",
+    "workflow YAML",
+    "validation",
+    "safe automation"
+  ],
+  "starter": {
+    "language": "yaml",
+    "code": "# .github/workflows/reusable-checks.yml\nname: Reusable checks\non:\n  workflow_call:\n    inputs:\n      python-version:\n        required: false\n        type: string\n        default: \"3.12\"\npermissions:\n  contents: read\njobs:\n  checks:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: python --version",
+    "execution_mode": "workflow-fragment"
+  },
+  "expected_output": "A reviewed workflow or design note satisfying: workflow_call:, uses:. Verify behavior on a disposable repository where execution is required; a static sketch is not proof of a live deployment.",
+  "public_tests": [
+    {
+      "name": "Required evidence check",
+      "required_strings": [
+        "workflow_call:",
+        "uses:"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Include or explain `workflow_call:`.",
+    "Include or explain `uses:`.",
+    "Explain one validation result or limitation.",
+    "Do not include a real secret or use production resources."
+  ],
+  "hints": [
+    "First identify the trigger, input, and expected result.",
+    "Start with read-only permissions and a disposable branch or test environment.",
+    "Compare your result with the linked lesson and official documentation; distinguish a configuration sketch from a live integration."
+  ],
+  "solution": {
+    "answer": null,
+    "explanation": "The detailed reference solution is stored in a protected repository-only JSON file; it is not intended for a learner-facing response."
+  },
+  "solution_file": "../solutions/016-create-a-reusable-workflow-solution.json",
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "workflow_call:",
+      "uses:"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus human review for workflow semantics and security boundaries.",
+  "retry_policy": "Allow retries; incorrect submissions do not award XP. The platform awards exercise XP only after server-verified successful completion and applies idempotency per activity.",
+  "status": "draft",
+  "status_note": "Source mapping: Section C: Practical Exercises; original learning task adapted to CodeLeaf structure."
+}

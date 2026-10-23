@@ -1,0 +1,152 @@
+{
+  "id": "redis-lesson-079",
+  "slug": "data-type-compatibility-and-version-awareness",
+  "title": "Data Type Compatibility and Version Awareness",
+  "sequence": 79,
+  "module_id": "redis-module-10",
+  "module_slug": "advanced-and-specialized-redis-data-types",
+  "level": "intermediate to advanced",
+  "difficulty": "intermediate",
+  "track": "version-dependent-specialist",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-078"
+  ],
+  "previous_lesson_id": "redis-lesson-078",
+  "next_lesson_id": "redis-lesson-080",
+  "keywords": [
+    "data-type-compatibility-and-version-awareness",
+    "minimum-supported-versions",
+    "redis-open-source-vs-managed-deployments",
+    "legacy-module-configurations",
+    "feature-discovery",
+    "testing-compatibility-before-deployment",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 79,
+  "subtopics": [
+    "Minimum supported versions",
+    "Redis Open Source vs managed deployments",
+    "Legacy module configurations",
+    "Feature discovery",
+    "Testing compatibility before deployment"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Data Type Compatibility and Version Awareness and distinguish it from a related Redis concept.",
+    "Apply or trace Data Type Compatibility and Version Awareness in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Data Type Compatibility and Version Awareness and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Data Type Compatibility and Version Awareness in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Data Type Compatibility and Version Awareness belongs to Redis specialized data-type capabilities. First check whether the target server and hosting plan support the relevant commands.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Data Type Compatibility and Version Awareness",
+        "asset_path": "diagrams/lesson-079-data-type-compatibility-and-version-awareness.svg",
+        "alt_text": "Concept diagram for Data Type Compatibility and Version Awareness, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Data Type Compatibility and Version Awareness; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Data Type Compatibility and Version Awareness belongs to Redis specialized data-type capabilities. First check whether the target server and hosting plan support the relevant commands."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Data Type Compatibility and Version Awareness, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Minimum supported versions",
+            "text": "Connect Minimum supported versions to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Redis Open Source vs managed deployments",
+            "text": "Connect Redis Open Source vs managed deployments to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Legacy module configurations",
+            "text": "Connect Legacy module configurations to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Feature discovery",
+            "text": "Connect Feature discovery to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Testing compatibility before deployment",
+            "text": "Connect Testing compatibility before deployment to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Data Type Compatibility and Version Awareness",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "TYPE demo:key\nTTL demo:key\nSCAN 0 MATCH demo:* COUNT 20",
+        "expected_output": "Returns a type, remaining TTL (or -1/-2 where applicable), and a cursor/key page.",
+        "run_instructions": "SCAN COUNT is a hint; continue while the cursor is non-zero and do not assume one page is complete.",
+        "reset_steps": "Read-only inspection; no key is created.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Data Type Compatibility and Version Awareness. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Data Type Compatibility and Version Awareness in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Data Type Compatibility and Version Awareness.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "Returns a type, remaining TTL (or -1/-2 where applicable), and a cursor/key page.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-079-questions.json",
+    "recap": [
+      "Data Type Compatibility and Version Awareness is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Redis data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "strings, hashes, lists, sets, sorted sets, streams, geospatial indexes, bitmaps, bitfields, JSON, arrays, time series, probabilistic structures, vector sets"
+      ]
+    },
+    {
+      "title": "Compare data types",
+      "url": "https://redis.io/docs/latest/develop/data-types/compare-data-types/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "data-type selection and use-case trade-offs"
+      ]
+    },
+    {
+      "title": "Redis commands reference",
+      "url": "https://redis.io/docs/latest/commands/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "command syntax, return values, complexity, compatibility and command history"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

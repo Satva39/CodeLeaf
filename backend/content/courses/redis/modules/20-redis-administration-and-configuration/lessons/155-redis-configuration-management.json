@@ -1,0 +1,143 @@
+{
+  "id": "redis-lesson-155",
+  "slug": "redis-configuration-management",
+  "title": "Redis Configuration Management",
+  "sequence": 155,
+  "module_id": "redis-module-20",
+  "module_slug": "redis-administration-and-configuration",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-154"
+  ],
+  "previous_lesson_id": "redis-lesson-154",
+  "next_lesson_id": "redis-lesson-156",
+  "keywords": [
+    "redis-configuration-management",
+    "redis-conf",
+    "startup-arguments",
+    "config-get",
+    "config-set",
+    "configuration-persistence-and-reload-considerations",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 155,
+  "subtopics": [
+    "redis.conf",
+    "Startup arguments",
+    "CONFIG GET",
+    "CONFIG SET",
+    "Configuration persistence and reload considerations"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Redis Configuration Management and distinguish it from a related Redis concept.",
+    "Apply or trace Redis Configuration Management in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Redis Configuration Management and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Redis Configuration Management in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Redis Configuration Management helps implement inspect and change operational settings without disrupting production workloads. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Redis Configuration Management",
+        "asset_path": "diagrams/lesson-155-redis-configuration-management.svg",
+        "alt_text": "Concept diagram for Redis Configuration Management, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Redis Configuration Management; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Redis Configuration Management helps implement inspect and change operational settings without disrupting production workloads. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Redis Configuration Management, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "redis.conf",
+            "text": "Connect redis.conf to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Startup arguments",
+            "text": "Connect Startup arguments to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "CONFIG GET",
+            "text": "Connect CONFIG GET to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "CONFIG SET",
+            "text": "Connect CONFIG SET to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Configuration persistence and reload considerations",
+            "text": "Connect Configuration persistence and reload considerations to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Redis Configuration Management",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "INFO server\nINFO clients\nINFO memory",
+        "expected_output": "Returns selected server, client and memory sections.",
+        "run_instructions": "Some administrative commands require elevated ACL permissions. Avoid CONFIG SET on shared/production systems during exercises.",
+        "reset_steps": "Read-only inspection.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Redis Configuration Management. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Redis Configuration Management in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Redis Configuration Management.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "Returns selected server, client and memory sections.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-155-questions.json",
+    "recap": [
+      "Redis Configuration Management is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Redis commands reference",
+      "url": "https://redis.io/docs/latest/commands/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "command syntax, return values, complexity, compatibility and command history"
+      ]
+    },
+    {
+      "title": "Memory optimization",
+      "url": "https://redis.io/docs/latest/management/optimization/memory-optimization/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "compact encodings, memory trade-offs and optimization"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

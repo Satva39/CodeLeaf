@@ -1,0 +1,116 @@
+{
+  "id": "dart-lesson-184",
+  "slug": "creating-streams-with-streamcontroller",
+  "title": "Creating Streams with StreamController",
+  "sequence": 184,
+  "module_id": "dart-module-16",
+  "module_slug": "asynchronous-programming",
+  "level": "advanced",
+  "difficulty": "intermediate",
+  "track": "async-programming",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "dart-lesson-183"
+  ],
+  "previous_lesson_id": "dart-lesson-183",
+  "next_lesson_id": "dart-lesson-185",
+  "keywords": [
+    "creating",
+    "streams",
+    "streamcontroller"
+  ],
+  "source_syllabus_number": 184,
+  "source_syllabus_description": "Adding events and errors, closing streams, and managing lifecycle.",
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain Creating Streams with StreamController and its role in a Dart program.",
+    "Apply or trace a small example related to Creating Streams with StreamController and state the expected result.",
+    "Identify one edge case, diagnostic, or version/platform caveat relevant to the topic."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study Creating Streams with StreamController.",
+    "why_it_matters": "This skill helps you reason about adding events and errors, closing streams, and managing lifecycle. before introducing it into a maintainable program.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "asset_path": "diagrams/lesson-184-creating-streams-with-streamcontroller.svg",
+        "alt_text": "Original learning diagram for Creating Streams with StreamController; shows concept, application, and verification stages.",
+        "caption": "Creating Streams with StreamController: relate the central idea to its implementation and one checkable result."
+      },
+      {
+        "type": "paragraph",
+        "text": "Creating Streams with StreamController matters because Dart programs need predictable behavior, explicit contracts, and examples that can be verified. This topic focuses on adding events and errors, closing streams, and managing lifecycle. Keep the lesson’s core distinction separate from runtime, SDK, package, or platform details that may vary. When you build on this idea, state your assumptions, try the smallest useful example, and check edge cases before integrating it into a larger project."
+      },
+      {
+        "type": "list",
+        "title": "Concept checkpoints",
+        "items": [
+          "Define the term in Creating Streams with StreamController and explain the boundary it introduces.",
+          "Explain how the topic affects correctness, readability, or maintenance in a Dart program.",
+          "Identify one edge case or platform/version assumption that should be verified."
+        ]
+      },
+      {
+        "type": "code",
+        "language": "dart",
+        "filename": "example-184.dart",
+        "code": "Future<String> loadLabel() async {\n  await Future<void>.delayed(const Duration(milliseconds: 1));\n  return 'ready';\n}\n\nFuture<void> main() async {\n  print(await loadLabel());\n}",
+        "expected_output": "ready",
+        "run_instructions": "Run with `dart run`. Add timeout/error paths and make subscription/resource cleanup explicit.",
+        "reset_steps": "Restore the original snippet, rerun the same command, and compare the complete output. For package/platform examples, restore pubspec and target settings too.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "style": "tip",
+        "title": "Try it yourself",
+        "text": "Change one input or condition in the example for “Creating Streams with StreamController”. Predict the output first, then run or statically inspect it. Add one boundary test and explain why the result is expected."
+      },
+      {
+        "type": "paragraph",
+        "text": "Common mistakes: confusing a language guarantee with a runtime or package behavior; skipping malformed/empty inputs; relying on undocumented version assumptions; and changing multiple things before reproducing a failure. Prefer explicit naming, a small test, and official documentation."
+      }
+    ],
+    "task": "Create a small, standalone Dart example that demonstrates Creating Streams with StreamController. Include a short comment naming the assumption being tested, then verify one ordinary input and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example focuses on the stated topic and uses clear Dart naming.",
+      "Expected behavior is documented and checked with a repeatable command or static inspection.",
+      "At least one boundary/error/platform assumption is stated."
+    ],
+    "hints": [
+      "Start from the supplied minimal example and change only one behavior.",
+      "Write down the expected output before running the program.",
+      "Use `dart format .` and `dart analyze .`; add a test when the behavior matters."
+    ],
+    "expected_output": "ready",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-184-questions.json",
+    "recap": [
+      "Creating Streams with StreamController: Adding events and errors, closing streams, and managing lifecycle.",
+      "Prefer explicit assumptions, a minimal reproduction, and an appropriate edge-case check."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Dart language overview",
+      "url": "https://dart.dev/language",
+      "publisher": "Dart project",
+      "checked_on": "2026-10-19"
+    },
+    {
+      "title": "Dart built-in types",
+      "url": "https://dart.dev/language/built-in-types",
+      "publisher": "Dart project",
+      "checked_on": "2026-10-19"
+    },
+    {
+      "title": "Dart records",
+      "url": "https://dart.dev/language/records",
+      "publisher": "Dart project",
+      "checked_on": "2026-10-19"
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the supplied Dart syllabus; run examples against the selected stable SDK and review wording before publishing."
+}

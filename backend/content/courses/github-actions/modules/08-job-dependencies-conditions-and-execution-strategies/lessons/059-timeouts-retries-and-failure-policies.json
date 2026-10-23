@@ -1,0 +1,261 @@
+{
+  "id": "github-actions-lesson-059",
+  "slug": "timeouts-retries-and-failure-policies",
+  "title": "Timeouts, Retries, and Failure Policies",
+  "sequence": 59,
+  "module_id": "github-actions-module-08",
+  "module_slug": "job-dependencies-conditions-and-execution-strategies",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "github-actions-lesson-058"
+  ],
+  "previous_lesson_id": "github-actions-lesson-058",
+  "next_lesson_id": "github-actions-lesson-060",
+  "keywords": [
+    "timeouts-retries-and-failure-policies",
+    "job-dependencies-conditions-and-execution-strategies",
+    "timeout-minutes",
+    "continue-on-error",
+    "handling-expected-failures",
+    "designing-retry-logic",
+    "avoiding-uncontrolled-retries",
+    "managing-flaky-jobs",
+    "distinguishing-test-failures-from-infrastructure-failures"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of timeouts, retries, and failure policies and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to timeouts, retries, and failure policies.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on timeouts, retries, and failure policies. Set timeouts and bounded retry logic for transient failures; do not retry deterministic test or configuration errors indefinitely or silently accept them. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "Timeouts, Retries, and Failure Policies matters because it affects correctness, security, maintainability, or operating cost. Set timeouts and bounded retry logic for transient failures; do not retry deterministic test or configuration errors indefinitely or silently accept them. Use `needs` for dependencies, matrices for controlled combinations, conditions for deliberate branching, and concurrency/timeouts to prevent stale or unbounded work.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 8 visual map",
+        "asset_path": "diagrams/module-08-overview.svg",
+        "alt_text": "Ordered overview of module 8: Job Dependencies; Parallel and Sequential Execution; Conditional Jobs and Steps; Matrix Strategies; Controlling Parallelism; Workflow and Job Concurrency; Timeouts, Retries, and Failure Policies; Dynamic Execution Patterns.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Set timeouts and bounded retry logic for transient failures; do not retry deterministic test or configuration errors indefinitely or silently accept them. Use `needs` for dependencies, matrices for controlled combinations, conditions for deliberate branching, and concurrency/timeouts to prevent stale or unbounded work. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "timeout-minutes",
+            "text": "Measure duration, resource/runner consumption, queue time, and failure rate before changing the pipeline. Bound retries, cancel stale work only when safe, and compare the result after one controlled change."
+          },
+          {
+            "title": "continue-on-error",
+            "text": "Start with the first failed step and its exit code, then inspect the event, conditions, permissions, tool versions, network, and runner state. Capture sanitized diagnostics and preserve evidence of the failure."
+          },
+          {
+            "title": "Handling expected failures",
+            "text": "Start with the first failed step and its exit code, then inspect the event, conditions, permissions, tool versions, network, and runner state. Capture sanitized diagnostics and preserve evidence of the failure."
+          },
+          {
+            "title": "Designing retry logic",
+            "text": "Start with the first failed step and its exit code, then inspect the event, conditions, permissions, tool versions, network, and runner state. Capture sanitized diagnostics and preserve evidence of the failure."
+          },
+          {
+            "title": "Avoiding uncontrolled retries",
+            "text": "For avoiding uncontrolled retries, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Managing flaky jobs",
+            "text": "Make the workflow contract explicit: identify the event, job runner, inputs, command/action, output, and failure signal. Keep steps small and review the permissions and source of every action."
+          },
+          {
+            "title": "Distinguishing test failures from infrastructure failures",
+            "text": "Start with the first failed step and its exit code, then inspect the event, conditions, permissions, tool versions, network, and runner state. Capture sanitized diagnostics and preserve evidence of the failure."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "name: Bound a validation job\non: workflow_dispatch\njobs:\n  validate:\n    runs-on: ubuntu-latest\n    timeout-minutes: 10\n    steps:\n      - name: Run a bounded command\n        continue-on-error: false\n        run: echo \"Replace with a deterministic validation command\"",
+        "expected_output": "The job is cancelled if it exceeds ten minutes; the step failure remains visible rather than being ignored.",
+        "run_instructions": "Use a deterministic test command and confirm its expected duration before setting the timeout.",
+        "reset_steps": "Do not set timeouts so low that normal workload variation causes false failures.",
+        "execution_mode": "workflow-fragment"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to timeouts, retries, and failure policies. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain timeouts, retries, and failure policies, read the example, and identify a way to validate it. The wider system goal remains: Express dependencies and parallel work as a clear job graph with bounded execution and failure behavior."
+      }
+    ],
+    "task": "Apply timeouts, retries, and failure policies to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: Set timeouts and bounded retry logic for transient failures; do not retry deterministic test or configuration errors indefinitely or silently accept them.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: Set timeouts and bounded retry logic for transient failures; do not retry deterministic test or configuration errors indefinitely or silently accept them. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "Set timeouts and bounded retry logic for transient failures; do not retry deterministic test or configuration errors indefinitely or silently accept them.",
+      "Use `needs` for dependencies, matrices for controlled combinations, conditions for deliberate branching, and concurrency/timeouts to prevent stale or unbounded work.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-059-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "workflow-fragment",
+    "references": [
+      {
+        "title": "Workflow syntax for GitHub Actions",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "workflow files",
+          "jobs",
+          "steps",
+          "permissions",
+          "defaults",
+          "concurrency",
+          "matrix",
+          "environments"
+        ]
+      },
+      {
+        "title": "Evaluate expressions in workflows and actions",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/expressions",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "expression syntax",
+          "operators",
+          "functions",
+          "status checks",
+          "change detection"
+        ]
+      },
+      {
+        "title": "Workflow artifacts",
+        "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/workflow-artifacts",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "build outputs",
+          "test reports",
+          "inter-job data",
+          "artifact attestations"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Workflow syntax for GitHub Actions",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "workflow files",
+        "jobs",
+        "steps",
+        "permissions",
+        "defaults",
+        "concurrency",
+        "matrix",
+        "environments"
+      ]
+    },
+    {
+      "title": "Evaluate expressions in workflows and actions",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/expressions",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "expression syntax",
+        "operators",
+        "functions",
+        "status checks",
+        "change detection"
+      ]
+    },
+    {
+      "title": "Workflow artifacts",
+      "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions/workflow-artifacts",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "build outputs",
+        "test reports",
+        "inter-job data",
+        "artifact attestations"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "59",
+    "module_title": "Job Dependencies, Conditions, and Execution Strategies",
+    "subtopics": [
+      "timeout-minutes",
+      "continue-on-error",
+      "Handling expected failures",
+      "Designing retry logic",
+      "Avoiding uncontrolled retries",
+      "Managing flaky jobs",
+      "Distinguishing test failures from infrastructure failures"
+    ]
+  }
+}

@@ -1,0 +1,263 @@
+{
+  "id": "github-actions-lesson-048",
+  "slug": "expression-syntax",
+  "title": "Expression Syntax",
+  "sequence": 48,
+  "module_id": "github-actions-module-07",
+  "module_slug": "variables-contexts-and-expressions",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "github-actions-lesson-047"
+  ],
+  "previous_lesson_id": "github-actions-lesson-047",
+  "next_lesson_id": "github-actions-lesson-049",
+  "keywords": [
+    "expression-syntax",
+    "variables-contexts-and-expressions",
+    "the-syntax",
+    "property-dereferencing",
+    "index-based-property-access",
+    "literals-and-operators",
+    "string-comparisons",
+    "expression-evaluation-timing"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of expression syntax and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to expression syntax.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on expression syntax. Expressions use `${{ ... }}` to read contexts, compare values, and build conditional configuration; their evaluation timing differs from shell variable expansion. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "Expression Syntax matters because it affects correctness, security, maintainability, or operating cost. Expressions use `${{ ... }}` to read contexts, compare values, and build conditional configuration; their evaluation timing differs from shell variable expansion. Contexts, environment variables, and expressions have different scopes and evaluation times. Treat event data as untrusted and avoid interpolating untrusted values directly into shell source.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 7 visual map",
+        "asset_path": "diagrams/module-07-overview.svg",
+        "alt_text": "Ordered overview of module 7: Default Environment Variables; Custom Environment Variables; GitHub Configuration Variables; Understanding GitHub Actions Contexts; Expression Syntax; Built-In Expression Functions; Conditional Execution; Safe Handling of Workflow Expressions; Passing Data Through Environment Files.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Expressions use `${{ ... }}` to read contexts, compare values, and build conditional configuration; their evaluation timing differs from shell variable expansion. Contexts, environment variables, and expressions have different scopes and evaluation times. Treat event data as untrusted and avoid interpolating untrusted values directly into shell source. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "The ${{ ... }} syntax",
+            "text": "For the ${{ ... }} syntax, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Property dereferencing",
+            "text": "For property dereferencing, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Index-based property access",
+            "text": "For index-based property access, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Literals and operators",
+            "text": "For literals and operators, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "String comparisons",
+            "text": "YAML is indentation-sensitive. Check that nested values are aligned, values have the expected type, special strings are quoted when needed, and the workflow schema accepts the key at that level."
+          },
+          {
+            "title": "Expression evaluation timing",
+            "text": "Use `${{ ... }}` for workflow expressions and the correct context for the field. Treat event-derived values as data: pass untrusted text through an environment variable and quote it instead of inserting it into shell source."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "jobs:\n  validate:\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo \"Validate input and exit status\"\n  report:\n    needs: validate\n    if: ${{ always() }}\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo \"Inspect the dependency result before acting\"",
+        "expected_output": "The reporting job waits for the validation job and runs even after it finishes; real cleanup/reporting logic should inspect `needs.validate.result` before making decisions.",
+        "run_instructions": "Use a test repository or static validation first. Confirm the snippet matches the repository, runner, permissions, and current GitHub documentation.",
+        "reset_steps": "Remove temporary test workflows and never carry test credentials or sample outputs into production.",
+        "execution_mode": "workflow-fragment"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to expression syntax. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain expression syntax, read the example, and identify a way to validate it. The wider system goal remains: Pass explicit values between workflow components while treating event data as untrusted input."
+      }
+    ],
+    "task": "Apply expression syntax to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: Expressions use `${{ ... }}` to read contexts, compare values, and build conditional configuration; their evaluation timing differs from shell variable expansion.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: Expressions use `${{ ... }}` to read contexts, compare values, and build conditional configuration; their evaluation timing differs from shell variable expansion. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "Expressions use `${{ ... }}` to read contexts, compare values, and build conditional configuration; their evaluation timing differs from shell variable expansion.",
+      "Contexts, environment variables, and expressions have different scopes and evaluation times. Treat event data as untrusted and avoid interpolating untrusted values directly into shell source.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-048-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "workflow-fragment",
+    "references": [
+      {
+        "title": "Contexts reference",
+        "url": "https://docs.github.com/en/actions/reference/contexts-reference",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "github",
+          "env",
+          "vars",
+          "secrets",
+          "runner",
+          "job",
+          "steps",
+          "needs",
+          "matrix",
+          "inputs contexts"
+        ]
+      },
+      {
+        "title": "Evaluate expressions in workflows and actions",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/expressions",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "expression syntax",
+          "operators",
+          "functions",
+          "status checks",
+          "change detection"
+        ]
+      },
+      {
+        "title": "Secure use reference",
+        "url": "https://docs.github.com/en/actions/reference/security/secure-use",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "security_guidance",
+        "supports": [
+          "least privilege",
+          "third-party actions",
+          "full SHA pinning",
+          "untrusted input",
+          "privileged workflow triggers",
+          "cache security"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Contexts reference",
+      "url": "https://docs.github.com/en/actions/reference/contexts-reference",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "github",
+        "env",
+        "vars",
+        "secrets",
+        "runner",
+        "job",
+        "steps",
+        "needs",
+        "matrix",
+        "inputs contexts"
+      ]
+    },
+    {
+      "title": "Evaluate expressions in workflows and actions",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/expressions",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "expression syntax",
+        "operators",
+        "functions",
+        "status checks",
+        "change detection"
+      ]
+    },
+    {
+      "title": "Secure use reference",
+      "url": "https://docs.github.com/en/actions/reference/security/secure-use",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "security_guidance",
+      "supports": [
+        "least privilege",
+        "third-party actions",
+        "full SHA pinning",
+        "untrusted input",
+        "privileged workflow triggers",
+        "cache security"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "48",
+    "module_title": "Variables, Contexts, and Expressions",
+    "subtopics": [
+      "The ${{ ... }} syntax",
+      "Property dereferencing",
+      "Index-based property access",
+      "Literals and operators",
+      "String comparisons",
+      "Expression evaluation timing"
+    ]
+  }
+}

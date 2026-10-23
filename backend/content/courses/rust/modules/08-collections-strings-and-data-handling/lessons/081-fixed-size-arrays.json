@@ -1,0 +1,149 @@
+{
+  "id": "rust-lesson-081",
+  "slug": "fixed-size-arrays",
+  "title": "Fixed-Size Arrays",
+  "sequence": 81,
+  "module_id": "rust-module-08",
+  "module_slug": "collections-strings-and-data-handling",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-foundations",
+  "estimated_minutes": 9,
+  "prerequisites": [
+    "rust-lesson-080"
+  ],
+  "previous_lesson_id": "rust-lesson-080",
+  "next_lesson_id": "rust-lesson-082",
+  "keywords": [
+    "arrays",
+    "collection-selection-and-data-representation",
+    "fixed",
+    "rust",
+    "size"
+  ],
+  "source_syllabus_number": 81,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the main purpose of Fixed-Size Arrays and distinguish it from a closely related Rust concept.",
+    "Apply or trace Fixed-Size Arrays in a small Rust example, using the module guidance and stated toolchain assumptions.",
+    "Identify one relevant edge case or failure mode for Fixed-Size Arrays and select a suitable verification step."
+  ],
+  "content": {
+    "intro": "This lesson covers Fixed-Size Arrays. It sits in Module 8, Collections, Strings, and Data Handling, and builds toward a practical Rust mental model rather than memorizing a term in isolation.",
+    "why_it_matters": "Fixed-Size Arrays matters when you work with collection selection and data representation. Understanding the rule helps you predict compiler or runtime behavior, document assumptions, and choose a safer implementation when inputs or system conditions change.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Fixed-Size Arrays",
+        "asset_path": "diagrams/lesson-081-fixed-size-arrays.svg",
+        "alt_text": "Concept diagram for Fixed-Size Arrays: collection selection and data representation; inputs flow through a rule to an outcome, followed by a verification step.",
+        "caption": "Visual model for Fixed-Size Arrays. The diagram is a learning aid; use the prose and examples for exact conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Choose a collection based on the shape of the data and the operations needed. Arrays have a fixed length, Vec grows as needed, slices borrow a view, and maps associate keys with values."
+      },
+      {
+        "type": "paragraph",
+        "title": "A reliable way to reason about it",
+        "text": "For Fixed-Size Arrays, write down the inputs, the guarantee you expect, and the boundary where that guarantee stops. Work through a minimal example first; then deliberately test one edge case. A string is UTF-8 text; do not treat its byte indices as arbitrary character positions. Choose collection types by access patterns and ownership needs."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Fixed-Size Arrays",
+            "text": "Choose a collection based on the shape of the data and the operations needed. Arrays have a fixed length, Vec grows as needed, slices borrow a view, and maps associate keys with values."
+          },
+          {
+            "title": "Inputs and guarantees",
+            "text": "Identify the value, type, state, tool, or external system involved in Fixed-Size Arrays. Separate what Rust checks at compile time from what still needs validation or a test."
+          },
+          {
+            "title": "Boundary case",
+            "text": "Try an empty, missing, invalid, unusually large, or concurrently accessed input when that boundary applies to Fixed-Size Arrays. Record what should happen and how you can verify it."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "rust",
+        "execution_mode": "static-validation",
+        "code": "fn main() {\n    let mut values = vec![3, 1, 4];\n    values.push(2);\n    values.sort();\n    println!(\"{values:?}\");\n}",
+        "expected_output": "[1, 2, 3, 4]",
+        "run_instructions": "Save as src/main.rs and run cargo run. Choose the collection according to required operations and ownership.",
+        "reset_steps": "Return the sample to its original form, run the documented command again, and compare the result. If a dependency, target, runtime, database, or hardware device is required, configure that separately before treating the result as verified."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not assume Fixed-Size Arrays guarantees more than it actually does. Reduce a failure to a small reproducer, read the full compiler diagnostic or error value, consult the matching official reference, and change one assumption at a time."
+      },
+      {
+        "type": "callout",
+        "title": "Toolchain and execution boundary",
+        "text": "Course examples are static reference snippets, not executed inside CodeLeaf. Most standard-library examples can be tried in a Rust 2024 Cargo project; specialized networking, database, async, procedural-macro, embedded, and WebAssembly scenarios require the toolchain and dependencies described in their lessons."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate Fixed-Size Arrays. Predict the result before you run it, then explain one normal case and one relevant boundary case in your own words.",
+    "task_acceptance_criteria": [
+      "Explain the purpose of Fixed-Size Arrays using a concrete example.",
+      "Verify the example using an appropriate local command, targeted test, or documented manual check.",
+      "Describe one edge case, failure mode, version assumption, or limitation that matters for this topic."
+    ],
+    "hints": [
+      "Start by identifying the inputs and guarantee involved in Fixed-Size Arrays.",
+      "Use the smallest example that isolates one rule; avoid changing multiple variables at once.",
+      "Check the matching official reference if compiler behavior, a library API, or toolchain support differs from your expectation."
+    ],
+    "expected_output": "[1, 2, 3, 4]",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-081-questions.json",
+    "recap": [
+      "Fixed-Size Arrays supports collection selection and data representation.",
+      "Predict and verify behavior with small examples.",
+      "Keep library and target-specific assumptions explicit."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "The Rust Programming Language (The Rust Book)",
+      "url": "https://doc.rust-lang.org/stable/book/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "learning sequence",
+        "syntax",
+        "ownership",
+        "structs and enums",
+        "collections",
+        "generics",
+        "error handling",
+        "modules",
+        "lifetimes",
+        "threads",
+        "testing"
+      ]
+    },
+    {
+      "title": "Rust Standard Library Documentation",
+      "url": "https://doc.rust-lang.org/std/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "standard library APIs",
+        "collections",
+        "I/O",
+        "threads",
+        "smart pointers",
+        "filesystem"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Rust.pdf; review explanation, code behavior, version notes, and assessment quality before publication."
+}

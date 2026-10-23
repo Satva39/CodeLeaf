@@ -1,0 +1,187 @@
+{
+  "id": "bash-lesson-049",
+  "slug": "conditional-tests",
+  "title": "Conditional Tests",
+  "sequence": 49,
+  "module_id": "bash-module-06",
+  "module_slug": "operators-and-control-flow",
+  "level": "beginner-to-intermediate",
+  "difficulty": "beginner-to-intermediate",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "bash-lesson-048"
+  ],
+  "previous_lesson_id": "bash-lesson-048",
+  "next_lesson_id": "bash-lesson-050",
+  "keywords": [
+    "conditional",
+    "tests",
+    "the",
+    "test",
+    "builtin",
+    "bracket",
+    "with",
+    "...",
+    "bash",
+    "expressions",
+    "expression",
+    "structure",
+    "and",
+    "quoting"
+  ],
+  "source_syllabus_number": 49,
+  "subtopics": [
+    "The test builtin",
+    "Bracket tests with [ ... ]",
+    "Bash conditional expressions with [[ ... ]]",
+    "Expression structure and quoting",
+    "Differences between portable tests and Bash-specific tests"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Conditional Tests and identify at least two relevant syllabus points.",
+    "Apply conditional tests in a small Bash example and verify the expected output or status.",
+    "Identify one edge case or failure mode and state how to test it safely."
+  ],
+  "content": {
+    "intro": "`test`, `[ ...",
+    "why_it_matters": "Conditional Tests matters because reliable shell automation depends on making this behavior explicit, testing its boundaries, and documenting environment assumptions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 06 visual roadmap",
+        "asset_path": "diagrams/module-06-overview.svg",
+        "alt_text": "Overview roadmap for Module 6: Operators and Control Flow, listing lessons 48 through 59 in curriculum order. Lesson focus: Conditional Tests.",
+        "caption": "Module roadmap for context. For this lesson, focus on: The test builtin; Bracket tests with [ ... ]; Bash conditional expressions with [[ ... ]]."
+      },
+      {
+        "type": "paragraph",
+        "title": "The central idea",
+        "text": "`[[ ... ]]` is a Bash conditional construct with pattern and regular-expression features; `[ ... ]` and `test` have different parsing rules and are more portable but require careful quoting."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the supplied syllabus",
+        "items": [
+          {
+            "title": "The test builtin",
+            "text": "Make the check repeatable, include a failing case, and record its result; static checks complement but do not replace behavioral tests."
+          },
+          {
+            "title": "Bracket tests with [ ... ]",
+            "text": "Make the check repeatable, include a failing case, and record its result; static checks complement but do not replace behavioral tests."
+          },
+          {
+            "title": "Bash conditional expressions with [[ ... ]]",
+            "text": "Exercise every branch with representative input and verify that unsupported input reaches an explicit default/error path."
+          },
+          {
+            "title": "Expression structure and quoting",
+            "text": "Test a value containing spaces and wildcard characters, and verify that quoting preserves it as the intended single argument or filename."
+          },
+          {
+            "title": "Differences between portable tests and Bash-specific tests",
+            "text": "Record the supported interpreter/utility version and test on the oldest target environment rather than assuming all installations are identical."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How it fits into Bash",
+        "text": "`test`, `[ ... ]`, and Bash’s `[[ ... ]]` test expressions differ in syntax and portability. Keep spaces around bracket-test arguments, quote expansions in portable test forms, and use Bash-specific matching only when the script’s interpreter is Bash."
+      },
+      {
+        "type": "code",
+        "language": "bash",
+        "execution_mode": "manual-terminal",
+        "code": "value='ready'\nif [[ -n $value ]]; then printf 'set\\n'; fi",
+        "expected_output": "set",
+        "run_instructions": "Save the snippet in a temporary practice file and run it with the locally installed Bash interpreter. The CodeLeaf in-page preview displays reference output only; it does not execute Bash code. Some examples require commands already installed on your machine.",
+        "reset_steps": "Discard the temporary file or reset the editor to the original snippet. The examples are designed not to modify important data."
+      },
+      {
+        "type": "callout",
+        "title": "Watch out",
+        "text": "Make loop termination explicit and include a normal, an edge, and a failure case in your manual checks. Do not assume the same command options or newer Bash features exist on every operating system."
+      },
+      {
+        "type": "paragraph",
+        "title": "Check your result",
+        "text": "Compare the observed output and exit status with the reference behavior. Change one input at a time, include a boundary or invalid input, and note what differs on your target Bash/utility version."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety note",
+        "text": "Use a local test directory, avoid secrets in commands/history/logs, and check the installed interpreter with `bash --version`. This course remains draft until technical examples and assessments receive subject-matter review."
+      }
+    ],
+    "task": "Build a small local example for “Conditional Tests” using synthetic input or a disposable practice directory. Explain what the command should do, check its output and exit status, and test one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "Use an example aligned with the lesson and preserve arguments, paths, or streams correctly.",
+      "Record the observed output and exit status.",
+      "Test one boundary case or expected failure.",
+      "State the Bash version and any external utility dependency that matters."
+    ],
+    "hints": [
+      "Reduce the problem to one command or one small function first.",
+      "Use quoting and printf to make argument boundaries visible.",
+      "Check exit statuses as well as printed output; use syntax-only validation before testing changes."
+    ],
+    "expected_output": "A documented example for “Conditional Tests” with the observed output/status, one tested boundary case, and an explicit statement of any version or utility dependency.",
+    "run_mode": "static-validation",
+    "troubleshooting": [
+      "If the snippet uses an external command, check availability with `command -v NAME` and consult that program’s local help.",
+      "If behavior differs by operating system or Bash version, record `bash --version` and check the official manual linked below.",
+      "For syntax-only validation run `bash -n script.sh`; this parses but does not execute the script."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming a successful-looking output means the command succeeded.",
+        "why": "Output and exit status are separate signals, and a later command may replace `$?`.",
+        "fix": "Capture important statuses immediately and check all relevant pipeline stages."
+      },
+      {
+        "problem": "Copying example commands straight into a production path.",
+        "why": "Real paths, permissions, input names, and external utility versions differ.",
+        "fix": "Use a disposable fixture and inspect the planned side effects first."
+      },
+      {
+        "problem": "Treating Bash-specific syntax as portable `sh` syntax.",
+        "why": "Arrays, `[[ ... ]]`, process substitution, and some parameter operators are extensions.",
+        "fix": "Name the interpreter and test the minimum supported version."
+      }
+    ],
+    "summary": [
+      "Conditional Tests has specific syntax and behavior; verify it rather than relying on guesswork.",
+      "Preserve argument boundaries and keep shell commands separate from untrusted data.",
+      "Test successful, boundary, and failure cases in a safe environment."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-049-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "gnu-bash-manual-5-3",
+      "title": "GNU Bash Reference Manual, Edition 5.3",
+      "url": "https://www.gnu.org/s/bash/manual/bash.html",
+      "publisher": "GNU Project / Free Software Foundation",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "Bash syntax and parsing",
+        "quoting and expansion",
+        "variables and arrays",
+        "control flow",
+        "functions",
+        "redirection and pipelines",
+        "processes and traps",
+        "startup files and shell options",
+        "version compatibility"
+      ],
+      "source_type": "official language reference",
+      "notes": "The primary technical reference for Bash-specific behavior. Verify examples against the interpreter installed on the target system."
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft content mapped to Bash.pdf Section B lesson 49. Technical examples and grading require review before publication."
+}

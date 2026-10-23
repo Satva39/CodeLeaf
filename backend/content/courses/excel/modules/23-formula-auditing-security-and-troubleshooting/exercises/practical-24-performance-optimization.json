@@ -1,0 +1,63 @@
+{
+  "id": "excel-practical-24",
+  "slug": "practical-24-performance-optimization",
+  "title": "Performance Optimization",
+  "type": "choice",
+  "lesson_id": "excel-lesson-222",
+  "module_id": "excel-module-23",
+  "difficulty": "advanced",
+  "sequence": 2,
+  "source_exercise_id": "PDF-EX-24",
+  "source_topics": [
+    222
+  ],
+  "prompt": "Improve calculation speed and maintainability of a large workbook.\n\nSkills: Formula design, efficient ranges and profiling.\n\nUse the supplied synthetic CSV at assets/data/practical-24-performance-optimization.csv. A small copy/pastable sample is included below in case the CSV is not directly downloadable from the lesson page. Complete the work in a separate .xlsx copy, preserve a raw-data sheet, and check the result against the acceptance criteria. Then answer the short grading check; it does not validate the workbook itself.\n\nSample CSV (synthetic):\nPattern,Risk,Improvement\nWhole-column formula,Unneeded calculation span,Bounded table references\nRepeated lookup,Duplicate work,Reuse a helper result or LET where supported\nVolatile function,Frequent recalculation,Use a non-volatile alternative if appropriate",
+  "objective": "Improve calculation speed and maintainability of a large workbook.",
+  "target_skills": [
+    "Formula design",
+    "efficient ranges and profiling."
+  ],
+  "starter": {
+    "options": [
+      "Measure before and after, change one cause at a time, and confirm the results still match.",
+      "Use a shorter formula without measuring its performance.",
+      "Optimize first and do not rerun regression checks.",
+      "Replace formulas with manual values."
+    ]
+  },
+  "expected_output": "Expected: a repeatable before/after timing or complexity comparison is recorded without changing the intended results.",
+  "public_tests": [
+    {
+      "name": "Sample-data acceptance",
+      "checklist": [
+        "Input records are preserved and data types are checked.",
+        "Totals/results reconcile with a small independent calculation.",
+        "An edge case, duplicate or threshold boundary is tested where relevant."
+      ]
+    },
+    {
+      "name": "Server-side answer check",
+      "note": "A text/choice check does not execute Excel or inspect the workbook artifact."
+    }
+  ],
+  "acceptance_criteria": [
+    "Expected: a repeatable before/after timing or complexity comparison is recorded without changing the intended results.",
+    "Use a labeled result area and document formulas, assumptions or transformation steps.",
+    "Compare actual results with a manual/independently calculated expected result and test one edge case.",
+    "Keep source data intact and request human review of the completed workbook; do not treat the text grader as artifact validation."
+  ],
+  "hints": [
+    "Import data without losing dates, decimals or leading zeros.",
+    "Separate raw inputs, calculations and presentation outputs.",
+    "Test empty inputs, duplicated keys, boundary values or missing matches as appropriate to the scenario."
+  ],
+  "grading_config": {
+    "mode": "choice",
+    "correct_answer": "Measure before and after, change one cause at a time, and confirm the results still match."
+  },
+  "grading_method": "Server-side choice check of the submitted answer/expression only; does not execute Excel or inspect the workbook. This workbook-practice task needs a human-reviewed artifact and test evidence for full acceptance. A performance optimization should be measured and regression-tested; a shorter formula is not automatically faster or safer.",
+  "retry_policy": "Retries are permitted. A failed string/choice submission does not complete the exercise. Course files do not define XP; platform-wide server logic applies.",
+  "solution_file": "solutions/practical-24-performance-optimization-solution.json",
+  "status": "draft",
+  "source_data_file": "assets/data/practical-24-performance-optimization.csv"
+}

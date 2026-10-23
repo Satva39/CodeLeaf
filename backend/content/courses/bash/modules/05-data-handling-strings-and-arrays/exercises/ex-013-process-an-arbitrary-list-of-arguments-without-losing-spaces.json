@@ -1,0 +1,56 @@
+{
+  "id": "bash-exercise-013",
+  "lesson_id": "bash-lesson-044",
+  "slug": "process-an-arbitrary-list-of-arguments-without-losing-spaces",
+  "title": "Process an arbitrary list of arguments without losing spaces",
+  "type": "short_answer",
+  "difficulty": "intermediate",
+  "sequence": 13,
+  "prompt": "Process an arbitrary list of arguments without losing spaces.\n\nUse a disposable practice directory and synthetic inputs. Submit your Bash script and a short verification note. CodeLeaf does not run Bash submissions inside its web process, so this exercise uses a server-side text gate plus the acceptance criteria below; complete technical correctness requires manual review or an isolated local test environment.",
+  "starter": {
+    "language": "bash",
+    "execution_mode": "manual-terminal; requires a local Bash interpreter or a separately isolated runner",
+    "starter": "#!/usr/bin/env bash\n# Process an arbitrary list of arguments without losing spaces\n# TODO: validate inputs before side effects.\n"
+  },
+  "public_tests": [
+    {
+      "name": "Required concept present",
+      "mode": "manual_or_text_check",
+      "note": "Text gate looks for a relevant Bash pattern (\"${); it is not proof the script runs correctly."
+    },
+    {
+      "name": "Acceptance checklist",
+      "mode": "human_review",
+      "note": "Review output, status, invalid input, safety, and boundary cases in an isolated environment."
+    }
+  ],
+  "acceptance_criteria": [
+    "Implements the requested behavior for Arrays, positional parameters.",
+    "Quotes expansions and preserves filenames/argument boundaries where relevant.",
+    "Handles at least one invalid-input or failure case and documents the expected status/output.",
+    "Includes a safe way to test the script with disposable or synthetic inputs."
+  ],
+  "hints": [
+    "Start with the smallest successful input.",
+    "Add an edge case before adding options or extra features.",
+    "Use bash -n script.sh for a syntax-only check, then test manually in a disposable directory."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "\"${"
+    ]
+  },
+  "retry_policy": {
+    "allow_retries": true,
+    "guidance": "Revise and resubmit after inspecting the feedback. The platform’s server owns the one-time base reward; the course does not override XP."
+  },
+  "solution_file": "solutions/ex-013-process-an-arbitrary-list-of-arguments-without-losing-spaces-solution.json",
+  "target_skills": [
+    "Arrays",
+    "positional parameters"
+  ],
+  "expected_output": "A reviewable Bash script plus a reproducible test note showing normal and failure-path behavior.",
+  "status": "draft",
+  "status_note": "Draft exercise derived from Bash.pdf Section C. The text grader is a lightweight gate only; publish after technical and grading review."
+}

@@ -1,0 +1,153 @@
+{
+  "id": "kotlin-lesson-240",
+  "slug": "local-data-and-persistence",
+  "title": "Local Data and Persistence",
+  "sequence": 240,
+  "module_id": "kotlin-module-23",
+  "module_slug": "kotlin-for-android-development",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "specialization-android",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "kotlin-lesson-239"
+  ],
+  "previous_lesson_id": "kotlin-lesson-239",
+  "next_lesson_id": "kotlin-lesson-241",
+  "keywords": [
+    "local-data-and-persistence",
+    "preferences-and-key-value-stor",
+    "room-database-fundamentals",
+    "offline-first-data-concepts"
+  ],
+  "source_syllabus_number": 240,
+  "subtopics": [
+    "Preferences and Key-Value Storage",
+    "Room Database Fundamentals",
+    "Offline-First Data Concepts"
+  ],
+  "learning_outcomes": [
+    "Explain the central rule or purpose of local data and persistence using at least one correct term from the lesson.",
+    "Interpret or adapt a small Kotlin example that demonstrates local data and persistence.",
+    "Identify one relevant edge case, debugging step, or version/platform constraint."
+  ],
+  "content": {
+    "intro": "In this lesson, you will learn **Local Data and Persistence** as part of **Kotlin for Android Development**. Integration code must validate external data, handle timeouts and failure states, keep credentials outside source control, and test boundary behavior. Use the subtopics—Preferences and Key-Value Storage, Room Database Fundamentals, Offline-First Data Concepts—as a checklist: predict what the example will do, then verify it in a project configured for the target platform.",
+    "why_it_matters": "Android code must account for lifecycle changes, accessibility, UI state, and platform APIs. Isolating business logic makes the interface easier to test.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Concept visual",
+        "asset_path": "diagrams/lesson-240-local-data-and-persistence.svg",
+        "alt_text": "Concept diagram for lesson 240, Local Data and Persistence: connects Preferences and Key-Value Storage with Room Database Fundamentals and a practice/check step.",
+        "caption": "Lesson 240: Local Data and Persistence. Use this concept map to connect the syllabus subtopics to the small example and test task."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Integration code must validate external data, handle timeouts and failure states, keep credentials outside source control, and test boundary behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with preferences and key-value storage. Then compare it with room database fundamentals. Identify the input, state, dependency, or branch that determines the result. The snippet is a static reference for CodeLeaf and is not executed in the lesson page."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the syllabus",
+        "items": [
+          {
+            "title": "Preferences and Key-Value Storage",
+            "text": "Preferences and Key-Value Storage is one part of local data and persistence. Connect its definition to the example, identify the input/state it changes, and verify the expected behavior with a small test case."
+          },
+          {
+            "title": "Room Database Fundamentals",
+            "text": "Room Database Fundamentals crosses a system boundary. Model success and failure, validate external data, apply timeout/retry rules deliberately, and keep credentials and database access out of presentation code."
+          },
+          {
+            "title": "Offline-First Data Concepts",
+            "text": "Offline-First Data Concepts is one part of local data and persistence. Connect its definition to the example, identify the input/state it changes, and verify the expected behavior with a small test case."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "kotlin-android",
+        "execution_mode": "static-validation",
+        "code": "data class ApiResult<T>(val value: T?, val error: String? = null)\n\nfun main() = println(ApiResult(value = \"ready\"))",
+        "expected_output": "ApiResult(value=ready, error=null)",
+        "run_instructions": "Run within an Android Studio project with compatible Android Gradle Plugin and Jetpack Compose dependencies; this is not a standalone console program.",
+        "reset_steps": "Restore the documented starting values, rerun the smallest test, and compare the result with the expected output. If behavior differs, check the compiler/plugin/runtime versions and the active target before changing more than one thing."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake to avoid",
+        "text": "Local Data and Persistence removes the need to test boundary conditions or verify the chosen runtime/library version."
+      },
+      {
+        "type": "paragraph",
+        "title": "Troubleshooting and reset",
+        "text": "If the example fails, first confirm which runtime/project type the snippet requires. Read the first useful compiler or runtime message, check imports and declared dependencies, reduce the example to a minimal case, and rerun. For target-specific code, use the target toolchain rather than assuming a console or browser runner can execute it."
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          {
+            "title": "Explain",
+            "text": "Describe the main rule of local data and persistence in your own words."
+          },
+          {
+            "title": "Apply",
+            "text": "Change one input or condition and predict the result before running it."
+          },
+          {
+            "title": "Verify",
+            "text": "Check one edge case and the official reference for the selected Kotlin/runtime version."
+          }
+        ]
+      }
+    ],
+    "task": "Try it yourself: create a small variation that demonstrates local data and persistence. Write down your predicted result first, run it in the correct local project, then explain one boundary case involving preferences and key-value storage.",
+    "task_acceptance_criteria": [
+      "Explain local data and persistence without copying the lesson wording.",
+      "Demonstrate the concept with a small code/configuration change and state the expected result.",
+      "Test one boundary case or explain a relevant platform/version limitation."
+    ],
+    "hints": [
+      "Begin with the first syllabus subtopic: Preferences and Key-Value Storage. What input or state does it act on?",
+      "Change only one value, branch, declaration, or dependency at a time. Predict what should happen before running the code.",
+      "Compare your observed result with the expected output and the official reference; verify that you are using the required project type and dependency set."
+    ],
+    "expected_output": "ApiResult(value=ready, error=null)",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-240-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Kotlin Documentation",
+      "url": "https://kotlinlang.org/docs/home.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Local Data and Persistence",
+        "Preferences and Key-Value Storage",
+        "Room Database Fundamentals"
+      ]
+    },
+    {
+      "title": "Kotlin Language Features and Proposals",
+      "url": "https://kotlinlang.org/docs/kotlin-language-features-and-proposals.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "language feature stability",
+        "compiler version compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson derived from the numbered syllabus entry 240 in Kotlin.pdf. Review example compatibility and question alignment before publishing."
+}

@@ -1,0 +1,199 @@
+{
+  "id": "mysql-lesson-183",
+  "slug": "lock-waits-and-transaction-timeouts",
+  "title": "Lock Waits and Transaction Timeouts",
+  "sequence": 183,
+  "module_id": "mysql-module-19",
+  "module_slug": "transactions-and-concurrency-control",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "mysql-lesson-182"
+  ],
+  "previous_lesson_id": "mysql-lesson-182",
+  "next_lesson_id": "mysql-lesson-184",
+  "keywords": [
+    "lock-waits-and-transaction-timeouts",
+    "transactions-and-concurrency-control",
+    "mysql",
+    "database"
+  ],
+  "source_syllabus_number": 183,
+  "source_module_number": 19,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the purpose of lock waits and transaction timeouts in MySQL and when it is useful.",
+    "Interpret or adapt the supplied sql example and predict its expected behavior.",
+    "Verify one relevant boundary, safety requirement, or version-specific assumption."
+  ],
+  "content": {
+    "intro": "Learn lock waits and transaction timeouts in the context of transactions and concurrency control. This lesson covers the supplied syllabus topic, demonstrates a representative MySQL example, and finishes with a verification task.",
+    "why_it_matters": "A transaction groups related data changes into a single reliability boundary. Isolation and locking affect what concurrent sessions can see or change; keep transactions short and design retries so the same business action is not applied twice.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Lock Waits and Transaction Timeouts",
+        "asset_path": "diagrams/lesson-183-lock-waits-and-transaction-timeouts.svg",
+        "alt_text": "Concept flow for Lock Waits and Transaction Timeouts: understand the MySQL concept, inspect the example, verify its behavior, and apply it safely.",
+        "caption": "Lock Waits and Transaction Timeouts: connect the concept to a concrete example, verify the result, and apply it in a disposable lab."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "A transaction groups related data changes into a single reliability boundary. Isolation and locking affect what concurrent sessions can see or change; keep transactions short and design retries so the same business action is not applied twice."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics to master",
+        "items": [
+          {
+            "title": "Core concept",
+            "text": "A transaction groups related data changes into a single reliability boundary. Isolation and locking affect what concurrent sessions can see or change; keep transactions short and design retries so the same business action is not applied twice."
+          },
+          {
+            "title": "Practical verification",
+            "text": "Predict the outcome, check the result against the selected MySQL version, and record an edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Apply the idea",
+        "text": "Describe two-session behavior for a small transaction, then test commit/rollback and one conflict in a disposable database. Write down the expected result before running the snippet. Compare actual output with the reference, then try one normal case and one edge case."
+      },
+      {
+        "type": "code",
+        "language": "sql",
+        "execution_mode": "static-validation",
+        "code": "START TRANSACTION;\nUPDATE lab_inventory SET quantity = quantity - 1 WHERE product_id = 10 AND quantity > 0;\nSELECT ROW_COUNT() AS changed_rows;\nROLLBACK;",
+        "expected_output": "The UPDATE is undone by ROLLBACK. This illustrates only the transaction boundary; the table must exist in a disposable InnoDB schema.",
+        "run_instructions": "Run in a dedicated local MySQL lab using the stated MySQL release track. For schema-changing or administrative snippets, inspect every statement and use only a disposable schema; the in-page editor shows reference output and does not execute SQL.",
+        "reset_steps": "Remove only objects created for this lesson from the disposable schema/session, or restore the lab snapshot. Never run reset or destructive commands against production."
+      },
+      {
+        "type": "callout",
+        "title": "Version, security, and safety note",
+        "text": "Use MySQL 9.7 LTS documentation as the default stable-track reference; verify behavior against MySQL 26.7 documentation when relevant and label any MySQL 8.4-specific fact. Examples are static references, not executed by CodeLeaf. Run mutation, privilege, replication, backup, and recovery examples only in an isolated lab."
+      }
+    ],
+    "task": "Try it yourself: Describe two-session behavior for a small transaction, then test commit/rollback and one conflict in a disposable database. Submit the query, result or decision record, plus one edge case and one verification step.",
+    "task_acceptance_criteria": [
+      "Address the core behavior in lock waits and transaction timeouts using a MySQL-specific example or a clear operational plan.",
+      "State the expected result and demonstrate how it would be verified in the selected environment.",
+      "Identify one relevant edge case, permissions boundary, operational risk, or version assumption."
+    ],
+    "hints": [
+      "Start by identifying the question that lock waits and transaction timeouts needs to answer.",
+      "Reduce the example to the smallest meaningful row set or operational change, then write down the result you expect.",
+      "Check the applicable official manual and version note before treating the reference output as guaranteed."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming that a sample result proves the whole design is correct.",
+        "why": "Edge cases such as NULLs, duplicate matches, concurrency, privileges, or version differences may change behavior.",
+        "fix": "Add a targeted boundary case and record the server version, schema and expected result."
+      },
+      {
+        "problem": "Running a mutating or administrative example in the wrong environment.",
+        "why": "DDL, data changes, access grants, and recovery commands may have persistent impact.",
+        "fix": "Use a disposable lab, preview targets and permissions, and write a reset/recovery plan before executing."
+      }
+    ],
+    "summary": [
+      "A transaction groups related data changes into a single reliability boundary. Isolation and locking affect what concurrent sessions can see or change; keep transactions short and design retries so the same business action is not applied twice.",
+      "Use the PDF subtopics for lock waits and transaction timeouts as a checklist, then validate behavior in the chosen MySQL version.",
+      "Keep the example, assumptions, expected output, and recovery steps together."
+    ],
+    "references": [
+      {
+        "title": "MySQL 9.7 Reference Manual",
+        "url": "https://dev.mysql.com/doc/refman/9.7/en/",
+        "publisher": "Oracle / MySQL",
+        "checked_on": "2026-10-12",
+        "supports": [
+          "core SQL syntax",
+          "data types",
+          "DDL and DML",
+          "query optimization",
+          "security",
+          "administration"
+        ]
+      },
+      {
+        "title": "MySQL InnoDB Introduction",
+        "url": "https://dev.mysql.com/doc/refman/8.4/en/innodb-introduction.html",
+        "publisher": "Oracle / MySQL",
+        "checked_on": "2026-10-12",
+        "supports": [
+          "InnoDB transaction behavior",
+          "row-level locking",
+          "crash recovery",
+          "foreign keys; explicit MySQL 8.4 scope"
+        ]
+      },
+      {
+        "title": "InnoDB Transaction Isolation Levels",
+        "url": "https://dev.mysql.com/doc/refman/8.4/en/innodb-transaction-isolation-levels.html",
+        "publisher": "Oracle / MySQL",
+        "checked_on": "2026-10-12",
+        "supports": [
+          "READ UNCOMMITTED",
+          "READ COMMITTED",
+          "REPEATABLE READ",
+          "SERIALIZABLE"
+        ]
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-183-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "Draft authored from the supplied MySQL curriculum outline. Code samples require technical review and do not execute in the browser."
+  },
+  "exercise_files": [
+    "../exercises/183-lock-waits-and-transaction-timeouts-practice.json"
+  ],
+  "sources": [
+    {
+      "title": "MySQL 9.7 Reference Manual",
+      "url": "https://dev.mysql.com/doc/refman/9.7/en/",
+      "publisher": "Oracle / MySQL",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "core SQL syntax",
+        "data types",
+        "DDL and DML",
+        "query optimization",
+        "security",
+        "administration"
+      ]
+    },
+    {
+      "title": "MySQL InnoDB Introduction",
+      "url": "https://dev.mysql.com/doc/refman/8.4/en/innodb-introduction.html",
+      "publisher": "Oracle / MySQL",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "InnoDB transaction behavior",
+        "row-level locking",
+        "crash recovery",
+        "foreign keys; explicit MySQL 8.4 scope"
+      ]
+    },
+    {
+      "title": "InnoDB Transaction Isolation Levels",
+      "url": "https://dev.mysql.com/doc/refman/8.4/en/innodb-transaction-isolation-levels.html",
+      "publisher": "Oracle / MySQL",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "READ UNCOMMITTED",
+        "READ COMMITTED",
+        "REPEATABLE READ",
+        "SERIALIZABLE"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft: verify the lesson, example, expected output, references, and version notes before publishing."
+}

@@ -1,0 +1,17 @@
+{
+  "id": "c-exercise-solution-021",
+  "exercise_id": "c-exercise-021",
+  "title": "Safe string-copy helper reference solution",
+  "language": "c",
+  "answer": "#include <string.h>\n#include <stdio.h>\nint copy_text(char *dst, size_t cap, const char *src) { size_t n=strlen(src); if(dst==NULL || src==NULL || cap==0 || n>=cap) return 0; memcpy(dst,src,n+1); return 1; }\nint main(void) { char out[16]; if(!copy_text(out,sizeof out,\"C language\")) return 1; puts(out); return 0; }",
+  "explanation": "This reference illustrates one possible implementation, not the only acceptable solution. Review integer range, input validation, ownership/lifetime, compiler warnings and target-platform assumptions as appropriate.",
+  "manual_validation_checklist": [
+    "Build with an explicit ISO C mode and warnings enabled.",
+    "Run ordinary, boundary and invalid/failure cases.",
+    "Review all return values and object lifetime.",
+    "Check whether the example relies on platform-specific behavior."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only answer; keep protected from the learner-facing API until the platform has an explicit authorized reveal policy."
+}

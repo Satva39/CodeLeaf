@@ -1,0 +1,189 @@
+{
+  "id": "r-lesson-077",
+  "slug": "working-with-purrr",
+  "title": "Working with purrr",
+  "sequence": 77,
+  "module_id": "r-module-08",
+  "module_slug": "apply-functions-and-functional-programming",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "r-lesson-076"
+  ],
+  "previous_lesson_id": "r-lesson-076",
+  "next_lesson_id": "r-lesson-078",
+  "keywords": [
+    "working-with-purrr",
+    "apply-functions-and-functional-programming",
+    "map-and-typed-variants",
+    "iterating-over-multiple-inputs",
+    "map2-and-pmap",
+    "walk-for-side-effects",
+    "safe-mapping-and-error-handling",
+    "anonymous-functions-within-mappers",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 77,
+  "subtopics": [
+    "map() and Typed Variants",
+    "Iterating Over Multiple Inputs",
+    "map2() and pmap()",
+    "walk() for Side Effects",
+    "Safe Mapping and Error Handling",
+    "Anonymous Functions Within Mappers"
+  ],
+  "learning_outcomes": [
+    "Explain the role of working with purrr and identify its main inputs, outputs or constraints.",
+    "Apply map() and typed variants in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Working with purrr is part of Apply Functions and Functional Programming. Start with map() and typed variants and connect it to the worked example and expected result.",
+    "why_it_matters": "Working with purrr is one step in Apply Functions and Functional Programming; the apply family and purrr tools help express repeated transformations; simplification rules can change result shape.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Working with purrr",
+        "asset_path": "diagrams/module-08-overview.svg",
+        "alt_text": "Concept visual supporting lesson 77, Working with purrr. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Working with purrr is one step in Apply Functions and Functional Programming; the apply family and purrr tools help express repeated transformations; simplification rules can change result shape. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "map() and Typed Variants",
+            "text": "Explain map() and typed variants in the context of working with purrr, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Iterating Over Multiple Inputs",
+            "text": "Explain iterating over multiple inputs in the context of working with purrr, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "map2() and pmap()",
+            "text": "Explain map2() and pmap() in the context of working with purrr, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "walk() for Side Effects",
+            "text": "Explain walk() for side effects in the context of working with purrr, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Safe Mapping and Error Handling",
+            "text": "For safe mapping and error handling, include a failing or boundary case and explain how it should be detected without silently losing information."
+          },
+          {
+            "title": "Anonymous Functions Within Mappers",
+            "text": "Use anonymous functions within mappers to make input, output and scope explicit, then test both a typical call and one edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Choose the simplest mapper that makes expected result structure obvious and test type stability. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Working with purrr",
+        "language": "r",
+        "code": "# Lesson 77: Working with purrr\nparts <- list(first = 2:3, second = 4:5)\nvapply(parts, sum, numeric(1))",
+        "expected_output": " first second\n     5 9",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "vapply declares the expected result type and makes the output shape easier to check. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For working with purrr, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-077-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply working with purrr to a small synthetic example. Start with map() and typed variants, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the map() and typed variants idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible working with purrr example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “map() and Typed Variants” and identify the input and output before coding.",
+      "Inspect the type and shape of the result, then test one ordinary and one boundary input.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: Working with purrr is one step in Apply Functions and Functional Programming; the apply family and purrr tools help express repeated transformations; simplification rules can change result shape.",
+      "Practice: Choose the simplest mapper that makes expected result structure obvious and test type stability.",
+      "Source syllabus focus: map() and Typed Variants. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply working with purrr to a small synthetic example. Start with map() and typed variants, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible working with purrr example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “map() and Typed Variants” and identify the input and output before coding.",
+    "Inspect the type and shape of the result, then test one ordinary and one boundary input.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: Working with purrr is one step in Apply Functions and Functional Programming; the apply family and purrr tools help express repeated transformations; simplification rules can change result shape.",
+    "Practice: Choose the simplest mapper that makes expected result structure obvious and test type stability.",
+    "Source syllabus focus: map() and Typed Variants. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 8 — Apply Functions and Functional Programming, lesson 77: Working with purrr.",
+    "Official documentation: https://cran.r-project.org/doc/manuals/r-release/R-intro.html",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

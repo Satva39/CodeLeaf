@@ -1,0 +1,199 @@
+{
+  "id": "cpp-lesson-044",
+  "slug": "switch-statements",
+  "title": "Switch Statements",
+  "sequence": 44,
+  "module_id": "cpp-module-05",
+  "module_slug": "conditional-statements-and-loops",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "cpp-lesson-043"
+  ],
+  "previous_lesson_id": "cpp-lesson-043",
+  "next_lesson_id": "cpp-lesson-045",
+  "keywords": [
+    "switch-statements",
+    "basic-switch-syntax",
+    "the-case-label",
+    "the-default-label",
+    "the-break-statement",
+    "fallthrough-behavior",
+    "grouping-case-labels",
+    "switch-with-enumerations"
+  ],
+  "source_syllabus_number": 44,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Basic switch Syntax",
+    "The case Label",
+    "The default Label",
+    "The break Statement",
+    "Fallthrough Behavior",
+    "Grouping Case Labels",
+    "Switch With Enumerations"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and core rule of switch statements using at least one example.",
+    "Trace or adapt a minimal C++ example related to switch statements and state its expected result.",
+    "Identify one precondition, error case, lifetime issue, portability assumption or version constraint relevant to the topic."
+  ],
+  "content": {
+    "intro": "Switch Statements focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Switch Statements matters because try a normal input, a boundary input and an invalid input; verify that the program terminates and does not skip required cases. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Switch Statements: visual trace",
+        "asset_path": "diagrams/lessons/lesson-044.svg",
+        "alt_text": "Lesson 44 visual for Switch Statements; concept: Basic switch Syntax; apply: The case Label; verify: The default Label.",
+        "caption": "Original lesson-specific overview: understand basic switch syntax, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Control flow selects paths and repeats work. A reliable loop has a clear invariant, an intentional update and a termination condition that can be tested.\n\nSwitch Statements focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nTry a normal input, a boundary input and an invalid input; verify that the program terminates and does not skip required cases."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Switch Statements",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <iostream>\n\nint main() {\n    int choice = 2;\n    switch (choice) {\n        case 1: std::cout << \"start\\n\"; break;\n        case 2: std::cout << \"settings\\n\"; break;\n        default: std::cout << \"unknown\\n\"; break;\n    }\n}\n",
+        "expected_output": "settings",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "Each case ends intentionally, so execution does not fall through into a following label."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Basic switch Syntax",
+            "text": "Explain basic switch syntax in the context of Switch Statements: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "The case Label",
+            "text": "Explain the case label in the context of Switch Statements: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "The default Label",
+            "text": "Explain the default label in the context of Switch Statements: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "The break Statement",
+            "text": "Explain the break statement in the context of Switch Statements: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Fallthrough Behavior",
+            "text": "Explain fallthrough behavior in the context of Switch Statements: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Grouping Case Labels",
+            "text": "Explain grouping case labels in the context of Switch Statements: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Switch With Enumerations",
+            "text": "An enumeration names a finite set of values; scoped enum class avoids implicit conversions to integers and accidental name leakage."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate basic switch syntax, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "Use standard C++ rather than compiler-specific behavior unless the lesson explicitly labels the dependency. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-044-questions.json",
+    "task": "Create a small, independent example that demonstrates switch statements. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example builds under a documented standard mode with warnings enabled.",
+      "The predicted and observed result are recorded; deviations are explained.",
+      "At least one boundary, invalid-input, lifetime or portability assumption is tested or documented."
+    ],
+    "hints": [
+      "Start with the smallest example that demonstrates basic switch syntax.",
+      "Trace the relevant values and state the expected output before running the program.",
+      "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+    ],
+    "summary": [
+      "Switch Statements is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying switch statements.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation"
+  },
+  "task": "Create a small, independent example that demonstrates switch statements. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+  "hints": [
+    "Start with the smallest example that demonstrates basic switch syntax.",
+    "Trace the relevant values and state the expected output before running the program.",
+    "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+  ],
+  "expected_output": "settings",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Switch Statements is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying switch statements.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 5, lesson 44: Switch Statements.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

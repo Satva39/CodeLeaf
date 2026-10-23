@@ -1,0 +1,177 @@
+{
+  "id": "fastapi-lesson-104",
+  "slug": "testing-asynchronous-applications",
+  "title": "Testing Asynchronous Applications",
+  "sequence": 104,
+  "module_id": "fastapi-module-17",
+  "module_slug": "testing-and-code-quality",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "fastapi-lesson-103"
+  ],
+  "previous_lesson_id": "fastapi-lesson-103",
+  "next_lesson_id": "fastapi-lesson-105",
+  "keywords": [
+    "testing-asynchronous-applications",
+    "testing-and-code-quality",
+    "fastapi",
+    "python",
+    "api",
+    "async-test-functions",
+    "httpx-async-clients",
+    "asgi-transport"
+  ],
+  "source_syllabus_number": 104,
+  "subtopics": [
+    "Async test functions",
+    "HTTPX async clients",
+    "ASGI transport",
+    "Testing async database integration",
+    "Managing event-loop and lifespan behavior"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of testing asynchronous applications in a FastAPI application.",
+    "Apply or interpret one example related to async test functions.",
+    "Identify one limitation or failure case and describe how to verify it."
+  ],
+  "content": {
+    "intro": "This lesson covers testing asynchronous applications within testing and code quality. Use the supplied syllabus topics as the coverage checklist, then connect them to the worked example and the verification task.",
+    "why_it_matters": "You will use testing asynchronous applications to build APIs whose contracts and behavior are understandable to both clients and maintainers. The practical aim is resource lifecycle, cancellation, concurrency limits and observable I/O behavior.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Testing Asynchronous Applications: concept map",
+        "asset_path": "diagrams/lesson-104-concept.svg",
+        "alt_text": "Four-step flow for Testing Asynchronous Applications: Async test functions, HTTPX async clients, ASGI transport, Testing async database integration",
+        "caption": "Visual-first overview before the worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Testing Asynchronous Applications matters because it is part of testing and code quality. In practice, focus on resource lifecycle, cancellation, concurrency limits and observable I/O behavior. A framework feature only helps when its assumptions match the application; keep input validation, business policy and side effects distinguishable."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus coverage",
+        "items": [
+          {
+            "title": "Async test functions",
+            "text": "Use async test functions to make behavior observable and repeatable. Specify one normal case, one invalid or missing-input case, and the expected status or diagnostic. A passing happy path alone is not enough evidence."
+          },
+          {
+            "title": "HTTPX async clients",
+            "text": "For httpx async clients, identify which operation waits on I/O, which resources remain open, and what happens on timeout or disconnect. Async syntax does not make CPU-bound work faster or durable background jobs reliable by itself."
+          },
+          {
+            "title": "ASGI transport",
+            "text": "Use asgi transport as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Testing async database integration",
+            "text": "Use testing async database integration to make behavior observable and repeatable. Specify one normal case, one invalid or missing-input case, and the expected status or diagnostic. A passing happy path alone is not enough evidence."
+          },
+          {
+            "title": "Managing event-loop and lifespan behavior",
+            "text": "Use managing event-loop and lifespan behavior as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Testing Asynchronous Applications",
+        "language": "python",
+        "code": "from contextlib import asynccontextmanager\nfrom fastapi import FastAPI\n\n@asynccontextmanager\nasync def lifespan(app: FastAPI):\n    app.state.ready = True\n    yield\n    app.state.ready = False\n\napp = FastAPI(lifespan=lifespan)",
+        "expected_output": "The lifespan setup runs before requests are served and cleanup runs at shutdown.",
+        "run_instructions": "Run locally and watch startup/shutdown logs; do not use this example to store secrets in code.",
+        "reset_steps": "For read-only examples, no reset is needed. For any example that writes state, use a disposable local database/test fixture; record the starting state and clean up only lab data. Never use production credentials or real personal data.",
+        "execution_mode": "human-review",
+        "limitations": "This code is inspectable lesson material, not executed by CodeLeaf. Run it only in a local virtual environment or a separately isolated runner with resource/time/network limits. Security examples are sketches, not complete production authentication or authorization systems."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to cover “Async test functions”. Write down the expected success result and one invalid, missing, duplicate, timeout or permission-boundary case that matters for this topic."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-104-questions.json"
+  },
+  "task": "Create a small reviewable artifact for “Testing Asynchronous Applications”: explain its goal, cover the listed subtopics, show an example with expected result, then include one edge case and how you would verify it.",
+  "hints": [
+    "Start with “Async test functions” and state the required inputs, output and assumptions.",
+    "Change one thing at a time; check the official reference and capture the actual response/error instead of guessing.",
+    "Include a negative/edge-case check and document which behavior remains untested."
+  ],
+  "expected_output": "A reviewable example or design note for Testing Asynchronous Applications, covering the PDF subtopics, expected behavior and at least one verification check.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Copying a code fragment without checking its assumptions.",
+      "why": "Installed versions, imported types, application structure and external services affect behavior.",
+      "fix": "State assumptions; check the versioned official docs; run a minimal local test and add one failure case."
+    },
+    {
+      "problem": "Treating one happy-path response as proof of correctness.",
+      "why": "Invalid input, permissions, concurrency, timeouts and cleanup are not exercised by a single request.",
+      "fix": "Add focused normal and negative tests and record exact expected status/body."
+    },
+    {
+      "problem": "Running examples against production resources.",
+      "why": "Even short examples may mutate records, reveal data or affect availability.",
+      "fix": "Use synthetic inputs and a disposable environment; review security, cleanup and rollback before promotion."
+    }
+  ],
+  "summary": [
+    "Testing Asynchronous Applications belongs to the broader goal of resource lifecycle, cancellation, concurrency limits and observable I/O behavior.",
+    "Use the source subtopics as the completeness checklist and verify expected results rather than relying on intuition.",
+    "Examples in this course are illustrative until technically reviewed and executed on a supported local environment."
+  ],
+  "sources": [
+    {
+      "title": "FastAPI Advanced - Lifespan Events",
+      "url": "https://fastapi.tiangolo.com/advanced/events/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "lifespan context manager and startup/shutdown resource handling"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Tutorial - Security First Steps",
+      "url": "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "security utilities and bearer-token flow declarations"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Tutorial - CORS",
+      "url": "https://fastapi.tiangolo.com/tutorial/cors/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "origins, methods, headers and credentials"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Tutorial - Testing",
+      "url": "https://fastapi.tiangolo.com/tutorial/testing/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "TestClient endpoint tests"
+      ],
+      "source_type": "official documentation"
+    }
+  ],
+  "exercise_files": [],
+  "status": "draft",
+  "status_note": "Draft expansion from the numbered topics in FastAPI.pdf. Content structure, file references and SVGs are validated locally; code snippets and integration behavior still require technical review and targeted tests before publication."
+}

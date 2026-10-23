@@ -1,0 +1,169 @@
+/* Focused UI polish for lesson actions, compact course listings, and account controls. */
+
+/* Lesson example actions should look like intentional dark-theme controls, not browser defaults. */
+.lesson-code-footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+.lesson-code-footer-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 7px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  background: var(--panel-soft);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.25;
+  cursor: pointer;
+  transition: background .16s ease, border-color .16s ease, color .16s ease, transform .16s ease;
+}
+.lesson-code-footer-actions button:hover {
+  background: var(--mint-wash);
+  color: var(--mint);
+  border-color: color-mix(in srgb, var(--mint) 48%, var(--line-strong));
+}
+.lesson-code-footer-actions button:active { transform: translateY(1px); }
+.lesson-code-footer-actions button:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+
+/* Keep the practice-library callout useful without its oversized, paragraph-first layout. */
+.exercise-library-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  margin: 24px 0;
+  padding: clamp(16px, 2.3vw, 24px);
+}
+.exercise-library-prompt-copy { flex: 1 1 440px; min-width: 0; }
+.exercise-library-prompt-copy .eyebrow { margin-bottom: 7px; }
+.exercise-library-prompt-copy h2 {
+  margin: 0;
+  font: 780 clamp(19px, 2vw, 24px)/1.25 Manrope, sans-serif;
+  letter-spacing: -.55px;
+}
+.exercise-library-prompt-copy p {
+  max-width: 68ch;
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.exercise-library-prompt > .button { flex: 0 0 auto; white-space: nowrap; }
+
+/* The IDE toolbar's general button reset must not erase the primary button's contrast. */
+.ide-editor-actions button.button-primary {
+  background: var(--mint);
+  color: #06231b;
+  border: 1px solid transparent;
+  font-weight: 800;
+}
+.ide-editor-actions button.button-primary:hover:not(:disabled) {
+  background: #4be1b5;
+  color: #06231b;
+}
+.ide-editor-actions button.button-primary:disabled {
+  background: rgba(148, 163, 184, .13);
+  color: #a8b6ca;
+  border-color: rgba(148, 163, 184, .23);
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+/* Replace large language/category chip walls with one predictable category dropdown. */
+.collection-directory-toolbar { align-items: center; gap: 12px; }
+.collection-category-picker {
+  display: inline-grid;
+  grid-template-columns: auto minmax(160px, 260px);
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 750;
+}
+.collection-category-picker select {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  padding: 8px 34px 8px 11px;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  color: var(--text);
+  background: var(--panel-deep);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+}
+.collection-category-picker select:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 2px;
+}
+.collection-secondary-filter-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+/* Removing per-course marketing paragraphs should also reduce cards' minimum height. */
+.collection-course-card {
+  min-height: 218px;
+}
+.collection-course-card h2 { margin-top: 8px; }
+.collection-course-card-foot { margin-top: auto; }
+.tutorials-page .course-grid-catalog .course-card {
+  min-height: 170px;
+}
+.tutorials-page .course-grid-catalog .course-card h3 {
+  margin-top: 13px;
+  margin-bottom: 16px;
+  line-height: 1.35;
+}
+.tutorials-page .course-grid-catalog .course-card-bottom { margin-top: auto; }
+
+/* Separate adjacent account forms and the destructive/export action row. */
+.profile-section .auth-form + .auth-form {
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.profile-account-actions {
+  margin-top: 14px;
+  gap: 12px;
+}
+.profile-account-actions .button {
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 14px;
+  justify-content: center;
+  text-align: center;
+  white-space: normal;
+  line-height: 1.3;
+}
+.profile-account-actions .button:hover { border-color: color-mix(in srgb, var(--mint) 40%, var(--line-strong)); }
+
+@media (max-width: 760px) {
+  .exercise-library-prompt { align-items: stretch; flex-direction: column; gap: 13px; }
+  .exercise-library-prompt-copy { flex-basis: auto; }
+  .exercise-library-prompt > .button { align-self: flex-start; white-space: normal; }
+  .collection-category-picker { flex: 1 1 100%; grid-template-columns: 1fr; gap: 5px; }
+  .collection-category-picker select { min-height: 42px; }
+  .collection-directory-toolbar > span { flex: 1 1 auto; }
+  .collection-secondary-filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .lesson-code-footer-actions { width: 100%; justify-content: flex-start; }
+  .lesson-code-footer-actions button { flex: 1 1 auto; }
+  .collection-directory-toolbar { align-items: stretch; }
+  .collection-directory-toolbar > .button { width: 100%; justify-content: center; }
+  .collection-directory-toolbar > span { order: 3; width: 100%; }
+  .collection-directory-toolbar > .text-link { order: 4; }
+  .collection-secondary-filter-grid { grid-template-columns: 1fr; }
+  .profile-account-actions { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .profile-account-actions .button { font-size: 12px; padding: 9px 7px; }
+}

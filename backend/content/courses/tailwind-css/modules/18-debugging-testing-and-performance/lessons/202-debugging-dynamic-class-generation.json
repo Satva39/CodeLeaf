@@ -1,0 +1,171 @@
+{
+  "id": "tailwind-css-lesson-202",
+  "slug": "debugging-dynamic-class-generation",
+  "title": "Debugging Dynamic Class Generation",
+  "sequence": 202,
+  "module_id": "tailwind-css-module-18",
+  "module_slug": "debugging-testing-and-performance",
+  "level": "advanced",
+  "difficulty": "hard",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "tailwind-css-lesson-201"
+  ],
+  "previous_lesson_id": "tailwind-css-lesson-201",
+  "next_lesson_id": "tailwind-css-lesson-203",
+  "keywords": [
+    "debugging",
+    "dynamic",
+    "class",
+    "generation",
+    "tailwind-css",
+    "utility-first",
+    "responsive-ui"
+  ],
+  "source_syllabus_number": 202,
+  "subtopics": [
+    "Incomplete class strings",
+    "Conditional styling problems",
+    "Runtime-generated data",
+    "Explicit source registration",
+    "Testing representative application states"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of debugging dynamic class generation.",
+    "Apply one appropriate technique to a small Tailwind CSS example.",
+    "Verify the expected result and identify a common failure mode."
+  ],
+  "content": {
+    "intro": "In this lesson, focus on debugging dynamic class generation and connect it to the way Tailwind CSS generates and applies utility styles.",
+    "why_it_matters": "Debugging Dynamic Class Generation turns styling work into a repeatable engineering process that can be checked, deployed and maintained.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 18 learning map",
+        "asset_path": "diagrams/module-18-overview.svg",
+        "alt_text": "Four-step module learning map: Debugging Missing Styles → Debugging CSS Integration Problems → Runtime and Rendering Performance → Troubleshooting Workflow and Documentation. Lesson pages add code examples and practice.",
+        "caption": "Learning map for Module 18, from the opening concept to a practical checkpoint."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "The source curriculum highlights: Incomplete class strings; Conditional styling problems; Runtime-generated data; Explicit source registration; Testing representative application states. Treat these as practical decisions rather than a list to memorize: identify the intended behavior, choose the smallest suitable utility or directive, and inspect what the browser receives."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to understand",
+        "items": [
+          "Incomplete class strings",
+          "Conditional styling problems",
+          "Runtime-generated data",
+          "Explicit source registration",
+          "Testing representative application states"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Debugging Dynamic Class Generation",
+        "language": "jsx",
+        "execution_mode": "static-validation",
+        "code": "const buttonClasses = {\n  primary: \"bg-blue-700 text-white hover:bg-blue-800\",\n  quiet: \"bg-slate-100 text-slate-900 hover:bg-slate-200\",\n};\n\nfunction ActionButton({ variant = \"primary\", children }) {\n  return <button className={`rounded-lg px-4 py-2 ${buttonClasses[variant]}`}>{children}</button>;\n}",
+        "expected_output": "Complete class strings are present in source, allowing Tailwind to detect both variants."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Start with the example, change one decision related to debugging dynamic class generation, then compare the outcome. In a Tailwind-enabled project, confirm the generated CSS exists; class strings alone do not make styles available without a configured build."
+      },
+      {
+        "type": "callout",
+        "title": "Version and compatibility note",
+        "text": "This course prioritizes Tailwind CSS v4. Confirm your installed version and use its matching official guide. Snippets using v3 directives or configuration are labelled as legacy and should not be mixed blindly with v4 syntax."
+      }
+    ],
+    "task": "Create a minimal example demonstrating debugging dynamic class generation. Include a before/after comparison and explain why the chosen utility, variant or directive is appropriate.",
+    "task_acceptance_criteria": [
+      "Demonstrate at least one decision tied to debugging dynamic class generation.",
+      "Keep the example easy to inspect, with complete utility names.",
+      "Test the outcome and document one limitation or environment assumption."
+    ],
+    "hints": [
+      "Identify which listed syllabus topic is most important to debugging dynamic class generation.",
+      "Change one utility, token, variant or configuration setting at a time.",
+      "Inspect generated CSS and computed styles before changing unrelated code."
+    ],
+    "expected_output": "Complete class strings are present in source, allowing Tailwind to detect both variants.",
+    "troubleshooting": [
+      "If no style appears, verify the package, CSS import and build-tool integration before changing the HTML.",
+      "If only a state or breakpoint style fails, check the full class token, source detection, condition and computed CSS.",
+      "For a framework snippet, import the stylesheet through its supported entry point and consult the current official guide."
+    ],
+    "common_mistakes": [
+      "Applying debugging dynamic class generation without checking generated styles or browser behavior.",
+      "Mixing Tailwind v3 and v4 setup examples without a migration plan.",
+      "Treating visual appearance as a substitute for semantic markup, keyboard usability or actual component behavior."
+    ],
+    "summary": [
+      "Debugging Dynamic Class Generation is one part of a predictable utility-first styling workflow.",
+      "Keep examples small, test the built interface and use version-matched documentation."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-202-questions.json",
+    "solution_notes": "Question answer keys remain in repository-side question files and must not be returned in learner lesson payloads. Review the example and acceptance criteria before checking the answer.",
+    "run_mode": "static-validation",
+    "references": [
+      {
+        "title": "Detecting classes in source files",
+        "url": "https://tailwindcss.com/docs/detecting-classes-in-source-files"
+      },
+      {
+        "title": "Functions and directives",
+        "url": "https://tailwindcss.com/docs/functions-and-directives"
+      },
+      {
+        "title": "Compatibility",
+        "url": "https://tailwindcss.com/docs/compatibility"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Detecting classes in source files",
+      "url": "https://tailwindcss.com/docs/detecting-classes-in-source-files",
+      "publisher": "Tailwind CSS official documentation",
+      "checked_on": "2026-10-19",
+      "source_type": "official documentation",
+      "supports": [
+        "Debugging Dynamic Class Generation",
+        "Incomplete class strings",
+        "Conditional styling problems"
+      ]
+    },
+    {
+      "title": "Functions and directives",
+      "url": "https://tailwindcss.com/docs/functions-and-directives",
+      "publisher": "Tailwind CSS official documentation",
+      "checked_on": "2026-10-19",
+      "source_type": "official documentation",
+      "supports": [
+        "Debugging Dynamic Class Generation",
+        "Incomplete class strings",
+        "Conditional styling problems"
+      ]
+    },
+    {
+      "title": "Compatibility",
+      "url": "https://tailwindcss.com/docs/compatibility",
+      "publisher": "Tailwind CSS official documentation",
+      "checked_on": "2026-10-19",
+      "source_type": "official documentation",
+      "supports": [
+        "Debugging Dynamic Class Generation",
+        "Incomplete class strings",
+        "Conditional styling problems"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Unreviewed educational draft; validate the course and check examples against the target Tailwind version before publication."
+}

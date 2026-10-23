@@ -1,0 +1,153 @@
+{
+  "id": "rust-lesson-069",
+  "slug": "creating-and-updating-struct-instances",
+  "title": "Creating and Updating Struct Instances",
+  "sequence": 69,
+  "module_id": "rust-module-07",
+  "module_slug": "structures-enumerations-and-pattern-matching",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-foundations",
+  "estimated_minutes": 11,
+  "prerequisites": [
+    "rust-lesson-068"
+  ],
+  "previous_lesson_id": "rust-lesson-068",
+  "next_lesson_id": "rust-lesson-070",
+  "keywords": [
+    "and",
+    "creating",
+    "data-modelling-and-exhaustive-handling",
+    "instances",
+    "rust",
+    "struct",
+    "updating"
+  ],
+  "source_syllabus_number": 69,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the main purpose of Creating and Updating Struct Instances and distinguish it from a closely related Rust concept.",
+    "Apply or trace Creating and Updating Struct Instances in a small Rust example, using the module guidance and stated toolchain assumptions.",
+    "Identify one relevant edge case or failure mode for Creating and Updating Struct Instances and select a suitable verification step."
+  ],
+  "content": {
+    "intro": "This lesson covers Creating and Updating Struct Instances. It sits in Module 7, Structures, Enumerations, and Pattern Matching, and builds toward a practical Rust mental model rather than memorizing a term in isolation.",
+    "why_it_matters": "Creating and Updating Struct Instances matters when you work with data modelling and exhaustive handling. Understanding the rule helps you predict compiler or runtime behavior, document assumptions, and choose a safer implementation when inputs or system conditions change.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Creating and Updating Struct Instances",
+        "asset_path": "diagrams/lesson-069-creating-and-updating-struct-instances.svg",
+        "alt_text": "Concept diagram for Creating and Updating Struct Instances: data modelling and exhaustive handling; inputs flow through a rule to an outcome, followed by a verification step.",
+        "caption": "Visual model for Creating and Updating Struct Instances. The diagram is a learning aid; use the prose and examples for exact conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Structs model records and enums model one of several named variants. Pattern matching inspects the shape of a value and helps the compiler check that important cases are handled."
+      },
+      {
+        "type": "paragraph",
+        "title": "A reliable way to reason about it",
+        "text": "For Creating and Updating Struct Instances, write down the inputs, the guarantee you expect, and the boundary where that guarantee stops. Work through a minimal example first; then deliberately test one edge case. Use enum variants to make states explicit. Exhaustive matching lets the compiler point out cases that a change may otherwise leave unhandled."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Creating and Updating Struct Instances",
+            "text": "Structs model records and enums model one of several named variants. Pattern matching inspects the shape of a value and helps the compiler check that important cases are handled."
+          },
+          {
+            "title": "Inputs and guarantees",
+            "text": "Identify the value, type, state, tool, or external system involved in Creating and Updating Struct Instances. Separate what Rust checks at compile time from what still needs validation or a test."
+          },
+          {
+            "title": "Boundary case",
+            "text": "Try an empty, missing, invalid, unusually large, or concurrently accessed input when that boundary applies to Creating and Updating Struct Instances. Record what should happen and how you can verify it."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "rust",
+        "execution_mode": "static-validation",
+        "code": "#[derive(Debug)]\nstruct Point { x: i32, y: i32 }\n\nimpl Point {\n    fn magnitude_squared(&self) -> i32 { self.x * self.x + self.y * self.y }\n}\n\nfn main() {\n    let point = Point { x: 3, y: 4 };\n    println!(\"{}\", point.magnitude_squared());\n}",
+        "expected_output": "25",
+        "run_instructions": "Save as src/main.rs and run cargo run. Keep the data representation and the behavior that operates on it easy to discover.",
+        "reset_steps": "Return the sample to its original form, run the documented command again, and compare the result. If a dependency, target, runtime, database, or hardware device is required, configure that separately before treating the result as verified."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not assume Creating and Updating Struct Instances guarantees more than it actually does. Reduce a failure to a small reproducer, read the full compiler diagnostic or error value, consult the matching official reference, and change one assumption at a time."
+      },
+      {
+        "type": "callout",
+        "title": "Toolchain and execution boundary",
+        "text": "Course examples are static reference snippets, not executed inside CodeLeaf. Most standard-library examples can be tried in a Rust 2024 Cargo project; specialized networking, database, async, procedural-macro, embedded, and WebAssembly scenarios require the toolchain and dependencies described in their lessons."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate Creating and Updating Struct Instances. Predict the result before you run it, then explain one normal case and one relevant boundary case in your own words.",
+    "task_acceptance_criteria": [
+      "Explain the purpose of Creating and Updating Struct Instances using a concrete example.",
+      "Verify the example using an appropriate local command, targeted test, or documented manual check.",
+      "Describe one edge case, failure mode, version assumption, or limitation that matters for this topic."
+    ],
+    "hints": [
+      "Start by identifying the inputs and guarantee involved in Creating and Updating Struct Instances.",
+      "Use the smallest example that isolates one rule; avoid changing multiple variables at once.",
+      "Check the matching official reference if compiler behavior, a library API, or toolchain support differs from your expectation."
+    ],
+    "expected_output": "25",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-069-questions.json",
+    "recap": [
+      "Creating and Updating Struct Instances supports data modelling and exhaustive handling.",
+      "Predict and verify behavior with small examples.",
+      "Keep library and target-specific assumptions explicit."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "The Rust Programming Language (The Rust Book)",
+      "url": "https://doc.rust-lang.org/stable/book/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "learning sequence",
+        "syntax",
+        "ownership",
+        "structs and enums",
+        "collections",
+        "generics",
+        "error handling",
+        "modules",
+        "lifetimes",
+        "threads",
+        "testing"
+      ]
+    },
+    {
+      "title": "The Rust Reference",
+      "url": "https://doc.rust-lang.org/reference/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "language syntax and semantics",
+        "type system",
+        "patterns",
+        "macros",
+        "unsafe Rust",
+        "FFI",
+        "ABI",
+        "compiler behavior"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Rust.pdf; review explanation, code behavior, version notes, and assessment quality before publication."
+}

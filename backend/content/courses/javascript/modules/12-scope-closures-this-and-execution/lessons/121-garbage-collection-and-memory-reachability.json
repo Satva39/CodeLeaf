@@ -1,0 +1,226 @@
+{
+  "id": "javascript-lesson-121",
+  "slug": "garbage-collection-and-memory-reachability",
+  "title": "Garbage Collection and Memory Reachability",
+  "sequence": 121,
+  "module_id": "javascript-module-12",
+  "module_slug": "scope-closures-this-and-execution",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "javascript-lesson-120"
+  ],
+  "previous_lesson_id": "javascript-lesson-120",
+  "next_lesson_id": "javascript-lesson-122",
+  "keywords": [
+    "garbage",
+    "collection",
+    "and",
+    "memory",
+    "reachability",
+    "reachable",
+    "versus",
+    "unreachable",
+    "objects",
+    "fundamentals",
+    "unintentional",
+    "retention",
+    "leaks",
+    "caused",
+    "closures",
+    "references"
+  ],
+  "source_syllabus_number": 111,
+  "subtopics": [
+    "Reachable versus unreachable objects",
+    "Garbage collection fundamentals",
+    "Unintentional retention of objects",
+    "Memory leaks caused by closures and references"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and behavior of Garbage Collection and Memory Reachability.",
+    "Apply Garbage Collection and Memory Reachability in a small JavaScript example.",
+    "Test at least one edge case or environment constraint related to Garbage Collection and Memory Reachability."
+  ],
+  "content": {
+    "intro": "This lesson introduces Garbage Collection and Memory Reachability using the supplied syllabus terms, a visual map, and a short inspectable example.",
+    "why_it_matters": "Understanding Garbage Collection and Memory Reachability helps you make JavaScript behavior explicit instead of relying on guesswork. The skill becomes more valuable as programs combine data, user input, runtime APIs, and failures.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Garbage Collection and Memory Reachability: visual guide",
+        "asset_path": "diagrams/lessons/lesson-121-garbage-collection-and-memory-reachability.svg",
+        "alt_text": "Concept path for Garbage Collection and Memory Reachability showing Reachable versus unreachable objects, Unintentional retention of objects, Memory leaks caused by closures and references.",
+        "caption": "A visual scaffold for the explanation below; it is not a substitute for running the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Garbage Collection and Memory Reachability is one of the named concepts in the JavaScript syllabus. Focus on the behavior it defines, the inputs that influence that behavior, and the result you can observe. JavaScript language semantics are specified by ECMAScript; browser and Node.js APIs belong to their host runtimes, so check which environment a feature requires."
+      },
+      {
+        "type": "list",
+        "title": "Build the idea in small steps",
+        "items": [
+          {
+            "title": "Reachable versus unreachable objects",
+            "text": "For Reachable versus unreachable objects, compare the behavior on a small example and on an edge case. Choose the option whose intent is most obvious to the next maintainer."
+          },
+          {
+            "title": "Garbage collection fundamentals",
+            "text": "Connect Garbage collection fundamentals to Garbage Collection and Memory Reachability. Define the expected behavior first, demonstrate it with a small example, and explain one edge case before using it in a larger program."
+          },
+          {
+            "title": "Unintentional retention of objects",
+            "text": "Connect Unintentional retention of objects to Garbage Collection and Memory Reachability. Define the expected behavior first, demonstrate it with a small example, and explain one edge case before using it in a larger program."
+          },
+          {
+            "title": "Memory leaks caused by closures and references",
+            "text": "For Memory leaks caused by closures and references, start with a correct baseline and representative input. Measure before and after any optimization; avoid trading away clarity for an unverified speed improvement."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "let score = 0;\nscore += 5;\nconst summary = `Score: ${score}`;\nconsole.log(summary);",
+        "expected_output": "Score: 5",
+        "run_instructions": "This example is an inspectable teaching snippet, not an arbitrary-code execution service inside CodeLeaf. Save it as a small .js file and run it with a supported Node.js release for console-only examples, or place browser-only code in an HTML page with the required element. Compare the actual output with the expectation and change one input at a time.",
+        "reset_steps": "Restore the initial snippet, remove temporary logging, and repeat with one boundary or invalid input.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "First, name the expected result for Garbage Collection and Memory Reachability. Then trace the code one statement at a time: record the important value before and after each operation, and check whether the output matches your expectation. Change one input or condition; if the result is different, inspect that step instead of rewriting the whole program."
+      },
+      {
+        "type": "callout",
+        "title": "Environment and correctness note",
+        "text": "The ECMAScript 2026 edition is the stable language reference used by this course. The browser DOM, Fetch API, and Node.js APIs are host features. Emerging proposals and runtime support can change; verify compatibility before depending on a feature in production."
+      }
+    ],
+    "task": "Try it yourself: create a small program that demonstrates Garbage Collection and Memory Reachability. Use at least one of the listed subtopics (Reachable versus unreachable objects), include one normal input and one edge case, and write two sentences explaining why the observed result makes sense.",
+    "task_acceptance_criteria": [
+      "The program uses the lesson concept accurately and has readable names.",
+      "The learner states the expected result and checks the actual result.",
+      "At least one edge case, failure path, or environment assumption is addressed."
+    ],
+    "hints": [
+      "Reduce the program to the smallest example that still shows the concept.",
+      "Trace values and control flow from the first statement to the output.",
+      "Use the linked official reference when behavior is unclear."
+    ],
+    "expected_output": "Score: 5",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-121-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a snippet without understanding its input and output.",
+        "why": "A memorized example can appear to work while hiding assumptions about input values or runtime.",
+        "fix": "Explain the expected output first, run the smallest example, and test one boundary case."
+      },
+      {
+        "problem": "Assuming browser APIs are part of core JavaScript.",
+        "why": "ECMAScript does not define the browser DOM or Node.js filesystem APIs.",
+        "fix": "Identify the host environment and consult its official API reference."
+      },
+      {
+        "problem": "Changing multiple things during debugging.",
+        "why": "Several simultaneous edits make the cause of a behavior difficult to isolate.",
+        "fix": "Change one variable or line, reproduce the result, and record what changed."
+      }
+    ],
+    "summary": [
+      "Garbage Collection and Memory Reachability describes a specific behavior or tool that should be tested with an observable example.",
+      "Keep syntax, runtime APIs, and application assumptions separate.",
+      "Prefer a small reproducible example and verify one edge case before moving on."
+    ],
+    "references": [
+      {
+        "title": "Chrome DevTools Performance",
+        "url": "https://developer.chrome.com/docs/devtools/performance/"
+      },
+      {
+        "title": "Web Workers API",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API"
+      },
+      {
+        "title": "MDN JavaScript Guide",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide"
+      },
+      {
+        "title": "MDN JavaScript Reference",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference"
+      },
+      {
+        "title": "ECMAScript 2026 Language Specification",
+        "url": "https://tc39.es/ecma262/2026/multipage/"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Chrome DevTools Performance",
+      "url": "https://developer.chrome.com/docs/devtools/performance/",
+      "publisher": "Chrome for Developers",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "profiling",
+        "runtime performance diagnosis"
+      ]
+    },
+    {
+      "title": "Web Workers API",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "worker execution",
+        "main-thread responsiveness"
+      ]
+    },
+    {
+      "title": "MDN JavaScript Guide",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "core syntax",
+        "functions",
+        "objects",
+        "classes",
+        "modules"
+      ]
+    },
+    {
+      "title": "MDN JavaScript Reference",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "language syntax",
+        "operators",
+        "built-in objects",
+        "methods"
+      ]
+    },
+    {
+      "title": "ECMAScript 2026 Language Specification",
+      "url": "https://tc39.es/ecma262/2026/multipage/",
+      "publisher": "Ecma International",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "language semantics",
+        "syntax",
+        "standard built-ins"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated curriculum expansion; requires subject-matter, example execution, accessibility, and editorial review before publication."
+}

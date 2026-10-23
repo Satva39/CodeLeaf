@@ -1,0 +1,32 @@
+{
+  "id": "java-exercise-solution-041",
+  "exercise_id": "java-exercise-041",
+  "title": "Memory Leak Investigation reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "language": "java",
+  "answer": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Main {\n    private static final List<byte[]> RETAINED = new ArrayList<>();\n    public static void main(String[] args) {\n        for (int i = 0; i < 20; i++) RETAINED.add(new byte[256 * 1024]);\n        System.out.println(\"Retained buffers: \" + RETAINED.size());\n        RETAINED.clear();\n        System.out.println(\"Application references cleared; collection timing is JVM-controlled.\");\n    }\n}",
+  "explanation": "A leak is about objects remaining reachable when they should not be, not simply memory usage increasing once. Compare heap evidence over time with JFR/heap dumps and inspect retaining paths; do not rely on `System.gc()` to prove reclamation.",
+  "hidden_tests": [
+    {
+      "case": "normal case",
+      "input_or_setup": "Use the deterministic sample data or representative valid input described in the exercise.",
+      "expected_behavior": "Retained buffers: 20, then an explanation that application references were cleared",
+      "purpose": "Verify the main behavior and the output contract."
+    },
+    {
+      "case": "boundary case",
+      "input_or_setup": "Test empty, zero, minimum/maximum, duplicate, or end-of-range input as appropriate to the exercise.",
+      "expected_behavior": "The result matches the documented boundary rule and does not silently corrupt state.",
+      "purpose": "Check a boundary or invariant."
+    },
+    {
+      "case": "invalid or failure case",
+      "input_or_setup": "Provide malformed input or simulate a missing file, unavailable endpoint, missing configuration, or database failure where relevant.",
+      "expected_behavior": "The operation fails clearly or returns a safe result; resources are released and secrets are not printed.",
+      "purpose": "Check explicit error behavior and cleanup."
+    }
+  ],
+  "review_notes": "Repository-only reference material. Keep it out of public API responses and frontend bundles. The platform grader is only a required-token smoke check; complete task-specific execution tests in an isolated Java runner before publication.",
+  "sample_expected_result": "Retained buffers: 20, then an explanation that application references were cleared"
+}

@@ -1,0 +1,173 @@
+{
+  "id": "mysql-lesson-073",
+  "slug": "mathematical-string-and-date-function-combinations",
+  "title": "Mathematical, String, and Date Function Combinations",
+  "sequence": 73,
+  "module_id": "mysql-module-08",
+  "module_slug": "operators-and-built-in-functions",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "mysql-lesson-072"
+  ],
+  "previous_lesson_id": "mysql-lesson-072",
+  "next_lesson_id": "mysql-lesson-074",
+  "keywords": [
+    "mathematical-string-and-date-function-combinations",
+    "operators-and-built-in-functions",
+    "mysql",
+    "database"
+  ],
+  "source_syllabus_number": 73,
+  "source_module_number": 8,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the purpose of mathematical, string, and date function combinations in MySQL and when it is useful.",
+    "Interpret or adapt the supplied sql example and predict its expected behavior.",
+    "Verify one relevant boundary, safety requirement, or version-specific assumption."
+  ],
+  "content": {
+    "intro": "Learn mathematical, string, and date function combinations in the context of operators and built-in functions. This lesson covers the supplied syllabus topic, demonstrates a representative MySQL example, and finishes with a verification task.",
+    "why_it_matters": "A column type defines which values can be represented and affects precision, storage, comparison, and conversion. Choose a type from real domain rules; do not rely on accidental coercion or approximate numeric types for exact money values.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Mathematical, String, and Date Function Combinations",
+        "asset_path": "diagrams/lesson-073-mathematical-string-and-date-function-combinations.svg",
+        "alt_text": "Concept flow for Mathematical, String, and Date Function Combinations: understand the MySQL concept, inspect the example, verify its behavior, and apply it safely.",
+        "caption": "Mathematical, String, and Date Function Combinations: connect the concept to a concrete example, verify the result, and apply it in a disposable lab."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "A column type defines which values can be represented and affects precision, storage, comparison, and conversion. Choose a type from real domain rules; do not rely on accidental coercion or approximate numeric types for exact money values."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics to master",
+        "items": [
+          {
+            "title": "Core concept",
+            "text": "A column type defines which values can be represented and affects precision, storage, comparison, and conversion. Choose a type from real domain rules; do not rely on accidental coercion or approximate numeric types for exact money values."
+          },
+          {
+            "title": "Practical verification",
+            "text": "Predict the outcome, check the result against the selected MySQL version, and record an edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Apply the idea",
+        "text": "Predict the output type and value, run a minimal SELECT expression, and test a NULL or boundary input. Write down the expected result before running the snippet. Compare actual output with the reference, then try one normal case and one edge case."
+      },
+      {
+        "type": "code",
+        "language": "sql",
+        "execution_mode": "static-validation",
+        "code": "SELECT CURRENT_DATE() AS today, DATE_ADD('2026-10-12', INTERVAL 7 DAY) AS next_week, DATE_FORMAT('2026-10-12', '%Y-%m') AS year_month;",
+        "expected_output": "One row shows the server date, 2026-10-19, and year_month = 2026-10; current date depends on runtime.",
+        "run_instructions": "Run in a dedicated local MySQL lab using the stated MySQL release track. For schema-changing or administrative snippets, inspect every statement and use only a disposable schema; the in-page editor shows reference output and does not execute SQL.",
+        "reset_steps": "Remove only objects created for this lesson from the disposable schema/session, or restore the lab snapshot. Never run reset or destructive commands against production."
+      },
+      {
+        "type": "callout",
+        "title": "Version, security, and safety note",
+        "text": "Use MySQL 9.7 LTS documentation as the default stable-track reference; verify behavior against MySQL 26.7 documentation when relevant and label any MySQL 8.4-specific fact. Examples are static references, not executed by CodeLeaf. Run mutation, privilege, replication, backup, and recovery examples only in an isolated lab."
+      }
+    ],
+    "task": "Try it yourself: Predict the output type and value, run a minimal SELECT expression, and test a NULL or boundary input. Submit the query, result or decision record, plus one edge case and one verification step.",
+    "task_acceptance_criteria": [
+      "Address the core behavior in mathematical, string, and date function combinations using a MySQL-specific example or a clear operational plan.",
+      "State the expected result and demonstrate how it would be verified in the selected environment.",
+      "Identify one relevant edge case, permissions boundary, operational risk, or version assumption."
+    ],
+    "hints": [
+      "Start by identifying the question that mathematical, string, and date function combinations needs to answer.",
+      "Reduce the example to the smallest meaningful row set or operational change, then write down the result you expect.",
+      "Check the applicable official manual and version note before treating the reference output as guaranteed."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming that a sample result proves the whole design is correct.",
+        "why": "Edge cases such as NULLs, duplicate matches, concurrency, privileges, or version differences may change behavior.",
+        "fix": "Add a targeted boundary case and record the server version, schema and expected result."
+      },
+      {
+        "problem": "Running a mutating or administrative example in the wrong environment.",
+        "why": "DDL, data changes, access grants, and recovery commands may have persistent impact.",
+        "fix": "Use a disposable lab, preview targets and permissions, and write a reset/recovery plan before executing."
+      }
+    ],
+    "summary": [
+      "A column type defines which values can be represented and affects precision, storage, comparison, and conversion. Choose a type from real domain rules; do not rely on accidental coercion or approximate numeric types for exact money values.",
+      "Use the PDF subtopics for mathematical, string, and date function combinations as a checklist, then validate behavior in the chosen MySQL version.",
+      "Keep the example, assumptions, expected output, and recovery steps together."
+    ],
+    "references": [
+      {
+        "title": "MySQL 9.7 Reference Manual",
+        "url": "https://dev.mysql.com/doc/refman/9.7/en/",
+        "publisher": "Oracle / MySQL",
+        "checked_on": "2026-10-12",
+        "supports": [
+          "core SQL syntax",
+          "data types",
+          "DDL and DML",
+          "query optimization",
+          "security",
+          "administration"
+        ]
+      },
+      {
+        "title": "MySQL Built-In Functions and Operators",
+        "url": "https://dev.mysql.com/doc/refman/9.7/en/functions.html",
+        "publisher": "Oracle / MySQL",
+        "checked_on": "2026-10-12",
+        "supports": [
+          "string, numeric, date/time and utility functions",
+          "operators",
+          "JSON functions"
+        ]
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-073-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "Draft authored from the supplied MySQL curriculum outline. Code samples require technical review and do not execute in the browser."
+  },
+  "exercise_files": [
+    "../exercises/073-mathematical-string-and-date-function-combinations-practice.json"
+  ],
+  "sources": [
+    {
+      "title": "MySQL 9.7 Reference Manual",
+      "url": "https://dev.mysql.com/doc/refman/9.7/en/",
+      "publisher": "Oracle / MySQL",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "core SQL syntax",
+        "data types",
+        "DDL and DML",
+        "query optimization",
+        "security",
+        "administration"
+      ]
+    },
+    {
+      "title": "MySQL Built-In Functions and Operators",
+      "url": "https://dev.mysql.com/doc/refman/9.7/en/functions.html",
+      "publisher": "Oracle / MySQL",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "string, numeric, date/time and utility functions",
+        "operators",
+        "JSON functions"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft: verify the lesson, example, expected output, references, and version notes before publishing."
+}

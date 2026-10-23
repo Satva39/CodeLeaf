@@ -1,0 +1,173 @@
+{
+  "id": "php-lesson-032",
+  "slug": "logical-operators",
+  "title": "Logical Operators",
+  "sequence": 32,
+  "module_id": "php-module-04",
+  "module_slug": "operators-and-expressions",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "php-lesson-031"
+  ],
+  "previous_lesson_id": "php-lesson-031",
+  "next_lesson_id": "php-lesson-033",
+  "keywords": [
+    "logical operators",
+    "operators and expressions",
+    "and and or",
+    "not",
+    "short-circuit evaluation",
+    "operator precedence",
+    "combining multiple conditions",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 32,
+  "subtopics": [
+    "AND and OR.",
+    "NOT.",
+    "Short-circuit evaluation.",
+    "Operator precedence.",
+    "Combining multiple conditions."
+  ],
+  "learning_outcomes": [
+    "Explain what logical operators contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: and and or.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Operators combine values into expressions. Parentheses, precedence, strict comparisons, and deliberate fallback behavior help prevent expressions that compile but communicate the wrong intent. In this lesson, focus on and and or; then compare it with not. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use logical operators when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 4 overview: Operators and Expressions",
+        "asset_path": "diagrams/module-04-overview.svg",
+        "alt_text": "Four-stage overview for module 4, Operators and Expressions, grouping lesson topics in order.",
+        "caption": "Use this overview to place logical operators in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Operators combine values into expressions. Parentheses, precedence, strict comparisons, and deliberate fallback behavior help prevent expressions that compile but communicate the wrong intent. For logical operators, begin with and and or. Also distinguish not; short-circuit evaluation; operator precedence. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "AND and OR",
+            "text": "Know when to use and and or, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "NOT",
+            "text": "Know when to use not, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Short-circuit evaluation",
+            "text": "Know when to use short-circuit evaluation, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Operator precedence",
+            "text": "Write down the operand types and parenthesize combined expressions so that the intended evaluation order is clear."
+          },
+          {
+            "title": "Combining multiple conditions",
+            "text": "Know when to use combining multiple conditions, what input or program state it changes, and which boundary case is worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Logical Operators",
+        "language": "php",
+        "code": "<?php\n$left = 7; $right = 3;\necho ($left + $right) . PHP_EOL;",
+        "expected_output": "10",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for logical operators from top to bottom. Start by identifying and and or, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for logical operators that demonstrates \"and and or\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of and and or.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "10",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-032-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Logical Operators is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+    ],
+    "references": [
+      {
+        "title": "Operators",
+        "url": "https://www.php.net/manual/en/language.operators.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "arithmetic",
+          "comparison",
+          "logical",
+          "string and conditional operators"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Operators",
+      "url": "https://www.php.net/manual/en/language.operators.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "arithmetic",
+        "comparison",
+        "logical",
+        "string and conditional operators"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

@@ -1,0 +1,83 @@
+{
+  "id": "excel-practical-16",
+  "slug": "practical-16-loan-repayment-calculator",
+  "title": "Loan Repayment Calculator",
+  "type": "workbook-practice",
+  "lesson_id": "excel-lesson-183",
+  "module_id": "excel-module-20",
+  "difficulty": "intermediate",
+  "sequence": 2,
+  "source_exercise_id": "PDF-EX-16",
+  "source_topics": [
+    183
+  ],
+  "prompt": "Build a repayment schedule and calculate total interest.\n\nSkills: Financial functions, formulas and validation.\n\nUse the supplied synthetic CSV at assets/data/practical-16-loan-repayment-calculator.csv. A small copy/pastable sample is included below in case the CSV is not directly downloadable from the lesson page. Complete the work in a separate .xlsx copy, preserve a raw-data sheet, and check the result against the acceptance criteria. Then answer the short grading check; it does not validate the workbook itself.\n\nSample CSV (synthetic):\nParameter,Value\nPrincipal,10000\nAnnualRate,0.06\nMonths,36\nStartDate,2026-01-01",
+  "objective": "Build a repayment schedule and calculate total interest.",
+  "target_skills": [
+    "Financial functions",
+    "formulas and validation."
+  ],
+  "starter": {
+    "format": "csv",
+    "path": "assets/data/practical-16-loan-repayment-calculator.csv",
+    "headers": [
+      "Parameter",
+      "Value"
+    ],
+    "rows": [
+      [
+        "Principal",
+        10000
+      ],
+      [
+        "AnnualRate",
+        0.06
+      ],
+      [
+        "Months",
+        36
+      ],
+      [
+        "StartDate",
+        "2026-01-01"
+      ]
+    ],
+    "sample_row_count": 4,
+    "instructions": "Open/import the UTF-8 CSV into Excel. Keep the original source data unchanged and perform work on a separate sheet or workbook."
+  },
+  "expected_output": "Expected: payment, principal and interest calculations reconcile for the documented rate/term assumptions; the ending balance is near zero within rounding.",
+  "public_tests": [
+    {
+      "name": "Sample-data acceptance",
+      "checklist": [
+        "Input records are preserved and data types are checked.",
+        "Totals/results reconcile with a small independent calculation.",
+        "An edge case, duplicate or threshold boundary is tested where relevant."
+      ]
+    },
+    {
+      "name": "Server-side answer check",
+      "note": "A text/choice check does not execute Excel or inspect the workbook artifact."
+    }
+  ],
+  "acceptance_criteria": [
+    "Expected: payment, principal and interest calculations reconcile for the documented rate/term assumptions; the ending balance is near zero within rounding.",
+    "Use a labeled result area and document formulas, assumptions or transformation steps.",
+    "Compare actual results with a manual/independently calculated expected result and test one edge case.",
+    "Keep source data intact and request human review of the completed workbook; do not treat the text grader as artifact validation."
+  ],
+  "hints": [
+    "Import data without losing dates, decimals or leading zeros.",
+    "Separate raw inputs, calculations and presentation outputs.",
+    "Test empty inputs, duplicated keys, boundary values or missing matches as appropriate to the scenario."
+  ],
+  "grading_config": {
+    "mode": "exact_text",
+    "expected_text": "=PMT(6%/12,36,-10000)"
+  },
+  "grading_method": "Server-side exact_text check of the submitted answer/expression only; does not execute Excel or inspect the workbook. This workbook-practice task needs a human-reviewed artifact and test evidence for full acceptance. Illustrative loan payment using 6% nominal annual rate, monthly payments, 36 periods, and 10,000 principal; excludes fees and extra payments.",
+  "retry_policy": "Retries are permitted. A failed string/choice submission does not complete the exercise. Course files do not define XP; platform-wide server logic applies.",
+  "solution_file": "solutions/practical-16-loan-repayment-calculator-solution.json",
+  "status": "draft",
+  "source_data_file": "assets/data/practical-16-loan-repayment-calculator.csv"
+}

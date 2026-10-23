@@ -1,0 +1,201 @@
+{
+  "id": "pytorch-lesson-121",
+  "slug": "gradient-accumulation-and-micro-batching",
+  "title": "Gradient Accumulation and Micro-Batching",
+  "sequence": 121,
+  "module_id": "pytorch-module-15",
+  "module_slug": "gpu-computing-and-mixed-precision",
+  "level": "Advanced",
+  "difficulty": "advanced",
+  "track": "performance-engineering",
+  "estimated_minutes": 25,
+  "prerequisites": [
+    "pytorch-lesson-120"
+  ],
+  "previous_lesson_id": "pytorch-lesson-120",
+  "next_lesson_id": "pytorch-lesson-122",
+  "keywords": [
+    "gradient-accumulation-and-micro-batching",
+    "effective-batch-size",
+    "accumulating-gradients-over-multiple-batches",
+    "correct-loss-scaling",
+    "optimizer-step-timing",
+    "interaction-with-normalization-layers",
+    "pytorch",
+    "deep-learning"
+  ],
+  "learning_outcomes": [
+    "Explain the role of gradient accumulation and micro-batching in a PyTorch workflow.",
+    "Apply a small example of gradient accumulation and micro-batching and interpret the output.",
+    "Identify a relevant limitation, debugging check, or reproducibility concern."
+  ],
+  "content": {
+    "intro": "Gradient Accumulation and Micro-Batching: PyTorch tensors and models live on a device, and mixed precision changes how floating-point operations are represented. Hardware and operator support determine which settings are suitable. In this lesson, use a small example to make the inputs, outputs, and boundary conditions explicit.",
+    "why_it_matters": "Correct device placement avoids runtime mismatches, while carefully validated precision can reduce memory or time on supported hardware. For this lesson, focus on effective batch size and the evidence you can collect from a controlled example.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 15 roadmap",
+        "asset_path": "diagrams/module-15-overview.svg",
+        "alt_text": "Overview diagram of the ordered lessons in module 15: GPU Computing and Mixed Precision. This lesson is item 121 in the 164-lesson course.",
+        "caption": "Orientation map for GPU Computing and Mixed Precision; use the list below to connect this lesson to related ideas."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Move the model, features, and targets to the same device. Use autocast/scaling only in supported workflows and verify numerical quality as well as speed. The source topics for this lesson are: Effective batch size, Accumulating gradients over multiple batches, Correct loss scaling. Keep each topic connected to a checkable input/output behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "Read the example",
+        "text": "Print device and dtype metadata, then compare the result under an appropriate precision mode. CPU-only learners should not assume that a CUDA path was tested. The example is a teaching-scale check, not evidence of a trained model score or a hardware-independent performance claim."
+      },
+      {
+        "type": "list",
+        "title": "Source-aligned topic checklist",
+        "items": [
+          {
+            "title": "Effective batch size",
+            "text": "Inspect one sample before batching, verify feature/label alignment, and confirm that preprocessing and split boundaries fit the intended stage."
+          },
+          {
+            "title": "Accumulating gradients over multiple batches",
+            "text": "Identify the value being differentiated and the scalar objective; compare the resulting gradient with a tiny analytical or numerical check."
+          },
+          {
+            "title": "Correct loss scaling",
+            "text": "Connect the quantity to the model objective and update order; track it over steps and change one training setting per experiment."
+          },
+          {
+            "title": "Optimizer-step timing",
+            "text": "Connect the quantity to the model objective and update order; track it over steps and change one training setting per experiment."
+          },
+          {
+            "title": "Interaction with normalization layers",
+            "text": "Inspect one sample before batching, verify feature/label alignment, and confirm that preprocessing and split boundaries fit the intended stage."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Guided PyTorch example",
+        "language": "python",
+        "code": "import torch\nfrom torch import nn\nmodel = nn.Linear(2, 1)\noptimizer = torch.optim.SGD(model.parameters(), lr=0.01)\noptimizer.zero_grad()\nfor _ in range(2):\n    loss = model(torch.ones(1, 2)).sum() / 2\n    loss.backward()\noptimizer.step()\nprint(\"two micro-batches accumulated\")",
+        "expected_output": "two micro-batches accumulated",
+        "run_instructions": "Save as example.py in a Python environment with a compatible PyTorch installation, then run `python example.py`. PyTorch snippets are not executed in the browser. For GPU- or package-specific snippets, install the matching supported dependencies first.",
+        "reset_steps": "Restore the code block, rerun it, and compare both the printed output and tensor metadata.",
+        "run_mode": "server-runner"
+      },
+      {
+        "type": "callout",
+        "title": "Version and execution note",
+        "text": "The code block is a local Python example, not a browser execution promise. CodeLeaf does not currently provide an isolated general-purpose Python runner; use a virtual environment. Installation commands, optional packages, hardware behavior, and rapidly evolving specialist APIs must be checked against the linked official documentation."
+      }
+    ],
+    "task": "Try it yourself: Write a device-selection helper, move a small model and batch consistently, and record device/dtype alongside the result. Record the observed result and one limitation; do not report an unrun training or performance result as measured.",
+    "task_acceptance_criteria": [
+      "The experiment demonstrates at least one relevant aspect of gradient accumulation and micro-batching.",
+      "Record the expected and observed result, including shape/dtype/device information when relevant.",
+      "Explain one common failure mode, compatibility limitation, or evaluation caveat."
+    ],
+    "hints": [
+      "Begin with the smallest working example for gradient accumulation and micro-batching and keep input shapes explicit.",
+      "Change only one variable at a time; compare a tensor property, a printed value, or a test assertion.",
+      "Use the linked official reference for any hardware-specific, optional-package, or version-sensitive behavior."
+    ],
+    "expected_output": "two micro-batches accumulated",
+    "troubleshooting": [
+      {
+        "symptom": "A tensor operation raises a shape, dtype, or device mismatch.",
+        "check": "Print .shape, .dtype, and .device for each input. Resolve the mismatch intentionally instead of changing dimensions blindly."
+      },
+      {
+        "symptom": "The example fails because an optional package or accelerator is unavailable.",
+        "check": "Check the installed PyTorch/package versions and device availability. Use the official installation selector and run the CPU-compatible path where appropriate."
+      },
+      {
+        "symptom": "The result differs across runs or machines.",
+        "check": "Fix the seed where useful, record versions and inputs, and document operations that remain nondeterministic or hardware dependent."
+      }
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Relying on assumptions instead of inspecting the data or output.",
+        "why": "Many ML failures come from incorrect shapes, labels, preprocessing, or execution mode rather than a syntax error.",
+        "fix": "Inspect representative inputs and add assertions for the expected shape, dtype, range, or behavior."
+      },
+      {
+        "problem": "Mixing training-time behavior with inference-time behavior.",
+        "why": "Dropout, normalization, gradient tracking, and optimizer updates can change how a model behaves.",
+        "fix": "Do not treat a GPU availability check as proof that all model operators or precision modes are supported."
+      },
+      {
+        "problem": "Using a current or experimental API without recording its version assumptions.",
+        "why": "Hardware support and ecosystem APIs can change independently of the core package.",
+        "fix": "Pin compatible dependencies, record the environment, and test after upgrades."
+      }
+    ],
+    "summary": [
+      "Gradient Accumulation and Micro-Batching belongs to the GPU Computing and Mixed Precision learning path.",
+      "Practice effective batch size, accumulating gradients over multiple batches, correct loss scaling using the source-aligned checklist and read-example explanation.",
+      "Do not treat a GPU availability check as proof that all model operators or precision modes are supported."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-121-questions.json",
+    "solution_notes": "The linked lesson knowledge-check answers and exercise reference solutions are kept in protected backend content files. A published endpoint must return learner-safe prompts only.",
+    "run_mode": "server-runner",
+    "execution_note": "Requires a local or separately isolated Python runner. Do not execute learner-supplied Python inside the FastAPI process or the production web container.",
+    "references": [
+      {
+        "title": "Automatic Mixed Precision",
+        "url": "https://docs.pytorch.org/docs/stable/amp.html",
+        "publisher": "PyTorch",
+        "checked_on": "2026-10-20",
+        "supports": [
+          "autocast",
+          "gradient scaling"
+        ]
+      },
+      {
+        "title": "PyTorch API Documentation",
+        "url": "https://docs.pytorch.org/docs/stable/",
+        "publisher": "PyTorch",
+        "checked_on": "2026-10-20",
+        "supports": [
+          "tensor operations",
+          "torch.nn",
+          "autograd",
+          "testing",
+          "serialization"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Automatic Mixed Precision",
+      "url": "https://docs.pytorch.org/docs/stable/amp.html",
+      "publisher": "PyTorch",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "autocast",
+        "gradient scaling"
+      ]
+    },
+    {
+      "title": "PyTorch API Documentation",
+      "url": "https://docs.pytorch.org/docs/stable/",
+      "publisher": "PyTorch",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "tensor operations",
+        "torch.nn",
+        "autograd",
+        "testing",
+        "serialization"
+      ]
+    }
+  ],
+  "status": "draft"
+}

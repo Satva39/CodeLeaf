@@ -1,0 +1,67 @@
+{
+  "id": "pandas-exercise-21",
+  "slug": "multiindex-report",
+  "title": "MultiIndex Report",
+  "sequence": 21,
+  "lesson_id": "pandas-lesson-166",
+  "lesson_slug": "selecting-data-with-multiindex",
+  "module_id": "pandas-module-20",
+  "difficulty": "advanced",
+  "type": "code",
+  "prompt": "Create, sort, select, and reshape a hierarchical report.",
+  "scenario": "Use the synthetic data described below to practise m, u, l, t, i, i, n, d, e, x,  , o, p, e, r, a, t, i, o, n, s. Do not assume the input is correct without validating it.",
+  "skills": "MultiIndex operations",
+  "starter": {
+    "language": "python",
+    "code": "import pandas as pd\n\nidx = pd.MultiIndex.from_product([[\"West\", \"East\"], [\"Tea\", \"Juice\"]], names=[\"region\", \"product\"])\nreport = pd.DataFrame({\"units\": [2, 4, 3, 5]}, index=idx)\nprint(report.loc[(\"West\", \"Tea\"), \"units\"])",
+    "dataset_note": "Use small synthetic in-memory data; do not place private or real customer data in exercises."
+  },
+  "input_schema": {
+    "description": "Create or use a synthetic DataFrame with only the columns needed for this exercise.",
+    "validation": [
+      "Document expected columns and data types.",
+      "State how missing values or duplicates should be treated."
+    ]
+  },
+  "expected_output": [
+    "Build a MultiIndex from region and product labels.",
+    "Select by a label and a particular index level.",
+    "Explain how resetting the index changes the table shape."
+  ],
+  "public_tests": [
+    {
+      "name": "normal-case",
+      "description": "The solution returns the required columns and correctly computes the stated result."
+    },
+    {
+      "name": "edge-case",
+      "description": "The solution documents behavior for a missing value, duplicate key, empty input, invalid value, or other relevant edge case."
+    }
+  ],
+  "hints": [
+    "Write down the expected result before coding.",
+    "Use Pandas operations that preserve labels unless position-based behavior is intended.",
+    "Add a small assertion for the most important property."
+  ],
+  "acceptance_criteria": [
+    "Build a MultiIndex from region and product labels.",
+    "Select by a label and a particular index level.",
+    "Explain how resetting the index changes the table shape."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "m"
+    ],
+    "case_sensitive": false,
+    "note": "The generic short-response grader is only an initial scaffold; a reviewed isolated Python grader is required for automatic execution of arbitrary learner code."
+  },
+  "solution_file": "solutions/021-multiindex-report-solution.json",
+  "solution": {},
+  "retry_policy": {
+    "max_attempts": null,
+    "allow_retry_after_feedback": true
+  },
+  "status": "draft",
+  "status_note": "Review prompt, starter, rubric, and server-side grading before publication."
+}

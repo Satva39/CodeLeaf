@@ -1,0 +1,215 @@
+{
+  "id": "php-lesson-080",
+  "slug": "type-aliases-mixed-never-and-void",
+  "title": "Type Aliases, mixed, never, and void",
+  "sequence": 80,
+  "module_id": "php-module-09",
+  "module_slug": "modern-php-type-features-and-language-constructs",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 11,
+  "prerequisites": [
+    "php-lesson-079"
+  ],
+  "previous_lesson_id": "php-lesson-079",
+  "next_lesson_id": "php-lesson-081",
+  "keywords": [
+    "type aliases mixed never and void",
+    "modern php type features and language constructs",
+    "the mixed type",
+    "the never return type",
+    "the void return type",
+    "representing values that may not be known more precisely",
+    "avoiding unnecessary type weakening",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 80,
+  "subtopics": [
+    "The mixed type.",
+    "The never return type.",
+    "The void return type.",
+    "Representing values that may not be known more precisely.",
+    "Avoiding unnecessary type weakening."
+  ],
+  "learning_outcomes": [
+    "Explain what type aliases, mixed, never, and void contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: the mixed type.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Modern PHP offers stronger type declarations and language constructs for making intent explicit. Choose the narrowest useful type and use enums, attributes, and readonly design only when they model a real rule. In this lesson, focus on the mixed type; then compare it with the never return type. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use type aliases, mixed, never, and void when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 9 overview: Modern PHP Type Features and Language Constructs",
+        "asset_path": "diagrams/module-09-overview.svg",
+        "alt_text": "Four-stage overview for module 9, Modern PHP Type Features and Language Constructs, grouping lesson topics in order.",
+        "caption": "Use this overview to place type aliases, mixed, never, and void in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Modern PHP offers stronger type declarations and language constructs for making intent explicit. Choose the narrowest useful type and use enums, attributes, and readonly design only when they model a real rule. For type aliases, mixed, never, and void, begin with the mixed type. Also distinguish the never return type; the void return type; representing values that may not be known more precisely. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "The mixed type",
+            "text": "State which values are accepted and what contract the declaration enforces; include a case that should be rejected or handled explicitly."
+          },
+          {
+            "title": "The never return type",
+            "text": "State which values are accepted and what contract the declaration enforces; include a case that should be rejected or handled explicitly."
+          },
+          {
+            "title": "The void return type",
+            "text": "State which values are accepted and what contract the declaration enforces; include a case that should be rejected or handled explicitly."
+          },
+          {
+            "title": "Representing values that may not be known more precisely",
+            "text": "Know when to use representing values that may not be known more precisely, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Avoiding unnecessary type weakening",
+            "text": "State which values are accepted and what contract the declaration enforces; include a case that should be rejected or handled explicitly."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Type Aliases, mixed, never, and void",
+        "language": "php",
+        "code": "<?php\nreadonly class Point { public function __construct(public int $x, public int $y) {} }\n$p = new Point(3, 4);\necho $p->x + $p->y . PHP_EOL;",
+        "expected_output": "7",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for type aliases, mixed, never, and void from top to bottom. Start by identifying the mixed type, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for type aliases, mixed, never, and void that demonstrates \"the mixed type\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of the mixed type.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "7",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-080-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Type Aliases, mixed, never, and void is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+    ],
+    "references": [
+      {
+        "title": "Type declarations",
+        "url": "https://www.php.net/manual/en/language.types.declarations.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "parameter types",
+          "return types",
+          "union types",
+          "strict_types"
+        ]
+      },
+      {
+        "title": "Enumerations",
+        "url": "https://www.php.net/manual/en/language.enumerations.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "pure enums",
+          "backed enums",
+          "enum methods"
+        ]
+      },
+      {
+        "title": "Attributes overview",
+        "url": "https://www.php.net/manual/en/language.attributes.overview.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "attributes",
+          "reflection-based metadata"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Type declarations",
+      "url": "https://www.php.net/manual/en/language.types.declarations.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "parameter types",
+        "return types",
+        "union types",
+        "strict_types"
+      ]
+    },
+    {
+      "title": "Enumerations",
+      "url": "https://www.php.net/manual/en/language.enumerations.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "pure enums",
+        "backed enums",
+        "enum methods"
+      ]
+    },
+    {
+      "title": "Attributes overview",
+      "url": "https://www.php.net/manual/en/language.attributes.overview.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "attributes",
+        "reflection-based metadata"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

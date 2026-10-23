@@ -1,0 +1,56 @@
+{
+  "id": "django-exercise-003",
+  "slug": "create-a-book-database",
+  "title": "Create a Book Database",
+  "type": "practical",
+  "lesson_id": "django-lesson-056",
+  "module_id": "django-module-07",
+  "difficulty": "beginner",
+  "sequence": 3,
+  "prompt": "Define book and author models, apply migrations, add sample records, and create searchable admin listings.\n\nSubmission: a small reviewable artifact, relevant tests, expected outputs, one failure/boundary case, and version/environment notes. Use synthetic data. Django/Python server code is not executed by CodeLeaf browser preview; local or human review is required.",
+  "objective": "Create a Book Database",
+  "target_skills": [
+    "Create Author and Book models with a relation.",
+    "Generate/review/apply migrations and create sample data.",
+    "Register the model with search and filtering in the admin."
+  ],
+  "starter": {
+    "language": "text",
+    "content": "from django.db import models\n\nclass Author(models.Model):\n    name = models.CharField(max_length=120)\n\n    def __str__(self):\n        return self.name\n\nclass Book(models.Model):\n    title = models.CharField(max_length=200)\n    author = models.ForeignKey(Author, on_delete=models.PROTECT, related_name=\"books\")",
+    "code": "from django.db import models\n\nclass Author(models.Model):\n    name = models.CharField(max_length=120)\n\n    def __str__(self):\n        return self.name\n\nclass Book(models.Model):\n    title = models.CharField(max_length=200)\n    author = models.ForeignKey(Author, on_delete=models.PROTECT, related_name=\"books\")"
+  },
+  "expected_output": "Review the generated migration before applying it.",
+  "public_tests": [
+    {
+      "name": "Required-concept smoke check",
+      "required_strings": [
+        "models.ForeignKey",
+        "makemigrations"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Migration files are present and applied locally.",
+    "The admin lists title/author fields and searches by title.",
+    "A test confirms the relation behaves as expected.",
+    "State whether verification was local, static, or human-reviewed.",
+    "Do not claim a build/deployment or external integration was tested unless it was actually run."
+  ],
+  "hints": [
+    "Use a ForeignKey for many books per author.",
+    "Add readable `__str__` methods.",
+    "Use a deliberate deletion policy and test it."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "models.ForeignKey",
+      "makemigrations"
+    ]
+  },
+  "grading_method": "Required-string smoke check plus human review of technical correctness, tests, safe handling, expected result and reproducibility. This does not execute arbitrary Python/Django code.",
+  "retry_policy": "Retries are allowed after reviewing feedback; the platform backend owns its uniform XP/idempotency rules.",
+  "solution_file": "../solutions/003-create-a-book-database-solution.json",
+  "status": "draft",
+  "status_note": "Practical exercise from Section C of the supplied Django curriculum; content and grading need review before publication."
+}

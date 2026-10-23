@@ -1,0 +1,191 @@
+{
+  "id": "sql-lesson-005",
+  "slug": "where-is-sql-used",
+  "title": "Where Is SQL Used?",
+  "sequence": 5,
+  "module_id": "sql-module-01",
+  "module_slug": "introduction-to-sql",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 8,
+  "prerequisites": [
+    "sql-lesson-004"
+  ],
+  "previous_lesson_id": "sql-lesson-004",
+  "next_lesson_id": "sql-lesson-006",
+  "keywords": [
+    "where is sql used",
+    "websites and web applications",
+    "mobile and desktop applications",
+    "business and financial systems",
+    "reporting and business intelligence",
+    "data engineering and analytics"
+  ],
+  "source_syllabus_number": 5,
+  "source_module_number": 1,
+  "subtopics": [
+    "Websites and web applications",
+    "Mobile and desktop applications",
+    "Business and financial systems",
+    "Reporting and business intelligence",
+    "Data engineering and analytics",
+    "Enterprise information systems"
+  ],
+  "subtopic_source_numbers": [
+    "5.1",
+    "5.2",
+    "5.3",
+    "5.4",
+    "5.5",
+    "5.6"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and key terms of where is sql used?.",
+    "Apply websites and web applications in a small PostgreSQL-oriented example or design decision.",
+    "Validate the result against the expected behavior and identify one portability, safety, or edge-case consideration."
+  ],
+  "content": {
+    "intro": "Learn where is sql used? through a short explanation, a concept diagram, and a PostgreSQL-oriented example. Focus on the reason for the query or design decision before memorizing syntax.",
+    "why_it_matters": "Where Is SQL Used? matters because database behavior becomes more reliable when the intended row meaning, data shape, and edge cases are explicit. This lesson follows the SQL curriculum's listed subtopics and calls out PostgreSQL-specific behavior when it matters.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Where Is SQL Used?",
+        "asset_path": "diagrams/lesson-005-where-is-sql-used.svg",
+        "alt_text": "Original SQL concept diagram for Where Is SQL Used?; shows four steps based on the lesson subtopics.",
+        "caption": "Use this four-step visual to connect the question, the relevant SQL idea, its application, and a verification check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Where Is SQL Used? gives you the vocabulary to ask for a result without scripting every low-level retrieval step. SQL statements describe the data or operation; the database engine parses, plans, and executes them."
+      },
+      {
+        "type": "paragraph",
+        "title": "Apply the idea",
+        "text": "Start with the subtopics: Websites and web applications, Mobile and desktop applications, Business and financial systems, Reporting and business intelligence. Define the result you expect, run or inspect the small example in your own disposable PostgreSQL lab, and change one assumption at a time. The embedded lesson editor is a demonstration shell: the current project shows the sample expected output and does not execute arbitrary SQL on the server."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics to master",
+        "items": [
+          {
+            "title": "Websites and web applications",
+            "text": "Websites and web applications makes SQL easier to change safely. Turn assumptions into repeatable checks, keep schema/query changes reviewable, use deterministic ordering, and record the data shape and environment used for the check."
+          },
+          {
+            "title": "Mobile and desktop applications",
+            "text": "Mobile and desktop applications makes SQL easier to change safely. Turn assumptions into repeatable checks, keep schema/query changes reviewable, use deterministic ordering, and record the data shape and environment used for the check."
+          },
+          {
+            "title": "Business and financial systems",
+            "text": "Business and financial systems helps you build a mental model of SQL as a declarative language for relational data, and distinguish the language from the database engine that executes it. Start with a concrete example, state the expected result, and verify the behavior before extending the query or design."
+          },
+          {
+            "title": "Reporting and business intelligence",
+            "text": "Reporting and business intelligence begins with a definition of the metric and its grain. Name the numerator, denominator, time zone, null policy, and tie-handling rule before translating the definition into SQL."
+          },
+          {
+            "title": "Data engineering and analytics",
+            "text": "Data engineering and analytics helps you build a mental model of SQL as a declarative language for relational data, and distinguish the language from the database engine that executes it. Start with a concrete example, state the expected result, and verify the behavior before extending the query or design."
+          },
+          {
+            "title": "Enterprise information systems",
+            "text": "Enterprise information systems helps you build a mental model of SQL as a declarative language for relational data, and distinguish the language from the database engine that executes it. Start with a concrete example, state the expected result, and verify the behavior before extending the query or design."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "sql",
+        "execution_mode": "static-validation",
+        "code": "SELECT 'web applications' AS use_case UNION ALL SELECT 'analytics' UNION ALL SELECT 'business reporting';",
+        "expected_output": "The statement returns three illustrative SQL use cases without requiring a pre-existing table.",
+        "run_instructions": "Run in a disposable local PostgreSQL database such as codeleaf_sql_lab after loading datasets/postgresql-lab-setup.sql. Do not use production credentials or a production database. Some specialist examples require optional extensions or a specific PostgreSQL version, as stated in the lesson. The CodeLeaf lesson Run button in this scaffold only previews the documented expected output; it is not a SQL execution service.",
+        "reset_steps": "For queries, restore the original text and compare results. For statements that change data, use the transaction and rollback shown in the example, or recreate the disposable lab from the included setup instructions. Do not reset production data."
+      },
+      {
+        "type": "callout",
+        "title": "Remember",
+        "text": "SQL correctness depends on data shape, constraints, NULL behavior, row counts, and the target database dialect—not just whether a statement parses."
+      }
+    ],
+    "task": "Try it yourself: demonstrate where is sql used? using the sample schema. State what each returned row represents, test one edge case related to the lesson, and record the result.",
+    "task_acceptance_criteria": [
+      "The query or design example matches the lesson's intended behavior.",
+      "The expected row grain and relevant NULL, duplicate, boundary, or permission behavior are explained.",
+      "The test is performed only in the local disposable lab, or clearly marked as a static inspection when a real runner is unavailable."
+    ],
+    "hints": [
+      "Begin with the subtopic websites and web applications and write down the result you expect.",
+      "Use the smallest valid example; verify table and column names before adding complexity.",
+      "Inspect one edge case: missing values, duplicate matches, tied sort values, a constraint violation, or an engine-specific syntax difference."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming a query is correct because it returns some rows.",
+        "why": "A result can omit valid records, multiply joined rows, mishandle NULLs, or rely on a non-deterministic order.",
+        "fix": "Check the expected row grain, add targeted edge cases, and use a stable tie-breaker whenever order or pagination matters."
+      },
+      {
+        "problem": "Copying PostgreSQL syntax into another SQL engine without checking support.",
+        "why": "PostgreSQL, MySQL, SQLite, SQL Server, and Oracle differ in types, functions, row limits, procedural features, and transaction behavior.",
+        "fix": "Label the target engine/version and verify the relevant official reference before adapting the query."
+      },
+      {
+        "problem": "Testing with production data or credentials.",
+        "why": "Practice statements can change rows or expose sensitive information if run against the wrong connection.",
+        "fix": "Use a dedicated disposable lab, check current_database() and current_user, and review all changes before committing."
+      }
+    ],
+    "summary": [
+      "Where Is SQL Used? is about making the database behavior and the expected result explicit.",
+      "Use the provided subtopics as a review checklist and validate a small test case.",
+      "Keep vendor-specific syntax, access assumptions, and production-safety boundaries visible."
+    ],
+    "references": [
+      {
+        "title": "PostgreSQL Tutorial",
+        "url": "https://www.postgresql.org/docs/current/tutorial.html"
+      },
+      {
+        "title": "The SQL Language",
+        "url": "https://www.postgresql.org/docs/current/tutorial-sql.html"
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-005-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "Generated draft content. Review the query and expected output against the selected PostgreSQL version before publication."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "PostgreSQL Tutorial",
+      "url": "https://www.postgresql.org/docs/current/tutorial.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "database setup",
+        "relational concepts",
+        "querying",
+        "joins"
+      ]
+    },
+    {
+      "title": "The SQL Language",
+      "url": "https://www.postgresql.org/docs/current/tutorial-sql.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "tables",
+        "queries",
+        "joins",
+        "aggregates"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached SQL curriculum outline and official references; requires technical/editorial review before publication."
+}

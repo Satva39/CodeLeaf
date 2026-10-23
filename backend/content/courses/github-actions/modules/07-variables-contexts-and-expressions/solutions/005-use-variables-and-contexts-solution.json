@@ -1,0 +1,13 @@
+{
+  "id": "github-actions-exercise-solution-005",
+  "exercise_id": "github-actions-exercise-005",
+  "title": "Use variables and contexts reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": {
+    "approach": "A complete response for use variables and contexts should include: env:, ${{ github.ref }}, $PROJECT_MODE.",
+    "example": "steps:\n  - name: Show safe metadata\n    env:\n      BRANCH_NAME: ${{ github.ref_name }}\n      RUN_ACTOR: ${{ github.actor }}\n    run: |\n      echo \"Branch: $BRANCH_NAME\"\n      echo \"Triggered by: $RUN_ACTOR\"",
+    "verification": "The output shows the ref name and actor without interpolating those expressions directly into the shell program."
+  },
+  "explanation": "Reason about the trigger, permission boundary, expected observable result, and failure path for use variables and contexts. Try the step on a branch with a safe name. Never treat branch names, issue titles, or pull-request bodies as trusted shell syntax. Adapt action references and runtime details against the official docs checked on 2026-10-20."
+}

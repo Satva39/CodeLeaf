@@ -1,0 +1,162 @@
+{
+  "id": "data-science-lesson-230",
+  "slug": "data-lakes-and-lakehouses",
+  "title": "Data Lakes and Lakehouses",
+  "sequence": 230,
+  "module_id": "data-science-module-22",
+  "module_slug": "data-engineering-and-big-data",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "production",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "data-science-lesson-229"
+  ],
+  "previous_lesson_id": "data-science-lesson-229",
+  "next_lesson_id": "data-science-lesson-231",
+  "keywords": [
+    "data-lakes-and-lakehouses",
+    "object-storage",
+    "file-based-analytical-datasets",
+    "columnar-storage",
+    "table-formats",
+    "governance-and-discoverability"
+  ],
+  "source_syllabus_number": 230,
+  "subtopics": [
+    "Object storage",
+    "File-based analytical datasets",
+    "Columnar storage",
+    "Table formats",
+    "Governance and discoverability"
+  ],
+  "learning_outcomes": [
+    "Explain data lakes and lakehouses and accurately refer to at least two syllabus subtopics.",
+    "Apply the main idea of data lakes and lakehouses to a small example, trace, calculation, or scenario.",
+    "Identify one important assumption or failure mode and describe how to check it."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study data lakes and lakehouses in the context of data engineering and big data. You will connect the PDF subtopics to a small example and practice describing what the evidence does—and does not—support.",
+    "why_it_matters": "Data Lakes and Lakehouses matters because it affects how data is collected, represented, analyzed, interpreted, or used in a decision. Check the task and assumptions before choosing a method.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual overview: Data Lakes and Lakehouses",
+        "asset_path": "diagrams/lesson-230-overview.svg",
+        "alt_text": "Lesson 230: Data Lakes and Lakehouses; a three-stage visual for understanding the topic, applying it to a small example, and validating assumptions.",
+        "caption": "Use the overview to connect data lakes and lakehouses to a concrete example and a responsible check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The central idea",
+        "text": "Data engineering makes data workflows reliable, traceable, and scalable. Schemas, retries, lineage, partitioning, and observability are foundational, not optional extras."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered",
+        "items": [
+          {
+            "title": "Object storage",
+            "text": "Define object storage in relation to data lakes and lakehouses; identify the input, output, assumptions, and who uses the result."
+          },
+          {
+            "title": "File-based analytical datasets",
+            "text": "Work through file-based analytical datasets using a small, synthetic example before scaling up. State what the calculation or method returns and why that result is useful."
+          },
+          {
+            "title": "Columnar storage",
+            "text": "Check the edge cases for columnar storage: missing values, unusual ranges, different groups, time boundaries, or a changed input can affect the conclusion."
+          },
+          {
+            "title": "Table formats",
+            "text": "Document the rule or choice for table formats so another learner can reproduce the analysis and understand its limitations."
+          },
+          {
+            "title": "Governance and discoverability",
+            "text": "Define governance and discoverability in relation to data lakes and lakehouses; identify the input, output, assumptions, and who uses the result."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "1. Restate the question addressed by data lakes and lakehouses. 2. Identify the input data, intended output, and assumptions. 3. Predict what the small example should show before reading its output. 4. Change one input or assumption, compare the result, and document what remains uncertain."
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "execution_mode": "static-validation",
+        "code": "rows = [{\"region\":\"N\",\"amount\":5},{\"region\":\"S\",\"amount\":7},{\"region\":\"N\",\"amount\":3}]\ntotals = {}\nfor r in rows: totals[r[\"region\"]] = totals.get(r[\"region\"],0)+r[\"amount\"]\nprint(totals)",
+        "expected_output": "{'N': 8, 'S': 7}",
+        "run_instructions": "For Python, copy the snippet into a local file and run with Python 3. This CodeLeaf block is static and does not execute inside the browser. For SQL, adapt the query to an approved local schema; the stated result is a conceptual query simulation, not a live database result.",
+        "reset_steps": "Restore the provided synthetic input, rerun or retrace the example, and change one value at a time. Do not use personal records, credentials, or data you are not authorized to access."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistakes and fixes",
+        "text": "Keep the question, data grain, units, and assumptions explicit. If a result differs, inspect the input and steps in order. Avoid turning an observed association into a causal claim, treating a sample as the population, or assuming a small demonstration guarantees production behavior. Aggregation illustrates a reduce step; production pipelines also need schema checks and recovery."
+      },
+      {
+        "type": "callout",
+        "title": "Responsible interpretation",
+        "text": "This example is a teaching aid. It is static in the CodeLeaf lesson and is not executed in the browser. It uses small synthetic values; validate any real workflow in a separate, appropriate local environment and protect sensitive data."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap and next step",
+        "text": "Recap: Data engineering makes data workflows reliable, traceable, and scalable. Schemas, retries, lineage, partitioning, and observability are foundational, not optional extras. Next, connect this lesson to the linked prerequisite or following lesson. Record the method, input assumptions, observed result, and one limitation so another person can reproduce and review the work."
+      }
+    ],
+    "task": "Try it yourself: create a small synthetic example for data lakes and lakehouses. State a question, make a prediction, trace or run an appropriate calculation, then write one finding and one limitation.",
+    "task_acceptance_criteria": [
+      "Refer accurately to the topic and its syllabus subtopics.",
+      "Record a reproducible example or a complete manual trace with an expected result.",
+      "Document at least one assumption, limitation, data-quality issue, or evaluation check."
+    ],
+    "hints": [
+      "Write down the input, expected result, units, and assumptions first.",
+      "Change only one condition when testing a revised example.",
+      "Ask whether the data and method represent the real decision; do not infer causality or production readiness from a toy example."
+    ],
+    "expected_output": "{'N': 8, 'S': 7}",
+    "run_mode": "static-validation",
+    "troubleshooting": [
+      "Check input values, path assumptions, package versions, indentation, and units.",
+      "For SQL, use a local schema and read-only test data; this page does not provide a live database.",
+      "For package-dependent work, create an isolated environment and use the relevant official documentation."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-230-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "spark",
+      "title": "Spark SQL, DataFrames and Datasets Guide",
+      "url": "https://spark.apache.org/docs/latest/sql-programming-guide.html",
+      "publisher": "Apache Spark project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "distributed data processing",
+        "DataFrames"
+      ],
+      "source_type": "official documentation",
+      "notes": "Official source entry point. Verify current API signatures and version notes before implementation."
+    },
+    {
+      "id": "airflow",
+      "title": "Apache Airflow Tutorial",
+      "url": "https://airflow.apache.org/docs/apache-airflow/stable/tutorial/index.html",
+      "publisher": "Apache Airflow project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "workflow orchestration",
+        "data pipelines"
+      ],
+      "source_type": "official documentation",
+      "notes": "Official source entry point. Verify current API signatures and version notes before implementation."
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft authored against Data Science.pdf lesson 230; preserves the source title/subtopics. Review technical accuracy, example behavior, and assessment wording before publication."
+}

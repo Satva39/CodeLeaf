@@ -1,0 +1,178 @@
+{
+  "id": "web-application-security-lesson-127",
+  "slug": "race-conditions",
+  "title": "Race Conditions",
+  "sequence": 127,
+  "module_id": "web-application-security-module-17",
+  "module_slug": "business-logic-concurrency-and-workflow-security",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced-security",
+  "curriculum_tier": "advanced",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "web-application-security-lesson-126"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-126",
+  "next_lesson_id": "web-application-security-lesson-128",
+  "keywords": [
+    "race",
+    "conditions",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 127,
+  "source_syllabus_title": "Race Conditions",
+  "source_subtopics": [
+    {
+      "number": "127.1",
+      "title": "Concurrent requests and shared state"
+    },
+    {
+      "number": "127.2",
+      "title": "Time-of-check versus time-of-use problems"
+    },
+    {
+      "number": "127.3",
+      "title": "Double processing and duplicate transactions"
+    },
+    {
+      "number": "127.4",
+      "title": "Atomic operations and database constraints"
+    },
+    {
+      "number": "127.5",
+      "title": "Idempotency keys"
+    },
+    {
+      "number": "127.6",
+      "title": "Safe concurrency testing in an isolated environment"
+    }
+  ],
+  "subtopics": [
+    "Concurrent requests and shared state",
+    "Time-of-check versus time-of-use problems",
+    "Double processing and duplicate transactions",
+    "Atomic operations and database constraints",
+    "Idempotency keys",
+    "Safe concurrency testing in an isolated environment"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in Race Conditions.",
+    "Choose an appropriate defensive control for Race Conditions and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for Race Conditions, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 17: Business Logic, Concurrency, and Workflow Security. It builds practical understanding of Race Conditions with the syllabus subtopics retained below.",
+    "why_it_matters": "Race Conditions makes secure behavior repeatable across implementation, dependencies, configuration, and release. Enforce business invariants on the server inside atomic transactions or with database constraints, and test duplicates, retries, concurrency, and invalid state transitions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Race Conditions",
+        "asset_path": "diagrams/lesson-127-race-conditions.svg",
+        "alt_text": "Four-stage visual model for Race Conditions: Define invariant; Model concurrent retries; Commit atomically; Test duplicate + race.",
+        "caption": "Concept map for Race Conditions. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Race Conditions can be understood through this sequence: Define invariant → Model concurrent retries → Commit atomically → Test duplicate + race. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 127.1 Concurrent requests and shared state; 127.2 Time-of-check versus time-of-use problems; 127.3 Double processing and duplicate transactions; 127.4 Atomic operations and database constraints; 127.5 Idempotency keys; 127.6 Safe concurrency testing in an isolated environment. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Enforce business invariants on the server inside atomic transactions or with database constraints, and test duplicates, retries, concurrency, and invalid state transitions."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "text",
+        "execution_mode": "human-review",
+        "title": "Safe reference example: Race Conditions",
+        "code": "Topic: Race Conditions\nReview artifact: define scope, assumptions, control owner, expected secure behavior, failure behavior, and a reproducible verification step.",
+        "expected_output": "A written review artifact names the control and the evidence needed to verify it.",
+        "run_instructions": "Use a local/owned application or explicitly authorized test target. Record only sanitized synthetic evidence; use human review for behavior that a static snippet cannot prove.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Enforce business invariants on the server inside atomic transactions or with database constraints, and test duplicates, retries, concurrency, and invalid state transitions. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “Race Conditions”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for Race Conditions in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "human-review",
+    "knowledge_check_file": "exams/question-files/lesson-127-questions.json",
+    "recap": [
+      "Race Conditions is a security boundary/control topic, not a standalone checklist item.",
+      "Enforce business invariants on the server inside atomic transactions or with database constraints, and test duplicates, retries, concurrency, and invalid state transitions.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

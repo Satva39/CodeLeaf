@@ -1,0 +1,149 @@
+{
+  "id": "lua-lesson-212",
+  "slug": "lua-for-application-configuration",
+  "title": "Lua for Application Configuration",
+  "sequence": 212,
+  "module_id": "lua-module-21",
+  "module_slug": "lua-ecosystem-and-real-world-applications",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "specialist",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "lua-lesson-211"
+  ],
+  "previous_lesson_id": "lua-lesson-211",
+  "next_lesson_id": "lua-lesson-213",
+  "keywords": [
+    "lua-for-application-configuration",
+    "table-based-configuration",
+    "defaults-overrides-validation-and-safe-loading"
+  ],
+  "source_syllabus_number": 212,
+  "subtopics": [
+    "Table-based configuration",
+    "Defaults, overrides, validation, and safe loading"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of lua for Application Configuration and the key behavior described in this lesson.",
+    "Apply lua for Application Configuration in a small Lua example and predict its result.",
+    "Identify a relevant edge case, version constraint, or host-runtime limitation for lua for Application Configuration."
+  ],
+  "content": {
+    "intro": "Game engines, OpenResty, editors, and other scriptable hosts add their own APIs and lifecycle. Teach those interfaces as optional tracks and keep standard Lua behavior separate from host-provided globals.",
+    "why_it_matters": "Game engines, OpenResty, editors, and other scriptable hosts add their own APIs and lifecycle. Teach those interfaces as optional tracks and keep standard Lua behavior separate from host-provided globals. This concept appears in the supplied syllabus; keep the scope and assumptions visible in your implementation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual map: Lua for Application Configuration",
+        "asset_path": "diagrams/lessons/lesson-212.svg",
+        "alt_text": "Concept map for Lua for Application Configuration; understand the concept, inspect a Lua example, and verify behavior and edge cases.",
+        "caption": "Visual summary of Lua for Application Configuration; use the three-step path while working through the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Lua for Application Configuration is part of Lua Ecosystem and Real-World Applications. Start with the exact rule or capability, identify what the example assumes, and note what changes on another Lua version or in a host application."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core explanation",
+        "text": "Game engines, OpenResty, editors, and other scriptable hosts add their own APIs and lifecycle. Teach those interfaces as optional tracks and keep standard Lua behavior separate from host-provided globals."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics to cover",
+        "items": [
+          {
+            "title": "Table-based configuration",
+            "text": "Understand Table-based configuration; connect it to Lua for Application Configuration, then state one useful example or boundary case."
+          },
+          {
+            "title": "Defaults, overrides, validation, and safe loading",
+            "text": "Understand Defaults, overrides, validation, and safe loading; connect it to Lua for Application Configuration, then state one useful example or boundary case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through the example",
+        "text": "Read the small example, predict every output line, then run it locally with a compatible runtime. Run with the Lua 5.5 interpreter unless the example explicitly names a host API or another runtime. Keep the smallest reproducible case if the observed behavior differs."
+      },
+      {
+        "type": "code",
+        "language": "lua",
+        "execution_mode": "static-validation",
+        "code": "local player = { name = \"Mina\", score = 12 }\nplayer.score = player.score + 3\nprint(player.name, player.score)",
+        "expected_output": "Mina\t15",
+        "caption": "Static reference example for local verification; CodeLeaf does not execute this snippet unless a dedicated isolated runner is explicitly provided.",
+        "run_instructions": "Save the code in a local file with the correct language extension and test it using the runtime noted in the lesson. Run with the Lua 5.5 interpreter unless the example explicitly names a host API or another runtime. Compare the exact output to the documented result.",
+        "reset_steps": "Restore the original snippet, remove generated test files if any, and repeat from a clean local test state."
+      },
+      {
+        "type": "callout",
+        "title": "Version, host, and safety note",
+        "text": "Run with the Lua 5.5 interpreter unless the example explicitly names a host API or another runtime."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Mistake 1",
+            "text": "Confusing Lua for Application Configuration with a similarly named feature in another language or runtime. Fix: follow the version-matched reference and test the smallest example."
+          },
+          {
+            "title": "Mistake 2",
+            "text": "Relying on an output order or environment capability that the language/host does not guarantee. Fix: document assumptions and make order/capabilities explicit."
+          },
+          {
+            "title": "Mistake 3",
+            "text": "Skipping a boundary test or failing to check error-return values. Fix: test invalid and boundary inputs and inspect failure values."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Recap and next step",
+        "text": "Recap: explain Lua for Application Configuration without the example, predict its behavior, and name one limit. Next: Lua for Automation and Command-Line Tools."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate “Lua for Application Configuration” with a different input or boundary case. Predict the result before running it, record what you observe, and explain one limitation.",
+    "task_acceptance_criteria": [
+      "Explain the central behavior of Lua for Application Configuration in your own words.",
+      "Verify the result using a supported local runtime or clearly state why the host/tooling prevents a full run.",
+      "Identify a boundary case or compatibility/security limit relevant to the lesson."
+    ],
+    "hints": [
+      "First identify the input, output, and any assumed runtime or host feature.",
+      "Reduce the problem to the smallest example that exposes the relevant rule.",
+      "Test one normal case and one boundary/failure case; inspect error output without leaking secrets."
+    ],
+    "expected_output": "Mina\t15",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-212-knowledge-check.json",
+    "references": [
+      {
+        "title": "Lua 5.5 Reference Manual",
+        "url": "https://www.lua.org/manual/5.5/",
+        "publisher": "Lua.org",
+        "checked_on": "2026-10-20"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    "references/reference-index.json"
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Lua curriculum; requires expert technical, grading, accessibility, and runtime review before publication.",
+  "common_mistakes": [
+    "Confusing Lua for Application Configuration with a similarly named feature in another language or runtime.",
+    "Relying on an output order or environment capability that the language/host does not guarantee.",
+    "Skipping a boundary test or failing to check error-return values."
+  ],
+  "next_steps": [
+    "Continue with Lua for Automation and Command-Line Tools."
+  ]
+}

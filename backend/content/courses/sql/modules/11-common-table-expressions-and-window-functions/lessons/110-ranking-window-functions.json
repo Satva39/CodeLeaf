@@ -1,0 +1,192 @@
+{
+  "id": "sql-lesson-110",
+  "slug": "ranking-window-functions",
+  "title": "Ranking Window Functions",
+  "sequence": 110,
+  "module_id": "sql-module-11",
+  "module_slug": "common-table-expressions-and-window-functions",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "sql-lesson-109"
+  ],
+  "previous_lesson_id": "sql-lesson-109",
+  "next_lesson_id": "sql-lesson-111",
+  "keywords": [
+    "ranking window functions",
+    "row number",
+    "rank",
+    "dense rank",
+    "ntile",
+    "ranking within groups"
+  ],
+  "source_syllabus_number": 110,
+  "source_module_number": 11,
+  "subtopics": [
+    "ROW_NUMBER",
+    "RANK",
+    "DENSE_RANK",
+    "NTILE",
+    "Ranking within groups",
+    "Top-N records per category"
+  ],
+  "subtopic_source_numbers": [
+    "110.1",
+    "110.2",
+    "110.3",
+    "110.4",
+    "110.5",
+    "110.6"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and key terms of ranking window functions.",
+    "Apply row_number in a small PostgreSQL-oriented example or design decision.",
+    "Validate the result against the expected behavior and identify one portability, safety, or edge-case consideration."
+  ],
+  "content": {
+    "intro": "Learn ranking window functions through a short explanation, a concept diagram, and a PostgreSQL-oriented example. Focus on the reason for the query or design decision before memorizing syntax.",
+    "why_it_matters": "Ranking Window Functions matters because database behavior becomes more reliable when the intended row meaning, data shape, and edge cases are explicit. This lesson follows the SQL curriculum's listed subtopics and calls out PostgreSQL-specific behavior when it matters.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Ranking Window Functions",
+        "asset_path": "diagrams/lesson-110-ranking-window-functions.svg",
+        "alt_text": "Original SQL concept diagram for Ranking Window Functions; shows four steps based on the lesson subtopics.",
+        "caption": "Use this four-step visual to connect the question, the relevant SQL idea, its application, and a verification check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "The practical goal of ranking window functions is to produce a result set whose meaning is clear. Confirm which rows enter the query, how values are transformed or combined, and whether NULLs, duplicates, ties, or one-to-many relationships change the output."
+      },
+      {
+        "type": "paragraph",
+        "title": "Apply the idea",
+        "text": "Start with the subtopics: ROW_NUMBER, RANK, DENSE_RANK, NTILE. Define the result you expect, run or inspect the small example in your own disposable PostgreSQL lab, and change one assumption at a time. The embedded lesson editor is a demonstration shell: the current project shows the sample expected output and does not execute arbitrary SQL on the server."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics to master",
+        "items": [
+          {
+            "title": "ROW_NUMBER",
+            "text": "ROW_NUMBER helps you structure complex queries with CTEs, recursion, and window functions; choose an approach that keeps logic testable and output rows meaningful. Start with a concrete example, state the expected result, and verify the behavior before extending the query or design."
+          },
+          {
+            "title": "RANK",
+            "text": "RANK is easier to reason about when the input row grain, partition keys, ordering, and tie-breaking rule are explicit. A window expression can add a calculation while keeping the individual input rows visible."
+          },
+          {
+            "title": "DENSE_RANK",
+            "text": "DENSE_RANK is easier to reason about when the input row grain, partition keys, ordering, and tie-breaking rule are explicit. A window expression can add a calculation while keeping the individual input rows visible."
+          },
+          {
+            "title": "NTILE",
+            "text": "NTILE helps you structure complex queries with CTEs, recursion, and window functions; choose an approach that keeps logic testable and output rows meaningful. Start with a concrete example, state the expected result, and verify the behavior before extending the query or design."
+          },
+          {
+            "title": "Ranking within groups",
+            "text": "Ranking within groups is easier to reason about when the input row grain, partition keys, ordering, and tie-breaking rule are explicit. A window expression can add a calculation while keeping the individual input rows visible."
+          },
+          {
+            "title": "Top-N records per category",
+            "text": "Top-N records per category is easier to reason about when the input row grain, partition keys, ordering, and tie-breaking rule are explicit. A window expression can add a calculation while keeping the individual input rows visible."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "sql",
+        "execution_mode": "static-validation",
+        "code": "SELECT department_id, full_name, salary,\n       DENSE_RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS salary_rank\nFROM employees\nORDER BY department_id, salary_rank, employee_id;",
+        "expected_output": "Employees remain individual rows and receive a salary rank within each department; equal salary values share a DENSE_RANK.",
+        "run_instructions": "Run in a disposable local PostgreSQL database such as codeleaf_sql_lab after loading datasets/postgresql-lab-setup.sql. Do not use production credentials or a production database. Some specialist examples require optional extensions or a specific PostgreSQL version, as stated in the lesson. The CodeLeaf lesson Run button in this scaffold only previews the documented expected output; it is not a SQL execution service.",
+        "reset_steps": "For queries, restore the original text and compare results. For statements that change data, use the transaction and rollback shown in the example, or recreate the disposable lab from the included setup instructions. Do not reset production data."
+      },
+      {
+        "type": "callout",
+        "title": "Remember",
+        "text": "SQL correctness depends on data shape, constraints, NULL behavior, row counts, and the target database dialect—not just whether a statement parses."
+      }
+    ],
+    "task": "Try it yourself: demonstrate ranking window functions using the sample schema. State what each returned row represents, test one edge case related to the lesson, and record the result.",
+    "task_acceptance_criteria": [
+      "The query or design example matches the lesson's intended behavior.",
+      "The expected row grain and relevant NULL, duplicate, boundary, or permission behavior are explained.",
+      "The test is performed only in the local disposable lab, or clearly marked as a static inspection when a real runner is unavailable."
+    ],
+    "hints": [
+      "Begin with the subtopic row_number and write down the result you expect.",
+      "Use the smallest valid example; verify table and column names before adding complexity.",
+      "Inspect one edge case: missing values, duplicate matches, tied sort values, a constraint violation, or an engine-specific syntax difference."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming a query is correct because it returns some rows.",
+        "why": "A result can omit valid records, multiply joined rows, mishandle NULLs, or rely on a non-deterministic order.",
+        "fix": "Check the expected row grain, add targeted edge cases, and use a stable tie-breaker whenever order or pagination matters."
+      },
+      {
+        "problem": "Copying PostgreSQL syntax into another SQL engine without checking support.",
+        "why": "PostgreSQL, MySQL, SQLite, SQL Server, and Oracle differ in types, functions, row limits, procedural features, and transaction behavior.",
+        "fix": "Label the target engine/version and verify the relevant official reference before adapting the query."
+      },
+      {
+        "problem": "Testing with production data or credentials.",
+        "why": "Practice statements can change rows or expose sensitive information if run against the wrong connection.",
+        "fix": "Use a dedicated disposable lab, check current_database() and current_user, and review all changes before committing."
+      }
+    ],
+    "summary": [
+      "Ranking Window Functions is about making the database behavior and the expected result explicit.",
+      "Use the provided subtopics as a review checklist and validate a small test case.",
+      "Keep vendor-specific syntax, access assumptions, and production-safety boundaries visible."
+    ],
+    "references": [
+      {
+        "title": "WITH Queries (Common Table Expressions)",
+        "url": "https://www.postgresql.org/docs/current/queries-with.html"
+      },
+      {
+        "title": "Window Functions Tutorial",
+        "url": "https://www.postgresql.org/docs/current/tutorial-window.html"
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-110-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "Generated draft content. Review the query and expected output against the selected PostgreSQL version before publication."
+  },
+  "exercise_files": [
+    "../exercises/017-window-functions.json"
+  ],
+  "sources": [
+    {
+      "title": "WITH Queries (Common Table Expressions)",
+      "url": "https://www.postgresql.org/docs/current/queries-with.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "CTEs",
+        "recursive queries",
+        "data-modifying CTEs"
+      ]
+    },
+    {
+      "title": "Window Functions Tutorial",
+      "url": "https://www.postgresql.org/docs/current/tutorial-window.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "window functions",
+        "partitioning",
+        "ranking",
+        "running calculations"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached SQL curriculum outline and official references; requires technical/editorial review before publication."
+}

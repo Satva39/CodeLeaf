@@ -1,0 +1,153 @@
+{
+  "id": "kotlin-lesson-258",
+  "slug": "multiplatform-dependencies",
+  "title": "Multiplatform Dependencies",
+  "sequence": 258,
+  "module_id": "kotlin-module-25",
+  "module_slug": "kotlin-multiplatform-and-compose-multiplatform",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "specialization-multiplatform",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "kotlin-lesson-257"
+  ],
+  "previous_lesson_id": "kotlin-lesson-257",
+  "next_lesson_id": "kotlin-lesson-259",
+  "keywords": [
+    "multiplatform-dependencies",
+    "platform-compatible-libraries",
+    "source-set-dependency-configur",
+    "managing-library-compatibility"
+  ],
+  "source_syllabus_number": 258,
+  "subtopics": [
+    "Platform-Compatible Libraries",
+    "Source-Set Dependency Configuration",
+    "Managing Library Compatibility"
+  ],
+  "learning_outcomes": [
+    "Explain the central rule or purpose of multiplatform dependencies using at least one correct term from the lesson.",
+    "Interpret or adapt a small Kotlin example that demonstrates multiplatform dependencies.",
+    "Identify one relevant edge case, debugging step, or version/platform constraint."
+  ],
+  "content": {
+    "intro": "In this lesson, you will learn **Multiplatform Dependencies** as part of **Kotlin Multiplatform and Compose Multiplatform**. Kotlin Multiplatform organizes shared logic and target-specific implementations through source sets; only APIs available for every configured target belong in common code. Use the subtopics—Platform-Compatible Libraries, Source-Set Dependency Configuration, Managing Library Compatibility—as a checklist: predict what the example will do, then verify it in a project configured for the target platform.",
+    "why_it_matters": "Multiplatform work succeeds when shared code depends only on common APIs and platform-specific code is isolated behind deliberate interfaces.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Concept visual",
+        "asset_path": "diagrams/lesson-258-multiplatform-dependencies.svg",
+        "alt_text": "Concept diagram for lesson 258, Multiplatform Dependencies: connects Platform-Compatible Libraries with Source-Set Dependency Configuration and a practice/check step.",
+        "caption": "Lesson 258: Multiplatform Dependencies. Use this concept map to connect the syllabus subtopics to the small example and test task."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Kotlin Multiplatform organizes shared logic and target-specific implementations through source sets; only APIs available for every configured target belong in common code."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with platform-compatible libraries. Then compare it with source-set dependency configuration. Identify the input, state, dependency, or branch that determines the result. The snippet is a static reference for CodeLeaf and is not executed in the lesson page."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the syllabus",
+        "items": [
+          {
+            "title": "Platform-Compatible Libraries",
+            "text": "Platform-Compatible Libraries is one part of multiplatform dependencies. Connect its definition to the example, identify the input/state it changes, and verify the expected behavior with a small test case."
+          },
+          {
+            "title": "Source-Set Dependency Configuration",
+            "text": "Source-Set Dependency Configuration is best learned by tracing a small collection before and after the operation. Check ordering, duplicate handling, empty inputs, and whether the API returns a new value or mutates a mutable receiver."
+          },
+          {
+            "title": "Managing Library Compatibility",
+            "text": "Managing Library Compatibility means checking the boundary between the language feature and its compiler, runtime, plugin, library, or target version. Pin the versions used by the project and verify documented support before depending on the behavior."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "kotlin-multiplatform",
+        "execution_mode": "static-validation",
+        "code": "data class Greeting(val text: String)\n\nfun greetingFor(name: String): Greeting = Greeting(\"Hello, $name\")\n\nfun main() = println(greetingFor(\"Kotlin\").text)",
+        "expected_output": "Hello, Kotlin",
+        "run_instructions": "Run inside a Kotlin Multiplatform project with the target toolchains installed; common and platform-specific source sets have different APIs.",
+        "reset_steps": "Restore the documented starting values, rerun the smallest test, and compare the result with the expected output. If behavior differs, check the compiler/plugin/runtime versions and the active target before changing more than one thing."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake to avoid",
+        "text": "Multiplatform Dependencies removes the need to test boundary conditions or verify the chosen runtime/library version."
+      },
+      {
+        "type": "paragraph",
+        "title": "Troubleshooting and reset",
+        "text": "If the example fails, first confirm which runtime/project type the snippet requires. Read the first useful compiler or runtime message, check imports and declared dependencies, reduce the example to a minimal case, and rerun. For target-specific code, use the target toolchain rather than assuming a console or browser runner can execute it."
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          {
+            "title": "Explain",
+            "text": "Describe the main rule of multiplatform dependencies in your own words."
+          },
+          {
+            "title": "Apply",
+            "text": "Change one input or condition and predict the result before running it."
+          },
+          {
+            "title": "Verify",
+            "text": "Check one edge case and the official reference for the selected Kotlin/runtime version."
+          }
+        ]
+      }
+    ],
+    "task": "Try it yourself: create a small variation that demonstrates multiplatform dependencies. Write down your predicted result first, run it in the correct local project, then explain one boundary case involving platform-compatible libraries.",
+    "task_acceptance_criteria": [
+      "Explain multiplatform dependencies without copying the lesson wording.",
+      "Demonstrate the concept with a small code/configuration change and state the expected result.",
+      "Test one boundary case or explain a relevant platform/version limitation."
+    ],
+    "hints": [
+      "Begin with the first syllabus subtopic: Platform-Compatible Libraries. What input or state does it act on?",
+      "Change only one value, branch, declaration, or dependency at a time. Predict what should happen before running the code.",
+      "Compare your observed result with the expected output and the official reference; verify that you are using the required project type and dependency set."
+    ],
+    "expected_output": "Hello, Kotlin",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-258-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Kotlin Documentation",
+      "url": "https://kotlinlang.org/docs/home.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Multiplatform Dependencies",
+        "Platform-Compatible Libraries",
+        "Source-Set Dependency Configuration"
+      ]
+    },
+    {
+      "title": "Kotlin Language Features and Proposals",
+      "url": "https://kotlinlang.org/docs/kotlin-language-features-and-proposals.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "language feature stability",
+        "compiler version compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson derived from the numbered syllabus entry 258 in Kotlin.pdf. Review example compatibility and question alignment before publishing."
+}

@@ -1,0 +1,54 @@
+{
+  "id": "r-exercise-013",
+  "slug": "read-and-write-a-csv-file",
+  "title": "Read and write a CSV file",
+  "type": "short_answer",
+  "lesson_id": "r-lesson-096",
+  "module_id": "r-module-10",
+  "sequence": 13,
+  "difficulty": "beginner",
+  "prompt": "Demonstrate CSV import/export with a temporary file or in-memory text; explain encoding, column types and safe overwrite behavior.",
+  "objective": "Practice file input/output with explicit acceptance criteria and a reproducible result.",
+  "target_skills": [
+    "File input/output"
+  ],
+  "starter": {
+    "language": "r",
+    "source_code": "sample <- read.csv(text = \"item,count\\npen,3\\nbook,2\")\nwrite.csv(sample, file = \"sample-output.csv\", row.names = FALSE)",
+    "mode": "static-validation"
+  },
+  "expected_output": "Do not overwrite a real user file. Use a temporary working directory and verify the row count after re-import.",
+  "public_tests": [
+    {
+      "name": "Includes core concept",
+      "description": "The submission demonstrates read.csv."
+    },
+    {
+      "name": "Includes validation or outcome",
+      "description": "The submission also demonstrates write.csv."
+    }
+  ],
+  "acceptance_criteria": [
+    "The submission addresses the task and all required core concepts.",
+    "Expected behavior and an edge case are described and checked.",
+    "Input assumptions, missing-value handling and output shape are documented where relevant.",
+    "Code is readable, uses appropriate R constructs and avoids destructive/external side effects.",
+    "Any result derived from statistics includes assumptions and relevant limitations."
+  ],
+  "hints": [
+    "Identify the input, output and key R concept: File input/output.",
+    "Do not overwrite a real user file. Use a temporary working directory and verify the row count after re-import.",
+    "Test a normal case, a boundary/failure case, and verify the output independently."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "read.csv",
+      "write.csv"
+    ]
+  },
+  "grading_method": "Draft/static token check only. The current platform grader can check whether the submitted text contains these strings, but it cannot execute R or prove program correctness. Keep unpublished and use human review or a separately isolated R runner before enabling XP-bearing completion.",
+  "retry_policy": "Allow learner retries in a reviewed course policy; this content file does not override platform retry or XP policy.",
+  "solution_file": "../solutions/013-read-and-write-a-csv-file-solution.json",
+  "status": "draft"
+}

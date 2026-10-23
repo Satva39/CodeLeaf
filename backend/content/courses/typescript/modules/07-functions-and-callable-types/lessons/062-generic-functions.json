@@ -1,0 +1,136 @@
+{
+  "id": "typescript-lesson-062",
+  "slug": "062-generic-functions",
+  "title": "Generic Functions",
+  "sequence": 62,
+  "module_id": "typescript-module-07",
+  "module_slug": "functions-and-callable-types",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "typescript-lesson-061"
+  ],
+  "previous_lesson_id": "typescript-lesson-061",
+  "next_lesson_id": "typescript-lesson-063",
+  "keywords": [
+    "generic-functions",
+    "functions-and-callable-types",
+    "type-parameters-on-functions",
+    "preserving-input-to-output-relationships",
+    "inferring-generic-type-arguments"
+  ],
+  "source_syllabus_number": 62,
+  "subtopics": [
+    "Type parameters on functions",
+    "Preserving input-to-output relationships",
+    "Inferring generic type arguments"
+  ],
+  "learning_outcomes": [
+    "Explain type parameters on functions in the context of generic functions.",
+    "Apply the lesson concept in a small TypeScript example and describe what the compiler can check.",
+    "Identify one limitation or failure case and choose an appropriate runtime check or test when needed."
+  ],
+  "content": {
+    "intro": "Learn generic functions through a compact mental model, syllabus-aligned subtopics, a worked example and a practical task. The goal is not to memorize syntax but to know what the type contract guarantees and what evidence is still needed.",
+    "why_it_matters": "Model the narrowest honest type contract. Prefer inference where it is clear, use unknown at untrusted boundaries, and use control-flow checks before performing operations that depend on a value’s shape.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Generic Functions concept map",
+        "asset_path": "diagrams/lessons/062-generic-functions.svg",
+        "alt_text": "Lesson 62: Generic Functions. Understand the concept, model its contract, and verify expected behavior.",
+        "caption": "Concept map for Generic Functions; use the numbered stages rather than relying on color."
+      },
+      {
+        "type": "paragraph",
+        "title": "Mental model",
+        "text": "**Generic Functions.** This lesson belongs to **Functions and Callable Types**. Start by identifying the problem that generic functions solves. In TypeScript, separate three questions: what values your program intends to accept, what the compiler can prove from the code, and what must still be checked while the program runs. The last category matters whenever data comes from a user, file, API, storage layer, or an untyped JavaScript dependency."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics and how to use them",
+        "items": [
+          {
+            "title": "Type parameters on functions",
+            "text": "For type parameters on functions, write down the input contract and the result contract. Let TypeScript infer obvious local types, and add annotations where they clarify a public API, callback, or boundary."
+          },
+          {
+            "title": "Preserving input-to-output relationships",
+            "text": "For preserving input-to-output relationships, treat incoming values as untrusted until runtime checks establish the required shape. A TypeScript annotation does not validate network, file, database, storage, or user-provided data by itself."
+          },
+          {
+            "title": "Inferring generic type arguments",
+            "text": "For inferring generic type arguments, preserve the relationship between input types and output types, then check representative positive and negative cases. Prefer a readable type transformation over a clever but difficult-to-maintain abstraction."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Generic Functions",
+        "language": "typescript",
+        "code": "function first<T>(items: readonly T[]): T | undefined {\n  return items[0];\n}\nconst firstNumber = first([10, 20]);\nconst firstWord = first([\"oak\", \"elm\"]);",
+        "expected_output": "firstNumber is number | undefined, and firstWord is string | undefined. The generic preserves the relationship between input and output.",
+        "run_instructions": "This course displays TypeScript examples as static teaching text. The CodeLeaf web playground currently previews HTML/CSS/JavaScript only; TypeScript is not compiled or executed in the browser preview. For actual compiler feedback, create a local project with a pinned TypeScript version and run `npx tsc --noEmit`. For snippets requiring a browser, Node.js, React/JSX or a test runner, use the matching environment and dependencies.",
+        "reset_steps": "The lesson example does not modify files or remote systems. If you run it locally, use a disposable project directory, keep package versions recorded, and remove only the generated output you created.",
+        "execution_mode": "static-validation",
+        "limitations": "Static lesson example only. The browser preview is not a TypeScript compiler and does not execute backend, Node.js, React/TSX, test-runner, network or filesystem examples."
+      },
+      {
+        "type": "callout",
+        "title": "Compile-time versus runtime",
+        "text": "Type annotations and most type declarations are erased when TypeScript emits JavaScript. They do not validate external JSON, authorize a user, sanitize HTML, or prevent runtime failures by themselves. Validate trust-boundary inputs and test the behavior."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-062-knowledge-check.json",
+    "task": "Create a small TypeScript example for “Generic Functions”. Demonstrate type parameters on functions, explain your assumption, and include one check that shows the expected behavior. Do not treat a type annotation as runtime validation for external input.",
+    "task_acceptance_criteria": [
+      "The example demonstrates at least one syllabus subtopic named in this lesson.",
+      "The type contract is explicit enough that another learner can explain what it accepts and rejects.",
+      "The learner records a failure case and distinguishes compile-time checks from runtime validation."
+    ],
+    "hints": [
+      "Start with the syllabus item “Type parameters on functions” and define the smallest example that demonstrates it.",
+      "Ask which part is checked by TypeScript and which part depends on runtime data, the environment or a test.",
+      "For external input, start with unknown and validate the required shape before using a domain type."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Treating a successful type check as a runtime guarantee.",
+        "why": "Type annotations do not generally validate data after JavaScript starts running.",
+        "fix": "Add runtime checks for external input and tests for meaningful failure cases."
+      },
+      {
+        "problem": "Using any or an assertion to silence a useful diagnostic.",
+        "why": "That can hide the exact mismatch the type system would otherwise report.",
+        "fix": "Prefer a more precise type or unknown plus narrowing; use assertions only when a verified invariant justifies them."
+      },
+      {
+        "problem": "Copying a compiler setting or runtime example without checking the project environment.",
+        "why": "Module resolution, DOM/Node globals, JSX and tool behavior depend on the configured versions and environment.",
+        "fix": "Pin the toolchain, match tsconfig to the runtime/bundler, and run the actual project's typecheck and tests."
+      }
+    ],
+    "summary": [
+      "Generic Functions is taught through the subtopics listed in the source syllabus: Type parameters on functions, Preserving input-to-output relationships, Inferring generic type arguments.",
+      "Prefer precise contracts and use compiler diagnostics as evidence, not as a replacement for runtime tests.",
+      "Validate untrusted data and describe environment/version assumptions explicitly."
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation",
+    "solution_notes": "The lesson provides progressive hints, not a hidden single correct implementation. Compare your example against the stated learning outcomes and acceptance criteria."
+  },
+  "exercise_files": [],
+  "sources": [
+    "PDF: Complete TypeScript Curriculum — Beginner to Professional, Section B, topic 62.",
+    "TypeScript Handbook — https://www.typescriptlang.org/docs/handbook/intro.html",
+    "Functions / Generics — https://www.typescriptlang.org/docs/handbook/2/functions.html and https://www.typescriptlang.org/docs/handbook/2/generics.html"
+  ],
+  "technical_review_date": "2026-10-14",
+  "status": "draft",
+  "status_note": "Generated as a complete curriculum draft from the PDF syllabus; review all technical examples against the configured compiler/runtime before publication."
+}

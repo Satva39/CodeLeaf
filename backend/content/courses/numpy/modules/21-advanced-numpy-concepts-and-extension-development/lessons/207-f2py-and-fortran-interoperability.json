@@ -1,0 +1,201 @@
+{
+  "id": "numpy-lesson-207",
+  "slug": "f2py-and-fortran-interoperability",
+  "title": "F2PY and Fortran Interoperability",
+  "sequence": 207,
+  "module_id": "numpy-module-21",
+  "module_slug": "advanced-numpy-concepts-and-extension-development",
+  "level": "specialist",
+  "difficulty": "specialist",
+  "track": "specialist",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "numpy-lesson-206"
+  ],
+  "previous_lesson_id": "numpy-lesson-206",
+  "next_lesson_id": "numpy-lesson-208",
+  "keywords": [
+    "f2py and fortran interoperability",
+    "advanced numpy concepts and extension development",
+    "What F2PY does",
+    "Wrapping Fortran routines",
+    "Exposing compiled numerical code to Python",
+    "Build and compatibility considerations",
+    "NumPy",
+    "ndarray"
+  ],
+  "source_syllabus_number": 207,
+  "subtopics": [
+    "What F2PY does",
+    "Wrapping Fortran routines",
+    "Exposing compiled numerical code to Python",
+    "Build and compatibility considerations"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of f2py and fortran interoperability and name one situation where it is useful.",
+    "Apply what f2py does to a small NumPy example and inspect the resulting values, shape, or dtype.",
+    "Identify one important limitation, boundary case, or validation check for f2py and fortran interoperability."
+  ],
+  "content": {
+    "intro": "This lesson develops topic 207 of the supplied curriculum: **F2PY and Fortran Interoperability**. The main starting point is **What F2PY does**. You will connect the idea to a small, synthetic example, then use the result to reason about shape, dtype, accuracy, or memory as appropriate.",
+    "why_it_matters": "Compiled extensions and stride-level operations can improve specialized workloads but increase portability and memory-safety complexity. Learn the high-level array contract first and keep extension paths narrowly tested.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: F2PY and Fortran Interoperability",
+        "asset_path": "diagrams/lesson-207-f2py-and-fortran-interoperability.svg",
+        "alt_text": "Teaching visual for lesson 207, F2PY and Fortran Interoperability. It illustrates Python array metadata, then API / protocol / compiled boundary, leading to Validate ownership and compatibility.",
+        "caption": "Visual model for F2PY and Fortran Interoperability. Synthetic conceptual diagram; inspect shape, dtype, and assumptions as relevant."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Treat **F2PY and Fortran Interoperability** as an explicit step in an array workflow. This lesson centers on **What F2PY does** and the source syllabus's related subtopics. Before trusting a result, identify the input shape and dtype, perform the smallest useful operation, and inspect the output. The example uses synthetic data so you can change one value and observe what changes."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics from the supplied curriculum",
+        "items": [
+          "What F2PY does",
+          "Wrapping Fortran routines",
+          "Exposing compiled numerical code to Python",
+          "Build and compatibility considerations"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "powershell",
+        "code": "# PowerShell / terminal command (run only when a Fortran source is available):\npython -m numpy.f2py -h example.pyf example.f90",
+        "expected_output": "F2PY inspects the Fortran file and writes a signature file; compilation requires a compatible compiler toolchain.",
+        "execution_mode": "static-validation",
+        "run_instructions": "Run the PowerShell/terminal command from the project environment. The F2PY command additionally requires an available Fortran source and a compatible compiler.",
+        "reset_steps": "For examples that create files, use a temporary working directory and remove its outputs after reviewing them. The memory-map example already uses a temporary directory."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "F2PY can generate wrappers for supported Fortran routines, but compilation requires an available compatible compiler. Treat it as an optional compiled-extension track."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          "Explain the preconditions that a lower-level or compiled implementation must preserve. Keep the example high-level and testable.",
+          "Change one input value or parameter and predict the output before running the example.",
+          "Record one edge case and explain how your code should respond."
+        ]
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          "Topic 207: F2PY and Fortran Interoperability.",
+          "Core focus: What F2PY does.",
+          "Check the official reference when signatures or version-specific behavior matter."
+        ]
+      }
+    ],
+    "expected_output": "F2PY inspects the Fortran file and writes a signature file; compilation requires a compatible compiler toolchain.",
+    "run_instructions": "Use a local PowerShell/terminal for command examples; NumPy F2PY examples require a compatible compiler and source file.",
+    "reset_steps": "Use temporary paths for file-writing experiments. Restore modified arrays by recreating the example input. No platform progress or rewards are created by viewing the lesson.",
+    "hints": [
+      "First identify the input values and their shape/dtype.",
+      "Run the smallest complete example and compare the actual output with the expected behavior.",
+      "Change one variable at a time; if the result differs, inspect shape, dtype, finite values, and version-specific behavior before changing the algorithm."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-207-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Using low-level memory tools without validating strides and bounds",
+        "why": "Strided views and extension interfaces depend on layout and ownership contracts.",
+        "fix": "Start with safer high-level functions and add targeted tests before low-level paths."
+      },
+      {
+        "problem": "Assuming compiled binaries work across major NumPy versions",
+        "why": "The C API has binary-compatibility concerns across major versions.",
+        "fix": "Build/test wheels against supported NumPy versions and review migration notes."
+      }
+    ],
+    "summary": [
+      "Topic 207 covers f2py and fortran interoperability and the subtopics listed in the curriculum.",
+      "Keep low-level or compiled pathways isolated, documented, and tested for supported versions.",
+      "Examples and assessments are draft and require subject-matter review before publication."
+    ],
+    "references": [
+      {
+        "title": "NumPy C API",
+        "url": "https://numpy.org/doc/stable/reference/c-api/",
+        "publisher": "NumPy project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "F2PY and Fortran Interoperability",
+          "What F2PY does",
+          "Wrapping Fortran routines"
+        ]
+      },
+      {
+        "title": "F2PY user guide",
+        "url": "https://numpy.org/doc/stable/f2py/",
+        "publisher": "NumPy project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "F2PY and Fortran Interoperability",
+          "What F2PY does",
+          "Wrapping Fortran routines"
+        ]
+      },
+      {
+        "title": "NumPy typing",
+        "url": "https://numpy.org/doc/stable/reference/typing.html",
+        "publisher": "NumPy project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "F2PY and Fortran Interoperability",
+          "What F2PY does",
+          "Wrapping Fortran routines"
+        ]
+      }
+    ],
+    "accessibility_notes": "Every visual has descriptive SVG title/description and adjacent text explaining the concept. The diagram does not rely on color alone; text labels state each stage.",
+    "version_notes": "Written against the NumPy 2.5 stable documentation checked 2026-10-13. Example outputs that were executed were observed in an available NumPy 2.3.5 environment; release-specific formatting or pseudorandom streams may vary."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "NumPy C API",
+      "url": "https://numpy.org/doc/stable/reference/c-api/",
+      "publisher": "NumPy project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "F2PY and Fortran Interoperability",
+        "What F2PY does",
+        "Wrapping Fortran routines"
+      ]
+    },
+    {
+      "title": "F2PY user guide",
+      "url": "https://numpy.org/doc/stable/f2py/",
+      "publisher": "NumPy project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "F2PY and Fortran Interoperability",
+        "What F2PY does",
+        "Wrapping Fortran routines"
+      ]
+    },
+    {
+      "title": "NumPy typing",
+      "url": "https://numpy.org/doc/stable/reference/typing.html",
+      "publisher": "NumPy project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "F2PY and Fortran Interoperability",
+        "What F2PY does",
+        "Wrapping Fortran routines"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the supplied syllabus with original explanations and examples. Subject-matter review, learner testing, and publication approval are still required."
+}

@@ -1,0 +1,140 @@
+{
+  "id": "powershell-lesson-079",
+  "slug": "culture-and-localization",
+  "title": "Culture and Localization",
+  "sequence": 79,
+  "module_id": "powershell-module-08",
+  "module_slug": "strings-dates-regular-expressions-and-data",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "powershell-lesson-078"
+  ],
+  "previous_lesson_id": "powershell-lesson-078",
+  "next_lesson_id": "powershell-lesson-080",
+  "keywords": [
+    "culture",
+    "and",
+    "localization",
+    "powershell",
+    "module-08"
+  ],
+  "source_syllabus_number": 79,
+  "subtopics": [
+    "Culture-specific date and number formats",
+    "Invariant culture",
+    "Locale-sensitive string comparison",
+    "Consistent machine-readable output"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose of Culture and Localization and define its core vocabulary.",
+    "Apply culture and localization in a small PowerShell example and predict its result.",
+    "Identify one relevant edge case, version constraint, or troubleshooting step."
+  ],
+  "content": {
+    "intro": "This lesson covers Culture and Localization in the PowerShell learning path. It expands the supplied syllabus heading into an actionable draft with a visual, a worked example, and a short knowledge check.",
+    "why_it_matters": "Make data types and control flow explicit. Inspect values at boundaries, prefer readable comparisons and parenthesized expressions, normalize input before transforming it, and test empty collections, null values and other boundary cases before relying on the result.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Lesson 79 visual map",
+        "asset_path": "diagrams/lesson-079-culture-and-localization.svg",
+        "alt_text": "Lesson 79 concept map for Culture and Localization: concept and purpose, a local example and result, followed by practice and verification.",
+        "caption": "Follow the concept → example → verification path for Culture and Localization."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Culture and Localization belongs to Strings, Dates, Regular Expressions, and Data. Focus on the rule or workflow this lesson introduces, work through a small example, and explain the expected result and one boundary case."
+      },
+      {
+        "type": "paragraph",
+        "title": "Build understanding step by step",
+        "text": "Start with the syllabus concepts: Culture-specific date and number formats; Invariant culture; Locale-sensitive string comparison; Consistent machine-readable output. Separate the input, the operation and the expected result. Use a disposable local workspace for file or system examples, and verify platform-specific behavior against the active runtime."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Culture-specific date and number formats",
+            "text": "Culture-specific date and number formats is one part of Culture and Localization. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Invariant culture",
+            "text": "Invariant culture is one part of Culture and Localization. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Locale-sensitive string comparison",
+            "text": "Locale-sensitive string comparison is one part of Culture and Localization. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Consistent machine-readable output",
+            "text": "Consistent machine-readable output is one part of Culture and Localization. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "powershell",
+        "execution_mode": "static-validation",
+        "code": "$sample = [pscustomobject]@{ Topic = 'Culture and Localization'; Verified = $true }\n$sample | Format-List Topic, Verified",
+        "expected_output": "A formatted list showing Topic = 'Culture and Localization' and Verified = True.",
+        "run_instructions": "Review this snippet as a static teaching example. In a local PowerShell 7.6 session, save a copy under your course workspace, run it manually, and compare the result with the stated expectation. CodeLeaf’s current course preview does not execute PowerShell. Adjust environment-dependent output to your machine.",
+        "troubleshooting": "Check command availability with Get-Command, inspect values with Get-Member, consult Get-Help -Full, and verify PowerShell version/platform before assuming identical output. Do not run examples that change system state without adapting and reviewing them.",
+        "reset_steps": "Restore the original snippet and use synthetic values. If you created test files, delete only those files within the dedicated practice folder after checking their paths."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety note",
+        "text": "The main path targets modern PowerShell 7.6 LTS. Windows PowerShell 5.1 compatibility is labeled separately. Some providers, admin cmdlets and APIs depend on OS, module version, permissions or tenant access; the examples are static references, not proof of execution."
+      }
+    ],
+    "task": "Try it yourself: apply the concept to a small reproducible automation task. Use synthetic data or a disposable practice folder, write down your predicted result, check it locally, and explain one boundary case.",
+    "task_acceptance_criteria": [
+      "Explain the central idea in Culture and Localization in your own words.",
+      "Verify the expected result using a local session or a documented manual check.",
+      "Describe one relevant edge case, limitation or troubleshooting step."
+    ],
+    "hints": [
+      "Predict the output before changing the example.",
+      "Change one input or condition at a time and compare the results.",
+      "Use Get-Help and official versioned documentation when behavior differs; do not treat a static preview as execution."
+    ],
+    "expected_output": "A formatted list showing Topic = 'Culture and Localization' and Verified = True.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-079-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "PowerShell language documentation",
+      "url": "https://learn.microsoft.com/en-us/powershell/scripting/lang-spec/chapter-01?view=powershell-7.6",
+      "publisher": "Microsoft Learn",
+      "supports": [
+        "syntax",
+        "expressions",
+        "types and language semantics"
+      ],
+      "checked_on": "2026-10-20",
+      "source_type": "official_documentation"
+    },
+    {
+      "title": "Getting Started with PowerShell",
+      "url": "https://learn.microsoft.com/en-us/powershell/scripting/learn/ps101/01-getting-started?view=powershell-7.6",
+      "publisher": "Microsoft Learn",
+      "supports": [
+        "first commands",
+        "help and discovery",
+        "interactive sessions"
+      ],
+      "checked_on": "2026-10-20",
+      "source_type": "official_documentation"
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson expanded from the numbered PowerShell PDF syllabus. Static examples, answers, version details and technical phrasing need subject-matter review before publication."
+}

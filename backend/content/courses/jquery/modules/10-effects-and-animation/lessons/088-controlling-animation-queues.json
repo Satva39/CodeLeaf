@@ -1,0 +1,177 @@
+{
+  "id": "jquery-lesson-088",
+  "slug": "controlling-animation-queues",
+  "title": "Controlling Animation Queues",
+  "sequence": 88,
+  "module_id": "jquery-module-10",
+  "module_slug": "effects-and-animation",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "jquery-lesson-087"
+  ],
+  "previous_lesson_id": "jquery-lesson-087",
+  "next_lesson_id": "jquery-lesson-089",
+  "keywords": [
+    "controlling animation queues",
+    "jquery",
+    "javascript",
+    "effects and animation",
+    "understanding effect queues",
+    ".stop()",
+    ".finish()",
+    "queue management"
+  ],
+  "source_syllabus_number": 88,
+  "subtopics": [
+    "Understanding effect queues",
+    ".stop()",
+    ".finish()",
+    "Queue management",
+    "Preventing repeated interactions from accumulating animations"
+  ],
+  "learning_outcomes": [
+    "Explain the role of controlling animation queues in a jQuery application.",
+    "Apply understanding effect queues in a small example and describe its expected result.",
+    "Verify .stop() with an explicit test or browser observation."
+  ],
+  "exercise_files": [
+    "../exercises/088-controlling-animation-queues.json"
+  ],
+  "sources": [
+    {
+      "title": "jQuery API Documentation",
+      "url": "https://api.jquery.com/",
+      "publisher": "jQuery project",
+      "checked_on": "2026-10-12",
+      "source_type": "official_api_reference",
+      "supports": [
+        "Supported jQuery Core APIs",
+        "Method signatures and return values"
+      ]
+    },
+    {
+      "title": "jQuery Learning Center",
+      "url": "https://learn.jquery.com/",
+      "publisher": "jQuery project",
+      "checked_on": "2026-10-12",
+      "source_type": "official_learning_resource",
+      "supports": [
+        "Concept explanations",
+        "Events",
+        "Effects",
+        "AJAX",
+        "Plugins",
+        "Performance",
+        "Code organization"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the attached syllabus and official references; requires lesson-by-lesson technical review, local execution, accessibility checks, and editorial approval.",
+  "content": {
+    "intro": "In this lesson, you will work through controlling animation queues with a focused jQuery example. The subtopics below preserve the supplied curriculum coverage and connect the API idea to a small browser interface.",
+    "why_it_matters": "This topic is useful because it turns understanding effect queues into a repeatable implementation choice. Built-in effects and .animate() can reveal state changes, but effects should not block interaction or ignore reduced-motion preferences. Prefer CSS transitions for simple visual changes.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 10 overview",
+        "asset_path": "diagrams/module-10-overview.svg",
+        "alt_text": "Overview of Effects and Animation, illustrating the sequence from understanding the concept to implementing and checking it.",
+        "caption": "Use this module map to place controlling animation queues within the wider learning path."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Built-in effects and .animate() can reveal state changes, but effects should not block interaction or ignore reduced-motion preferences. Prefer CSS transitions for simple visual changes."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the supplied syllabus",
+        "items": [
+          "Understanding effect queues",
+          ".stop()",
+          ".finish()",
+          "Queue management",
+          "Preventing repeated interactions from accumulating animations"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "code": "if (window.matchMedia(\"(prefers-reduced-motion: reduce)\").matches) {\n  $(\"#panel\").show();\n} else {\n  $(\"#panel\").stop(true, true).slideDown(180);\n}",
+        "expected_output": "The UI uses immediate visibility when reduced motion is preferred and a short slide otherwise.",
+        "run_instructions": "Use a local HTML page with jQuery 4.0.0 loaded before app.js for JavaScript snippets. HTML and package-manager snippets can be checked as configuration examples. Run the interaction in browser DevTools, inspect the DOM/Network panel, and compare actual behavior with the expected result. Do not submit learner code to the production API for arbitrary execution.",
+        "reset_steps": "Restore the original markup and code, clear console/network filters, reload the local page, and repeat the same interaction. For a request example, return the mock endpoint to its original response before retrying."
+      },
+      {
+        "type": "callout",
+        "title": "Guided example",
+        "text": "Start with a known DOM structure, apply the pattern for controlling animation queues, and test one normal case plus one edge case. Keep selectors scoped to the intended component and verify the real browser result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Add a restrained effect related to controlling animation queues. Test repeated activation and reduced-motion preferences, then explain the chosen duration."
+      }
+    ],
+    "task": "Add a restrained effect related to controlling animation queues. Test repeated activation and reduced-motion preferences, then explain the chosen duration.",
+    "task_acceptance_criteria": [
+      "The implementation demonstrates controlling animation queues using a current, documented approach.",
+      "The learner records the expected and actual behavior and checks at least one edge case.",
+      "The example preserves semantic HTML and does not render untrusted data as HTML.",
+      "The test setup and any runtime limitation are documented honestly."
+    ],
+    "hints": [
+      "First identify which DOM nodes and runtime state are involved in controlling animation queues.",
+      "Make one small change, inspect the resulting element or request, and compare it with the expected result.",
+      "If the result differs, check the selector, script order, browser console, event target, and relevant API documentation before adding more code."
+    ],
+    "expected_output": "The UI uses immediate visibility when reduced motion is preferred and a short slide otherwise.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-088-questions.json",
+    "common_mistakes": [
+      "Assuming a selector matched an element without checking the collection length.",
+      "Confusing jQuery collections with native DOM elements or live properties with markup attributes.",
+      "Using .html() with untrusted data or assuming client-side validation enforces server rules.",
+      "Treating a demo snippet as production-ready without testing failure and accessibility states."
+    ],
+    "summary": [
+      "Controlling Animation Queues is one part of the effects and animation workflow.",
+      "Built-in effects and .animate() can reveal state changes, but effects should not block interaction or ignore reduced-motion preferences. Prefer CSS transitions for simple visual changes.",
+      "Use the official API or upgrade guide for version-specific behavior and verify an example locally before relying on it."
+    ],
+    "references": [
+      {
+        "title": "jQuery API Documentation",
+        "url": "https://api.jquery.com/",
+        "publisher": "jQuery project",
+        "checked_on": "2026-10-12",
+        "source_type": "official_api_reference",
+        "supports": [
+          "Supported jQuery Core APIs",
+          "Method signatures and return values"
+        ]
+      },
+      {
+        "title": "jQuery Learning Center",
+        "url": "https://learn.jquery.com/",
+        "publisher": "jQuery project",
+        "checked_on": "2026-10-12",
+        "source_type": "official_learning_resource",
+        "supports": [
+          "Concept explanations",
+          "Events",
+          "Effects",
+          "AJAX",
+          "Plugins",
+          "Performance",
+          "Code organization"
+        ]
+      }
+    ]
+  }
+}

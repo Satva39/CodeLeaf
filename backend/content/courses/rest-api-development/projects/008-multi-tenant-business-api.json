@@ -1,0 +1,119 @@
+{
+  "id": "rest-api-development-project-008",
+  "slug": "multi-tenant-business-api",
+  "title": "Multi-Tenant Business API",
+  "sequence": 8,
+  "tier": "advanced",
+  "objective": "Support multiple organizations while isolating each organization’s resources.",
+  "prerequisite_lesson_ids": [
+    "rest-api-development-lesson-122",
+    "rest-api-development-lesson-125",
+    "rest-api-development-lesson-126"
+  ],
+  "recommended_lesson_range": [
+    11,
+    21
+  ],
+  "curriculum_topics": [
+    122,
+    125,
+    126,
+    127,
+    132,
+    136,
+    149,
+    152,
+    124
+  ],
+  "skills": [
+    "resource modeling and HTTP semantics",
+    "request validation and structured errors",
+    "persistence and consistent state changes",
+    "authorization and defensive testing",
+    "API documentation and operational review"
+  ],
+  "starter_readme": "projects/starter-files/008-multi-tenant-business-api/README.md",
+  "starter_files": [
+    "projects/starter-files/008-multi-tenant-business-api/README.md",
+    "projects/starter-files/008-multi-tenant-business-api/request-examples.txt",
+    "projects/starter-files/008-multi-tenant-business-api/schema.sql"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Milestone 1: Organization membership and tenant identity",
+      "acceptance_criteria": [
+        "Demonstrate organization membership and tenant identity in the project.",
+        "Document the contract and test one failure or boundary case."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Milestone 2: Tenant-scoped queries and role checks",
+      "acceptance_criteria": [
+        "Demonstrate tenant-scoped queries and role checks in the project.",
+        "Document the contract and test one failure or boundary case."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Milestone 3: Object ownership and audit logging",
+      "acceptance_criteria": [
+        "Demonstrate object ownership and audit logging in the project.",
+        "Document the contract and test one failure or boundary case."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Milestone 4: Cross-tenant regression tests and a threat model",
+      "acceptance_criteria": [
+        "Demonstrate cross-tenant regression tests and a threat model in the project.",
+        "Document the contract and test one failure or boundary case."
+      ]
+    }
+  ],
+  "required_features": [
+    "Organization membership and tenant identity",
+    "Tenant-scoped queries and role checks",
+    "Object ownership and audit logging",
+    "Cross-tenant regression tests and a threat model"
+  ],
+  "stretch_features": [
+    "Add contract validation to CI and detect a breaking change.",
+    "Add structured request IDs and useful metrics without logging secrets.",
+    "Document a recovery or migration trade-off with alternatives."
+  ],
+  "tests": [
+    "Test success, missing-resource, validation, and authorization outcomes.",
+    "Test duplicates and concurrent updates where the domain has non-idempotent side effects.",
+    "Run tests against a disposable database with deterministic fixtures.",
+    "Review public responses and logs for secret or personal-data exposure."
+  ],
+  "rubric": [
+    {
+      "criterion": "API contract and resource model",
+      "points": 20
+    },
+    {
+      "criterion": "Correct behavior and data integrity",
+      "points": 25
+    },
+    {
+      "criterion": "Authentication, authorization and security",
+      "points": 20
+    },
+    {
+      "criterion": "Automated tests and failure handling",
+      "points": 20
+    },
+    {
+      "criterion": "Documentation, operations and maintainability",
+      "points": 15
+    }
+  ],
+  "rubric_total": 100,
+  "review_method": "Automated tests and static contract checks plus human review against the rubric; no arbitrary learner code executes inside CodeLeaf’s production API.",
+  "reference_solution_file": "projects/solutions/008-multi-tenant-business-api-reference.json",
+  "status": "draft",
+  "status_note": "Unreviewed project draft; validate scope, starter files, rubric and implementation assumptions before publication."
+}

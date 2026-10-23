@@ -1,0 +1,189 @@
+{
+  "id": "r-lesson-210",
+  "slug": "installing-and-managing-packages",
+  "title": "Installing and Managing Packages",
+  "sequence": 210,
+  "module_id": "r-module-20",
+  "module_slug": "r-packages-and-package-development",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "r-lesson-209"
+  ],
+  "previous_lesson_id": "r-lesson-209",
+  "next_lesson_id": "r-lesson-211",
+  "keywords": [
+    "installing-and-managing-packages",
+    "r-packages-and-package-development",
+    "install-packages",
+    "library-and-require",
+    "using-package-function",
+    "updating-and-removing-packages",
+    "understanding-package-libraries",
+    "dependency-conflicts",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 210,
+  "subtopics": [
+    "install.packages()",
+    "library() and require()",
+    "Using package::function",
+    "Updating and Removing Packages",
+    "Understanding Package Libraries",
+    "Dependency Conflicts"
+  ],
+  "learning_outcomes": [
+    "Explain the role of installing and managing packages and identify its main inputs, outputs or constraints.",
+    "Apply install.packages() in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Installing and Managing Packages is part of R Packages and Package Development. Start with install.packages() and connect it to the worked example and expected result.",
+    "why_it_matters": "Use a repeatable setup and verify the toolchain before interpreting an example.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Installing and Managing Packages",
+        "asset_path": "diagrams/package-quality-gates.svg",
+        "alt_text": "Concept visual supporting lesson 210, Installing and Managing Packages. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Use a repeatable setup and verify the toolchain before interpreting an example. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "install.packages()",
+            "text": "Explain install.packages() in the context of installing and managing packages, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "library() and require()",
+            "text": "Explain library() and require() in the context of installing and managing packages, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Using package::function",
+            "text": "Build the smallest example for using package::function, inspect the returned object, and confirm its names, type and shape before using it downstream."
+          },
+          {
+            "title": "Updating and Removing Packages",
+            "text": "Explain updating and removing packages in the context of installing and managing packages, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Understanding Package Libraries",
+            "text": "Explain understanding package libraries in the context of installing and managing packages, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Dependency Conflicts",
+            "text": "Explain dependency conflicts in the context of installing and managing packages, connect it to the example, and verify one expected result or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Record the R version, working directory and packages used, then verify one small expression. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Installing and Managing Packages",
+        "language": "r",
+        "code": "# Lesson 210: Installing and Managing Packages\nexample_value <- 2\nexample_value + 1",
+        "expected_output": "[1] 3",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "Run the expression in a local R console and confirm the returned value. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For installing and managing packages, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-210-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply installing and managing packages to a small synthetic example. Start with install.packages(), predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the install.packages() idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible installing and managing packages example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “install.packages()” and identify the input and output before coding.",
+      "Prefer a small repeatable test and capture the result before changing the implementation.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Relying on a package attached only in the interactive workspace.",
+        "why": "A clean session may not have that dependency attached or installed.",
+        "fix": "Declare imports and test package functions from a fresh R session."
+      },
+      {
+        "problem": "Publishing examples without running their tests or checks.",
+        "why": "Documentation can be stale and examples can fail on a clean machine.",
+        "fix": "Run package tests and R CMD check under the supported R version."
+      },
+      {
+        "problem": "Leaving dependencies and version assumptions undocumented.",
+        "why": "Users may not be able to reproduce the package behavior.",
+        "fix": "Declare dependencies and document compatibility."
+      }
+    ],
+    "summary": [
+      "Key idea: Use a repeatable setup and verify the toolchain before interpreting an example.",
+      "Practice: Record the R version, working directory and packages used, then verify one small expression.",
+      "Source syllabus focus: install.packages(). Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply installing and managing packages to a small synthetic example. Start with install.packages(), predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible installing and managing packages example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “install.packages()” and identify the input and output before coding.",
+    "Prefer a small repeatable test and capture the result before changing the implementation.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Relying on a package attached only in the interactive workspace.",
+      "why": "A clean session may not have that dependency attached or installed.",
+      "fix": "Declare imports and test package functions from a fresh R session."
+    },
+    {
+      "problem": "Publishing examples without running their tests or checks.",
+      "why": "Documentation can be stale and examples can fail on a clean machine.",
+      "fix": "Run package tests and R CMD check under the supported R version."
+    },
+    {
+      "problem": "Leaving dependencies and version assumptions undocumented.",
+      "why": "Users may not be able to reproduce the package behavior.",
+      "fix": "Declare dependencies and document compatibility."
+    }
+  ],
+  "summary": [
+    "Key idea: Use a repeatable setup and verify the toolchain before interpreting an example.",
+    "Practice: Record the R version, working directory and packages used, then verify one small expression.",
+    "Source syllabus focus: install.packages(). Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 20 — R Packages and Package Development, lesson 210: Installing and Managing Packages.",
+    "Official documentation: https://cran.r-project.org/doc/manuals/r-release/R-exts.html",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

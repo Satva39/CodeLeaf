@@ -1,0 +1,216 @@
+{
+  "id": "bash-lesson-172",
+  "slug": "backups-and-restore-automation",
+  "title": "Backups and Restore Automation",
+  "sequence": 172,
+  "module_id": "bash-module-18",
+  "module_slug": "scheduling-system-administration-and-automation",
+  "level": "professional",
+  "difficulty": "professional",
+  "track": "professional",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "bash-lesson-171"
+  ],
+  "previous_lesson_id": "bash-lesson-171",
+  "next_lesson_id": "bash-lesson-173",
+  "keywords": [
+    "backups",
+    "and",
+    "restore",
+    "automation",
+    "selecting",
+    "files",
+    "directories",
+    "naming",
+    "organizing",
+    "backup",
+    "sets",
+    "recording",
+    "status"
+  ],
+  "source_syllabus_number": 172,
+  "subtopics": [
+    "Selecting files and directories",
+    "Naming and organizing backup sets",
+    "Recording backup status",
+    "Verifying archives",
+    "Testing restoration workflows"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Backups and Restore Automation and identify at least two relevant syllabus points.",
+    "Apply backups and restore automation in a small Bash example and verify the expected output or status.",
+    "Identify one edge case or failure mode and state how to test it safely."
+  ],
+  "content": {
+    "intro": "A backup-and-restore workflow needs explicit source and destination paths, complete archive creation, integrity verification, and a tested restore procedure.",
+    "why_it_matters": "Backups and Restore Automation matters because reliable shell automation depends on making this behavior explicit, testing its boundaries, and documenting environment assumptions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Concept flow: Backups and Restore Automation",
+        "asset_path": "diagrams/lessons/lesson-172.svg",
+        "alt_text": "Four-step concept flow for lesson 172: Backups and Restore Automation. Steps: Select source and destination; Preview planned files; Create archive in test area; Verify restore before relying on it.",
+        "caption": "Lesson-specific flow: Select source and destination → Preview planned files → Create archive in test area → Verify restore before relying on it."
+      },
+      {
+        "type": "paragraph",
+        "title": "The central idea",
+        "text": "A backup workflow is incomplete until the archive has been checked and a restore has been tested. Use explicit source/destination configuration, a preview mode, retention policy, and documented recovery steps."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the supplied syllabus",
+        "items": [
+          {
+            "title": "Selecting files and directories",
+            "text": "Use a disposable test directory with a present file, a missing path, and a pathname containing spaces; check the resulting status before changing data."
+          },
+          {
+            "title": "Naming and organizing backup sets",
+            "text": "Define what “Naming and organizing backup sets” means in this lesson, show it with a minimal example, and verify the expected result plus one limitation or edge case."
+          },
+          {
+            "title": "Recording backup status",
+            "text": "Define what “Recording backup status” means in this lesson, show it with a minimal example, and verify the expected result plus one limitation or edge case."
+          },
+          {
+            "title": "Verifying archives",
+            "text": "Define what “Verifying archives” means in this lesson, show it with a minimal example, and verify the expected result plus one limitation or edge case."
+          },
+          {
+            "title": "Testing restoration workflows",
+            "text": "Make the check repeatable, include a failing case, and record its result; static checks complement but do not replace behavioral tests."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How it fits into Bash",
+        "text": "A backup-and-restore workflow needs explicit source and destination paths, complete archive creation, integrity verification, and a tested restore procedure. A successful archive command alone does not prove every required file can be recovered; use disposable test data and verify the restored result."
+      },
+      {
+        "type": "code",
+        "language": "bash",
+        "execution_mode": "manual-terminal",
+        "code": "source_dir='./practice-input'\nprintf '[dry-run] planned backup source: %s\\n' \"$source_dir\"",
+        "expected_output": "[dry-run] planned backup source: ./practice-input",
+        "run_instructions": "Save the snippet in a temporary practice file and run it with the locally installed Bash interpreter. The CodeLeaf in-page preview displays reference output only; it does not execute Bash code. Some examples require commands already installed on your machine.",
+        "reset_steps": "Discard the temporary file or reset the editor to the original snippet. The examples are designed not to modify important data."
+      },
+      {
+        "type": "callout",
+        "title": "Watch out",
+        "text": "Separate planning from side effects, verify results, protect credentials, and document recovery steps before automating operations that matter. Do not assume the same command options or newer Bash features exist on every operating system."
+      },
+      {
+        "type": "paragraph",
+        "title": "Check your result",
+        "text": "Compare the observed output and exit status with the reference behavior. Change one input at a time, include a boundary or invalid input, and note what differs on your target Bash/utility version."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety note",
+        "text": "Use a local test directory, avoid secrets in commands/history/logs, and check the installed interpreter with `bash --version`. This course remains draft until technical examples and assessments receive subject-matter review."
+      }
+    ],
+    "task": "Build a small local example for “Backups and Restore Automation” using synthetic input or a disposable practice directory. Explain what the command should do, check its output and exit status, and test one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "Use an example aligned with the lesson and preserve arguments, paths, or streams correctly.",
+      "Record the observed output and exit status.",
+      "Test one boundary case or expected failure.",
+      "State the Bash version and any external utility dependency that matters."
+    ],
+    "hints": [
+      "Reduce the problem to one command or one small function first.",
+      "Use quoting and printf to make argument boundaries visible.",
+      "Check exit statuses as well as printed output; use syntax-only validation before testing changes."
+    ],
+    "expected_output": "A documented example for “Backups and Restore Automation” with the observed output/status, one tested boundary case, and an explicit statement of any version or utility dependency.",
+    "run_mode": "static-validation",
+    "troubleshooting": [
+      "If the snippet uses an external command, check availability with `command -v NAME` and consult that program’s local help.",
+      "If behavior differs by operating system or Bash version, record `bash --version` and check the official manual linked below.",
+      "For syntax-only validation run `bash -n script.sh`; this parses but does not execute the script."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming a successful-looking output means the command succeeded.",
+        "why": "Output and exit status are separate signals, and a later command may replace `$?`.",
+        "fix": "Capture important statuses immediately and check all relevant pipeline stages."
+      },
+      {
+        "problem": "Copying example commands straight into a production path.",
+        "why": "Real paths, permissions, input names, and external utility versions differ.",
+        "fix": "Use a disposable fixture and inspect the planned side effects first."
+      },
+      {
+        "problem": "Treating Bash-specific syntax as portable `sh` syntax.",
+        "why": "Arrays, `[[ ... ]]`, process substitution, and some parameter operators are extensions.",
+        "fix": "Name the interpreter and test the minimum supported version."
+      }
+    ],
+    "summary": [
+      "Backups and Restore Automation has specific syntax and behavior; verify it rather than relying on guesswork.",
+      "Preserve argument boundaries and keep shell commands separate from untrusted data.",
+      "Test successful, boundary, and failure cases in a safe environment."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-172-questions.json"
+  },
+  "exercise_files": [
+    "../exercises/ex-035-build-a-backup-workflow-with-retention-and-restoration-verification.json"
+  ],
+  "sources": [
+    {
+      "id": "gnu-bash-manual-5-3",
+      "title": "GNU Bash Reference Manual, Edition 5.3",
+      "url": "https://www.gnu.org/s/bash/manual/bash.html",
+      "publisher": "GNU Project / Free Software Foundation",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "Bash syntax and parsing",
+        "quoting and expansion",
+        "variables and arrays",
+        "control flow",
+        "functions",
+        "redirection and pipelines",
+        "processes and traps",
+        "startup files and shell options",
+        "version compatibility"
+      ],
+      "source_type": "official language reference",
+      "notes": "The primary technical reference for Bash-specific behavior. Verify examples against the interpreter installed on the target system."
+    },
+    {
+      "id": "gnu-coreutils-manual",
+      "title": "GNU Coreutils Manual",
+      "url": "https://www.gnu.org/software/coreutils/manual/coreutils.html",
+      "publisher": "GNU Project / Free Software Foundation",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "common file and text utilities",
+        "command options",
+        "filesystem workflows"
+      ],
+      "source_type": "official utility manual",
+      "notes": "Documents GNU utilities. Check BSD/macOS variants separately when portability matters."
+    },
+    {
+      "id": "gnu-findutils-manual",
+      "title": "GNU Findutils Manual",
+      "url": "https://www.gnu.org/software/findutils/manual/html_mono/find.html",
+      "publisher": "GNU Project / Free Software Foundation",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "find traversal",
+        "filename handling",
+        "safe file selection"
+      ],
+      "source_type": "official utility manual",
+      "notes": "Use with OS-specific documentation where GNU find is not installed."
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft content mapped to Bash.pdf Section B lesson 172. Technical examples and grading require review before publication."
+}

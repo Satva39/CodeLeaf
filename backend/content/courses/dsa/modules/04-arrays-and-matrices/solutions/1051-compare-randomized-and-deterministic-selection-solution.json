@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-51",
+  "exercise_id": "dsa-exercise-pdf-51",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\nimport random\n\ndef randomized_select(values, k, seed=0):\n    \"\"\"Return zero-based kth smallest, expected O(n), worst-case O(n^2).\"\"\"\n    if not 0<=k<len(values): raise IndexError(k)\n    a=list(values); rng=random.Random(seed); lo=0; hi=len(a)-1\n    while lo<=hi:\n        pivot=a[rng.randrange(lo,hi+1)]; lt=lo; i=lo; gt=hi\n        while i<=gt:\n            if a[i]<pivot: a[lt],a[i]=a[i],a[lt]; lt+=1; i+=1\n            elif a[i]>pivot: a[i],a[gt]=a[gt],a[i]; gt-=1\n            else: i+=1\n        if k<lt: hi=lt-1\n        elif k>gt: lo=gt+1\n        else: return a[k]\n\ndef deterministic_sort_select(values,k):\n    if not 0<=k<len(values): raise IndexError(k)\n    return sorted(values)[k]\n\nassert randomized_select([7,2,9,2],1)==deterministic_sort_select([7,2,9,2],1)==2\n```",
+  "explanation": "The randomized 3-way quickselect handles duplicates and has expected O(n) but worst-case O(n²) time; deterministic sorting is O(n log n). Fixed seed makes this comparison repeatable.",
+  "tested_reference_code": "import random\n\ndef randomized_select(values, k, seed=0):\n    \"\"\"Return zero-based kth smallest, expected O(n), worst-case O(n^2).\"\"\"\n    if not 0<=k<len(values): raise IndexError(k)\n    a=list(values); rng=random.Random(seed); lo=0; hi=len(a)-1\n    while lo<=hi:\n        pivot=a[rng.randrange(lo,hi+1)]; lt=lo; i=lo; gt=hi\n        while i<=gt:\n            if a[i]<pivot: a[lt],a[i]=a[i],a[lt]; lt+=1; i+=1\n            elif a[i]>pivot: a[i],a[gt]=a[gt],a[i]; gt-=1\n            else: i+=1\n        if k<lt: hi=lt-1\n        elif k>gt: lo=gt+1\n        else: return a[k]\n\ndef deterministic_sort_select(values,k):\n    if not 0<=k<len(values): raise IndexError(k)\n    return sorted(values)[k]\n\nassert randomized_select([7,2,9,2],1)==deterministic_sort_select([7,2,9,2],1)==2",
+  "language": "python"
+}

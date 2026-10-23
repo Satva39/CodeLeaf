@@ -1,0 +1,149 @@
+{
+  "id": "expressjs-project-002",
+  "slug": "task-manager-api",
+  "title": "Task Manager API",
+  "sequence": 2,
+  "tier": "beginner",
+  "objective": "Create a REST API with standard CRUD operations.",
+  "prerequisite_lesson_ids": [
+    "expressjs-lesson-066",
+    "expressjs-lesson-059",
+    "expressjs-lesson-068",
+    "expressjs-lesson-137"
+  ],
+  "recommended_lesson_ids": [
+    "expressjs-lesson-066",
+    "expressjs-lesson-059",
+    "expressjs-lesson-068",
+    "expressjs-lesson-137"
+  ],
+  "skills": [
+    "Create/list/get/update/delete tasks",
+    "Validate request data",
+    "Return structured errors",
+    "Test success and not-found paths",
+    "API contract design",
+    "safe error handling",
+    "repeatable testing and documentation"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Requirements and API contracts",
+      "acceptance_criteria": [
+        "Document requirements and api contracts for Task Manager API.",
+        "Provide a focused implementation artifact and an expected request/response contract.",
+        "Test one success case and at least one invalid or failure case using synthetic data.",
+        "Document security assumptions, external dependencies, cleanup, and known limitations."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Route/service implementation",
+      "acceptance_criteria": [
+        "Document route/service implementation for Task Manager API.",
+        "Provide a focused implementation artifact and an expected request/response contract.",
+        "Test one success case and at least one invalid or failure case using synthetic data.",
+        "Document security assumptions, external dependencies, cleanup, and known limitations."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Validation, security and data boundaries",
+      "acceptance_criteria": [
+        "Document validation, security and data boundaries for Task Manager API.",
+        "Provide a focused implementation artifact and an expected request/response contract.",
+        "Test one success case and at least one invalid or failure case using synthetic data.",
+        "Document security assumptions, external dependencies, cleanup, and known limitations."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Automated tests and failure handling",
+      "acceptance_criteria": [
+        "Document automated tests and failure handling for Task Manager API.",
+        "Provide a focused implementation artifact and an expected request/response contract.",
+        "Test one success case and at least one invalid or failure case using synthetic data.",
+        "Document security assumptions, external dependencies, cleanup, and known limitations."
+      ]
+    },
+    {
+      "sequence": 5,
+      "title": "Documentation, operations and release review",
+      "acceptance_criteria": [
+        "Document documentation, operations and release review for Task Manager API.",
+        "Provide a focused implementation artifact and an expected request/response contract.",
+        "Test one success case and at least one invalid or failure case using synthetic data.",
+        "Document security assumptions, external dependencies, cleanup, and known limitations."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "contents": "# Task Manager API\n\n## Objective\nCreate a REST API with standard CRUD operations.\n\n## Runtime\nExpress 5.x on a supported Node.js LTS release. Install dependencies from the local package manifest/lockfile.\n\n## Required behavior\n- Create/list/get/update/delete tasks\n- Validate request data\n- Return structured errors\n- Test success and not-found paths\n\n## API contract\nDocument method, path, request body, authentication, response status/body, and expected errors for every endpoint.\n\n## Verification\nTest success, malformed input, not-found, unauthorized access where relevant, and one dependency failure. Record actual commands and results.\n\n## Security and cleanup\nUse only synthetic data; keep credentials in environment variables; remove temporary files/records after testing.\n"
+    },
+    {
+      "path": "src/app.js",
+      "language": "javascript",
+      "contents": "import express from 'express';\nconst app = express();\napp.use(express.json({ limit: '100kb' }));\napp.get('/health', (_req, res) => res.status(200).json({ status: 'ok' }));\n// TODO: implement the project feature groups as small route/service modules.\n// Register not-found and error-handling middleware after routes.\nexport default app;\n"
+    },
+    {
+      "path": "tests/acceptance-checklist.md",
+      "language": "markdown",
+      "contents": "# Acceptance checklist\n\n- [ ] API routes and status codes match the documented contract.\n- [ ] Request schemas reject missing, malformed, oversized and unsupported values.\n- [ ] Permission checks run server-side for every protected resource.\n- [ ] Error responses are consistent and do not reveal stack traces or secrets.\n- [ ] Automated tests cover normal, negative, boundary and dependency failure cases.\n- [ ] Setup/reset commands work from a clean checkout.\n- [ ] Logs, health checks and deployment smoke tests are documented.\n"
+    }
+  ],
+  "required_features": [
+    "Create/list/get/update/delete tasks",
+    "Validate request data",
+    "Return structured errors",
+    "Test success and not-found paths"
+  ],
+  "stretch_features": [
+    "Add request correlation IDs and a concise observability dashboard.",
+    "Add contract tests and a repeatable CI check.",
+    "Document a safe rollback and data-recovery procedure appropriate to the project."
+  ],
+  "acceptance_criteria": [
+    "Document every route with method, path, authentication, request fields and response/error contract.",
+    "Use supported Express 5 syntax and validate all untrusted input.",
+    "Use parameterized queries and transactions where persistence or multi-step state changes are involved.",
+    "Test success, bad input, authorization failure, not-found and dependency failure as applicable.",
+    "Keep secrets server-side and provide reproducible setup, smoke-test and cleanup instructions."
+  ],
+  "test_plan": [
+    "Start from a clean local checkout and follow the README commands.",
+    "Run automated tests and record their actual result.",
+    "Use an HTTP client to verify representative routes and status/body values.",
+    "Test one invalid request and one simulated dependency failure.",
+    "Review logs for secret leakage and document reset/cleanup steps."
+  ],
+  "rubric": [
+    {
+      "criterion": "Requirements and API contract",
+      "points": 20
+    },
+    {
+      "criterion": "Implementation and separation of concerns",
+      "points": 25
+    },
+    {
+      "criterion": "Validation, authorization and security",
+      "points": 25
+    },
+    {
+      "criterion": "Automated testing and failure handling",
+      "points": 20
+    },
+    {
+      "criterion": "Documentation and release readiness",
+      "points": 10
+    }
+  ],
+  "review_method": "Human review of source, API contract, actual local tests and documented evidence. CodeLeaf does not execute the starter project or provision external services.",
+  "reference_solution_file": "solutions/expressjs-project-002-reference.json",
+  "status": "draft",
+  "status_note": "Mapped to the attached PDF Section D. Requirements are complete at blueprint level; every project still needs an independently run implementation/review before publication."
+}

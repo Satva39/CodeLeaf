@@ -1,0 +1,155 @@
+{
+  "id": "ruby-lesson-233",
+  "slug": "ractor-ports-and-shareable-procs",
+  "title": "Ractor Ports and Shareable Procs",
+  "sequence": 233,
+  "module_id": "ruby-module-21",
+  "module_slug": "concurrency-and-asynchronous-programming",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "engineering-specialization",
+  "estimated_minutes": 14,
+  "prerequisites": [],
+  "previous_lesson_id": "ruby-lesson-232",
+  "next_lesson_id": "ruby-lesson-234",
+  "keywords": [
+    "ractor-ports-and-shareable-procs",
+    "concurrency-and-asynchronous-programming",
+    "ruby",
+    "newer-ractor-communication-interfaces",
+    "sharing-callable-objects",
+    "version-specific-behavior",
+    "testing-concurrency-constraints"
+  ],
+  "source_syllabus_number": 233,
+  "subtopics": [
+    "Newer Ractor communication interfaces",
+    "Sharing callable objects",
+    "Version-specific behavior",
+    "Testing concurrency constraints"
+  ],
+  "learning_outcomes": [
+    "Explain the role of ractor ports and shareable procs in a Ruby program and name the key rule involved.",
+    "Apply ractor ports and shareable procs in a small example and predict its result before running it.",
+    "Identify one boundary or failure case related to testing concurrency constraints and verify the intended behavior."
+  ],
+  "content": {
+    "intro": "Learn Ractor Ports and Shareable Procs through a visual model, a minimal Ruby example, and a practical check.",
+    "why_it_matters": "Understanding ractor ports and shareable procs helps you write code that is easier to explain, test, and maintain. It also helps separate Ruby language guarantees from runtime assumptions, dependency behavior, and application-specific rules.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Ractor Ports and Shareable Procs",
+        "asset_path": "diagrams/lesson-233-ractor-ports-and-shareable-procs.svg",
+        "alt_text": "Three-stage concept diagram for Ractor Ports and Shareable Procs.",
+        "caption": "Use this diagram to plan a small example, then verify exact behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Ractor Ports and Shareable Procs helps you reason about newer ractor communication interfaces. In Ruby, prefer a small example whose inputs and expected result are easy to explain. This lesson connects the syllabus topic to practical code and highlights where assumptions or edge cases matter."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to think about it",
+        "text": "Begin by identifying the key rule: Newer Ractor communication interfaces. Then connect it to Sharing callable objects. The remaining syllabus points—Version-specific behavior, Testing concurrency constraints—are useful checks before applying this in a larger project."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to cover",
+        "items": [
+          {
+            "title": "Newer Ractor communication interfaces",
+            "text": "Explain how newer ractor communication interfaces affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Sharing callable objects",
+            "text": "Explain how sharing callable objects affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Version-specific behavior",
+            "text": "Explain how version-specific behavior affects the example, the public interface, or the behavior learners need to verify."
+          },
+          {
+            "title": "Testing concurrency constraints",
+            "text": "Explain how testing concurrency constraints affects the example, the public interface, or the behavior learners need to verify."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Ractor Ports and Shareable Procs",
+        "language": "ruby",
+        "code": "puts defined?(Ractor) ? \"Ractor API available\" : \"Ractor API unavailable\"",
+        "expected_output": "Ractor API available on current CRuby versions that provide Ractor",
+        "execution_mode": "server-runner",
+        "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+        "dependencies": "Ruby standard library",
+        "notes": "Local Ruby execution is required. CodeLeaf’s existing playground only previews HTML/CSS/JavaScript; do not run arbitrary Ruby inside the FastAPI process."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming the happy path is enough",
+            "text": "Test an empty value, a boundary value, and one invalid value before depending on the behavior."
+          },
+          {
+            "title": "Treating an example as a universal rule",
+            "text": "Check Ruby version, runtime implementation, and third-party library documentation when behavior is version-sensitive."
+          },
+          {
+            "title": "Mixing too many concerns",
+            "text": "Separate input parsing, domain behavior, and output so each piece is easier to test."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Run the example as written, compare it with the expected result, and explain why each line supports ractor ports and shareable procs. Next change one input or condition and predict the result before running it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second example for ractor ports and shareable procs using a different input. Add one edge case from the syllabus list (Testing concurrency constraints), state the expected behavior, and write a small test or manual check that would catch a regression."
+      },
+      {
+        "type": "paragraph",
+        "title": "Run, troubleshoot, and reset",
+        "text": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed. If the command fails, confirm `ruby --version`, inspect the full error message, and verify that required standard-library or gem dependencies are installed. Reset by removing temporary files created by your experiment and returning the code to the smallest reproducible example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain ractor ports and shareable procs, identify its place in concurrency and asynchronous programming, run a focused example, and verify an important boundary. Revisit the linked exercise if this is a core topic; advanced runtime or framework examples remain draft until reviewed in a suitable environment."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-233-questions.json",
+    "run_instructions": "Save as lesson.rb and run `ruby lesson.rb` from a terminal. CodeLeaf currently has no isolated Ruby runner, so these examples should be run locally until one is deployed.",
+    "reset_steps": [
+      "Restore the original minimal example before trying another variation.",
+      "Remove only temporary sample data created for the lesson.",
+      "Keep credentials and personal data out of logs, fixtures, and screenshots."
+    ],
+    "guided_example": "Predict the output, run the example, and explain the relationship between newer ractor communication interfaces and sharing callable objects.",
+    "try_it_yourself": "Create one variation of ractor ports and shareable procs, test a normal input and one boundary input, and note any version or dependency assumptions.",
+    "progressive_hints": [
+      "Write down the input and output contract first.",
+      "Reduce the task to one relevant Ruby method or construct.",
+      "Add the boundary case and verify it independently."
+    ],
+    "accessibility_notes": "The diagram includes a text alternative and the lesson explains the flow in prose. Do not use color alone to infer the correct sequence.",
+    "execution_mode": "server-runner",
+    "execution_note": "CodeLeaf does not currently provide an isolated Ruby runner. Run Ruby examples locally; a production runner needs a separate sandbox with time, memory, filesystem, and network limits."
+  },
+  "exercise_files": [],
+  "sources": [
+    "https://docs.ruby-lang.org/en/4.0/",
+    "https://www.ruby-lang.org/en/documentation/"
+  ],
+  "status": "draft",
+  "status_note": "Original lesson authored from the listed PDF syllabus topics; requires technical and editorial review before publication."
+}

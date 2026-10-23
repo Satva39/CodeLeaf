@@ -1,0 +1,209 @@
+{
+  "id": "java-lesson-263",
+  "slug": "transactions-in-jdbc",
+  "title": "Transactions in JDBC",
+  "sequence": 263,
+  "module_id": "java-module-25",
+  "module_slug": "databases-and-jdbc",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional",
+  "estimated_minutes": 13,
+  "prerequisites": [],
+  "previous_lesson_id": "java-lesson-262",
+  "next_lesson_id": "java-lesson-264",
+  "keywords": [
+    "transactions",
+    "in",
+    "jdbc",
+    "auto-commit",
+    "commit",
+    "rollback",
+    "transaction",
+    "boundaries",
+    "isolation-level",
+    "concepts",
+    "handling",
+    "partial"
+  ],
+  "source_syllabus_number": 263,
+  "subtopics": [
+    "Auto-commit",
+    "Commit and rollback",
+    "Transaction boundaries",
+    "Isolation-level concepts",
+    "Handling partial failures"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of transactions in jdbc and identify when it is appropriate in a Java program.",
+    "Apply at least one of the lesson topics—auto-commit—in a small, readable example.",
+    "Identify one failure, compatibility, security, or resource-management concern and describe a safe response."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study transactions in jdbc with a short explanation, an original visual map, a Java example, and a check you can perform yourself. Focus on the relationship between the rule and the behavior rather than memorizing isolated syntax.",
+    "why_it_matters": "This concept matters because it helps you access database data safely with parameter binding, resource management, and transactions. In this lesson, focus on auto-commit and use a minimal example to check what the rule actually guarantees.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Transactions in JDBC: concept map",
+        "asset_path": "diagrams/lesson-263.svg",
+        "alt_text": "Four-stage diagram for Transactions in JDBC: Auto-commit; Commit and rollback; Transaction boundaries; Isolation-level concepts.",
+        "caption": "Visual summary of Transactions in JDBC; use it as a map while reading the explanation and testing the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "JDBC connects application logic to database drivers and transactions. Bind user values with `PreparedStatement`, define commit/rollback boundaries, and close connections, statements, and result sets reliably. Apply that reasoning specifically to auto-commit and confirm the result with the example or a targeted test. The important habit is to make the assumptions explicit and use the code example as a small experiment."
+      },
+      {
+        "type": "paragraph",
+        "title": "How the pieces fit",
+        "text": "Connect auto-commit with commit and rollback before choosing an implementation. The example is a small, observable case; extend it by changing one input and checking a boundary, invalid value, or compatibility limit where relevant."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Auto-commit",
+            "text": "JDBC connects application logic to database drivers and transactions. Bind user values with `PreparedStatement`, define commit/rollback boundaries, and close connections, statements, and result sets reliably. Apply that reasoning specifically to auto-commit and confirm the result with the example or a targeted test."
+          },
+          {
+            "title": "Commit and rollback",
+            "text": "Production readiness includes configuration, observability, reproducible artifacts, graceful shutdown, rollback planning, and compatibility checks—not just a successful local run."
+          },
+          {
+            "title": "Transaction boundaries",
+            "text": "Use Path and Files for modern file operations, choose byte or character APIs based on the data, and close resources reliably. Parse external files defensively because their contents may be incomplete or malformed."
+          },
+          {
+            "title": "Isolation-level concepts",
+            "text": "Use Path and Files for modern file operations, choose byte or character APIs based on the data, and close resources reliably. Parse external files defensively because their contents may be incomplete or malformed."
+          },
+          {
+            "title": "Handling partial failures",
+            "text": "JDBC connects application logic to database drivers and transactions. Bind user values with `PreparedStatement`, define commit/rollback boundaries, and close connections, statements, and result sets reliably. Apply that reasoning specifically to handling partial failures and confirm the result with the example or a targeted test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "java",
+        "code": "public class Main {\n    public static void main(String[] args) {\n        String sql = \"SELECT id, name FROM customer WHERE status = ?\";\n        System.out.println(sql);\n        System.out.println(\"Bind status with PreparedStatement.setString(...)\");\n    }\n}\n",
+        "expected_output": "A parameterized query shape is printed; this example does not connect to a database.",
+        "run_instructions": "Treat SQL as data access and use PreparedStatement for values. Database execution requires a configured JDBC driver and connection. For ordinary Java SE examples, use JDK 25, save a complete class as Main.java, and run `javac Main.java` followed by `java Main`. CodeLeaf does not execute Java in the browser; use a local JDK for these examples. Preview-only and configuration-file examples have their own version or filename notes.",
+        "reset_steps": "Restore the original example, remove any temporary output files it created, and rerun the baseline case. Do not leave credentials, generated private data, or large test files in the project directory."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Keep one clear hypothesis per experiment. Check the version, read the error message, test boundaries, and record what evidence supports your conclusion."
+      }
+    ],
+    "task": "Try it yourself: model transactions in jdbc with a local test database or a mocked boundary. Use parameters for values, define transaction boundaries, and verify that resources close when an error occurs.",
+    "task_acceptance_criteria": [
+      "The example demonstrates at least one listed topic from Transactions in JDBC.",
+      "The learner states the expected result before running or inspecting the example.",
+      "At least one boundary, failure, compatibility, or maintainability consideration is documented where relevant."
+    ],
+    "hints": [
+      "Start by identifying the contract or rule behind auto-commit.",
+      "Reduce the example to the smallest input that makes the behavior visible.",
+      "Test one boundary or failure case and compare the result with the expected behavior."
+    ],
+    "expected_output": "A parameterized query shape is printed; this example does not connect to a database.",
+    "run_mode": "server-runner",
+    "execution_notes": "Java requires a JDK or a separate isolated server runner. No Java sandbox is bundled with this content; never execute learner code inside the FastAPI process or public production container.",
+    "knowledge_check_file": "exams/question-files/lesson-263-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Applying the rule from memory without checking its exact contract.",
+        "why": "Small differences in type, scope, API version, or input shape can change the result.",
+        "fix": "Inspect the relevant official API/language documentation and build a minimal reproducer."
+      },
+      {
+        "problem": "Testing only a single happy path.",
+        "why": "Boundary values and failures often reveal assumptions hidden by the simplest example.",
+        "fix": "Add an empty, boundary, or invalid case and state the expected behavior before running it."
+      },
+      {
+        "problem": "Changing several things between runs.",
+        "why": "It becomes difficult to identify the actual cause of a different result.",
+        "fix": "Change one factor at a time and keep a short record of observed behavior."
+      }
+    ],
+    "summary": [
+      "Transactions in JDBC is best understood by connecting its contract to a small observable example.",
+      "Key syllabus points: Auto-commit, Commit and rollback, Transaction boundaries.",
+      "Use official versioned documentation and tests to confirm assumptions before relying on behavior in a larger application."
+    ],
+    "references": [
+      {
+        "title": "Learn Java",
+        "url": "https://dev.java/learn/"
+      },
+      {
+        "title": "Java SE 25 API Specification",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html"
+      },
+      {
+        "title": "Java JDBC API",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/api/java.sql/module-summary.html"
+      }
+    ]
+  },
+  "exercise_files": [
+    "../exercises/039-transactional-order-processor.json"
+  ],
+  "sources": [
+    {
+      "title": "Learn Java",
+      "url": "https://dev.java/learn/",
+      "publisher": "Oracle / dev.java",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "getting started",
+        "language basics",
+        "object-oriented programming",
+        "generics",
+        "lambdas",
+        "collections",
+        "streams",
+        "modules",
+        "JVM tools",
+        "security"
+      ]
+    },
+    {
+      "title": "Java SE 25 API Specification",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "standard-library types and methods",
+        "API contracts",
+        "java.base",
+        "java.sql",
+        "java.net.http",
+        "java.nio.file",
+        "java.util.concurrent"
+      ]
+    },
+    {
+      "title": "Java JDBC API",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/api/java.sql/module-summary.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "Connection",
+        "PreparedStatement",
+        "ResultSet",
+        "transactions",
+        "SQL exceptions"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Java curriculum outline and current official references; requires Java subject-matter review and local verification before publication."
+}

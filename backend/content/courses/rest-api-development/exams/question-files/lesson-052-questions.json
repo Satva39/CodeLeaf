@@ -1,0 +1,49 @@
+{
+  "id": "rest-api-development-knowledge-check-052",
+  "lesson_id": "rest-api-development-lesson-052",
+  "lesson_slug": "response-headers-for-api-behavior",
+  "title": "Knowledge check: Response Headers for API Behavior",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "questions": [
+    {
+      "id": "rest-api-development-q-052-01",
+      "type": "single_choice",
+      "prompt": "How should an API communicate the outcome of an operation?",
+      "options": [
+        "Use 401 whenever a record is missing, regardless of authentication state.",
+        "Return a stack trace to help clients infer the failure category.",
+        "Use a status code with the correct HTTP meaning and include stable headers and a safe response representation where appropriate.",
+        "Return 200 for all outcomes and put the real status only in a private server log."
+      ],
+      "answer_key": "Use a status code with the correct HTTP meaning and include stable headers and a safe response representation where appropriate.",
+      "explanation": "Use a status code with the correct HTTP meaning and include stable headers and a safe response representation where appropriate. This is especially relevant to “Response Headers for API Behavior” because the API contract must remain explicit and reviewable."
+    },
+    {
+      "id": "rest-api-development-q-052-02",
+      "type": "single_choice",
+      "prompt": "For the lesson “Response Headers for API Behavior”, which check provides the strongest practical evidence?",
+      "options": [
+        "Test against production records so the exercise cannot be repeated safely.",
+        "Assert the status code, required headers, response shape, and safe error behavior.",
+        "Rely on a code review comment without running any representative check.",
+        "Run one happy-path call and skip invalid, denied, and failure scenarios."
+      ],
+      "answer_key": "Assert the status code, required headers, response shape, and safe error behavior.",
+      "explanation": "A useful check is repeatable, tied to an observable contract, and includes an important negative or boundary scenario."
+    },
+    {
+      "id": "rest-api-development-q-052-03",
+      "type": "single_choice",
+      "prompt": "Which review warning is most relevant to “Response Headers for API Behavior”?",
+      "options": [
+        "Status codes contradict the outcome or errors reveal internal details.",
+        "The expected behavior and relevant failure cases are documented.",
+        "A representative test can reproduce the result.",
+        "The API avoids exposing internal secrets and personal data."
+      ],
+      "answer_key": "Status codes contradict the outcome or errors reveal internal details.",
+      "explanation": "This finding weakens a core API guarantee and should be treated as a design or release issue, not only a style concern."
+    }
+  ]
+}

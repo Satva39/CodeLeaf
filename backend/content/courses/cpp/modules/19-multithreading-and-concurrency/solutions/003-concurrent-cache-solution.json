@@ -1,0 +1,18 @@
+{
+  "id": "cpp-exercise-solution-036",
+  "exercise_id": "cpp-exercise-036",
+  "title": "Concurrent cache reference solution notes",
+  "language": "cpp",
+  "answer": "#include <iostream>\n#include <mutex>\n#include <optional>\n#include <string>\n#include <unordered_map>\nclass Cache {\npublic:\n    void put(std::string key, int value) { std::lock_guard lock(m_); values_[std::move(key)] = value; }\n    std::optional<int> get(const std::string& key) const {\n        std::lock_guard lock(m_); auto it = values_.find(key);\n        if (it == values_.end()) return std::nullopt;\n        return it->second;\n    }\nprivate: mutable std::mutex m_; std::unordered_map<std::string, int> values_;\n};\nint main() { Cache cache; cache.put(\"answer\", 42); std::cout << cache.get(\"answer\").value_or(0) << '\\n'; }\n",
+  "explanation": "42",
+  "manual_validation_checklist": [
+    "Compile locally with C++20 and -Wall -Wextra -Wpedantic (add the external library named in the solution when applicable).",
+    "Test normal inputs and at least one boundary/failure case named in the exercise prompt.",
+    "Check integer range, object lifetime, resource cleanup and error handling where relevant.",
+    "Every access to the map is protected by the same mutex. Returning copied values avoids references that could outlive a lock or be invalidated.",
+    "Keep this solution in repository-only protected content; do not include it in learner API responses."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only reference notes; replace with a reviewed implementation and test suite before publishing the exercise."
+}

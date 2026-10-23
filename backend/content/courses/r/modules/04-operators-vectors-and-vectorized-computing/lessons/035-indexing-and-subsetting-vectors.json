@@ -1,0 +1,191 @@
+{
+  "id": "r-lesson-035",
+  "slug": "indexing-and-subsetting-vectors",
+  "title": "Indexing and Subsetting Vectors",
+  "sequence": 35,
+  "module_id": "r-module-04",
+  "module_slug": "operators-vectors-and-vectorized-computing",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "r-lesson-034"
+  ],
+  "previous_lesson_id": "r-lesson-034",
+  "next_lesson_id": "r-lesson-036",
+  "keywords": [
+    "indexing-and-subsetting-vectors",
+    "operators-vectors-and-vectorized-computing",
+    "positive-integer-indexing",
+    "negative-indexing",
+    "logical-indexing",
+    "character-indexing-by-name",
+    "using-which",
+    "combining-multiple-conditions",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 35,
+  "subtopics": [
+    "Positive Integer Indexing",
+    "Negative Indexing",
+    "Logical Indexing",
+    "Character Indexing by Name",
+    "Using which()",
+    "Combining Multiple Conditions"
+  ],
+  "learning_outcomes": [
+    "Explain the role of indexing and subsetting vectors and identify its main inputs, outputs or constraints.",
+    "Apply positive integer indexing in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Indexing and Subsetting Vectors is part of Operators, Vectors, and Vectorized Computing. Start with positive integer indexing and connect it to the worked example and expected result.",
+    "why_it_matters": "Indexing returns selected elements; logical indices are often the clearest way to filter vectors.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Indexing and Subsetting Vectors",
+        "asset_path": "diagrams/module-04-overview.svg",
+        "alt_text": "Concept visual supporting lesson 35, Indexing and Subsetting Vectors. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Indexing returns selected elements; logical indices are often the clearest way to filter vectors. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Positive Integer Indexing",
+            "text": "Explain positive integer indexing in the context of indexing and subsetting vectors, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Negative Indexing",
+            "text": "Explain negative indexing in the context of indexing and subsetting vectors, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Logical Indexing",
+            "text": "Explain logical indexing in the context of indexing and subsetting vectors, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Character Indexing by Name",
+            "text": "Explain character indexing by name in the context of indexing and subsetting vectors, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Using which()",
+            "text": "Build the smallest example for using which(), inspect the returned object, and confirm its names, type and shape before using it downstream."
+          },
+          {
+            "title": "Combining Multiple Conditions",
+            "text": "Explain combining multiple conditions in the context of indexing and subsetting vectors, connect it to the example, and verify one expected result or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Select only values above a threshold and test what happens when the input has NA. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Indexing and Subsetting Vectors",
+        "language": "r",
+        "code": "values <- c(12, 18, 23, 31)\nvalues[values > 20]",
+        "expected_output": "[1] 23 31",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "Logical indexing selects the values meeting the condition. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For indexing and subsetting vectors, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-035-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply indexing and subsetting vectors to a small synthetic example. Start with positive integer indexing, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the positive integer indexing idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible indexing and subsetting vectors example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Positive Integer Indexing” and identify the input and output before coding.",
+      "Inspect the type and shape of the result, then test one ordinary and one boundary input.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: Indexing returns selected elements; logical indices are often the clearest way to filter vectors.",
+      "Practice: Select only values above a threshold and test what happens when the input has NA.",
+      "Source syllabus focus: Positive Integer Indexing. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply indexing and subsetting vectors to a small synthetic example. Start with positive integer indexing, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible indexing and subsetting vectors example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Positive Integer Indexing” and identify the input and output before coding.",
+    "Inspect the type and shape of the result, then test one ordinary and one boundary input.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: Indexing returns selected elements; logical indices are often the clearest way to filter vectors.",
+    "Practice: Select only values above a threshold and test what happens when the input has NA.",
+    "Source syllabus focus: Positive Integer Indexing. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 4 — Operators, Vectors, and Vectorized Computing, lesson 35: Indexing and Subsetting Vectors.",
+    "Official documentation: https://cran.r-project.org/doc/manuals/r-release/R-intro.html",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [
+    "../exercises/008-find-maximum-and-minimum-values-in-a-dataset.json"
+  ],
+  "status": "draft"
+}

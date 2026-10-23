@@ -1,0 +1,161 @@
+{
+  "id": "redis-lesson-168",
+  "slug": "network-and-protocol-optimization",
+  "title": "Network and Protocol Optimization",
+  "sequence": 168,
+  "module_id": "redis-module-21",
+  "module_slug": "redis-performance-and-memory-optimization",
+  "level": "advanced to professional",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-167"
+  ],
+  "previous_lesson_id": "redis-lesson-167",
+  "next_lesson_id": "redis-lesson-169",
+  "keywords": [
+    "network-and-protocol-optimization",
+    "round-trip-reduction",
+    "pipelining",
+    "connection-reuse",
+    "payload-sizes",
+    "network-throughput-and-latency",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 168,
+  "subtopics": [
+    "Round-trip reduction",
+    "Pipelining",
+    "Connection reuse",
+    "Payload sizes",
+    "Network throughput and latency"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Network and Protocol Optimization and distinguish it from a related Redis concept.",
+    "Apply or trace Network and Protocol Optimization in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Network and Protocol Optimization and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Network and Protocol Optimization in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Network and Protocol Optimization helps implement measure latency, complexity, memory, and workload shape before optimizing. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Network and Protocol Optimization",
+        "asset_path": "diagrams/lesson-168-network-and-protocol-optimization.svg",
+        "alt_text": "Concept diagram for Network and Protocol Optimization, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Network and Protocol Optimization; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Network and Protocol Optimization helps implement measure latency, complexity, memory, and workload shape before optimizing. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Network and Protocol Optimization, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Round-trip reduction",
+            "text": "Connect Round-trip reduction to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Pipelining",
+            "text": "Connect Pipelining to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Connection reuse",
+            "text": "Connect Connection reuse to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Payload sizes",
+            "text": "Connect Payload sizes to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Network throughput and latency",
+            "text": "Connect Network throughput and latency to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Network and Protocol Optimization",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "TYPE demo:key\nTTL demo:key\nSCAN 0 MATCH demo:* COUNT 20",
+        "expected_output": "Returns a type, remaining TTL (or -1/-2 where applicable), and a cursor/key page.",
+        "run_instructions": "SCAN COUNT is a hint; continue while the cursor is non-zero and do not assume one page is complete.",
+        "reset_steps": "Read-only inspection; no key is created.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Network and Protocol Optimization. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Network and Protocol Optimization in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Network and Protocol Optimization.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "Returns a type, remaining TTL (or -1/-2 where applicable), and a cursor/key page.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-168-questions.json",
+    "recap": [
+      "Network and Protocol Optimization is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Diagnosing latency issues",
+      "url": "https://redis.io/docs/latest/management/optimization/latency/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "latency sources, slow commands, round trips and diagnosis"
+      ]
+    },
+    {
+      "title": "Redis latency monitoring",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/latency-monitor/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "SLOWLOG, LATENCY and operational diagnostics"
+      ]
+    },
+    {
+      "title": "Memory optimization",
+      "url": "https://redis.io/docs/latest/management/optimization/memory-optimization/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "compact encodings, memory trade-offs and optimization"
+      ]
+    },
+    {
+      "title": "Redis benchmarks",
+      "url": "https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/benchmarks/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "repeatable benchmarking methodology"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

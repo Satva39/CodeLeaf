@@ -1,0 +1,187 @@
+{
+  "id": "bash-lesson-052",
+  "slug": "file-and-directory-conditions",
+  "title": "File and Directory Conditions",
+  "sequence": 52,
+  "module_id": "bash-module-06",
+  "module_slug": "operators-and-control-flow",
+  "level": "beginner-to-intermediate",
+  "difficulty": "beginner-to-intermediate",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "bash-lesson-051"
+  ],
+  "previous_lesson_id": "bash-lesson-051",
+  "next_lesson_id": "bash-lesson-053",
+  "keywords": [
+    "file",
+    "and",
+    "directory",
+    "conditions",
+    "existence",
+    "regular",
+    "files",
+    "directories",
+    "read",
+    "write",
+    "execute",
+    "permissions"
+  ],
+  "source_syllabus_number": 52,
+  "subtopics": [
+    "File existence",
+    "Regular files and directories",
+    "Read, write, and execute permissions",
+    "File size and timestamps",
+    "Symbolic links and file-type checks"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of File and Directory Conditions and identify at least two relevant syllabus points.",
+    "Apply file and directory conditions in a small Bash example and verify the expected output or status.",
+    "Identify one edge case or failure mode and state how to test it safely."
+  ],
+  "content": {
+    "intro": "File tests can check existence, type, readability, writability, execution permission, size, and symbolic-link properties.",
+    "why_it_matters": "File and Directory Conditions matters because reliable shell automation depends on making this behavior explicit, testing its boundaries, and documenting environment assumptions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 06 visual roadmap",
+        "asset_path": "diagrams/module-06-overview.svg",
+        "alt_text": "Overview roadmap for Module 6: Operators and Control Flow, listing lessons 48 through 59 in curriculum order. Lesson focus: File and Directory Conditions.",
+        "caption": "Module roadmap for context. For this lesson, focus on: File existence; Regular files and directories; Read, write, and execute permissions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The central idea",
+        "text": "Conditional logic selects a branch based on an exit status or expression. Test the command or expression directly, and handle unknown, empty, and invalid cases explicitly."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the supplied syllabus",
+        "items": [
+          {
+            "title": "File existence",
+            "text": "Use a disposable test directory with a present file, a missing path, and a pathname containing spaces; check the resulting status before changing data."
+          },
+          {
+            "title": "Regular files and directories",
+            "text": "Use a disposable test directory with a present file, a missing path, and a pathname containing spaces; check the resulting status before changing data."
+          },
+          {
+            "title": "Read, write, and execute permissions",
+            "text": "Use a disposable test directory with a present file, a missing path, and a pathname containing spaces; check the resulting status before changing data."
+          },
+          {
+            "title": "File size and timestamps",
+            "text": "Use a disposable test directory with a present file, a missing path, and a pathname containing spaces; check the resulting status before changing data."
+          },
+          {
+            "title": "Symbolic links and file-type checks",
+            "text": "Use a disposable test directory with a present file, a missing path, and a pathname containing spaces; check the resulting status before changing data."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How it fits into Bash",
+        "text": "File tests can check existence, type, readability, writability, execution permission, size, and symbolic-link properties. A test can race with later filesystem changes, so re-check critical assumptions close to the operation and handle failures."
+      },
+      {
+        "type": "code",
+        "language": "bash",
+        "execution_mode": "manual-terminal",
+        "code": "path='notes.txt'\nif [[ -d $path ]]; then printf 'directory\\n'; else printf 'not a directory\\n'; fi",
+        "expected_output": "not a directory (assuming notes.txt is not a directory)",
+        "run_instructions": "Save the snippet in a temporary practice file and run it with the locally installed Bash interpreter. The CodeLeaf in-page preview displays reference output only; it does not execute Bash code. Some examples require commands already installed on your machine.",
+        "reset_steps": "Discard the temporary file or reset the editor to the original snippet. The examples are designed not to modify important data."
+      },
+      {
+        "type": "callout",
+        "title": "Watch out",
+        "text": "Make loop termination explicit and include a normal, an edge, and a failure case in your manual checks. Do not assume the same command options or newer Bash features exist on every operating system."
+      },
+      {
+        "type": "paragraph",
+        "title": "Check your result",
+        "text": "Compare the observed output and exit status with the reference behavior. Change one input at a time, include a boundary or invalid input, and note what differs on your target Bash/utility version."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety note",
+        "text": "Use a local test directory, avoid secrets in commands/history/logs, and check the installed interpreter with `bash --version`. This course remains draft until technical examples and assessments receive subject-matter review."
+      }
+    ],
+    "task": "Build a small local example for “File and Directory Conditions” using synthetic input or a disposable practice directory. Explain what the command should do, check its output and exit status, and test one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "Use an example aligned with the lesson and preserve arguments, paths, or streams correctly.",
+      "Record the observed output and exit status.",
+      "Test one boundary case or expected failure.",
+      "State the Bash version and any external utility dependency that matters."
+    ],
+    "hints": [
+      "Reduce the problem to one command or one small function first.",
+      "Use quoting and printf to make argument boundaries visible.",
+      "Check exit statuses as well as printed output; use syntax-only validation before testing changes."
+    ],
+    "expected_output": "A documented example for “File and Directory Conditions” with the observed output/status, one tested boundary case, and an explicit statement of any version or utility dependency.",
+    "run_mode": "static-validation",
+    "troubleshooting": [
+      "If the snippet uses an external command, check availability with `command -v NAME` and consult that program’s local help.",
+      "If behavior differs by operating system or Bash version, record `bash --version` and check the official manual linked below.",
+      "For syntax-only validation run `bash -n script.sh`; this parses but does not execute the script."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming a successful-looking output means the command succeeded.",
+        "why": "Output and exit status are separate signals, and a later command may replace `$?`.",
+        "fix": "Capture important statuses immediately and check all relevant pipeline stages."
+      },
+      {
+        "problem": "Copying example commands straight into a production path.",
+        "why": "Real paths, permissions, input names, and external utility versions differ.",
+        "fix": "Use a disposable fixture and inspect the planned side effects first."
+      },
+      {
+        "problem": "Treating Bash-specific syntax as portable `sh` syntax.",
+        "why": "Arrays, `[[ ... ]]`, process substitution, and some parameter operators are extensions.",
+        "fix": "Name the interpreter and test the minimum supported version."
+      }
+    ],
+    "summary": [
+      "File and Directory Conditions has specific syntax and behavior; verify it rather than relying on guesswork.",
+      "Preserve argument boundaries and keep shell commands separate from untrusted data.",
+      "Test successful, boundary, and failure cases in a safe environment."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-052-questions.json"
+  },
+  "exercise_files": [
+    "../exercises/ex-006-determine-whether-a-supplied-path-points-to-a-file-or-directory.json"
+  ],
+  "sources": [
+    {
+      "id": "gnu-bash-manual-5-3",
+      "title": "GNU Bash Reference Manual, Edition 5.3",
+      "url": "https://www.gnu.org/s/bash/manual/bash.html",
+      "publisher": "GNU Project / Free Software Foundation",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "Bash syntax and parsing",
+        "quoting and expansion",
+        "variables and arrays",
+        "control flow",
+        "functions",
+        "redirection and pipelines",
+        "processes and traps",
+        "startup files and shell options",
+        "version compatibility"
+      ],
+      "source_type": "official language reference",
+      "notes": "The primary technical reference for Bash-specific behavior. Verify examples against the interpreter installed on the target system."
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft content mapped to Bash.pdf Section B lesson 52. Technical examples and grading require review before publication."
+}

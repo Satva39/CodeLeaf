@@ -1,0 +1,56 @@
+{
+  "id": "django-exercise-009",
+  "slug": "email-notifications-and-external-webhooks",
+  "title": "Email Notifications and External Webhooks",
+  "type": "practical",
+  "lesson_id": "django-lesson-153",
+  "module_id": "django-module-15",
+  "difficulty": "intermediate",
+  "sequence": 9,
+  "prompt": "Send a transactional email, receive a simulated webhook, verify its authenticity, and safely handle duplicate deliveries.\n\nSubmission: a small reviewable artifact, relevant tests, expected outputs, one failure/boundary case, and version/environment notes. Use synthetic data. Django/Python server code is not executed by CodeLeaf browser preview; local or human review is required.",
+  "objective": "Email Notifications and External Webhooks",
+  "target_skills": [
+    "Configure a development-safe email backend.",
+    "Verify provider signature using its documented canonical payload.",
+    "Make event handling idempotent and test duplicate delivery."
+  ],
+  "starter": {
+    "language": "text",
+    "content": "import hmac\n\ndef verify(secret, payload, supplied):\n    expected = hmac.digest(secret, payload, \"sha256\").hex()\n    return hmac.compare_digest(expected, supplied)",
+    "code": "import hmac\n\ndef verify(secret, payload, supplied):\n    expected = hmac.digest(secret, payload, \"sha256\").hex()\n    return hmac.compare_digest(expected, supplied)"
+  },
+  "expected_output": "Use a fake provider test fixture, not a live payment/email endpoint.",
+  "public_tests": [
+    {
+      "name": "Required-concept smoke check",
+      "required_strings": [
+        "compare_digest",
+        "event_id"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Invalid signatures are rejected.",
+    "The same valid event delivered twice produces one business effect.",
+    "Email configuration is kept outside source code.",
+    "State whether verification was local, static, or human-reviewed.",
+    "Do not claim a build/deployment or external integration was tested unless it was actually run."
+  ],
+  "hints": [
+    "Use synthetic payloads and example secrets in local tests.",
+    "Verify raw-body signature before parsing or trusting payload content.",
+    "Record event IDs under a uniqueness constraint where possible."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "compare_digest",
+      "event_id"
+    ]
+  },
+  "grading_method": "Required-string smoke check plus human review of technical correctness, tests, safe handling, expected result and reproducibility. This does not execute arbitrary Python/Django code.",
+  "retry_policy": "Retries are allowed after reviewing feedback; the platform backend owns its uniform XP/idempotency rules.",
+  "solution_file": "../solutions/009-email-notifications-and-external-webhooks-solution.json",
+  "status": "draft",
+  "status_note": "Practical exercise from Section C of the supplied Django curriculum; content and grading need review before publication."
+}

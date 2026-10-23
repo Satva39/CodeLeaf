@@ -1,0 +1,201 @@
+{
+  "id": "java-lesson-085",
+  "slug": "varargs-and-array-based-parameters",
+  "title": "Varargs and Array-Based Parameters",
+  "sequence": 85,
+  "module_id": "java-module-09",
+  "module_slug": "arrays-and-basic-data-organization",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 9,
+  "prerequisites": [],
+  "previous_lesson_id": "java-lesson-084",
+  "next_lesson_id": "java-lesson-086",
+  "keywords": [
+    "varargs",
+    "and",
+    "array-based",
+    "parameters",
+    "variable-length",
+    "arguments",
+    "method",
+    "syntax",
+    "passing",
+    "arrays",
+    "methods",
+    "overload"
+  ],
+  "source_syllabus_number": 85,
+  "subtopics": [
+    "Variable-length arguments",
+    "Varargs method syntax",
+    "Passing arrays to varargs methods",
+    "Overload resolution considerations"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of varargs and array-based parameters and identify when it is appropriate in a Java program.",
+    "Apply at least one of the lesson topics—variable-length arguments—in a small, readable example.",
+    "Predict the example result and check it against the stated output or a boundary-case test."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study varargs and array-based parameters with a short explanation, an original visual map, a Java example, and a check you can perform yourself. Focus on the relationship between the rule and the behavior rather than memorizing isolated syntax.",
+    "why_it_matters": "This concept matters because it helps you organize indexed data and avoid incorrect indexes or accidental sharing when copying arrays. In this lesson, focus on variable-length arguments and use a minimal example to check what the rule actually guarantees.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Varargs and Array-Based Parameters: concept map",
+        "asset_path": "diagrams/lesson-085.svg",
+        "alt_text": "Four-stage diagram for Varargs and Array-Based Parameters: Variable-length arguments; Varargs method syntax; Passing arrays to varargs methods; Overload resolution considerations.",
+        "caption": "Visual summary of Varargs and Array-Based Parameters; use it as a map while reading the explanation and testing the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "A variable has a declared type and a scope. Initialize local variables before reading them; fields have defined default values, but relying on defaults can hide missing business logic. The important habit is to make the assumptions explicit and use the code example as a small experiment."
+      },
+      {
+        "type": "paragraph",
+        "title": "How the pieces fit",
+        "text": "Connect variable-length arguments with varargs method syntax before choosing an implementation. The example is a small, observable case; extend it by changing one input and checking a boundary, invalid value, or compatibility limit where relevant."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Variable-length arguments",
+            "text": "A variable has a declared type and a scope. Initialize local variables before reading them; fields have defined default values, but relying on defaults can hide missing business logic."
+          },
+          {
+            "title": "Varargs method syntax",
+            "text": "Arrays are fixed-length indexed containers. Check index bounds, iterate from the correct starting point, and choose a suitable search or sorting algorithm for the data and its existing order."
+          },
+          {
+            "title": "Passing arrays to varargs methods",
+            "text": "Arrays are fixed-length indexed containers. Check index bounds, iterate from the correct starting point, and choose a suitable search or sorting algorithm for the data and its existing order."
+          },
+          {
+            "title": "Overload resolution considerations",
+            "text": "Use Path and Files for modern file operations, choose byte or character APIs based on the data, and close resources reliably. Parse external files defensively because their contents may be incomplete or malformed."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "java",
+        "code": "public class Main {\n    public static void main(String[] args) {\n        int[] scores = {72, 85, 90};\n        int total = 0;\n        for (int score : scores) total += score;\n        System.out.println(\"Total=\" + total + \", average=\" + total / (double) scores.length);\n    }\n}\n",
+        "expected_output": "Total=247, average=82.33333333333333",
+        "run_instructions": "Traverse each element once and use a suitable numeric type for averages. For ordinary Java SE examples, use JDK 25, save a complete class as Main.java, and run `javac Main.java` followed by `java Main`. CodeLeaf does not execute Java in the browser; use a local JDK for these examples. Preview-only and configuration-file examples have their own version or filename notes.",
+        "reset_steps": "Restore the original example, remove any temporary output files it created, and rerun the baseline case. Do not leave credentials, generated private data, or large test files in the project directory."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Keep one clear hypothesis per experiment. Check the version, read the error message, test boundaries, and record what evidence supports your conclusion."
+      }
+    ],
+    "task": "Try it yourself: build the smallest program that demonstrates variable-length arguments. Change one input, predict the result, and add one boundary or invalid case before considering the task complete.",
+    "task_acceptance_criteria": [
+      "The example demonstrates at least one listed topic from Varargs and Array-Based Parameters.",
+      "The learner states the expected result before running or inspecting the example.",
+      "At least one boundary, failure, compatibility, or maintainability consideration is documented where relevant."
+    ],
+    "hints": [
+      "Start by identifying the contract or rule behind variable-length arguments.",
+      "Reduce the example to the smallest input that makes the behavior visible.",
+      "Test one boundary or failure case and compare the result with the expected behavior."
+    ],
+    "expected_output": "Total=247, average=82.33333333333333",
+    "run_mode": "server-runner",
+    "execution_notes": "Java requires a JDK or a separate isolated server runner. No Java sandbox is bundled with this content; never execute learner code inside the FastAPI process or public production container.",
+    "knowledge_check_file": "exams/question-files/lesson-085-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Applying the rule from memory without checking its exact contract.",
+        "why": "Small differences in type, scope, API version, or input shape can change the result.",
+        "fix": "Inspect the relevant official API/language documentation and build a minimal reproducer."
+      },
+      {
+        "problem": "Testing only a single happy path.",
+        "why": "Boundary values and failures often reveal assumptions hidden by the simplest example.",
+        "fix": "Add an empty, boundary, or invalid case and state the expected behavior before running it."
+      },
+      {
+        "problem": "Changing several things between runs.",
+        "why": "It becomes difficult to identify the actual cause of a different result.",
+        "fix": "Change one factor at a time and keep a short record of observed behavior."
+      }
+    ],
+    "summary": [
+      "Varargs and Array-Based Parameters is best understood by connecting its contract to a small observable example.",
+      "Key syllabus points: Variable-length arguments, Varargs method syntax, Passing arrays to varargs methods.",
+      "Use official versioned documentation and tests to confirm assumptions before relying on behavior in a larger application."
+    ],
+    "references": [
+      {
+        "title": "Learn Java",
+        "url": "https://dev.java/learn/"
+      },
+      {
+        "title": "Java SE 25 API Specification",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html"
+      },
+      {
+        "title": "Java SE 25 Specifications",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/specs/index.html"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Learn Java",
+      "url": "https://dev.java/learn/",
+      "publisher": "Oracle / dev.java",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "getting started",
+        "language basics",
+        "object-oriented programming",
+        "generics",
+        "lambdas",
+        "collections",
+        "streams",
+        "modules",
+        "JVM tools",
+        "security"
+      ]
+    },
+    {
+      "title": "Java SE 25 API Specification",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "standard-library types and methods",
+        "API contracts",
+        "java.base",
+        "java.sql",
+        "java.net.http",
+        "java.nio.file",
+        "java.util.concurrent"
+      ]
+    },
+    {
+      "title": "Java SE 25 Specifications",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/specs/index.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "Java Language Specification",
+        "Java Virtual Machine Specification",
+        "preview feature classification",
+        "class-file and JDK tool specifications"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Java curriculum outline and current official references; requires Java subject-matter review and local verification before publication."
+}

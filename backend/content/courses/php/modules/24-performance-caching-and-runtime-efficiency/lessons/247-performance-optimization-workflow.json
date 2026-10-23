@@ -1,0 +1,193 @@
+{
+  "id": "php-lesson-247",
+  "slug": "performance-optimization-workflow",
+  "title": "Performance Optimization Workflow",
+  "sequence": 247,
+  "module_id": "php-module-24",
+  "module_slug": "performance-caching-and-runtime-efficiency",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 13,
+  "prerequisites": [
+    "php-lesson-246"
+  ],
+  "previous_lesson_id": "php-lesson-246",
+  "next_lesson_id": "php-lesson-248",
+  "keywords": [
+    "performance optimization workflow",
+    "performance, caching, and runtime efficiency",
+    "defining a performance goal",
+    "profiling a representative workload",
+    "evaluating changes",
+    "regression monitoring",
+    "documenting trade-offs",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 247,
+  "subtopics": [
+    "Defining a performance goal.",
+    "Profiling a representative workload.",
+    "Evaluating changes.",
+    "Regression monitoring.",
+    "Documenting trade-offs."
+  ],
+  "learning_outcomes": [
+    "Explain what performance optimization workflow contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: defining a performance goal.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Performance work starts with a measurable target and representative workload. Profile before changing code, compare the same conditions after a change, and consider memory, cache invalidation, and regression risk. In this lesson, focus on defining a performance goal; then compare it with profiling a representative workload. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use performance optimization workflow when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Measure before optimizing",
+        "asset_path": "diagrams/php-performance-loop.svg",
+        "alt_text": "Define a target, profile representative traffic, make a narrow change, and measure for regressions.",
+        "caption": "Collect evidence before changing code"
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Performance work starts with a measurable target and representative workload. Profile before changing code, compare the same conditions after a change, and consider memory, cache invalidation, and regression risk. For performance optimization workflow, begin with defining a performance goal. Also distinguish profiling a representative workload; evaluating changes; regression monitoring. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Defining a performance goal",
+            "text": "Know when to use defining a performance goal, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Profiling a representative workload",
+            "text": "Know when to use profiling a representative workload, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Evaluating changes",
+            "text": "Know when to use evaluating changes, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Regression monitoring",
+            "text": "Know when to use regression monitoring, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Documenting trade-offs",
+            "text": "Know when to use documenting trade-offs, what input or program state it changes, and which boundary case is worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Performance Optimization Workflow",
+        "language": "php",
+        "code": "<?php\n$values = range(1, 100);\necho array_sum($values) . PHP_EOL;",
+        "expected_output": "5050",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Measure a representative workload before optimization, then repeat the measurement and watch for regressions."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for performance optimization workflow from top to bottom. Start by identifying defining a performance goal, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for performance optimization workflow that demonstrates \"defining a performance goal\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of defining a performance goal.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "5050",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-247-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Performance Optimization Workflow is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Measure a representative workload before optimization, then repeat the measurement and watch for regressions."
+    ],
+    "references": [
+      {
+        "title": "PHP Manual",
+        "url": "https://www.php.net/manual/en/",
+        "publisher": "PHP Documentation Group",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "language syntax",
+          "built-in functions",
+          "runtime behavior",
+          "classes and objects"
+        ]
+      },
+      {
+        "title": "PHPUnit supported versions",
+        "url": "https://phpunit.de/supported-versions.html",
+        "publisher": "PHPUnit",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "PHPUnit version compatibility",
+          "support lifecycle"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "PHP Manual",
+      "url": "https://www.php.net/manual/en/",
+      "publisher": "PHP Documentation Group",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "language syntax",
+        "built-in functions",
+        "runtime behavior",
+        "classes and objects"
+      ]
+    },
+    {
+      "title": "PHPUnit supported versions",
+      "url": "https://phpunit.de/supported-versions.html",
+      "publisher": "PHPUnit",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "PHPUnit version compatibility",
+        "support lifecycle"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

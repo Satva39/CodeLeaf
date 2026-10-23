@@ -1,0 +1,221 @@
+{
+  "id": "scipy-lesson-136",
+  "slug": "scipy-project-review-and-final-assessment",
+  "title": "SciPy Project Review and Final Assessment",
+  "sequence": 136,
+  "module_id": "scipy-module-20",
+  "module_slug": "capstone-integration-and-specialization",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "capstone",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "scipy-lesson-135"
+  ],
+  "previous_lesson_id": "scipy-lesson-135",
+  "next_lesson_id": null,
+  "keywords": [
+    "scipy project review and final assessment",
+    "integrated scipy workflow",
+    "explain the problem and chosen method",
+    "justify solver and parameter choices",
+    "validate results independently",
+    "benchmark performance where relevant",
+    "document known limitations"
+  ],
+  "source_syllabus_number": 136,
+  "source_syllabus_page": 28,
+  "subtopics": [
+    "Explain the problem and chosen method",
+    "Justify solver and parameter choices",
+    "Validate results independently",
+    "Benchmark performance where relevant",
+    "Document known limitations",
+    "Present a reproducible final project"
+  ],
+  "learning_outcomes": [
+    "Describe the role of explain the problem and chosen method in scipy project review and final assessment.",
+    "Use a suitable SciPy API or numerical procedure related to final project validation in a small deterministic example.",
+    "Validate the result with a relevant tolerance, shape/domain check, residual, diagnostic, or independent calculation."
+  ],
+  "content": {
+    "intro": "In this lesson, work through **SciPy Project Review and Final Assessment** using the syllabus terms **Explain the problem and chosen method** and **Justify solver and parameter choices**. Start from a clearly stated numerical question, choose the smallest appropriate SciPy tool, and inspect the result rather than treating the returned number as self-validating.",
+    "why_it_matters": "SciPy Project Review and Final Assessment supports reliable scientific computing by turning a mathematical or data-analysis problem into a repeatable computation. It is useful when you need to choose between methods, understand assumptions, and report limits rather than merely produce a number.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: SciPy Project Review and Final Assessment",
+        "asset_path": "diagrams/lesson-136-scipy-project-review-and-final-assessment.svg",
+        "alt_text": "Lesson 136 visual for SciPy Project Review and Final Assessment. Stages show Explain the problem and chosen method, final project validation, and Present a reproducible final project.",
+        "caption": "Concept map for lesson 136; the labels identify the core idea, method family, and validation focus."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "**SciPy Project Review and Final Assessment** is best approached as a deliberate numerical workflow. The supplied curriculum highlights **Explain the problem and chosen method**, along with **Justify solver and parameter choices**, **Validate results independently**, **Benchmark performance where relevant**. Define what the inputs mean and what result would count as credible before increasing problem size or complexity."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics from the supplied curriculum",
+        "items": [
+          "Explain the problem and chosen method",
+          "Justify solver and parameter choices",
+          "Validate results independently",
+          "Benchmark performance where relevant",
+          "Document known limitations",
+          "Present a reproducible final project"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about the method",
+        "text": "Connect the mathematics to the documented API family **final project validation**. Check input shape and dtype, units and domain assumptions, and whether the method is exact, approximate, iterative, or statistical. The output should be accompanied by an error estimate or a separate check when the API provides one or when the problem allows it."
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "import numpy as np\nfrom scipy.linalg import solve\n\nA = np.array([[3.0, 1.0], [1.0, 2.0]])\nb = np.array([9.0, 8.0])\nx = solve(A, b)\nnp.testing.assert_allclose(A @ x, b)\nprint('validated', np.linalg.norm(A @ x - b) < 1e-10)",
+        "expected_output": "validated True",
+        "execution_mode": "static-validation",
+        "run_instructions": "Create and activate an isolated Python virtual environment, install SciPy and NumPy with `python -m pip install scipy numpy`, save the code as a `.py` file, and run it using that environment. This lesson displays examples; it does not execute learner code on the production API.",
+        "reset_steps": "Examples use small synthetic values. Re-run with the original values to restore the stated output. Examples that write files use a temporary directory and remove it automatically."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "First identify the input and the quantity the code computes. Follow the call through the API **final project validation**, then compare the displayed result to the expected behavior. Change one input or parameter and predict what should happen before re-running. For an iterative solver, also inspect its status and stopping criteria."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          "Change one input related to explain the problem and chosen method and predict the result before running the example.",
+          "Add a check for one edge case relevant to scipy project review and final assessment (for example, invalid shape, boundary input, non-finite data, or a solver that does not converge).",
+          "Write one sentence describing an assumption or limitation that a reader should know before trusting the result."
+        ]
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          "Topic 136: SciPy Project Review and Final Assessment.",
+          "Keep the curriculum focus visible: Explain the problem and chosen method.",
+          "Choose methods from their documented assumptions and validate numerical output independently where possible."
+        ]
+      }
+    ],
+    "expected_output": "validated True",
+    "run_instructions": "Run locally with the SciPy version used by the course environment. `static-validation` means the example is displayed and syntax-checked; it is not run inside the CodeLeaf production API.",
+    "reset_steps": "Recreate the small synthetic inputs and temporary output directory before each run; no persistent platform activity is changed by viewing a lesson.",
+    "hints": [
+      "Start by writing down the intended quantity and the role of explain the problem and chosen method.",
+      "Run the smallest complete example and compare observed results with the expected behavior.",
+      "If results differ, inspect shape, dtype, valid domain, solver status, tolerances, and the installed SciPy version before changing the method."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-136-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Choosing an algorithm before stating the problem and assumptions.",
+        "why": "Two algorithms that look similar can have different domains, stability, performance, and convergence behavior.",
+        "fix": "Write down input shape, units/domain, the quantity to compute, and a validation check before selecting an API."
+      },
+      {
+        "problem": "Treating returned values as exact truths.",
+        "why": "Floating-point arithmetic and iterative numerical algorithms use finite precision and stopping conditions.",
+        "fix": "Inspect success/status fields and error estimates where available; use scale-appropriate tolerances and independent checks."
+      },
+      {
+        "problem": "Copying an example without checking version or edge cases.",
+        "why": "Signatures and legacy status can change between releases, and example data rarely covers boundary behavior.",
+        "fix": "Check the installed SciPy version, official documentation, input constraints, and a failure case."
+      }
+    ],
+    "summary": [
+      "Topic 136 is SciPy Project Review and Final Assessment; its complete subtopic list is kept in this lesson file.",
+      "The demonstration uses final project validation with synthetic values.",
+      "This generated lesson remains draft pending technical review and execution under the targeted release."
+    ],
+    "references": [
+      {
+        "title": "SciPy User Guide",
+        "url": "https://docs.scipy.org/doc/scipy/tutorial/index.html",
+        "publisher": "SciPy project",
+        "checked_on": "2026-10-17",
+        "source_type": "official documentation",
+        "supports": [
+          "Package overview",
+          "Algorithm selection",
+          "Scientific computing workflow"
+        ]
+      },
+      {
+        "title": "SciPy User Guide",
+        "url": "https://docs.scipy.org/doc/scipy/tutorial/index.html",
+        "publisher": "SciPy project",
+        "checked_on": "2026-10-17",
+        "source_type": "official documentation",
+        "supports": [
+          "Package overview",
+          "Algorithm selection",
+          "Scientific computing workflow"
+        ]
+      },
+      {
+        "title": "SciPy release notes",
+        "url": "https://docs.scipy.org/doc/scipy/release/",
+        "publisher": "SciPy project",
+        "checked_on": "2026-10-17",
+        "source_type": "official release documentation",
+        "supports": [
+          "Version compatibility",
+          "Deprecations",
+          "Migration review"
+        ]
+      }
+    ],
+    "accessibility_notes": "The SVG has a title and description, each stage is labeled in text, and the adjacent lesson text explains the sequence without relying on color alone. Code examples are text and can be copied into a local editor.",
+    "version_notes": "Reference baseline: the official SciPy 1.18.0 manual visible on 2026-10-17. The locally available validation runtime reported SciPy 1.17.0; the examples have not been represented as run against 1.18.0. Recheck release notes and behavior before publishing."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "SciPy User Guide",
+      "url": "https://docs.scipy.org/doc/scipy/tutorial/index.html",
+      "publisher": "SciPy project",
+      "checked_on": "2026-10-17",
+      "source_type": "official documentation",
+      "supports": [
+        "Package overview",
+        "Algorithm selection",
+        "Scientific computing workflow"
+      ]
+    },
+    {
+      "title": "SciPy User Guide",
+      "url": "https://docs.scipy.org/doc/scipy/tutorial/index.html",
+      "publisher": "SciPy project",
+      "checked_on": "2026-10-17",
+      "source_type": "official documentation",
+      "supports": [
+        "Package overview",
+        "Algorithm selection",
+        "Scientific computing workflow"
+      ]
+    },
+    {
+      "title": "SciPy release notes",
+      "url": "https://docs.scipy.org/doc/scipy/release/",
+      "publisher": "SciPy project",
+      "checked_on": "2026-10-17",
+      "source_type": "official release documentation",
+      "supports": [
+        "Version compatibility",
+        "Deprecations",
+        "Migration review"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the supplied SciPy curriculum with original explanations, synthetic examples, and original SVG visuals. Subject-matter review, targeted-version execution, accessibility review, and publication approval remain required."
+}

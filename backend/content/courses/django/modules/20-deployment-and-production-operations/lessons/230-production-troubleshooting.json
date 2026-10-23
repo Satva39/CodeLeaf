@@ -1,0 +1,203 @@
+{
+  "id": "django-lesson-230",
+  "slug": "production-troubleshooting",
+  "title": "Production Troubleshooting",
+  "sequence": 230,
+  "module_id": "django-module-20",
+  "module_slug": "deployment-and-production-operations",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "optional-specialization",
+  "estimated_minutes": 20,
+  "prerequisites": [
+    "django-lesson-229"
+  ],
+  "previous_lesson_id": "django-lesson-229",
+  "next_lesson_id": "django-lesson-231",
+  "keywords": [
+    "production-troubleshooting",
+    "deployment-and-production-operations",
+    "django",
+    "server-errors",
+    "missing-static-assets",
+    "database-connection-failures",
+    "misconfigured-proxy-headers",
+    "differences-between-local-and-production-environments"
+  ],
+  "source_syllabus_number": 230,
+  "subtopics": [
+    "Server errors",
+    "Missing static assets",
+    "Database connection failures",
+    "Misconfigured proxy headers",
+    "Differences between local and production environments"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of production troubleshooting and at least two listed subtopics.",
+    "Interpret the production troubleshooting example and predict its expected result.",
+    "Choose a verification step and identify one version, security, data, or troubleshooting consideration."
+  ],
+  "content": {
+    "intro": "Learn production troubleshooting through a compact visual, an inspectable Django example, and a practical verification task.",
+    "why_it_matters": "Production Troubleshooting matters because a Django project has to behave predictably across requests, database state, configuration, and deployments. Understanding this piece makes the surrounding application easier to test, maintain, and secure.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Visual guide: Production Troubleshooting",
+        "asset_path": "diagrams/module-20-overview.svg",
+        "alt_text": "Overview visual for module 20, Deployment and Production Operations; use it as a roadmap for the lesson topic Production Troubleshooting.",
+        "caption": "Use this visual to connect Production Troubleshooting to the broader flow; it is an overview, not a substitute for the worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "This lesson examines production troubleshooting as part of deployment and production operations. The objective is to understand the behavior, connect it to the listed subtopics, and verify it with a small example rather than relying on memorized syntax."
+      },
+      {
+        "type": "paragraph",
+        "title": "What to cover",
+        "text": "The source syllabus for this lesson names: Server errors; Missing static assets; Database connection failures; Misconfigured proxy headers; Differences between local and production environments. Keep these distinct concepts together: know what each item does, when it applies, and what assumption must be verified in your project."
+      },
+      {
+        "type": "list",
+        "title": "Lesson concepts and practical notes",
+        "items": [
+          {
+            "title": "Server errors",
+            "text": "Treat Server errors as a reproducible diagnostic: capture the exact input and observed result, isolate one hypothesis, and add a regression test once the cause is fixed. Avoid exposing internal stack traces or secrets to public users."
+          },
+          {
+            "title": "Missing static assets",
+            "text": "For Missing static assets, identify the Django component responsible, the inputs and outputs it owns, and the boundary conditions that matter. Use the accompanying example as a starting point, verify it with the official versioned documentation, and record one test demonstrating expected behavior."
+          },
+          {
+            "title": "Database connection failures",
+            "text": "Connection capacity is a system-wide budget spanning app workers, threads, pools and database limits. Coordinate concurrency and timeouts rather than merely increasing a connection count."
+          },
+          {
+            "title": "Misconfigured proxy headers",
+            "text": "Misconfigured proxy headers is part of the request/response contract. Match routes and methods explicitly, return an appropriate response/status, and test success, missing-resource and unauthorized paths."
+          },
+          {
+            "title": "Differences between local and production environments",
+            "text": "Production readiness requires environment-specific settings, secrets, allowed hosts, HTTPS, database/static/media configuration, checks, tested migration/rollback plans, logging, monitoring, and backups."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Production Troubleshooting",
+        "language": "python",
+        "code": "from django.http import HttpResponse\n\ndef method_example(request):\n    if request.method != \"GET\":\n        return HttpResponse(\"Method not allowed\", status=405)\n    response = HttpResponse(\"Ready\", content_type=\"text/plain\")\n    response[\"X-Content-Type-Options\"] = \"nosniff\"\n    return response",
+        "expected_output": "A GET receives a text response; other methods receive HTTP 405.",
+        "execution_mode": "server-runner",
+        "run_instructions": "Open a local project using the documented Django 6.1-compatible Python environment. If this snippet depends on model names, URL configuration, settings, or an optional package, add those prerequisites before running it. Otherwise inspect it as a static example. CodeLeaf browser preview does not execute Django/Python server code.",
+        "troubleshooting": "Choose methods based on the operation’s semantics and use security headers consistent with the deployment policy."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "First identify the input and the responsible Django component. Next trace how the example moves through “Production Troubleshooting” and the related concept “Server errors”. Predict the result before running or inspecting it. Finally compare the observed behavior with the expected result and the cited official documentation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Change one input or configuration choice related to Server errors. Write down the expected outcome, test one normal case and one invalid or boundary case, then record what changed. Do not add real credentials or sensitive production data."
+      },
+      {
+        "type": "paragraph",
+        "title": "Common mistakes and fixes",
+        "text": "Common pitfalls include skipping a required configuration/import, copying a fragment without its model or URL context, trusting client input, or treating a development-only behavior as production-ready. Check the earliest failing assumption, consult the version-specific docs, and add a regression test for the failure you found."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to describe production troubleshooting, explain the listed topics, inspect the example, and choose an appropriate verification step. Keep the scope and version caveat visible when sharing your solution."
+      }
+    ],
+    "execution_mode": "server-runner",
+    "expected_result": "A GET receives a text response; other methods receive HTTP 405.",
+    "run_instructions": "Use an isolated local project and synthetic data. Follow the code block instructions; setup-dependent fragments must be integrated into the relevant app. Static examples can be reviewed without execution.",
+    "troubleshooting": [
+      "Choose methods based on the operation’s semantics and use security headers consistent with the deployment policy.",
+      "Confirm the active Python virtual environment, settings module, app registration, URL routing, dependencies, and database migrations before debugging application behavior."
+    ],
+    "reset_steps": "Reset only local practice data or recreate the disposable development database as documented for your project. Never delete production data or migration history to reset an exercise.",
+    "try_it_yourself": "Apply Server errors to a small local example, then record a normal case, an invalid/boundary case, and the expected versus observed result.",
+    "progressive_hints": [
+      "Identify which Django component owns this behavior.",
+      "Trace a single request or object through the example before adding more features.",
+      "Use the relevant linked official documentation and a test for the failure case."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Copying a framework fragment without its imports, configuration, model, or URL context.",
+        "why": "The snippet may be incomplete when separated from a Django project.",
+        "fix": "Use the stated prerequisites and run the relevant management check or focused test."
+      },
+      {
+        "problem": "Trusting input or relying only on a happy-path example.",
+        "why": "Invalid values, unauthorized requests, or concurrent activity can violate assumptions.",
+        "fix": "Validate on the server and add a negative or boundary test."
+      },
+      {
+        "problem": "Treating the development sample as production-ready.",
+        "why": "Production hosting, secrets, storage, monitoring and resource limits differ from local use.",
+        "fix": "Follow the current deployment/security references and document untested areas."
+      }
+    ],
+    "recap": "Production Troubleshooting connects Server errors; Missing static assets; Database connection failures; Misconfigured proxy headers; Differences between local and production environments. Verify behavior in your project and keep any version-specific assumption documented.",
+    "knowledge_check_file": "exams/question-files/lesson-230-questions.json",
+    "content_review_status": "draft",
+    "accessibility_notes": "Use descriptive headings, meaningful labels/alt text, keyboard-accessible interactions, and text explanations alongside the diagram. Never rely on color alone.",
+    "version_notes": "Examples target Django 6.1 concepts and must be checked against the installed supported patch release. Optional third-party integrations are labelled separately; snippets with dependencies are not claimed to have been executed.",
+    "source_syllabus_topics_reviewed": true,
+    "topic_explanations_count": 5,
+    "run_mode": "static-validation",
+    "task": "Apply Server errors to a small local example, then record a normal case, an invalid/boundary case, and the expected versus observed result.",
+    "task_acceptance_criteria": [
+      "Record a predicted result before running or inspecting the example.",
+      "Include one normal case and one invalid or boundary case.",
+      "State the Python/Django version and verification method used."
+    ],
+    "hints": [
+      "Identify which Django component owns this behavior.",
+      "Trace a single request or object through the example before adding more features.",
+      "Use the relevant linked official documentation and a test for the failure case."
+    ],
+    "solution_notes": "Suggested approach: identify the responsible Django component, keep input validation and authorization at the server boundary where relevant, then verify production troubleshooting with a focused test. This is a learning hint, not a claim that code was executed.",
+    "summary": [
+      "Production Troubleshooting is part of deployment and production operations and should be understood alongside its listed subtopics.",
+      "The worked example is a starting point; review its prerequisites and version notes before local execution.",
+      "Verify the expected behavior with normal and failure cases and keep the result reproducible."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "django-checklist",
+      "title": "Deployment checklist",
+      "url": "https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/",
+      "publisher": "Django Software Foundation",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "production settings",
+        "secrets",
+        "deployment review"
+      ]
+    },
+    {
+      "id": "django-release-612",
+      "title": "Django 6.1.2 release notes",
+      "url": "https://docs.djangoproject.com/en/6.1/releases/6.1.2/",
+      "publisher": "Django Software Foundation",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "security maintenance",
+        "patch release behavior"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Django curriculum; pending Django-specialist and instructional review before publication."
+}

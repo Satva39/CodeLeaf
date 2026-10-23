@@ -1,0 +1,63 @@
+{
+  "id": "github-actions-exercise-033",
+  "slug": "review-an-action-dependency",
+  "title": "Review an action dependency",
+  "type": "coding",
+  "lesson_id": "github-actions-lesson-039",
+  "module_id": "github-actions-module-06",
+  "difficulty": "easy",
+  "sequence": 33,
+  "prompt": "Document how you would review an action owner, source, inputs, outputs, release practices, and immutable pin.",
+  "objective": "Demonstrate the behavior of review an action dependency and capture verifiable evidence.",
+  "target_skills": [
+    "actions",
+    "workflow YAML",
+    "validation",
+    "safe automation"
+  ],
+  "starter": {
+    "language": "yaml",
+    "code": "name: Reusable action step\non: workflow_dispatch\npermissions:\n  contents: read\njobs:\n  example:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: Run a small check\n        run: echo \"Check completed\"",
+    "execution_mode": "workflow-fragment"
+  },
+  "expected_output": "A reviewed workflow or design note satisfying: uses:, SHA, inputs. Verify behavior on a disposable repository where execution is required; a static sketch is not proof of a live deployment.",
+  "public_tests": [
+    {
+      "name": "Required evidence check",
+      "required_strings": [
+        "uses:",
+        "SHA",
+        "inputs"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Include or explain `uses:`.",
+    "Include or explain `SHA`.",
+    "Include or explain `inputs`.",
+    "Explain one validation result or limitation.",
+    "Do not include a real secret or use production resources."
+  ],
+  "hints": [
+    "First identify the trigger, input, and expected result.",
+    "Start with read-only permissions and a disposable branch or test environment.",
+    "Compare your result with the linked lesson and official documentation; distinguish a configuration sketch from a live integration."
+  ],
+  "solution": {
+    "answer": null,
+    "explanation": "The detailed reference solution is stored in a protected repository-only JSON file; it is not intended for a learner-facing response."
+  },
+  "solution_file": "../solutions/033-review-an-action-dependency-solution.json",
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "uses:",
+      "SHA",
+      "inputs"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus human review for workflow semantics and security boundaries.",
+  "retry_policy": "Allow retries; incorrect submissions do not award XP. The platform awards exercise XP only after server-verified successful completion and applies idempotency per activity.",
+  "status": "draft",
+  "status_note": "Source mapping: Course reinforcement practice; original learning task adapted to CodeLeaf structure. Starter example aligned with its linked lesson; review and replace any remaining repository-specific placeholders."
+}

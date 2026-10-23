@@ -1,0 +1,56 @@
+{
+  "id": "r-exercise-037",
+  "slug": "develop-a-time-series-forecasting-workflow",
+  "title": "Develop a time-series forecasting workflow",
+  "type": "short_answer",
+  "lesson_id": "r-lesson-231",
+  "module_id": "r-module-22",
+  "sequence": 37,
+  "difficulty": "advanced",
+  "prompt": "Use a synthetic time series to define the forecast horizon, split by time, compare a baseline and inspect residuals.",
+  "objective": "Practice time-series analysis, diagnostics, evaluation with explicit acceptance criteria and a reproducible result.",
+  "target_skills": [
+    "Time-series analysis",
+    "diagnostics",
+    "evaluation"
+  ],
+  "starter": {
+    "language": "r",
+    "source_code": "monthly <- ts(c(10, 12, 11, 15, 16, 18), frequency = 12, start = c(2025, 1))\nplot(monthly)\ndiff(monthly)",
+    "mode": "static-validation"
+  },
+  "expected_output": "Do not randomly shuffle a time series split; compare against a naive baseline and state uncertainty.",
+  "public_tests": [
+    {
+      "name": "Includes core concept",
+      "description": "The submission demonstrates ts(."
+    },
+    {
+      "name": "Includes validation or outcome",
+      "description": "The submission also demonstrates diff(."
+    }
+  ],
+  "acceptance_criteria": [
+    "The submission addresses the task and all required core concepts.",
+    "Expected behavior and an edge case are described and checked.",
+    "Input assumptions, missing-value handling and output shape are documented where relevant.",
+    "Code is readable, uses appropriate R constructs and avoids destructive/external side effects.",
+    "Any result derived from statistics includes assumptions and relevant limitations."
+  ],
+  "hints": [
+    "Identify the input, output and key R concept: Time-series analysis, diagnostics, evaluation.",
+    "Do not randomly shuffle a time series split; compare against a naive baseline and state uncertainty.",
+    "Test a normal case, a boundary/failure case, and verify the output independently."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "ts(",
+      "diff("
+    ]
+  },
+  "grading_method": "Draft/static token check only. The current platform grader can check whether the submitted text contains these strings, but it cannot execute R or prove program correctness. Keep unpublished and use human review or a separately isolated R runner before enabling XP-bearing completion.",
+  "retry_policy": "Allow learner retries in a reviewed course policy; this content file does not override platform retry or XP policy.",
+  "solution_file": "../solutions/037-develop-a-time-series-forecasting-workflow-solution.json",
+  "status": "draft"
+}

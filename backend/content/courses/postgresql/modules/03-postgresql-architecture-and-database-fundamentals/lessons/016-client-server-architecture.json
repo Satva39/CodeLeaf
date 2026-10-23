@@ -1,0 +1,147 @@
+{
+  "id": "postgresql-lesson-016",
+  "slug": "client-server-architecture",
+  "title": "Client–Server Architecture",
+  "sequence": 16,
+  "module_id": "postgresql-module-03",
+  "module_slug": "postgresql-architecture-and-database-fundamentals",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "postgresql-lesson-015"
+  ],
+  "previous_lesson_id": "postgresql-lesson-015",
+  "next_lesson_id": "postgresql-lesson-017",
+  "keywords": [
+    "client-server-architecture",
+    "postgresql-architecture-and-database-fundamentals",
+    "postgresql-clients-and-the-database-server",
+    "client-connections-and-sessions",
+    "query-submission-and-results",
+    "database-drivers-and-connection-protocols"
+  ],
+  "source_syllabus_number": 16,
+  "subtopics": [
+    "PostgreSQL clients and the database server",
+    "Client connections and sessions",
+    "Query submission and results",
+    "Database drivers and connection protocols",
+    "Local versus remote connections"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose and main terms of Client–Server Architecture.",
+    "Use or interpret an appropriate PostgreSQL example connected to postgresql clients and the database server.",
+    "Identify one edge case and select a safe way to verify the expected result."
+  ],
+  "content": {
+    "intro": "This lesson focuses on Client–Server Architecture. Its primary job is to help you understand how clients, sessions, server processes, snapshots and storage relate to one another. The listed PDF subtopics define the coverage expected here; work through them in order and connect each one to an example, edge case and checkable result.",
+    "why_it_matters": "This topic matters because PostgreSQL systems must preserve correct results as data grows and more sessions or services interact with it. Practicing client–server architecture teaches you to make assumptions explicit, apply the right SQL or operational tool, and verify behavior instead of relying on a demonstration that only worked once.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 03 Overview",
+        "asset_path": "diagrams/module-03-overview.svg",
+        "alt_text": "Four-step overview for module 3, PostgreSQL Architecture and Database Fundamentals: PostgreSQL Database Organization, Client–Server Architecture, PostgreSQL Server Processes, and verify/test/document.",
+        "caption": "Visual aid for Client–Server Architecture. Use it alongside the subtopics and worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Keep the problem small: understand how clients, sessions, server processes, snapshots and storage relate to one another. A PostgreSQL feature should be chosen for the semantics it provides, not just because it is available. Before executing a change, state the inputs, expected output and boundary conditions. The example below is intentionally small enough to inspect; it illustrates the idea but is not a substitute for a test against your schema and PostgreSQL version."
+      },
+      {
+        "type": "list",
+        "title": "Coverage from the attached curriculum",
+        "items": [
+          {
+            "title": "PostgreSQL clients and the database server",
+            "text": "Relate this point to client–server architecture: define the expected behavior, one edge case, and a query or check that would provide evidence."
+          },
+          {
+            "title": "Client connections and sessions",
+            "text": "Relate this point to client–server architecture: define the expected behavior, one edge case, and a query or check that would provide evidence."
+          },
+          {
+            "title": "Query submission and results",
+            "text": "Relate this point to client–server architecture: define the expected behavior, one edge case, and a query or check that would provide evidence."
+          },
+          {
+            "title": "Database drivers and connection protocols",
+            "text": "Bind values as parameters rather than concatenating user input, and return only clean connections to the pool."
+          },
+          {
+            "title": "Local versus remote connections",
+            "text": "Relate this point to client–server architecture: define the expected behavior, one edge case, and a query or check that would provide evidence."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Client–Server Architecture",
+        "language": "sql",
+        "code": "SELECT version() AS postgres_version;",
+        "expected_output": "One row containing the PostgreSQL server version.",
+        "safety_note": "Read-only query.",
+        "run_instructions": "Run after connecting to the database.",
+        "reset_steps": "For a read-only SELECT or inspection command, no reset is needed. For DDL/DML, use a disposable database; capture the starting state, run the example, inspect the result, and ROLLBACK or drop the lab objects as appropriate. Do not use production data or credentials.",
+        "execution_mode": "query-simulation",
+        "limitations": "CodeLeaf currently previews HTML/CSS/JavaScript only; it does not execute PostgreSQL queries, shell commands or Python in the lesson page. Treat the sample as inspectable code unless you run it yourself in an approved isolated environment. Python examples require a separate isolated runner.",
+        "schema_assumptions": "Run after connecting to the database."
+      },
+      {
+        "type": "callout",
+        "title": "Practical checkpoint",
+        "text": "Version note: PostgreSQL 18.6 is the primary reference. PostgreSQL 19 beta/development features are not assumed to be stable."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-016-questions.json"
+  },
+  "task": "Create a short practice artifact for “Client–Server Architecture”: explain its goal, show one example linked to “PostgreSQL clients and the database server”, state the expected result, and include one edge/failure case and verification method. Use a disposable database or static artifact as appropriate.",
+  "hints": [
+    "Start with the listed subtopics, especially “PostgreSQL clients and the database server”, and describe the expected behavior in your own words.",
+    "Run or inspect the smallest example that demonstrates the behavior; do not add unrelated features before it is verified.",
+    "When the result surprises you, capture the exact SQL/error, check version and permissions, and change one assumption at a time."
+  ],
+  "expected_output": "A reviewable note or query for Client–Server Architecture, with an explanation of “PostgreSQL clients and the database server”, expected behavior, and a documented edge-case check.",
+  "run_mode": "query-simulation",
+  "common_mistakes": [
+    {
+      "problem": "Copying the example without checking its assumptions.",
+      "why": "Object names, data types, privileges, extensions and data distribution affect database behavior.",
+      "fix": "List schema/version assumptions and test with a tiny synthetic dataset first."
+    },
+    {
+      "problem": "Treating a single successful query as proof of production readiness.",
+      "why": "A happy-path result does not test invalid input, concurrent sessions, permissions, recovery or query performance.",
+      "fix": "Add one negative/edge case and record the evidence that confirms the expected behavior."
+    },
+    {
+      "problem": "Making a production change directly from a lesson.",
+      "why": "DDL, data updates, role changes and operational commands can affect data or availability.",
+      "fix": "Use an isolated lab, reviewed migration, least privilege, rollback/recovery plan and a second-person review for production."
+    }
+  ],
+  "summary": [
+    "Client–Server Architecture fits into the broader goal to understand how clients, sessions, server processes, snapshots and storage relate to one another.",
+    "Use the curriculum subtopics as a completeness checklist: PostgreSQL clients and the database server, Client connections and sessions, Query submission and results.",
+    "State the schema/version assumptions and verify one normal case plus an edge case before trusting the result."
+  ],
+  "sources": [
+    {
+      "title": "Architectural Fundamentals",
+      "url": "https://www.postgresql.org/docs/18/tutorial-arch.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checked_on": "2026-10-15",
+      "supports": [
+        "Architectural Fundamentals; lesson 16 is a teaching adaptation and should be checked against this official reference."
+      ],
+      "source_type": "official documentation"
+    }
+  ],
+  "exercise_files": [],
+  "status": "draft",
+  "status_note": "Draft teaching content generated from the full PostgreSQL.pdf syllabus. Examples and operational advice require technical review and PostgreSQL 18.6 test validation before publication."
+}

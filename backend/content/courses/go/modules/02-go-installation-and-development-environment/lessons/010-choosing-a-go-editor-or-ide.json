@@ -1,0 +1,266 @@
+{
+  "id": "go-lesson-010",
+  "slug": "choosing-a-go-editor-or-ide",
+  "title": "Choosing a Go Editor or IDE",
+  "sequence": 10,
+  "module_id": "go-module-02",
+  "module_slug": "go-installation-and-development-environment",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "go-lesson-009"
+  ],
+  "previous_lesson_id": "go-lesson-009",
+  "next_lesson_id": "go-lesson-011",
+  "keywords": [
+    "choosing a go editor or ide",
+    "visual studio code and its go extension",
+    "goland and other ides",
+    "vim and terminal based editors",
+    "autocomplete navigation and diagnostics",
+    "configuring formatting and code analysis",
+    "Go",
+    "Golang"
+  ],
+  "source_syllabus_number": 10,
+  "subtopics": [
+    "Visual Studio Code and its Go extension",
+    "GoLand and other IDEs",
+    "Vim and terminal-based editors",
+    "Autocomplete, navigation, and diagnostics",
+    "Configuring formatting and code analysis"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and behavior of choosing a go editor or ide.",
+    "Apply at least one lesson concept—visual studio code and its go extension—in a small Go example or workflow.",
+    "Predict a representative result, then test a boundary case and explain any difference."
+  ],
+  "exercise_files": [],
+  "content": {
+    "intro": "Choosing a Go Editor or IDE is part of the foundation for using Go reliably. Start by identifying the goal, checking the toolchain or runtime assumptions, and reproducing the result with the documented Go commands. Do not assume that a command or setting is identical on every operating system.",
+    "why_it_matters": "You need this topic to set up a repeatable workflow and distinguish an installation/configuration problem from a language or application defect.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 2 overview: Go Installation and Development Environment",
+        "asset_path": "diagrams/module-02-overview.svg",
+        "alt_text": "Overview of Module 2, Go Installation and Development Environment; this lesson is lesson 10 in the ordered module sequence.",
+        "caption": "Use the module map to place “Choosing a Go Editor or IDE” within the larger sequence, then return to the individual code and practice below."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Choosing a Go Editor or IDE is part of the foundation for using Go reliably. Start by identifying the goal, checking the toolchain or runtime assumptions, and reproducing the result with the documented Go commands. Do not assume that a command or setting is identical on every operating system."
+      },
+      {
+        "type": "list",
+        "title": "Topics covered in this lesson",
+        "items": [
+          {
+            "title": "Visual Studio Code and its Go extension",
+            "text": "Be able to explain visual studio code and its go extension, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "GoLand and other IDEs",
+            "text": "Be able to explain goland and other ides, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Vim and terminal-based editors",
+            "text": "Be able to explain vim and terminal-based editors, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Autocomplete, navigation, and diagnostics",
+            "text": "Be able to explain autocomplete, navigation, and diagnostics, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Configuring formatting and code analysis",
+            "text": "Be able to explain configuring formatting and code analysis, identify the inputs or program state it affects, and name one boundary case worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Choosing a Go Editor or IDE",
+        "language": "bash",
+        "code": "// Common Go workflow (run from the project folder):\n//   go mod init example.com/hello\n//   gofmt -w .\n//   go test ./...\n//   go run .",
+        "expected_output": "The module is initialized, code is formatted and tests run before execution.",
+        "run_mode": "static-validation",
+        "run_instructions": "Run commands one at a time and inspect the first error before continuing."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through the example",
+        "text": "First, identify the input or initial state in the example for choosing a go editor or ide. Next, trace the operation or contract that matters, and predict the result before running it. If the example depends on a version-specific feature, a driver, or an external service, follow the stated prerequisites rather than assuming it works in a browser preview."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to one subtopic—Visual Studio Code and its Go extension—and add a second case that could fail or behave differently. Write down the expected result before testing."
+      }
+    ],
+    "task": "Create a small example connected to “Choosing a Go Editor or IDE”. Use Visual Studio Code and its Go extension as the starting point, predict the output, then add one invalid, empty, or boundary case and document its result.",
+    "task_acceptance_criteria": [
+      "The example demonstrates visual studio code and its go extension or a closely related concept.",
+      "Inputs, relevant state changes, and expected output are clear.",
+      "At least one boundary case is deliberately tested or documented.",
+      "Errors are handled honestly and no success state is reported when the operation fails."
+    ],
+    "hints": [
+      "Start from the simplest example related to visual studio code and its go extension.",
+      "Predict the result manually and annotate the value that changes at each step.",
+      "Run `gofmt` and the appropriate local `go run`, `go test`, `go vet`, or inspection command when prerequisites are available."
+    ],
+    "expected_output": "The module is initialized, code is formatted and tests run before execution.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-010-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the happy-path output proves all inputs are safe.",
+        "why": "Empty, malformed, boundary, or concurrent cases may follow different paths.",
+        "fix": "Add focused tests for a normal input and at least one relevant edge case."
+      },
+      {
+        "problem": "Ignoring returned errors or external-system status.",
+        "why": "Go APIs commonly report expected failures as explicit error values.",
+        "fix": "Check errors close to the operation, add useful context when propagating, and clean up resources."
+      },
+      {
+        "problem": "Using an API or syntax without checking the selected Go version.",
+        "why": "Language and standard-library capabilities can change between releases.",
+        "fix": "Record `go version`, inspect the `go` directive, and read official release notes for version-specific topics."
+      }
+    ],
+    "summary": [
+      "Choosing a Go Editor or IDE provides a reusable rule or workflow for Go programs.",
+      "The subtopics to revisit are: Visual Studio Code and its Go extension; GoLand and other IDEs; Vim and terminal-based editors; Autocomplete, navigation, and diagnostics; Configuring formatting and code analysis.",
+      "Prefer a small reproducible example, explicit errors, appropriate tests, and version-matched official documentation."
+    ],
+    "references": [
+      {
+        "title": "Go Documentation",
+        "url": "https://go.dev/doc/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "tutorials",
+          "language concepts",
+          "tooling",
+          "application development"
+        ]
+      },
+      {
+        "title": "The Go Programming Language Specification",
+        "url": "https://go.dev/ref/spec",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "syntax",
+          "types",
+          "control flow",
+          "interfaces"
+        ]
+      },
+      {
+        "title": "Go Installation",
+        "url": "https://go.dev/doc/install",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "installation",
+          "supported releases",
+          "environment setup"
+        ]
+      },
+      {
+        "title": "Go Release History",
+        "url": "https://go.dev/doc/devel/release",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "version compatibility",
+          "security releases",
+          "latest supported patch releases"
+        ]
+      },
+      {
+        "title": "Go Command Reference",
+        "url": "https://go.dev/cmd/go/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "go run",
+          "go build",
+          "go test",
+          "go vet"
+        ]
+      }
+    ],
+    "accessibility_note": "The diagram includes descriptive alt text and a text caption. Code examples are also described in prose; do not rely on color alone to understand a sequence.",
+    "execution_note": "Run commands one at a time and inspect the first error before continuing. Examples that need a database driver, external service, isolated execution environment, or version-specific feature are labeled as static examples and should not be treated as already executed."
+  },
+  "sources": [
+    {
+      "title": "Go Documentation",
+      "url": "https://go.dev/doc/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tutorials",
+        "language concepts",
+        "tooling",
+        "application development"
+      ]
+    },
+    {
+      "title": "The Go Programming Language Specification",
+      "url": "https://go.dev/ref/spec",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "syntax",
+        "types",
+        "control flow",
+        "interfaces"
+      ]
+    },
+    {
+      "title": "Go Installation",
+      "url": "https://go.dev/doc/install",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "installation",
+        "supported releases",
+        "environment setup"
+      ]
+    },
+    {
+      "title": "Go Release History",
+      "url": "https://go.dev/doc/devel/release",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "version compatibility",
+        "security releases",
+        "latest supported patch releases"
+      ]
+    },
+    {
+      "title": "Go Command Reference",
+      "url": "https://go.dev/cmd/go/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "go run",
+        "go build",
+        "go test",
+        "go vet"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied Go.pdf syllabus mapping. Human review and local runtime verification are required before publication."
+}

@@ -1,0 +1,221 @@
+{
+  "id": "scipy-lesson-082",
+  "slug": "statistical-sampling-and-random-variables",
+  "title": "Statistical Sampling and Random Variables",
+  "sequence": 82,
+  "module_id": "scipy-module-11",
+  "module_slug": "statistics-and-probability-with-scipy-stats",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "specialist",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "scipy-lesson-081"
+  ],
+  "previous_lesson_id": "scipy-lesson-081",
+  "next_lesson_id": "scipy-lesson-083",
+  "keywords": [
+    "statistical sampling and random variables",
+    "scipy.stats",
+    "reproducible random sampling",
+    "random-number generator configuration",
+    "sampling from distributions",
+    "vectorized random-variable operations",
+    "broadcasting of distribution parameters"
+  ],
+  "source_syllabus_number": 82,
+  "source_syllabus_page": 17,
+  "subtopics": [
+    "Reproducible random sampling",
+    "Random-number generator configuration",
+    "Sampling from distributions",
+    "Vectorized random-variable operations",
+    "Broadcasting of distribution parameters",
+    "Monte Carlo sampling fundamentals"
+  ],
+  "learning_outcomes": [
+    "Describe the role of reproducible random sampling in statistical sampling and random variables.",
+    "Use a suitable SciPy API or numerical procedure related to reproducible sampling in a small deterministic example.",
+    "Validate the result with a relevant tolerance, shape/domain check, residual, diagnostic, or independent calculation."
+  ],
+  "content": {
+    "intro": "In this lesson, work through **Statistical Sampling and Random Variables** using the syllabus terms **Reproducible random sampling** and **Random-number generator configuration**. Start from a clearly stated numerical question, choose the smallest appropriate SciPy tool, and inspect the result rather than treating the returned number as self-validating.",
+    "why_it_matters": "Statistical Sampling and Random Variables supports reliable scientific computing by turning a mathematical or data-analysis problem into a repeatable computation. It is useful when you need to choose between methods, understand assumptions, and report limits rather than merely produce a number.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Statistical Sampling and Random Variables",
+        "asset_path": "diagrams/lesson-082-statistical-sampling-and-random-variables.svg",
+        "alt_text": "Lesson 82 visual for Statistical Sampling and Random Variables. Stages show Reproducible random sampling, reproducible sampling, and Monte Carlo sampling fundamentals.",
+        "caption": "Concept map for lesson 82; the labels identify the core idea, method family, and validation focus."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "**Statistical Sampling and Random Variables** is best approached as a deliberate numerical workflow. The supplied curriculum highlights **Reproducible random sampling**, along with **Random-number generator configuration**, **Sampling from distributions**, **Vectorized random-variable operations**. Define what the inputs mean and what result would count as credible before increasing problem size or complexity."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics from the supplied curriculum",
+        "items": [
+          "Reproducible random sampling",
+          "Random-number generator configuration",
+          "Sampling from distributions",
+          "Vectorized random-variable operations",
+          "Broadcasting of distribution parameters",
+          "Monte Carlo sampling fundamentals"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about the method",
+        "text": "Connect the mathematics to the documented API family **reproducible sampling**. Check input shape and dtype, units and domain assumptions, and whether the method is exact, approximate, iterative, or statistical. The output should be accompanied by an error estimate or a separate check when the API provides one or when the problem allows it."
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "import numpy as np\n\nrng = np.random.default_rng(42)\nsample = rng.normal(size=4)\nprint(sample.size)",
+        "expected_output": "4",
+        "execution_mode": "static-validation",
+        "run_instructions": "Create and activate an isolated Python virtual environment, install SciPy and NumPy with `python -m pip install scipy numpy`, save the code as a `.py` file, and run it using that environment. This lesson displays examples; it does not execute learner code on the production API.",
+        "reset_steps": "Examples use small synthetic values. Re-run with the original values to restore the stated output. Examples that write files use a temporary directory and remove it automatically."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "First identify the input and the quantity the code computes. Follow the call through the API **reproducible sampling**, then compare the displayed result to the expected behavior. Change one input or parameter and predict what should happen before re-running. For an iterative solver, also inspect its status and stopping criteria."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          "Change one input related to reproducible random sampling and predict the result before running the example.",
+          "Add a check for one edge case relevant to statistical sampling and random variables (for example, invalid shape, boundary input, non-finite data, or a solver that does not converge).",
+          "Write one sentence describing an assumption or limitation that a reader should know before trusting the result."
+        ]
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          "Topic 82: Statistical Sampling and Random Variables.",
+          "Keep the curriculum focus visible: Reproducible random sampling.",
+          "Choose methods from their documented assumptions and validate numerical output independently where possible."
+        ]
+      }
+    ],
+    "expected_output": "4",
+    "run_instructions": "Run locally with the SciPy version used by the course environment. `static-validation` means the example is displayed and syntax-checked; it is not run inside the CodeLeaf production API.",
+    "reset_steps": "Recreate the small synthetic inputs and temporary output directory before each run; no persistent platform activity is changed by viewing a lesson.",
+    "hints": [
+      "Start by writing down the intended quantity and the role of reproducible random sampling.",
+      "Run the smallest complete example and compare observed results with the expected behavior.",
+      "If results differ, inspect shape, dtype, valid domain, solver status, tolerances, and the installed SciPy version before changing the method."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-082-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Choosing an algorithm before stating the problem and assumptions.",
+        "why": "Two algorithms that look similar can have different domains, stability, performance, and convergence behavior.",
+        "fix": "Write down input shape, units/domain, the quantity to compute, and a validation check before selecting an API."
+      },
+      {
+        "problem": "Treating returned values as exact truths.",
+        "why": "Floating-point arithmetic and iterative numerical algorithms use finite precision and stopping conditions.",
+        "fix": "Inspect success/status fields and error estimates where available; use scale-appropriate tolerances and independent checks."
+      },
+      {
+        "problem": "Copying an example without checking version or edge cases.",
+        "why": "Signatures and legacy status can change between releases, and example data rarely covers boundary behavior.",
+        "fix": "Check the installed SciPy version, official documentation, input constraints, and a failure case."
+      }
+    ],
+    "summary": [
+      "Topic 82 is Statistical Sampling and Random Variables; its complete subtopic list is kept in this lesson file.",
+      "The demonstration uses reproducible sampling with synthetic values.",
+      "This generated lesson remains draft pending technical review and execution under the targeted release."
+    ],
+    "references": [
+      {
+        "title": "Statistics reference",
+        "url": "https://docs.scipy.org/doc/scipy/reference/stats.html",
+        "publisher": "SciPy project",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "Probability distributions",
+          "Hypothesis tests",
+          "Resampling"
+        ],
+        "source_type": "official API reference"
+      },
+      {
+        "title": "SciPy User Guide",
+        "url": "https://docs.scipy.org/doc/scipy/tutorial/index.html",
+        "publisher": "SciPy project",
+        "checked_on": "2026-10-17",
+        "source_type": "official documentation",
+        "supports": [
+          "Package overview",
+          "Algorithm selection",
+          "Scientific computing workflow"
+        ]
+      },
+      {
+        "title": "SciPy release notes",
+        "url": "https://docs.scipy.org/doc/scipy/release/",
+        "publisher": "SciPy project",
+        "checked_on": "2026-10-17",
+        "source_type": "official release documentation",
+        "supports": [
+          "Version compatibility",
+          "Deprecations",
+          "Migration review"
+        ]
+      }
+    ],
+    "accessibility_notes": "The SVG has a title and description, each stage is labeled in text, and the adjacent lesson text explains the sequence without relying on color alone. Code examples are text and can be copied into a local editor.",
+    "version_notes": "Reference baseline: the official SciPy 1.18.0 manual visible on 2026-10-17. The locally available validation runtime reported SciPy 1.17.0; the examples have not been represented as run against 1.18.0. Recheck release notes and behavior before publishing."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Statistics reference",
+      "url": "https://docs.scipy.org/doc/scipy/reference/stats.html",
+      "publisher": "SciPy project",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Probability distributions",
+        "Hypothesis tests",
+        "Resampling"
+      ],
+      "source_type": "official API reference"
+    },
+    {
+      "title": "SciPy User Guide",
+      "url": "https://docs.scipy.org/doc/scipy/tutorial/index.html",
+      "publisher": "SciPy project",
+      "checked_on": "2026-10-17",
+      "source_type": "official documentation",
+      "supports": [
+        "Package overview",
+        "Algorithm selection",
+        "Scientific computing workflow"
+      ]
+    },
+    {
+      "title": "SciPy release notes",
+      "url": "https://docs.scipy.org/doc/scipy/release/",
+      "publisher": "SciPy project",
+      "checked_on": "2026-10-17",
+      "source_type": "official release documentation",
+      "supports": [
+        "Version compatibility",
+        "Deprecations",
+        "Migration review"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the supplied SciPy curriculum with original explanations, synthetic examples, and original SVG visuals. Subject-matter review, targeted-version execution, accessibility review, and publication approval remain required."
+}

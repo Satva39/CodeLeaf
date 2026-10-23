@@ -1,0 +1,52 @@
+{
+  "id": "sass-exercise-020",
+  "lesson_id": "sass-lesson-129",
+  "slug": "reusable-component-library",
+  "title": "Reusable Component Library",
+  "type": "code",
+  "difficulty": "advanced",
+  "sequence": 20,
+  "prompt": "Design a public Sass entrypoint for buttons, cards, and forms with documented public mixins and private internal helpers.",
+  "starter": {
+    "language": "scss",
+    "code": "// library/_index.scss\n@forward \"tokens\";\n@forward \"mixins\" show focus-ring, surface;\n// consumer.scss\n@use \"library\" as ui;"
+  },
+  "public_tests": [
+    {
+      "name": "Expected behavior",
+      "mode": "manual_or_text_check",
+      "note": "This starter grader checks required terms only; compile and inspect the real CSS before considering the work correct."
+    }
+  ],
+  "acceptance_criteria": [
+    "Implements the requested Sass pattern for reusable component library.",
+    "Includes a repeatable command or source-to-output check.",
+    "Documents one edge case, assumption, accessibility concern, or maintenance trade-off."
+  ],
+  "hints": [
+    "Keep one intentional entrypoint.",
+    "Compile a minimal source file with `npx sass input.scss output.css` and inspect the generated CSS.",
+    "Compare the source and expected output; refine the pattern before adding more components."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "@forward",
+      "@use",
+      "public"
+    ]
+  },
+  "retry_policy": {
+    "allow_retries": true,
+    "guidance": "Use the feedback to improve the source and resubmit; the platform controls activity completion and its standard reward policy."
+  },
+  "solution_file": "solutions/020-reusable-component-library-solution.json",
+  "target_skills": [
+    "Reusable Component Library",
+    "Designing Reusable Sass Libraries",
+    "SCSS output inspection"
+  ],
+  "expected_output": "A consumer can access the documented public members through `ui` and cannot rely on internal file names.",
+  "status": "draft",
+  "status_note": "Draft exercise. The automatic grader is a lightweight submission gate; technical correctness requires compilation and/or human review."
+}

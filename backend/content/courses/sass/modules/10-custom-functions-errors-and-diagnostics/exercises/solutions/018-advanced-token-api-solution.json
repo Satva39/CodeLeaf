@@ -1,0 +1,8 @@
+{
+  "id": "sass-exercise-solution-018",
+  "exercise_id": "sass-exercise-018",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "One valid approach starts with:\n\n@use \"sass:map\";\n$colors: (brand: #3157d5, success: #16845b);\n@function color-token($name) { @if not map.has-key($colors, $name) { @error \"Unknown color token\"; } @return map.get($colors, $name); }\n\nThen compile it with Dart Sass and review the generated CSS. Acceptance depends on the exact prompt and evidence, not on matching the starter byte-for-byte.",
+  "explanation": "Advanced Token API is a practice task aligned to lesson 86 (Functions for Design Tokens). Do not silently return an empty string or null for an invalid token. The automatic grader checks only the required strings; a reviewer should verify semantics, real compiled output, and project quality."
+}

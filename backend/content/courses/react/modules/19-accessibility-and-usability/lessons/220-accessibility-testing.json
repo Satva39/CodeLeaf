@@ -1,0 +1,181 @@
+{
+  "id": "react-lesson-220",
+  "slug": "accessibility-testing",
+  "title": "Accessibility Testing",
+  "sequence": 220,
+  "module_id": "react-module-19",
+  "module_slug": "accessibility-and-usability",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "react-lesson-219"
+  ],
+  "previous_lesson_id": "react-lesson-219",
+  "next_lesson_id": "react-lesson-221",
+  "keywords": [
+    "Accessibility Testing",
+    "Accessibility and Usability",
+    "Automated accessibility checks",
+    "Keyboard-only testing",
+    "Screen-reader testing",
+    "Contrast checks",
+    "Recognizing limitations of automated tools",
+    "accessibility"
+  ],
+  "source_syllabus_number": 220,
+  "subtopics": [
+    "Automated accessibility checks",
+    "Keyboard-only testing",
+    "Screen-reader testing",
+    "Contrast checks",
+    "Recognizing limitations of automated tools"
+  ],
+  "learning_outcomes": [
+    "Explain how Accessibility Testing relates to Accessibility and Usability.",
+    "Apply Automated accessibility checks in a small React or JavaScript example and describe the expected result.",
+    "Test one edge/failure case and identify a maintainable, accessible fix."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study Accessibility Testing as part of Accessibility and Usability. The syllabus topics are kept below, then connected to a small example you can inspect and adapt.",
+    "why_it_matters": "Automated accessibility checks makes the interface usable across input methods and assistive technologies. Use native semantic elements first, give controls accessible names, and test focus and keyboard operation.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Accessibility Testing: concept map",
+        "asset_path": "diagrams/lessons/lesson-220-accessibility-testing.svg",
+        "alt_text": "Concept map for Accessibility Testing: Automated accessibility checks, Keyboard-only testing, Screen-reader testing.",
+        "caption": "A visual scaffold for the idea; the code and verification steps below provide the practical check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Automated accessibility checks makes the interface usable across input methods and assistive technologies. Use native semantic elements first, give controls accessible names, and test focus and keyboard operation. Start with one responsibility at a time: identify the data, describe the expected interface, then decide which event, state update, request, or runtime boundary changes the result."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Automated accessibility checks",
+            "text": "Automated accessibility checks makes the interface usable across input methods and assistive technologies. Use native semantic elements first, give controls accessible names, and test focus and keyboard operation."
+          },
+          {
+            "title": "Keyboard-only testing",
+            "text": "Keyboard-only testing makes the interface usable across input methods and assistive technologies. Use native semantic elements first, give controls accessible names, and test focus and keyboard operation."
+          },
+          {
+            "title": "Screen-reader testing",
+            "text": "Screen-reader testing makes the interface usable across input methods and assistive technologies. Use native semantic elements first, give controls accessible names, and test focus and keyboard operation."
+          },
+          {
+            "title": "Contrast checks",
+            "text": "Contrast checks makes the interface usable across input methods and assistive technologies. Use native semantic elements first, give controls accessible names, and test focus and keyboard operation."
+          },
+          {
+            "title": "Recognizing limitations of automated tools",
+            "text": "Recognizing limitations of automated tools makes the interface usable across input methods and assistive technologies. Use native semantic elements first, give controls accessible names, and test focus and keyboard operation."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "jsx",
+        "code": "function SearchBox({ value, onChange }) {\n  return <label>Search products<input type=\"search\" value={value} onChange={onChange} /></label>;\n}",
+        "expected_output": "The input has a programmatically associated label and a native search role.",
+        "run_instructions": "This is an inspectable teaching example, not an arbitrary-code runner inside CodeLeaf. Place JSX in a React/Vite project (or the relevant CSS/HTML/config file), run the project with its documented toolchain, and compare the visible behavior with the expected result. Server rendering and framework APIs require their stated runtime.",
+        "reset_steps": "Restore the original snippet, reset the component/data to its starting state, and repeat with a different input or an edge/failure case.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Use the code as a small experiment for Accessibility Testing. First predict the result, then run or inspect it in the required runtime. Change one input and explain why the output changed. If the topic depends on React version or framework support, confirm that the project uses a compatible version before interpreting a result."
+      },
+      {
+        "type": "callout",
+        "title": "Version and environment note",
+        "text": "This course assumes the React 19.3 documentation snapshot dated 2026-10-12. Core component, JSX, props, state, and event concepts apply broadly; modern APIs and server rendering must be checked against the stated React version and the framework/runtime in use."
+      }
+    ],
+    "task": "Create a minimal example demonstrating Accessibility Testing. Include the relevant subtopic “Automated accessibility checks”, explain the expected UI/result, and verify one normal case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named concept rather than merely mentioning it.",
+      "The expected visible or logged result is documented and reproducible.",
+      "At least one boundary, empty, loading, or failure case is handled or explained.",
+      "The implementation remains accessible and does not introduce avoidable mutation, stale state, or insecure client-only trust."
+    ],
+    "hints": [
+      "Start with the smallest part of “Automated accessibility checks” that can be observed independently.",
+      "Write down what should appear before changing the code; then change one input at a time.",
+      "Use the browser console, React Developer Tools, or the appropriate test/runtime to isolate a mismatch."
+    ],
+    "expected_output": "The input has a programmatically associated label and a native search role.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-220-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "The example handles only the happy path.",
+        "why": "Real UI receives empty values, delayed responses, and invalid input.",
+        "fix": "Add one explicit edge/failure case and document the expected message or state."
+      },
+      {
+        "problem": "The example stores redundant data or mutates an existing array/object.",
+        "why": "The displayed result can drift from the source data or React may not observe the intended change.",
+        "fix": "Derive values where possible and create a new value when updating state."
+      },
+      {
+        "problem": "A browser or framework capability is assumed to exist everywhere.",
+        "why": "Availability can depend on the host runtime, React version, and framework.",
+        "fix": "Check the official reference, declare the runtime/version, and provide a fallback when appropriate."
+      }
+    ],
+    "summary": [
+      "Accessibility Testing fits into the broader Accessibility and Usability workflow.",
+      "The central concept is Automated accessibility checks; apply it with the smallest reproducible example.",
+      "Verify correctness with at least one normal input and one boundary or failure case."
+    ],
+    "references": [
+      "https://react.dev/learn",
+      "https://react.dev/reference/react",
+      "https://react.dev/blog/2026/09/09/react-19-3"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "React — Learn",
+      "url": "https://react.dev/learn",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "Accessibility Testing",
+        "Automated accessibility checks",
+        "Keyboard-only testing"
+      ]
+    },
+    {
+      "title": "React Reference",
+      "url": "https://react.dev/reference/react",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "React APIs and behavior",
+        "Accessibility Testing"
+      ]
+    },
+    {
+      "title": "React 19.3 Release Notes",
+      "url": "https://react.dev/blog/2026/09/09/react-19-3",
+      "publisher": "React team",
+      "checked_on": "2026-10-12",
+      "supports": [
+        "version-specific modern APIs and compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus and authored as an educational draft; technical/instructional review required before publication."
+}

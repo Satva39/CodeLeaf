@@ -1,0 +1,139 @@
+{
+  "id": "powershell-lesson-117",
+  "slug": "parameter-sets",
+  "title": "Parameter Sets",
+  "sequence": 117,
+  "module_id": "powershell-module-11",
+  "module_slug": "functions-and-advanced-parameters",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "powershell-lesson-116"
+  ],
+  "previous_lesson_id": "powershell-lesson-116",
+  "next_lesson_id": "powershell-lesson-118",
+  "keywords": [
+    "parameter",
+    "sets",
+    "powershell",
+    "module-11"
+  ],
+  "source_syllabus_number": 117,
+  "subtopics": [
+    "Defining alternative ways to call a function",
+    "Mandatory parameter sets",
+    "Selecting the active parameter set",
+    "Designing unambiguous command interfaces"
+  ],
+  "learning_outcomes": [
+    "Describe the purpose of Parameter Sets and define its core vocabulary.",
+    "Apply parameter sets in a small PowerShell example and predict its result.",
+    "Identify one relevant edge case, version constraint, or troubleshooting step."
+  ],
+  "content": {
+    "intro": "This lesson covers Parameter Sets in the PowerShell learning path. It expands the supplied syllabus heading into an actionable draft with a visual, a worked example, and a short knowledge check.",
+    "why_it_matters": "Reliable scripts use an explicit parameter contract, a predictable output contract, and dependencies relative to `$PSScriptRoot` rather than the caller’s current directory. Reusable functions validate input and make changes previewable with `SupportsShouldProcess`, `-WhatIf` and `-Confirm` when appropriate.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Lesson 117 visual map",
+        "asset_path": "diagrams/lesson-117-parameter-sets.svg",
+        "alt_text": "Lesson 117 concept map for Parameter Sets: concept and purpose, a local example and result, followed by practice and verification.",
+        "caption": "Follow the concept → example → verification path for Parameter Sets."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Parameter Sets belongs to Functions and Advanced Parameters. Focus on the rule or workflow this lesson introduces, work through a small example, and explain the expected result and one boundary case."
+      },
+      {
+        "type": "paragraph",
+        "title": "Build understanding step by step",
+        "text": "Start with the syllabus concepts: Defining alternative ways to call a function; Mandatory parameter sets; Selecting the active parameter set; Designing unambiguous command interfaces. Separate the input, the operation and the expected result. Use a disposable local workspace for file or system examples, and verify platform-specific behavior against the active runtime."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Defining alternative ways to call a function",
+            "text": "Defining alternative ways to call a function is one part of Parameter Sets. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Mandatory parameter sets",
+            "text": "Mandatory parameter sets is one part of Parameter Sets. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Selecting the active parameter set",
+            "text": "Selecting the active parameter set is one part of Parameter Sets. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          },
+          {
+            "title": "Designing unambiguous command interfaces",
+            "text": "Designing unambiguous command interfaces is one part of Parameter Sets. Define the term, connect it to the example, and note any platform, version, input-validation, or failure consideration that applies."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "powershell",
+        "execution_mode": "static-validation",
+        "code": "function Get-Label {\n    param([Parameter(Mandatory)][string]$Name)\n    \"Item: $Name\"\n}\nGet-Label -Name 'sample'",
+        "expected_output": "Item: sample",
+        "run_instructions": "Review this snippet as a static teaching example. In a local PowerShell 7.6 session, save a copy under your course workspace, run it manually, and compare the result with the stated expectation. CodeLeaf’s current course preview does not execute PowerShell. Adjust environment-dependent output to your machine.",
+        "troubleshooting": "Check command availability with Get-Command, inspect values with Get-Member, consult Get-Help -Full, and verify PowerShell version/platform before assuming identical output. Do not run examples that change system state without adapting and reviewing them.",
+        "reset_steps": "Restore the original snippet and use synthetic values. If you created test files, delete only those files within the dedicated practice folder after checking their paths."
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety note",
+        "text": "The main path targets modern PowerShell 7.6 LTS. Windows PowerShell 5.1 compatibility is labeled separately. Some providers, admin cmdlets and APIs depend on OS, module version, permissions or tenant access; the examples are static references, not proof of execution."
+      }
+    ],
+    "task": "Try it yourself: design a reusable interface with explicit inputs and outputs. Use synthetic data or a disposable practice folder, write down your predicted result, check it locally, and explain one boundary case.",
+    "task_acceptance_criteria": [
+      "Explain the central idea in Parameter Sets in your own words.",
+      "Verify the expected result using a local session or a documented manual check.",
+      "Describe one relevant edge case, limitation or troubleshooting step."
+    ],
+    "hints": [
+      "Predict the output before changing the example.",
+      "Change one input or condition at a time and compare the results.",
+      "Use Get-Help and official versioned documentation when behavior differs; do not treat a static preview as execution."
+    ],
+    "expected_output": "Item: sample",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-117-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "PowerShell language documentation",
+      "url": "https://learn.microsoft.com/en-us/powershell/scripting/lang-spec/chapter-01?view=powershell-7.6",
+      "publisher": "Microsoft Learn",
+      "supports": [
+        "syntax",
+        "expressions",
+        "types and language semantics"
+      ],
+      "checked_on": "2026-10-20",
+      "source_type": "official_documentation"
+    },
+    {
+      "title": "Getting Started with PowerShell",
+      "url": "https://learn.microsoft.com/en-us/powershell/scripting/learn/ps101/01-getting-started?view=powershell-7.6",
+      "publisher": "Microsoft Learn",
+      "supports": [
+        "first commands",
+        "help and discovery",
+        "interactive sessions"
+      ],
+      "checked_on": "2026-10-20",
+      "source_type": "official_documentation"
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson expanded from the numbered PowerShell PDF syllabus. Static examples, answers, version details and technical phrasing need subject-matter review before publication."
+}

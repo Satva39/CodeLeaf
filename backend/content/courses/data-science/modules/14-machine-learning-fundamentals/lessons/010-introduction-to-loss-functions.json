@@ -1,0 +1,150 @@
+{
+  "id": "data-science-lesson-151",
+  "slug": "introduction-to-loss-functions",
+  "title": "Introduction to Loss Functions",
+  "sequence": 151,
+  "module_id": "data-science-module-14",
+  "module_slug": "machine-learning-fundamentals",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "machine-learning",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "data-science-lesson-150"
+  ],
+  "previous_lesson_id": "data-science-lesson-150",
+  "next_lesson_id": "data-science-lesson-152",
+  "keywords": [
+    "introduction-to-loss-functions",
+    "prediction-errors",
+    "loss-versus-evaluation-metric",
+    "regression-loss",
+    "classification-loss",
+    "model-optimization-objectives"
+  ],
+  "source_syllabus_number": 151,
+  "subtopics": [
+    "Prediction errors",
+    "Loss versus evaluation metric",
+    "Regression loss",
+    "Classification loss",
+    "Model optimization objectives"
+  ],
+  "learning_outcomes": [
+    "Explain introduction to loss functions and accurately refer to at least two syllabus subtopics.",
+    "Apply the main idea of introduction to loss functions to a small example, trace, calculation, or scenario.",
+    "Identify one important assumption or failure mode and describe how to check it."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study introduction to loss functions in the context of machine learning fundamentals. You will connect the PDF subtopics to a small example and practice describing what the evidence does—and does not—support.",
+    "why_it_matters": "Introduction to Loss Functions matters because it affects how data is collected, represented, analyzed, interpreted, or used in a decision. Check the task and assumptions before choosing a method.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual overview: Introduction to Loss Functions",
+        "asset_path": "diagrams/lesson-151-overview.svg",
+        "alt_text": "Lesson 151: Introduction to Loss Functions; a three-stage visual for understanding the topic, applying it to a small example, and validating assumptions.",
+        "caption": "Use the overview to connect introduction to loss functions to a concrete example and a responsible check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The central idea",
+        "text": "Machine learning estimates patterns from examples. Training is only one step: a robust workflow defines splits, baselines, metrics, assumptions, and monitoring."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered",
+        "items": [
+          {
+            "title": "Prediction errors",
+            "text": "Define prediction errors in relation to introduction to loss functions; identify the input, output, assumptions, and who uses the result."
+          },
+          {
+            "title": "Loss versus evaluation metric",
+            "text": "Work through loss versus evaluation metric using a small, synthetic example before scaling up. State what the calculation or method returns and why that result is useful."
+          },
+          {
+            "title": "Regression loss",
+            "text": "Check the edge cases for regression loss: missing values, unusual ranges, different groups, time boundaries, or a changed input can affect the conclusion."
+          },
+          {
+            "title": "Classification loss",
+            "text": "Document the rule or choice for classification loss so another learner can reproduce the analysis and understand its limitations."
+          },
+          {
+            "title": "Model optimization objectives",
+            "text": "Define model optimization objectives in relation to introduction to loss functions; identify the input, output, assumptions, and who uses the result."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "1. Restate the question addressed by introduction to loss functions. 2. Identify the input data, intended output, and assumptions. 3. Predict what the small example should show before reading its output. 4. Change one input or assumption, compare the result, and document what remains uncertain."
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "execution_mode": "static-validation",
+        "code": "actual = [3, 5, 8]\npredicted = [4, 4, 7]\nmae = sum(abs(a-p) for a,p in zip(actual,predicted))/len(actual)\nprint(\"MAE:\", round(mae, 2))",
+        "expected_output": "MAE: 1.0",
+        "run_instructions": "For Python, copy the snippet into a local file and run with Python 3. This CodeLeaf block is static and does not execute inside the browser. For SQL, adapt the query to an approved local schema; the stated result is a conceptual query simulation, not a live database result.",
+        "reset_steps": "Restore the provided synthetic input, rerun or retrace the example, and change one value at a time. Do not use personal records, credentials, or data you are not authorized to access."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistakes and fixes",
+        "text": "Keep the question, data grain, units, and assumptions explicit. If a result differs, inspect the input and steps in order. Avoid turning an observed association into a causal claim, treating a sample as the population, or assuming a small demonstration guarantees production behavior. Always compare with a simple baseline and choose a metric that fits the use case."
+      },
+      {
+        "type": "callout",
+        "title": "Responsible interpretation",
+        "text": "This example is a teaching aid. It is static in the CodeLeaf lesson and is not executed in the browser. It uses small synthetic values; validate any real workflow in a separate, appropriate local environment and protect sensitive data."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap and next step",
+        "text": "Recap: Machine learning estimates patterns from examples. Training is only one step: a robust workflow defines splits, baselines, metrics, assumptions, and monitoring. Next, connect this lesson to the linked prerequisite or following lesson. Record the method, input assumptions, observed result, and one limitation so another person can reproduce and review the work."
+      }
+    ],
+    "task": "Try it yourself: create a small synthetic example for introduction to loss functions. State a question, make a prediction, trace or run an appropriate calculation, then write one finding and one limitation.",
+    "task_acceptance_criteria": [
+      "Refer accurately to the topic and its syllabus subtopics.",
+      "Record a reproducible example or a complete manual trace with an expected result.",
+      "Document at least one assumption, limitation, data-quality issue, or evaluation check."
+    ],
+    "hints": [
+      "Write down the input, expected result, units, and assumptions first.",
+      "Change only one condition when testing a revised example.",
+      "Ask whether the data and method represent the real decision; do not infer causality or production readiness from a toy example."
+    ],
+    "expected_output": "MAE: 1.0",
+    "run_mode": "static-validation",
+    "troubleshooting": [
+      "Check input values, path assumptions, package versions, indentation, and units.",
+      "For SQL, use a local schema and read-only test data; this page does not provide a live database.",
+      "For package-dependent work, create an isolated environment and use the relevant official documentation."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-151-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "sklearn",
+      "title": "scikit-learn User Guide",
+      "url": "https://scikit-learn.org/stable/user_guide.html",
+      "publisher": "scikit-learn developers",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "preprocessing",
+        "machine learning",
+        "model evaluation"
+      ],
+      "source_type": "official documentation",
+      "notes": "Official source entry point. Verify current API signatures and version notes before implementation."
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft authored against Data Science.pdf lesson 151; preserves the source title/subtopics. Review technical accuracy, example behavior, and assessment wording before publication."
+}

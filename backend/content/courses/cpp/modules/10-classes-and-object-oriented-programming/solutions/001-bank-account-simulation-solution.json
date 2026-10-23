@@ -1,0 +1,18 @@
+{
+  "id": "cpp-exercise-solution-016",
+  "exercise_id": "cpp-exercise-016",
+  "title": "Bank account simulation reference solution notes",
+  "language": "cpp",
+  "answer": "#include <iostream>\n#include <stdexcept>\nclass Account {\npublic:\n    explicit Account(int initial_cents = 0) : balance_(initial_cents) {\n        if (initial_cents < 0) throw std::invalid_argument(\"negative opening balance\");\n    }\n    bool deposit(int cents) { if (cents <= 0) return false; balance_ += cents; return true; }\n    bool withdraw(int cents) { if (cents <= 0 || cents > balance_) return false; balance_ -= cents; return true; }\n    int balance() const { return balance_; }\nprivate: int balance_;\n};\nint main() { Account account{1000}; account.deposit(250); account.withdraw(300); std::cout << account.balance() << \" cents\\n\"; }\n",
+  "explanation": "950 cents",
+  "manual_validation_checklist": [
+    "Compile locally with C++20 and -Wall -Wextra -Wpedantic (add the external library named in the solution when applicable).",
+    "Test normal inputs and at least one boundary/failure case named in the exercise prompt.",
+    "Check integer range, object lifetime, resource cleanup and error handling where relevant.",
+    "Integer cents avoid binary floating-point rounding for this small money example. A real system also needs overflow limits, persistence and authorization.",
+    "Keep this solution in repository-only protected content; do not include it in learner API responses."
+  ],
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "status_note": "Repository-only reference notes; replace with a reviewed implementation and test suite before publishing the exercise."
+}

@@ -1,0 +1,183 @@
+{
+  "id": "r-lesson-078",
+  "slug": "splitting-and-grouped-processing",
+  "title": "Splitting and Grouped Processing",
+  "sequence": 78,
+  "module_id": "r-module-08",
+  "module_slug": "apply-functions-and-functional-programming",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "r-lesson-077"
+  ],
+  "previous_lesson_id": "r-lesson-077",
+  "next_lesson_id": "r-lesson-079",
+  "keywords": [
+    "splitting-and-grouped-processing",
+    "apply-functions-and-functional-programming",
+    "split",
+    "by",
+    "aggregate",
+    "processing-groups-with-dplyr",
+    "combining-group-wise-results",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 78,
+  "subtopics": [
+    "split()",
+    "by()",
+    "aggregate()",
+    "Processing Groups with dplyr",
+    "Combining Group-Wise Results"
+  ],
+  "learning_outcomes": [
+    "Explain the role of splitting and grouped processing and identify its main inputs, outputs or constraints.",
+    "Apply split() in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Splitting and Grouped Processing is part of Apply Functions and Functional Programming. Start with split() and connect it to the worked example and expected result.",
+    "why_it_matters": "Splitting and Grouped Processing is one step in Apply Functions and Functional Programming; the apply family and purrr tools help express repeated transformations; simplification rules can change result shape.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Splitting and Grouped Processing",
+        "asset_path": "diagrams/module-08-overview.svg",
+        "alt_text": "Concept visual supporting lesson 78, Splitting and Grouped Processing. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Splitting and Grouped Processing is one step in Apply Functions and Functional Programming; the apply family and purrr tools help express repeated transformations; simplification rules can change result shape. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "split()",
+            "text": "Explain split() in the context of splitting and grouped processing, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "by()",
+            "text": "Explain by() in the context of splitting and grouped processing, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "aggregate()",
+            "text": "Explain aggregate() in the context of splitting and grouped processing, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Processing Groups with dplyr",
+            "text": "Explain processing groups with dplyr in the context of splitting and grouped processing, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Combining Group-Wise Results",
+            "text": "Explain combining group-wise results in the context of splitting and grouped processing, connect it to the example, and verify one expected result or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Choose the simplest mapper that makes expected result structure obvious and test type stability. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Splitting and Grouped Processing",
+        "language": "r",
+        "code": "# Lesson 78: Splitting and Grouped Processing\nparts <- list(first = 3:4, second = 5:6)\nvapply(parts, sum, numeric(1))",
+        "expected_output": " first second\n     7 11",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "vapply declares the expected result type and makes the output shape easier to check. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For splitting and grouped processing, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-078-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply splitting and grouped processing to a small synthetic example. Start with split(), predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the split() idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible splitting and grouped processing example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “split()” and identify the input and output before coding.",
+      "Inspect the type and shape of the result, then test one ordinary and one boundary input.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: Splitting and Grouped Processing is one step in Apply Functions and Functional Programming; the apply family and purrr tools help express repeated transformations; simplification rules can change result shape.",
+      "Practice: Choose the simplest mapper that makes expected result structure obvious and test type stability.",
+      "Source syllabus focus: split(). Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply splitting and grouped processing to a small synthetic example. Start with split(), predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible splitting and grouped processing example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “split()” and identify the input and output before coding.",
+    "Inspect the type and shape of the result, then test one ordinary and one boundary input.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: Splitting and Grouped Processing is one step in Apply Functions and Functional Programming; the apply family and purrr tools help express repeated transformations; simplification rules can change result shape.",
+    "Practice: Choose the simplest mapper that makes expected result structure obvious and test type stability.",
+    "Source syllabus focus: split(). Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 8 — Apply Functions and Functional Programming, lesson 78: Splitting and Grouped Processing.",
+    "Official documentation: https://cran.r-project.org/doc/manuals/r-release/R-intro.html",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

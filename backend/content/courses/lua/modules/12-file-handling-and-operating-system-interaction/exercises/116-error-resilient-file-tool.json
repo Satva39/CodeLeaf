@@ -1,0 +1,59 @@
+{
+  "id": "lua-exercise-116",
+  "slug": "error-resilient-file-tool",
+  "title": "Error-Resilient File Tool",
+  "sequence": 116,
+  "module_id": "lua-module-12",
+  "lesson_id": "lua-lesson-116",
+  "lesson_slug": "safe-file-handling",
+  "difficulty": "intermediate",
+  "prompt": "Implement a small text-file reader that reports missing files, closes handles on success, and does not expose sensitive contents in diagnostics.",
+  "target_skills": [
+    "io.open",
+    "resource cleanup",
+    "protected calls"
+  ],
+  "starter_code": "-- Complete this Lua exercise: Error-Resilient File Tool\n-- Add your solution below.\n",
+  "expected_output_or_acceptance_criteria": [
+    "io.open",
+    "pcall",
+    "close",
+    "error handling"
+  ],
+  "hints": [
+    "Check io.open return values.",
+    "Prefer a close-safe pattern or guaranteed cleanup.",
+    "Test missing path and unreadable-file behavior."
+  ],
+  "acceptance_criteria": [
+    "Resources close on successful paths.",
+    "Failures return a clear, non-sensitive diagnostic."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "io.open",
+      "close"
+    ]
+  },
+  "grading_method": "Server-side source-token checks are a draft heuristic, not execution of Lua. Review false positives/negatives and replace with isolated execution or instructor review before publication.",
+  "test_cases": [
+    {
+      "name": "normal case",
+      "input": "Use the fixture and inputs described in the prompt.",
+      "expected": "Meets all acceptance criteria."
+    },
+    {
+      "name": "boundary or invalid case",
+      "input": "Use an empty, missing, or boundary value relevant to the prompt.",
+      "expected": "Failure or boundary behavior is explicit and safe."
+    }
+  ],
+  "retry_policy": {
+    "unlimited_for_learning": true,
+    "feedback": "Show progressive hints before presenting any reference solution."
+  },
+  "solution_file": "solutions/116-error-resilient-file-tool-solution.json",
+  "status": "draft",
+  "status_note": "Needs subject-matter review and automated grader calibration before publication."
+}

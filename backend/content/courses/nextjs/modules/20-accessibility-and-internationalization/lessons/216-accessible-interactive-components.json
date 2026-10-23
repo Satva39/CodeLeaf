@@ -1,0 +1,164 @@
+{
+  "id": "nextjs-lesson-216",
+  "slug": "accessible-interactive-components",
+  "title": "Accessible Interactive Components",
+  "sequence": 216,
+  "module_id": "nextjs-module-20",
+  "module_slug": "accessibility-and-internationalization",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "nextjs-lesson-215"
+  ],
+  "previous_lesson_id": "nextjs-lesson-215",
+  "next_lesson_id": "nextjs-lesson-217",
+  "keywords": [
+    "Accessible Interactive Components",
+    "Buttons and link semantics",
+    "Modal dialog accessibility",
+    "Status messages",
+    "Reduced-motion behavior",
+    "Next.js",
+    "JavaScript",
+    "App Router"
+  ],
+  "source_syllabus_number": 216,
+  "subtopics": [
+    "Buttons and link semantics",
+    "Modal dialog accessibility",
+    "Status messages",
+    "Reduced-motion behavior"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and boundaries of Accessible Interactive Components in the context of Accessibility and Internationalization.",
+    "Apply Buttons and link semantics in a minimal JavaScript/JSX or configuration example and describe its expected result.",
+    "Verify the example with one relevant edge or failure case and identify version/runtime assumptions."
+  ],
+  "content": {
+    "intro": "This lesson develops Accessible Interactive Components in the supplied Next.js curriculum. The list below preserves its named syllabus subtopics and ties them to a small example you can inspect and adapt.",
+    "why_it_matters": "Accessible and localized interfaces need semantic structure, keyboard support, clear labels, predictable focus, and locale-aware content/metadata. In practice, buttons and link semantics should be understood well enough to explain the expected behavior and how it can fail.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Accessible Interactive Components: concept map",
+        "asset_path": "diagrams/lessons/lesson-216-accessible-interactive-components.svg",
+        "alt_text": "Lesson 216: Accessible Interactive Components: a four-step visual flow showing Buttons and link semantics, Modal dialog accessibility, Status messages, Reduced-motion behavior.",
+        "caption": "Concept map for Accessible Interactive Components in Accessibility and Internationalization; understand the idea, inspect its convention, practice, and verify. The numbered steps communicate order independently of color."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Accessible and localized interfaces need semantic structure, keyboard support, clear labels, predictable focus, and locale-aware content/metadata. “Accessible Interactive Components” is part of the lesson model for Accessible Interactive Components. Describe its role, use the framework convention that applies to the selected Next.js version, and confirm the result with a focused example."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Buttons and link semantics",
+            "text": "“Buttons and link semantics” is part of the lesson model for Accessible Interactive Components. Describe its role, use the framework convention that applies to the selected Next.js version, and confirm the result with a focused example."
+          },
+          {
+            "title": "Modal dialog accessibility",
+            "text": "For modal dialog accessibility, verify the interface with keyboard navigation, meaningful names, and language/reading-direction expectations."
+          },
+          {
+            "title": "Status messages",
+            "text": "“Status messages” is part of the lesson model for Accessible Interactive Components. Describe its role, use the framework convention that applies to the selected Next.js version, and confirm the result with a focused example."
+          },
+          {
+            "title": "Reduced-motion behavior",
+            "text": "“Reduced-motion behavior” is part of the lesson model for Accessible Interactive Components. Describe its role, use the framework convention that applies to the selected Next.js version, and confirm the result with a focused example."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "jsx",
+        "filename": "app/page.jsx",
+        "code": "export default function SearchForm() {\n  return <form action=\"/search\">\n    <label htmlFor=\"query\">Search articles</label>\n    <input id=\"query\" name=\"q\" type=\"search\" />\n    <button type=\"submit\">Search</button>\n  </form>;\n}",
+        "expected_output": "The input has a programmatically associated label and the form has a real submit button. Verify keyboard operation, focus visibility, and understandable errors.",
+        "run_instructions": "This is an inspectable example, not an arbitrary-code runner inside CodeLeaf. Start from a separate JavaScript App Router project created with `npx create-next-app@latest my-next-app --js --app`, put the snippet in the named or relevant file, and run `npm run dev`. Examples that call application-owned helpers, databases, authentication, or third-party APIs require those dependencies and appropriate environment variables. Use `npm run build` to validate a production build after adapting it.",
+        "reset_steps": "Restore the original snippet, reset the example data and request state, then rerun the same normal case and one empty, invalid, slow, denied, or failed case as relevant. Remove any test records and use non-production credentials.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Work through “Accessible Interactive Components” by predicting the result before running the example. Identify which file convention or API creates the behavior, then vary one relevant input such as a route parameter, form value, request result, or viewport. Record the actual outcome and compare it with the expected result above."
+      },
+      {
+        "type": "callout",
+        "title": "Version and environment note",
+        "text": "This JavaScript-first course uses the Next.js 16 documentation snapshot checked on 2026-10-18. Runtime note: this snippet is static instructional material, not an arbitrary-code runner. Run it in a separate, version-matched Next.js project and compare its output with the expected result. TypeScript is an optional parallel skill, not a requirement for these examples. Confirm any experimental or configuration-dependent API in the exact version installed in your learning project."
+      }
+    ],
+    "task": "Create or inspect a minimal example for “Accessible Interactive Components”. Include the syllabus concept “Buttons and link semantics”, state its expected output, and verify one normal and one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named concept rather than only mentioning it.",
+      "Expected output and the project/runtime needed to reproduce it are documented.",
+      "At least one boundary, empty, loading, denied, or failure case is tested or explicitly reasoned about.",
+      "Secrets and trusted server operations stay on the server; UI behavior remains semantic and accessible where relevant."
+    ],
+    "hints": [
+      "Start with the smallest observable part of “Buttons and link semantics”.",
+      "Predict the output, change one input at a time, and compare the result with your expectation.",
+      "If results differ, check the route/file convention, current Next.js and Node.js versions, server logs, and whether the behavior is cache-dependent."
+    ],
+    "expected_output": "The input has a programmatically associated label and the form has a real submit button. Verify keyboard operation, focus visibility, and understandable errors.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-216-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating a development preview as proof that the production application is correct.",
+        "why": "Caching, environment configuration, deployment constraints, and error handling can differ between development and production.",
+        "fix": "Run the relevant targeted tests and a production build, then verify the deployed/runtime-specific behavior."
+      },
+      {
+        "problem": "Relying on client-only checks for sensitive data or mutations.",
+        "why": "Requests can be sent without using the visible UI.",
+        "fix": "Authenticate, authorize, validate inputs, and check resource ownership inside the trusted server operation."
+      },
+      {
+        "problem": "Assuming a Next.js behavior is universal across releases.",
+        "why": "Rendering, caching, config, and request processing APIs evolve between versions.",
+        "fix": "Name the target release and check its matching official docs before publishing or upgrading the example."
+      }
+    ],
+    "summary": [
+      "Accessible Interactive Components fits into Accessibility and Internationalization and should be explained with the vocabulary in the syllabus subtopics.",
+      "Keep the implementation minimal, make its runtime boundary explicit, and document its expected output.",
+      "Verify at least one relevant edge/failure case before treating the example as correct."
+    ],
+    "references": [
+      "https://nextjs.org/docs/architecture/accessibility",
+      "https://nextjs.org/docs/app/guides/internationalization"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Accessibility",
+      "url": "https://nextjs.org/docs/architecture/accessibility",
+      "publisher": "Vercel / Next.js documentation team",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "accessibility support and practical testing"
+      ]
+    },
+    {
+      "title": "Internationalization",
+      "url": "https://nextjs.org/docs/app/guides/internationalization",
+      "publisher": "Vercel / Next.js documentation team",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "locale-aware App Router routing"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Authored from the supplied syllabus and current official documentation links; instructor and technical review are required before publication."
+}

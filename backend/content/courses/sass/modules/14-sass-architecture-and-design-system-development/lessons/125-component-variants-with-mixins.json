@@ -1,0 +1,153 @@
+{
+  "sequence": 125,
+  "title": "Component Variants with Mixins",
+  "slug": "component-variants-with-mixins",
+  "id": "sass-lesson-125",
+  "module_id": "sass-module-14",
+  "module_slug": "sass-architecture-and-design-system-development",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 12,
+  "status": "draft",
+  "prerequisites": [
+    "sass-lesson-124"
+  ],
+  "previous_lesson_id": "sass-lesson-124",
+  "next_lesson_id": "sass-lesson-126",
+  "keywords": [
+    "component-variants-with-mixins",
+    "base-component-styles",
+    "size-variants",
+    "visual-variants",
+    "state-variants",
+    "reusable-component-patterns-without-unnecessary-duplication"
+  ],
+  "source_syllabus_number": 125,
+  "learning_outcomes": [
+    "Explain component variants with mixins and connect it to at least two of its syllabus subtopics.",
+    "Apply component variants with mixins in a small SCSS example and predict the resulting CSS or compiler behavior.",
+    "Inspect the output, diagnose one plausible mistake, and state a relevant limitation or best practice."
+  ],
+  "exercise_files": [
+    "../exercises/015-component-variants.json"
+  ],
+  "content": {
+    "intro": "This lesson turns **Component Variants with Mixins** into a practical, inspectable step. You will connect base component styles with size variants, then check what Dart Sass emits instead of relying on the SCSS source alone.",
+    "why_it_matters": "A mixin packages a reusable group of declarations or nested rules. Parameters make the intended variation explicit, while `@content` lets the caller supply a controlled block when a wrapper needs caller-owned styles.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual map: Component Variants with Mixins",
+        "asset_path": "diagrams/lessons/lesson-125.svg",
+        "alt_text": "Three-step diagram for Component Variants with Mixins: understand the concept, apply it to base component styles, and verify the result.",
+        "caption": "Use this visual as a check sequence for component variants with mixins: understand, apply, and verify."
+      },
+      {
+        "type": "paragraph",
+        "title": "The mental model",
+        "text": "Give each mixin one clear purpose, document arguments and defaults, and check for repeated declarations when it is included in many components. Prefer a plain class or a function when it communicates intent more directly."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics in this lesson",
+        "items": [
+          {
+            "title": "Base component styles",
+            "text": "For base component styles, identify the relevant source rule, predict the intended result, and check the emitted CSS against that expectation."
+          },
+          {
+            "title": "Size variants",
+            "text": "For size variants, identify the relevant source rule, predict the intended result, and check the emitted CSS against that expectation."
+          },
+          {
+            "title": "Visual variants",
+            "text": "For visual variants, identify the relevant source rule, predict the intended result, and check the emitted CSS against that expectation."
+          },
+          {
+            "title": "State variants",
+            "text": "For state variants, identify the relevant source rule, predict the intended result, and check the emitted CSS against that expectation."
+          },
+          {
+            "title": "Reusable component patterns without unnecessary duplication",
+            "text": "For reusable component patterns without unnecessary duplication, identify the relevant source rule, predict the intended result, and check the emitted CSS against that expectation."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "1. Start with the smallest source file that demonstrates component variants with mixins. 2. State what should change and what should stay the same. 3. Compile the entrypoint with Dart Sass, or use the stated command if this lesson is about the toolchain. 4. Compare the resulting CSS or diagnostic with the expected result, then change one input and repeat."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Component Variants with Mixins",
+        "language": "scss",
+        "language_label": "SCSS",
+        "code": "@mixin pill($bg, $fg: white) {\n  background: $bg; color: $fg; border-radius: 999px;\n}\n.badge-success { @include pill(#16845b); }",
+        "expected_output": ".badge-success { background: #16845b; color: white; border-radius: 999px; }",
+        "run_mode": "static-validation",
+        "execution_note": "This course example is a Sass/SCSS or tooling example. CodeLeaf’s current in-browser playground previews HTML/CSS/JavaScript only; compile Sass locally with Dart Sass. Do not treat the browser preview as a Sass compiler."
+      },
+      {
+        "type": "callout",
+        "title": "Modern Sass note",
+        "text": "Use Dart Sass for new work. Prefer @use / @forward and namespaced sass: built-in modules. Sass compiles to CSS; browser-native CSS features still run in the browser."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a small SCSS example that demonstrates component variants with mixins. Keep the example focused on one behavior, compile it with the version used by your project, and explain which part of the output proves your understanding."
+      },
+      {
+        "type": "paragraph",
+        "title": "Common mistake to avoid",
+        "text": "Do not edit generated CSS when you intend to change source behavior. Edit the SCSS entrypoint or its module, compile again, and compare the generated output."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-125-questions.json"
+  },
+  "task": "Create a small SCSS example that demonstrates component variants with mixins. Keep the example focused on one behavior, compile it with the version used by your project, and explain which part of the output proves your understanding.",
+  "task_acceptance_criteria": [
+    "The example includes the intended Sass construct and a clear input.",
+    "The expected output or tool result is documented and consistent with the source.",
+    "The work is reproducible and includes one limitation, test, or troubleshooting note."
+  ],
+  "hints": [
+    "Reduce the example to one source file and one entrypoint before adding more abstractions.",
+    "Read the first compiler diagnostic and confirm you are editing the Sass source, not only generated CSS.",
+    "Compile and inspect the emitted CSS; compare exact selectors, values, and at-rules with your expectation."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Assuming SCSS runs directly in the browser.",
+      "why": "Browsers consume CSS, not Sass syntax.",
+      "fix": "Compile with Dart Sass and load the resulting .css file in the HTML page."
+    },
+    {
+      "problem": "Trusting source readability without inspecting generated output.",
+      "why": "Nesting, mixins, loops, and extension can emit unexpected selectors or more CSS than intended.",
+      "fix": "Compile a small example and inspect the CSS output or browser computed styles."
+    }
+  ],
+  "summary": [
+    "Component Variants with Mixins is useful when it solves the specific organization or reuse problem described in this lesson.",
+    "Keep compile-time Sass behavior distinct from browser-time CSS behavior.",
+    "Validate both source intent and generated CSS before relying on the pattern in a larger project."
+  ],
+  "sources": [
+    {
+      "title": "Sass documentation",
+      "url": "https://sass-lang.com/documentation/",
+      "publisher": "Sass",
+      "supports": [
+        "Reference for lesson 125: Component Variants with Mixins"
+      ]
+    }
+  ],
+  "run_mode": "static-validation",
+  "status_note": "Draft lesson generated from the attached Sass.pdf curriculum and aligned to modern Dart Sass documentation; subject-matter and compiled-example review is required before publishing.",
+  "exercise_ids": [
+    "sass-exercise-015"
+  ]
+}

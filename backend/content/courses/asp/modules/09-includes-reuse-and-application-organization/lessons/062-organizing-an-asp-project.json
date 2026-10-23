@@ -1,0 +1,187 @@
+{
+  "id": "asp-lesson-062",
+  "slug": "organizing-an-asp-project",
+  "title": "Organizing an ASP Project",
+  "sequence": 62,
+  "module_id": "asp-module-09",
+  "module_slug": "includes-reuse-and-application-organization",
+  "level": "Intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "asp-lesson-061"
+  ],
+  "previous_lesson_id": "asp-lesson-061",
+  "next_lesson_id": "asp-lesson-063",
+  "keywords": [
+    "organizing-an-asp-project",
+    "root-level-files-and-folders",
+    "shared-include-directories",
+    "database-helper-files",
+    "shared-validation-procedures"
+  ],
+  "source_syllabus_number": 62,
+  "subtopics": [
+    "Root-level files and folders",
+    "Shared include directories",
+    "Database helper files",
+    "Shared validation procedures",
+    "Public and protected resources",
+    "Organizing static assets",
+    "Separating environment-specific configuration"
+  ],
+  "learning_outcomes": [
+    "Explain the role of organizing an asp project in a Classic ASP application.",
+    "Identify and describe at least two syllabus subtopics: Root-level files and folders and Shared include directories.",
+    "Inspect a minimal example and define a reproducible normal-case and failure-case test."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study organizing an asp project as part of Classic ASP development and legacy maintenance. The lesson follows the attached ASP curriculum topic 62 and uses the syllabus subtopics as the coverage checklist.",
+    "why_it_matters": "Organizing an ASP Project matters because Classic ASP behavior crosses a server-side scripting engine, IIS configuration, request/response boundaries, and often COM or ADO dependencies. A small, explicit test helps distinguish intended behavior from runtime-specific behavior.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "Organizing an ASP Project: concept map",
+        "asset_path": "diagrams/lessons/lesson-062-organizing-an-asp-project.svg",
+        "alt_text": "Concept map for Organizing an ASP Project; steps include Root-level files and folders, Shared include directories, Shared validation procedures, Separating environment-specific configuration.",
+        "caption": "The visual introduces the idea; use the subtopic list and inspectable example to verify each step."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Includes and shared procedures reduce duplication, but they also create shared dependencies and path-resolution risks. For 'Organizing an ASP Project', define clear file ownership, use stable application-relative paths where possible, keep configuration separate from page markup, and inspect shared includes before changing behavior across the application."
+      },
+      {
+        "type": "paragraph",
+        "title": "Syllabus coverage",
+        "text": "The lesson explicitly covers: Root-level files and folders; Shared include directories; Database helper files; Shared validation procedures; Public and protected resources; Organizing static assets; Separating environment-specific configuration. Treat these subtopics as connected requirements. For each one, be able to define the concept, identify where it appears in a Classic ASP application, and name one test or diagnostic that would verify it."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: Organizing an ASP Project",
+        "language": "text",
+        "code": "/public/*.asp       learner-facing pages\n/includes/*.inc    shared, non-secret functions and markup\n/private-data/      protected files outside public web root\n/config/            restricted environment-specific configuration",
+        "expected_output": "A separation between public routes, shared code, protected data, and configuration improves reviewability.",
+        "run_instructions": "Use the layout as a design sketch; actual Windows ACLs and IIS application boundaries determine effective access. The standard CodeLeaf browser playground previews HTML/CSS/JavaScript only; it does not execute Classic ASP, VBScript, ADO, IIS commands, PowerShell, or SQL. This block is therefore marked for static inspection unless you run it in the clearly identified local tool.",
+        "reset_steps": "Restore the original sample and test data. Change one condition, input, provider setting, or runtime option at a time, then compare observed behavior with the expected result.",
+        "execution_mode": "static-validation",
+        "limitations": "Not executed during course generation. Classic ASP examples require a configured Windows/IIS environment with the matching ASP scripting engine and any required COM/ADO providers. Provider-specific and IIS-version-specific behavior must be verified locally."
+      },
+      {
+        "type": "callout",
+        "title": "Runtime and safety checkpoint",
+        "text": "Submit requests through a browser to a local/test IIS site. Test missing fields, repeated parameters, session expiry, and a second request; do not infer security from a successful happy path. The source syllabus treats Classic ASP as a legacy maintenance technology, not as ASP.NET or a default choice for new web projects."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided workflow",
+        "text": "1. Start with a minimal local example of organizing an asp project. 2. Trace its inputs, state changes, dependencies, and output. 3. Test a normal case, a missing/malformed case, and one permission/provider/runtime failure. 4. Write down the exact expected and observed result before changing another variable."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a small, reviewable demonstration of organizing an asp project using synthetic data. Include at least one of these syllabus concepts: Root-level files and folders. State the expected result first, then add one invalid or boundary case and explain how your program should behave."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-062-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating legacy runtime behavior as universal.",
+        "why": "IIS versions, Windows lifecycle, COM registration/bitness, and ADO providers can change behavior.",
+        "fix": "Write down the actual server/provider versions and validate on a disposable test site."
+      },
+      {
+        "problem": "Testing only a successful path.",
+        "why": "Empty input, missing records, expired sessions, permissions, timeouts, and malformed data reveal different failure modes.",
+        "fix": "Add normal, negative, and boundary cases with expected outcomes."
+      },
+      {
+        "problem": "Exposing internal details while debugging.",
+        "why": "Detailed errors can reveal paths, SQL text, configuration, and component information.",
+        "fix": "Keep diagnostics in restricted server-side logs and return a generic message with a reference ID."
+      }
+    ]
+  },
+  "task": "Build a short demonstration of organizing an asp project using synthetic data. Demonstrate “Root-level files and folders”, state the expected result, and document one edge/failure case.",
+  "task_acceptance_criteria": [
+    "The artifact demonstrates Root-level files and folders.",
+    "Expected result is written before verification.",
+    "At least one invalid or boundary case is documented.",
+    "Runtime/provider/version assumptions and security limits are recorded."
+  ],
+  "hints": [
+    "Start with the smallest example for root-level files and folders.",
+    "Keep the sample synthetic and change one thing at a time.",
+    "Compare observed behavior against a written expectation and consult the linked official reference if the runtime differs."
+  ],
+  "summary": [
+    "Organizing an ASP Project is one step in the larger Classic ASP request, state, data, security, or maintenance workflow.",
+    "The syllabus coverage includes Root-level files and folders; Shared include directories; Database helper files; Shared validation procedures; Public and protected resources; Organizing static assets; Separating environment-specific configuration.",
+    "A reproducible legacy-code example records input, environment/version, expected outcome, observed outcome, and a meaningful failure case."
+  ],
+  "run_mode": "static-validation",
+  "expected_output": "A separation between public routes, shared code, protected data, and configuration improves reviewability.",
+  "common_mistakes": [
+    {
+      "problem": "Assuming syntax alone proves the application works.",
+      "why": "IIS configuration, permissions, COM activation, database providers, and response behavior are external dependencies.",
+      "fix": "Run against the documented local test host and record exact evidence."
+    },
+    {
+      "problem": "Trusting browser-supplied values.",
+      "why": "Query strings, form fields, cookies, and hidden controls remain client-controlled.",
+      "fix": "Validate on the server and apply authorization and output encoding at the appropriate boundary."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "id": "asp-ref-build-iis",
+      "title": "Scenario: Build a Classic ASP Website on IIS",
+      "url": "https://learn.microsoft.com/en-us/iis/application-frameworks/running-classic-asp-applications-on-iis-7-and-iis-8/scenario-build-a-classic-asp-website-on-iis",
+      "publisher": "Microsoft Learn",
+      "checked_on": "2026-10-15",
+      "concepts": [
+        "IIS feature installation",
+        "Classic ASP site bindings and physical paths",
+        "application settings"
+      ],
+      "source_type": "official implementation guide; some UI steps are for older Windows versions"
+    },
+    {
+      "id": "asp-ref-iis-asp-config",
+      "title": "ASP <asp> configuration reference",
+      "url": "https://learn.microsoft.com/en-us/iis/configuration/system.webserver/asp/",
+      "publisher": "Microsoft Learn",
+      "checked_on": "2026-10-15",
+      "concepts": [
+        "ASP engine configuration",
+        "session settings",
+        "buffering",
+        "script language",
+        "parent paths",
+        "error disclosure"
+      ],
+      "source_type": "official configuration reference"
+    },
+    {
+      "id": "asp-ref-script-errors",
+      "title": "Classic ASP Script Error Messages No Longer Shown in Web Browser by Default",
+      "url": "https://learn.microsoft.com/en-us/iis/application-frameworks/running-classic-asp-applications-on-iis-7-and-iis-8/classic-asp-script-error-messages-no-longer-shown-in-web-browser-by-default",
+      "publisher": "Microsoft Learn",
+      "checked_on": "2026-10-15",
+      "concepts": [
+        "server-side diagnostics",
+        "safe error responses"
+      ],
+      "source_type": "official IIS guidance"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Draft generated from the attached ASP (Classic Active Server Pages) curriculum. Requires technical review and target-IIS/provider verification before publication.",
+  "exercise_files": []
+}

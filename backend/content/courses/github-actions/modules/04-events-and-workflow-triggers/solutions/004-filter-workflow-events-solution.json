@@ -1,0 +1,13 @@
+{
+  "id": "github-actions-exercise-solution-004",
+  "exercise_id": "github-actions-exercise-004",
+  "title": "Filter workflow events reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": {
+    "approach": "A complete response for filter workflow events should include: push:, branches:, pull_request:.",
+    "example": "name: Scoped validation\non:\n  push:\n    branches: [main]\n    paths:\n      - \"src/**\"\n      - \"tests/**\"\n  pull_request:\n    branches: [main]\npermissions:\n  contents: read\njobs:\n  validate:\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo \"Run scoped validation here\"",
+    "verification": "Push runs are limited by branch and changed-path filters; pull requests targeting main run the validation job."
+  },
+  "explanation": "Reason about the trigger, permission boundary, expected observable result, and failure path for filter workflow events. Use a non-production branch to test the intended trigger behavior. Ensure path filters do not skip shared-code or mandatory security checks. Adapt action references and runtime details against the official docs checked on 2026-10-20."
+}

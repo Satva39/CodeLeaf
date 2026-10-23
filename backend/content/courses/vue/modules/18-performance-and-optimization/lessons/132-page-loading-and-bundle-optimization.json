@@ -1,0 +1,183 @@
+{
+  "id": "vue-lesson-132",
+  "slug": "page-loading-and-bundle-optimization",
+  "title": "Page Loading and Bundle Optimization",
+  "sequence": 132,
+  "module_id": "vue-module-18",
+  "module_slug": "performance-and-optimization",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "vue-lesson-131"
+  ],
+  "previous_lesson_id": "vue-lesson-131",
+  "next_lesson_id": "vue-lesson-133",
+  "keywords": [
+    "Page Loading and Bundle Optimization",
+    "Performance and Optimization",
+    "Route-level code splitting",
+    "Lazy-loaded components",
+    "Tree shaking",
+    "Asset optimization",
+    "Understanding bundle analysis",
+    "Vue 3",
+    "Composition API"
+  ],
+  "source_syllabus_number": 132,
+  "subtopics": [
+    "Route-level code splitting",
+    "Lazy-loaded components",
+    "Tree shaking",
+    "Asset optimization",
+    "Understanding bundle analysis"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Page Loading and Bundle Optimization in a Vue 3 application.",
+    "Apply at least one of the syllabus subtopics in a small, inspectable example.",
+    "Verify one expected behavior and identify a relevant edge case."
+  ],
+  "content": {
+    "intro": "This lesson studies Page Loading and Bundle Optimization within Performance and Optimization. The source PDF subtopics are preserved below and connected to an original working-style example.",
+    "why_it_matters": "Profiling avoids guesswork and helps developers optimize the bottleneck that users actually experience.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Page Loading and Bundle Optimization: Measure before optimizing",
+        "asset_path": "diagrams/lessons/lesson-132-page-loading-and-bundle-optimization.svg",
+        "alt_text": "Measure before optimizing diagram for lesson 132: Page Loading and Bundle Optimization. Record the same route, data, and device → Identify the actual render or bundle bottleneck → Repeat measurements and check behavior",
+        "caption": "Performance workflow: measure a reproducible baseline, optimize the observed bottleneck, and repeat the same test."
+      },
+      {
+        "type": "paragraph",
+        "title": "The idea in context",
+        "text": "Vue performance work starts with measurement and distinguishes initial load costs from reactive update costs. This lesson focuses on Page Loading and Bundle Optimization. Start by naming the state, component, browser behavior, or deployment boundary involved; then predict what should change and test the smallest example."
+      },
+      {
+        "type": "list",
+        "title": "Topics to understand",
+        "items": [
+          {
+            "title": "Route-level code splitting",
+            "text": "For Route-level code splitting, keep the URL as the addressable navigation state, use named route records when practical, and handle invalid parameters or failed navigation explicitly. A route guard improves navigation flow but does not replace backend access control."
+          },
+          {
+            "title": "Lazy-loaded components",
+            "text": "For Lazy-loaded components, measure first and optimize the constrained resource rather than guessing. Compare before/after behavior, keep stable identity for rendered lists, and verify that an optimization does not make the code harder to maintain."
+          },
+          {
+            "title": "Tree shaking",
+            "text": "For Tree shaking, connect the term to a visible behavior in a small Vue 3 example. State what input or reactive dependency changes, predict the UI result, and verify the prediction with a normal case plus a boundary case."
+          },
+          {
+            "title": "Asset optimization",
+            "text": "For Asset optimization, measure first and optimize the constrained resource rather than guessing. Compare before/after behavior, keep stable identity for rendered lists, and verify that an optimization does not make the code harder to maintain."
+          },
+          {
+            "title": "Understanding bundle analysis",
+            "text": "For Understanding bundle analysis, measure first and optimize the constrained resource rather than guessing. Compare before/after behavior, keep stable identity for rendered lists, and verify that an optimization does not make the code harder to maintain."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "vue",
+        "code": "<script setup>\nimport { computed, ref } from 'vue'\nconst query = ref('')\nconst items = ref([{ id: 1, name: 'Vue' }, { id: 2, name: 'Vite' }])\nconst filtered = computed(() => items.value.filter((item) => item.name.toLowerCase().includes(query.value.toLowerCase())))\n</script>\n<template><input v-model=\"query\" aria-label=\"Filter items\"/><ul><li v-for=\"item in filtered\" :key=\"item.id\">{{ item.name }}</li></ul></template>",
+        "expected_output": "Typing filters the two rows; the result is derived instead of stored as a second mutable list.",
+        "run_instructions": "Run as App.vue. For very large datasets, measure and consider server filtering or a maintained virtualization component.",
+        "reset_steps": "Restore the initial values or original code, reload the development app/test, and repeat once with a boundary or failure case. Remove temporary logs and test data before committing.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided example",
+        "text": "Work through Page Loading and Bundle Optimization with a predict–change–verify loop. First state the expected UI or console output. Change only the relevant input/state value, then observe the result. Compare it with the expected output in the code block; if it differs, check the exact file, runtime/version, browser Console, and network response before widening the investigation."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Extend the example to include “Lazy-loaded components”. Keep the same behavior for the ordinary input, then try an empty, invalid, repeated, or failure condition that makes sense for the example. Record the expected result before testing."
+      },
+      {
+        "type": "list",
+        "title": "Common mistakes and fixes",
+        "items": [
+          {
+            "title": "Assuming behavior instead of checking it",
+            "text": "Write down the expected result and reproduce the issue in the smallest possible example; inspect the browser Console and the exact reactive value or request."
+          },
+          {
+            "title": "Ignoring an edge case",
+            "text": "Try empty input, a missing item, repeated interaction, a failed request, or unmounting while work is pending; handle the case explicitly."
+          },
+          {
+            "title": "Putting every responsibility in one component",
+            "text": "Separate display, reusable logic, API service, and shared state when that boundary makes the behavior easier to test and explain."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "Remember: Vue performance work starts with measurement and distinguishes initial load costs from reactive update costs. For Page Loading and Bundle Optimization, keep the example small, verify the rendered or logged result, and consult the official references when behavior depends on a specific Vue or ecosystem version."
+      },
+      {
+        "type": "callout",
+        "title": "Accessibility, version, and runtime notes",
+        "text": "Use semantic HTML, readable labels, keyboard-operable controls, and visible errors where the example interacts with users. Vue examples are intended for Vue 3.x with create-vue/Vite unless a legacy or specialist lesson explicitly says otherwise. This CodeLeaf playground does not execute arbitrary Vue code; the snippets are labeled for static validation and should be run in a separate local project."
+      }
+    ],
+    "task": "Create a small example for “Page Loading and Bundle Optimization” that applies “Route-level code splitting”, predicts the expected result, and verifies a relevant boundary case.",
+    "task_acceptance_criteria": [
+      "The example demonstrates the named Vue concept rather than only mentioning it.",
+      "The expected output or observable behavior is written down and can be checked locally.",
+      "At least one boundary, loading, invalid-input, or failure case is tested or explicitly reasoned about.",
+      "The example uses semantic/accessible interaction patterns and does not treat frontend state as authoritative security."
+    ],
+    "hints": [
+      "Start with the smallest observable part of “Route-level code splitting”.",
+      "Predict the output before changing one input at a time.",
+      "Use the browser Console, Vue DevTools, or the appropriate test runner to isolate a mismatch."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "The example only covers the happy path.",
+        "why": "Real interfaces receive empty values, delayed responses, invalid input, and failed requests.",
+        "fix": "Add one realistic edge/failure case and state its expected behavior."
+      },
+      {
+        "problem": "The code assumes an API or feature exists in every runtime.",
+        "why": "Tool and API support depends on Vue, the build tool, or the chosen SSR/test framework.",
+        "fix": "Check the linked official reference and record the runtime/version assumption."
+      }
+    ],
+    "summary": [
+      "Page Loading and Bundle Optimization belongs to the broader area Performance and Optimization.",
+      "The main concept to practice is Route-level code splitting.",
+      "Verify a normal result and one meaningful boundary case before using the pattern in a production feature."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-132-questions.json",
+    "references": [
+      "https://vuejs.org/guide/best-practices/performance.html"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Vue Performance Guide",
+      "url": "https://vuejs.org/guide/best-practices/performance.html",
+      "publisher": "Vue.js core team",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Page Loading and Bundle Optimization",
+        "Route-level code splitting",
+        "Lazy-loaded components",
+        "Tree shaking"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Authored as a syllabus-complete educational draft. Technical and instructional review required before publication."
+}

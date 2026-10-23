@@ -1,0 +1,206 @@
+{
+  "id": "mongodb-lesson-111",
+  "slug": "introduction-to-indexes",
+  "title": "Introduction to Indexes",
+  "sequence": 111,
+  "module_id": "mongodb-module-11",
+  "module_slug": "mongodb-indexes",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "mongodb-lesson-110"
+  ],
+  "previous_lesson_id": "mongodb-lesson-110",
+  "next_lesson_id": "mongodb-lesson-112",
+  "keywords": [
+    "introduction",
+    "indexes",
+    "mongodb",
+    "database"
+  ],
+  "source_syllabus_number": 111,
+  "source_module_number": 11,
+  "subtopics": [
+    "What an index does",
+    "Collection scans versus index scans",
+    "Index storage costs",
+    "Index selection and query patterns"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and main trade-off of introduction to indexes.",
+    "Apply introduction to indexes to a small MongoDB data or operational scenario.",
+    "Verify the expected result, one edge case, and the relevant version/deployment assumption."
+  ],
+  "content": {
+    "intro": "Learn introduction to indexes as part of MongoDB Indexes. The lesson preserves the PDF subtopics, connects them to a practical MongoDB pattern, and ends with a verification task.",
+    "why_it_matters": "Introduction to Indexes is a performance decision, not a rule to apply blindly. Start from a representative query and data distribution, inspect explain() evidence, and compare read improvements with write, memory and storage overhead.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Introduction to Indexes",
+        "asset_path": "diagrams/lesson-111-introduction-to-indexes.svg",
+        "alt_text": "Four-step learning diagram for Introduction to Indexes: Capture workload; Choose index/plan; Measure execution; Review trade-offs.",
+        "caption": "Visual guide to Introduction to Indexes: follow the concept, action, verification and application steps."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Introduction to Indexes is a performance decision, not a rule to apply blindly. Start from a representative query and data distribution, inspect explain() evidence, and compare read improvements with write, memory and storage overhead."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics to master",
+        "items": [
+          {
+            "title": "1. What an index does",
+            "text": "Be able to explain or demonstrate what an index does in the context of introduction to indexes, and document the relevant design or version assumption."
+          },
+          {
+            "title": "2. Collection scans versus index scans",
+            "text": "Be able to explain or demonstrate collection scans versus index scans in the context of introduction to indexes, and document the relevant design or version assumption."
+          },
+          {
+            "title": "3. Index storage costs",
+            "text": "Be able to explain or demonstrate index storage costs in the context of introduction to indexes, and document the relevant design or version assumption."
+          },
+          {
+            "title": "4. Index selection and query patterns",
+            "text": "Be able to explain or demonstrate index selection and query patterns in the context of introduction to indexes, and document the relevant design or version assumption."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the behavior you want, identify the collection/document shape and access pattern involved, then select the smallest MongoDB operation that expresses the requirement. Write down read/write patterns and negative cases, then test the proposal with representative data."
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "execution_mode": "static-validation",
+        "code": "db.products.createIndex({ category: 1, price: 1 });\ndb.products.find({ category: \"stationery\", price: { $lt: 10 } }).explain(\"executionStats\");",
+        "expected_output": "The index is evaluated against a category-and-price query; explain output, not the mere existence of an index, is the evidence.",
+        "run_instructions": "CodeLeaf displays this example as a reference and does not execute a MongoDB server or arbitrary driver code in the page. Run shell examples with mongosh, or driver examples in a separately configured Node.js/Python lab, against a disposable database. Verify installed server/driver versions and deployment feature availability first. Never place credentials in source files.",
+        "reset_steps": "Use a dedicated training database and synthetic fixtures. Remove only objects created by this lesson or recreate the disposable database after confirming the target; do not run destructive/reset commands against production."
+      },
+      {
+        "type": "callout",
+        "title": "Environment and safety note",
+        "text": "All examples are teaching references, not production-ready configuration. MongoDB Atlas-specific Search, Vector Search, monitoring, backup and automation features are marked as deployment-dependent. Server, driver, shell and managed-service capabilities differ; check the official documentation that matches your target."
+      }
+    ],
+    "task": "Try it yourself: Capture explain(\"executionStats\") for a representative query, compare an appropriate index or pipeline change, and record the read/write trade-off rather than guessing. Submit your choice plus the expected result/evidence and one edge case.",
+    "task_acceptance_criteria": [
+      "Demonstrate the key idea in Introduction to Indexes.",
+      "Predict the result and state how you would verify it.",
+      "Name one boundary, risk or version/deployment assumption."
+    ],
+    "hints": [
+      "First, explain what “Introduction to Indexes” needs to accomplish in this scenario.",
+      "Write down the data shape, filter, expected output or operational evidence before running the example.",
+      "Test one normal case and one meaningful boundary/failure case; consult the matching official reference."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Designing from an example instead of real access patterns",
+        "why": "A model, validator or index that fits one sample may fail for growth, optional values or important queries.",
+        "fix": "Write down read/write patterns and negative cases, then test the proposal with representative data."
+      },
+      {
+        "problem": "Assuming a static reference result proves the environment will behave identically.",
+        "why": "MongoDB server, shell, driver, managed service and permissions can affect the available behavior.",
+        "fix": "Record the target versions and privileges, run the smallest safe test, and keep expected and actual results side by side."
+      }
+    ],
+    "summary": [
+      "Introduction to Indexes is a performance decision, not a rule to apply blindly. Start from a representative query and data distribution, inspect explain() evidence, and compare read improvements with write, memory and storage overhead.",
+      "The supplied roadmap identifies these subtopics: What an index does; Collection scans versus index scans; Index storage costs; Index selection and query patterns.",
+      "Use a disposable practice environment, verify the result and keep operational assumptions explicit."
+    ],
+    "references": [
+      {
+        "title": "MongoDB Manual — Complete Documentation Index",
+        "url": "https://www.mongodb.com/docs/manual/contents/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "course-wide concepts",
+          "deployment and version navigation",
+          "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+        ]
+      },
+      {
+        "title": "Indexes",
+        "url": "https://www.mongodb.com/docs/manual/indexes/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "index types",
+          "compound and multikey indexes",
+          "index trade-offs"
+        ]
+      },
+      {
+        "title": "MongoDB Explain Results",
+        "url": "https://www.mongodb.com/docs/manual/reference/explain-results/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "execution plans",
+          "execution statistics and query diagnosis"
+        ]
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-111-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "MongoDB-specific examples are reference content. A separate isolated MongoDB server/driver runtime is required for execution; questions and solutions remain protected."
+  },
+  "exercise_files": [
+    "../exercises/111-introduction-to-indexes-practice.json"
+  ],
+  "sources": [
+    {
+      "title": "MongoDB Manual — Complete Documentation Index",
+      "url": "https://www.mongodb.com/docs/manual/contents/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "course-wide concepts",
+        "deployment and version navigation",
+        "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+      ]
+    },
+    {
+      "title": "Indexes",
+      "url": "https://www.mongodb.com/docs/manual/indexes/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "index types",
+        "compound and multikey indexes",
+        "index trade-offs"
+      ]
+    },
+    {
+      "title": "MongoDB Explain Results",
+      "url": "https://www.mongodb.com/docs/manual/reference/explain-results/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "execution plans",
+        "execution statistics and query diagnosis"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson authored from the supplied MongoDB syllabus and original instructional material. Review examples against the target MongoDB release/deployment before publication."
+}

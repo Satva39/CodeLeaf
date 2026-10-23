@@ -1,0 +1,166 @@
+{
+  "id": "genai-lesson-114",
+  "slug": "introduction-to-rag",
+  "title": "Introduction to RAG",
+  "sequence": 114,
+  "module_id": "genai-module-14",
+  "module_slug": "retrieval-augmented-generation-rag",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core-application-development",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "genai-lesson-088",
+    "genai-lesson-106"
+  ],
+  "previous_lesson_id": "genai-lesson-113",
+  "next_lesson_id": "genai-lesson-115",
+  "keywords": [
+    "Introduction to RAG",
+    "What retrieval-augmented generation is",
+    "Why RAG is useful",
+    "RAG versus model fine-tuning",
+    "Retrieval, context assembly, and generation",
+    "Common RAG architectures",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 114,
+  "subtopics": [
+    "What retrieval-augmented generation is",
+    "Why RAG is useful",
+    "RAG versus model fine-tuning",
+    "Retrieval, context assembly, and generation",
+    "Common RAG architectures",
+    "Limitations of RAG"
+  ],
+  "learning_outcomes": [
+    "Explain what retrieval-augmented generation is and how it connects to introduction to rag.",
+    "Apply why rag is useful in the example and predict the output before running it.",
+    "Test one realistic edge case for introduction to rag and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers introduction to rag through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Build RAG as a chain of data preparation, retrieval, context assembly, generation, source attribution, and evaluation; inspect each stage instead of treating it as a single prompt.",
+    "why_it_matters": "What retrieval-augmented generation is concerns how content is represented, selected, or ranked for relevance. Keep the source text and metadata traceable, measure retrieval with labeled queries, and verify that similarity scores correspond to useful results rather than assuming nearby vectors prove factual correctness.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Introduction to RAG: concept map",
+        "asset_path": "diagrams/lessons/lesson-114-introduction-to-rag.svg",
+        "alt_text": "Diagram for Introduction to RAG: understand What retrieval-augmented generation is, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand What retrieval-augmented generation is, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "What retrieval-augmented generation is concerns how content is represented, selected, or ranked for relevance. Keep the source text and metadata traceable, measure retrieval with labeled queries, and verify that similarity scores correspond to useful results rather than assuming nearby vectors prove factual correctness."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "What retrieval-augmented generation is",
+            "text": "What retrieval-augmented generation is concerns how content is represented, selected, or ranked for relevance. Keep the source text and metadata traceable, measure retrieval with labeled queries, and verify that similarity scores correspond to useful results rather than assuming nearby vectors prove factual correctness."
+          },
+          {
+            "title": "Why RAG is useful",
+            "text": "Use why rag is useful as a lens for understanding introduction to rag. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "RAG versus model fine-tuning",
+            "text": "For rag versus model fine-tuning, distinguish the training objective from the evaluation goal. Check provenance and data quality, keep validation/test examples isolated from training, record the baseline and configuration, and evaluate both improvement on the target task and possible regressions elsewhere."
+          },
+          {
+            "title": "Retrieval, context assembly, and generation",
+            "text": "Treat retrieval, context assembly, and generation as part of the model's input contract: state the task, provide only relevant context, specify what a good response looks like, and test representative and ambiguous cases. A prompt can guide behavior, but application code must still validate important outputs."
+          },
+          {
+            "title": "Common RAG architectures",
+            "text": "Common RAG architectures is part of the representation and generation mechanism. Follow the information flow from input representation to model computation to output selection, then distinguish the architecture's capabilities from limits caused by data, context, decoding choices, or compute."
+          },
+          {
+            "title": "Limitations of RAG",
+            "text": "Use limitations of rag as a lens for understanding introduction to rag. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Introduction to RAG\ndocuments = {\"d1\": \"Password reset requires verified email.\", \"d2\": \"Shipping status appears in order history.\"}\nquestion = \"How do I reset my password?\"\nretrieved = [doc_id for doc_id,text in documents.items() if \"password\" in text.lower()]\nprint({\"question\": question, \"retrieved_sources\": retrieved, \"answer_should_be_grounded\": bool(retrieved)})",
+        "expected_output": "{'question': 'How do I reset my password?', 'retrieved_sources': ['d1'], 'answer_should_be_grounded': True}",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice what retrieval-augmented generation is within introduction to rag: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "{'question': 'How do I reset my password?', 'retrieved_sources': ['d1'], 'answer_should_be_grounded': True}",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-114-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Introduction to RAG is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide",
+      "https://developers.openai.com/api/docs/guides/embeddings"
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Design and develop a RAG solution",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide",
+      "publisher": "Microsoft Learn / Azure Architecture Center",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "RAG architecture"
+      ]
+    },
+    {
+      "title": "Vector embeddings",
+      "url": "https://developers.openai.com/api/docs/guides/embeddings",
+      "publisher": "OpenAI API documentation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "embeddings"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

@@ -1,0 +1,49 @@
+{
+  "id": "rest-api-development-knowledge-check-096",
+  "lesson_id": "rest-api-development-lesson-096",
+  "lesson_slug": "middleware-and-request-pipelines",
+  "title": "Knowledge check: Middleware and Request Pipelines",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "questions": [
+    {
+      "id": "rest-api-development-q-096-01",
+      "type": "single_choice",
+      "prompt": "Which backend structure keeps a REST API maintainable?",
+      "options": [
+        "Make business rules depend on the browser’s current UI state.",
+        "Use global mutable state as the only communication path between all layers.",
+        "Separate transport/routing from use cases, domain rules, and persistence; inject boundaries so behavior can be tested.",
+        "Put SQL, authorization, business rules, serialization, and retries into one route handler."
+      ],
+      "answer_key": "Separate transport/routing from use cases, domain rules, and persistence; inject boundaries so behavior can be tested.",
+      "explanation": "Separate transport/routing from use cases, domain rules, and persistence; inject boundaries so behavior can be tested. This is especially relevant to “Middleware and Request Pipelines” because the API contract must remain explicit and reviewable."
+    },
+    {
+      "id": "rest-api-development-q-096-02",
+      "type": "single_choice",
+      "prompt": "For the lesson “Middleware and Request Pipelines”, which check provides the strongest practical evidence?",
+      "options": [
+        "Test against production records so the exercise cannot be repeated safely.",
+        "Test use-case logic separately, then verify its integration with routing and persistence.",
+        "Rely on a code review comment without running any representative check.",
+        "Run one happy-path call and skip invalid, denied, and failure scenarios."
+      ],
+      "answer_key": "Test use-case logic separately, then verify its integration with routing and persistence.",
+      "explanation": "A useful check is repeatable, tied to an observable contract, and includes an important negative or boundary scenario."
+    },
+    {
+      "id": "rest-api-development-q-096-03",
+      "type": "single_choice",
+      "prompt": "Which review warning is most relevant to “Middleware and Request Pipelines”?",
+      "options": [
+        "Controllers contain persistence, business logic, and external-service behavior in one untestable block.",
+        "The expected behavior and relevant failure cases are documented.",
+        "A representative test can reproduce the result.",
+        "The API avoids exposing internal secrets and personal data."
+      ],
+      "answer_key": "Controllers contain persistence, business logic, and external-service behavior in one untestable block.",
+      "explanation": "This finding weakens a core API guarantee and should be treated as a design or release issue, not only a style concern."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "id": "expressjs-exercise-solution-006",
+  "exercise_id": "expressjs-exercise-006",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference approach for Custom Logger:\n\nimport express from 'express';\nimport { randomUUID } from 'node:crypto';\nconst app = express();\napp.use((req, res, next) => {\n  const started = process.hrtime.bigint();\n  req.requestId = randomUUID();\n  res.setHeader('X-Request-Id', req.requestId);\n  res.on('finish', () => {\n    const ms = Number(process.hrtime.bigint() - started) / 1e6;\n    console.log(JSON.stringify({ id: req.requestId, method: req.method, path: req.path, status: res.statusCode, ms: Math.round(ms) }));\n  });\n  next();\n});\napp.get('/health', (_req, res) => res.json({ status: 'ok' }));\napp.listen(3000);\n\nReview the prompt's acceptance criteria. This is a teaching fragment; integrate it into a complete app, install listed external packages, and run it locally with a supported Node.js LTS release.\n\nRequired markers checked by the current CodeLeaf static grader: app.use, req.method, res.on.",
+  "explanation": "The grader for Custom Logger checks required strings only. It does not execute arbitrary JavaScript, validate runtime semantics, or prove security. A reviewer should test normal input, invalid input, route order, error propagation, and cleanup where relevant."
+}

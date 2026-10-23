@@ -1,0 +1,182 @@
+{
+  "id": "web-application-security-lesson-094",
+  "slug": "host-header-and-request-control-vulnerabilities",
+  "title": "Host Header and Request-Control Vulnerabilities",
+  "sequence": 94,
+  "module_id": "web-application-security-module-13",
+  "module_slug": "ssrf-request-routing-and-http-infrastructure-attacks",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced-security",
+  "curriculum_tier": "advanced",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "web-application-security-lesson-093"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-093",
+  "next_lesson_id": "web-application-security-lesson-095",
+  "keywords": [
+    "host",
+    "header",
+    "and",
+    "request",
+    "control",
+    "vulnerabilities",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 94,
+  "source_syllabus_title": "Host Header and Request-Control Vulnerabilities",
+  "source_subtopics": [
+    {
+      "number": "94.1",
+      "title": "Host and forwarded-host headers"
+    },
+    {
+      "number": "94.2",
+      "title": "Host-header trust and absolute URL generation"
+    },
+    {
+      "number": "94.3",
+      "title": "Password-reset and verification links"
+    },
+    {
+      "number": "94.4",
+      "title": "Proxy trust configuration"
+    },
+    {
+      "number": "94.5",
+      "title": "Trusted-host validation"
+    },
+    {
+      "number": "94.6",
+      "title": "Preventing header-driven URL manipulation"
+    }
+  ],
+  "subtopics": [
+    "Host and forwarded-host headers",
+    "Host-header trust and absolute URL generation",
+    "Password-reset and verification links",
+    "Proxy trust configuration",
+    "Trusted-host validation",
+    "Preventing header-driven URL manipulation"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in Host Header and Request-Control Vulnerabilities.",
+    "Choose an appropriate defensive control for Host Header and Request-Control Vulnerabilities and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for Host Header and Request-Control Vulnerabilities, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 13: SSRF, Request Routing, and HTTP Infrastructure Attacks. It builds practical understanding of Host Header and Request-Control Vulnerabilities with the syllabus subtopics retained below.",
+    "why_it_matters": "Host Header and Request-Control Vulnerabilities addresses how untrusted data or requests cross a boundary and may influence application behavior. The safe fix should address the root cause and remain testable. Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Host Header and Request-Control Vulnerabilities",
+        "asset_path": "diagrams/lesson-094-host-header-and-request-control-vulnerabilities.svg",
+        "alt_text": "Four-stage visual model for Host Header and Request-Control Vulnerabilities: Parse destination; Allowlist scheme + host; Check connection boundary; Limit network egress.",
+        "caption": "Concept map for Host Header and Request-Control Vulnerabilities. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Host Header and Request-Control Vulnerabilities can be understood through this sequence: Parse destination → Allowlist scheme + host → Check connection boundary → Limit network egress. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 94.1 Host and forwarded-host headers; 94.2 Host-header trust and absolute URL generation; 94.3 Password-reset and verification links; 94.4 Proxy trust configuration; 94.5 Trusted-host validation; 94.6 Preventing header-driven URL manipulation. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "text",
+        "execution_mode": "human-review",
+        "title": "Safe reference example: Host Header and Request-Control Vulnerabilities",
+        "code": "Topic: Host Header and Request-Control Vulnerabilities\nReview artifact: define scope, assumptions, control owner, expected secure behavior, failure behavior, and a reproducible verification step.",
+        "expected_output": "A written review artifact names the control and the evidence needed to verify it.",
+        "run_instructions": "Use a local/owned application or explicitly authorized test target. Record only sanitized synthetic evidence; use human review for behavior that a static snippet cannot prove.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “Host Header and Request-Control Vulnerabilities”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for Host Header and Request-Control Vulnerabilities in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "human-review",
+    "knowledge_check_file": "exams/question-files/lesson-094-questions.json",
+    "recap": [
+      "Host Header and Request-Control Vulnerabilities is a security boundary/control topic, not a standalone checklist item.",
+      "Validate identity with a reviewed authentication design, protect session/token lifecycle and recovery, enforce server-side authorization separately, and test expiry, revocation, and failure paths.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

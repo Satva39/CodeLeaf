@@ -1,0 +1,53 @@
+{
+  "id": "github-actions-lesson-127-knowledge-check",
+  "lesson_id": "github-actions-lesson-127",
+  "lesson_slug": "managing-workflow-failures",
+  "title": "Managing Workflow Failures knowledge check",
+  "question_count": 3,
+  "questions": [
+    {
+      "id": "github-actions-q-127-01",
+      "type": "single_choice",
+      "prompt": "Which statement correctly describes Managing Workflow Failures?",
+      "options": [
+        "Run untrusted pull-request code in the same job that holds production credentials.",
+        "Retries should be limited to plausible transient failures; keep failed-run evidence, preserve clear failure status, and document escalation/incident steps.",
+        "Give every job write permission to avoid troubleshooting authorization errors.",
+        "Print all environment variables and event payloads to make the run easier to debug."
+      ],
+      "answer_key": "Retries should be limited to plausible transient failures; keep failed-run evidence, preserve clear failure status, and document escalation/incident steps.",
+      "explanation": "This is the central behavior of managing workflow failures: Retries should be limited to plausible transient failures; keep failed-run evidence, preserve clear failure status, and document escalation/incident steps. Validate configuration and behavior against the current official reference before production use.",
+      "difficulty": "applied"
+    },
+    {
+      "id": "github-actions-q-127-02",
+      "type": "single_choice",
+      "prompt": "A team is working with “Identifying flaky tests”. Which practice best fits this topic?",
+      "options": [
+        "Give every job write permission to avoid troubleshooting authorization errors.",
+        "Print all environment variables and event payloads to make the run easier to debug.",
+        "Run untrusted pull-request code in the same job that holds production credentials.",
+        "Make the check deterministic and fail with a meaningful status when requirements are not met. Preserve reports where useful and configure required branch checks to match the checks the workflow actually emits."
+      ],
+      "answer_key": "Make the check deterministic and fail with a meaningful status when requirements are not met. Preserve reports where useful and configure required branch checks to match the checks the workflow actually emits.",
+      "explanation": "Identifying flaky tests: Make the check deterministic and fail with a meaningful status when requirements are not met. Preserve reports where useful and configure required branch checks to match the checks the workflow actually emits. Apply the guidance to the actual event, runner, permissions, or artifact boundary and test the relevant case.",
+      "difficulty": "applied"
+    },
+    {
+      "id": "github-actions-q-127-03",
+      "type": "single_choice",
+      "prompt": "How should a reviewer verify a change related to managing workflow failures?",
+      "options": [
+        "Publish the workflow to production before reviewing its triggers and permissions.",
+        "Run a controlled test or static check, inspect the relevant job and step result, and compare the evidence with the stated acceptance criteria.",
+        "Assume the workflow is correct as soon as the YAML file is committed.",
+        "Retry every failure without looking at the exit code or preserving evidence."
+      ],
+      "answer_key": "Run a controlled test or static check, inspect the relevant job and step result, and compare the evidence with the stated acceptance criteria.",
+      "explanation": "Reliable verification uses observable evidence. For this lesson, consider: Retries should be limited to plausible transient failures; keep failed-run evidence, preserve clear failure status, and document escalation/incident steps. A syntax check alone cannot prove remote execution, permissions, or deployment behavior.",
+      "difficulty": "applied"
+    }
+  ],
+  "status": "draft",
+  "visibility": "protected_content_repository_only"
+}

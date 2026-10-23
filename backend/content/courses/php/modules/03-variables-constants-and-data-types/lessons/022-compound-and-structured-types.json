@@ -1,0 +1,199 @@
+{
+  "id": "php-lesson-022",
+  "slug": "compound-and-structured-types",
+  "title": "Compound and Structured Types",
+  "sequence": 22,
+  "module_id": "php-module-03",
+  "module_slug": "variables-constants-and-data-types",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "php-lesson-021"
+  ],
+  "previous_lesson_id": "php-lesson-021",
+  "next_lesson_id": "php-lesson-023",
+  "keywords": [
+    "compound and structured types",
+    "variables, constants, and data types",
+    "arrays",
+    "objects",
+    "resource values",
+    "introduction to enumerations",
+    "choosing an appropriate representation for data",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 22,
+  "subtopics": [
+    "Arrays.",
+    "Objects.",
+    "Resource values.",
+    "Introduction to enumerations.",
+    "Choosing an appropriate representation for data."
+  ],
+  "learning_outcomes": [
+    "Explain what compound and structured types contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: arrays.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Reliable programs represent values deliberately. Variables hold changing values, constants name stable values, and type behavior affects comparisons, conversion, function contracts, and error handling. In this lesson, focus on arrays; then compare it with objects. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use compound and structured types when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 3 overview: Variables, Constants, and Data Types",
+        "asset_path": "diagrams/module-03-overview.svg",
+        "alt_text": "Four-stage overview for module 3, Variables, Constants, and Data Types, grouping lesson topics in order.",
+        "caption": "Use this overview to place compound and structured types in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Reliable programs represent values deliberately. Variables hold changing values, constants name stable values, and type behavior affects comparisons, conversion, function contracts, and error handling. For compound and structured types, begin with arrays. Also distinguish objects; resource values; introduction to enumerations. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Arrays",
+            "text": "Trace the input keys and values, then verify the resulting order and shape, including empty collections and missing keys."
+          },
+          {
+            "title": "Objects",
+            "text": "Know when to use objects, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Resource values",
+            "text": "Know when to use resource values, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Introduction to enumerations",
+            "text": "State which values are accepted and what contract the declaration enforces; include a case that should be rejected or handled explicitly."
+          },
+          {
+            "title": "Choosing an appropriate representation for data",
+            "text": "Know when to use choosing an appropriate representation for data, what input or program state it changes, and which boundary case is worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Compound and Structured Types",
+        "language": "php",
+        "code": "<?php\n$metadata = [\"class\" => \"Product\", \"method\" => \"price\"];\necho $metadata[\"class\"] . \"::\" . $metadata[\"method\"] . PHP_EOL;",
+        "expected_output": "Product::price",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for compound and structured types from top to bottom. Start by identifying arrays, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for compound and structured types that demonstrates \"arrays\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of arrays.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "Product::price",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-022-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Compound and Structured Types is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+    ],
+    "references": [
+      {
+        "title": "Types",
+        "url": "https://www.php.net/manual/en/language.types.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "scalar types",
+          "arrays",
+          "objects",
+          "null",
+          "type conversion"
+        ]
+      },
+      {
+        "title": "Type declarations",
+        "url": "https://www.php.net/manual/en/language.types.declarations.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "parameter types",
+          "return types",
+          "union types",
+          "strict_types"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Types",
+      "url": "https://www.php.net/manual/en/language.types.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "scalar types",
+        "arrays",
+        "objects",
+        "null",
+        "type conversion"
+      ]
+    },
+    {
+      "title": "Type declarations",
+      "url": "https://www.php.net/manual/en/language.types.declarations.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "parameter types",
+        "return types",
+        "union types",
+        "strict_types"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

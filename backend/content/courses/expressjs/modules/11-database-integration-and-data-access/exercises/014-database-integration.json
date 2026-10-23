@@ -1,0 +1,54 @@
+{
+  "id": "expressjs-exercise-014",
+  "slug": "database-integration",
+  "title": "Database Integration",
+  "type": "practical",
+  "lesson_id": "expressjs-lesson-096",
+  "module_id": "expressjs-module-11",
+  "difficulty": "intermediate",
+  "sequence": 1,
+  "prompt": "Persist products in a database and retrieve them through Express. Submit a focused JavaScript/Express artifact and explain how you would run and verify it locally. Use synthetic data and test both a normal request and an invalid or failure case.",
+  "objective": "Database Integration",
+  "target_skills": [
+    "data access",
+    "queries",
+    "connection handling"
+  ],
+  "starter": {
+    "language": "javascript",
+    "code": "// Database Integration\n// TODO: implement the required behavior.\n// Lesson example reference:\nimport express from 'express';\nimport pg from 'pg';\nconst { Pool } = pg;\nconst pool = new Pool({ connectionString: process.env.DATABASE_URL });\nconst app = express();\napp.get('/api/products/:id', async (req, res) => {\n  const id = Number(req.params.id);\n  if (!Number.isSafeInteger(id) || id < 1) return res.status(400).json({ error: 'Invalid id' });\n  const result = await pool.query('SELECT id, name FROM products WHERE id = $1', [id]);\n  if (!result.rowCount) return res.status(404).json({ error: 'Not found' });\n  res.json(result.rows[0]);\n});\napp.listen(process.env.PORT || 3000);"
+  },
+  "expected_output": "A reviewable implementation for Database Integration with a documented expected response and a local test for one success case and one failure/edge case. CodeLeaf checks required strings only; it does not run submitted Node.js code in the browser.",
+  "public_tests": [
+    {
+      "name": "Required implementation markers (static smoke check)",
+      "required_strings": [
+        "pool.query",
+        "$1"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Address the task: Persist products in a database and retrieve them through Express.",
+    "Use the Express.js 5 syntax and make the required status/response behavior explicit.",
+    "Document the local command and show a successful request plus one invalid or dependency-failure request.",
+    "Do not include credentials or production data; explain any remaining runtime or security review needed."
+  ],
+  "hints": [
+    "Start with the smallest route or middleware that demonstrates the requested concept, then add the validation/error path.",
+    "Check the relevant Express 5 guide and the expected status/response shape before changing the example.",
+    "Run the server locally and test both a valid request and an invalid/boundary request; capture the result rather than assuming it passed."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "pool.query",
+      "$1"
+    ]
+  },
+  "grading_method": "Server-side case-sensitive required-string smoke check plus human/runtime review. It is not a Node.js sandbox and does not prove that submitted code executes correctly.",
+  "retry_policy": "Retries permitted after feedback; CodeLeaf records successful completion once. XP is controlled centrally by the backend; this content file defines no reward override.",
+  "solution_file": "../solutions/expressjs-exercise-014-reference.json",
+  "status": "draft",
+  "status_note": "Adapted from Section C of ExpressJS.pdf; static grading only checks markers, so manually run and review the implementation before publication."
+}

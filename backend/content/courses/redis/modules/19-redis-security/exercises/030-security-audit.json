@@ -1,0 +1,54 @@
+{
+  "id": "redis-exercise-030",
+  "slug": "security-audit",
+  "title": "Security Audit",
+  "type": "coding",
+  "lesson_id": "redis-lesson-154",
+  "module_id": "redis-module-19",
+  "difficulty": "advanced",
+  "sequence": 30,
+  "prompt": "Audit private networking, ACL least privilege and TLS assumptions. Use only synthetic data and the disposable local/test instance. Record the commands or application code, expected result, one edge case, and cleanup steps.",
+  "objective": "Audit private networking, ACL least privilege and TLS assumptions",
+  "target_skills": [
+    "Redis data modeling and command use",
+    "expected-output reasoning",
+    "boundary testing and cleanup"
+  ],
+  "starter": {
+    "language": "redis-cli / notes",
+    "code": "# TODO: Audit private networking, ACL least privilege and TLS assumptions.\n# Add the smallest correct implementation and document normal + boundary cases.\n"
+  },
+  "expected_output": "A reproducible Redis lab for Security Audit, with the requested behavior, one normal-case check, one edge-case check, and cleanup instructions in the README or notes.",
+  "public_tests": [
+    {
+      "name": "Required implementation evidence",
+      "required_strings": [
+        "ACL",
+        "TLS"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "The solution implements the stated goal: Audit private networking, ACL least privilege and TLS assumptions.",
+    "The learner uses a disposable key namespace and does not include real personal data, passwords, or production credentials.",
+    "At least one normal and one boundary/error case are checked.",
+    "The result records the relevant command/version assumptions and a cleanup/reset step."
+  ],
+  "hints": [
+    "Write down the data model and expected result before coding.",
+    "Use a unique demo: key prefix, and state what happens for a missing key or repeated request.",
+    "Static token checks are only smoke checks; run commands in a local compatible Redis environment and review the result manually."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "ACL",
+      "TLS"
+    ]
+  },
+  "grading_method": "Static required-token smoke check only. This is not Redis command execution and does not prove correctness, atomicity, version compatibility, or recovery behavior; perform the local lab and human review described in the criteria.",
+  "retry_policy": "Allow retries. Platform backend owns completion and reward idempotency; this file defines no XP override.",
+  "solution_file": "../../../solutions/exercises/030-security-audit-solution.json",
+  "status": "draft",
+  "status_note": "Draft derived from Section C of Redis.pdf; inspect command compatibility, expected outputs, and grading tokens before publication."
+}

@@ -1,0 +1,143 @@
+{
+  "id": "rust-lesson-298",
+  "slug": "cross-compiling-for-embedded-targets",
+  "title": "Cross-Compiling for Embedded Targets",
+  "sequence": 298,
+  "module_id": "rust-module-25",
+  "module_slug": "embedded-rust-and-no-std",
+  "level": "specialization",
+  "difficulty": "specialization",
+  "track": "optional-embedded",
+  "estimated_minutes": 13,
+  "prerequisites": [
+    "rust-lesson-297"
+  ],
+  "previous_lesson_id": "rust-lesson-297",
+  "next_lesson_id": "rust-lesson-299",
+  "keywords": [
+    "compiling",
+    "cross",
+    "embedded",
+    "for",
+    "rust",
+    "target-specific-resource-and-hardware-constraints",
+    "targets"
+  ],
+  "source_syllabus_number": 298,
+  "subtopics": [],
+  "learning_outcomes": [
+    "Explain the main purpose of Cross-Compiling for Embedded Targets and distinguish it from a closely related Rust concept.",
+    "Apply or trace Cross-Compiling for Embedded Targets in a small Rust example, using the module guidance and stated toolchain assumptions.",
+    "Identify one relevant edge case or failure mode for Cross-Compiling for Embedded Targets and select a suitable verification step."
+  ],
+  "content": {
+    "intro": "This lesson covers Cross-Compiling for Embedded Targets. It sits in Module 25, Embedded Rust and no_std, and builds toward a practical Rust mental model rather than memorizing a term in isolation.",
+    "why_it_matters": "Cross-Compiling for Embedded Targets matters when you work with target-specific resource and hardware constraints. Understanding the rule helps you predict compiler or runtime behavior, document assumptions, and choose a safer implementation when inputs or system conditions change.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Cross-Compiling for Embedded Targets",
+        "asset_path": "diagrams/lesson-298-cross-compiling-for-embedded-targets.svg",
+        "alt_text": "Concept diagram for Cross-Compiling for Embedded Targets: target-specific resource and hardware constraints; inputs flow through a rule to an outcome, followed by a verification step.",
+        "caption": "Visual model for Cross-Compiling for Embedded Targets. The diagram is a learning aid; use the prose and examples for exact conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Embedded Rust must fit the target’s processor, memory, timing, and hardware constraints. no_std removes the standard library, so available APIs and startup/linking responsibilities depend on the target."
+      },
+      {
+        "type": "paragraph",
+        "title": "A reliable way to reason about it",
+        "text": "For Cross-Compiling for Embedded Targets, write down the inputs, the guarantee you expect, and the boundary where that guarantee stops. Work through a minimal example first; then deliberately test one edge case. Hardware-specific modules require a supported target and often a device or emulator. The sample code is concept-focused and will not exercise a physical peripheral by itself."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Cross-Compiling for Embedded Targets",
+            "text": "Embedded Rust must fit the target’s processor, memory, timing, and hardware constraints. no_std removes the standard library, so available APIs and startup/linking responsibilities depend on the target."
+          },
+          {
+            "title": "Inputs and guarantees",
+            "text": "Identify the value, type, state, tool, or external system involved in Cross-Compiling for Embedded Targets. Separate what Rust checks at compile time from what still needs validation or a test."
+          },
+          {
+            "title": "Boundary case",
+            "text": "Try an empty, missing, invalid, unusually large, or concurrently accessed input when that boundary applies to Cross-Compiling for Embedded Targets. Record what should happen and how you can verify it."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "rust",
+        "execution_mode": "static-validation",
+        "code": "#![no_std]\n\n/// Convert a 12-bit ADC reading into an approximate 3.3 V millivolt value.\npub fn millivolts(raw: u16) -> u32 {\n    u32::from(raw) * 3300 / 4095\n}",
+        "expected_output": "For raw = 2048, the integer result is 1650 millivolts.",
+        "run_instructions": "Save as src/lib.rs in a no_std library. This is a pure calculation, not a hardware driver; target setup, startup code, and peripheral APIs remain platform-specific.",
+        "reset_steps": "Return the sample to its original form, run the documented command again, and compare the result. If a dependency, target, runtime, database, or hardware device is required, configure that separately before treating the result as verified."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not assume Cross-Compiling for Embedded Targets guarantees more than it actually does. Reduce a failure to a small reproducer, read the full compiler diagnostic or error value, consult the matching official reference, and change one assumption at a time."
+      },
+      {
+        "type": "callout",
+        "title": "Toolchain and execution boundary",
+        "text": "Course examples are static reference snippets, not executed inside CodeLeaf. Most standard-library examples can be tried in a Rust 2024 Cargo project; specialized networking, database, async, procedural-macro, embedded, and WebAssembly scenarios require the toolchain and dependencies described in their lessons."
+      }
+    ],
+    "task": "Try it yourself: adapt the example to demonstrate Cross-Compiling for Embedded Targets. Predict the result before you run it, then explain one normal case and one relevant boundary case in your own words.",
+    "task_acceptance_criteria": [
+      "Explain the purpose of Cross-Compiling for Embedded Targets using a concrete example.",
+      "Verify the example using an appropriate local command, targeted test, or documented manual check.",
+      "Describe one edge case, failure mode, version assumption, or limitation that matters for this topic."
+    ],
+    "hints": [
+      "Start by identifying the inputs and guarantee involved in Cross-Compiling for Embedded Targets.",
+      "Use the smallest example that isolates one rule; avoid changing multiple variables at once.",
+      "Check the matching official reference if compiler behavior, a library API, or toolchain support differs from your expectation."
+    ],
+    "expected_output": "For raw = 2048, the integer result is 1650 millivolts.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-298-questions.json",
+    "recap": [
+      "Cross-Compiling for Embedded Targets supports target-specific resource and hardware constraints.",
+      "Predict and verify behavior with small examples.",
+      "Keep library and target-specific assumptions explicit."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "The Rust Embedded Book",
+      "url": "https://docs.rust-embedded.org/book/",
+      "publisher": "Embedded Working Group",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "embedded workflows",
+        "no_std concepts",
+        "cross compilation and hardware abstractions"
+      ]
+    },
+    {
+      "title": "Rust Standard Library Documentation",
+      "url": "https://doc.rust-lang.org/std/",
+      "publisher": "Rust Project",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "standard library APIs",
+        "collections",
+        "I/O",
+        "threads",
+        "smart pointers",
+        "filesystem"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Rust.pdf; review explanation, code behavior, version notes, and assessment quality before publication."
+}

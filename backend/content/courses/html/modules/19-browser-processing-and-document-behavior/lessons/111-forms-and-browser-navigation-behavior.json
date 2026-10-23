@@ -1,0 +1,208 @@
+{
+    "id": "html-lesson-111",
+    "slug": "forms-and-browser-navigation-behavior",
+    "title": "Forms and Browser Navigation Behavior",
+    "sequence": 111,
+    "module_id": "html-module-19",
+    "module_slug": "browser-processing-and-document-behavior",
+    "level": "advanced",
+    "difficulty": "advanced",
+    "track": "advanced-core",
+    "estimated_minutes": 13,
+    "prerequisites": [
+        "html-lesson-110"
+    ],
+    "previous_lesson_id": "html-lesson-110",
+    "next_lesson_id": "html-lesson-112",
+    "keywords": [
+        "forms",
+        "browser",
+        "navigation",
+        "behavior",
+        "processing",
+        "document",
+        "form",
+        "submission",
+        "url",
+        "query",
+        "parameters",
+        "get"
+    ],
+    "learning_outcomes": [
+        "Explain the purpose of forms and browser navigation behavior in a browser document.",
+        "Apply at least one relevant rule from this lesson to a small HTML example.",
+        "Check the result using browser inspection, a validator, or an accessibility checklist."
+    ],
+    "content": {
+        "intro": "This lesson turns “Forms and Browser Navigation Behavior” into a practical authoring skill. You will work with form submission navigation, understand the choices that matter, and check the result instead of relying on guesswork.",
+        "why_it_matters": "Understanding browser behavior and boundaries helps you reason about embedded content, interaction, privacy, and how document markup participates in a larger application.",
+        "content_blocks": [
+            {
+                "type": "diagram",
+                "format": "svg",
+                "title": "Forms and Browser Navigation Behavior concept map",
+                "asset_path": "diagrams/lessons/lesson-111-forms-and-browser-navigation-behavior.svg",
+                "alt_text": "A concept map for Forms and Browser Navigation Behavior, connecting the core idea, key concepts, a relevant example, and a verification step.",
+                "caption": "Use the example and expected result to check your understanding of Forms and Browser Navigation Behavior."
+            },
+            {
+                "type": "paragraph",
+                "title": "Why this matters",
+                "text": "Understanding browser behavior and boundaries helps you reason about embedded content, interaction, privacy, and how document markup participates in a larger application."
+            },
+            {
+                "type": "paragraph",
+                "title": "Core idea",
+                "text": "Form controls need meaningful labels and names, clear instructions, and constraints that match the data. Treat browser validation as feedback for users, not proof that submitted data is trustworthy."
+            },
+            {
+                "type": "list",
+                "title": "Concepts covered in this lesson",
+                "items": [
+                    {
+                        "title": "Form submission navigation",
+                        "text": "Form controls need meaningful labels and names, clear instructions, and constraints that match the data. Treat browser validation as feedback for users, not proof that submitted data is trustworthy."
+                    },
+                    {
+                        "title": "URL query parameters and GET forms",
+                        "text": "Form controls need meaningful labels and names, clear instructions, and constraints that match the data. Treat browser validation as feedback for users, not proof that submitted data is trustworthy."
+                    },
+                    {
+                        "title": "Browser history and fragment navigation",
+                        "text": "Browsers parse HTML into a document tree and recover from many authoring errors. Browser recovery is not a substitute for valid markup; inspect the DOM and validate the original source."
+                    },
+                    {
+                        "title": "Form restoration and autocomplete behavior",
+                        "text": "The autocomplete attribute: hints the meaning of personal data fields to the browser and password manager."
+                    },
+                    {
+                        "title": "Native browser controls and default behaviors",
+                        "text": "Browsers parse HTML into a document tree and recover from many authoring errors. Browser recovery is not a substitute for valid markup; inspect the DOM and validate the original source."
+                    },
+                    {
+                        "title": "Differences between browser implementations",
+                        "text": "Browsers parse HTML into a document tree and recover from many authoring errors. Browser recovery is not a substitute for valid markup; inspect the DOM and validate the original source."
+                    }
+                ]
+            },
+            {
+                "type": "code",
+                "language": "html",
+                "code": "<nav aria-label=\"Main navigation\">\n  <a href=\"index.html\">Home</a>\n  <a href=\"about.html\">About</a>\n  <a href=\"#contact\">Contact section</a>\n</nav>\n\n<section id=\"contact\">\n  <h2>Contact</h2>\n  <a href=\"mailto:hello@example.com\">Email the team</a>\n</section>",
+                "expected_output": "The first two links open local pages when those files exist; the fragment link jumps to the Contact section.",
+                "run_instructions": "Save the snippet in an .html file and open it in a modern browser. Inspect the result, then run an HTML validator if the lesson concerns syntax or structure. Example paths are illustrative; provide the referenced files or adjust paths before evaluating media/resource behavior.",
+                "reset_steps": "Restore the snippet in this lesson file or paste it into a fresh index.html file, then repeat the check."
+            },
+            {
+                "type": "callout",
+                "title": "Keep in mind",
+                "text": "Prefer the native semantic element that communicates intent. Do not choose markup solely for its default visual style."
+            }
+        ],
+        "task": "Build a short form related to a real, non-sensitive practice scenario. Label all controls and explain where actual server validation would happen.",
+        "task_acceptance_criteria": [
+            "Use the relevant concept from Forms and Browser Navigation Behavior.",
+            "Keep IDs unique and use valid nesting.",
+            "Check the result in a browser and record one finding."
+        ],
+        "hints": [
+            "Start with the smallest valid example for forms and browser navigation behavior.",
+            "Add one element or attribute at a time, then check the result.",
+            "Compare the source and rendered DOM if the behavior surprises you."
+        ],
+        "expected_output": "The first two links open local pages when those files exist; the fragment link jumps to the Contact section.",
+        "troubleshooting": [
+            {
+                "symptom": "The expected content does not appear.",
+                "check": "Confirm the file was saved with an .html extension and inspect its path and nesting."
+            },
+            {
+                "symptom": "A resource does not load.",
+                "check": "Check the resolved URL and confirm the referenced file or external resource exists and allows the request."
+            },
+            {
+                "symptom": "The page looks correct but the markup may be invalid.",
+                "check": "Run the Nu Html Checker and follow its first relevant diagnostic, then validate again."
+            }
+        ],
+        "common_mistakes": [
+            {
+                "problem": "Choosing markup for appearance alone",
+                "why": "The default appearance is not the element’s main meaning and can make navigation or maintenance harder.",
+                "fix": "Choose the element that matches the content purpose, then use CSS for presentation."
+            },
+            {
+                "problem": "Assuming a browser’s recovery means the source is valid",
+                "why": "Browsers often recover from malformed markup, which can hide defects and produce unexpected document structure.",
+                "fix": "Inspect the rendered DOM and run a validator against the original source."
+            },
+            {
+                "problem": "Testing only the happy path",
+                "why": "Missing files, narrow viewports, keyboard access, invalid input, or other states can expose defects.",
+                "fix": "Check the expected state plus one realistic edge case and an accessibility path."
+            }
+        ],
+        "summary": [
+            "Forms and Browser Navigation Behavior is about expressing document structure or behavior intentionally.",
+            "Browsers parse HTML into a document tree and recover from many authoring errors. Browser recovery is not a substitute for valid markup; inspect the DOM and validate the original source.",
+            "Verify both markup and behavior; do not infer correctness from appearance alone."
+        ],
+        "knowledge_check_file": "exams/question-files/lesson-111-questions.json",
+        "solution_notes": "Use the related exercise solution only after making a first attempt. Explanatory hints are for guided practice; exercise answer keys are stored separately in the content repository.",
+        "run_mode": "browser-preview",
+        "references": [
+            {
+                "title": "HTML Living Standard",
+                "url": "https://html.spec.whatwg.org/",
+                "publisher": "WHATWG",
+                "checked_on": "2026-10-10",
+                "supports": [
+                    "document structure",
+                    "elements and attributes",
+                    "forms",
+                    "embedded content",
+                    "interactive elements",
+                    "browser parsing",
+                    "obsolete features"
+                ]
+            },
+            {
+                "title": "HTML: HyperText Markup Language",
+                "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+                "publisher": "MDN Web Docs",
+                "checked_on": "2026-10-10",
+                "supports": [
+                    "HTML overview and authoring guides"
+                ]
+            }
+        ]
+    },
+    "exercise_files": [],
+    "sources": [
+        {
+            "title": "HTML Living Standard",
+            "url": "https://html.spec.whatwg.org/",
+            "publisher": "WHATWG",
+            "checked_on": "2026-10-10",
+            "supports": [
+                "document structure",
+                "elements and attributes",
+                "forms",
+                "embedded content",
+                "interactive elements",
+                "browser parsing",
+                "obsolete features"
+            ]
+        },
+        {
+            "title": "HTML: HyperText Markup Language",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+            "publisher": "MDN Web Docs",
+            "checked_on": "2026-10-10",
+            "supports": [
+                "HTML overview and authoring guides"
+            ]
+        }
+    ],
+    "status": "draft"
+}

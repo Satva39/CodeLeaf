@@ -1,0 +1,207 @@
+{
+  "id": "pytorch-lesson-005",
+  "slug": "pytorch-architecture-at-a-high-level",
+  "title": "PyTorch Architecture at a High Level",
+  "sequence": 5,
+  "module_id": "pytorch-module-01",
+  "module_slug": "introduction-to-pytorch",
+  "level": "Beginner",
+  "difficulty": "beginner",
+  "track": "core-foundations",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "pytorch-lesson-004"
+  ],
+  "previous_lesson_id": "pytorch-lesson-004",
+  "next_lesson_id": "pytorch-lesson-006",
+  "keywords": [
+    "pytorch-architecture-at-a-high-level",
+    "tensors-and-operators",
+    "autograd",
+    "torch-nn",
+    "torch-optim",
+    "data-loading-utilities-and-accelerator-support",
+    "pytorch",
+    "deep-learning"
+  ],
+  "learning_outcomes": [
+    "Explain the role of pytorch architecture at a high level in a PyTorch workflow.",
+    "Apply a small example of pytorch architecture at a high level and interpret the output.",
+    "Identify a relevant limitation, debugging check, or reproducibility concern."
+  ],
+  "content": {
+    "intro": "PyTorch Architecture at a High Level: PyTorch is a Python framework for tensor computation and neural-network workflows. A tensor is a typed, shaped collection of values; operators build computations from those values. In this lesson, use a small example to make the inputs, outputs, and boundary conditions explicit.",
+    "why_it_matters": "A shared tensor model makes it possible to progress from simple numerical operations to differentiable models without switching the basic data abstraction. For this lesson, focus on tensors and operators and the evidence you can collect from a controlled example.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 01 roadmap",
+        "asset_path": "diagrams/module-01-overview.svg",
+        "alt_text": "Overview diagram of the ordered lessons in module 1: Introduction to PyTorch. This lesson is item 5 in the 164-lesson course.",
+        "caption": "Orientation map for Introduction to PyTorch; use the list below to connect this lesson to related ideas."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "A PyTorch workflow combines tensors and operators with autograd, neural-network modules, optimizers, and data-loading utilities. The source topics for this lesson are: Tensors and operators, torch.autograd, torch.nn. Keep each topic connected to a checkable input/output behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "Read the example",
+        "text": "Read the values and printed result first, then inspect how the operation transforms every tensor element. This tiny example is the foundation for later model code. The example is a teaching-scale check, not evidence of a trained model score or a hardware-independent performance claim."
+      },
+      {
+        "type": "list",
+        "title": "Source-aligned topic checklist",
+        "items": [
+          {
+            "title": "Tensors and operators",
+            "text": "Measure a representative baseline with warm-up and repeated trials, change one factor, and re-check output quality before claiming improvement."
+          },
+          {
+            "title": "torch.autograd",
+            "text": "Identify the value being differentiated and the scalar objective; compare the resulting gradient with a tiny analytical or numerical check."
+          },
+          {
+            "title": "torch.nn",
+            "text": "Connect this topic to the lesson workflow: A PyTorch workflow combines tensors and operators with autograd, neural-network modules, optimizers, and data-loading utilities. Write down the expected behavior and test it on a small, inspectable input."
+          },
+          {
+            "title": "torch.optim",
+            "text": "Connect this topic to the lesson workflow: A PyTorch workflow combines tensors and operators with autograd, neural-network modules, optimizers, and data-loading utilities. Write down the expected behavior and test it on a small, inspectable input."
+          },
+          {
+            "title": "Data-loading utilities and accelerator support",
+            "text": "Record the artifact state and environment assumptions, restore it in a clean model, and verify behavior on a fixed input before trusting the result."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Guided PyTorch example",
+        "language": "python",
+        "code": "import torch\nprint(\"tensor ops -> autograd -> nn -> optim\")\nprint(torch.tensor([1, 2]).shape)",
+        "expected_output": "tensor ops -> autograd -> nn -> optim\ntorch.Size([2])",
+        "run_instructions": "Save as example.py in a Python environment with a compatible PyTorch installation, then run `python example.py`. PyTorch snippets are not executed in the browser. For GPU- or package-specific snippets, install the matching supported dependencies first.",
+        "reset_steps": "Restore the code block, rerun it, and compare both the printed output and tensor metadata.",
+        "run_mode": "server-runner"
+      },
+      {
+        "type": "callout",
+        "title": "Version and execution note",
+        "text": "The code block is a local Python example, not a browser execution promise. CodeLeaf does not currently provide an isolated general-purpose Python runner; use a virtual environment. Installation commands, optional packages, hardware behavior, and rapidly evolving specialist APIs must be checked against the linked official documentation."
+      }
+    ],
+    "task": "Try it yourself: Create two small tensors, apply one element-wise operation and one reduction, then describe the output shape and value. Record the observed result and one limitation; do not report an unrun training or performance result as measured.",
+    "task_acceptance_criteria": [
+      "The experiment demonstrates at least one relevant aspect of pytorch architecture at a high level.",
+      "Record the expected and observed result, including shape/dtype/device information when relevant.",
+      "Explain one common failure mode, compatibility limitation, or evaluation caveat."
+    ],
+    "hints": [
+      "Begin with the smallest working example for pytorch architecture at a high level and keep input shapes explicit.",
+      "Change only one variable at a time; compare a tensor property, a printed value, or a test assertion.",
+      "Use the linked official reference for any hardware-specific, optional-package, or version-sensitive behavior."
+    ],
+    "expected_output": "tensor ops -> autograd -> nn -> optim\ntorch.Size([2])",
+    "troubleshooting": [
+      {
+        "symptom": "A tensor operation raises a shape, dtype, or device mismatch.",
+        "check": "Print .shape, .dtype, and .device for each input. Resolve the mismatch intentionally instead of changing dimensions blindly."
+      },
+      {
+        "symptom": "The example fails because an optional package or accelerator is unavailable.",
+        "check": "Check the installed PyTorch/package versions and device availability. Use the official installation selector and run the CPU-compatible path where appropriate."
+      },
+      {
+        "symptom": "The result differs across runs or machines.",
+        "check": "Fix the seed where useful, record versions and inputs, and document operations that remain nondeterministic or hardware dependent."
+      }
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Relying on assumptions instead of inspecting the data or output.",
+        "why": "Many ML failures come from incorrect shapes, labels, preprocessing, or execution mode rather than a syntax error.",
+        "fix": "Inspect representative inputs and add assertions for the expected shape, dtype, range, or behavior."
+      },
+      {
+        "problem": "Mixing training-time behavior with inference-time behavior.",
+        "why": "Dropout, normalization, gradient tracking, and optimizer updates can change how a model behaves.",
+        "fix": "Do not assume that importing torch proves a model is correct; inspect actual tensor values and shapes."
+      },
+      {
+        "problem": "Using a current or experimental API without recording its version assumptions.",
+        "why": "Hardware support and ecosystem APIs can change independently of the core package.",
+        "fix": "Pin compatible dependencies, record the environment, and test after upgrades."
+      }
+    ],
+    "summary": [
+      "PyTorch Architecture at a High Level belongs to the Introduction to PyTorch learning path.",
+      "Practice tensors and operators, torch.autograd, torch.nn using the source-aligned checklist and read-example explanation.",
+      "Do not assume that importing torch proves a model is correct; inspect actual tensor values and shapes."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-005-questions.json",
+    "solution_notes": "The linked lesson knowledge-check answers and exercise reference solutions are kept in protected backend content files. A published endpoint must return learner-safe prompts only.",
+    "run_mode": "server-runner",
+    "execution_note": "Requires a local or separately isolated Python runner. Do not execute learner-supplied Python inside the FastAPI process or the production web container.",
+    "references": [
+      {
+        "title": "Learn the Basics",
+        "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro.html",
+        "publisher": "PyTorch Tutorials",
+        "checked_on": "2026-10-20",
+        "supports": [
+          "tensors",
+          "datasets and data loaders",
+          "transforms",
+          "models",
+          "autograd"
+        ]
+      },
+      {
+        "title": "PyTorch API Documentation",
+        "url": "https://docs.pytorch.org/docs/stable/",
+        "publisher": "PyTorch",
+        "checked_on": "2026-10-20",
+        "supports": [
+          "tensor operations",
+          "torch.nn",
+          "autograd",
+          "testing",
+          "serialization"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Learn the Basics",
+      "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro.html",
+      "publisher": "PyTorch Tutorials",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "tensors",
+        "datasets and data loaders",
+        "transforms",
+        "models",
+        "autograd"
+      ]
+    },
+    {
+      "title": "PyTorch API Documentation",
+      "url": "https://docs.pytorch.org/docs/stable/",
+      "publisher": "PyTorch",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "tensor operations",
+        "torch.nn",
+        "autograd",
+        "testing",
+        "serialization"
+      ]
+    }
+  ],
+  "status": "draft"
+}

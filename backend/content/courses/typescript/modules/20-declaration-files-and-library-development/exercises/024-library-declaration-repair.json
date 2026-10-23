@@ -1,0 +1,56 @@
+{
+  "id": "typescript-exercise-024",
+  "slug": "library-declaration-repair",
+  "title": "Library Declaration Repair",
+  "sequence": 24,
+  "lesson_id": "typescript-lesson-189",
+  "lesson_slug": "189-typing-javascript-libraries",
+  "module_id": "typescript-module-20",
+  "type": "coding",
+  "difficulty": "advanced",
+  "status": "draft",
+  "prompt": "Write a minimal declaration for a JavaScript function whose runtime contract is known.",
+  "starter": {
+    "code": "// TODO: create a declaration for formatLabel(value: string): string\n// TODO: document any runtime constraints that declarations cannot prove\n",
+    "language": "typescript",
+    "file_name": "library-declaration-repair.ts",
+    "execution_mode": "static-validation"
+  },
+  "public_tests": [
+    {
+      "name": "Required type contract",
+      "description": "Review that the submission contains the required declarations and preserves the stated input/output relationship.",
+      "mode": "static-token-check",
+      "required_strings": [
+        "declare function formatLabel(value: string): string",
+        "string"
+      ]
+    },
+    {
+      "name": "Runtime and boundary review",
+      "description": "Explain one failure case and add a real runtime check when data crosses an external trust boundary.",
+      "mode": "human-review"
+    }
+  ],
+  "acceptance_criteria": [
+    "The declaration accurately describes the existing JavaScript API without pretending to implement it.",
+    "Submit code with the required type declarations and add an explanation or test for one meaningful boundary/failure case.",
+    "Do not claim that the code has been executed by the CodeLeaf browser playground."
+  ],
+  "hints": [
+    "Declarations describe behavior; they should match runtime code and be checked by consumer tests.",
+    "TypeScript checks assignability but does not validate external data at runtime.",
+    "Use the local TypeScript compiler and an appropriate test runner to verify behavior; the course grader checks only the documented text markers."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "declare function formatLabel(value: string): string",
+      "string"
+    ]
+  },
+  "grading_method": "Server-side static token check for the required declarations plus human review of runtime tests. This is not a TypeScript compiler or arbitrary-code runner.",
+  "retry_policy": "Unlimited practice retries; platform XP is awarded once only after a correct server-side grade.",
+  "solution_file": "solutions/024-library-declaration-repair-solution.json",
+  "status_note": "Draft until exercise instructions, starter, and static grader are reviewed. No course-authored XP override is used."
+}

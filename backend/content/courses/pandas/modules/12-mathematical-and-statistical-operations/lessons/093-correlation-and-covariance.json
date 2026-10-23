@@ -1,0 +1,181 @@
+{
+  "id": "pandas-lesson-093",
+  "slug": "correlation-and-covariance",
+  "title": "Correlation and Covariance",
+  "sequence": 93,
+  "module_id": "pandas-module-12",
+  "module_slug": "mathematical-and-statistical-operations",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "analysis",
+  "estimated_minutes": 12,
+  "prerequisites": [],
+  "previous_lesson_id": "pandas-lesson-092",
+  "next_lesson_id": "pandas-lesson-094",
+  "keywords": [
+    "correlation and covariance",
+    "understanding correlation",
+    "understanding covariance",
+    "using corr()",
+    "using cov()",
+    "interpreting correlation cautiously",
+    "pandas",
+    "data analysis"
+  ],
+  "source_syllabus_number": 93,
+  "subtopics": [
+    "Understanding correlation",
+    "Understanding covariance",
+    "Using corr()",
+    "Using cov()",
+    "Interpreting correlation cautiously"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of correlation and covariance and identify when the concept is useful.",
+    "Apply at least one method or decision from correlation and covariance to a small synthetic dataset.",
+    "Verify the result by checking relevant values, labels, row counts, dtypes, or assumptions."
+  ],
+  "content": {
+    "intro": "Learn correlation and covariance through a focused example and a checkable task. This lesson keeps the source syllabus subtopics visible and uses synthetic data so you can reproduce the behavior safely.",
+    "why_it_matters": "Statistics summarize data, but choosing the right measure and explaining its limitations matters as much as computing it.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Correlation and Covariance",
+        "asset_path": "diagrams/lesson-093-correlation-and-covariance.svg",
+        "alt_text": "Diagram for Correlation and Covariance: input or question → Pandas concept → result validation.",
+        "caption": "Visual guide to Correlation and Covariance; the next blocks explain the decisions and example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Statistics summarize data, but choosing the right measure and explaining its limitations matters as much as computing it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "This lesson focuses on **Correlation and Covariance**. Work through the listed subtopics (Understanding correlation, Understanding covariance, Using corr(), Using cov()) as decisions in one small data workflow: identify the input and its labels, choose the relevant Pandas operation, then inspect the output shape, values, and types. Do not assume the result is correct solely because the code ran."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Understanding correlation",
+            "text": "Understanding correlation is one part of correlation and covariance. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Understanding covariance",
+            "text": "Understanding covariance is one part of correlation and covariance. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Using corr()",
+            "text": "Using corr() is one part of correlation and covariance. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Using cov()",
+            "text": "Using cov() is one part of correlation and covariance. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          },
+          {
+            "title": "Interpreting correlation cautiously",
+            "text": "Interpreting correlation cautiously is one part of correlation and covariance. Identify what input it needs, what result it should produce, and which edge cases or version notes could change the interpretation."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "import pandas as pd\n\ndf = pd.DataFrame({\"ad_spend\": [1, 2, 3], \"sales\": [2, 4, 6]})\nprint(df.corr().loc[\"ad_spend\", \"sales\"])",
+        "expected_output": "1.0 (perfect positive linear association in this synthetic example; not proof of causation)",
+        "execution_mode": "static-validation",
+        "run_instructions": "Save the snippet as a .py file in a Python environment with Pandas installed, then run `python filename.py`. CodeLeaf’s current playground is a browser preview and does not execute Python; examples are shown in static-validation mode.",
+        "reset_steps": "The example uses synthetic, in-memory values and does not modify project files. Restart the Python process or recreate the DataFrame to reset its state."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to interpret the result",
+        "text": "Compare the result with the task’s intended meaning. Check whether row order, labels, missing values, inferred dtypes, and duplicate keys should be preserved or changed. When the result depends on a library version or optional dependency, test against the environment you plan to use."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          {
+            "title": "Change one input",
+            "text": "Use a tiny synthetic dataset to practise correlation and covariance and change one value, label, or edge case."
+          },
+          {
+            "title": "Verify the invariant",
+            "text": "State the expected row count, key uniqueness, output dtype, or numerical result before running your solution."
+          },
+          {
+            "title": "Explain a limitation",
+            "text": "Write one sentence identifying an assumption, a missing-data rule, a version concern, or a case where this operation is not suitable."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Common mistakes and fixes",
+        "text": "Avoid assuming inferred types are always correct, treating every repeated record as an error, or overlooking alignment by labels. Check the actual API documentation for the target version and assert the properties that matter to the task."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-093-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Pandas User Guide",
+      "url": "https://pandas.pydata.org/docs/user_guide/",
+      "publisher": "pandas project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Correlation and Covariance"
+      ]
+    },
+    {
+      "title": "Pandas API Reference",
+      "url": "https://pandas.pydata.org/docs/reference/index.html",
+      "publisher": "pandas project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Correlation and Covariance"
+      ]
+    }
+  ],
+  "run_mode": "static-validation",
+  "task": "Practise correlation and covariance with a small synthetic DataFrame. Keep the input, transformation, and expected result explicit.",
+  "task_acceptance_criteria": [
+    "The code uses an appropriate Pandas operation for the stated goal.",
+    "The result is checked for the expected values, labels, dtypes, row count, or alignment.",
+    "The solution documents a relevant edge case, assumption, or compatibility note."
+  ],
+  "hints": [
+    "Start by printing the relevant shape, labels, and dtypes.",
+    "Write down the expected result for a tiny example before applying the operation to larger data.",
+    "Use a small assertion or comparison to verify the outcome instead of relying only on visual inspection."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Trusting a result because the statement ran without raising an exception.",
+      "why": "A valid expression can still select the wrong rows, misalign labels, or use an unsuitable dtype.",
+      "fix": "Check the output shape, labels, dtypes, and at least one expected value."
+    },
+    {
+      "problem": "Using the operation without considering missing values or duplicate keys.",
+      "why": "Those records may change totals, group sizes, or join cardinality.",
+      "fix": "State the policy and test an example containing the relevant edge case."
+    }
+  ],
+  "summary": [
+    "Correlation and Covariance supports one clearly defined part of a repeatable data workflow.",
+    "Check labels, dtypes, missing values, and row counts where they affect the result.",
+    "Record assumptions and consult the official reference when version-specific behavior matters."
+  ],
+  "next_steps": [
+    "Review the next topic after correlation and covariance and compare how it builds on the same data model."
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached syllabus and official documentation links; subject-matter review and target-version execution are required before publication."
+}

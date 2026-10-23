@@ -1,0 +1,49 @@
+{
+  "id": "rest-api-development-knowledge-check-075",
+  "lesson_id": "rest-api-development-lesson-075",
+  "lesson_slug": "offset-and-limit-pagination",
+  "title": "Knowledge check: Offset and Limit Pagination",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "questions": [
+    {
+      "id": "rest-api-development-q-075-01",
+      "type": "single_choice",
+      "prompt": "What makes collection pagination reliable?",
+      "options": [
+        "Return the entire collection by default so clients need fewer decisions.",
+        "Sort by a non-unique value with no stable tiebreaker and assume pages cannot shift.",
+        "Accept any filter field and raw sort expression directly from the client.",
+        "Use bounded page sizes and deterministic ordering, and define clear continuation metadata."
+      ],
+      "answer_key": "Use bounded page sizes and deterministic ordering, and define clear continuation metadata.",
+      "explanation": "Use bounded page sizes and deterministic ordering, and define clear continuation metadata. This is especially relevant to “Offset and Limit Pagination” because the API contract must remain explicit and reviewable."
+    },
+    {
+      "id": "rest-api-development-q-075-02",
+      "type": "single_choice",
+      "prompt": "For the lesson “Offset and Limit Pagination”, which check provides the strongest practical evidence?",
+      "options": [
+        "Run one happy-path call and skip invalid, denied, and failure scenarios.",
+        "Test against production records so the exercise cannot be repeated safely.",
+        "Test maximum page size, stable order, and continuation behavior across boundaries.",
+        "Rely on a code review comment without running any representative check."
+      ],
+      "answer_key": "Test maximum page size, stable order, and continuation behavior across boundaries.",
+      "explanation": "A useful check is repeatable, tied to an observable contract, and includes an important negative or boundary scenario."
+    },
+    {
+      "id": "rest-api-development-q-075-03",
+      "type": "single_choice",
+      "prompt": "Which review warning is most relevant to “Offset and Limit Pagination”?",
+      "options": [
+        "The API avoids exposing internal secrets and personal data.",
+        "A collection can return unbounded data or apply unvalidated query expressions.",
+        "The expected behavior and relevant failure cases are documented.",
+        "A representative test can reproduce the result."
+      ],
+      "answer_key": "A collection can return unbounded data or apply unvalidated query expressions.",
+      "explanation": "This finding weakens a core API guarantee and should be treated as a design or release issue, not only a style concern."
+    }
+  ]
+}

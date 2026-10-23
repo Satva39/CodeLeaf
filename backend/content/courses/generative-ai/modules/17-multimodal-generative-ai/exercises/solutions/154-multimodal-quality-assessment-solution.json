@@ -1,0 +1,47 @@
+{
+  "id": "genai-exercise-solution-154",
+  "exercise_id": "genai-exercise-154",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": {
+    "objective": "Multimodal quality assessment",
+    "implementation_plan": [
+      "Choose one target modality and specify modality-appropriate quality criteria before generation/analysis.",
+      "Freeze input assets, model/version, prompt, and settings; retain licenses/consent and transformation metadata.",
+      "Compare outputs to a baseline or reference rubric (for images, check artifacts/layout; for audio, intelligibility; for video, temporal consistency).",
+      "Repeat runs for stochastic output and record quality dispersion, not only the best sample.",
+      "Inspect copyright/provenance, bias, accessibility, and inappropriate content risks before any release."
+    ],
+    "reference_test_cases": [
+      {
+        "case": "Normal licensed input",
+        "input": "A small fixed media example",
+        "expected": "Output is assessed against predefined modality criteria."
+      },
+      {
+        "case": "Quality edge case",
+        "input": "Noisy, low resolution, clipped, or temporally inconsistent input",
+        "expected": "Failure category is recorded and not silently ignored."
+      },
+      {
+        "case": "Provenance missing",
+        "input": "Generated output with missing source/version data",
+        "expected": "Artifact is marked incomplete and not release-ready."
+      }
+    ],
+    "recommended_metrics": [
+      "Modality-specific quality rubric",
+      "Artifact/error rate",
+      "Repeat-run variance",
+      "Provenance completeness"
+    ],
+    "expected_artifacts": [
+      "Input manifest",
+      "Versioned settings",
+      "Quality table and limitations"
+    ],
+    "review_gate": "Do not publish until a reviewer inspects the actual submitted implementation/results and confirms the acceptance criteria; outline completion alone is not completion."
+  },
+  "explanation": "Reference solution outline for Multimodal quality assessment. It specifies a defensible implementation path, representative tests, and evaluation evidence. It is not a universally executable implementation: provider APIs, deployment environments, permissions, and available hardware vary. Use synthetic/test data, mock external services first, and keep credentials server-side. The exercise's current contains_all grader only checks required keywords and is a preliminary scaffold check, not a correctness/security evaluator; human review is required.",
+  "solution_quality_note": "Design outline only; no solution implementation was run in this build."
+}

@@ -1,0 +1,49 @@
+{
+  "id": "rest-api-development-knowledge-check-120",
+  "lesson_id": "rest-api-development-lesson-120",
+  "lesson_slug": "role-based-access-control",
+  "title": "Knowledge check: Role-Based Access Control",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "questions": [
+    {
+      "id": "rest-api-development-q-120-01",
+      "type": "single_choice",
+      "prompt": "What is the difference between authentication and authorization?",
+      "options": [
+        "A valid token automatically grants every administrative permission.",
+        "Authorization should be performed only in frontend components.",
+        "Authentication establishes who the caller is; authorization decides whether that caller may perform this action on this resource.",
+        "They are interchangeable words for successful password comparison."
+      ],
+      "answer_key": "Authentication establishes who the caller is; authorization decides whether that caller may perform this action on this resource.",
+      "explanation": "Authentication establishes who the caller is; authorization decides whether that caller may perform this action on this resource. This is especially relevant to “Role-Based Access Control” because the API contract must remain explicit and reviewable."
+    },
+    {
+      "id": "rest-api-development-q-120-02",
+      "type": "single_choice",
+      "prompt": "For the lesson “Role-Based Access Control”, which check provides the strongest practical evidence?",
+      "options": [
+        "Test against production records so the exercise cannot be repeated safely.",
+        "Test a valid identity with and without permission for the requested action.",
+        "Rely on a code review comment without running any representative check.",
+        "Run one happy-path call and skip invalid, denied, and failure scenarios."
+      ],
+      "answer_key": "Test a valid identity with and without permission for the requested action.",
+      "explanation": "A useful check is repeatable, tied to an observable contract, and includes an important negative or boundary scenario."
+    },
+    {
+      "id": "rest-api-development-q-120-03",
+      "type": "single_choice",
+      "prompt": "Which review warning is most relevant to “Role-Based Access Control”?",
+      "options": [
+        "Login success is treated as permission to access every resource.",
+        "The expected behavior and relevant failure cases are documented.",
+        "A representative test can reproduce the result.",
+        "The API avoids exposing internal secrets and personal data."
+      ],
+      "answer_key": "Login success is treated as permission to access every resource.",
+      "explanation": "This finding weakens a core API guarantee and should be treated as a design or release issue, not only a style concern."
+    }
+  ]
+}

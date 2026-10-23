@@ -1,0 +1,67 @@
+{
+  "id": "pandas-exercise-26",
+  "slug": "machine-learning-preparation",
+  "title": "Machine-Learning Preparation",
+  "sequence": 26,
+  "lesson_id": "pandas-lesson-208",
+  "lesson_slug": "data-preparation-for-machine-learning",
+  "module_id": "pandas-module-25",
+  "difficulty": "advanced",
+  "type": "code",
+  "prompt": "Build a validated feature table and check that a time-based split avoids future-data leakage.",
+  "scenario": "Use the synthetic data described below to practise f, e, a, t, u, r, e,  , p, r, e, p, a, r, a, t, i, o, n,  , a, n, d,  , l, e, a, k, a, g, e,  , p, r, e, v, e, n, t, i, o, n. Do not assume the input is correct without validating it.",
+  "skills": "Feature preparation and leakage prevention",
+  "starter": {
+    "language": "python",
+    "code": "import pandas as pd\n\ndf = pd.DataFrame({\"date\": pd.date_range(\"2026-01-01\", periods=5), \"feature\": [1, 2, 3, 4, 5], \"target\": [0, 0, 1, 1, 1]})\ntrain = df.loc[df[\"date\"] < \"2026-01-05\"]\ntest = df.loc[df[\"date\"] >= \"2026-01-05\"]\nprint(len(train), len(test))",
+    "dataset_note": "Use small synthetic in-memory data; do not place private or real customer data in exercises."
+  },
+  "input_schema": {
+    "description": "Create or use a synthetic DataFrame with only the columns needed for this exercise.",
+    "validation": [
+      "Document expected columns and data types.",
+      "State how missing values or duplicates should be treated."
+    ]
+  },
+  "expected_output": [
+    "Separate features and target, and preserve row identifiers through transformations.",
+    "Build a chronological training/test split where time order is relevant.",
+    "Check missing values and document preprocessing learned only from training data."
+  ],
+  "public_tests": [
+    {
+      "name": "normal-case",
+      "description": "The solution returns the required columns and correctly computes the stated result."
+    },
+    {
+      "name": "edge-case",
+      "description": "The solution documents behavior for a missing value, duplicate key, empty input, invalid value, or other relevant edge case."
+    }
+  ],
+  "hints": [
+    "Write down the expected result before coding.",
+    "Use Pandas operations that preserve labels unless position-based behavior is intended.",
+    "Add a small assertion for the most important property."
+  ],
+  "acceptance_criteria": [
+    "Separate features and target, and preserve row identifiers through transformations.",
+    "Build a chronological training/test split where time order is relevant.",
+    "Check missing values and document preprocessing learned only from training data."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "f"
+    ],
+    "case_sensitive": false,
+    "note": "The generic short-response grader is only an initial scaffold; a reviewed isolated Python grader is required for automatic execution of arbitrary learner code."
+  },
+  "solution_file": "solutions/026-machine-learning-preparation-solution.json",
+  "solution": {},
+  "retry_policy": {
+    "max_attempts": null,
+    "allow_retry_after_feedback": true
+  },
+  "status": "draft",
+  "status_note": "Review prompt, starter, rubric, and server-side grading before publication."
+}

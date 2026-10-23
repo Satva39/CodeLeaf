@@ -1,0 +1,66 @@
+{
+  "id": "github-actions-exercise-021",
+  "slug": "build-a-custom-composite-action",
+  "title": "Build a custom composite action",
+  "type": "coding",
+  "lesson_id": "github-actions-lesson-101",
+  "module_id": "github-actions-module-13",
+  "difficulty": "advanced",
+  "sequence": 21,
+  "prompt": "Package repeated validation steps into an action with inputs and documented outputs.",
+  "objective": "Demonstrate the behavior of build a custom composite action and capture verifiable evidence.",
+  "target_skills": [
+    "advanced",
+    "workflow YAML",
+    "validation",
+    "safe automation"
+  ],
+  "starter": {
+    "language": "yaml",
+    "code": "# action.yml\nname: Repository checks\ndescription: Run shared, non-destructive checks\ninputs:\n  message:\n    description: Status message\n    required: false\n    default: \"Checks ready\"\nruns:\n  using: composite\n  steps:\n    - name: Print status\n      shell: bash\n      env:\n        MESSAGE: ${{ inputs.message }}\n      run: echo \"$MESSAGE\"",
+    "execution_mode": "action-metadata"
+  },
+  "expected_output": "A reviewed workflow or design note satisfying: using: composite, inputs:, outputs:, action.yml. Verify behavior on a disposable repository where execution is required; a static sketch is not proof of a live deployment.",
+  "public_tests": [
+    {
+      "name": "Required evidence check",
+      "required_strings": [
+        "using: composite",
+        "inputs:",
+        "outputs:",
+        "action.yml"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Include or explain `using: composite`.",
+    "Include or explain `inputs:`.",
+    "Include or explain `outputs:`.",
+    "Include or explain `action.yml`.",
+    "Explain one validation result or limitation.",
+    "Do not include a real secret or use production resources."
+  ],
+  "hints": [
+    "First identify the trigger, input, and expected result.",
+    "Start with read-only permissions and a disposable branch or test environment.",
+    "Compare your result with the linked lesson and official documentation; distinguish a configuration sketch from a live integration."
+  ],
+  "solution": {
+    "answer": null,
+    "explanation": "The detailed reference solution is stored in a protected repository-only JSON file; it is not intended for a learner-facing response."
+  },
+  "solution_file": "../solutions/021-build-a-custom-composite-action-solution.json",
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "using: composite",
+      "inputs:",
+      "outputs:",
+      "action.yml"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus human review for workflow semantics and security boundaries.",
+  "retry_policy": "Allow retries; incorrect submissions do not award XP. The platform awards exercise XP only after server-verified successful completion and applies idempotency per activity.",
+  "status": "draft",
+  "status_note": "Source mapping: Section C: Practical Exercises; original learning task adapted to CodeLeaf structure."
+}

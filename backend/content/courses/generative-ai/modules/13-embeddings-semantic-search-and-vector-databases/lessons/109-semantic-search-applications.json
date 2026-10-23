@@ -1,0 +1,167 @@
+{
+  "id": "genai-lesson-109",
+  "slug": "semantic-search-applications",
+  "title": "Semantic Search Applications",
+  "sequence": 109,
+  "module_id": "genai-module-13",
+  "module_slug": "embeddings-semantic-search-and-vector-databases",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core-application-development",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "genai-lesson-107"
+  ],
+  "previous_lesson_id": "genai-lesson-108",
+  "next_lesson_id": "genai-lesson-110",
+  "keywords": [
+    "Semantic Search Applications",
+    "Natural-language search",
+    "Semantic FAQ retrieval",
+    "Document similarity",
+    "Duplicate and near-duplicate detection",
+    "Multilingual retrieval",
+    "Generative AI",
+    "evaluation",
+    "limitations"
+  ],
+  "source_syllabus_number": 109,
+  "subtopics": [
+    "Natural-language search",
+    "Semantic FAQ retrieval",
+    "Document similarity",
+    "Duplicate and near-duplicate detection",
+    "Multilingual retrieval",
+    "Search results and ranking evaluation"
+  ],
+  "learning_outcomes": [
+    "Explain natural-language search and how it connects to semantic search applications.",
+    "Apply semantic faq retrieval in the example and predict the output before running it.",
+    "Test one realistic edge case for semantic search applications and explain what the example does not prove."
+  ],
+  "content": {
+    "intro": "This lesson covers semantic search applications through 6 syllabus subtopics preserved from the supplied Generative AI curriculum. Represent content as embeddings and build semantic or hybrid retrieval. Evaluate ranking with representative queries and preserve permissions through retrieval.",
+    "why_it_matters": "Use natural-language search as a lens for understanding semantic search applications. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Semantic Search Applications: concept map",
+        "asset_path": "diagrams/lessons/lesson-109-semantic-search-applications.svg",
+        "alt_text": "Diagram for Semantic Search Applications: understand Natural-language search, apply the concept, and verify expected behavior and limitations.",
+        "caption": "Original diagram: understand Natural-language search, apply the concept, then verify it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Use natural-language search as a lens for understanding semantic search applications. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the source syllabus",
+        "items": [
+          {
+            "title": "Natural-language search",
+            "text": "Use natural-language search as a lens for understanding semantic search applications. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Semantic FAQ retrieval",
+            "text": "Semantic FAQ retrieval concerns how content is represented, selected, or ranked for relevance. Keep the source text and metadata traceable, measure retrieval with labeled queries, and verify that similarity scores correspond to useful results rather than assuming nearby vectors prove factual correctness."
+          },
+          {
+            "title": "Document similarity",
+            "text": "Document similarity concerns how content is represented, selected, or ranked for relevance. Keep the source text and metadata traceable, measure retrieval with labeled queries, and verify that similarity scores correspond to useful results rather than assuming nearby vectors prove factual correctness."
+          },
+          {
+            "title": "Duplicate and near-duplicate detection",
+            "text": "Use duplicate and near-duplicate detection as a lens for understanding semantic search applications. Trace its inputs, the operation or decision it describes, the result a learner can observe, and the limitations that matter for the intended task. Confirm the idea with a small example and an explicit check rather than relying on fluent or plausible output."
+          },
+          {
+            "title": "Multilingual retrieval",
+            "text": "Multilingual retrieval concerns how content is represented, selected, or ranked for relevance. Keep the source text and metadata traceable, measure retrieval with labeled queries, and verify that similarity scores correspond to useful results rather than assuming nearby vectors prove factual correctness."
+          },
+          {
+            "title": "Search results and ranking evaluation",
+            "text": "Use search results and ranking evaluation to turn a vague quality claim into an observable criterion. Define a representative dataset, an expected outcome or rubric, a baseline, and the failure categories you will record; interpret aggregate scores alongside examples and affected groups."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "# Focus: Semantic Search Applications\ndocuments = {\"policy\": \"reset password with verified email\", \"shipping\": \"track an order in order history\"}\nquery = set(\"reset password email\".split())\nscores = {name: len(query & set(text.split())) for name,text in documents.items()}\nprint(sorted(scores.items(), key=lambda item: item[1], reverse=True))\n# This is lexical overlap, not semantic embeddings.",
+        "expected_output": "[('policy', 3), ('shipping', 0)]",
+        "run_instructions": "Save the snippet to a local file such as lesson_example.py and run it with Python 3.11+ using `python lesson_example.py`. This is a local/static teaching example; CodeLeaf's current browser iframe previews HTML/CSS/JavaScript and is not a secure Python runner. Do not paste API credentials into the example or public source files.",
+        "reset_steps": "Restore the original snippet and fixed sample inputs, rerun it, then change one input at a time and compare the new output with the stated contract.",
+        "execution_mode": "static-validation"
+      },
+      {
+        "type": "callout",
+        "title": "Provider and version note",
+        "text": "Model names, API payloads, supported modalities, quotas, pricing, and SDK behavior vary by provider and change over time. Treat linked official documentation as the authority for a live integration; examples here avoid hard-coded production model IDs and secrets."
+      }
+    ],
+    "task": "Practice natural-language search within semantic search applications: use a small synthetic input, predict the result, run the example, then change one input to test an edge case. Record the expected result and one limitation.",
+    "task_acceptance_criteria": [
+      "The example uses a clearly described, non-sensitive input.",
+      "Expected behavior and at least one edge/failure case are written down.",
+      "The learner checks the result against an explicit criterion and records limitations."
+    ],
+    "hints": [
+      "Begin with a tiny input whose expected behavior you can explain before running it.",
+      "Change one variable at a time and retain a fixed baseline for comparison.",
+      "When a model or external service is involved, inspect evidence and errors; do not treat the model response as a trusted instruction."
+    ],
+    "expected_output": "[('policy', 3), ('shipping', 0)]",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-109-questions.json",
+    "common_mistakes": [
+      {
+        "mistake": "Assuming fluent or plausible output is necessarily correct.",
+        "fix": "Use evidence, schema checks, representative test cases, and human review for consequential results."
+      },
+      {
+        "mistake": "Changing several inputs or parameters at once.",
+        "fix": "Keep a baseline and vary one factor at a time so the effect can be interpreted."
+      },
+      {
+        "mistake": "Putting secrets or private source material in prompts, logs, or a public example.",
+        "fix": "Use synthetic data, server-side secret storage, data minimization, and reviewed retention rules."
+      }
+    ],
+    "summary": [
+      "Semantic Search Applications is one part of a larger generative AI application lifecycle.",
+      "Use explicit inputs, criteria, and reproducible examples to test the concept.",
+      "Document uncertainty, failure modes, security considerations, and version assumptions."
+    ],
+    "references": [
+      "https://developers.openai.com/api/docs/guides/embeddings",
+      "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide"
+    ]
+  },
+  "exercise_files": [
+    "../exercises/109-create-a-semantic-search-engine.json"
+  ],
+  "sources": [
+    {
+      "title": "Vector embeddings",
+      "url": "https://developers.openai.com/api/docs/guides/embeddings",
+      "publisher": "OpenAI API documentation",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "embeddings"
+      ]
+    },
+    {
+      "title": "Design and develop a RAG solution",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/rag/rag-solution-design-and-evaluation-guide",
+      "publisher": "Microsoft Learn / Azure Architecture Center",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "RAG architecture"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated as a complete draft from the supplied syllabus. Content and technical examples require subject-matter review before publication."
+}

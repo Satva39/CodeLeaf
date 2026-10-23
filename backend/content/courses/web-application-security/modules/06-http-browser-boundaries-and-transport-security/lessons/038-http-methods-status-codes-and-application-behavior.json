@@ -1,0 +1,189 @@
+{
+  "id": "web-application-security-lesson-038",
+  "slug": "http-methods-status-codes-and-application-behavior",
+  "title": "HTTP Methods, Status Codes, and Application Behavior",
+  "sequence": 38,
+  "module_id": "web-application-security-module-06",
+  "module_slug": "http-browser-boundaries-and-transport-security",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core-foundations",
+  "curriculum_tier": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "web-application-security-lesson-037"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-037",
+  "next_lesson_id": "web-application-security-lesson-039",
+  "keywords": [
+    "http",
+    "methods",
+    "status",
+    "codes",
+    "and",
+    "application",
+    "behavior",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 38,
+  "source_syllabus_title": "HTTP Methods, Status Codes, and Application Behavior",
+  "source_subtopics": [
+    {
+      "number": "38.1",
+      "title": "Safe and idempotent methods"
+    },
+    {
+      "number": "38.2",
+      "title": "GET versus state-changing requests"
+    },
+    {
+      "number": "38.3",
+      "title": "Authorization for write operations"
+    },
+    {
+      "number": "38.4",
+      "title": "Error and redirect behavior"
+    },
+    {
+      "number": "38.5",
+      "title": "Consistency between UI restrictions and server enforcement"
+    }
+  ],
+  "subtopics": [
+    "Safe and idempotent methods",
+    "GET versus state-changing requests",
+    "Authorization for write operations",
+    "Error and redirect behavior",
+    "Consistency between UI restrictions and server enforcement"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in HTTP Methods, Status Codes, and Application Behavior.",
+    "Choose an appropriate defensive control for HTTP Methods, Status Codes, and Application Behavior and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for HTTP Methods, Status Codes, and Application Behavior, including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 6: HTTP, Browser Boundaries, and Transport Security. It builds practical understanding of HTTP Methods, Status Codes, and Application Behavior with the syllabus subtopics retained below.",
+    "why_it_matters": "HTTP Methods, Status Codes, and Application Behavior helps you observe a real boundary instead of assuming that browser, proxy, transport, and server behavior are interchangeable. Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: HTTP Methods, Status Codes, and Application Behavior",
+        "asset_path": "diagrams/lesson-038-http-methods-status-codes-and-application-behavior.svg",
+        "alt_text": "Four-stage visual model for HTTP Methods, Status Codes, and Application Behavior: Observe web behavior; Map boundary; Configure control; Inspect the result.",
+        "caption": "Concept map for HTTP Methods, Status Codes, and Application Behavior. It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "HTTP Methods, Status Codes, and Application Behavior can be understood through this sequence: Observe web behavior → Map boundary → Configure control → Inspect the result. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 38.1 Safe and idempotent methods; 38.2 GET versus state-changing requests; 38.3 Authorization for write operations; 38.4 Error and redirect behavior; 38.5 Consistency between UI restrictions and server enforcement. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "http",
+        "execution_mode": "static-validation",
+        "title": "Safe reference example: HTTP Methods, Status Codes, and Application Behavior",
+        "code": "GET /api/profile HTTP/1.1\nHost: app.example.test\nAccept: application/json\n\nHTTP/1.1 200 OK\nContent-Type: application/json\nCache-Control: no-store",
+        "expected_output": "The response declares JSON content and asks caches not to retain this personalized response.",
+        "run_instructions": "This is a schematic transcript for a local test app. Confirm actual headers in the browser network panel or an authorized HTTP client.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “HTTP Methods, Status Codes, and Application Behavior”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for HTTP Methods, Status Codes, and Application Behavior in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-038-questions.json",
+    "recap": [
+      "HTTP Methods, Status Codes, and Application Behavior is a security boundary/control topic, not a standalone checklist item.",
+      "Apply least privilege and default-deny authorization on the server for each relevant action, object, and property, then test both allowed and denied cases.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "MDN Web Security",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "same-origin policy",
+        "browser security boundaries",
+        "web security features"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

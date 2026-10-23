@@ -1,0 +1,145 @@
+{
+  "id": "redis-lesson-090",
+  "slug": "redis-functions",
+  "title": "Redis Functions",
+  "sequence": 90,
+  "module_id": "redis-module-12",
+  "module_slug": "redis-programmability-lua-and-functions",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core-redis",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "redis-lesson-089"
+  ],
+  "previous_lesson_id": "redis-lesson-089",
+  "next_lesson_id": "redis-lesson-091",
+  "keywords": [
+    "redis-functions",
+    "redis-functions-introduced-in-redis-7",
+    "function-libraries",
+    "function-load",
+    "fcall-and-fcall-ro",
+    "persistent-managed-server-side-logic",
+    "redis",
+    "redis-cli"
+  ],
+  "source_syllabus_number": 90,
+  "subtopics": [
+    "Redis Functions introduced in Redis 7",
+    "Function libraries",
+    "FUNCTION LOAD",
+    "FCALL and FCALL_RO",
+    "Persistent, managed server-side logic"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of Redis Functions and distinguish it from a related Redis concept.",
+    "Apply or trace Redis Functions in a small example, using the subtopics and version assumptions listed here.",
+    "Identify a relevant edge case or failure mode for Redis Functions and choose a verification step."
+  ],
+  "content": {
+    "intro": "This lesson explores Redis Functions in the context of Redis. It follows the provided Redis curriculum and uses short examples and verification tasks rather than assuming every command is available in every hosted service.",
+    "why_it_matters": "Redis Functions helps implement move bounded business logic next to data without exposing untrusted dynamic commands. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Redis Functions",
+        "asset_path": "diagrams/lesson-090-redis-functions.svg",
+        "alt_text": "Concept diagram for Redis Functions, connecting the input, Redis mechanism, and verification step.",
+        "caption": "Visual model for Redis Functions; use the lesson text for exact command syntax, compatibility, and operational boundaries."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Redis Functions helps implement move bounded business logic next to data without exposing untrusted dynamic commands. Keep the data model small, state assumptions explicitly, and verify normal and boundary cases."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the smallest useful data example. Name the key, type, expected return value, expiration behavior, and failure conditions. For Redis Functions, separate documented Redis guarantees from assumptions made by your application or managed hosting provider."
+      },
+      {
+        "type": "list",
+        "title": "Topics preserved from the syllabus",
+        "items": [
+          {
+            "title": "Redis Functions introduced in Redis 7",
+            "text": "Connect Redis Functions introduced in Redis 7 to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Function libraries",
+            "text": "Connect Function libraries to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "FUNCTION LOAD",
+            "text": "Connect FUNCTION LOAD to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "FCALL and FCALL_RO",
+            "text": "Connect FCALL and FCALL_RO to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          },
+          {
+            "title": "Persistent, managed server-side logic",
+            "text": "Connect Persistent, managed server-side logic to the lesson model; check exact syntax and return values in the official command reference before using a version-sensitive option."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Reference example: Redis Functions",
+        "language": "redis-cli",
+        "execution_mode": "static-validation",
+        "code": "EVAL \"return redis.call('PING')\" 0",
+        "expected_output": "\"PONG\"",
+        "run_instructions": "Keep scripts/functions bounded and validate all application-controlled inputs; production deployments may restrict programmability commands.",
+        "reset_steps": "No key is written.",
+        "note": "Use a disposable development keyspace. Treat this as a learning example, not a production-ready policy without boundary tests."
+      }
+    ],
+    "task": "Try it yourself: make a small, isolated demonstration of Redis Functions. Predict the result before running it, then record one normal case and one boundary case. Use synthetic data only.",
+    "task_acceptance_criteria": [
+      "Explain Redis Functions in your own words and connect it to at least one syllabus subtopic.",
+      "Verify a concrete result using the appropriate CLI, a local test, a documented manual check, or a trace.",
+      "Describe one edge case, failure mode, compatibility requirement, or operational limitation."
+    ],
+    "hints": [
+      "Begin by identifying the Redis data type or operational guarantee involved in Redis Functions.",
+      "Use a disposable namespace such as demo:...; avoid using real customer data.",
+      "Check the official command reference for return values, complexity, and version availability before assuming the example is portable."
+    ],
+    "expected_output": "\"PONG\"",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-090-questions.json",
+    "recap": [
+      "Redis Functions is best understood with a small example and an explicit boundary.",
+      "Verify commands and semantics on the target Redis version/service.",
+      "Do not treat a reference snippet as an automatically executed or production-ready implementation."
+    ]
+  },
+  "exercise_files": [
+    "../exercises/022-server-side-function.json"
+  ],
+  "sources": [
+    {
+      "title": "Redis Functions",
+      "url": "https://redis.io/docs/latest/develop/interact/programmability/functions-intro/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "managed server-side functions and compatibility with scripting"
+      ]
+    },
+    {
+      "title": "Redis programmability",
+      "url": "https://redis.io/docs/latest/develop/interact/programmability/",
+      "publisher": "Redis documentation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "Lua scripting, execution behavior and server-side logic"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from Redis.pdf; review technical details, command outputs, platform compatibility, and assessment wording before publication."
+}

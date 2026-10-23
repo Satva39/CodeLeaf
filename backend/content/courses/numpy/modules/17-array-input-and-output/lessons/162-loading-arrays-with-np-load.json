@@ -1,0 +1,159 @@
+{
+  "id": "numpy-lesson-162",
+  "slug": "loading-arrays-with-np-load",
+  "title": "Loading Arrays with np.load()",
+  "sequence": 162,
+  "module_id": "numpy-module-17",
+  "module_slug": "array-input-and-output",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 8,
+  "prerequisites": [
+    "numpy-lesson-161"
+  ],
+  "previous_lesson_id": "numpy-lesson-161",
+  "next_lesson_id": "numpy-lesson-163",
+  "keywords": [
+    "loading arrays with np.load()",
+    "array input and output",
+    "Reading .npy  files",
+    "Inspecting loaded arrays",
+    "Handling file-path errors",
+    "Understanding trusted versus untrusted files",
+    "NumPy",
+    "ndarray"
+  ],
+  "source_syllabus_number": 162,
+  "subtopics": [
+    "Reading .npy  files",
+    "Inspecting loaded arrays",
+    "Handling file-path errors",
+    "Understanding trusted versus untrusted files"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of loading arrays with np.load() and name one situation where it is useful.",
+    "Apply reading .npy  files to a small NumPy example and inspect the resulting values, shape, or dtype.",
+    "Identify one important limitation, boundary case, or validation check for loading arrays with np.load()."
+  ],
+  "content": {
+    "intro": "This lesson develops topic 162 of the supplied curriculum: **Loading Arrays with np.load()**. The main starting point is **Reading .npy  files**. You will connect the idea to a small, synthetic example, then use the result to reason about shape, dtype, accuracy, or memory as appropriate.",
+    "why_it_matters": "File I/O is a trust and reproducibility boundary: validate dimensions and dtypes, avoid loading pickled objects from untrusted sources, and use formats that preserve the required information.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Loading Arrays with np.load()",
+        "asset_path": "diagrams/lesson-162-loading-arrays-with-np-load.svg",
+        "alt_text": "Teaching visual for lesson 162, Loading Arrays with np.load(). It illustrates Source file / buffer, then Load and validate, leading to Save or exchange array.",
+        "caption": "Visual model for Loading Arrays with np.load(). Synthetic conceptual diagram; inspect shape, dtype, and assumptions as relevant."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Treat **Loading Arrays with np.load()** as an explicit step in an array workflow. This lesson centers on **Reading .npy  files** and the source syllabus's related subtopics. Before trusting a result, identify the input shape and dtype, perform the smallest useful operation, and inspect the output. The example uses synthetic data so you can change one value and observe what changes."
+      },
+      {
+        "type": "list",
+        "title": "Subtopics from the supplied curriculum",
+        "items": [
+          "Reading .npy  files",
+          "Inspecting loaded arrays",
+          "Handling file-path errors",
+          "Understanding trusted versus untrusted files"
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "code": "import io\nimport numpy as np\n\nbuffer = io.BytesIO()\nnp.save(buffer, np.array([2, 4, 6]))\nbuffer.seek(0)\nprint(np.load(buffer, allow_pickle=False).tolist())",
+        "expected_output": "Observed output in the available validation environment (Python 3.13.5, NumPy 2.3.5):\n[2, 4, 6]",
+        "execution_mode": "static-validation",
+        "run_instructions": "Save this snippet as a .py file inside the intended Python environment, then run `python filename.py`. Install NumPy in that same environment first. This learning page displays the sample; it does not execute arbitrary Python on the web server.",
+        "reset_steps": "For examples that create files, use a temporary working directory and remove its outputs after reviewing them. The memory-map example already uses a temporary directory."
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "Load numeric arrays with `allow_pickle=False` unless a trusted object-array workflow specifically requires pickle. Treat file content as input to validate, not as a trusted schema."
+      },
+      {
+        "type": "list",
+        "title": "Try it yourself",
+        "items": [
+          "Load a synthetic dataset from an in-memory buffer, validate it, and save/reload the result without enabling pickle.",
+          "Change one input value or parameter and predict the output before running the example.",
+          "Record one edge case and explain how your code should respond."
+        ]
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          "Topic 162: Loading Arrays with np.load().",
+          "Core focus: Reading .npy  files.",
+          "Check the official reference when signatures or version-specific behavior matter."
+        ]
+      }
+    ],
+    "expected_output": "Observed output in the available validation environment (Python 3.13.5, NumPy 2.3.5):\n[2, 4, 6]",
+    "run_instructions": "Run Python examples locally in the same environment where NumPy is installed; no embedded server-side Python execution is assumed.",
+    "reset_steps": "Use temporary paths for file-writing experiments. Restore modified arrays by recreating the example input. No platform progress or rewards are created by viewing the lesson.",
+    "hints": [
+      "First identify the input values and their shape/dtype.",
+      "Run the smallest complete example and compare the actual output with the expected behavior.",
+      "Change one variable at a time; if the result differs, inspect shape, dtype, finite values, and version-specific behavior before changing the algorithm."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-162-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Loading serialized objects from untrusted files",
+        "why": "Pickle-based object loading can execute code.",
+        "fix": "For numeric data, prefer `np.load(..., allow_pickle=False)` unless a trusted object workflow is explicitly necessary."
+      },
+      {
+        "problem": "Failing to validate input shape",
+        "why": "A file can be readable but still violate the analysis contract.",
+        "fix": "Check shape, dtype, missing values, and expected fields after loading."
+      }
+    ],
+    "summary": [
+      "Topic 162 covers loading arrays with np.load() and the subtopics listed in the curriculum.",
+      "Validate files and arrays at the I/O boundary; do not load pickled objects from untrusted sources.",
+      "Examples and assessments are draft and require subject-matter review before publication."
+    ],
+    "references": [
+      {
+        "title": "Input and output",
+        "url": "https://numpy.org/doc/stable/reference/routines.io.html",
+        "publisher": "NumPy project",
+        "checked_on": "2026-10-13",
+        "supports": [
+          "Loading Arrays with np.load()",
+          "Reading .npy  files",
+          "Inspecting loaded arrays"
+        ]
+      }
+    ],
+    "accessibility_notes": "Every visual has descriptive SVG title/description and adjacent text explaining the concept. The diagram does not rely on color alone; text labels state each stage.",
+    "version_notes": "Written against the NumPy 2.5 stable documentation checked 2026-10-13. Example outputs that were executed were observed in an available NumPy 2.3.5 environment; release-specific formatting or pseudorandom streams may vary."
+  },
+  "exercise_files": [
+    "../exercises/014-save-and-reload-an-array.json"
+  ],
+  "sources": [
+    {
+      "title": "Input and output",
+      "url": "https://numpy.org/doc/stable/reference/routines.io.html",
+      "publisher": "NumPy project",
+      "checked_on": "2026-10-13",
+      "supports": [
+        "Loading Arrays with np.load()",
+        "Reading .npy  files",
+        "Inspecting loaded arrays"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft generated from the supplied syllabus with original explanations and examples. Subject-matter review, learner testing, and publication approval are still required."
+}

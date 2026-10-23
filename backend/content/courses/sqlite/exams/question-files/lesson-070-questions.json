@@ -1,0 +1,50 @@
+{
+  "id": "sqlite-l070-question-set",
+  "lesson_id": "sqlite-lesson-070",
+  "lesson_slug": "deferred-foreign-key-constraints",
+  "title": "Knowledge check: Deferred Foreign-Key Constraints",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "question_count": 3,
+  "questions": [
+    {
+      "id": "sqlite-l070-q01",
+      "type": "single_choice",
+      "prompt": "Which practice best applies to “Deferred Foreign-Key Constraints”?",
+      "options": [
+        "Concatenate untrusted input directly into SQL and suppress errors.",
+        "Assume the result is correct without checking the schema, data or expected output.",
+        "Enable PRAGMA foreign_keys on each connection, define matching referenced keys, and test invalid child rows.",
+        "Rely on undocumented behavior and skip checking the actual SQLite runtime."
+      ],
+      "answer_key": "Enable PRAGMA foreign_keys on each connection, define matching referenced keys, and test invalid child rows.",
+      "explanation": "Deferred Foreign-Key Constraints: Enable PRAGMA foreign_keys on each connection, define matching referenced keys, and test invalid child rows. Foreign-key declarations alone do not guarantee enforcement is enabled for a connection."
+    },
+    {
+      "id": "sqlite-l070-q02",
+      "type": "single_choice",
+      "prompt": "When a minimal example for “Deferred Foreign-Key Constraints” behaves unexpectedly, what is the best next step?",
+      "options": [
+        "Reduce it to a reproducible fixture, inspect schema and values, and verify the expected result.",
+        "Change several unrelated statements at once and rerun against important production data.",
+        "Ignore the runtime version and assume every SQLite build includes every optional feature.",
+        "Disable constraints so the current test always passes."
+      ],
+      "answer_key": "Reduce it to a reproducible fixture, inspect schema and values, and verify the expected result.",
+      "explanation": "A controlled fixture helps isolate behavior and makes the test repeatable. Preserve constraints and state the assumptions you verified."
+    },
+    {
+      "id": "sqlite-l070-q03",
+      "type": "single_choice",
+      "prompt": "What should be recorded before depending on an SQLite capability related to “Deferred Foreign-Key Constraints”?",
+      "options": [
+        "The installed CLI only; the linked library and build options never differ.",
+        "The library version linked into the application, relevant feature/build support, and a small compatibility test.",
+        "Only the operating system name.",
+        "Nothing, because SQLite automatically upgrades the application runtime."
+      ],
+      "answer_key": "The library version linked into the application, relevant feature/build support, and a small compatibility test.",
+      "explanation": "The CLI and application may be linked to different SQLite versions, and some capabilities depend on compile-time options or loaded extensions."
+    }
+  ]
+}

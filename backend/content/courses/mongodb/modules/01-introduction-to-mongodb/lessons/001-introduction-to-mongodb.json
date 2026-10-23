@@ -1,0 +1,227 @@
+{
+  "id": "mongodb-lesson-001",
+  "slug": "introduction-to-mongodb",
+  "title": "Introduction to MongoDB",
+  "sequence": 1,
+  "module_id": "mongodb-module-01",
+  "module_slug": "introduction-to-mongodb",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [],
+  "previous_lesson_id": null,
+  "next_lesson_id": "mongodb-lesson-002",
+  "keywords": [
+    "introduction",
+    "mongodb",
+    "database"
+  ],
+  "source_syllabus_number": 1,
+  "source_module_number": 1,
+  "subtopics": [
+    "What is MongoDB?",
+    "What is a document database?",
+    "MongoDB as a NoSQL database",
+    "Key MongoDB terminology"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and main trade-off of introduction to mongodb.",
+    "Apply introduction to mongodb to a small MongoDB data or operational scenario.",
+    "Verify the expected result, one edge case, and the relevant version/deployment assumption."
+  ],
+  "content": {
+    "intro": "Learn introduction to mongodb as part of Introduction to MongoDB. The lesson preserves the PDF subtopics, connects them to a practical MongoDB pattern, and ends with a verification task.",
+    "why_it_matters": "Introduction to MongoDB introduces the MongoDB document model and its surrounding tools. Understand the relevant vocabulary, identify which component owns each responsibility, and practice in a repeatable environment before expanding to production concerns.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Introduction to MongoDB",
+        "asset_path": "diagrams/lesson-001-introduction-to-mongodb.svg",
+        "alt_text": "Four-step learning diagram for Introduction to MongoDB: Understand concept; Inspect example; Verify behavior; Apply to a task.",
+        "caption": "Visual guide to Introduction to MongoDB: follow the concept, action, verification and application steps."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Introduction to MongoDB introduces the MongoDB document model and its surrounding tools. Understand the relevant vocabulary, identify which component owns each responsibility, and practice in a repeatable environment before expanding to production concerns."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics to master",
+        "items": [
+          {
+            "title": "1. What is MongoDB?",
+            "text": "Be able to explain or demonstrate what is MongoDB? in the context of introduction to mongodb, and document the relevant design or version assumption."
+          },
+          {
+            "title": "2. What is a document database?",
+            "text": "Be able to explain or demonstrate what is a document database? in the context of introduction to mongodb, and document the relevant design or version assumption."
+          },
+          {
+            "title": "3. MongoDB as a NoSQL database",
+            "text": "Be able to explain or demonstrate mongoDB as a NoSQL database in the context of introduction to mongodb, and document the relevant design or version assumption."
+          },
+          {
+            "title": "4. Key MongoDB terminology",
+            "text": "Be able to explain or demonstrate key MongoDB terminology in the context of introduction to mongodb, and document the relevant design or version assumption."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the behavior you want, identify the collection/document shape and access pattern involved, then select the smallest MongoDB operation that expresses the requirement. Document required fields and types, and test an edge case along with the normal case."
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "execution_mode": "static-validation",
+        "code": "db.products.insertOne({\n  sku: \"P-101\",\n  name: \"Notebook\",\n  price: 4.50,\n  active: true,\n  tags: [\"stationery\"],\n  inventory: { onHand: 20, warehouse: \"west\" }\n});\ndb.products.findOne({ sku: \"P-101\" });",
+        "expected_output": "The insert result reports one inserted document; findOne returns the inserted document, including its nested inventory object and tags array.",
+        "run_instructions": "CodeLeaf displays this example as a reference and does not execute a MongoDB server or arbitrary driver code in the page. Run shell examples with mongosh, or driver examples in a separately configured Node.js/Python lab, against a disposable database. Verify installed server/driver versions and deployment feature availability first. Never place credentials in source files.",
+        "reset_steps": "Use a dedicated training database and synthetic fixtures. Remove only objects created by this lesson or recreate the disposable database after confirming the target; do not run destructive/reset commands against production."
+      },
+      {
+        "type": "callout",
+        "title": "Environment and safety note",
+        "text": "All examples are teaching references, not production-ready configuration. MongoDB Atlas-specific Search, Vector Search, monitoring, backup and automation features are marked as deployment-dependent. Server, driver, shell and managed-service capabilities differ; check the official documentation that matches your target."
+      }
+    ],
+    "task": "Try it yourself: Describe the document shape and the application access pattern first, then compare the trade-off with a relational representation. Submit your choice plus the expected result/evidence and one edge case.",
+    "task_acceptance_criteria": [
+      "Demonstrate the key idea in Introduction to MongoDB.",
+      "Predict the result and state how you would verify it.",
+      "Name one boundary, risk or version/deployment assumption."
+    ],
+    "hints": [
+      "First, explain what “Introduction to MongoDB” needs to accomplish in this scenario.",
+      "Write down the data shape, filter, expected output or operational evidence before running the example.",
+      "Test one normal case and one meaningful boundary/failure case; consult the matching official reference."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Relying on flexible schemas without a data contract",
+        "why": "Documents can drift in field names and BSON types, which makes query behavior and application code less predictable.",
+        "fix": "Document required fields and types, and test an edge case along with the normal case."
+      },
+      {
+        "problem": "Assuming a static reference result proves the environment will behave identically.",
+        "why": "MongoDB server, shell, driver, managed service and permissions can affect the available behavior.",
+        "fix": "Record the target versions and privileges, run the smallest safe test, and keep expected and actual results side by side."
+      }
+    ],
+    "summary": [
+      "Introduction to MongoDB introduces the MongoDB document model and its surrounding tools. Understand the relevant vocabulary, identify which component owns each responsibility, and practice in a repeatable environment before expanding to production concerns.",
+      "The supplied roadmap identifies these subtopics: What is MongoDB?; What is a document database?; MongoDB as a NoSQL database; Key MongoDB terminology.",
+      "Use a disposable practice environment, verify the result and keep operational assumptions explicit."
+    ],
+    "references": [
+      {
+        "title": "MongoDB Manual — Complete Documentation Index",
+        "url": "https://www.mongodb.com/docs/manual/contents/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "course-wide concepts",
+          "deployment and version navigation",
+          "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+        ]
+      },
+      {
+        "title": "MongoDB Documents",
+        "url": "https://www.mongodb.com/docs/manual/core/document/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "BSON documents",
+          "fields and values",
+          "embedded documents and arrays"
+        ]
+      },
+      {
+        "title": "Databases and Collections",
+        "url": "https://www.mongodb.com/docs/manual/core/databases-and-collections/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "databases",
+          "collections",
+          "mongosh and Compass workflows"
+        ]
+      },
+      {
+        "title": "MongoDB Shell (mongosh)",
+        "url": "https://www.mongodb.com/docs/mongodb-shell/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_developer_guide",
+        "supports": [
+          "mongosh installation and use",
+          "shell commands and CRUD practice"
+        ]
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-001-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "MongoDB-specific examples are reference content. A separate isolated MongoDB server/driver runtime is required for execution; questions and solutions remain protected."
+  },
+  "exercise_files": [
+    "../exercises/001-introduction-to-mongodb-practice.json"
+  ],
+  "sources": [
+    {
+      "title": "MongoDB Manual — Complete Documentation Index",
+      "url": "https://www.mongodb.com/docs/manual/contents/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "course-wide concepts",
+        "deployment and version navigation",
+        "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+      ]
+    },
+    {
+      "title": "MongoDB Documents",
+      "url": "https://www.mongodb.com/docs/manual/core/document/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "BSON documents",
+        "fields and values",
+        "embedded documents and arrays"
+      ]
+    },
+    {
+      "title": "Databases and Collections",
+      "url": "https://www.mongodb.com/docs/manual/core/databases-and-collections/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "databases",
+        "collections",
+        "mongosh and Compass workflows"
+      ]
+    },
+    {
+      "title": "MongoDB Shell (mongosh)",
+      "url": "https://www.mongodb.com/docs/mongodb-shell/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_developer_guide",
+      "supports": [
+        "mongosh installation and use",
+        "shell commands and CRUD practice"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson authored from the supplied MongoDB syllabus and original instructional material. Review examples against the target MongoDB release/deployment before publication."
+}

@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-16",
+  "exercise_id": "dsa-exercise-pdf-16",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\ndef reverse_list(head):\n    previous, current = None, head\n    while current:\n        following = current.next\n        current.next = previous\n        previous, current = current, following\n    return previous\n\nclass Node:\n    def __init__(self, value, next_node=None): self.value, self.next = value, next_node\ndef traverse(head):\n    out=[]\n    while head: out.append(head.value); head=head.next\n    return out\n\nhead = Node(1, Node(2, Node(3)))\nassert traverse(reverse_list(head)) == [3, 2, 1]\n```",
+  "explanation": "Reverse links iteratively with previous/current/following references. Time O(n), auxiliary space O(1).",
+  "tested_reference_code": "def reverse_list(head):\n    previous, current = None, head\n    while current:\n        following = current.next\n        current.next = previous\n        previous, current = current, following\n    return previous\n\nclass Node:\n    def __init__(self, value, next_node=None): self.value, self.next = value, next_node\ndef traverse(head):\n    out=[]\n    while head: out.append(head.value); head=head.next\n    return out\n\nhead = Node(1, Node(2, Node(3)))\nassert traverse(reverse_list(head)) == [3, 2, 1]",
+  "language": "python"
+}

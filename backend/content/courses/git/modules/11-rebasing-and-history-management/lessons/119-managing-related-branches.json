@@ -1,0 +1,145 @@
+{
+  "id": "git-lesson-119",
+  "slug": "managing-related-branches",
+  "title": "Managing Related Branches",
+  "sequence": 119,
+  "module_id": "git-module-11",
+  "module_slug": "rebasing-and-history-management",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "primary_service": "Git version control",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "git-lesson-118"
+  ],
+  "previous_lesson_id": "git-lesson-118",
+  "next_lesson_id": "git-lesson-120",
+  "keywords": [
+    "git-automation-scripting-and-production-workflows",
+    "rebasing-and-history-management",
+    "git",
+    "keeping-feature-branches-current",
+    "moving-selected-commits-between-branches",
+    "separating-unrelated-changes",
+    "choosing-cherry-pick-merge-or-rebase"
+  ],
+  "source_syllabus_number": 119,
+  "subtopics": [
+    "Keeping feature branches current",
+    "Moving selected commits between branches",
+    "Separating unrelated changes",
+    "Choosing cherry-pick, merge, or rebase"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and boundaries of managing related branches.",
+    "Choose and interpret a Git command relevant to managing related branches using a disposable repository.",
+    "Verify the result with repository state or history and identify one safety limitation."
+  ],
+  "content": {
+    "intro": "This lesson introduces managing related branches as part of Rebasing and History Management. It follows the supplied Git curriculum and adds an original explanation, an inspectable command example, troubleshooting notes, and a practice task.",
+    "why_it_matters": "Branches are movable names for commits, so separate lines of work can progress independently. A deliberate starting point and clear cleanup policy make integration safer.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 11: Rebasing and History Management",
+        "asset_path": "diagrams/module-11-overview.svg",
+        "alt_text": "Four-step view of Rebasing and History Management, with key syllabus checkpoints and a verification reminder.",
+        "caption": "Original CodeLeaf diagram. Review labels as well as the explanatory text; color is not the only signal."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "**Core idea.** Branches are movable names for commits, so separate lines of work can progress independently. A deliberate starting point and clear cleanup policy make integration safer.\n\nFor **Managing Related Branches**, keep the named subtopics in view: Keeping feature branches current; Moving selected commits between branches; Separating unrelated changes; Choosing cherry-pick, merge, or rebase. Treat those as the scope of this lesson, then practise the smallest workflow that demonstrates the idea."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "**Before you run a command:** decide what state you are inspecting or changing, identify whether the effect is local or remote, and write down what evidence would count as success. Use merge to combine histories, rebase to replay a private line of work, and cherry-pick to copy a selected commit; confirm the intended target."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered",
+        "items": [
+          "Keeping feature branches current",
+          "Moving selected commits between branches",
+          "Separating unrelated changes",
+          "Choosing cherry-pick, merge, or rebase"
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Command example: Managing Related Branches",
+        "language": "bash",
+        "code": "git log --oneline --graph --decorate --all",
+        "expected_output": "Visible commit and branch relationships before choosing merge, rebase or cherry-pick.",
+        "run_instructions": "Use merge to combine histories, rebase to replay a private line of work, and cherry-pick to copy a selected commit; confirm the intended target.",
+        "reset_steps": "Use a disposable repository. If the exercise changes state, check git status and git log before and after; discard the practice directory only after confirming it contains no valuable work.",
+        "execution_mode": "static-validation",
+        "limitations": "The CodeLeaf web lesson page does not execute arbitrary Git commands. Run commands locally in a disposable repository with a Git version appropriate to your task. Placeholder paths, branches, commit IDs and repository URLs must be replaced with values from that practice repository."
+      },
+      {
+        "type": "callout",
+        "title": "Safety and verification checkpoint",
+        "text": "Start with git status --short --branch. For destructive or history-rewriting operations, review the exact target, create a recovery reference when appropriate, and keep valuable work backed up. Never put credentials, access tokens or private keys in course submissions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-119-questions.json"
+  },
+  "task": "Create or use two clearly named branches in a disposable repository. Make one small change on each, inspect the commit graph, perform the relevant integration step, then verify the final files and history.",
+  "hints": [
+    "Start by reviewing: Keeping feature branches current.",
+    "Use a read-only inspection command before any operation that changes files, refs or remote state.",
+    "After the example, verify with git status --short --branch and/or git log --oneline --graph as appropriate."
+  ],
+  "expected_output": "Visible commit and branch relationships before choosing merge, rebase or cherry-pick.",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Running a state-changing command without confirming the target repository or branch.",
+      "why": "A command may affect the wrong working tree or move a reference that other work depends on.",
+      "fix": "Check git rev-parse --show-toplevel and git status --short --branch before proceeding."
+    },
+    {
+      "problem": "Assuming a command succeeded because no error was visible.",
+      "why": "Some Git commands are silent on success, and some expected actions are blocked by repository state or permissions.",
+      "fix": "Verify status, log, references, remote state or the named output explicitly."
+    },
+    {
+      "problem": "Using an example placeholder literally or applying a destructive example to valuable work.",
+      "why": "Paths, branch names and object IDs depend on the current repository; restore/reset/clean operations can discard work.",
+      "fix": "Substitute real practice values, use a disposable repository, and preview changes before proceeding."
+    }
+  ],
+  "summary": [
+    "Managing Related Branches is covered through these syllabus topics: Keeping feature branches current; Moving selected commits between branches; Separating unrelated changes; Choosing cherry-pick, merge, or rebase.",
+    "Choose the command for the intended effect; understand whether it changes files, the index, local references, or remote state.",
+    "Verify the result, record unexpected output, and retain a recovery path for risky operations."
+  ],
+  "references": [
+    "references/reference-index.json",
+    "https://git-scm.com/docs",
+    "https://git-scm.com/book/en/v2"
+  ],
+  "sources": [
+    {
+      "title": "Git Reference Documentation",
+      "url": "https://git-scm.com/docs",
+      "publisher": "Git project",
+      "checked_on": "2026-10-15",
+      "source_type": "official-reference"
+    },
+    {
+      "title": "Pro Git Book, 2nd Edition",
+      "url": "https://git-scm.com/book/en/v2",
+      "publisher": "Git project / Pro Git",
+      "checked_on": "2026-10-15",
+      "source_type": "officially-hosted-book"
+    }
+  ],
+  "exercise_files": [],
+  "technical_review_date": "2026-10-15",
+  "status": "draft",
+  "status_note": "Generated from the supplied Git syllabus. Content and commands need editorial/technical review before publication."
+}

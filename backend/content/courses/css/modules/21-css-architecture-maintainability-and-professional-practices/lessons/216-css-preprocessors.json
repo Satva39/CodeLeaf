@@ -1,0 +1,181 @@
+{
+  "id": "css-lesson-216",
+  "slug": "css-preprocessors",
+  "title": "CSS Preprocessors",
+  "sequence": 216,
+  "module_id": "css-module-21",
+  "module_slug": "css-architecture-maintainability-and-professional-practices",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "professional",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "css-lesson-215"
+  ],
+  "previous_lesson_id": "css-lesson-215",
+  "next_lesson_id": "css-lesson-217",
+  "keywords": [
+    "preprocessors",
+    "why",
+    "exist",
+    "sass",
+    "scss",
+    "fundamentals",
+    "variables",
+    "nesting",
+    "mixins",
+    "functions"
+  ],
+  "source_syllabus_number": 216,
+  "subtopics": [
+    "Why preprocessors exist",
+    "Sass/SCSS fundamentals",
+    "Variables and nesting in Sass",
+    "Mixins and functions",
+    "Partial files and module systems",
+    "Comparing preprocessors with native CSS"
+  ],
+  "learning_outcomes": [
+    "Describe the role of CSS Preprocessors and recognize when it is useful.",
+    "Apply a relevant property, selector, or technique from this lesson in a small stylesheet.",
+    "Inspect the browser result and explain one behavior, limitation, or compatibility consideration."
+  ],
+  "content": {
+    "intro": "In this lesson, you will explore CSS Preprocessors through a small CSS example, a visual guide, and one practical check. You do not need to memorize every property at once; focus on the decision the browser is making.",
+    "why_it_matters": "CSS Preprocessors helps you build interfaces that remain understandable, maintainable, and usable as content and viewport conditions change.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "CSS production workflow",
+        "asset_path": "diagrams/css-production-pipeline.svg",
+        "alt_text": "Source files become deliverable stylesheets through checked build steps. Labels show the concept flow.",
+        "caption": "Use the labeled steps as a reasoning guide; detailed behavior is described in the lesson."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Treat CSS tooling as a build-time aid rather than a browser requirement. Keep source files understandable, verify generated output, and document the build command and the fallback or browser assumptions."
+      },
+      {
+        "type": "paragraph",
+        "title": "A useful way to practice",
+        "text": "Start with one element or component. Use the concepts in this lesson—why preprocessors exist, sass/scss fundamentals, variables and nesting in sass—and change one declaration at a time. Compare the page before and after the change."
+      },
+      {
+        "type": "list",
+        "title": "What to look for",
+        "items": [
+          {
+            "title": "Why preprocessors exist",
+            "text": "Connect why preprocessors exist to the main idea in css preprocessors, then verify it in a minimal browser example."
+          },
+          {
+            "title": "Sass/SCSS fundamentals",
+            "text": "Connect sass/scss fundamentals to the main idea in css preprocessors, then verify it in a minimal browser example."
+          },
+          {
+            "title": "Variables and nesting in Sass",
+            "text": "Connect variables and nesting in sass to the main idea in css preprocessors, then verify it in a minimal browser example."
+          },
+          {
+            "title": "Mixins and functions",
+            "text": "Connect mixins and functions to the main idea in css preprocessors, then verify it in a minimal browser example."
+          },
+          {
+            "title": "Partial files and module systems",
+            "text": "Connect partial files and module systems to the main idea in css preprocessors, then verify it in a minimal browser example."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "css",
+        "code": "/* Native CSS custom properties work in the browser. */\n:root { --gap: 1rem; }\n.grid { display: grid; gap: var(--gap); }",
+        "expected_output": "Preprocessors and PostCSS transform source at build time; native CSS features reduce the need for transformation when their browser support meets project requirements.",
+        "run_instructions": "Put this snippet in styles.css and link it from a minimal index.html file with a viewport meta tag. Add elements whose classes match the selectors, open the page in a modern browser, and inspect computed styles. This lesson editor displays the expected result as a guide; it is not a server-side arbitrary-code runner.",
+        "reset_steps": "Restore the original CSS snippet, save the file, and repeat the test. Remove temporary debugging rules before keeping a final version."
+      },
+      {
+        "type": "callout",
+        "title": "Keep in mind",
+        "text": "Use the smallest valid example, prefer a readable default, and check browser behavior rather than trusting appearance alone."
+      }
+    ],
+    "task": "Try it yourself: build a small example that demonstrates CSS Preprocessors. Use the simplest relevant selector and one or more declarations, inspect the browser result, and explain it in your own words.",
+    "task_acceptance_criteria": [
+      "The stylesheet uses valid CSS syntax for the chosen feature.",
+      "The intended element or state visibly changes when the rule applies.",
+      "The behavior is checked with browser tools or a documented manual checklist."
+    ],
+    "hints": [
+      "Write the smallest rule that can demonstrate the concept.",
+      "Inspect which element matched and which declaration won before adding more selectors.",
+      "For a developing or optional feature, check browser support and preserve a useful fallback."
+    ],
+    "expected_output": "Preprocessors and PostCSS transform source at build time; native CSS features reduce the need for transformation when their browser support meets project requirements.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-216-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Changing several declarations at once.",
+        "why": "It becomes difficult to connect a visual change to its cause.",
+        "fix": "Change one property, save, and compare again."
+      },
+      {
+        "problem": "Assuming the last rule always wins.",
+        "why": "The cascade also considers origin, importance, layers and selector specificity; scope and source order may also matter.",
+        "fix": "Inspect matched declarations and computed styles before changing the stylesheet."
+      },
+      {
+        "problem": "Testing only one viewport or interaction state.",
+        "why": "A rule can work at one width and fail when content, focus, zoom or preferences change.",
+        "fix": "Repeat the check at narrow and wide widths and include keyboard focus or reduced-motion checks when relevant."
+      }
+    ],
+    "summary": [
+      "CSS Preprocessors is easiest to learn by connecting syntax to a rendered result.",
+      "Keep selectors readable and test the effect in the browser.",
+      "Verify compatibility and accessibility when the feature or interface requires it."
+    ],
+    "references": [
+      {
+        "title": "CSS reference",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference"
+      },
+      {
+        "title": "CSS styling basics",
+        "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "CSS reference",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "properties",
+        "selectors",
+        "at-rules",
+        "values"
+      ]
+    },
+    {
+      "title": "CSS styling basics",
+      "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "first CSS rules",
+        "syntax",
+        "selectors",
+        "cascade"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached CSS syllabus outline; requires subject-matter and browser QA review before publication."
+}

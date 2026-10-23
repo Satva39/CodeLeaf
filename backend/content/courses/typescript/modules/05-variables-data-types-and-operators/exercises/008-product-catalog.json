@@ -1,0 +1,58 @@
+{
+  "id": "typescript-exercise-008",
+  "slug": "product-catalog",
+  "title": "Product Catalog",
+  "sequence": 8,
+  "lesson_id": "typescript-lesson-038",
+  "lesson_slug": "038-union-types",
+  "module_id": "typescript-module-05",
+  "type": "coding",
+  "difficulty": "beginner",
+  "status": "draft",
+  "prompt": "Represent product categories with a union and use readonly product data.",
+  "starter": {
+    "code": "// TODO: declare type Category = \"book\" | \"stationery\"\n// TODO: define Product with readonly id and optional description\n",
+    "language": "typescript",
+    "file_name": "product-catalog.ts",
+    "execution_mode": "static-validation"
+  },
+  "public_tests": [
+    {
+      "name": "Required type contract",
+      "description": "Review that the submission contains the required declarations and preserves the stated input/output relationship.",
+      "mode": "static-token-check",
+      "required_strings": [
+        "type Category = \"book\" | \"stationery\"",
+        "readonly id: string",
+        "description?: string"
+      ]
+    },
+    {
+      "name": "Runtime and boundary review",
+      "description": "Explain one failure case and add a real runtime check when data crosses an external trust boundary.",
+      "mode": "human-review"
+    }
+  ],
+  "acceptance_criteria": [
+    "The Product type rejects categories outside the declared union and prevents id reassignment at compile time.",
+    "Submit code with the required type declarations and add an explanation or test for one meaningful boundary/failure case.",
+    "Do not claim that the code has been executed by the CodeLeaf browser playground."
+  ],
+  "hints": [
+    "Use a finite union for known categories, and remember readonly is not runtime freezing.",
+    "TypeScript checks assignability but does not validate external data at runtime.",
+    "Use the local TypeScript compiler and an appropriate test runner to verify behavior; the course grader checks only the documented text markers."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "type Category = \"book\" | \"stationery\"",
+      "readonly id: string",
+      "description?: string"
+    ]
+  },
+  "grading_method": "Server-side static token check for the required declarations plus human review of runtime tests. This is not a TypeScript compiler or arbitrary-code runner.",
+  "retry_policy": "Unlimited practice retries; platform XP is awarded once only after a correct server-side grade.",
+  "solution_file": "solutions/008-product-catalog-solution.json",
+  "status_note": "Draft until exercise instructions, starter, and static grader are reviewed. No course-authored XP override is used."
+}

@@ -1,0 +1,140 @@
+{
+  "id": "scipy-project-008",
+  "slug": "constrained-engineering-optimization-system",
+  "title": "Constrained Engineering Optimization System",
+  "sequence": 8,
+  "tier": "advanced",
+  "objective": "Find useful design parameters for a simulated engineering-style objective under explicit constraints.",
+  "prerequisite_lesson_ids": [
+    "scipy-lesson-025",
+    "scipy-lesson-026",
+    "scipy-lesson-027"
+  ],
+  "recommended_module_range": [
+    4,
+    19
+  ],
+  "recommended_lesson_range": [
+    25,
+    130
+  ],
+  "skills": [
+    "scipy.differentiate",
+    "scipy.optimize",
+    "input validation",
+    "numerical tests",
+    "reproducibility"
+  ],
+  "milestones": [
+    {
+      "sequence": 1,
+      "title": "Define objective functions, bounds, and linear/nonlinear constraints.",
+      "acceptance_criteria": [
+        "Demonstrate: Define objective functions, bounds, and linear/nonlinear constraints.",
+        "Include a reproducible test or verification step.",
+        "State one assumption or limitation."
+      ]
+    },
+    {
+      "sequence": 2,
+      "title": "Compare local and global optimization methods where appropriate.",
+      "acceptance_criteria": [
+        "Demonstrate: Compare local and global optimization methods where appropriate.",
+        "Include a reproducible test or verification step.",
+        "State one assumption or limitation."
+      ]
+    },
+    {
+      "sequence": 3,
+      "title": "Inspect convergence diagnostics and constraint satisfaction.",
+      "acceptance_criteria": [
+        "Demonstrate: Inspect convergence diagnostics and constraint satisfaction.",
+        "Include a reproducible test or verification step.",
+        "State one assumption or limitation."
+      ]
+    },
+    {
+      "sequence": 4,
+      "title": "Perform sensitivity analysis and document model limitations.",
+      "acceptance_criteria": [
+        "Demonstrate: Perform sensitivity analysis and document model limitations.",
+        "Include a reproducible test or verification step.",
+        "State one assumption or limitation."
+      ]
+    }
+  ],
+  "starter_files": [
+    {
+      "path": "README.md",
+      "purpose": "Setup, run instructions, scope, assumptions, and expected deliverables."
+    },
+    {
+      "path": "src/main.py",
+      "purpose": "Small runnable starting point for the analysis pipeline."
+    },
+    {
+      "path": "tests/test_analysis.py",
+      "purpose": "Tests for known results, boundaries, invalid values, and tolerance-based numeric checks."
+    }
+  ],
+  "required_features": [
+    "Define objective functions, bounds, and linear/nonlinear constraints.",
+    "Compare local and global optimization methods where appropriate.",
+    "Inspect convergence diagnostics and constraint satisfaction.",
+    "Perform sensitivity analysis and document model limitations."
+  ],
+  "stretch_features": [
+    "Add an independent method and explain when the two methods disagree.",
+    "Add a synthetic edge-case dataset and automated regression tests.",
+    "Provide an optional labeled visualization while keeping calculations separate from presentation."
+  ],
+  "tests": [
+    {
+      "name": "Numerical correctness",
+      "steps": [
+        "Compare at least one result with a known synthetic answer or independent method.",
+        "Use scale-aware tolerances where floating-point approximation is expected."
+      ]
+    },
+    {
+      "name": "Boundaries and failure modes",
+      "steps": [
+        "Test empty, non-finite, malformed, or boundary inputs where relevant.",
+        "Do not report success when a solver or input validation step fails."
+      ]
+    },
+    {
+      "name": "Reproducibility",
+      "steps": [
+        "Run with documented dependencies and a fixed random seed if randomness is involved.",
+        "Record the SciPy version, units, assumptions, and method settings."
+      ]
+    }
+  ],
+  "rubric": [
+    {
+      "criterion": "Mathematical/scientific correctness and appropriate method selection",
+      "points": 25
+    },
+    {
+      "criterion": "Numerical validation, error checks, and boundary handling",
+      "points": 20
+    },
+    {
+      "criterion": "Input validation and treatment of assumptions/uncertainty",
+      "points": 20
+    },
+    {
+      "criterion": "Testing, reproducibility, and dependency/version notes",
+      "points": 20
+    },
+    {
+      "criterion": "Documentation, presentation, and maintainable structure",
+      "points": 15
+    }
+  ],
+  "review_method": "Automated local tests plus human rubric review. The production API is not an arbitrary Python execution environment; submissions require an isolated runner or human review.",
+  "reference_solution_file": "projects/solutions/008-constrained-engineering-optimization-system-solution.json",
+  "status": "draft",
+  "status_note": "Draft project brief derived from Section D of the supplied SciPy PDF; full implementation, tests, data assumptions, and rubric require human review before publication."
+}

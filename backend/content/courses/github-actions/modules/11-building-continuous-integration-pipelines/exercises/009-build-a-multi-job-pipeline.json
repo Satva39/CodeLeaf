@@ -1,0 +1,69 @@
+{
+  "id": "github-actions-exercise-009",
+  "slug": "build-a-multi-job-pipeline",
+  "title": "Build a multi-job pipeline",
+  "type": "coding",
+  "lesson_id": "github-actions-lesson-078",
+  "module_id": "github-actions-module-11",
+  "difficulty": "medium",
+  "sequence": 9,
+  "prompt": "Create lint, test, and build jobs with explicit dependencies.",
+  "objective": "Demonstrate the behavior of build a multi-job pipeline and capture verifiable evidence.",
+  "target_skills": [
+    "intermediate",
+    "workflow YAML",
+    "validation",
+    "safe automation"
+  ],
+  "starter": {
+    "language": "yaml",
+    "code": "name: Pull request CI\non: [push, pull_request]\npermissions:\n  contents: read\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: Run tests\n        run: echo \"Replace with the project test command\"",
+    "execution_mode": "workflow-fragment"
+  },
+  "expected_output": "A reviewed workflow or design note satisfying: jobs:, lint:, test:, build:, needs:. Verify behavior on a disposable repository where execution is required; a static sketch is not proof of a live deployment.",
+  "public_tests": [
+    {
+      "name": "Required evidence check",
+      "required_strings": [
+        "jobs:",
+        "lint:",
+        "test:",
+        "build:",
+        "needs:"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Include or explain `jobs:`.",
+    "Include or explain `lint:`.",
+    "Include or explain `test:`.",
+    "Include or explain `build:`.",
+    "Include or explain `needs:`.",
+    "Explain one validation result or limitation.",
+    "Do not include a real secret or use production resources."
+  ],
+  "hints": [
+    "First identify the trigger, input, and expected result.",
+    "Start with read-only permissions and a disposable branch or test environment.",
+    "Compare your result with the linked lesson and official documentation; distinguish a configuration sketch from a live integration."
+  ],
+  "solution": {
+    "answer": null,
+    "explanation": "The detailed reference solution is stored in a protected repository-only JSON file; it is not intended for a learner-facing response."
+  },
+  "solution_file": "../solutions/009-build-a-multi-job-pipeline-solution.json",
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "jobs:",
+      "lint:",
+      "test:",
+      "build:",
+      "needs:"
+    ]
+  },
+  "grading_method": "Server-side required-string smoke check plus human review for workflow semantics and security boundaries.",
+  "retry_policy": "Allow retries; incorrect submissions do not award XP. The platform awards exercise XP only after server-verified successful completion and applies idempotency per activity.",
+  "status": "draft",
+  "status_note": "Source mapping: Section C: Practical Exercises; original learning task adapted to CodeLeaf structure. Starter example aligned with its linked lesson; review and replace any remaining repository-specific placeholders."
+}

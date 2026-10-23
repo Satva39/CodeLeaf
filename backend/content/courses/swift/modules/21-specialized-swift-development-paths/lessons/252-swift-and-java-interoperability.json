@@ -1,0 +1,305 @@
+{
+  "id": "swift-lesson-252",
+  "slug": "swift-and-java-interoperability",
+  "title": "Swift and Java Interoperability",
+  "sequence": 252,
+  "module_id": "swift-module-21",
+  "module_slug": "specialized-swift-development-paths",
+  "level": "specialist",
+  "difficulty": "specialist",
+  "track": "specialization",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "swift-lesson-251"
+  ],
+  "previous_lesson_id": "swift-lesson-251",
+  "next_lesson_id": "swift-lesson-253",
+  "keywords": [
+    "swift",
+    "and",
+    "java",
+    "interoperability",
+    "exposing",
+    "apis",
+    "type",
+    "conversion",
+    "callback",
+    "asynchronous",
+    "cross-language",
+    "build",
+    "testing",
+    "concerns"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of swift and java interoperability in a Swift program or workflow.",
+    "Apply exposing swift apis to java in a small, inspectable example.",
+    "Check the expected result and identify one boundary case or platform constraint."
+  ],
+  "content": {
+    "intro": "This lesson focuses on swift and java interoperability and the practical choices around it. Start with the smallest example, connect it to “Exposing Swift APIs to Java”, and verify the result before adding complexity.",
+    "why_it_matters": "Specialist paths and new language features depend on target support and toolchain details. Treat official documentation and reproducible checks as part of the solution.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 21: Specialized Swift Development Paths",
+        "asset_path": "diagrams/module-21-overview.svg",
+        "alt_text": "Module 21: Specialized Swift Development Paths. Lessons in order: Introduction to Server-Side Swift; Building HTTP Services in Swift; API Design and Validation; Databases and Server-Side Persistence; Server Security and Authentication; Deploying Swift Server Applications; Swift for WebAssembly; JavaScript Interoperability; Building Browser-Based Swift Experiences; Introduction to Embedded Swift; Hardware and Low-Level Integration; Embedded Reliability and Optimization; Swift on Android; Swift and Java Interoperability; Cross-Platform Architecture.",
+        "caption": "Numbered overview of the Specialized Swift Development Paths learning sequence."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Start with the rule.** Treat exposing swift apis to java as a specialist or version-sensitive area. Verify target support and toolchain assumptions first, isolate platform-specific code, and document limitations instead of treating experimental support as universal."
+      },
+      {
+        "type": "paragraph",
+        "text": "**Work through the lesson.** Choose a specialist track and validate its target-specific toolchain, APIs, runtime, and deployment model. The detailed subtopic list in this lesson preserves the curriculum coverage; treat each item as a cue for a small example or a focused question rather than trying to memorize syntax."
+      },
+      {
+        "type": "list",
+        "title": "Key ideas from the syllabus",
+        "items": [
+          {
+            "title": "Exposing Swift APIs to Java",
+            "text": "Treat exposing swift apis to java as a specialist or version-sensitive area. Verify target support and toolchain assumptions first, isolate platform-specific code, and document limitations instead of treating experimental support as universal."
+          },
+          {
+            "title": "Type conversion",
+            "text": "Treat type conversion as a specialist or version-sensitive area. Verify target support and toolchain assumptions first, isolate platform-specific code, and document limitations instead of treating experimental support as universal."
+          },
+          {
+            "title": "Callback and asynchronous interoperability",
+            "text": "Asynchronous execution can suspend while work waits; it is not automatically the same as parallel execution. Design cancellation, error propagation, task lifetime, and shared-state isolation deliberately."
+          },
+          {
+            "title": "Cross-language build and testing concerns",
+            "text": "Tests record expected behavior in an executable form. Prefer focused, deterministic tests and include edge cases and failure paths; Swift Testing and XCTest can coexist."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Swift and Java Interoperability",
+        "language": "swift",
+        "code": "#if canImport(Foundation)\nimport Foundation\n#endif\nlet portableMessage = \"Keep platform-specific APIs behind clear boundaries.\"\nprint(portableMessage)",
+        "expected_output": "Keep platform-specific APIs behind clear boundaries.",
+        "execution_mode": "static-validation",
+        "run_instructions": "Save a command-line example as main.swift and run `swift main.swift` with an installed compatible Swift toolchain. If the snippet imports SwiftUI, Swift Testing, or platform-only frameworks, use the matching Apple-platform project or Swift package instead. CodeLeaf’s browser preview does not execute Swift.",
+        "troubleshooting": "If compilation fails, check the exact diagnostic, toolchain version, imports, target platform and whether this snippet belongs in a package/test target rather than a standalone file.",
+        "reset_steps": "Restore the snippet from this lesson file, make one change at a time, and run the same check again."
+      },
+      {
+        "type": "callout",
+        "title": "Keep in mind",
+        "text": "Use the compiler and versioned documentation as evidence. Do not treat a source-string check or an illustrative output as proof that a complete Swift program compiles on every platform."
+      }
+    ],
+    "task": "Write a minimal prototype plan for “Swift and Java Interoperability” naming the target, toolchain, dependencies, platform-specific APIs, test strategy and known support limits. Keep unsupported assumptions out of the implementation.",
+    "task_acceptance_criteria": [
+      "Address at least one listed subtopic from “Swift and Java Interoperability”.",
+      "Use explicit names and a minimal example so the main rule is easy to see.",
+      "Verify the result with a local Swift toolchain or document why the target needs human/platform review."
+    ],
+    "hints": [
+      "Start with “Exposing Swift APIs to Java” and keep the first example small.",
+      "Change one value or branch at a time and compare the result with the expected output.",
+      "If the API is platform- or version-specific, check the official reference before assuming it is available."
+    ],
+    "expected_output": "Keep platform-specific APIs behind clear boundaries.",
+    "troubleshooting": [
+      {
+        "symptom": "The snippet does not compile as a standalone file.",
+        "check": "Confirm whether it belongs in a Swift package, test target, SwiftUI application, or another platform-specific project; follow the code-block run instructions."
+      },
+      {
+        "symptom": "A value or branch behaves differently than expected.",
+        "check": "Reduce the example, inspect types and control flow, and add a test for the boundary case."
+      },
+      {
+        "symptom": "An API is unavailable on the current computer or target.",
+        "check": "Check Swift toolchain and platform support in the official documentation; separate shared language concepts from target-specific frameworks."
+      }
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming every Swift snippet can run in a browser or on every operating system.",
+        "why": "CodeLeaf’s current preview is not a Swift compiler, and Apple frameworks require appropriate target support.",
+        "fix": "Run command-line examples locally; use Xcode or a compatible package/target for framework-specific material."
+      },
+      {
+        "problem": "Treating an illustrative output as compiler verification.",
+        "why": "A reference result helps reason about behavior but cannot replace compiling and testing the exact code.",
+        "fix": "Run the example with the stated toolchain and test one realistic edge case."
+      },
+      {
+        "problem": "Bypassing version-specific diagnostics.",
+        "why": "Swift concurrency checks and newer APIs can vary by language mode and toolchain.",
+        "fix": "Read the exact diagnostic and confirm the supported version before changing safety checks."
+      }
+    ],
+    "summary": [
+      "Swift and Java Interoperability is part of the ordered Swift learning path.",
+      "Use the small example to make one rule concrete, then verify behavior and at least one boundary case.",
+      "For advanced and specialist topics, check the compiler version, platform support, and official release information."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-252-questions.json",
+    "solution_notes": "Exercise reference answers remain in protected content files. The example output is illustrative until the snippet has been run in its intended environment.",
+    "run_mode": "static-validation",
+    "run_instructions": "Use a local Swift 6.4-compatible toolchain for command-line examples. SwiftUI and Apple-framework examples require an appropriate Apple SDK. In-app execution requires a separate isolated Swift runner, which is not included in this patch.",
+    "references": [
+      {
+        "title": "Swift Documentation",
+        "url": "https://www.swift.org/documentation/",
+        "publisher": "Swift.org",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "official documentation index",
+          "toolchains",
+          "libraries",
+          "platform support"
+        ]
+      },
+      {
+        "title": "Swift 6.4 Released",
+        "url": "https://www.swift.org/blog/swift-6.4-released/",
+        "publisher": "Swift.org",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "Swift 6.4 release baseline",
+          "Swift Build",
+          "Subprocess",
+          "interoperability",
+          "WebAssembly ecosystem updates"
+        ]
+      },
+      {
+        "title": "Swift on Server Guides",
+        "url": "https://www.swift.org/documentation/server/guides/",
+        "publisher": "Swift.org / Swift Server Workgroup",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "server-side Swift",
+          "builds",
+          "testing",
+          "debugging",
+          "deployment",
+          "package guidance"
+        ]
+      },
+      {
+        "title": "Swift for Windows",
+        "url": "https://www.swift.org/install/windows/",
+        "publisher": "Swift.org",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "Windows toolchain setup",
+          "supported workflows and requirements"
+        ]
+      },
+      {
+        "title": "Swift for Linux",
+        "url": "https://www.swift.org/install/linux/",
+        "publisher": "Swift.org",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "Linux toolchain setup",
+          "supported workflows and requirements"
+        ]
+      },
+      {
+        "title": "Swift Evolution",
+        "url": "https://www.swift.org/swift-evolution/",
+        "publisher": "Swift.org",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "language proposals",
+          "accepted and shipped features",
+          "version-sensitive language changes"
+        ]
+      }
+    ],
+    "syllabus_subtopics": [
+      "Exposing Swift APIs to Java",
+      "Type conversion",
+      "Callback and asynchronous interoperability",
+      "Cross-language build and testing concerns"
+    ]
+  },
+  "exercise_files": [
+    "../exercises/252-swift-and-java-interoperability-practice.json"
+  ],
+  "sources": [
+    {
+      "title": "Swift Documentation",
+      "url": "https://www.swift.org/documentation/",
+      "publisher": "Swift.org",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "official documentation index",
+        "toolchains",
+        "libraries",
+        "platform support"
+      ]
+    },
+    {
+      "title": "Swift 6.4 Released",
+      "url": "https://www.swift.org/blog/swift-6.4-released/",
+      "publisher": "Swift.org",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Swift 6.4 release baseline",
+        "Swift Build",
+        "Subprocess",
+        "interoperability",
+        "WebAssembly ecosystem updates"
+      ]
+    },
+    {
+      "title": "Swift on Server Guides",
+      "url": "https://www.swift.org/documentation/server/guides/",
+      "publisher": "Swift.org / Swift Server Workgroup",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "server-side Swift",
+        "builds",
+        "testing",
+        "debugging",
+        "deployment",
+        "package guidance"
+      ]
+    },
+    {
+      "title": "Swift for Windows",
+      "url": "https://www.swift.org/install/windows/",
+      "publisher": "Swift.org",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Windows toolchain setup",
+        "supported workflows and requirements"
+      ]
+    },
+    {
+      "title": "Swift for Linux",
+      "url": "https://www.swift.org/install/linux/",
+      "publisher": "Swift.org",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Linux toolchain setup",
+        "supported workflows and requirements"
+      ]
+    },
+    {
+      "title": "Swift Evolution",
+      "url": "https://www.swift.org/swift-evolution/",
+      "publisher": "Swift.org",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "language proposals",
+        "accepted and shipped features",
+        "version-sensitive language changes"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft pending expert review and local execution checks; not approved for publication."
+}

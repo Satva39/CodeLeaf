@@ -1,0 +1,211 @@
+{
+  "id": "php-lesson-206",
+  "slug": "introduction-to-composer",
+  "title": "Introduction to Composer",
+  "sequence": 206,
+  "module_id": "php-module-21",
+  "module_slug": "composer-and-the-php-ecosystem",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "core",
+  "estimated_minutes": 13,
+  "prerequisites": [],
+  "previous_lesson_id": "php-lesson-205",
+  "next_lesson_id": "php-lesson-207",
+  "keywords": [
+    "introduction to composer",
+    "composer and the php ecosystem",
+    "purpose of dependency management",
+    "composer installation",
+    "composer and php compatibility",
+    "project dependencies",
+    "composer versus manual library installation",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 206,
+  "subtopics": [
+    "Purpose of dependency management.",
+    "Composer installation.",
+    "Composer and PHP compatibility.",
+    "Project dependencies.",
+    "Composer versus manual library installation."
+  ],
+  "learning_outcomes": [
+    "Explain what introduction to composer contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: purpose of dependency management.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Composer describes dependencies and maps namespaces to source files. Lockfiles make application installs reproducible; declared constraints and maintenance/security review keep dependency choices intentional. In this lesson, focus on purpose of dependency management; then compare it with composer installation. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use introduction to composer when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 21 overview: Composer and the PHP Ecosystem",
+        "asset_path": "diagrams/module-21-overview.svg",
+        "alt_text": "Four-stage overview for module 21, Composer and the PHP Ecosystem, grouping lesson topics in order.",
+        "caption": "Use this overview to place introduction to composer in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Composer describes dependencies and maps namespaces to source files. Lockfiles make application installs reproducible; declared constraints and maintenance/security review keep dependency choices intentional. For introduction to composer, begin with purpose of dependency management. Also distinguish composer installation; composer and php compatibility; project dependencies. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Purpose of dependency management",
+            "text": "Keep package metadata and source layout consistent, and verify version constraints and class-to-file mapping with the selected tools."
+          },
+          {
+            "title": "Composer installation",
+            "text": "Keep package metadata and source layout consistent, and verify version constraints and class-to-file mapping with the selected tools."
+          },
+          {
+            "title": "Composer and PHP compatibility",
+            "text": "Keep package metadata and source layout consistent, and verify version constraints and class-to-file mapping with the selected tools."
+          },
+          {
+            "title": "Project dependencies",
+            "text": "Know when to use project dependencies, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Composer versus manual library installation",
+            "text": "Keep package metadata and source layout consistent, and verify version constraints and class-to-file mapping with the selected tools."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Introduction to Composer",
+        "language": "php",
+        "code": "<?php\n$namespace = \"Acme\\\\Catalog\\\\Product\";\n$path = \"src/Catalog/Product.php\";\necho $namespace . \" -> \" . $path . PHP_EOL;",
+        "expected_output": "Acme\\Catalog\\Product -> src/Catalog/Product.php",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Use Composer metadata and locked dependency versions, and review package compatibility and maintenance before adoption."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for introduction to composer from top to bottom. Start by identifying purpose of dependency management, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for introduction to composer that demonstrates \"purpose of dependency management\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of purpose of dependency management.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "Acme\\Catalog\\Product -> src/Catalog/Product.php",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-206-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Editing vendor files directly.",
+        "why": "Updates can overwrite manual changes and make builds irreproducible.",
+        "fix": "Declare dependencies in composer.json and regenerate the lock/autoload state using Composer."
+      },
+      {
+        "problem": "Ignoring composer.lock in an application.",
+        "why": "Different environments may resolve different dependency versions.",
+        "fix": "Commit the lockfile for applications and use the project’s intended install workflow."
+      },
+      {
+        "problem": "Choosing a package by download count alone.",
+        "why": "Popularity does not prove security, maintenance, or version compatibility.",
+        "fix": "Review maintenance activity, releases, dependencies, license, and docs."
+      }
+    ],
+    "summary": [
+      "Introduction to Composer is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Use Composer metadata and locked dependency versions, and review package compatibility and maintenance before adoption."
+    ],
+    "references": [
+      {
+        "title": "Composer basic usage",
+        "url": "https://getcomposer.org/doc/01-basic-usage.md",
+        "publisher": "Composer",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "composer install",
+          "lockfiles",
+          "autoloading"
+        ]
+      },
+      {
+        "title": "Composer schema",
+        "url": "https://getcomposer.org/doc/04-schema.md",
+        "publisher": "Composer",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "composer.json",
+          "version constraints",
+          "autoload metadata"
+        ]
+      },
+      {
+        "title": "PSR-4 Autoloader",
+        "url": "https://www.php-fig.org/psr/psr-4/",
+        "publisher": "PHP-FIG",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "namespace-to-path mapping",
+          "autoload interoperability"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Composer basic usage",
+      "url": "https://getcomposer.org/doc/01-basic-usage.md",
+      "publisher": "Composer",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "composer install",
+        "lockfiles",
+        "autoloading"
+      ]
+    },
+    {
+      "title": "Composer schema",
+      "url": "https://getcomposer.org/doc/04-schema.md",
+      "publisher": "Composer",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "composer.json",
+        "version constraints",
+        "autoload metadata"
+      ]
+    },
+    {
+      "title": "PSR-4 Autoloader",
+      "url": "https://www.php-fig.org/psr/psr-4/",
+      "publisher": "PHP-FIG",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "namespace-to-path mapping",
+        "autoload interoperability"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

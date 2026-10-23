@@ -1,0 +1,168 @@
+{
+  "id": "data-science-lesson-062",
+  "slug": "statistical-tests",
+  "title": "Statistical Tests",
+  "sequence": 62,
+  "module_id": "data-science-module-06",
+  "module_slug": "probability-and-statistics",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "foundations",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "data-science-lesson-061"
+  ],
+  "previous_lesson_id": "data-science-lesson-061",
+  "next_lesson_id": "data-science-lesson-063",
+  "keywords": [
+    "statistical-tests",
+    "z-tests-and-t-tests",
+    "paired-and-independent-sample-tests",
+    "chi-square-tests",
+    "analysis-of-variance",
+    "nonparametric-alternatives"
+  ],
+  "source_syllabus_number": 62,
+  "subtopics": [
+    "z-tests and t-tests",
+    "Paired and independent-sample tests",
+    "Chi-square tests",
+    "Analysis of variance",
+    "Nonparametric alternatives",
+    "Assumptions and test selection"
+  ],
+  "learning_outcomes": [
+    "Explain statistical tests and accurately refer to at least two syllabus subtopics.",
+    "Apply the main idea of statistical tests to a small example, trace, calculation, or scenario.",
+    "Identify one important assumption or failure mode and describe how to check it."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study statistical tests in the context of probability and statistics. You will connect the PDF subtopics to a small example and practice describing what the evidence does—and does not—support.",
+    "why_it_matters": "Statistical Tests matters because it affects how data is collected, represented, analyzed, interpreted, or used in a decision. Check the task and assumptions before choosing a method.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual overview: Statistical Tests",
+        "asset_path": "diagrams/lesson-062-overview.svg",
+        "alt_text": "Lesson 62: Statistical Tests; a three-stage visual for understanding the topic, applying it to a small example, and validating assumptions.",
+        "caption": "Use the overview to connect statistical tests to a concrete example and a responsible check."
+      },
+      {
+        "type": "paragraph",
+        "title": "The central idea",
+        "text": "Statistics describes data and helps estimate what may be true beyond a sample. Every estimate should be accompanied by its assumptions, uncertainty, and practical context."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus topics covered",
+        "items": [
+          {
+            "title": "z-tests and t-tests",
+            "text": "Define z-tests and t-tests in relation to statistical tests; identify the input, output, assumptions, and who uses the result."
+          },
+          {
+            "title": "Paired and independent-sample tests",
+            "text": "Work through paired and independent-sample tests using a small, synthetic example before scaling up. State what the calculation or method returns and why that result is useful."
+          },
+          {
+            "title": "Chi-square tests",
+            "text": "Check the edge cases for chi-square tests: missing values, unusual ranges, different groups, time boundaries, or a changed input can affect the conclusion."
+          },
+          {
+            "title": "Analysis of variance",
+            "text": "Document the rule or choice for analysis of variance so another learner can reproduce the analysis and understand its limitations."
+          },
+          {
+            "title": "Nonparametric alternatives",
+            "text": "Define nonparametric alternatives in relation to statistical tests; identify the input, output, assumptions, and who uses the result."
+          },
+          {
+            "title": "Assumptions and test selection",
+            "text": "Work through assumptions and test selection using a small, synthetic example before scaling up. State what the calculation or method returns and why that result is useful."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided walkthrough",
+        "text": "1. Restate the question addressed by statistical tests. 2. Identify the input data, intended output, and assumptions. 3. Predict what the small example should show before reading its output. 4. Change one input or assumption, compare the result, and document what remains uncertain."
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "execution_mode": "static-validation",
+        "code": "import statistics\nvalues = [2, 3, 3, 6, 10]\nprint(\"mean:\", statistics.mean(values))\nprint(\"median:\", statistics.median(values))",
+        "expected_output": "mean: 4.8\nmedian: 3",
+        "run_instructions": "For Python, copy the snippet into a local file and run with Python 3. This CodeLeaf block is static and does not execute inside the browser. For SQL, adapt the query to an approved local schema; the stated result is a conceptual query simulation, not a live database result.",
+        "reset_steps": "Restore the provided synthetic input, rerun or retrace the example, and change one value at a time. Do not use personal records, credentials, or data you are not authorized to access."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistakes and fixes",
+        "text": "Keep the question, data grain, units, and assumptions explicit. If a result differs, inspect the input and steps in order. Avoid turning an observed association into a causal claim, treating a sample as the population, or assuming a small demonstration guarantees production behavior. Mean and median answer different questions and respond differently to skewed data."
+      },
+      {
+        "type": "callout",
+        "title": "Responsible interpretation",
+        "text": "This example is a teaching aid. It is static in the CodeLeaf lesson and is not executed in the browser. It uses small synthetic values; validate any real workflow in a separate, appropriate local environment and protect sensitive data."
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap and next step",
+        "text": "Recap: Statistics describes data and helps estimate what may be true beyond a sample. Every estimate should be accompanied by its assumptions, uncertainty, and practical context. Next, connect this lesson to the linked prerequisite or following lesson. Record the method, input assumptions, observed result, and one limitation so another person can reproduce and review the work."
+      }
+    ],
+    "task": "Try it yourself: create a small synthetic example for statistical tests. State a question, make a prediction, trace or run an appropriate calculation, then write one finding and one limitation.",
+    "task_acceptance_criteria": [
+      "Refer accurately to the topic and its syllabus subtopics.",
+      "Record a reproducible example or a complete manual trace with an expected result.",
+      "Document at least one assumption, limitation, data-quality issue, or evaluation check."
+    ],
+    "hints": [
+      "Write down the input, expected result, units, and assumptions first.",
+      "Change only one condition when testing a revised example.",
+      "Ask whether the data and method represent the real decision; do not infer causality or production readiness from a toy example."
+    ],
+    "expected_output": "mean: 4.8\nmedian: 3",
+    "run_mode": "static-validation",
+    "troubleshooting": [
+      "Check input values, path assumptions, package versions, indentation, and units.",
+      "For SQL, use a local schema and read-only test data; this page does not provide a live database.",
+      "For package-dependent work, create an isolated environment and use the relevant official documentation."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-062-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "id": "scipy",
+      "title": "SciPy User Guide",
+      "url": "https://docs.scipy.org/doc/scipy/tutorial/",
+      "publisher": "SciPy community",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "scientific computing",
+        "statistics"
+      ],
+      "source_type": "official documentation",
+      "notes": "Official source entry point. Verify current API signatures and version notes before implementation."
+    },
+    {
+      "id": "statsmodels",
+      "title": "statsmodels User Guide",
+      "url": "https://www.statsmodels.org/stable/user-guide.html",
+      "publisher": "statsmodels developers",
+      "checked_on": "2026-10-18",
+      "supports": [
+        "statistical inference",
+        "regression",
+        "time series"
+      ],
+      "source_type": "official documentation",
+      "notes": "Official source entry point. Verify current API signatures and version notes before implementation."
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft authored against Data Science.pdf lesson 62; preserves the source title/subtopics. Review technical accuracy, example behavior, and assessment wording before publication."
+}

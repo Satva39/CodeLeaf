@@ -1,0 +1,193 @@
+{
+  "id": "cpp-lesson-086",
+  "slug": "memory-debugging",
+  "title": "Memory Debugging",
+  "sequence": 86,
+  "module_id": "cpp-module-08",
+  "module_slug": "pointers-references-and-memory",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 14,
+  "prerequisites": [
+    "cpp-lesson-085"
+  ],
+  "previous_lesson_id": "cpp-lesson-085",
+  "next_lesson_id": "cpp-lesson-087",
+  "keywords": [
+    "memory-debugging",
+    "detecting-memory-leaks",
+    "addresssanitizer",
+    "undefinedbehaviorsanitizer",
+    "leak-detection-tools",
+    "valgrind-on-supported-platforms",
+    "diagnosing-invalid-reads-and-writes"
+  ],
+  "source_syllabus_number": 86,
+  "source_pdf_section": "Section B: Complete Curriculum",
+  "subtopics": [
+    "Detecting Memory Leaks",
+    "AddressSanitizer",
+    "UndefinedBehaviorSanitizer",
+    "Leak Detection Tools",
+    "Valgrind on Supported Platforms",
+    "Diagnosing Invalid Reads and Writes"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and core rule of memory debugging using at least one example.",
+    "Trace or adapt a minimal C++ example related to memory debugging and state its expected result.",
+    "Identify one precondition, error case, lifetime issue, portability assumption or version constraint relevant to the topic."
+  ],
+  "content": {
+    "intro": "Memory Debugging focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.",
+    "why_it_matters": "Memory Debugging matters because before dereferencing or storing an alias, identify the owner, the lifetime and the conditions under which access remains valid. Connect this lesson to the earlier module prerequisites and use it as a building block rather than an isolated term.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Memory Debugging: visual trace",
+        "asset_path": "diagrams/lessons/lesson-086.svg",
+        "alt_text": "Lesson 86 visual for Memory Debugging; concept: Detecting Memory Leaks; apply: AddressSanitizer; verify: UndefinedBehaviorSanitizer.",
+        "caption": "Original lesson-specific overview: understand detecting memory leaks, apply the idea, and verify the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Pointers and references provide indirect access, but the object’s lifetime and ownership remain central. Prefer value semantics and standard ownership types before manual allocation.\n\nMemory Debugging focuses on the decisions and observable behavior named by the subtopics below. The aim is to explain the rule, predict what a small program should do, and then confirm the result with a focused check.\n\nBefore dereferencing or storing an alias, identify the owner, the lifetime and the conditions under which access remains valid."
+      },
+      {
+        "type": "code",
+        "title": "Minimal example: Memory Debugging",
+        "language": "cpp",
+        "standard": "c++20",
+        "code": "#include <iostream>\n\nint main() {\n    constexpr int first = 6;\n    constexpr int second = 7;\n    const int result = first * second;\n    std::cout << \"Memory Debugging: \" << result << '\\n';\n}\n",
+        "expected_output": "Memory Debugging: 42",
+        "run_instructions": "Save as `example.cpp`. Compile using `g++ -std=c++20 -Wall -Wextra -Wpedantic example.cpp -o example; then run ./example (Windows: .\\example.exe).` The CodeLeaf page shows reference output only; it does not execute C++ learner code.",
+        "reset_steps": "Restore the example, rebuild with the same standard and warning flags, and rerun the same input. If the example is nondeterministic or depends on platform support, record that constraint instead of expecting byte-for-byte identical output.",
+        "execution_mode": "static-validation",
+        "compile_validation": "auto",
+        "limitations": "The built-in CodeLeaf page does not execute C++ in a sandbox. Compile local teaching examples only; arbitrary learner code requires a separately deployed isolated runner with CPU, memory, process, filesystem and network limits.",
+        "explanation": "The minimal program keeps the input state and result visible. Extend it with the topic-specific edge case and test the assumption stated in the lesson."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics",
+        "items": [
+          {
+            "title": "Detecting Memory Leaks",
+            "text": "Explain detecting memory leaks in the context of Memory Debugging: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "AddressSanitizer",
+            "text": "Sanitizers instrument builds to detect classes of runtime defects, but a clean run does not prove a program free of bugs."
+          },
+          {
+            "title": "UndefinedBehaviorSanitizer",
+            "text": "Sanitizers instrument builds to detect classes of runtime defects, but a clean run does not prove a program free of bugs."
+          },
+          {
+            "title": "Leak Detection Tools",
+            "text": "Explain leak detection tools in the context of Memory Debugging: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Valgrind on Supported Platforms",
+            "text": "Explain valgrind on supported platforms in the context of Memory Debugging: identify the rule, trace a minimal example, and check one boundary or failure case."
+          },
+          {
+            "title": "Diagnosing Invalid Reads and Writes",
+            "text": "Explain diagnosing invalid reads and writes in the context of Memory Debugging: identify the rule, trace a minimal example, and check one boundary or failure case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Guided practice",
+        "text": "Before changing the example, predict the output and name the rule that produces it. Then modify one line to demonstrate detecting memory leaks, and add a test for one boundary or failure scenario. Keep the experiment small enough that another learner can reproduce it."
+      },
+      {
+        "type": "callout",
+        "title": "Version, safety and portability note",
+        "text": "Use standard C++ rather than compiler-specific behavior unless the lesson explicitly labels the dependency. Feature support varies by compiler version and standard-library implementation. Check the references and prefer explicit diagnostics to assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-086-questions.json",
+    "task": "Create a small, independent example that demonstrates memory debugging. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+    "task_acceptance_criteria": [
+      "The example builds under a documented standard mode with warnings enabled.",
+      "The predicted and observed result are recorded; deviations are explained.",
+      "At least one boundary, invalid-input, lifetime or portability assumption is tested or documented."
+    ],
+    "hints": [
+      "Start with the smallest example that demonstrates detecting memory leaks.",
+      "Trace the relevant values and state the expected output before running the program.",
+      "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+    ],
+    "summary": [
+      "Memory Debugging is about a concrete language rule or engineering decision, not only terminology.",
+      "Keep the important preconditions and trade-offs visible when applying memory debugging.",
+      "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming one successful example proves every case.",
+        "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+        "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+      },
+      {
+        "problem": "Copying a language feature without checking its requirements.",
+        "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+        "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+      },
+      {
+        "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+        "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+        "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+      }
+    ],
+    "references": [
+      "references/reference-index.json"
+    ],
+    "run_mode": "static-validation"
+  },
+  "task": "Create a small, independent example that demonstrates memory debugging. Predict the result before compiling, write down a precondition, and test one ordinary case plus one boundary or failure case.",
+  "hints": [
+    "Start with the smallest example that demonstrates detecting memory leaks.",
+    "Trace the relevant values and state the expected output before running the program.",
+    "Check the standard/compiler reference and add an edge case instead of relying only on the happy path."
+  ],
+  "expected_output": "Memory Debugging: 42",
+  "run_mode": "static-validation",
+  "common_mistakes": [
+    {
+      "problem": "Assuming one successful example proves every case.",
+      "why": "It may miss an invalid input, boundary, error path or implementation difference.",
+      "fix": "Write down the preconditions and test at least one ordinary case plus an edge or failure case."
+    },
+    {
+      "problem": "Copying a language feature without checking its requirements.",
+      "why": "The code may depend on a standard version, an object lifetime or an API precondition.",
+      "fix": "Use the explicit standard mode and verify the relevant rule and compiler/library support."
+    },
+    {
+      "problem": "Ignoring compiler diagnostics or simplifying away ownership and error behavior.",
+      "why": "Warnings and explicit contracts often expose a defect before it becomes a runtime problem.",
+      "fix": "Compile with warnings, keep the smallest reproducible sample and state what happens when an operation fails."
+    }
+  ],
+  "summary": [
+    "Memory Debugging is about a concrete language rule or engineering decision, not only terminology.",
+    "Keep the important preconditions and trade-offs visible when applying memory debugging.",
+    "Use explicit build settings and focused tests to support the claim that the example behaves as expected."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "sources": [
+    "PDF: C++ Programming Language Curriculum, Section B, Module 8, lesson 86: Memory Debugging.",
+    "ISO/IEC 14882:2024 (published C++ standard): https://www.iso.org/standard/83626.html",
+    "cppreference C++ language and library reference: https://en.cppreference.com/w/cpp",
+    "Compiler support must be checked feature-by-feature: https://en.cppreference.com/w/cpp/compiler_support"
+  ],
+  "status": "draft"
+}

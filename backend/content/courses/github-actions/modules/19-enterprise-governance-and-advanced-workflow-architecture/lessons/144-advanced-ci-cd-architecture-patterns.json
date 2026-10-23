@@ -1,0 +1,255 @@
+{
+  "id": "github-actions-lesson-144",
+  "slug": "advanced-ci-cd-architecture-patterns",
+  "title": "Advanced CI/CD Architecture Patterns",
+  "sequence": 144,
+  "module_id": "github-actions-module-19",
+  "module_slug": "enterprise-governance-and-advanced-workflow-architecture",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "github-actions-lesson-143"
+  ],
+  "previous_lesson_id": "github-actions-lesson-143",
+  "next_lesson_id": "github-actions-lesson-145",
+  "keywords": [
+    "advanced-ci-cd-architecture-patterns",
+    "enterprise-governance-and-advanced-workflow-architecture",
+    "multi-stage-pipelines",
+    "build-once-deploy-many-patterns",
+    "cross-repository-automation",
+    "fan-out-and-fan-in-job-structures",
+    "conditional-release-pipelines",
+    "event-driven-automation",
+    "separating-build-test-and-production-privileges"
+  ],
+  "learning_outcomes": [
+    "Explain the key behavior of advanced ci/cd architecture patterns and identify when it should be used.",
+    "Configure or review the workflow fields and permissions relevant to advanced ci/cd architecture patterns.",
+    "Verify the result using a controlled run or static check and interpret the evidence."
+  ],
+  "content": {
+    "intro": "This lesson focuses on advanced ci/cd architecture patterns. Advanced architectures use explicit stages, fan-out/fan-in, cross-repository events, build-once/deploy-many, and separate build privileges from production credentials. Use the example to predict the workflow result, then verify the behavior in a safe test repository or by static review.",
+    "why_it_matters": "Advanced CI/CD Architecture Patterns matters because it affects correctness, security, maintainability, or operating cost. Advanced architectures use explicit stages, fan-out/fan-in, cross-repository events, build-once/deploy-many, and separate build privileges from production credentials. Enterprise design requires consistent policy, explicit ownership, auditable privilege boundaries, reviewed shared workflows, controlled artifact promotion, and documented recovery.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 19 visual map",
+        "asset_path": "diagrams/module-19-overview.svg",
+        "alt_text": "Ordered overview of module 19: Organization-Level Actions Policies; Standardizing Workflows Across Teams; Advanced CI/CD Architecture Patterns; Secure Deployment Architecture; Change Detection and Selective Pipelines; Workflow Reuse at Scale; Reliable Release and Rollback Architecture; Compliance and Auditability.",
+        "caption": "Overview of the module sequence; use the numbered path to place this concept in context."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Advanced architectures use explicit stages, fan-out/fan-in, cross-repository events, build-once/deploy-many, and separate build privileges from production credentials. Enterprise design requires consistent policy, explicit ownership, auditable privilege boundaries, reviewed shared workflows, controlled artifact promotion, and documented recovery. The most useful check is one that produces observable evidence and fails clearly when its stated requirement is not met."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus topics explained",
+        "items": [
+          {
+            "title": "Multi-stage pipelines",
+            "text": "Use filters to reduce unnecessary runs only when skipped work is genuinely unrelated. Include shared dependencies and test the changed and unchanged path cases so required checks are not bypassed."
+          },
+          {
+            "title": "Build-once, deploy-many patterns",
+            "text": "Make the check deterministic and fail with a meaningful status when requirements are not met. Preserve reports where useful and configure required branch checks to match the checks the workflow actually emits."
+          },
+          {
+            "title": "Cross-repository automation",
+            "text": "For cross-repository automation, state the expected input and result, identify the relevant workflow field or operational decision, and verify it with a controlled check plus run logs. Document the failure condition rather than relying on the YAML file merely parsing."
+          },
+          {
+            "title": "Fan-out and fan-in job structures",
+            "text": "List the supported combinations explicitly and use `include`/`exclude` or `max-parallel` to control expansion. Keep all required configurations covered and avoid unnecessary duplicate jobs."
+          },
+          {
+            "title": "Conditional release pipelines",
+            "text": "Match the event to the intended lifecycle, then test positive and negative branch/path/activity cases. Event payloads may be attacker-controlled, and scheduled jobs use UTC rather than a guaranteed exact start time."
+          },
+          {
+            "title": "Event-driven automation",
+            "text": "Match the event to the intended lifecycle, then test positive and negative branch/path/activity cases. Event payloads may be attacker-controlled, and scheduled jobs use UTC rather than a guaranteed exact start time."
+          },
+          {
+            "title": "Separating build, test, and production privileges",
+            "text": "Use a GitHub Environment for deployment-specific secrets, variables, branch restrictions, and reviewer gates. Do not treat an environment name alone as proof that approval rules are configured."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "yaml",
+        "code": "name: Build once, then validate artifact\non: [push, pull_request]\npermissions:\n  contents: read\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: mkdir -p dist && echo \"same-artifact\" > dist/build.txt\n      - uses: actions/upload-artifact@v4\n        with:\n          name: release-candidate\n          path: dist/\n  verify:\n    needs: build\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/download-artifact@v4\n        with:\n          name: release-candidate\n      - run: test -f build.txt",
+        "expected_output": "The verify job consumes the build job’s uploaded output instead of rebuilding it, preserving a traceable artifact flow.",
+        "run_instructions": "Use a test repository and inspect the downloaded file in the dependent job.",
+        "reset_steps": "For real deployments, record artifact identity and permissions; do not promote an unverified build.",
+        "execution_mode": "workflow-fragment"
+      },
+      {
+        "type": "callout",
+        "title": "Practice and verification",
+        "text": "Inspect the example and make one focused change related to advanced ci/cd architecture patterns. Predict the expected result first, then use the run instructions or a static review to check it. Record the difference between your prediction and the actual result. Do not add production secrets or grant write permissions just to make a sample pass."
+      },
+      {
+        "type": "list",
+        "title": "Common checks and troubleshooting",
+        "items": [
+          {
+            "title": "Syntax and scope",
+            "text": "Check YAML indentation and confirm whether the setting belongs at workflow, job, or step level."
+          },
+          {
+            "title": "Permissions and trust",
+            "text": "Start with read-only access. If the example needs more access, explain the exact operation and reduce permissions again afterwards."
+          },
+          {
+            "title": "Evidence",
+            "text": "Use the run summary and first failing step. A green result is meaningful only when the intended checks actually ran."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Recap",
+        "text": "You should now be able to explain advanced ci/cd architecture patterns, read the example, and identify a way to validate it. The wider system goal remains: Standardize workflow behavior across teams without hiding important security boundaries."
+      }
+    ],
+    "task": "Apply advanced ci/cd architecture patterns to a small workflow change. State the expected result first, validate the configuration, then record evidence from the run or static check.",
+    "task_acceptance_criteria": [
+      "Identify the relevant event, workflow field, runner behavior, or security boundary.",
+      "Explain the expected success result and at least one failure or skip condition.",
+      "Use least privilege and a disposable/test context; do not include credentials or production resources."
+    ],
+    "hints": [
+      "Start with the key behavior: Advanced architectures use explicit stages, fan-out/fan-in, cross-repository events, build-once/deploy-many, and separate build privileges from production credentials.",
+      "Inspect the exact event filters, permissions, expressions, inputs, and job dependencies that affect this example.",
+      "Compare the observed status and logs with the expected result; distinguish static validation from a real hosted run."
+    ],
+    "expected_output": "The expected result is the behavior described here: Advanced architectures use explicit stages, fan-out/fan-in, cross-repository events, build-once/deploy-many, and separate build privileges from production credentials. The real result depends on the repository, selected ref, configured permissions, and runner availability.",
+    "troubleshooting": [
+      "If a workflow never starts, verify the workflow is under `.github/workflows/`, the event and filters match, and repository/organization Actions policy allows it.",
+      "If a step fails, inspect the first failed step, exit code, stderr, installed tool versions, permissions, and runner/network state before retrying.",
+      "If a job is skipped or data is missing, inspect `if`, `needs`, outputs, artifact names/paths, and cache keys; jobs do not automatically share filesystems."
+    ],
+    "common_mistakes": [
+      "Assuming YAML parsing proves the workflow runs correctly or matches the intended trigger.",
+      "Granting broad token permissions, printing environment values, or exposing a secret to untrusted code.",
+      "Using a placeholder command as evidence of a real build, test, deployment, or security scan."
+    ],
+    "summary": [
+      "Advanced architectures use explicit stages, fan-out/fan-in, cross-repository events, build-once/deploy-many, and separate build privileges from production credentials.",
+      "Enterprise design requires consistent policy, explicit ownership, auditable privilege boundaries, reviewed shared workflows, controlled artifact promotion, and documented recovery.",
+      "Use the provided example as a starting point, replace placeholders with repository-specific checks, and validate both success and expected failure behavior before publication."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-144-questions.json",
+    "solution_notes": "Knowledge-check answer keys are stored in protected course files and must not be sent to the learner-facing API. Exercise reference solutions are separate repository-only JSON files.",
+    "run_mode": "workflow-fragment",
+    "references": [
+      {
+        "title": "Secure use reference",
+        "url": "https://docs.github.com/en/actions/reference/security/secure-use",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "security_guidance",
+        "supports": [
+          "least privilege",
+          "third-party actions",
+          "full SHA pinning",
+          "untrusted input",
+          "privileged workflow triggers",
+          "cache security"
+        ]
+      },
+      {
+        "title": "Configuring and managing deployments",
+        "url": "https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "deployment environments",
+          "protection rules",
+          "approvals",
+          "concurrency",
+          "deployment history"
+        ]
+      },
+      {
+        "title": "Reusing workflow configurations",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/reusing-workflow-configurations",
+        "publisher": "GitHub Docs",
+        "checked_on": "2026-10-20",
+        "source_type": "official_reference",
+        "supports": [
+          "reusable workflows",
+          "composite-action comparisons",
+          "YAML anchors and aliases"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Secure use reference",
+      "url": "https://docs.github.com/en/actions/reference/security/secure-use",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "security_guidance",
+      "supports": [
+        "least privilege",
+        "third-party actions",
+        "full SHA pinning",
+        "untrusted input",
+        "privileged workflow triggers",
+        "cache security"
+      ]
+    },
+    {
+      "title": "Configuring and managing deployments",
+      "url": "https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "deployment environments",
+        "protection rules",
+        "approvals",
+        "concurrency",
+        "deployment history"
+      ]
+    },
+    {
+      "title": "Reusing workflow configurations",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/reusing-workflow-configurations",
+      "publisher": "GitHub Docs",
+      "checked_on": "2026-10-20",
+      "source_type": "official_reference",
+      "supports": [
+        "reusable workflows",
+        "composite-action comparisons",
+        "YAML anchors and aliases"
+      ]
+    }
+  ],
+  "status": "draft",
+  "source_syllabus": {
+    "section": "Section B: Complete Curriculum",
+    "source_lesson_number": "144",
+    "module_title": "Enterprise Governance and Advanced Workflow Architecture",
+    "subtopics": [
+      "Multi-stage pipelines",
+      "Build-once, deploy-many patterns",
+      "Cross-repository automation",
+      "Fan-out and fan-in job structures",
+      "Conditional release pipelines",
+      "Event-driven automation",
+      "Separating build, test, and production privileges"
+    ]
+  }
+}

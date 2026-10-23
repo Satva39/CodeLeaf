@@ -1,0 +1,223 @@
+{
+  "id": "java-lesson-328",
+  "slug": "understanding-java-release-compatibility",
+  "title": "Understanding Java Release Compatibility",
+  "sequence": 328,
+  "module_id": "java-module-32",
+  "module_slug": "java-evolution-legacy-compatibility-and-migration",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "release-literacy",
+  "estimated_minutes": 13,
+  "prerequisites": [
+    "java-lesson-327"
+  ],
+  "previous_lesson_id": "java-lesson-327",
+  "next_lesson_id": "java-lesson-329",
+  "keywords": [
+    "understanding",
+    "java",
+    "release",
+    "compatibility",
+    "source",
+    "binary",
+    "behavioral",
+    "runtime",
+    "version",
+    "requirements",
+    "dependencies",
+    "internal"
+  ],
+  "source_syllabus_number": 328,
+  "subtopics": [
+    "Source compatibility",
+    "Binary compatibility",
+    "Behavioral compatibility",
+    "Runtime version requirements",
+    "Dependencies on internal APIs"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of understanding java release compatibility and identify when it is appropriate in a Java program.",
+    "Apply at least one of the lesson topics—source compatibility—in a small, readable example.",
+    "Identify one failure, compatibility, security, or resource-management concern and describe a safe response."
+  ],
+  "content": {
+    "intro": "In this lesson, you will study understanding java release compatibility with a short explanation, an original visual map, a Java example, and a check you can perform yourself. Focus on the relationship between the rule and the behavior rather than memorizing isolated syntax.",
+    "why_it_matters": "This concept matters because it helps you evaluate upgrades using compatibility evidence instead of assuming every release feature is stable. In this lesson, focus on source compatibility and use a minimal example to check what the rule actually guarantees.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Understanding Java Release Compatibility: concept map",
+        "asset_path": "diagrams/lesson-328.svg",
+        "alt_text": "Four-stage diagram for Understanding Java Release Compatibility: Source compatibility; Binary compatibility; Behavioral compatibility; Runtime version requirements.",
+        "caption": "Visual summary of Understanding Java Release Compatibility; use it as a map while reading the explanation and testing the example."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Java evolves across feature and LTS releases. Review official release notes, deprecations, API compatibility, and preview status before upgrading a project or adopting a new language feature. Apply that reasoning specifically to source compatibility and confirm the result with the example or a targeted test. The important habit is to make the assumptions explicit and use the code example as a small experiment."
+      },
+      {
+        "type": "paragraph",
+        "title": "How the pieces fit",
+        "text": "Connect source compatibility with binary compatibility before choosing an implementation. The example is a small, observable case; extend it by changing one input and checking a boundary, invalid value, or compatibility limit where relevant."
+      },
+      {
+        "type": "list",
+        "title": "Concepts to connect",
+        "items": [
+          {
+            "title": "Source compatibility",
+            "text": "Java evolves across feature and LTS releases. Review official release notes, deprecations, API compatibility, and preview status before upgrading a project or adopting a new language feature. Apply that reasoning specifically to source compatibility and confirm the result with the example or a targeted test."
+          },
+          {
+            "title": "Binary compatibility",
+            "text": "Java evolves across feature and LTS releases. Review official release notes, deprecations, API compatibility, and preview status before upgrading a project or adopting a new language feature. Apply that reasoning specifically to binary compatibility and confirm the result with the example or a targeted test."
+          },
+          {
+            "title": "Behavioral compatibility",
+            "text": "Use Path and Files for modern file operations, choose byte or character APIs based on the data, and close resources reliably. Parse external files defensively because their contents may be incomplete or malformed."
+          },
+          {
+            "title": "Runtime version requirements",
+            "text": "Use the standard library type that matches the data: java.time for dates and zones, BigDecimal for exact decimal arithmetic, and locale-aware APIs for user-facing text and numbers."
+          },
+          {
+            "title": "Dependencies on internal APIs",
+            "text": "Primitive variables store values of the eight primitive types. Choose a type that represents the domain and range required; use exact decimal arithmetic for monetary values when appropriate."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "java",
+        "code": "public class Main {\n    public static void main(String[] args) {\n        int feature = Runtime.version().feature();\n        System.out.println(\"Running Java feature version \" + feature);\n        System.out.println(feature >= 25 ? \"Review compatibility and support policy\" : \"Check the required release\");\n    }\n}\n",
+        "expected_output": "The running Java feature version and an associated compatibility reminder are printed.",
+        "run_instructions": "Compare source, binary, and behavioral compatibility, then run regression tests against the target JDK. For ordinary Java SE examples, use JDK 25, save a complete class as Main.java, and run `javac Main.java` followed by `java Main`. CodeLeaf does not execute Java in the browser; use a local JDK for these examples. Preview-only and configuration-file examples have their own version or filename notes.",
+        "reset_steps": "Restore the original example, remove any temporary output files it created, and rerun the baseline case. Do not leave credentials, generated private data, or large test files in the project directory."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Keep one clear hypothesis per experiment. Check the version, read the error message, test boundaries, and record what evidence supports your conclusion."
+      }
+    ],
+    "task": "Try it yourself: apply understanding java release compatibility to a small project artifact. Record the trade-off, one verification step, and a rollback or recovery path where relevant.",
+    "task_acceptance_criteria": [
+      "The example demonstrates at least one listed topic from Understanding Java Release Compatibility.",
+      "The learner states the expected result before running or inspecting the example.",
+      "At least one boundary, failure, compatibility, or maintainability consideration is documented where relevant."
+    ],
+    "hints": [
+      "Start by identifying the contract or rule behind source compatibility.",
+      "Reduce the example to the smallest input that makes the behavior visible.",
+      "Test one boundary or failure case and compare the result with the expected behavior."
+    ],
+    "expected_output": "The running Java feature version and an associated compatibility reminder are printed.",
+    "run_mode": "server-runner",
+    "execution_notes": "Java requires a JDK or a separate isolated server runner. No Java sandbox is bundled with this content; never execute learner code inside the FastAPI process or public production container.",
+    "knowledge_check_file": "exams/question-files/lesson-328-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Applying the rule from memory without checking its exact contract.",
+        "why": "Small differences in type, scope, API version, or input shape can change the result.",
+        "fix": "Inspect the relevant official API/language documentation and build a minimal reproducer."
+      },
+      {
+        "problem": "Testing only a single happy path.",
+        "why": "Boundary values and failures often reveal assumptions hidden by the simplest example.",
+        "fix": "Add an empty, boundary, or invalid case and state the expected behavior before running it."
+      },
+      {
+        "problem": "Changing several things between runs.",
+        "why": "It becomes difficult to identify the actual cause of a different result.",
+        "fix": "Change one factor at a time and keep a short record of observed behavior."
+      }
+    ],
+    "summary": [
+      "Understanding Java Release Compatibility is best understood by connecting its contract to a small observable example.",
+      "Key syllabus points: Source compatibility, Binary compatibility, Behavioral compatibility.",
+      "Use official versioned documentation and tests to confirm assumptions before relying on behavior in a larger application."
+    ],
+    "references": [
+      {
+        "title": "Learn Java",
+        "url": "https://dev.java/learn/"
+      },
+      {
+        "title": "Java SE 25 API Specification",
+        "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html"
+      },
+      {
+        "title": "Oracle Java SE Support Roadmap",
+        "url": "https://www.oracle.com/java/technologies/java-se-support-roadmap.html"
+      },
+      {
+        "title": "JDK 27 Release Notes",
+        "url": "https://www.oracle.com/java/technologies/javase/27all-relnotes.html"
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Learn Java",
+      "url": "https://dev.java/learn/",
+      "publisher": "Oracle / dev.java",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "getting started",
+        "language basics",
+        "object-oriented programming",
+        "generics",
+        "lambdas",
+        "collections",
+        "streams",
+        "modules",
+        "JVM tools",
+        "security"
+      ]
+    },
+    {
+      "title": "Java SE 25 API Specification",
+      "url": "https://docs.oracle.com/en/java/javase/25/docs/api/index.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "standard-library types and methods",
+        "API contracts",
+        "java.base",
+        "java.sql",
+        "java.net.http",
+        "java.nio.file",
+        "java.util.concurrent"
+      ]
+    },
+    {
+      "title": "Oracle Java SE Support Roadmap",
+      "url": "https://www.oracle.com/java/technologies/java-se-support-roadmap.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "LTS and non-LTS release dates",
+        "Java 25 support baseline",
+        "release compatibility planning"
+      ]
+    },
+    {
+      "title": "JDK 27 Release Notes",
+      "url": "https://www.oracle.com/java/technologies/javase/27all-relnotes.html",
+      "publisher": "Oracle",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "JDK 27 general availability",
+        "preview and incubator features",
+        "migration and compatibility notes",
+        "JEP 532 primitive types in patterns, instanceof, and switch"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the attached Java curriculum outline and current official references; requires Java subject-matter review and local verification before publication."
+}

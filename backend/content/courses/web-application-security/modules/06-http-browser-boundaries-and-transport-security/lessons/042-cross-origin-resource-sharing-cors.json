@@ -1,0 +1,192 @@
+{
+  "id": "web-application-security-lesson-042",
+  "slug": "cross-origin-resource-sharing-cors",
+  "title": "Cross-Origin Resource Sharing (CORS)",
+  "sequence": 42,
+  "module_id": "web-application-security-module-06",
+  "module_slug": "http-browser-boundaries-and-transport-security",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core-foundations",
+  "curriculum_tier": "core",
+  "estimated_minutes": 12,
+  "prerequisites": [
+    "web-application-security-lesson-041"
+  ],
+  "previous_lesson_id": "web-application-security-lesson-041",
+  "next_lesson_id": "web-application-security-lesson-043",
+  "keywords": [
+    "cross",
+    "origin",
+    "resource",
+    "sharing",
+    "cors",
+    "application-security",
+    "defensive-testing"
+  ],
+  "source_syllabus_number": 42,
+  "source_syllabus_title": "Cross-Origin Resource Sharing (CORS)",
+  "source_subtopics": [
+    {
+      "number": "42.1",
+      "title": "CORS request and response headers"
+    },
+    {
+      "number": "42.2",
+      "title": "Simple requests and preflight requests"
+    },
+    {
+      "number": "42.3",
+      "title": "Explicit allowed-origin lists"
+    },
+    {
+      "number": "42.4",
+      "title": "Credentialed requests"
+    },
+    {
+      "number": "42.5",
+      "title": "Misconfiguration and excessive origin trust"
+    },
+    {
+      "number": "42.6",
+      "title": "CORS as a browser access policy, not authentication"
+    }
+  ],
+  "subtopics": [
+    "CORS request and response headers",
+    "Simple requests and preflight requests",
+    "Explicit allowed-origin lists",
+    "Credentialed requests",
+    "Misconfiguration and excessive origin trust",
+    "CORS as a browser access policy, not authentication"
+  ],
+  "learning_outcomes": [
+    "Explain the main security concern and trust boundary involved in Cross-Origin Resource Sharing (CORS).",
+    "Choose an appropriate defensive control for Cross-Origin Resource Sharing (CORS) and state the assumptions under which it works.",
+    "Define a safe, reproducible verification step for Cross-Origin Resource Sharing (CORS), including a relevant negative or failure case."
+  ],
+  "content": {
+    "intro": "This lesson belongs to Module 6: HTTP, Browser Boundaries, and Transport Security. It builds practical understanding of Cross-Origin Resource Sharing (CORS) with the syllabus subtopics retained below.",
+    "why_it_matters": "Cross-Origin Resource Sharing (CORS) helps you observe a real boundary instead of assuming that browser, proxy, transport, and server behavior are interchangeable. Use a narrow, explicit origin allowlist based on the actual browser client; credentialed CORS requires careful origin handling and does not replace server-side authorization.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual model: Cross-Origin Resource Sharing (CORS)",
+        "asset_path": "diagrams/lesson-042-cross-origin-resource-sharing-cors.svg",
+        "alt_text": "Four-stage visual model for Cross-Origin Resource Sharing (CORS): Identify browser origin; Understand credentials; Narrow cross-origin policy; Test expected requests.",
+        "caption": "Concept map for Cross-Origin Resource Sharing (CORS). It is a learning aid, not a substitute for the stated control conditions."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Cross-Origin Resource Sharing (CORS) can be understood through this sequence: Identify browser origin → Understand credentials → Narrow cross-origin policy → Test expected requests. Start with the application asset and trust boundary, state what secure behavior should occur, and identify the evidence that would prove or disprove it."
+      },
+      {
+        "type": "paragraph",
+        "title": "Connect the syllabus subtopics",
+        "text": "The source curriculum groups this lesson around: 42.1 CORS request and response headers; 42.2 Simple requests and preflight requests; 42.3 Explicit allowed-origin lists; 42.4 Credentialed requests; 42.5 Misconfiguration and excessive origin trust; 42.6 CORS as a browser access policy, not authentication. Treat these points as a checklist, not a list to memorize: explain the risk, identify the root cause, select a control, and define a test for that control."
+      },
+      {
+        "type": "list",
+        "title": "Review checklist",
+        "items": [
+          {
+            "title": "Scope",
+            "text": "Identify the asset, principal, input, state, or boundary affected. State whether the example is local, owned, or explicitly authorized."
+          },
+          {
+            "title": "Control",
+            "text": "Use a narrow, explicit origin allowlist based on the actual browser client; credentialed CORS requires careful origin handling and does not replace server-side authorization."
+          },
+          {
+            "title": "Failure behavior",
+            "text": "Include an invalid, denied, expired, malformed, repeated, or otherwise relevant boundary case. Fail safely without exposing secrets."
+          },
+          {
+            "title": "Evidence",
+            "text": "Record expected versus actual behavior, a sanitized request or test result, the root cause, the chosen fix, and the regression test."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "python",
+        "execution_mode": "static-validation",
+        "title": "Safe reference example: Cross-Origin Resource Sharing (CORS)",
+        "code": "app.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"https://app.example.test\"],\n    allow_credentials=True,\n    allow_methods=[\"GET\", \"POST\"],\n    allow_headers=[\"Content-Type\", \"X-CSRF-Token\"],\n)",
+        "expected_output": "Only the listed frontend origin is allowed by this example; configure the production origin list separately.",
+        "run_instructions": "Illustrative FastAPI configuration. Do not combine credentialed requests with a permissive wildcard origin; CORS is not authorization.",
+        "reset_steps": "Use a clean local test account and synthetic data. Reset the test fixture after recording the result; do not include credentials or private data in the course report."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake and recovery",
+        "text": "Do not confuse an observation with proof or rely on a UI-only restriction. Use a narrow, explicit origin allowlist based on the actual browser client; credentialed CORS requires careful origin handling and does not replace server-side authorization. If evidence is ambiguous, reduce the test to one condition, inspect the application code/configuration, and repeat only within the permitted scope."
+      },
+      {
+        "type": "callout",
+        "title": "Execution and safety boundary",
+        "text": "The current CodeLeaf playground is an HTML/CSS/JavaScript preview, not a secure runner for arbitrary server code. This example is a static reference unless the run instructions explicitly identify a supported local environment. Use a private local lab or a test system with written authorization; do not test unrelated public systems."
+      }
+    ],
+    "task": "For “Cross-Origin Resource Sharing (CORS)”, write a short security note or test in a local/owned application. Identify the expected secure behavior, at least one relevant failure case, and the evidence needed to prove the control works.",
+    "task_acceptance_criteria": [
+      "Explain the core rule for Cross-Origin Resource Sharing (CORS) in your own words.",
+      "Name the trust boundary and the server-side control or policy that applies.",
+      "Specify a repeatable test for expected behavior and a relevant denied/failure path.",
+      "Use synthetic data and redact credentials, tokens, and personal information from evidence."
+    ],
+    "hints": [
+      "Start by stating the asset, input, actor, or trust boundary and the expected secure behavior.",
+      "Change one condition at a time; record expected and actual outcomes with synthetic data.",
+      "Check the linked official reference for framework-specific settings and version-dependent behavior."
+    ],
+    "expected_output": "A concise control explanation and a sanitized test record showing expected/actual behavior, one failure case, and a regression check.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-042-questions.json",
+    "recap": [
+      "Cross-Origin Resource Sharing (CORS) is a security boundary/control topic, not a standalone checklist item.",
+      "Use a narrow, explicit origin allowlist based on the actual browser client; credentialed CORS requires careful origin handling and does not replace server-side authorization.",
+      "Retest fixes and record sanitized evidence; use only authorized environments."
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "OWASP Application Security Verification Standard (ASVS)",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "security requirements",
+        "control verification",
+        "test traceability"
+      ]
+    },
+    {
+      "title": "OWASP Cheat Sheet Series",
+      "url": "https://cheatsheetseries.owasp.org/",
+      "publisher": "OWASP Foundation",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "authentication",
+        "authorization",
+        "sessions"
+      ]
+    },
+    {
+      "title": "MDN Web Security",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/Security",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-20",
+      "supports": [
+        "same-origin policy",
+        "browser security boundaries",
+        "web security features"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Curriculum draft derived from the attached Web Security PDF and mapped to official references. Human review and local verification are required before publication."
+}

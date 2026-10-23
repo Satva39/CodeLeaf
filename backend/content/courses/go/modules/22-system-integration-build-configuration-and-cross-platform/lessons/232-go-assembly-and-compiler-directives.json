@@ -1,0 +1,273 @@
+{
+  "id": "go-lesson-232",
+  "slug": "go-assembly-and-compiler-directives",
+  "title": "Go Assembly and Compiler Directives",
+  "sequence": 232,
+  "module_id": "go-module-22",
+  "module_slug": "system-integration-build-configuration-and-cross-platform",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "elective",
+  "estimated_minutes": 23,
+  "prerequisites": [
+    "go-lesson-231"
+  ],
+  "previous_lesson_id": "go-lesson-231",
+  "next_lesson_id": "go-lesson-233",
+  "keywords": [
+    "go assembly and compiler directives",
+    "assembly language overview",
+    "assembly source and build integration",
+    "compiler directives",
+    "architecture dependence",
+    "when low level implementation is justified",
+    "Go",
+    "Golang"
+  ],
+  "source_syllabus_number": 232,
+  "subtopics": [
+    "Assembly language overview",
+    "Assembly source and build integration",
+    "Compiler directives",
+    "Architecture dependence",
+    "When low-level implementation is justified"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and behavior of go assembly and compiler directives.",
+    "Apply at least one lesson concept—assembly language overview—in a small Go example or workflow.",
+    "Predict a representative result, then test a boundary case and explain any difference."
+  ],
+  "exercise_files": [
+    "../exercises/032-cross-platform-build.json"
+  ],
+  "content": {
+    "intro": "Go Assembly and Compiler Directives is an advanced engineering topic. Establish a baseline, observe the actual runtime behavior, change one relevant factor, and compare results. Mark architecture-specific or experimental features clearly; isolate them behind small boundaries with documented fallbacks.",
+    "why_it_matters": "Optimization and systems integration are most effective when driven by evidence and explicit portability constraints, not by assumptions.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 22 overview: System Integration, Build Configuration, and Cross-Platform",
+        "asset_path": "diagrams/module-22-overview.svg",
+        "alt_text": "Overview of Module 22, System Integration, Build Configuration, and Cross-Platform; this lesson is lesson 232 in the ordered module sequence.",
+        "caption": "Use the module map to place “Go Assembly and Compiler Directives” within the larger sequence, then return to the individual code and practice below."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Go Assembly and Compiler Directives is an advanced engineering topic. Establish a baseline, observe the actual runtime behavior, change one relevant factor, and compare results. Mark architecture-specific or experimental features clearly; isolate them behind small boundaries with documented fallbacks."
+      },
+      {
+        "type": "list",
+        "title": "Topics covered in this lesson",
+        "items": [
+          {
+            "title": "Assembly language overview",
+            "text": "Be able to explain assembly language overview, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Assembly source and build integration",
+            "text": "Be able to explain assembly source and build integration, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Compiler directives",
+            "text": "Be able to explain compiler directives, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "Architecture dependence",
+            "text": "Be able to explain architecture dependence, identify the inputs or program state it affects, and name one boundary case worth testing."
+          },
+          {
+            "title": "When low-level implementation is justified",
+            "text": "Be able to explain when low-level implementation is justified, identify the inputs or program state it affects, and name one boundary case worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Example: Go Assembly and Compiler Directives",
+        "language": "text",
+        "code": "// Specialist / platform-dependent topic.\n// Keep unsafe, cgo, assembly, and experimental SIMD behind small boundaries.\n// Document target architectures, toolchain versions, pointer lifetimes, and fallbacks.\n// For Go 1.27 SIMD experiments: GOEXPERIMENT=simd go test ./...\n",
+        "expected_output": "The feature is isolated, version-gated, documented, and validated on the intended target; unsupported targets use a safe fallback.",
+        "run_mode": "static-validation",
+        "run_instructions": "Optional specialist material. Test only in an isolated sample on a supported toolchain and target architecture."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through the example",
+        "text": "First, identify the input or initial state in the example for go assembly and compiler directives. Next, trace the operation or contract that matters, and predict the result before running it. If the example depends on a version-specific feature, a driver, or an external service, follow the stated prerequisites rather than assuming it works in a browser preview."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to one subtopic—Assembly language overview—and add a second case that could fail or behave differently. Write down the expected result before testing."
+      },
+      {
+        "type": "callout",
+        "title": "Scope and compatibility",
+        "text": "Optional or version-sensitive material: consult the version-matched official release notes, isolate the implementation, and verify target/runtime assumptions. Experimental features are not stable API commitments."
+      }
+    ],
+    "task": "Create a small example connected to “Go Assembly and Compiler Directives”. Use Assembly language overview as the starting point, predict the output, then add one invalid, empty, or boundary case and document its result.",
+    "task_acceptance_criteria": [
+      "The example demonstrates assembly language overview or a closely related concept.",
+      "Inputs, relevant state changes, and expected output are clear.",
+      "At least one boundary case is deliberately tested or documented.",
+      "Errors are handled honestly and no success state is reported when the operation fails."
+    ],
+    "hints": [
+      "Start from the simplest example related to assembly language overview.",
+      "Predict the result manually and annotate the value that changes at each step.",
+      "Run `gofmt` and the appropriate local `go run`, `go test`, `go vet`, or inspection command when prerequisites are available."
+    ],
+    "expected_output": "The feature is isolated, version-gated, documented, and validated on the intended target; unsupported targets use a safe fallback.",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-232-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Assuming the happy-path output proves all inputs are safe.",
+        "why": "Empty, malformed, boundary, or concurrent cases may follow different paths.",
+        "fix": "Add focused tests for a normal input and at least one relevant edge case."
+      },
+      {
+        "problem": "Ignoring returned errors or external-system status.",
+        "why": "Go APIs commonly report expected failures as explicit error values.",
+        "fix": "Check errors close to the operation, add useful context when propagating, and clean up resources."
+      },
+      {
+        "problem": "Using an API or syntax without checking the selected Go version.",
+        "why": "Language and standard-library capabilities can change between releases.",
+        "fix": "Record `go version`, inspect the `go` directive, and read official release notes for version-specific topics."
+      }
+    ],
+    "summary": [
+      "Go Assembly and Compiler Directives provides a reusable rule or workflow for Go programs.",
+      "The subtopics to revisit are: Assembly language overview; Assembly source and build integration; Compiler directives; Architecture dependence; When low-level implementation is justified.",
+      "Prefer a small reproducible example, explicit errors, appropriate tests, and version-matched official documentation."
+    ],
+    "references": [
+      {
+        "title": "Go Documentation",
+        "url": "https://go.dev/doc/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "tutorials",
+          "language concepts",
+          "tooling",
+          "application development"
+        ]
+      },
+      {
+        "title": "The Go Programming Language Specification",
+        "url": "https://go.dev/ref/spec",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "syntax",
+          "types",
+          "control flow",
+          "interfaces"
+        ]
+      },
+      {
+        "title": "Go Build Constraints",
+        "url": "https://go.dev/cmd/go/#hdr-Build_constraints",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "build tags",
+          "platform-specific files",
+          "portability"
+        ]
+      },
+      {
+        "title": "Go Command Reference",
+        "url": "https://go.dev/cmd/go/",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "go run",
+          "go build",
+          "go test",
+          "go vet"
+        ]
+      },
+      {
+        "title": "Go Release History",
+        "url": "https://go.dev/doc/devel/release",
+        "publisher": "The Go Authors",
+        "checked_on": "2026-10-17",
+        "supports": [
+          "version compatibility",
+          "security releases",
+          "latest supported patch releases"
+        ]
+      }
+    ],
+    "accessibility_note": "The diagram includes descriptive alt text and a text caption. Code examples are also described in prose; do not rely on color alone to understand a sequence.",
+    "execution_note": "Optional specialist material. Test only in an isolated sample on a supported toolchain and target architecture. Examples that need a database driver, external service, isolated execution environment, or version-specific feature are labeled as static examples and should not be treated as already executed."
+  },
+  "sources": [
+    {
+      "title": "Go Documentation",
+      "url": "https://go.dev/doc/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "tutorials",
+        "language concepts",
+        "tooling",
+        "application development"
+      ]
+    },
+    {
+      "title": "The Go Programming Language Specification",
+      "url": "https://go.dev/ref/spec",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "syntax",
+        "types",
+        "control flow",
+        "interfaces"
+      ]
+    },
+    {
+      "title": "Go Build Constraints",
+      "url": "https://go.dev/cmd/go/#hdr-Build_constraints",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "build tags",
+        "platform-specific files",
+        "portability"
+      ]
+    },
+    {
+      "title": "Go Command Reference",
+      "url": "https://go.dev/cmd/go/",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "go run",
+        "go build",
+        "go test",
+        "go vet"
+      ]
+    },
+    {
+      "title": "Go Release History",
+      "url": "https://go.dev/doc/devel/release",
+      "publisher": "The Go Authors",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "version compatibility",
+        "security releases",
+        "latest supported patch releases"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied Go.pdf syllabus mapping. Human review and local runtime verification are required before publication."
+}

@@ -1,0 +1,183 @@
+{
+  "id": "r-lesson-204",
+  "slug": "static-analysis-and-code-review",
+  "title": "Static Analysis and Code Review",
+  "sequence": 204,
+  "module_id": "r-module-19",
+  "module_slug": "debugging-testing-and-software-quality",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "r-lesson-203"
+  ],
+  "previous_lesson_id": "r-lesson-203",
+  "next_lesson_id": "r-lesson-205",
+  "keywords": [
+    "static-analysis-and-code-review",
+    "debugging-testing-and-software-quality",
+    "understanding-code-linting",
+    "identifying-suspicious-expressions",
+    "reviewing-dependencies",
+    "conducting-peer-reviews",
+    "improving-code-based-on-review-feedback",
+    "r-programming",
+    "static-validation"
+  ],
+  "source_syllabus_number": 204,
+  "subtopics": [
+    "Understanding Code Linting",
+    "Identifying Suspicious Expressions",
+    "Reviewing Dependencies",
+    "Conducting Peer Reviews",
+    "Improving Code Based on Review Feedback"
+  ],
+  "learning_outcomes": [
+    "Explain the role of static analysis and code review and identify its main inputs, outputs or constraints.",
+    "Apply understanding code linting in a minimal example and state the expected result before checking it.",
+    "Test one relevant edge, missing or failure case and describe a limitation of the result."
+  ],
+  "content": {
+    "intro": "Static Analysis and Code Review is part of Debugging, Testing, and Software Quality. Start with understanding code linting and connect it to the worked example and expected result.",
+    "why_it_matters": "Static Analysis and Code Review is one step in Debugging, Testing, and Software Quality; errors, warnings, assertions and tests provide distinct signals. Reproducible failing cases help isolate defects.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Visual guide: Static Analysis and Code Review",
+        "asset_path": "diagrams/module-19-overview.svg",
+        "alt_text": "Concept visual supporting lesson 204, Static Analysis and Code Review. The module and lesson flow is shown with labelled steps and verification checkpoints.",
+        "caption": "Use the visual to orient the topic, then validate the details in the example and official references."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Static Analysis and Code Review is one step in Debugging, Testing, and Software Quality; errors, warnings, assertions and tests provide distinct signals. Reproducible failing cases help isolate defects. The example is intentionally small so you can predict its result before checking it in a local R session."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus checkpoints",
+        "items": [
+          {
+            "title": "Understanding Code Linting",
+            "text": "Explain understanding code linting in the context of static analysis and code review, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Identifying Suspicious Expressions",
+            "text": "Explain identifying suspicious expressions in the context of static analysis and code review, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Reviewing Dependencies",
+            "text": "Explain reviewing dependencies in the context of static analysis and code review, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Conducting Peer Reviews",
+            "text": "Explain conducting peer reviews in the context of static analysis and code review, connect it to the example, and verify one expected result or edge case."
+          },
+          {
+            "title": "Improving Code Based on Review Feedback",
+            "text": "Explain improving code based on review feedback in the context of static analysis and code review, connect it to the example, and verify one expected result or edge case."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "Work through it",
+        "text": "Test expected behavior and edge cases, avoid leaking sensitive values in logs, and run checks in a clean environment. Change one input or condition at a time, compare the observed result with your prediction, and write down one limitation."
+      },
+      {
+        "type": "code",
+        "title": "R example: Static Analysis and Code Review",
+        "language": "r",
+        "code": "stopifnot(all(c(2, 4, 6) > 0))\n\"checks passed\"",
+        "expected_output": "[1] \"checks passed\"",
+        "run_instructions": "CodeLeaf does not provide an R runtime. This block is an inspectable reference example; execute it in a local R console or a reviewed R-aware environment. Static validation checks file structure, not R semantics.",
+        "reset_steps": "No example is executed by this CodeLeaf lesson. For a local run, use synthetic data in a temporary working directory, avoid production credentials or destructive writes, and restart a clean R session to clear lesson objects.",
+        "execution_mode": "static-validation",
+        "limitations": "Assertions fail early when required assumptions are not met. Verify the snippet and expected output with the supported R and package versions before publishing."
+      },
+      {
+        "type": "callout",
+        "title": "Common pitfall",
+        "text": "Do not treat a syntactically plausible example as proof of correctness. For static analysis and code review, check the input type, missing/empty cases, output shape, and domain assumptions."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-204-questions.json",
+    "run_mode": "static-validation",
+    "task": "Apply static analysis and code review to a small synthetic example. Start with understanding code linting, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+    "task_acceptance_criteria": [
+      "Use the understanding code linting idea in a minimal example or safe design sketch.",
+      "State the expected result before running the example.",
+      "Verify one relevant boundary, missing-value or failure case.",
+      "Record assumptions and one limitation of the result."
+    ],
+    "expected_output": "A reproducible static analysis and code review example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+    "hints": [
+      "Start with “Understanding Code Linting” and identify the input and output before coding.",
+      "Prefer a small repeatable test and capture the result before changing the implementation.",
+      "Test a boundary, missing, invalid or failure input relevant to this topic."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Using an example without checking its inputs or output shape.",
+        "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+        "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+      },
+      {
+        "problem": "Treating a demonstration as proof that every edge case works.",
+        "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+        "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+      },
+      {
+        "problem": "Reporting a result without context.",
+        "why": "The conclusion depends on data provenance, transformations and assumptions.",
+        "fix": "Record input source, cleaning choices and known limitations beside the result."
+      }
+    ],
+    "summary": [
+      "Key idea: Static Analysis and Code Review is one step in Debugging, Testing, and Software Quality; errors, warnings, assertions and tests provide distinct signals. Reproducible failing cases help isolate defects.",
+      "Practice: Test expected behavior and edge cases, avoid leaking sensitive values in logs, and run checks in a clean environment.",
+      "Source syllabus focus: Understanding Code Linting. Verify the result with the linked official reference before publication."
+    ]
+  },
+  "task": "Apply static analysis and code review to a small synthetic example. Start with understanding code linting, predict the result, compare it with a local R run, test one edge or failure case, and document one limitation. For integrations or package-dependent topics, submit a safe verification plan rather than claiming the code ran.",
+  "expected_output": "A reproducible static analysis and code review example or design sketch with the expected result, one checked edge or failure case, and a stated limitation.",
+  "hints": [
+    "Start with “Understanding Code Linting” and identify the input and output before coding.",
+    "Prefer a small repeatable test and capture the result before changing the implementation.",
+    "Test a boundary, missing, invalid or failure input relevant to this topic."
+  ],
+  "common_mistakes": [
+    {
+      "problem": "Using an example without checking its inputs or output shape.",
+      "why": "R can coerce types, propagate missing values or simplify results unexpectedly.",
+      "fix": "Inspect with str(), class(), typeof(), length() or dim() and add a direct check."
+    },
+    {
+      "problem": "Treating a demonstration as proof that every edge case works.",
+      "why": "Empty input, missing values, dependencies and version differences can change behavior.",
+      "fix": "Test a normal case and a boundary/failure case in a clean local R session."
+    },
+    {
+      "problem": "Reporting a result without context.",
+      "why": "The conclusion depends on data provenance, transformations and assumptions.",
+      "fix": "Record input source, cleaning choices and known limitations beside the result."
+    }
+  ],
+  "summary": [
+    "Key idea: Static Analysis and Code Review is one step in Debugging, Testing, and Software Quality; errors, warnings, assertions and tests provide distinct signals. Reproducible failing cases help isolate defects.",
+    "Practice: Test expected behavior and edge cases, avoid leaking sensitive values in logs, and run checks in a clean environment.",
+    "Source syllabus focus: Understanding Code Linting. Verify the result with the linked official reference before publication."
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    "PDF source: R Language — Complete Curriculum, attached PDF, Section B (Complete Curriculum). Module 19 — Debugging, Testing, and Software Quality, lesson 204: Static Analysis and Code Review.",
+    "Official documentation: https://testthat.r-lib.org/",
+    "Reference index: references/reference-index.json"
+  ],
+  "exercise_files": [],
+  "status": "draft"
+}

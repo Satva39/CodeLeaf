@@ -1,0 +1,214 @@
+{
+  "id": "mongodb-lesson-169",
+  "slug": "vector-search-fundamentals",
+  "title": "Vector Search Fundamentals",
+  "sequence": 169,
+  "module_id": "mongodb-module-16",
+  "module_slug": "mongodb-search-and-vector-search-specialized",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "optional-specialist",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "mongodb-lesson-168"
+  ],
+  "previous_lesson_id": "mongodb-lesson-168",
+  "next_lesson_id": "mongodb-lesson-170",
+  "keywords": [
+    "vector",
+    "search",
+    "fundamentals",
+    "mongodb",
+    "database"
+  ],
+  "source_syllabus_number": 169,
+  "source_module_number": 16,
+  "subtopics": [
+    "What embeddings are",
+    "Semantic similarity",
+    "Vector representations of data",
+    "Approximate nearest-neighbor search",
+    "Exact nearest-neighbor search"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose and main trade-off of vector search fundamentals.",
+    "Apply vector search fundamentals to a small MongoDB data or operational scenario.",
+    "Verify the expected result, one edge case, and the relevant version/deployment assumption."
+  ],
+  "content": {
+    "intro": "Learn vector search fundamentals as part of MongoDB Search and Vector Search — Specialized. The lesson preserves the PDF subtopics, connects them to a practical MongoDB pattern, and ends with a verification task.",
+    "why_it_matters": "Vector Search Fundamentals is a specialist retrieval capability rather than a prerequisite for ordinary CRUD. Define the index and query deliberately, measure relevance on representative test cases, and verify the target deployment and version support the feature.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Vector Search Fundamentals",
+        "asset_path": "diagrams/lesson-169-vector-search-fundamentals.svg",
+        "alt_text": "Four-step learning diagram for Vector Search Fundamentals: Prepare corpus; Define search index; Run retrieval query; Measure relevance.",
+        "caption": "Visual guide to Vector Search Fundamentals: follow the concept, action, verification and application steps."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Vector Search Fundamentals is a specialist retrieval capability rather than a prerequisite for ordinary CRUD. Define the index and query deliberately, measure relevance on representative test cases, and verify the target deployment and version support the feature."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus subtopics to master",
+        "items": [
+          {
+            "title": "1. What embeddings are",
+            "text": "Be able to explain or demonstrate what embeddings are in the context of vector search fundamentals, and document the relevant design or version assumption."
+          },
+          {
+            "title": "2. Semantic similarity",
+            "text": "Be able to explain or demonstrate semantic similarity in the context of vector search fundamentals, and document the relevant design or version assumption."
+          },
+          {
+            "title": "3. Vector representations of data",
+            "text": "Be able to explain or demonstrate vector representations of data in the context of vector search fundamentals, and document the relevant design or version assumption."
+          },
+          {
+            "title": "4. Approximate nearest-neighbor search",
+            "text": "Be able to explain or demonstrate approximate nearest-neighbor search in the context of vector search fundamentals, and document the relevant design or version assumption."
+          },
+          {
+            "title": "5. Exact nearest-neighbor search",
+            "text": "Be able to explain or demonstrate exact nearest-neighbor search in the context of vector search fundamentals, and document the relevant design or version assumption."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with the behavior you want, identify the collection/document shape and access pattern involved, then select the smallest MongoDB operation that expresses the requirement. Check the chosen deployment docs and test representative queries or interrupted consumption before promising behavior."
+      },
+      {
+        "type": "code",
+        "language": "javascript",
+        "execution_mode": "static-validation",
+        "code": "db.knowledge.aggregate([\n  { $vectorSearch: { index: \"vector_index\", path: \"embedding\", queryVector: [0.12, 0.25, 0.33], numCandidates: 50, limit: 5 } },\n  { $project: { title: 1, score: { $meta: \"vectorSearchScore\" } } }\n]);",
+        "expected_output": "The pipeline requests up to five nearest results from a configured vector index; vector dimensions and index configuration must match the embedding model and deployment.",
+        "run_instructions": "CodeLeaf displays this example as a reference and does not execute a MongoDB server or arbitrary driver code in the page. Run shell examples with mongosh, or driver examples in a separately configured Node.js/Python lab, against a disposable database. Verify installed server/driver versions and deployment feature availability first. Never place credentials in source files.",
+        "reset_steps": "Use a dedicated training database and synthetic fixtures. Remove only objects created by this lesson or recreate the disposable database after confirming the target; do not run destructive/reset commands against production."
+      },
+      {
+        "type": "callout",
+        "title": "Environment and safety note",
+        "text": "All examples are teaching references, not production-ready configuration. MongoDB Atlas-specific Search, Vector Search, monitoring, backup and automation features are marked as deployment-dependent. Server, driver, shell and managed-service capabilities differ; check the official documentation that matches your target."
+      }
+    ],
+    "task": "Try it yourself: Create a tiny labeled retrieval dataset, define the required search/vector index, run representative queries, and evaluate relevance and metadata filters in the actual supported deployment. Submit your choice plus the expected result/evidence and one edge case.",
+    "task_acceptance_criteria": [
+      "Demonstrate the key idea in Vector Search Fundamentals.",
+      "Predict the result and state how you would verify it.",
+      "Name one boundary, risk or version/deployment assumption."
+    ],
+    "hints": [
+      "First, explain what “Vector Search Fundamentals” needs to accomplish in this scenario.",
+      "Write down the data shape, filter, expected output or operational evidence before running the example.",
+      "Test one normal case and one meaningful boundary/failure case; consult the matching official reference."
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Assuming specialist search/event features work everywhere",
+        "why": "Index types, resume behavior and service availability depend on the deployment and version.",
+        "fix": "Check the chosen deployment docs and test representative queries or interrupted consumption before promising behavior."
+      },
+      {
+        "problem": "Assuming a static reference result proves the environment will behave identically.",
+        "why": "MongoDB server, shell, driver, managed service and permissions can affect the available behavior.",
+        "fix": "Record the target versions and privileges, run the smallest safe test, and keep expected and actual results side by side."
+      }
+    ],
+    "summary": [
+      "Vector Search Fundamentals is a specialist retrieval capability rather than a prerequisite for ordinary CRUD. Define the index and query deliberately, measure relevance on representative test cases, and verify the target deployment and version support the feature.",
+      "The supplied roadmap identifies these subtopics: What embeddings are; Semantic similarity; Vector representations of data; Approximate nearest-neighbor search; Exact nearest-neighbor search.",
+      "Use a disposable practice environment, verify the result and keep operational assumptions explicit."
+    ],
+    "references": [
+      {
+        "title": "MongoDB Manual — Complete Documentation Index",
+        "url": "https://www.mongodb.com/docs/manual/contents/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "course-wide concepts",
+          "deployment and version navigation",
+          "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+        ]
+      },
+      {
+        "title": "Atlas Search",
+        "url": "https://www.mongodb.com/docs/atlas/atlas-search/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "full-text search",
+          "search indexes",
+          "relevance and filtering; Atlas feature scope"
+        ]
+      },
+      {
+        "title": "MongoDB Vector Search",
+        "url": "https://www.mongodb.com/docs/atlas/atlas-vector-search/",
+        "publisher": "MongoDB, Inc.",
+        "checked_on": "2026-10-15",
+        "source_type": "official_reference",
+        "supports": [
+          "vector indexes",
+          "semantic retrieval",
+          "query filtering and relevance; version and deployment constraints"
+        ]
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-169-questions.json",
+    "run_mode": "static-validation",
+    "editor_note": "MongoDB-specific examples are reference content. A separate isolated MongoDB server/driver runtime is required for execution; questions and solutions remain protected."
+  },
+  "exercise_files": [
+    "../exercises/169-vector-search-fundamentals-practice.json"
+  ],
+  "sources": [
+    {
+      "title": "MongoDB Manual — Complete Documentation Index",
+      "url": "https://www.mongodb.com/docs/manual/contents/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "course-wide concepts",
+        "deployment and version navigation",
+        "CRUD, aggregation, indexing, modeling, replication, sharding, security and administration"
+      ]
+    },
+    {
+      "title": "Atlas Search",
+      "url": "https://www.mongodb.com/docs/atlas/atlas-search/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "full-text search",
+        "search indexes",
+        "relevance and filtering; Atlas feature scope"
+      ]
+    },
+    {
+      "title": "MongoDB Vector Search",
+      "url": "https://www.mongodb.com/docs/atlas/atlas-vector-search/",
+      "publisher": "MongoDB, Inc.",
+      "checked_on": "2026-10-15",
+      "source_type": "official_reference",
+      "supports": [
+        "vector indexes",
+        "semantic retrieval",
+        "query filtering and relevance; version and deployment constraints"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson authored from the supplied MongoDB syllabus and original instructional material. Review examples against the target MongoDB release/deployment before publication."
+}

@@ -1,0 +1,190 @@
+{
+  "id": "json-yaml-lesson-085",
+  "slug": "yaml-boolean-values",
+  "title": "YAML Boolean Values",
+  "sequence": 85,
+  "module_id": "json-yaml-module-09",
+  "module_slug": "yaml-values-typing-and-scalar-semantics",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 15,
+  "prerequisites": [
+    "json-yaml-lesson-084"
+  ],
+  "previous_lesson_id": "json-yaml-lesson-084",
+  "next_lesson_id": "json-yaml-lesson-086",
+  "keywords": [
+    "yaml-boolean-values",
+    "boolean-representations-in-yaml-1-2-lowercase-boolean-forms-values-that-resemble-booleans-quoted-versus-unquoted-values",
+    "yaml-1-1-compatibility-issues-parser-specific-boolean-resolution"
+  ],
+  "source_syllabus_number": 85,
+  "subtopics": [
+    "Boolean representations in YAML 1.2. Lowercase boolean forms. Values that resemble booleans. Quoted versus unquoted values.",
+    "YAML 1.1 compatibility issues. Parser-specific boolean resolution."
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of yaml boolean values and identify at least one related syllabus concept.",
+    "Interpret the example for yaml boolean values and describe its expected result.",
+    "Choose a relevant syntax, type, compatibility, security, or troubleshooting check for the example."
+  ],
+  "content": {
+    "intro": "This lesson focuses on yaml boolean values and connects the PDF syllabus topics to a small, inspectable example. Work from the intended data model, write down the expected result, then verify syntax and semantics with the target tool.",
+    "why_it_matters": "YAML Boolean Values matters because structured-data files sit between people, tools, services, and deployment systems. A clear contract and repeatable checks make the result easier to maintain and safer to consume.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "title": "YAML Boolean Values: visual explanation",
+        "asset_path": "diagrams/lessons/lesson-085-yaml-boolean-values.svg",
+        "alt_text": "YAML Boolean Values: Boolean representations in YAML 1.2. Lowercase boolean forms. Values that resemble booleans. Quoted versus unquoted values. leads to Resolve YAML structure, then Constructed values.",
+        "caption": "Use this concept flow to predict the result for YAML Boolean Values before you test the snippet."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "YAML scalar style and schema influence how text is resolved into values. Quote strings that resemble booleans, numbers, dates, or null when string interpretation is intended; parser versions and schemas can affect the result."
+      },
+      {
+        "type": "paragraph",
+        "title": "What you will cover",
+        "text": "This lesson explicitly addresses: Boolean representations in YAML 1.2. Lowercase boolean forms. Values that resemble booleans. Quoted versus unquoted values.; YAML 1.1 compatibility issues. Parser-specific boolean resolution.. Treat each as part of a workflow: define what the data should mean, represent it consistently, and test how the chosen implementation interprets it."
+      },
+      {
+        "type": "code",
+        "title": "Inspectable example: YAML Boolean Values",
+        "language": "yaml",
+        "code": "enabled: true\ndisabled: false\nlabel: \"true\"\nlegacy_word: \"on\"",
+        "expected_output": "Use lowercase true/false for clear booleans and quote words intended as strings; YAML 1.1-style parsers may resolve some legacy words differently.",
+        "run_instructions": "Save as example.yaml and validate it with the exact parser/linter used by the target application. For Python experiments, use an isolated environment and safe loading for untrusted content. Do not assume every parser resolves ambiguous scalars identically.",
+        "reset_steps": "Restore the starting fixture before each test. Change one field, indentation level, parser option, or schema constraint at a time, then compare the result with the prediction.",
+        "execution_mode": "static-validation",
+        "limitations": "This snippet is a reference/example, not evidence that the CodeLeaf browser executes JSON/YAML parsing, shell commands, or Python. Validate locally with a named parser or tool before relying on it."
+      },
+      {
+        "type": "list",
+        "title": "A reliable working sequence",
+        "items": [
+          {
+            "title": "1. State the contract",
+            "text": "Write down the expected root type, required fields, scalar types, and any compatibility assumptions."
+          },
+          {
+            "title": "2. Validate before use",
+            "text": "Parse the document and run the applicable schema or policy checks; syntax success alone is not full correctness."
+          },
+          {
+            "title": "3. Test a boundary",
+            "text": "Include at least one missing, malformed, ambiguous, or unexpected input and record the desired behavior."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Version and safety checkpoint",
+        "text": "Indentation and scalar interpretation are part of the data model. Quote ambiguous strings, use consistent spaces, and test with the parser/schema that the target application actually uses. Confirm implementation-specific behavior against the target parser, tool version, and standards documentation."
+      },
+      {
+        "type": "paragraph",
+        "title": "Try it yourself",
+        "text": "Create a second synthetic fixture for “Boolean representations in YAML 1.2. Lowercase boolean forms. Values that resemble booleans. Quoted versus unquoted values.”. Predict the parsed types/result, change one relevant detail, and record whether the target tool behaved as expected. Include one invalid or boundary case."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-085-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Treating readable text as proof of correctness.",
+        "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+        "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+      },
+      {
+        "problem": "Assuming every parser interprets the feature identically.",
+        "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+        "fix": "Record the exact parser/version and test the target environment."
+      },
+      {
+        "problem": "Testing only a happy path.",
+        "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+        "fix": "Keep valid, invalid, and boundary fixtures in version control."
+      }
+    ],
+    "task": "Prepare a brief, reviewable demonstration of YAML Boolean Values. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+    "task_acceptance_criteria": [
+      "The artifact clearly demonstrates Boolean representations in YAML 1.2. Lowercase boolean forms. Values that resemble booleans. Quoted versus unquoted values..",
+      "Expected behavior is written before verification.",
+      "One invalid or boundary case is documented.",
+      "The relevant format, parser/version, and any security or interoperability limits are recorded."
+    ],
+    "hints": [
+      "Start with the smallest valid example that demonstrates Boolean representations in YAML 1.2. Lowercase boolean forms. Values that resemble booleans. Quoted versus unquoted values..",
+      "Change one thing at a time and compare parsed values, not only visual formatting.",
+      "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+    ],
+    "summary": [
+      "YAML Boolean Values fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+      "Topics retained from the source PDF include Boolean representations in YAML 1.2. Lowercase boolean forms. Values that resemble booleans. Quoted versus unquoted values.; YAML 1.1 compatibility issues. Parser-specific boolean resolution..",
+      "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+    ],
+    "run_mode": "static-validation",
+    "expected_output": "Use lowercase true/false for clear booleans and quote words intended as strings; YAML 1.1-style parsers may resolve some legacy words differently."
+  },
+  "task": "Prepare a brief, reviewable demonstration of YAML Boolean Values. Include an input fixture, expected result, validation method, and one edge case. Use synthetic values and record the parser/tool and version.",
+  "task_acceptance_criteria": [
+    "The artifact clearly demonstrates Boolean representations in YAML 1.2. Lowercase boolean forms. Values that resemble booleans. Quoted versus unquoted values..",
+    "Expected behavior is written before verification.",
+    "One invalid or boundary case is documented.",
+    "The relevant format, parser/version, and any security or interoperability limits are recorded."
+  ],
+  "hints": [
+    "Start with the smallest valid example that demonstrates Boolean representations in YAML 1.2. Lowercase boolean forms. Values that resemble booleans. Quoted versus unquoted values..",
+    "Change one thing at a time and compare parsed values, not only visual formatting.",
+    "Use the standards or implementation documentation linked below when behavior differs from your prediction."
+  ],
+  "summary": [
+    "YAML Boolean Values fits the wider JSON/YAML workflow of modelling, processing, validating, and maintaining structured data.",
+    "Topics retained from the source PDF include Boolean representations in YAML 1.2. Lowercase boolean forms. Values that resemble booleans. Quoted versus unquoted values.; YAML 1.1 compatibility issues. Parser-specific boolean resolution..",
+    "A reproducible check documents input, expected result, tool/version, and a meaningful failure case."
+  ],
+  "run_mode": "static-validation",
+  "expected_output": "Use lowercase true/false for clear booleans and quote words intended as strings; YAML 1.1-style parsers may resolve some legacy words differently.",
+  "common_mistakes": [
+    {
+      "problem": "Treating readable text as proof of correctness.",
+      "why": "Syntax and visual formatting cannot establish data types, schema conformance, or application-specific meaning.",
+      "fix": "Parse, validate against the intended contract, and test a valid plus an invalid fixture."
+    },
+    {
+      "problem": "Assuming every parser interprets the feature identically.",
+      "why": "Format versions, schema choices, library defaults, and product-specific restrictions affect behavior.",
+      "fix": "Record the exact parser/version and test the target environment."
+    },
+    {
+      "problem": "Testing only a happy path.",
+      "why": "Missing fields, wrong types, duplicate keys, or ambiguous scalars may still break consumers.",
+      "fix": "Keep valid, invalid, and boundary fixtures in version control."
+    }
+  ],
+  "references": [
+    "references/reference-index.json"
+  ],
+  "sources": [
+    {
+      "id": "json-yaml-ref-yaml122",
+      "title": "YAML Ain’t Markup Language (YAML) Version 1.2.2 Specification",
+      "url": "https://yaml.org/spec/1.2.2/",
+      "publisher": "YAML Language Development Team",
+      "checked_on": "2026-10-20"
+    },
+    {
+      "id": "json-yaml-ref-pyyaml",
+      "title": "PyYAML Documentation",
+      "url": "https://pyyaml.org/wiki/PyYAMLDocumentation",
+      "publisher": "PyYAML project",
+      "checked_on": "2026-10-20"
+    }
+  ],
+  "technical_review_date": null,
+  "status": "draft",
+  "status_note": "Generated from the attached JSON and YAML syllabus; requires technical review and target-tool validation before publication.",
+  "exercise_files": []
+}

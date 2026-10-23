@@ -1,0 +1,49 @@
+{
+  "id": "postgresql-lesson-069-knowledge-check",
+  "lesson_id": "postgresql-lesson-069",
+  "lesson_slug": "conditional-data-changes-with-merge",
+  "title": "Conditional Data Changes with MERGE knowledge check",
+  "question_count": 3,
+  "status": "draft",
+  "questions": [
+    {
+      "id": "postgresql-q-069-01",
+      "type": "single_choice",
+      "prompt": "What is needed for an ON CONFLICT upsert to target duplicates?",
+      "options": [
+        "A WHERE clause that names every column in the table.",
+        "A full table lock in every case.",
+        "A JSONB column in every target table.",
+        "A matching unique or exclusion constraint/index and an appropriate conflict target."
+      ],
+      "answer_key": "A matching unique or exclusion constraint/index and an appropriate conflict target.",
+      "explanation": "ON CONFLICT handles conflicts recognized by a usable uniqueness constraint/index; it does not infer arbitrary business duplicates."
+    },
+    {
+      "id": "postgresql-q-069-02",
+      "type": "single_choice",
+      "prompt": "Which workflow best supports a correct implementation of conditional data changes with merge?",
+      "options": [
+        "Assume one successful example proves security and recovery",
+        "Apply the largest possible change before collecting a baseline",
+        "Define the expected behavior and prerequisites, make the smallest change in an isolated environment, then verify both success and an important edge case.",
+        "Concatenate user input into SQL and remove permission checks"
+      ],
+      "answer_key": "Define the expected behavior and prerequisites, make the smallest change in an isolated environment, then verify both success and an important edge case.",
+      "explanation": "A controlled example makes the prerequisites and expected behavior explicit. Verification of an edge case helps show whether the idea behind conditional data changes with merge is understood."
+    },
+    {
+      "id": "postgresql-q-069-03",
+      "type": "single_choice",
+      "prompt": "When an example related to conditional data changes with merge produces an unexpected result, what is the strongest next step?",
+      "options": [
+        "Ignore the returned result and assume the write succeeded",
+        "Capture the exact error and context, inspect relevant state or logs, test one hypothesis at a time, and document the verified result.",
+        "Disable constraints and retry until the command succeeds",
+        "Grant administrator privileges to every application role"
+      ],
+      "answer_key": "Capture the exact error and context, inspect relevant state or logs, test one hypothesis at a time, and document the verified result.",
+      "explanation": "Database troubleshooting should be evidence-led and performed with suitable permissions. Broad privileges or disabling integrity checks may hide the cause and create new failures."
+    }
+  ]
+}

@@ -1,0 +1,173 @@
+{
+  "id": "php-lesson-035",
+  "slug": "bitwise-operators-and-other-specialized-operators",
+  "title": "Bitwise Operators and Other Specialized Operators",
+  "sequence": 35,
+  "module_id": "php-module-04",
+  "module_slug": "operators-and-expressions",
+  "level": "beginner",
+  "difficulty": "beginner",
+  "track": "core",
+  "estimated_minutes": 10,
+  "prerequisites": [
+    "php-lesson-034"
+  ],
+  "previous_lesson_id": "php-lesson-034",
+  "next_lesson_id": "php-lesson-036",
+  "keywords": [
+    "bitwise operators and other specialized operators",
+    "operators and expressions",
+    "bitwise and, or, xor, and not",
+    "bit shifts",
+    "practical use cases for flags and bitmasks",
+    "error-control and execution operators in context",
+    "situations in which specialized operators should be avoided",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 35,
+  "subtopics": [
+    "Bitwise AND, OR, XOR, and NOT.",
+    "Bit shifts.",
+    "Practical use cases for flags and bitmasks.",
+    "Error-control and execution operators in context.",
+    "Situations in which specialized operators should be avoided."
+  ],
+  "learning_outcomes": [
+    "Explain what bitwise operators and other specialized operators contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: bitwise and, or, xor, and not.",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Operators combine values into expressions. Parentheses, precedence, strict comparisons, and deliberate fallback behavior help prevent expressions that compile but communicate the wrong intent. In this lesson, focus on bitwise and, or, xor, and not; then compare it with bit shifts. Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use bitwise operators and other specialized operators when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 4 overview: Operators and Expressions",
+        "asset_path": "diagrams/module-04-overview.svg",
+        "alt_text": "Four-stage overview for module 4, Operators and Expressions, grouping lesson topics in order.",
+        "caption": "Use this overview to place bitwise operators and other specialized operators in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Operators combine values into expressions. Parentheses, precedence, strict comparisons, and deliberate fallback behavior help prevent expressions that compile but communicate the wrong intent. For bitwise operators and other specialized operators, begin with bitwise and, or, xor, and not. Also distinguish bit shifts; practical use cases for flags and bitmasks; error-control and execution operators in context. Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "Bitwise AND, OR, XOR, and NOT",
+            "text": "Know when to use bitwise and, or, xor, and not, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Bit shifts",
+            "text": "Know when to use bit shifts, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Practical use cases for flags and bitmasks",
+            "text": "Know when to use practical use cases for flags and bitmasks, what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Error-control and execution operators in context",
+            "text": "Write down the operand types and parenthesize combined expressions so that the intended evaluation order is clear."
+          },
+          {
+            "title": "Situations in which specialized operators should be avoided",
+            "text": "Write down the operand types and parenthesize combined expressions so that the intended evaluation order is clear."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Bitwise Operators and Other Specialized Operators",
+        "language": "php",
+        "code": "<?php\n$name = \"CodeLeaf\";\necho str_contains($name, \"Leaf\") ? \"found\" : \"missing\";",
+        "expected_output": "found",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for bitwise operators and other specialized operators from top to bottom. Start by identifying bitwise and, or, xor, and not, write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for bitwise operators and other specialized operators that demonstrates \"bitwise and, or, xor, and not\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of bitwise and, or, xor, and not.",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "found",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-035-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Bitwise Operators and Other Specialized Operators is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+    ],
+    "references": [
+      {
+        "title": "Operators",
+        "url": "https://www.php.net/manual/en/language.operators.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "arithmetic",
+          "comparison",
+          "logical",
+          "string and conditional operators"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Operators",
+      "url": "https://www.php.net/manual/en/language.operators.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "arithmetic",
+        "comparison",
+        "logical",
+        "string and conditional operators"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

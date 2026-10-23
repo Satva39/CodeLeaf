@@ -1,0 +1,10 @@
+{
+  "id": "dsa-solution-pdf-19",
+  "exercise_id": "dsa-exercise-pdf-19",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "Reference implementation (Python 3.12+):\n```python\nclass TreeNode:\n    def __init__(self,value,left=None,right=None): self.value,self.left,self.right=value,left,right\n\ndef node_and_leaf_counts(root):\n    if root is None: return (0, 0)\n    left_nodes, left_leaves = node_and_leaf_counts(root.left)\n    right_nodes, right_leaves = node_and_leaf_counts(root.right)\n    leaves = 1 if root.left is None and root.right is None else left_leaves + right_leaves\n    return 1 + left_nodes + right_nodes, leaves\n\nroot=TreeNode(2,TreeNode(1),TreeNode(3))\nassert node_and_leaf_counts(root) == (3, 2)\n```",
+  "explanation": "Combine left and right subtree counts. Time O(n), recursive stack O(h). A leaf has neither left nor right child.",
+  "tested_reference_code": "class TreeNode:\n    def __init__(self,value,left=None,right=None): self.value,self.left,self.right=value,left,right\n\ndef node_and_leaf_counts(root):\n    if root is None: return (0, 0)\n    left_nodes, left_leaves = node_and_leaf_counts(root.left)\n    right_nodes, right_leaves = node_and_leaf_counts(root.right)\n    leaves = 1 if root.left is None and root.right is None else left_leaves + right_leaves\n    return 1 + left_nodes + right_nodes, leaves\n\nroot=TreeNode(2,TreeNode(1),TreeNode(3))\nassert node_and_leaf_counts(root) == (3, 2)",
+  "language": "python"
+}

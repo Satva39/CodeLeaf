@@ -1,0 +1,60 @@
+{
+  "id": "typescript-exercise-011",
+  "slug": "generic-collection",
+  "title": "Generic Collection",
+  "sequence": 11,
+  "lesson_id": "typescript-lesson-083",
+  "lesson_slug": "083-introduction-to-generics",
+  "module_id": "typescript-module-10",
+  "type": "coding",
+  "difficulty": "intermediate",
+  "status": "draft",
+  "prompt": "Implement a small generic collection that preserves the type of stored items.",
+  "starter": {
+    "code": "// TODO: define class Collection<T> with private items: T[]\n// TODO: add(value: T): void and getAll(): readonly T[]\n",
+    "language": "typescript",
+    "file_name": "generic-collection.ts",
+    "execution_mode": "static-validation"
+  },
+  "public_tests": [
+    {
+      "name": "Required type contract",
+      "description": "Review that the submission contains the required declarations and preserves the stated input/output relationship.",
+      "mode": "static-token-check",
+      "required_strings": [
+        "class Collection<T>",
+        "items: T[]",
+        "add(value: T): void",
+        "getAll(): readonly T[]"
+      ]
+    },
+    {
+      "name": "Runtime and boundary review",
+      "description": "Explain one failure case and add a real runtime check when data crosses an external trust boundary.",
+      "mode": "human-review"
+    }
+  ],
+  "acceptance_criteria": [
+    "A Collection<string> only accepts strings, and getAll preserves the string element type.",
+    "Submit code with the required type declarations and add an explanation or test for one meaningful boundary/failure case.",
+    "Do not claim that the code has been executed by the CodeLeaf browser playground."
+  ],
+  "hints": [
+    "Use a type parameter instead of any so the input and output relationship is preserved.",
+    "TypeScript checks assignability but does not validate external data at runtime.",
+    "Use the local TypeScript compiler and an appropriate test runner to verify behavior; the course grader checks only the documented text markers."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "class Collection<T>",
+      "items: T[]",
+      "add(value: T): void",
+      "getAll(): readonly T[]"
+    ]
+  },
+  "grading_method": "Server-side static token check for the required declarations plus human review of runtime tests. This is not a TypeScript compiler or arbitrary-code runner.",
+  "retry_policy": "Unlimited practice retries; platform XP is awarded once only after a correct server-side grade.",
+  "solution_file": "solutions/011-generic-collection-solution.json",
+  "status_note": "Draft until exercise instructions, starter, and static grader are reviewed. No course-authored XP override is used."
+}

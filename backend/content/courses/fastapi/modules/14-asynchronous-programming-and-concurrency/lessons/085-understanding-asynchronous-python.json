@@ -1,0 +1,167 @@
+{
+  "id": "fastapi-lesson-085",
+  "slug": "understanding-asynchronous-python",
+  "title": "Understanding Asynchronous Python",
+  "sequence": 85,
+  "module_id": "fastapi-module-14",
+  "module_slug": "asynchronous-programming-and-concurrency",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 18,
+  "prerequisites": [
+    "fastapi-lesson-084"
+  ],
+  "previous_lesson_id": "fastapi-lesson-084",
+  "next_lesson_id": "fastapi-lesson-086",
+  "keywords": [
+    "understanding-asynchronous-python",
+    "asynchronous-programming-and-concurrency",
+    "fastapi",
+    "python",
+    "api",
+    "what-asynchronous-programming-means",
+    "async-def-and-coroutines",
+    "the-await-keyword"
+  ],
+  "source_syllabus_number": 85,
+  "subtopics": [
+    "What asynchronous programming means",
+    "async def and coroutines",
+    "The await keyword",
+    "Event loops",
+    "I/O-bound versus CPU-bound work"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of understanding asynchronous python in a FastAPI application.",
+    "Apply or interpret one example related to what asynchronous programming means.",
+    "Identify one limitation or failure case and describe how to verify it."
+  ],
+  "content": {
+    "intro": "This lesson covers understanding asynchronous python within asynchronous programming and concurrency. Use the supplied syllabus topics as the coverage checklist, then connect them to the worked example and the verification task.",
+    "why_it_matters": "You will use understanding asynchronous python to build APIs whose contracts and behavior are understandable to both clients and maintainers. The practical aim is resource lifecycle, cancellation, concurrency limits and observable I/O behavior.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Understanding Asynchronous Python: concept map",
+        "asset_path": "diagrams/lesson-085-concept.svg",
+        "alt_text": "Four-step flow for Understanding Asynchronous Python: What asynchronous programming means, async def and coroutines, The await keyword, Event loops",
+        "caption": "Visual-first overview before the worked example."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Understanding Asynchronous Python matters because it is part of asynchronous programming and concurrency. In practice, focus on resource lifecycle, cancellation, concurrency limits and observable I/O behavior. A framework feature only helps when its assumptions match the application; keep input validation, business policy and side effects distinguishable."
+      },
+      {
+        "type": "list",
+        "title": "Source syllabus coverage",
+        "items": [
+          {
+            "title": "What asynchronous programming means",
+            "text": "For what asynchronous programming means, identify which operation waits on I/O, which resources remain open, and what happens on timeout or disconnect. Async syntax does not make CPU-bound work faster or durable background jobs reliable by itself."
+          },
+          {
+            "title": "async def and coroutines",
+            "text": "For async def and coroutines, identify which operation waits on I/O, which resources remain open, and what happens on timeout or disconnect. Async syntax does not make CPU-bound work faster or durable background jobs reliable by itself."
+          },
+          {
+            "title": "The await keyword",
+            "text": "Use the await keyword as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "Event loops",
+            "text": "Use event loops as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          },
+          {
+            "title": "I/O-bound versus CPU-bound work",
+            "text": "Use i/o-bound versus cpu-bound work as a design decision rather than a keyword to memorize. State the input and expected result, identify the boundary conditions, and connect the concept to the surrounding FastAPI request lifecycle."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "Worked example: Understanding Asynchronous Python",
+        "language": "python",
+        "code": "import asyncio\n\nasync def fetch_one(name: str) -> str:\n    await asyncio.sleep(0)  # stand-in for non-blocking I/O\n    return name\n\nasync def main():\n    results = await asyncio.gather(fetch_one(\"A\"), fetch_one(\"B\"))\n    print(results)",
+        "expected_output": "['A', 'B']",
+        "run_instructions": "Run with asyncio.run(main()) in a standalone Python script. Async helps I/O concurrency; it does not make CPU-heavy code automatically faster.",
+        "reset_steps": "For read-only examples, no reset is needed. For any example that writes state, use a disposable local database/test fixture; record the starting state and clean up only lab data. Never use production credentials or real personal data.",
+        "execution_mode": "human-review",
+        "limitations": "This code is inspectable lesson material, not executed by CodeLeaf. Run it only in a local virtual environment or a separately isolated runner with resource/time/network limits. Security examples are sketches, not complete production authentication or authorization systems."
+      },
+      {
+        "type": "callout",
+        "title": "Try it yourself",
+        "text": "Adapt the example to cover “What asynchronous programming means”. Write down the expected success result and one invalid, missing, duplicate, timeout or permission-boundary case that matters for this topic."
+      }
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-085-questions.json"
+  },
+  "task": "Create a small reviewable artifact for “Understanding Asynchronous Python”: explain its goal, cover the listed subtopics, show an example with expected result, then include one edge case and how you would verify it.",
+  "hints": [
+    "Start with “What asynchronous programming means” and state the required inputs, output and assumptions.",
+    "Change one thing at a time; check the official reference and capture the actual response/error instead of guessing.",
+    "Include a negative/edge-case check and document which behavior remains untested."
+  ],
+  "expected_output": "A reviewable example or design note for Understanding Asynchronous Python, covering the PDF subtopics, expected behavior and at least one verification check.",
+  "run_mode": "human-review",
+  "common_mistakes": [
+    {
+      "problem": "Copying a code fragment without checking its assumptions.",
+      "why": "Installed versions, imported types, application structure and external services affect behavior.",
+      "fix": "State assumptions; check the versioned official docs; run a minimal local test and add one failure case."
+    },
+    {
+      "problem": "Treating one happy-path response as proof of correctness.",
+      "why": "Invalid input, permissions, concurrency, timeouts and cleanup are not exercised by a single request.",
+      "fix": "Add focused normal and negative tests and record exact expected status/body."
+    },
+    {
+      "problem": "Running examples against production resources.",
+      "why": "Even short examples may mutate records, reveal data or affect availability.",
+      "fix": "Use synthetic inputs and a disposable environment; review security, cleanup and rollback before promotion."
+    }
+  ],
+  "summary": [
+    "Understanding Asynchronous Python belongs to the broader goal of resource lifecycle, cancellation, concurrency limits and observable I/O behavior.",
+    "Use the source subtopics as the completeness checklist and verify expected results rather than relying on intuition.",
+    "Examples in this course are illustrative until technically reviewed and executed on a supported local environment."
+  ],
+  "sources": [
+    {
+      "title": "FastAPI Async",
+      "url": "https://fastapi.tiangolo.com/async/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "sync/async trade-offs and I/O vs CPU-bound work"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Deployment Concepts",
+      "url": "https://fastapi.tiangolo.com/deployment/concepts/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "HTTPS, startup, replication, memory and pre-start steps"
+      ],
+      "source_type": "official documentation"
+    },
+    {
+      "title": "FastAPI Deployment with Docker",
+      "url": "https://fastapi.tiangolo.com/deployment/docker/",
+      "publisher": "FastAPI",
+      "checked_on": "2026-10-19",
+      "supports": [
+        "container image and production start command"
+      ],
+      "source_type": "official documentation"
+    }
+  ],
+  "exercise_files": [],
+  "status": "draft",
+  "status_note": "Draft expansion from the numbered topics in FastAPI.pdf. Content structure, file references and SVGs are validated locally; code snippets and integration behavior still require technical review and targeted tests before publication."
+}

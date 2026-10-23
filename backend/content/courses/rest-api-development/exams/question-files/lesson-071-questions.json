@@ -1,0 +1,49 @@
+{
+  "id": "rest-api-development-knowledge-check-071",
+  "lesson_id": "rest-api-development-lesson-071",
+  "lesson_slug": "crud-api-implementation-review",
+  "title": "Knowledge check: CRUD API Implementation Review",
+  "status": "draft",
+  "visibility": "protected_content_repository_only",
+  "questions": [
+    {
+      "id": "rest-api-development-q-071-01",
+      "type": "single_choice",
+      "prompt": "What should a create endpoint do after a valid new resource is committed?",
+      "options": [
+        "Return 404 because the new resource did not exist before the request.",
+        "Return success before validation and persistence finish.",
+        "Let the client set every server-managed identifier and authorization field.",
+        "Return a success status appropriate to creation, commonly 201 Created, and identify the new resource when useful."
+      ],
+      "answer_key": "Return a success status appropriate to creation, commonly 201 Created, and identify the new resource when useful.",
+      "explanation": "Return a success status appropriate to creation, commonly 201 Created, and identify the new resource when useful. This is especially relevant to “CRUD API Implementation Review” because the API contract must remain explicit and reviewable."
+    },
+    {
+      "id": "rest-api-development-q-071-02",
+      "type": "single_choice",
+      "prompt": "For the lesson “CRUD API Implementation Review”, which check provides the strongest practical evidence?",
+      "options": [
+        "Run one happy-path call and skip invalid, denied, and failure scenarios.",
+        "Test against production records so the exercise cannot be repeated safely.",
+        "Test persistence and response semantics, including invalid input and missing-resource cases.",
+        "Rely on a code review comment without running any representative check."
+      ],
+      "answer_key": "Test persistence and response semantics, including invalid input and missing-resource cases.",
+      "explanation": "A useful check is repeatable, tied to an observable contract, and includes an important negative or boundary scenario."
+    },
+    {
+      "id": "rest-api-development-q-071-03",
+      "type": "single_choice",
+      "prompt": "Which review warning is most relevant to “CRUD API Implementation Review”?",
+      "options": [
+        "The API avoids exposing internal secrets and personal data.",
+        "A request can mutate state before validation, permission checks, or durable persistence finish.",
+        "The expected behavior and relevant failure cases are documented.",
+        "A representative test can reproduce the result."
+      ],
+      "answer_key": "A request can mutate state before validation, permission checks, or durable persistence finish.",
+      "explanation": "This finding weakens a core API guarantee and should be treated as a design or release issue, not only a style concern."
+    }
+  ]
+}

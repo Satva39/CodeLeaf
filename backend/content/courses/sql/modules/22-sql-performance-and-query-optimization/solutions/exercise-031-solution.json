@@ -1,0 +1,10 @@
+{
+  "id": "sql-exercise-solution-031",
+  "exercise_id": "sql-exercise-031",
+  "title": "Performance Benchmarking reference solution",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "answer": "EXPLAIN (COSTS, VERBOSE) SELECT c.customer_id, COUNT(o.order_id) FROM customers c LEFT JOIN orders o ON o.customer_id = c.customer_id GROUP BY c.customer_id;",
+  "explanation": "The plan helps compare access paths; meaningful benchmarks also record data size, cache state, concurrency, and repeated timings. Review the query against the lab data and explain why the chosen joins, filters, aggregation grain, ordering, or transaction boundary is correct.",
+  "review_notes": "Repository-only illustration. Do not expose this file through public content endpoints; replace token-only grading with engine-backed tests before publishing."
+}

@@ -1,0 +1,19 @@
+{
+  "id": "sql-project-solution-10",
+  "project_id": "sql-project-10",
+  "project_slug": "production-ready-commerce-database",
+  "title": "Production-Ready Commerce Database reference solution notes",
+  "visibility": "protected_content_repository_only",
+  "status": "draft",
+  "review_notes": "Illustrative solution outline kept in the repository only. It is not served by the public project endpoint; review actual schema/query behavior before publication.",
+  "approach": "Start with an ER model and define the row grain for each table. Implement production-ready commerce database using primary/foreign keys, CHECK/UNIQUE/NOT NULL rules, and parameterized queries as appropriate. Add synthetic seed rows, then validate result sets and negative cases.",
+  "reference_sql": "-- Begin with a copy of datasets/postgresql-lab-setup.sql.\n-- Design project-specific tables here; never run destructive resets in a production database.\n\n-- Example report pattern:\nSELECT c.customer_id, c.full_name, COUNT(o.order_id) AS order_count, COALESCE(SUM(o.total_amount), 0) AS spend\nFROM customers AS c\nLEFT JOIN orders AS o ON o.customer_id = c.customer_id\nGROUP BY c.customer_id, c.full_name\nORDER BY spend DESC, c.customer_id;\n",
+  "acceptance_notes": [
+    "Keep the row meaning of every table and report explicit.",
+    "Validate referential integrity and edge cases with synthetic data.",
+    "Use transaction tests for multi-step changes; don't claim concurrency safety without a multi-session test.",
+    "Document all PostgreSQL-specific features and possible portability alternatives."
+  ],
+  "deliverables_review": "ER diagram, schema creation scripts, seed data, query library, analytical reports, constraint and transaction tests, benchmark results, security test results, and a deployment guide. performance, maintainability, and documented design decisions.",
+  "assessment_criteria": "Correctness, data integrity, query readability, security, concurrency safety,"
+}

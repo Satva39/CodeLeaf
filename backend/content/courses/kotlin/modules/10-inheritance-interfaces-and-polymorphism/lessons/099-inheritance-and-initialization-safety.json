@@ -1,0 +1,153 @@
+{
+  "id": "kotlin-lesson-099",
+  "slug": "inheritance-and-initialization-safety",
+  "title": "Inheritance and Initialization Safety",
+  "sequence": 99,
+  "module_id": "kotlin-module-10",
+  "module_slug": "inheritance-interfaces-and-polymorphism",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 16,
+  "prerequisites": [
+    "kotlin-lesson-098"
+  ],
+  "previous_lesson_id": "kotlin-lesson-098",
+  "next_lesson_id": "kotlin-lesson-100",
+  "keywords": [
+    "inheritance-and-initialization",
+    "base-class-initialization-orde",
+    "calling-overridable-members-du",
+    "avoiding-initialization-hazard"
+  ],
+  "source_syllabus_number": 99,
+  "subtopics": [
+    "Base-Class Initialization Order",
+    "Calling Overridable Members During Initialization",
+    "Avoiding Initialization Hazards"
+  ],
+  "learning_outcomes": [
+    "Explain the central rule or purpose of inheritance and initialization safety using at least one correct term from the lesson.",
+    "Interpret or adapt a small Kotlin example that demonstrates inheritance and initialization safety.",
+    "Identify one relevant edge case, debugging step, or version/platform constraint."
+  ],
+  "content": {
+    "intro": "In this lesson, you will learn **Inheritance and Initialization Safety** as part of **Inheritance, Interfaces, and Polymorphism**. Use interfaces and inheritance when they express substitutability, and prefer composition when an object should contain or coordinate collaborators. Use the subtopics—Base-Class Initialization Order, Calling Overridable Members During Initialization, Avoiding Initialization Hazards—as a checklist: predict what the example will do, then verify it in a project configured for the target platform.",
+    "why_it_matters": "These concepts help you model domain rules and reusable APIs. Good boundaries reduce accidental mutation, unsafe casts, and code that is difficult to extend.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Concept visual",
+        "asset_path": "diagrams/lesson-099-inheritance-and-initialization-safety.svg",
+        "alt_text": "Concept diagram for lesson 99, Inheritance and Initialization Safety: connects Base-Class Initialization Order with Calling Overridable Members During Initialization and a practice/check step.",
+        "caption": "Lesson 99: Inheritance and Initialization Safety. Use this concept map to connect the syllabus subtopics to the small example and test task."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Use interfaces and inheritance when they express substitutability, and prefer composition when an object should contain or coordinate collaborators."
+      },
+      {
+        "type": "paragraph",
+        "title": "How to reason about it",
+        "text": "Start with base-class initialization order. Then compare it with calling overridable members during initialization. Identify the input, state, dependency, or branch that determines the result. The snippet is a static reference for CodeLeaf and is not executed in the lesson page."
+      },
+      {
+        "type": "list",
+        "title": "Topics from the syllabus",
+        "items": [
+          {
+            "title": "Base-Class Initialization Order",
+            "text": "Base-Class Initialization Order should support a clear object invariant: make valid states easy to represent, restrict mutation to the intended API, and keep initialization and dependencies explicit."
+          },
+          {
+            "title": "Calling Overridable Members During Initialization",
+            "text": "Calling Overridable Members During Initialization is one part of inheritance and initialization safety. Connect its definition to the example, identify the input/state it changes, and verify the expected behavior with a small test case."
+          },
+          {
+            "title": "Avoiding Initialization Hazards",
+            "text": "Avoiding Initialization Hazards is one part of inheritance and initialization safety. Connect its definition to the example, identify the input/state it changes, and verify the expected behavior with a small test case."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "language": "kotlin",
+        "execution_mode": "static-validation",
+        "code": "// Topic: Inheritance and Initialization Safety\nfun main() {\n    val result = \"Kotlin\".take(3)\n    println(result)\n}",
+        "expected_output": "Kot",
+        "run_instructions": "Save the snippet in a Kotlin/JVM console project and run the configured Gradle application task, or use the Kotlin Playground for examples that need no external dependencies.",
+        "reset_steps": "Restore the documented starting values, rerun the smallest test, and compare the result with the expected output. If behavior differs, check the compiler/plugin/runtime versions and the active target before changing more than one thing."
+      },
+      {
+        "type": "callout",
+        "title": "Common mistake to avoid",
+        "text": "Inheritance is the default choice for sharing any behavior."
+      },
+      {
+        "type": "paragraph",
+        "title": "Troubleshooting and reset",
+        "text": "If the example fails, first confirm which runtime/project type the snippet requires. Read the first useful compiler or runtime message, check imports and declared dependencies, reduce the example to a minimal case, and rerun. For target-specific code, use the target toolchain rather than assuming a console or browser runner can execute it."
+      },
+      {
+        "type": "list",
+        "title": "Quick recap",
+        "items": [
+          {
+            "title": "Explain",
+            "text": "Describe the main rule of inheritance and initialization safety in your own words."
+          },
+          {
+            "title": "Apply",
+            "text": "Change one input or condition and predict the result before running it."
+          },
+          {
+            "title": "Verify",
+            "text": "Check one edge case and the official reference for the selected Kotlin/runtime version."
+          }
+        ]
+      }
+    ],
+    "task": "Try it yourself: create a small variation that demonstrates inheritance and initialization safety. Write down your predicted result first, run it in the correct local project, then explain one boundary case involving base-class initialization order.",
+    "task_acceptance_criteria": [
+      "Explain inheritance and initialization safety without copying the lesson wording.",
+      "Demonstrate the concept with a small code/configuration change and state the expected result.",
+      "Test one boundary case or explain a relevant platform/version limitation."
+    ],
+    "hints": [
+      "Begin with the first syllabus subtopic: Base-Class Initialization Order. What input or state does it act on?",
+      "Change only one value, branch, declaration, or dependency at a time. Predict what should happen before running the code.",
+      "Compare your observed result with the expected output and the official reference; verify that you are using the required project type and dependency set."
+    ],
+    "expected_output": "Kot",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-099-questions.json"
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Kotlin Documentation",
+      "url": "https://kotlinlang.org/docs/home.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "Inheritance and Initialization Safety",
+        "Base-Class Initialization Order",
+        "Calling Overridable Members During Initialization"
+      ]
+    },
+    {
+      "title": "Kotlin Language Features and Proposals",
+      "url": "https://kotlinlang.org/docs/kotlin-language-features-and-proposals.html",
+      "publisher": "JetBrains",
+      "checked_on": "2026-10-17",
+      "supports": [
+        "language feature stability",
+        "compiler version compatibility"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Draft lesson derived from the numbered syllabus entry 99 in Kotlin.pdf. Review example compatibility and question alignment before publishing."
+}

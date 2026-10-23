@@ -1,0 +1,195 @@
+{
+  "id": "php-lesson-105",
+  "slug": "magic-methods",
+  "title": "Magic Methods",
+  "sequence": 105,
+  "module_id": "php-module-11",
+  "module_slug": "advanced-object-oriented-programming",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 11,
+  "prerequisites": [
+    "php-lesson-104"
+  ],
+  "previous_lesson_id": "php-lesson-104",
+  "next_lesson_id": "php-lesson-106",
+  "keywords": [
+    "magic methods",
+    "advanced object-oriented programming",
+    "__get() and __set()",
+    "__call() and __callstatic()",
+    "__tostring()",
+    "__invoke()",
+    "appropriate uses and debugging risks",
+    "PHP 8.5"
+  ],
+  "source_syllabus_number": 105,
+  "subtopics": [
+    "__get() and __set().",
+    "__call() and __callStatic().",
+    "__toString().",
+    "__invoke().",
+    "Appropriate uses and debugging risks."
+  ],
+  "learning_outcomes": [
+    "Explain what magic methods contributes to a PHP application.",
+    "Apply at least one of these concepts in a small example: __get() and __set().",
+    "Check one edge case and explain how to diagnose unexpected behavior."
+  ],
+  "content": {
+    "intro": "Advanced object design is about collaboration and stable contracts. Interfaces, composition, dependency injection, namespaces, and autoloading help change or test parts independently. In this lesson, focus on __get() and __set(); then compare it with __call() and __callstatic(). Use the example to predict a result before checking it, and record one case where the behavior may differ.",
+    "why_it_matters": "You will use magic methods when building readable, testable PHP programs. Its practical value is knowing which rule applies, what result to expect, and how to handle failure or unexpected input.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Module 11 overview: Advanced Object-Oriented Programming",
+        "asset_path": "diagrams/module-11-overview.svg",
+        "alt_text": "Four-stage overview for module 11, Advanced Object-Oriented Programming, grouping lesson topics in order.",
+        "caption": "Use this overview to place magic methods in the wider module sequence."
+      },
+      {
+        "type": "paragraph",
+        "title": "The core idea",
+        "text": "Advanced object design is about collaboration and stable contracts. Interfaces, composition, dependency injection, namespaces, and autoloading help change or test parts independently. For magic methods, begin with __get() and __set(). Also distinguish __call() and __callstatic(); __tostring(); __invoke(). Identify the input, the rule applied, and the observable output or side effect; then check the relevant official reference when a version or edge-case detail matters."
+      },
+      {
+        "type": "list",
+        "title": "Syllabus concepts to recognize",
+        "items": [
+          {
+            "title": "__get() and __set()",
+            "text": "Know when to use __get() and __set(), what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "__call() and __callStatic()",
+            "text": "Know when to use __call() and __callstatic(), what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "__toString()",
+            "text": "Know when to use __tostring(), what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "__invoke()",
+            "text": "Know when to use __invoke(), what input or program state it changes, and which boundary case is worth testing."
+          },
+          {
+            "title": "Appropriate uses and debugging risks",
+            "text": "Know when to use appropriate uses and debugging risks, what input or program state it changes, and which boundary case is worth testing."
+          }
+        ]
+      },
+      {
+        "type": "code",
+        "title": "A small PHP example for Magic Methods",
+        "language": "php",
+        "code": "<?php\n$debug = [\"type\" => \"InvalidArgumentException\", \"code\" => 422];\necho $debug[\"type\"] . \":\" . $debug[\"code\"] . PHP_EOL;",
+        "expected_output": "InvalidArgumentException:422",
+        "run_mode": "static-validation",
+        "run_instructions": "Save the snippet as example.php. Run `php -l example.php` to check syntax, then run `php example.php` locally when the example has no external-service or framework prerequisites. Some examples are syntax-only illustrations and require the noted extension or framework to run meaningfully."
+      },
+      {
+        "type": "callout",
+        "title": "Professional habit",
+        "text": "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+      },
+      {
+        "type": "paragraph",
+        "title": "Walk through one example",
+        "text": "Read the example for magic methods from top to bottom. Start by identifying __get() and __set(), write down the relevant variable values or control-flow choice, and predict the expected output before running it. Then change one input or condition, check a boundary case, and explain why the result changed."
+      }
+    ],
+    "task": "Create a second small example for magic methods that demonstrates \"__get() and __set()\". Before running it, write down the expected result and one boundary case.",
+    "task_acceptance_criteria": [
+      "The example includes a clear use of __get() and __set().",
+      "The learner can explain its input, rule, and observable output.",
+      "At least one edge case is tested or documented."
+    ],
+    "hints": [
+      "Start with the most direct listed subtopic and a single input.",
+      "Keep the example small enough that you can predict the output manually.",
+      "Test one normal case and one empty, invalid, or boundary case."
+    ],
+    "expected_output": "InvalidArgumentException:422",
+    "run_mode": "static-validation",
+    "knowledge_check_file": "exams/question-files/lesson-105-questions.json",
+    "common_mistakes": [
+      {
+        "problem": "Copying a pattern without understanding its inputs and output.",
+        "why": "Small environment or type differences can change behavior.",
+        "fix": "Trace one example by hand, name expected outputs, and consult version-matched official docs."
+      },
+      {
+        "problem": "Ignoring empty, invalid, or boundary input.",
+        "why": "Real data rarely matches only the simplest example.",
+        "fix": "Add a deliberate edge-case check before relying on the result."
+      },
+      {
+        "problem": "Making several changes at once while debugging.",
+        "why": "It becomes difficult to identify which change caused the behavior.",
+        "fix": "Reduce the issue to one small reproducible case, change one cause, and retest."
+      }
+    ],
+    "summary": [
+      "Magic Methods is one part of the PHP implementation workflow.",
+      "Prefer explicit behavior and testable examples over implicit assumptions.",
+      "Use the smallest representative example, make expected behavior explicit, and test normal plus boundary inputs."
+    ],
+    "references": [
+      {
+        "title": "Classes and Objects",
+        "url": "https://www.php.net/manual/en/language.oop5.php",
+        "publisher": "PHP Manual",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "classes",
+          "interfaces",
+          "traits",
+          "inheritance",
+          "visibility"
+        ]
+      },
+      {
+        "title": "PSR-4 Autoloader",
+        "url": "https://www.php-fig.org/psr/psr-4/",
+        "publisher": "PHP-FIG",
+        "checked_on": "2026-10-11",
+        "supports": [
+          "namespace-to-path mapping",
+          "autoload interoperability"
+        ]
+      }
+    ],
+    "accessibility_note": "Keep code text selectable, provide a textual explanation alongside diagrams, and do not rely on color alone to communicate order or meaning.",
+    "execution_note": "This is a local PHP syntax example with a reference result. CodeLeaf shows expected output only; it does not execute learner PHP in the web process. Use PHP CLI for local experiments, and use a separate isolated runner for untrusted submissions."
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "Classes and Objects",
+      "url": "https://www.php.net/manual/en/language.oop5.php",
+      "publisher": "PHP Manual",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "classes",
+        "interfaces",
+        "traits",
+        "inheritance",
+        "visibility"
+      ]
+    },
+    {
+      "title": "PSR-4 Autoloader",
+      "url": "https://www.php-fig.org/psr/psr-4/",
+      "publisher": "PHP-FIG",
+      "checked_on": "2026-10-11",
+      "supports": [
+        "namespace-to-path mapping",
+        "autoload interoperability"
+      ]
+    }
+  ],
+  "status": "draft",
+  "status_note": "Generated from the supplied syllabus mapping. Review code semantics, examples, knowledge checks, and runtime notes before marking published."
+}

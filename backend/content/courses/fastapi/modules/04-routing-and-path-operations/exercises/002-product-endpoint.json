@@ -1,0 +1,54 @@
+{
+  "id": "fastapi-exercise-002",
+  "slug": "product-endpoint",
+  "title": "Product endpoint",
+  "type": "practical",
+  "lesson_id": "fastapi-lesson-021",
+  "module_id": "fastapi-module-04",
+  "difficulty": "beginner",
+  "sequence": 2,
+  "prompt": "Return a product using a path parameter.",
+  "objective": "Product endpoint",
+  "target_skills": [
+    "Product endpoint",
+    "FastAPI request/response design",
+    "testing and safe verification"
+  ],
+  "starter": {
+    "language": "python",
+    "content": "@app.get(\"/products/{product_id}\")\ndef get_product(product_id: int):\n    return {\"product_id\": product_id}"
+  },
+  "expected_output": "GET /products/7 identifies product 7 with a documented response schema.",
+  "public_tests": [
+    {
+      "name": "Required concepts in submitted artifact",
+      "required_strings": [
+        "/products/{product_id}",
+        "product_id: int"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "Address the exercise task: Return a product using a path parameter.",
+    "State prerequisites and expected behavior; include one success case and one invalid/edge case.",
+    "Use synthetic data and a disposable local environment; do not include production credentials.",
+    "Explain what was actually tested and identify any untested runtime/security assumption."
+  ],
+  "hints": [
+    "Read the linked lesson and identify the smallest endpoint/model/dependency needed.",
+    "Write a test for the expected result before adding optional features.",
+    "Static keyword checks do not execute Python; confirm runtime correctness with pytest or appropriate local tests."
+  ],
+  "grading_config": {
+    "mode": "contains_all",
+    "required_strings": [
+      "/products/{product_id}",
+      "product_id: int"
+    ]
+  },
+  "grading_method": "Server-side static required-string check plus human review; CodeLeaf does not execute arbitrary learner Python. This draft exercise must not be treated as proof of runtime correctness.",
+  "retry_policy": "Retries permitted after feedback; completion is recorded idempotently by CodeLeaf. Platform-wide XP rules apply; no course-authored reward override.",
+  "solution_file": "solutions/002-product-endpoint-solution.json",
+  "status": "draft",
+  "status_note": "Original task based on the corresponding FastAPI.pdf Section C exercise. The file has not been promoted to published and the example still requires technical/runtimes tests."
+}
