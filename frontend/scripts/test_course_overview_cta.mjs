@@ -12,6 +12,10 @@ function check(condition, message) {
 }
 
 check(/allowUnavailableAction\s*=\s*false/.test(overview), "course overview supports an explicit CTA override for roadmap courses");
+check(/showLearningSections\s*=\s*false/.test(overview), "learning details and course outline are opt-in by default");
+check(/showLearningSections\s*&&\s*\(audience\.length/.test(overview), "audience, prerequisites, and outcomes render only when learning sections are enabled");
+check(/showLearningSections\s*&&\s*available\s*&&/.test(overview), "course outline renders only when learning sections are enabled");
+check(/showLearningSections/.test(landing), "tutorial course landing enables learning details and course outline");
 check(/const actionCanOpenCourse\s*=\s*available\s*\|\|\s*allowUnavailableAction/.test(overview), "CTA route resolution preserves normal availability rules by default");
 check(/actionTo=\{`\/learn\/\$\{encodeURIComponent\(course\.slug\)\}`\}/.test(landing), "course landing Start Learning links to the selected course");
 check(/actionLabel="Start Learning"/.test(landing) && /allowUnavailableAction/.test(landing), "course landing always renders the requested Start Learning action");
