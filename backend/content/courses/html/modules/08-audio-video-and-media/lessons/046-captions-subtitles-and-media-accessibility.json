@@ -1,264 +1,264 @@
 {
-    "id": "html-lesson-046",
-    "slug": "captions-subtitles-and-media-accessibility",
-    "title": "Captions, Subtitles, and Media Accessibility",
-    "sequence": 46,
-    "module_id": "html-module-08",
-    "module_slug": "audio-video-and-media",
-    "level": "intermediate",
-    "difficulty": "intermediate",
-    "track": "core",
-    "estimated_minutes": 11,
-    "prerequisites": [
-        "html-lesson-045"
-    ],
-    "previous_lesson_id": "html-lesson-045",
-    "next_lesson_id": "html-lesson-047",
-    "keywords": [
-        "captions",
-        "subtitles",
-        "media",
-        "accessibility",
-        "audio",
-        "video",
-        "track",
-        "element",
-        "webvtt",
-        "caption",
-        "files",
-        "descriptions"
-    ],
-    "learning_outcomes": [
-        "Explain the purpose of captions, subtitles, and media accessibility in a browser document.",
-        "Apply at least one relevant rule from this lesson to a small HTML example.",
-        "Check the result using browser inspection, a validator, or an accessibility checklist."
-    ],
-    "content": {
-        "intro": "This lesson turns “Captions, Subtitles, and Media Accessibility” into a practical authoring skill. You will work with the <track> element, understand the choices that matter, and check the result instead of relying on guesswork.",
-        "why_it_matters": "Text, links, lists, images, and media are the building blocks of readable, navigable web content; the markup should communicate meaning even before CSS is added.",
-        "content_blocks": [
-            {
-                "type": "diagram",
-                "format": "svg",
-                "title": "Captions, Subtitles, and Media Accessibility concept map",
-                "asset_path": "diagrams/lessons/lesson-046-captions-subtitles-and-media-accessibility.svg",
-                "alt_text": "A concept map for Captions, Subtitles, and Media Accessibility, connecting the core idea, key concepts, a relevant example, and a verification step.",
-                "caption": "Use the example and expected result to check your understanding of Captions, Subtitles, and Media Accessibility."
-            },
-            {
-                "type": "paragraph",
-                "title": "Why this matters",
-                "text": "Text, links, lists, images, and media are the building blocks of readable, navigable web content; the markup should communicate meaning even before CSS is added."
-            },
-            {
-                "type": "paragraph",
-                "title": "Core idea",
-                "text": "Track associates timed text such as captions or subtitles with audio or video."
-            },
-            {
-                "type": "list",
-                "title": "Concepts covered in this lesson",
-                "items": [
-                    {
-                        "title": "The <track> element",
-                        "text": "Track associates timed text such as captions or subtitles with audio or video."
-                    },
-                    {
-                        "title": "WebVTT caption files",
-                        "text": "WebVTT caption files is one of the decisions covered by Captions, Subtitles, and Media Accessibility. Decide what the markup is meant to communicate, choose the native HTML structure that expresses that meaning, and verify the result in a browser or a relevant validation checklist. Avoid using an element or attribute just because its default appearance seems convenient."
-                    },
-                    {
-                        "title": "Subtitles versus captions",
-                        "text": "Include the media controls people need and alternatives to important audio or visual information. Check format support, file paths, caption timing, and permission/privacy needs."
-                    },
-                    {
-                        "title": "Audio descriptions and transcripts",
-                        "text": "Metadata describes the document or its relationship to other resources. Keep each value accurate, unique where appropriate, and consistent with the visible page; search systems may ignore metadata that is misleading."
-                    },
-                    {
-                        "title": "Providing accessible media controls",
-                        "text": "Include the media controls people need and alternatives to important audio or visual information. Check format support, file paths, caption timing, and permission/privacy needs."
-                    },
-                    {
-                        "title": "Supporting users who cannot access audio or video",
-                        "text": "Supporting users who cannot access audio or video is one of the decisions covered by Captions, Subtitles, and Media Accessibility. Decide what the markup is meant to communicate, choose the native HTML structure that expresses that meaning, and verify the result in a browser or a relevant validation checklist. Avoid using an element or attribute just because its default appearance seems convenient."
-                    }
-                ]
-            },
-            {
-                "type": "code",
-                "language": "html",
-                "code": "<video controls width=\"640\" height=\"360\" poster=\"images/lesson-poster.jpg\">\n  <source src=\"media/lesson.mp4\" type=\"video/mp4\">\n  <track kind=\"captions\" src=\"media/lesson-en.vtt\"\n         srclang=\"en\" label=\"English\" default>\n  Sorry, your browser cannot play this video.\n</video>",
-                "expected_output": "The video controls appear, but playback and captions require the referenced media and WebVTT files.",
-                "run_instructions": "Save the snippet in an .html file and open it in a modern browser. Inspect the result, then run an HTML validator if the lesson concerns syntax or structure. Example paths are illustrative; provide the referenced files or adjust paths before evaluating media/resource behavior.",
-                "reset_steps": "Restore the snippet in this lesson file or paste it into a fresh index.html file, then repeat the check."
-            },
-            {
-                "type": "callout",
-                "title": "Keep in mind",
-                "text": "Prefer the native semantic element that communicates intent. Do not choose markup solely for its default visual style."
-            }
-        ],
-        "task": "Test a short page without relying on color alone: navigate with the keyboard, inspect headings/labels, and write down one improvement.",
-        "task_acceptance_criteria": [
-            "Use the relevant concept from Captions, Subtitles, and Media Accessibility.",
-            "Keep IDs unique and use valid nesting.",
-            "Check the result in a browser and record one finding."
-        ],
-        "hints": [
-            "Start with the smallest valid example for captions, subtitles, and media accessibility.",
-            "Add one element or attribute at a time, then check the result.",
-            "Compare the source and rendered DOM if the behavior surprises you."
-        ],
-        "expected_output": "The video controls appear, but playback and captions require the referenced media and WebVTT files.",
-        "troubleshooting": [
-            {
-                "symptom": "The expected content does not appear.",
-                "check": "Confirm the file was saved with an .html extension and inspect its path and nesting."
-            },
-            {
-                "symptom": "A resource does not load.",
-                "check": "Check the resolved URL and confirm the referenced file or external resource exists and allows the request."
-            },
-            {
-                "symptom": "The page looks correct but the markup may be invalid.",
-                "check": "Run the Nu Html Checker and follow its first relevant diagnostic, then validate again."
-            }
-        ],
-        "common_mistakes": [
-            {
-                "problem": "Choosing markup for appearance alone",
-                "why": "The default appearance is not the element’s main meaning and can make navigation or maintenance harder.",
-                "fix": "Choose the element that matches the content purpose, then use CSS for presentation."
-            },
-            {
-                "problem": "Assuming a browser’s recovery means the source is valid",
-                "why": "Browsers often recover from malformed markup, which can hide defects and produce unexpected document structure.",
-                "fix": "Inspect the rendered DOM and run a validator against the original source."
-            },
-            {
-                "problem": "Testing only the happy path",
-                "why": "Missing files, narrow viewports, keyboard access, invalid input, or other states can expose defects.",
-                "fix": "Check the expected state plus one realistic edge case and an accessibility path."
-            }
-        ],
-        "summary": [
-            "Captions, Subtitles, and Media Accessibility is about expressing document structure or behavior intentionally.",
-            "Supporting users who cannot access audio or video is one of the decisions covered by Captions, Subtitles, and Media Accessibility. Decide what the markup is meant to communicate, choose the native HTML structure that expresses that meaning, and verify the result in a browser or a relevant validation checklist. Avoid using an element or attribute just because its default appearance seems convenient.",
-            "Verify both markup and behavior; do not infer correctness from appearance alone."
-        ],
-        "knowledge_check_file": "exams/question-files/lesson-046-questions.json",
-        "solution_notes": "Use the related exercise solution only after making a first attempt. Explanatory hints are for guided practice; exercise answer keys are stored separately in the content repository.",
-        "run_mode": "browser-preview",
-        "references": [
-            {
-                "title": "HTML Living Standard",
-                "url": "https://html.spec.whatwg.org/",
-                "publisher": "WHATWG",
-                "checked_on": "2026-10-10",
-                "supports": [
-                    "document structure",
-                    "elements and attributes",
-                    "forms",
-                    "embedded content",
-                    "interactive elements",
-                    "browser parsing",
-                    "obsolete features"
-                ]
-            },
-            {
-                "title": "HTML: HyperText Markup Language",
-                "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
-                "publisher": "MDN Web Docs",
-                "checked_on": "2026-10-10",
-                "supports": [
-                    "HTML overview and authoring guides"
-                ]
-            },
-            {
-                "title": "Images Tutorial",
-                "url": "https://www.w3.org/WAI/tutorials/images/",
-                "publisher": "W3C Web Accessibility Initiative",
-                "checked_on": "2026-10-10",
-                "supports": [
-                    "informative, decorative and functional alternative text"
-                ]
-            },
-            {
-                "title": "Forms Tutorial",
-                "url": "https://www.w3.org/WAI/tutorials/forms/",
-                "publisher": "W3C Web Accessibility Initiative",
-                "checked_on": "2026-10-10",
-                "supports": [
-                    "labels, grouping, instructions and accessible error handling"
-                ]
-            },
-            {
-                "title": "Tables Tutorial",
-                "url": "https://www.w3.org/WAI/tutorials/tables/",
-                "publisher": "W3C Web Accessibility Initiative",
-                "checked_on": "2026-10-10",
-                "supports": [
-                    "table headers, relationships and captions"
-                ]
-            }
+  "id": "html-lesson-046",
+  "slug": "captions-subtitles-and-media-accessibility",
+  "title": "Captions, Subtitles, and Media Accessibility",
+  "sequence": 46,
+  "module_id": "html-module-08",
+  "module_slug": "audio-video-and-media",
+  "level": "intermediate",
+  "difficulty": "intermediate",
+  "track": "core",
+  "estimated_minutes": 11,
+  "prerequisites": [
+    "html-lesson-045"
+  ],
+  "previous_lesson_id": "html-lesson-045",
+  "next_lesson_id": "html-lesson-047",
+  "keywords": [
+    "captions",
+    "subtitles",
+    "media",
+    "accessibility",
+    "audio",
+    "video",
+    "track",
+    "element",
+    "webvtt",
+    "caption",
+    "files",
+    "descriptions"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of captions, subtitles, and media accessibility in a browser document.",
+    "Apply at least one relevant rule from this lesson to a small HTML example.",
+    "Check the result using browser inspection, a validator, or an accessibility checklist."
+  ],
+  "content": {
+    "intro": "This lesson turns “Captions, Subtitles, and Media Accessibility” into a practical authoring skill. You will work with the <track> element, understand the choices that matter, and check the result instead of relying on guesswork.",
+    "why_it_matters": "Text, links, lists, images, and media are the building blocks of readable, navigable web content; the markup should communicate meaning even before CSS is added.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "Captions, Subtitles, and Media Accessibility concept map",
+        "asset_path": "diagrams/lessons/lesson-046-captions-subtitles-and-media-accessibility.svg",
+        "alt_text": "A concept map for Captions, Subtitles, and Media Accessibility, connecting the core idea, key concepts, a relevant example, and a verification step.",
+        "caption": "Use the example and expected result to check your understanding of Captions, Subtitles, and Media Accessibility."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Text, links, lists, images, and media are the building blocks of readable, navigable web content; the markup should communicate meaning even before CSS is added."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Track associates timed text such as captions or subtitles with audio or video."
+      },
+      {
+        "type": "list",
+        "title": "Concepts covered in this lesson",
+        "items": [
+          {
+            "title": "The <track> element",
+            "text": "Track associates timed text such as captions or subtitles with audio or video."
+          },
+          {
+            "title": "WebVTT caption files",
+            "text": "WebVTT caption files is one of the decisions covered by Captions, Subtitles, and Media Accessibility. Decide what the markup is meant to communicate, choose the native HTML structure that expresses that meaning, and verify the result in a browser or a relevant validation checklist. Avoid using an element or attribute just because its default appearance seems convenient."
+          },
+          {
+            "title": "Subtitles versus captions",
+            "text": "Include the media controls people need and alternatives to important audio or visual information. Check format support, file paths, caption timing, and permission/privacy needs."
+          },
+          {
+            "title": "Audio descriptions and transcripts",
+            "text": "Metadata describes the document or its relationship to other resources. Keep each value accurate, unique where appropriate, and consistent with the visible page; search systems may ignore metadata that is misleading."
+          },
+          {
+            "title": "Providing accessible media controls",
+            "text": "Include the media controls people need and alternatives to important audio or visual information. Check format support, file paths, caption timing, and permission/privacy needs."
+          },
+          {
+            "title": "Supporting users who cannot access audio or video",
+            "text": "Supporting users who cannot access audio or video is one of the decisions covered by Captions, Subtitles, and Media Accessibility. Decide what the markup is meant to communicate, choose the native HTML structure that expresses that meaning, and verify the result in a browser or a relevant validation checklist. Avoid using an element or attribute just because its default appearance seems convenient."
+          }
         ]
+      },
+      {
+        "type": "code",
+        "language": "html",
+        "code": "<video controls width=\"640\" height=\"360\" poster=\"images/lesson-poster.jpg\">\n  <source src=\"media/lesson.mp4\" type=\"video/mp4\">\n  <track kind=\"captions\" src=\"media/lesson-en.vtt\"\n         srclang=\"en\" label=\"English\" default>\n  Sorry, your browser cannot play this video.\n</video>",
+        "expected_output": "The video controls appear, but playback and captions require the referenced media and WebVTT files.",
+        "run_instructions": "Save the snippet in an .html file and open it in a modern browser. Inspect the result, then run an HTML validator if the lesson concerns syntax or structure. Example paths are illustrative; provide the referenced files or adjust paths before evaluating media/resource behavior.",
+        "reset_steps": "Restore the snippet in this lesson file or paste it into a fresh index.html file, then repeat the check."
+      },
+      {
+        "type": "callout",
+        "title": "Keep in mind",
+        "text": "Prefer the native semantic element that communicates intent. Do not choose markup solely for its default visual style."
+      }
+    ],
+    "task": "Test a short page without relying on color alone: navigate with the keyboard, inspect headings/labels, and write down one improvement.",
+    "task_acceptance_criteria": [
+      "Use the relevant concept from Captions, Subtitles, and Media Accessibility.",
+      "Keep IDs unique and use valid nesting.",
+      "Check the result in a browser and record one finding."
+    ],
+    "hints": [
+      "Start with the smallest valid example for captions, subtitles, and media accessibility.",
+      "Add one element or attribute at a time, then check the result.",
+      "Compare the source and rendered DOM if the behavior surprises you."
+    ],
+    "expected_output": "The video controls appear, but playback and captions require the referenced media and WebVTT files.",
+    "troubleshooting": [
+      {
+        "symptom": "The expected content does not appear.",
+        "check": "Confirm the file was saved with an .html extension and inspect its path and nesting."
+      },
+      {
+        "symptom": "A resource does not load.",
+        "check": "Check the resolved URL and confirm the referenced file or external resource exists and allows the request."
+      },
+      {
+        "symptom": "The page looks correct but the markup may be invalid.",
+        "check": "Run the Nu Html Checker and follow its first relevant diagnostic, then validate again."
+      }
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Choosing markup for appearance alone",
+        "why": "The default appearance is not the element’s main meaning and can make navigation or maintenance harder.",
+        "fix": "Choose the element that matches the content purpose, then use CSS for presentation."
+      },
+      {
+        "problem": "Assuming a browser’s recovery means the source is valid",
+        "why": "Browsers often recover from malformed markup, which can hide defects and produce unexpected document structure.",
+        "fix": "Inspect the rendered DOM and run a validator against the original source."
+      },
+      {
+        "problem": "Testing only the happy path",
+        "why": "Missing files, narrow viewports, keyboard access, invalid input, or other states can expose defects.",
+        "fix": "Check the expected state plus one realistic edge case and an accessibility path."
+      }
+    ],
+    "summary": [
+      "Captions, Subtitles, and Media Accessibility is about expressing document structure or behavior intentionally.",
+      "Supporting users who cannot access audio or video is one of the decisions covered by Captions, Subtitles, and Media Accessibility. Decide what the markup is meant to communicate, choose the native HTML structure that expresses that meaning, and verify the result in a browser or a relevant validation checklist. Avoid using an element or attribute just because its default appearance seems convenient.",
+      "Verify both markup and behavior; do not infer correctness from appearance alone."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-046-questions.json",
+    "solution_notes": "Use the related exercise solution only after making a first attempt. Explanatory hints are for guided practice; exercise answer keys are stored separately in the content repository.",
+    "run_mode": "browser-preview",
+    "references": [
+      {
+        "title": "HTML Living Standard",
+        "url": "https://html.spec.whatwg.org/",
+        "publisher": "WHATWG",
+        "checked_on": "2026-10-10",
+        "supports": [
+          "document structure",
+          "elements and attributes",
+          "forms",
+          "embedded content",
+          "interactive elements",
+          "browser parsing",
+          "obsolete features"
+        ]
+      },
+      {
+        "title": "HTML: HyperText Markup Language",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "publisher": "MDN Web Docs",
+        "checked_on": "2026-10-10",
+        "supports": [
+          "HTML overview and authoring guides"
+        ]
+      },
+      {
+        "title": "Images Tutorial",
+        "url": "https://www.w3.org/WAI/tutorials/images/",
+        "publisher": "W3C Web Accessibility Initiative",
+        "checked_on": "2026-10-10",
+        "supports": [
+          "informative, decorative and functional alternative text"
+        ]
+      },
+      {
+        "title": "Forms Tutorial",
+        "url": "https://www.w3.org/WAI/tutorials/forms/",
+        "publisher": "W3C Web Accessibility Initiative",
+        "checked_on": "2026-10-10",
+        "supports": [
+          "labels, grouping, instructions and accessible error handling"
+        ]
+      },
+      {
+        "title": "Tables Tutorial",
+        "url": "https://www.w3.org/WAI/tutorials/tables/",
+        "publisher": "W3C Web Accessibility Initiative",
+        "checked_on": "2026-10-10",
+        "supports": [
+          "table headers, relationships and captions"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [
+    "../exercises/015-accessible-video-lesson.json"
+  ],
+  "sources": [
+    {
+      "title": "HTML Living Standard",
+      "url": "https://html.spec.whatwg.org/",
+      "publisher": "WHATWG",
+      "checked_on": "2026-10-10",
+      "supports": [
+        "document structure",
+        "elements and attributes",
+        "forms",
+        "embedded content",
+        "interactive elements",
+        "browser parsing",
+        "obsolete features"
+      ]
     },
-    "exercise_files": [
-        "../exercises/015-accessible-video-lesson.json"
-    ],
-    "sources": [
-        {
-            "title": "HTML Living Standard",
-            "url": "https://html.spec.whatwg.org/",
-            "publisher": "WHATWG",
-            "checked_on": "2026-10-10",
-            "supports": [
-                "document structure",
-                "elements and attributes",
-                "forms",
-                "embedded content",
-                "interactive elements",
-                "browser parsing",
-                "obsolete features"
-            ]
-        },
-        {
-            "title": "HTML: HyperText Markup Language",
-            "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
-            "publisher": "MDN Web Docs",
-            "checked_on": "2026-10-10",
-            "supports": [
-                "HTML overview and authoring guides"
-            ]
-        },
-        {
-            "title": "Images Tutorial",
-            "url": "https://www.w3.org/WAI/tutorials/images/",
-            "publisher": "W3C Web Accessibility Initiative",
-            "checked_on": "2026-10-10",
-            "supports": [
-                "informative, decorative and functional alternative text"
-            ]
-        },
-        {
-            "title": "Forms Tutorial",
-            "url": "https://www.w3.org/WAI/tutorials/forms/",
-            "publisher": "W3C Web Accessibility Initiative",
-            "checked_on": "2026-10-10",
-            "supports": [
-                "labels, grouping, instructions and accessible error handling"
-            ]
-        },
-        {
-            "title": "Tables Tutorial",
-            "url": "https://www.w3.org/WAI/tutorials/tables/",
-            "publisher": "W3C Web Accessibility Initiative",
-            "checked_on": "2026-10-10",
-            "supports": [
-                "table headers, relationships and captions"
-            ]
-        }
-    ],
-    "status": "draft"
+    {
+      "title": "HTML: HyperText Markup Language",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-10",
+      "supports": [
+        "HTML overview and authoring guides"
+      ]
+    },
+    {
+      "title": "Images Tutorial",
+      "url": "https://www.w3.org/WAI/tutorials/images/",
+      "publisher": "W3C Web Accessibility Initiative",
+      "checked_on": "2026-10-10",
+      "supports": [
+        "informative, decorative and functional alternative text"
+      ]
+    },
+    {
+      "title": "Forms Tutorial",
+      "url": "https://www.w3.org/WAI/tutorials/forms/",
+      "publisher": "W3C Web Accessibility Initiative",
+      "checked_on": "2026-10-10",
+      "supports": [
+        "labels, grouping, instructions and accessible error handling"
+      ]
+    },
+    {
+      "title": "Tables Tutorial",
+      "url": "https://www.w3.org/WAI/tutorials/tables/",
+      "publisher": "W3C Web Accessibility Initiative",
+      "checked_on": "2026-10-10",
+      "supports": [
+        "table headers, relationships and captions"
+      ]
+    }
+  ],
+  "status": "published"
 }

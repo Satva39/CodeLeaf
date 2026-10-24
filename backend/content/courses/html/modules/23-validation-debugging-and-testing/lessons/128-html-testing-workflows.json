@@ -1,230 +1,230 @@
 {
-    "id": "html-lesson-128",
-    "slug": "html-testing-workflows",
-    "title": "HTML Testing Workflows",
-    "sequence": 128,
-    "module_id": "html-module-23",
-    "module_slug": "validation-debugging-and-testing",
-    "level": "advanced",
-    "difficulty": "advanced",
-    "track": "advanced-core",
-    "estimated_minutes": 13,
-    "prerequisites": [
-        "html-lesson-127"
-    ],
-    "previous_lesson_id": "html-lesson-127",
-    "next_lesson_id": "html-lesson-129",
-    "keywords": [
-        "testing",
-        "workflows",
-        "validation",
-        "debugging",
-        "creating",
-        "page-review",
-        "checklist",
-        "all",
-        "internal",
-        "external",
-        "links",
-        "images"
-    ],
-    "learning_outcomes": [
-        "Explain the purpose of html testing workflows in a browser document.",
-        "Apply at least one relevant rule from this lesson to a small HTML example.",
-        "Check the result using browser inspection, a validator, or an accessibility checklist."
-    ],
-    "content": {
-        "intro": "This lesson turns “HTML Testing Workflows” into a practical authoring skill. You will work with creating a page-review checklist, understand the choices that matter, and check the result instead of relying on guesswork.",
-        "why_it_matters": "Professional pages need to load efficiently, validate cleanly, adapt to different contexts, and remain understandable to other developers.",
-        "content_blocks": [
-            {
-                "type": "diagram",
-                "format": "svg",
-                "title": "HTML Testing Workflows concept map",
-                "asset_path": "diagrams/lessons/lesson-128-html-testing-workflows.svg",
-                "alt_text": "A concept map for HTML Testing Workflows, connecting the core idea, key concepts, a relevant example, and a verification step.",
-                "caption": "Use the example and expected result to check your understanding of HTML Testing Workflows."
-            },
-            {
-                "type": "paragraph",
-                "title": "Why this matters",
-                "text": "Professional pages need to load efficiently, validate cleanly, adapt to different contexts, and remain understandable to other developers."
-            },
-            {
-                "type": "paragraph",
-                "title": "Core idea",
-                "text": "Use list markup when items form a genuine group. Choose ordered lists when sequence matters, unordered lists when it does not, and description lists for terms with associated descriptions."
-            },
-            {
-                "type": "list",
-                "title": "Concepts covered in this lesson",
-                "items": [
-                    {
-                        "title": "Creating a page-review checklist",
-                        "text": "Use list markup when items form a genuine group. Choose ordered lists when sequence matters, unordered lists when it does not, and description lists for terms with associated descriptions."
-                    },
-                    {
-                        "title": "Testing all internal and external links",
-                        "text": "Resolve the URL relative to the current document or base URL. Prefer meaningful link text, test internal paths from each page location, and verify external destinations."
-                    },
-                    {
-                        "title": "Testing images and alternative text",
-                        "text": "Write alternative text for the image’s purpose in context: describe meaningful information or function, use alt=\"\" for decoration, and avoid repeating nearby text."
-                    },
-                    {
-                        "title": "Testing multiple screen sizes",
-                        "text": "The sizes attribute: a description of the image’s expected rendered CSS width at different viewport conditions."
-                    },
-                    {
-                        "title": "Testing forms with valid and invalid inputs",
-                        "text": "Form controls need meaningful labels and names, clear instructions, and constraints that match the data. Treat browser validation as feedback for users, not proof that submitted data is trustworthy."
-                    },
-                    {
-                        "title": "Regression checks after changes",
-                        "text": "Regression checks after changes is one of the decisions covered by HTML Testing Workflows. Decide what the markup is meant to communicate, choose the native HTML structure that expresses that meaning, and verify the result in a browser or a relevant validation checklist. Avoid using an element or attribute just because its default appearance seems convenient."
-                    },
-                    {
-                        "title": "Peer review of HTML structure",
-                        "text": "Peer review of HTML structure is one of the decisions covered by HTML Testing Workflows. Decide what the markup is meant to communicate, choose the native HTML structure that expresses that meaning, and verify the result in a browser or a relevant validation checklist. Avoid using an element or attribute just because its default appearance seems convenient."
-                    }
-                ]
-            },
-            {
-                "type": "code",
-                "language": "html",
-                "code": "<!doctype html>\n<html lang=\"en\">\n<head><meta charset=\"utf-8\"><title>Validation sample</title></head>\n<body><main><h1>Validation sample</h1><p>Check the structure.</p></main></body>\n</html>",
-                "expected_output": "Use a validator on this complete document, then fix reported errors and rerun it.",
-                "run_instructions": "Save the snippet in an .html file and open it in a modern browser. Inspect the result, then run an HTML validator if the lesson concerns syntax or structure. Example paths are illustrative; provide the referenced files or adjust paths before evaluating media/resource behavior.",
-                "reset_steps": "Restore the snippet in this lesson file or paste it into a fresh index.html file, then repeat the check."
-            },
-            {
-                "type": "callout",
-                "title": "Keep in mind",
-                "text": "Prefer the native semantic element that communicates intent. Do not choose markup solely for its default visual style."
-            }
-        ],
-        "task": "Create a small HTML example that demonstrates html testing workflows. Keep the markup minimal, give every element a clear purpose, and inspect the rendered result.",
-        "task_acceptance_criteria": [
-            "Use the relevant concept from HTML Testing Workflows.",
-            "Keep IDs unique and use valid nesting.",
-            "Check the result in a browser and record one finding."
-        ],
-        "hints": [
-            "Start with the smallest valid example for html testing workflows.",
-            "Add one element or attribute at a time, then check the result.",
-            "Compare the source and rendered DOM if the behavior surprises you."
-        ],
-        "expected_output": "Use a validator on this complete document, then fix reported errors and rerun it.",
-        "troubleshooting": [
-            {
-                "symptom": "The expected content does not appear.",
-                "check": "Confirm the file was saved with an .html extension and inspect its path and nesting."
-            },
-            {
-                "symptom": "A resource does not load.",
-                "check": "Check the resolved URL and confirm the referenced file or external resource exists and allows the request."
-            },
-            {
-                "symptom": "The page looks correct but the markup may be invalid.",
-                "check": "Run the Nu Html Checker and follow its first relevant diagnostic, then validate again."
-            }
-        ],
-        "common_mistakes": [
-            {
-                "problem": "Choosing markup for appearance alone",
-                "why": "The default appearance is not the element’s main meaning and can make navigation or maintenance harder.",
-                "fix": "Choose the element that matches the content purpose, then use CSS for presentation."
-            },
-            {
-                "problem": "Assuming a browser’s recovery means the source is valid",
-                "why": "Browsers often recover from malformed markup, which can hide defects and produce unexpected document structure.",
-                "fix": "Inspect the rendered DOM and run a validator against the original source."
-            },
-            {
-                "problem": "Testing only the happy path",
-                "why": "Missing files, narrow viewports, keyboard access, invalid input, or other states can expose defects.",
-                "fix": "Check the expected state plus one realistic edge case and an accessibility path."
-            }
-        ],
-        "summary": [
-            "HTML Testing Workflows is about expressing document structure or behavior intentionally.",
-            "Peer review of HTML structure is one of the decisions covered by HTML Testing Workflows. Decide what the markup is meant to communicate, choose the native HTML structure that expresses that meaning, and verify the result in a browser or a relevant validation checklist. Avoid using an element or attribute just because its default appearance seems convenient.",
-            "Verify both markup and behavior; do not infer correctness from appearance alone."
-        ],
-        "knowledge_check_file": "exams/question-files/lesson-128-questions.json",
-        "solution_notes": "Use the related exercise solution only after making a first attempt. Explanatory hints are for guided practice; exercise answer keys are stored separately in the content repository.",
-        "run_mode": "browser-preview",
-        "references": [
-            {
-                "title": "HTML Living Standard",
-                "url": "https://html.spec.whatwg.org/",
-                "publisher": "WHATWG",
-                "checked_on": "2026-10-10",
-                "supports": [
-                    "document structure",
-                    "elements and attributes",
-                    "forms",
-                    "embedded content",
-                    "interactive elements",
-                    "browser parsing",
-                    "obsolete features"
-                ]
-            },
-            {
-                "title": "HTML: HyperText Markup Language",
-                "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
-                "publisher": "MDN Web Docs",
-                "checked_on": "2026-10-10",
-                "supports": [
-                    "HTML overview and authoring guides"
-                ]
-            },
-            {
-                "title": "Nu Html Checker",
-                "url": "https://validator.w3.org/nu/",
-                "publisher": "W3C validator service",
-                "checked_on": "2026-10-10",
-                "supports": [
-                    "HTML validation and markup diagnostics"
-                ]
-            }
+  "id": "html-lesson-128",
+  "slug": "html-testing-workflows",
+  "title": "HTML Testing Workflows",
+  "sequence": 128,
+  "module_id": "html-module-23",
+  "module_slug": "validation-debugging-and-testing",
+  "level": "advanced",
+  "difficulty": "advanced",
+  "track": "advanced-core",
+  "estimated_minutes": 13,
+  "prerequisites": [
+    "html-lesson-127"
+  ],
+  "previous_lesson_id": "html-lesson-127",
+  "next_lesson_id": "html-lesson-129",
+  "keywords": [
+    "testing",
+    "workflows",
+    "validation",
+    "debugging",
+    "creating",
+    "page-review",
+    "checklist",
+    "all",
+    "internal",
+    "external",
+    "links",
+    "images"
+  ],
+  "learning_outcomes": [
+    "Explain the purpose of html testing workflows in a browser document.",
+    "Apply at least one relevant rule from this lesson to a small HTML example.",
+    "Check the result using browser inspection, a validator, or an accessibility checklist."
+  ],
+  "content": {
+    "intro": "This lesson turns “HTML Testing Workflows” into a practical authoring skill. You will work with creating a page-review checklist, understand the choices that matter, and check the result instead of relying on guesswork.",
+    "why_it_matters": "Professional pages need to load efficiently, validate cleanly, adapt to different contexts, and remain understandable to other developers.",
+    "content_blocks": [
+      {
+        "type": "diagram",
+        "format": "svg",
+        "title": "HTML Testing Workflows concept map",
+        "asset_path": "diagrams/lessons/lesson-128-html-testing-workflows.svg",
+        "alt_text": "A concept map for HTML Testing Workflows, connecting the core idea, key concepts, a relevant example, and a verification step.",
+        "caption": "Use the example and expected result to check your understanding of HTML Testing Workflows."
+      },
+      {
+        "type": "paragraph",
+        "title": "Why this matters",
+        "text": "Professional pages need to load efficiently, validate cleanly, adapt to different contexts, and remain understandable to other developers."
+      },
+      {
+        "type": "paragraph",
+        "title": "Core idea",
+        "text": "Use list markup when items form a genuine group. Choose ordered lists when sequence matters, unordered lists when it does not, and description lists for terms with associated descriptions."
+      },
+      {
+        "type": "list",
+        "title": "Concepts covered in this lesson",
+        "items": [
+          {
+            "title": "Creating a page-review checklist",
+            "text": "Use list markup when items form a genuine group. Choose ordered lists when sequence matters, unordered lists when it does not, and description lists for terms with associated descriptions."
+          },
+          {
+            "title": "Testing all internal and external links",
+            "text": "Resolve the URL relative to the current document or base URL. Prefer meaningful link text, test internal paths from each page location, and verify external destinations."
+          },
+          {
+            "title": "Testing images and alternative text",
+            "text": "Write alternative text for the image’s purpose in context: describe meaningful information or function, use alt=\"\" for decoration, and avoid repeating nearby text."
+          },
+          {
+            "title": "Testing multiple screen sizes",
+            "text": "The sizes attribute: a description of the image’s expected rendered CSS width at different viewport conditions."
+          },
+          {
+            "title": "Testing forms with valid and invalid inputs",
+            "text": "Form controls need meaningful labels and names, clear instructions, and constraints that match the data. Treat browser validation as feedback for users, not proof that submitted data is trustworthy."
+          },
+          {
+            "title": "Regression checks after changes",
+            "text": "Regression checks after changes is one of the decisions covered by HTML Testing Workflows. Decide what the markup is meant to communicate, choose the native HTML structure that expresses that meaning, and verify the result in a browser or a relevant validation checklist. Avoid using an element or attribute just because its default appearance seems convenient."
+          },
+          {
+            "title": "Peer review of HTML structure",
+            "text": "Peer review of HTML structure is one of the decisions covered by HTML Testing Workflows. Decide what the markup is meant to communicate, choose the native HTML structure that expresses that meaning, and verify the result in a browser or a relevant validation checklist. Avoid using an element or attribute just because its default appearance seems convenient."
+          }
         ]
-    },
-    "exercise_files": [],
-    "sources": [
-        {
-            "title": "HTML Living Standard",
-            "url": "https://html.spec.whatwg.org/",
-            "publisher": "WHATWG",
-            "checked_on": "2026-10-10",
-            "supports": [
-                "document structure",
-                "elements and attributes",
-                "forms",
-                "embedded content",
-                "interactive elements",
-                "browser parsing",
-                "obsolete features"
-            ]
-        },
-        {
-            "title": "HTML: HyperText Markup Language",
-            "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
-            "publisher": "MDN Web Docs",
-            "checked_on": "2026-10-10",
-            "supports": [
-                "HTML overview and authoring guides"
-            ]
-        },
-        {
-            "title": "Nu Html Checker",
-            "url": "https://validator.w3.org/nu/",
-            "publisher": "W3C validator service",
-            "checked_on": "2026-10-10",
-            "supports": [
-                "HTML validation and markup diagnostics"
-            ]
-        }
+      },
+      {
+        "type": "code",
+        "language": "html",
+        "code": "<!doctype html>\n<html lang=\"en\">\n<head><meta charset=\"utf-8\"><title>Validation sample</title></head>\n<body><main><h1>Validation sample</h1><p>Check the structure.</p></main></body>\n</html>",
+        "expected_output": "Use a validator on this complete document, then fix reported errors and rerun it.",
+        "run_instructions": "Save the snippet in an .html file and open it in a modern browser. Inspect the result, then run an HTML validator if the lesson concerns syntax or structure. Example paths are illustrative; provide the referenced files or adjust paths before evaluating media/resource behavior.",
+        "reset_steps": "Restore the snippet in this lesson file or paste it into a fresh index.html file, then repeat the check."
+      },
+      {
+        "type": "callout",
+        "title": "Keep in mind",
+        "text": "Prefer the native semantic element that communicates intent. Do not choose markup solely for its default visual style."
+      }
     ],
-    "status": "draft"
+    "task": "Create a small HTML example that demonstrates html testing workflows. Keep the markup minimal, give every element a clear purpose, and inspect the rendered result.",
+    "task_acceptance_criteria": [
+      "Use the relevant concept from HTML Testing Workflows.",
+      "Keep IDs unique and use valid nesting.",
+      "Check the result in a browser and record one finding."
+    ],
+    "hints": [
+      "Start with the smallest valid example for html testing workflows.",
+      "Add one element or attribute at a time, then check the result.",
+      "Compare the source and rendered DOM if the behavior surprises you."
+    ],
+    "expected_output": "Use a validator on this complete document, then fix reported errors and rerun it.",
+    "troubleshooting": [
+      {
+        "symptom": "The expected content does not appear.",
+        "check": "Confirm the file was saved with an .html extension and inspect its path and nesting."
+      },
+      {
+        "symptom": "A resource does not load.",
+        "check": "Check the resolved URL and confirm the referenced file or external resource exists and allows the request."
+      },
+      {
+        "symptom": "The page looks correct but the markup may be invalid.",
+        "check": "Run the Nu Html Checker and follow its first relevant diagnostic, then validate again."
+      }
+    ],
+    "common_mistakes": [
+      {
+        "problem": "Choosing markup for appearance alone",
+        "why": "The default appearance is not the element’s main meaning and can make navigation or maintenance harder.",
+        "fix": "Choose the element that matches the content purpose, then use CSS for presentation."
+      },
+      {
+        "problem": "Assuming a browser’s recovery means the source is valid",
+        "why": "Browsers often recover from malformed markup, which can hide defects and produce unexpected document structure.",
+        "fix": "Inspect the rendered DOM and run a validator against the original source."
+      },
+      {
+        "problem": "Testing only the happy path",
+        "why": "Missing files, narrow viewports, keyboard access, invalid input, or other states can expose defects.",
+        "fix": "Check the expected state plus one realistic edge case and an accessibility path."
+      }
+    ],
+    "summary": [
+      "HTML Testing Workflows is about expressing document structure or behavior intentionally.",
+      "Peer review of HTML structure is one of the decisions covered by HTML Testing Workflows. Decide what the markup is meant to communicate, choose the native HTML structure that expresses that meaning, and verify the result in a browser or a relevant validation checklist. Avoid using an element or attribute just because its default appearance seems convenient.",
+      "Verify both markup and behavior; do not infer correctness from appearance alone."
+    ],
+    "knowledge_check_file": "exams/question-files/lesson-128-questions.json",
+    "solution_notes": "Use the related exercise solution only after making a first attempt. Explanatory hints are for guided practice; exercise answer keys are stored separately in the content repository.",
+    "run_mode": "browser-preview",
+    "references": [
+      {
+        "title": "HTML Living Standard",
+        "url": "https://html.spec.whatwg.org/",
+        "publisher": "WHATWG",
+        "checked_on": "2026-10-10",
+        "supports": [
+          "document structure",
+          "elements and attributes",
+          "forms",
+          "embedded content",
+          "interactive elements",
+          "browser parsing",
+          "obsolete features"
+        ]
+      },
+      {
+        "title": "HTML: HyperText Markup Language",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "publisher": "MDN Web Docs",
+        "checked_on": "2026-10-10",
+        "supports": [
+          "HTML overview and authoring guides"
+        ]
+      },
+      {
+        "title": "Nu Html Checker",
+        "url": "https://validator.w3.org/nu/",
+        "publisher": "W3C validator service",
+        "checked_on": "2026-10-10",
+        "supports": [
+          "HTML validation and markup diagnostics"
+        ]
+      }
+    ]
+  },
+  "exercise_files": [],
+  "sources": [
+    {
+      "title": "HTML Living Standard",
+      "url": "https://html.spec.whatwg.org/",
+      "publisher": "WHATWG",
+      "checked_on": "2026-10-10",
+      "supports": [
+        "document structure",
+        "elements and attributes",
+        "forms",
+        "embedded content",
+        "interactive elements",
+        "browser parsing",
+        "obsolete features"
+      ]
+    },
+    {
+      "title": "HTML: HyperText Markup Language",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+      "publisher": "MDN Web Docs",
+      "checked_on": "2026-10-10",
+      "supports": [
+        "HTML overview and authoring guides"
+      ]
+    },
+    {
+      "title": "Nu Html Checker",
+      "url": "https://validator.w3.org/nu/",
+      "publisher": "W3C validator service",
+      "checked_on": "2026-10-10",
+      "supports": [
+        "HTML validation and markup diagnostics"
+      ]
+    }
+  ],
+  "status": "published"
 }
