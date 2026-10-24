@@ -29,6 +29,8 @@ import {
   BookmarkButton,
 } from "../components/common.jsx";
 import { Avatar } from "../components/layout/Header.jsx";
+import { selectLearningTarget } from "../lib/learningPath.js";
+import "../styles/phase3-learning-loop.css";
 
 export default function HomePage() {
   const stats = useGamificationStats();
@@ -37,8 +39,12 @@ export default function HomePage() {
   const [category, setCategory] = useState("All");
   const catalog = useCourseCatalog();
   const lastCourseSlug = getProfile().lastCourse;
-  const availableCourses = catalog.filter((course) => ["Published", "Local preview"].includes(course.status) && Number(course.lessons) > 0);
-  const resumeCourse = availableCourses.find((course) => course.slug === lastCourseSlug) || availableCourses[0] || catalog.find((course) => course.slug === "html") || catalog[0];
+  const resumeTarget = selectLearningTarget({
+    courses: catalog,
+    recentItems: learnerProgress.recentItems,
+    lastCourseSlug,
+  });
+  const resumeCourse = resumeTarget.course || null;
   const done = resumeCourse ? learnerProgress.completedIds.filter((id) => id.startsWith(`${resumeCourse.slug}:`)).length : 0;
   const courseLessonCount = Number(resumeCourse?.lessons || 0);
   const courseProgressPercent = courseLessonCount ? Math.min(100, Math.round((done / courseLessonCount) * 100)) : 0;
@@ -65,10 +71,10 @@ export default function HomePage() {
           </p>
           <div className="hero-actions">
             <Link
-              to={resumeAvailable ? `/learn/${encodeURIComponent(resumeCourse.slug)}` : "/tutorials"}
+              to={resumeAvailable ? resumeTarget.href : "/tutorials"}
               className="button button-primary"
             >
-              {resumeAvailable ? "Continue learning" : "Explore courses"} <ArrowRight size={17} />
+              {resumeAvailable ? resumeTarget.ctaLabel : "Explore courses"} <ArrowRight size={17} />
             </Link>
             <Link to="/tutorials" className="button button-secondary">
               Explore courses
@@ -81,7 +87,7 @@ export default function HomePage() {
               <Avatar size="xs" variant="spark" />
             </div>
             <span>
-              <strong>{formatNumber(learningSteps)}</strong> learning steps
+              <strong>{stats.mode === "loading" ? "…" : stats.mode === "unavailable" ? "—" : formatNumber(learningSteps)}</strong> learning steps
               completed
             </span>
           </div>
@@ -128,11 +134,15 @@ export default function HomePage() {
           <div className="floating-badge badge-streak">
             <Flame size={18} />
             <span>
-              <strong>{stats.currentStreak} day streak</strong>
+              <strong>{stats.mode === "loading" ? "Checking streak…" : stats.mode === "unavailable" ? "Streak unavailable" : `${stats.currentStreak} day streak`}</strong>
               <small>
-                {stats.currentStreak
-                  ? "Keep the rhythm"
-                  : "Complete a lesson to begin"}
+                {stats.mode === "loading"
+                  ? "Loading recorded activity"
+                  : stats.mode === "unavailable"
+                    ? "Activity could not be verified right now"
+                    : stats.currentStreak
+                      ? "Take the pace that works for you"
+                      : "Complete a lesson to begin"}
               </small>
             </span>
           </div>
@@ -168,11 +178,16 @@ export default function HomePage() {
               <CourseIcon course={resumeCourse || catalog[0]} />
             </div>
             <div className="resume-content">
-              <div className="eyebrow">CONTINUE LEARNING</div>
-              <h3>{resumeAvailable ? resumeCourse.title.replace(/\s+[—–-]\s+From Beginner to Professional.*$/i, "") : "Choose your first learning path"}</h3>
+              <div className="eyebrow">{resumeTarget.eyebrow}</div>
+              <h3>{resumeTarget.kind === "lesson" ? resumeTarget.lessonTitle : resumeAvailable ? resumeCourse.title.replace(/\s+[—–-]\s+From Beginner to Professional.*$/i, "") : "Choose your first learning path"}</h3>
               <p>
-                {resumeAvailable ? resumeCourse.desc : "Course outlines and learning activities will appear as individual tracks are reviewed and published. Browse the catalog to choose an available path."}
+                {resumeTarget.kind === "lesson"
+                  ? `${resumeTarget.completed ? "You completed" : "You last opened"} this lesson in ${resumeCourse.title}. Return directly to it, with course progress based on recorded activity.`
+                  : resumeAvailable
+                    ? (resumeCourse.desc || "Continue through this published course at your own pace.")
+                    : "Course outlines and learning activities will appear as individual tracks are reviewed and published. Browse the catalog to choose an available path."}
               </p>
+              {resumeTarget.kind === "lesson" && <div className="resume-last-lesson-meta"><span>{resumeCourse.title}</span><span>{resumeTarget.completed ? "Completed" : "Last opened"}</span></div>}
               <div className="resume-progress-label">
                 <span>
                   {resumeAvailable ? `${done} of ${courseLessonCount} lessons completed` : "Published course not selected"}
@@ -180,8 +195,8 @@ export default function HomePage() {
                 <span>{resumeAvailable ? `${courseProgressPercent}%` : "—"}</span>
               </div>
               {resumeAvailable && <div className="progress-track"><span style={{ width: `${courseProgressPercent}%` }} /></div>}
-              <Link to={resumeAvailable ? `/learn/${encodeURIComponent(resumeCourse.slug)}` : "/tutorials"} className="button button-primary">
-                {resumeAvailable ? (done ? "Continue learning" : "Start learning") : "Browse course catalog"} <ArrowRight size={15} />
+              <Link to={resumeAvailable ? resumeTarget.href : "/tutorials"} className="button button-primary">
+                {resumeAvailable ? resumeTarget.ctaLabel : "Browse course catalog"} <ArrowRight size={15} />
               </Link>
             </div>
             {resumeAvailable && resumeCourse.slug === "html" && <BookmarkButton

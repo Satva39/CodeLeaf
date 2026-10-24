@@ -7,12 +7,12 @@ import {
   ChevronRight,
   Flame,
   GraduationCap,
-  FolderKanban,
 } from "lucide-react";
-import { formatNumber } from "../lib/demoState.js";
 import { useLearnerProgress } from "../lib/useLearnerProgress.js";
 import { useCourseCatalogState } from "../lib/useCourseCatalog.js";
 import { useGamificationStats } from "../lib/useGamificationStats.js";
+import { formatLearningStat } from "../lib/learningPath.js";
+import "../styles/phase3-learning-loop.css";
 import {
   PageShell,
   SectionTitle,
@@ -51,7 +51,7 @@ export default function ProgressPage() {
               : null,
           };
         })
-        .filter((course) => course.done > 0 || course.slug === "html")
+        .filter((course) => course.done > 0)
         .sort((a, b) => b.done - a.done || a.title.localeCompare(b.title)),
     [completedIds, catalog],
   );
@@ -60,12 +60,12 @@ export default function ProgressPage() {
   const latestCourse = latestRecorded ? catalog.find((course) => course.slug === latestRecorded.course_slug) : null;
   const latestDate = latestRecorded?.last_opened_at ? new Date(latestRecorded.last_opened_at) : null;
   const quickStats = [
-    ["Total XP", formatNumber(stats.totalXp)],
-    ["Lessons completed", formatNumber(stats.completedLessons)],
-    ["Exercises completed", formatNumber(stats.completedExercises)],
-    ["Exercise attempts", formatNumber(stats.exercisesAttempted)],
-    ["Exams passed", formatNumber(stats.examsPassed || 0)],
-    ["Certificates", formatNumber(stats.certificates)],
+    ["Total XP", formatLearningStat(stats.totalXp, stats.mode)],
+    ["Lessons completed", formatLearningStat(stats.completedLessons, stats.mode)],
+    ["Exercises completed", formatLearningStat(stats.completedExercises, stats.mode)],
+    ["Exercise attempts", formatLearningStat(stats.exercisesAttempted, stats.mode)],
+    ["Exams passed", formatLearningStat(stats.examsPassed || 0, stats.mode)],
+    ["Certificates", formatLearningStat(stats.certificates, stats.mode)],
   ];
 
   return (
@@ -90,6 +90,8 @@ export default function ProgressPage() {
           ))}
         </div>
       </div>
+      {stats.mode === "loading" && <p role="status" className="phase3-data-note">Loading your latest recorded learning statistics…</p>}
+      {stats.mode === "unavailable" && <p role="status" className="phase3-data-note phase3-data-note-warning">We couldn't verify your latest account statistics. Values are shown as unavailable rather than as zero.</p>}
       {learnerProgress.mode === "unavailable" && (
         <p role="status" className="project-empty-note">
           Progress is temporarily unavailable. The page will not infer account
@@ -99,10 +101,6 @@ export default function ProgressPage() {
       {learnerProgress.mode === "guest" && (
         <p role="status" className="catalog-status-note">Guest progress is stored on this device only. Sign in to keep account progress in sync across devices.</p>
       )}
-      <div className="phase5-dashboard-links">
-        <Link to="/learning-hub" className="button button-secondary"><Activity size={15} /> Open learning hub <ArrowRight size={14} /></Link>
-        <Link to="/portfolio" className="button button-secondary"><FolderKanban size={15} /> Manage portfolio <ArrowRight size={14} /></Link>
-      </div>
       <div className="progress-resume-grid">
         <section className="panel progress-resume-card">
           <div className="eyebrow">CONTINUE LEARNING</div>
@@ -110,7 +108,10 @@ export default function ProgressPage() {
           {latestRecorded && latestCourse ? <>
             <p><strong>{latestRecorded.title}</strong> · {latestCourse.title}</p>
             {latestDate && !Number.isNaN(latestDate.getTime()) && <small>Last recorded {latestDate.toLocaleDateString()}</small>}
-            <Link className="button button-primary" to={`/learn/${encodeURIComponent(latestRecorded.course_slug)}/${encodeURIComponent(latestRecorded.lesson_slug)}`}>Open lesson <ArrowRight size={14} /></Link>
+            <div className="progress-next-actions">
+              <Link className="button button-primary" to={`/learn/${encodeURIComponent(latestRecorded.course_slug)}/${encodeURIComponent(latestRecorded.lesson_slug)}`}>Open lesson <ArrowRight size={14} /></Link>
+              <Link className="button button-secondary" to={`/practice/${encodeURIComponent(latestRecorded.course_slug)}`}>Practise this course <Activity size={14} /></Link>
+            </div>
           </> : <>
             <p>{learnerProgress.mode === "guest" ? "Complete a lesson to start a local learning history. Your guest records remain separate from account data." : "Your most recently opened lesson will appear here when a server progress record is available."}</p>
             <Link className="button button-secondary" to="/tutorials">Browse published courses <ArrowRight size={14} /></Link>

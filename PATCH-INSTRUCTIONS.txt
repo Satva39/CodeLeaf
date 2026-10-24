@@ -1,85 +1,85 @@
-CodeLeaf Phase 2 — Course and Content Consistency
+CodeLeaf — Phase 3A: Learner Progress & Resume Flow
 =================================================
 
-This is a focused patch for the existing Code_Leaf repository. It preserves the
-React + JavaScript/JSX + Vite frontend, FastAPI API, PostgreSQL database, and
-Vercel/Render deployment. It does not change production data or environment
-variables.
+Scope
+-----
+This increment improves the current learner loop without changing the database schema:
+- Home page resumes the most recently recorded, available lesson (rather than merely opening a course root).
+- Completed last lessons are labelled as review, not incorrectly described as unfinished.
+- Draft/roadmap or empty courses cannot become public resume targets.
+- A new learner gets a truthful “Start learning” path instead of the interface implying historical progress.
+- Progress numbers show Loading/Unavailable rather than misleading zeros while account statistics are being fetched or cannot be verified.
+- The progress page no longer displays HTML as an “in progress” course when no lessons have actually been completed.
+- A recent lesson offers a course-scoped practice link.
+- New styles are imported by their pages only. Global `frontend/src/styles.css` and its existing imports are not replaced or edited.
 
-Files in this patch
--------------------
-frontend/src/components/course/CourseOverview.jsx
-frontend/src/pages/CourseLandingPage.jsx
-frontend/src/pages/ReferencePage.jsx
-frontend/src/lib/referenceDetails.js
-frontend/src/styles/course-overview-redesign.css
-frontend/src/styles/reference-enrichment.css
-frontend/scripts/test_phase2_content_consistency.mjs
-frontend/scripts/test_reference_details.mjs
-docs/PHASE2_CONTENT_CONSISTENCY.md
-PATCH-INSTRUCTIONS.txt
+No backend files, DB schema, migrations, `.env` files, or production records are changed by this patch.
 
-Before applying
----------------
-1. Open PowerShell in the folder that contains Code_Leaf.
-2. Run `git status --short`. Commit or back up any unrelated uncommitted edits.
-3. This patch updates shared components/pages. It does not edit `frontend/src/styles.css`.
-   Existing imports such as phase5.css and ui-polish.css are left untouched.
-4. Extract this ZIP into the existing project root (the parent folder of
-   `frontend/` and `backend/`), preserving paths. Allow files in the list above
-   to be replaced only after backing up any local changes to those same files.
+Apply (PowerShell)
+------------------
+Run from the parent directory containing `Code_Leaf` and this ZIP. Back up files first:
 
-What changes
-------------
-- Tutorials course overviews show audience, prerequisites, outcomes, and a
-  collapsible course outline in separate sections, with Start Learning visible
-  near the top.
-- References explicitly opt out of tutorial-only details; Projects and Practice
-  rely on the shared component's safe compact default and do not load the outline.
-- Reference pages get a common enriched layout across every course and a
-  full-width detail panel. Authored descriptions/examples are preserved.
-- Related lesson links come from the selected course's outline. External source
-  links are restricted to HTTP/HTTPS schemes.
-- Existing course filtering remains API-authoritative; roadmap/draft/empty
-  course metadata does not become published merely because a page loads.
+```powershell
+$projectRoot = (Resolve-Path .\Code_Leaf).Path
+$backupRoot = Join-Path (Get-Location).Path 'Code_Leaf_Phase3A_Backup'
+$modifiedFiles = @(
+  'frontend/src/pages/HomePage.jsx',
+  'frontend/src/pages/ProgressPage.jsx'
+)
+foreach ($relative in $modifiedFiles) {
+  $source = Join-Path $projectRoot $relative
+  if (-not (Test-Path -LiteralPath $source)) { throw "Expected file is missing: $relative" }
+  $backupFile = Join-Path $backupRoot $relative
+  New-Item -ItemType Directory -Force -Path (Split-Path $backupFile) | Out-Null
+  Copy-Item -LiteralPath $source -Destination $backupFile -Force
+}
+Expand-Archive -LiteralPath .\CodeLeaf_Phase3_Learning_Loop_Patch.zip -DestinationPath $projectRoot -Force
+```
 
-Validation
-----------
-From `frontend/`, run:
+If you have edited either page locally, compare it with the patch first and merge the changes instead of overwriting them. The added files are:
+- `frontend/src/lib/learningPath.js`
+- `frontend/src/styles/phase3-learning-loop.css`
+- `frontend/scripts/test_learning_path.mjs`
+- `docs/PHASE3_LEARNING_LOOP.md`
 
-node scripts/test_phase2_content_consistency.mjs
-node scripts/test_reference_details.mjs
-node scripts/test_course_catalog_filters.mjs
-node scripts/test_course_overview_cta.mjs
+Validate (PowerShell)
+---------------------
+```powershell
+Push-Location E:\Code_Leaf\frontend
+node .\scripts\test_learning_path.mjs
+npm run test:catalog
+npm run test:api-cache
+npm run test:api-client
+npm run test:auth-ui
+npm run test:course-overview
 npm run build
+Pop-Location
+```
 
-Manual smoke checks:
-- `/courses/html`: Start Learning is near the top; course-fit cards and outline
-  appear before “Explore this course”.
-- `/reference/html/<entry>` and `/reference/angular/<entry>`: shared detail
-  structure; full-width outer panel; related links lead to lessons from that
-  course.
-- `/projects/html` and `/practice/html`: tutorial-only detail cards and outline
-  are not displayed.
-- Test mobile width and keyboard activation for the outline disclosure buttons.
+The new standalone test uses only Node.js built-ins. Existing test/build commands require the project's frontend dependencies to be installed.
 
-If tests pass, inspect `git diff --check` and the changes before committing:
-
+After validation, review and deploy:
+-----------------------------------
+```powershell
 cd E:\Code_Leaf
 git diff --check
-git add frontend/src/components/course/CourseOverview.jsx frontend/src/pages/CourseLandingPage.jsx frontend/src/pages/ReferencePage.jsx frontend/src/lib/referenceDetails.js frontend/src/styles/course-overview-redesign.css frontend/src/styles/reference-enrichment.css frontend/scripts/test_phase2_content_consistency.mjs frontend/scripts/test_reference_details.mjs docs/PHASE2_CONTENT_CONSISTENCY.md PATCH-INSTRUCTIONS.txt
-git commit -m "Improve course and content consistency"
+git status --short
+git add frontend/src/pages/HomePage.jsx frontend/src/pages/ProgressPage.jsx frontend/src/lib/learningPath.js frontend/src/styles/phase3-learning-loop.css frontend/scripts/test_learning_path.mjs docs/PHASE3_LEARNING_LOOP.md PATCH-INSTRUCTIONS.txt
+git commit -m "Improve learner resume and progress feedback"
 git push origin master
+```
+
+Vercel should deploy after the push. Then test a signed-in account with a recent incomplete lesson, one with a completed recent lesson, and a brand-new account.
 
 Rollback
 --------
-Before applying, keep a copy of the original files named above. If rollback is
-needed, restore those backups and delete the newly added files:
-- frontend/src/lib/referenceDetails.js (if it did not exist before)
-- frontend/src/styles/course-overview-redesign.css (if it did not exist before)
-- frontend/src/styles/reference-enrichment.css (if it did not exist before)
-- frontend/scripts/test_phase2_content_consistency.mjs (if it did not exist before)
-- frontend/scripts/test_reference_details.mjs (if it did not exist before)
-- docs/PHASE2_CONTENT_CONSISTENCY.md
+Restore `HomePage.jsx` and `ProgressPage.jsx` from the backup directory. Remove only the new files listed above. Do not remove or rewrite any existing global stylesheet imports.
 
-Do not roll back production database rows; this patch makes no database changes.
+Validation status
+-----------------
+Passed in the patching environment:
+- 9 grouped learning-target scenarios (including more detailed assertions for latest lesson, completed lesson, unpublished courses, empty catalog, and URL encoding).
+- JSX syntax/transpile checks for HomePage and ProgressPage.
+- CSS brace-balance check.
+
+Not run in this environment: full Vite build, browser visual checks, and live production behavior. Run those locally before deployment.
