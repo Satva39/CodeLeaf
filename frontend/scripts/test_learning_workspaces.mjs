@@ -58,6 +58,11 @@ assert.doesNotMatch(lesson, /\? "example\.js"/);
 assert.doesNotMatch(lesson, /\{exercises\.length > 0 &&/);
 assert.match(lesson, /lesson-practice-library/);
 assert.match(lesson, /referenceSources\.length > 0/);
+assert.doesNotMatch(lesson, /KnowledgeCheck|knowledge-check-section/);
+const collectionsCss = read("../src/styles/collections.css");
+assert.match(collectionsCss, /\.course-exercise-library \.exercise-topic-group/);
+assert.match(collectionsCss, /\.course-exercise-library \.exercise-library-row/);
+assert.match(collectionsCss, /@media \(max-width: 650px\)/);
 assert.match(lesson, /setExpandedGroup\(\(previous\) => previous === g\.title \? "" : g\.title\)/);
 
 const workspace = read("../src/pages/PlaygroundPage.jsx");

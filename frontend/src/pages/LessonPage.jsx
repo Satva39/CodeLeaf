@@ -44,7 +44,6 @@ import {
   confirmRemoteLessonCompletion,
 } from "../lib/useLearnerProgress.js";
 import { BookmarkButton } from "../components/common.jsx";
-import { KnowledgeCheck } from "../components/KnowledgeCheck.jsx";
 import ReviewPrompt from "../components/ReviewPrompt.jsx";
 import {
   apiGetJson,
@@ -1009,7 +1008,6 @@ export default function LessonPage() {
             </div>
           )}
         </section>
-        <KnowledgeCheck courseSlug={course.slug} lessonSlug={current.slug} />
         <section className="lesson-content-block mistakes-block">
           <h2>Common mistakes</h2>
           <div className="table-scroll">
