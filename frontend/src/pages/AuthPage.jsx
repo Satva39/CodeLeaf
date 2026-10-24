@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ArrowRight, CircleHelp, Code2, ShieldCheck } from "lucide-react";
+import { ArrowRight, CircleHelp, Code2, Eye, EyeOff, RefreshCw, ShieldCheck } from "lucide-react";
 
 import { API_BASE } from "../lib/demoState.js";
 import { apiFetch } from "../lib/apiClient.js";
@@ -20,6 +20,8 @@ export default function AuthPage() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [resending, setResending] = useState(false);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [testUrl, setTestUrl] = useState("");
@@ -28,6 +30,11 @@ export default function AuthPage() {
     const hint = new URLSearchParams(location.search).get("email");
     if (hint && !email) setEmail(hint);
   }, [location.search]);
+
+  useEffect(() => {
+    setShowPassword(false);
+    setResending(false);
+  }, [path]);
 
   async function submit(event) {
     event.preventDefault();
@@ -83,6 +90,7 @@ export default function AuthPage() {
 
   async function resendVerification() {
     setBusy(true);
+    setResending(true);
     setMessage("");
     setTestUrl("");
     try {
@@ -97,6 +105,7 @@ export default function AuthPage() {
       setMessage(error.message || "Could not request another verification link.");
     } finally {
       setBusy(false);
+      setResending(false);
     }
   }
 
@@ -127,7 +136,24 @@ export default function AuthPage() {
               <label>Username<input value={username} onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, "").slice(0, 40))} required minLength={3} maxLength={40} autoComplete="username" /></label>
             </>}
             {!isReset && <label>Email address<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required maxLength={320} autoComplete="email" /></label>}
-            {!isForgot && <label>Password<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={isRegister || isReset ? 10 : 1} maxLength={128} autoComplete={isRegister || isReset ? "new-password" : "current-password"} />{(isRegister || isReset) && <small>Use at least 10 characters.</small>}</label>}
+            {!isForgot && <div className="auth-password-field">
+              <label htmlFor="auth-password">Password</label>
+              <div className="auth-password-control">
+                <input id="auth-password" type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required minLength={isRegister || isReset ? 10 : 1} maxLength={128} autoComplete={isRegister || isReset ? "new-password" : "current-password"} />
+                <button
+                  type="button"
+                  className="auth-password-toggle"
+                  onClick={() => setShowPassword((visible) => !visible)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-pressed={showPassword}
+                  aria-controls="auth-password"
+                  title={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff size={17} aria-hidden="true" /> : <Eye size={17} aria-hidden="true" />}
+                </button>
+              </div>
+              {(isRegister || isReset) && <small>Use at least 10 characters.</small>}
+            </div>}
             <button className="button button-primary button-wide" disabled={busy}>
               {busy ? "Please wait…" : isReset ? "Update password" : isForgot ? "Send reset link" : isRegister ? "Create account" : "Sign in"} <ArrowRight size={15} />
             </button>
@@ -137,7 +163,17 @@ export default function AuthPage() {
         {isActionLink && <button type="button" className="button button-primary button-wide" disabled={busy || !new URLSearchParams(location.search).get("token")} onClick={submit}>{busy ? "Please wait…" : "Confirm"} <ArrowRight size={15} /></button>}
         {message && <div className="checkout-message" role="status"><CircleHelp size={16} />{message}</div>}
         {testUrl && <p className="profile-save-note" role="status">Local test mode only: no email was sent. <a href={testUrl}>Open the one-time action link</a>.</p>}
-        {isRegister && message && <button type="button" className="text-link" onClick={resendVerification} disabled={busy || !email}>Resend verification link</button>}
+        {isRegister && (message || resending) && <button
+          type="button"
+          className="button button-secondary button-wide auth-resend-button"
+          onClick={resendVerification}
+          disabled={busy || !email}
+          aria-busy={resending}
+        >
+          <RefreshCw size={16} className={resending ? "auth-resend-icon is-spinning" : "auth-resend-icon"} aria-hidden="true" />
+          <span>{resending ? "Sending verification link…" : "Resend verification link"}</span>
+          <ArrowRight size={15} className="auth-resend-arrow" aria-hidden="true" />
+        </button>}
         {isActionLink && message && <p><Link to="/login">Go to sign in</Link></p>}
         {isReset && message && <p><Link to="/login">Go to sign in</Link></p>}
         {isForgot && <div className="auth-switch"><Link to="/login">Back to sign in</Link></div>}

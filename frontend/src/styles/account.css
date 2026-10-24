@@ -76,10 +76,108 @@
   border-color: var(--mint);
   box-shadow: 0 0 0 3px #10b98120;
 }
-.auth-form label small {
+.auth-password-field {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+.auth-password-field > label {
+  display: block;
+  font-size: 14.3px;
+  font-weight: 650;
+  color: var(--text);
+}
+.auth-password-control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+.auth-password-control input {
+  padding-right: 54px;
+}
+.auth-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+.auth-password-toggle:hover {
+  color: var(--mint);
+  background: var(--mint-wash);
+  border-color: rgba(39, 214, 160, 0.18);
+}
+.auth-password-toggle:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 2px;
+}
+.auth-password-toggle svg {
+  pointer-events: none;
+}
+.auth-form label small,
+.auth-password-field small {
   font-size: 12.1px;
   font-weight: 450;
   color: var(--muted);
+}
+.auth-resend-button {
+  margin-top: 14px;
+  min-height: 48px;
+  gap: 10px;
+  justify-content: flex-start;
+  border-radius: 12px;
+  text-align: left;
+  white-space: normal;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+.auth-resend-button:hover:not(:disabled) {
+  color: var(--text);
+  background: var(--mint-wash);
+  border-color: rgba(39, 214, 160, 0.45);
+}
+.auth-resend-button:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 3px;
+}
+.auth-resend-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+  transform: none;
+}
+.auth-resend-icon {
+  flex: 0 0 auto;
+  color: var(--mint);
+}
+.auth-resend-icon.is-spinning {
+  animation: auth-resend-spin 0.9s linear infinite;
+}
+.auth-resend-arrow {
+  flex: 0 0 auto;
+  margin-left: auto;
+  color: var(--mint);
+}
+@keyframes auth-resend-spin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .auth-resend-icon.is-spinning {
+    animation-duration: 2.5s;
+  }
+  .auth-resend-button,
+  .auth-password-toggle {
+    transition: none;
+  }
 }
 .auth-form .button {
   margin-top: 6px;
