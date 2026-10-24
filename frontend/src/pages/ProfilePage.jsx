@@ -11,8 +11,8 @@ import {
   Crown,
   ExternalLink,
   Flame,
+  LogOut,
   Settings,
-  ShieldCheck,
   Sparkles,
   UserRound,
   Zap,
@@ -41,6 +41,8 @@ export default function ProfilePage() {
   const [securityFeedback, setSecurityFeedback] = useState("");
   const [securityTestUrl, setSecurityTestUrl] = useState("");
   const [securityBusy, setSecurityBusy] = useState(false);
+  const [logoutBusy, setLogoutBusy] = useState(false);
+  const [logoutError, setLogoutError] = useState("");
   const [profile, setProfile] = useState(getProfile());
   const [name, setName] = useState(profile.nickname);
   const [handle, setHandle] = useState(profile.handle);
@@ -203,39 +205,34 @@ export default function ProfilePage() {
     finally { setSecurityBusy(false); }
   };
 
-  const exportAccount = async () => {
-    setSecurityBusy(true); setSecurityFeedback("");
+  const handleLogout = async () => {
+    if (logoutBusy || accountMode !== "remote") return;
+    setLogoutBusy(true);
+    setLogoutError("");
     try {
-      const response = await apiFetch(`${API_BASE}/api/me/export`);
-      const payload = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(payload.detail || "Account export could not be prepared.");
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url; link.download = "codeleaf-account-export.json";
-      document.body.appendChild(link); link.click(); link.remove(); window.URL.revokeObjectURL(url);
-      setSecurityFeedback("Your account export has been downloaded.");
-    } catch (error) { setSecurityFeedback(error.message || "Account export could not be prepared."); }
-    finally { setSecurityBusy(false); }
-  };
-
-  const deleteAccount = async () => {
-    const confirmed = window.confirm("Delete your CodeLeaf account? Learning progress and public identity will be removed. Payment/audit records may be retained in anonymized form where required.");
-    if (!confirmed) return;
-    const passwordValue = window.prompt("Enter your current password to confirm account deletion:");
-    if (passwordValue === null) return;
-    setSecurityBusy(true); setSecurityFeedback("");
-    try {
-      const response = await apiFetch(`${API_BASE}/api/me/delete`, {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: passwordValue }),
+      const response = await apiFetch(`${API_BASE}/api/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+        headers: { Accept: "application/json" },
       });
       const payload = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(payload.detail || "Account deletion could not be completed.");
-      window.dispatchEvent(new CustomEvent("codeleaf:auth-changed", { detail: { authenticated: false } }));
-      navigate("/");
-    } catch (error) { setSecurityFeedback(error.message || "Account deletion could not be completed."); }
-    finally { setSecurityBusy(false); }
+      if (!response.ok || payload?.ok === false) {
+        throw new Error(payload?.detail || "Logout could not be completed. Please try again.");
+      }
+
+      // Clear cached user-scoped API responses and ask the shared header to
+      // re-check the now-revoked server session before rendering signed-out UI.
+      invalidateApiCache();
+      window.dispatchEvent(new CustomEvent("codeleaf:auth-changed", {
+        detail: { authenticated: false },
+      }));
+      navigate("/login", { replace: true });
+    } catch (error) {
+      // Stay on the account page if the server did not confirm the logout.
+      setLogoutError(error?.message || "Logout could not be completed. Please try again.");
+    } finally {
+      setLogoutBusy(false);
+    }
   };
 
   const save = async () => {
@@ -372,11 +369,6 @@ export default function ProfilePage() {
               ))}
             </div>
           </div>
-          <div className="profile-section profile-toggles">
-            <div className="eyebrow">PRIVACY & VISIBILITY</div>
-            <h2>Account visibility</h2>
-            <p>Public profile, certificate visibility, project visibility, and reminder preferences are not connected to account settings yet. This page will not label browser-only switches as account-wide privacy controls.</p>
-          </div>
           <div className="profile-section phase3c-preferences-section">
             <div className="eyebrow">LEARNING PREFERENCES</div>
             <h2>Set a pace that works for you</h2>
@@ -437,10 +429,6 @@ export default function ProfilePage() {
               <label>New password<input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required minLength={10} maxLength={128} autoComplete="new-password" /><small>Use at least 10 characters. Changing it signs out your other sessions.</small></label>
               <button type="submit" className="button button-secondary" disabled={securityBusy}>Change password</button>
             </form>
-            <div className="form-grid profile-account-actions">
-              <button type="button" className="button button-secondary" onClick={exportAccount} disabled={securityBusy}>Download my data</button>
-              <button type="button" className="button button-secondary" onClick={deleteAccount} disabled={securityBusy}>Delete account</button>
-            </div>
             {securityFeedback && <p className="profile-save-note" role="status">{securityFeedback}</p>}
             {securityTestUrl && <p className="profile-save-note" role="status">Local test mode only; no email was sent. <a href={securityTestUrl}>Open confirmation link</a>.</p>}
           </div>}
@@ -476,10 +464,19 @@ export default function ProfilePage() {
               </span>
               <ChevronRight size={15} />
             </Link>
-            <div className="account-setting-unavailable" aria-label="Privacy controls not available">
-              <span><ShieldCheck size={16} /> Privacy controls</span>
-              <small>Not available yet</small>
-            </div>
+            {accountMode === "remote" && (
+              <button
+                type="button"
+                className="account-logout-button"
+                onClick={handleLogout}
+                disabled={logoutBusy}
+                aria-label="Log out of CodeLeaf"
+                aria-busy={logoutBusy}
+              >
+                <span><LogOut size={16} /> {logoutBusy ? "Logging out…" : "Log out"}</span>
+              </button>
+            )}
+            {logoutError && <p className="account-logout-feedback" role="alert">{logoutError}</p>}
           </div>
         </div>
       </div>

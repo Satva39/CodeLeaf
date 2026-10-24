@@ -5,12 +5,13 @@ import path from "node:path";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const source = async (relativePath) => readFile(path.join(here, "..", "src", relativePath), "utf8");
-const [authPage, app, header, profile, accountStyles] = await Promise.all([
+const [authPage, app, header, profile, accountStyles, pageStyles] = await Promise.all([
   source("pages/AuthPage.jsx"),
   source("App.jsx"),
   source("components/layout/Header.jsx"),
   source("pages/ProfilePage.jsx"),
   source("styles/account.css"),
+  source("styles/pages.css"),
 ]);
 const check = (pattern, content, message) => assert.ok(pattern.test(content), message);
 
@@ -38,6 +39,19 @@ check(/setIsAuthenticated\(true\)/, header, "a valid session must update signed-
 check(/setIsAuthenticated\(error\?\.status === 401 \? false : null\)/, header, "an unauthorized session must clear signed-in state without masking other API failures");
 check(/invalidateApiCache\("\/api\/me"\)/, header, "authentication changes must invalidate cached user data");
 check(/codeleaf:auth-changed.*authenticated:\s*false/s, profile, "account security transitions must publish signed-out state");
+check(/apiFetch\(`\$\{API_BASE\}\/api\/auth\/logout`/, profile, "logout must call the existing server logout endpoint");
+check(/if \(!response\.ok \|\| payload\?\.ok === false\)/, profile, "logout must not redirect when the server reports failure");
+check(/invalidateApiCache\(\)/, profile, "successful logout must clear cached session/user responses");
+check(/navigate\("\/login", \{ replace: true \}\)/, profile, "successful logout must replace the current route with sign-in");
+check(/className="account-logout-button"/, profile, "signed-in account settings must show a logout button");
+check(/accountMode === "remote" && \(\s*<button/s, profile, "logout must only be shown after a signed-in session is confirmed");
+check(/setLogoutError\(error\?\.message \|\| "Logout could not be completed\. Please try again\."\)/, profile, "logout failure must be surfaced to the user");
+check(/\.account-info-card \.account-logout-button:focus-visible/, pageStyles, "logout button must have a visible keyboard focus indicator");
+check(/\.account-info-card \.account-logout-button:hover:not\(:disabled\)/, pageStyles, "logout button must have a hover state");
+check(/Change password/, profile, "the existing change-password UI must remain available");
+check(/\/api\/auth\/change-password/, profile, "the existing change-password endpoint must remain wired");
+assert.doesNotMatch(profile, /privacy controls|PRIVACY & VISIBILITY|account-setting-unavailable|Not available yet/i, "the unfinished privacy placeholder must be removed from the profile page");
+assert.doesNotMatch(profile, /Download my data|Delete account/, "the associated account export/delete buttons must be removed from the profile UI");
 
 console.log("PASS auth routes and action-link pages remain wired");
 console.log("PASS successful login publishes a signed-in state transition");
@@ -45,4 +59,6 @@ console.log("PASS password visibility toggle is accessible and masked by default
 console.log("PASS resend verification button includes an accessible loading state and themed styles");
 console.log("PASS the header rechecks /api/me and refreshes on auth changes");
 console.log("PASS password/email changes and account actions publish signed-out state");
+console.log("PASS logout calls the server, clears cached state, and handles failures safely");
+console.log("PASS unfinished privacy UI and associated data-action buttons are removed");
 console.log("Frontend authentication UI contract checks passed.");
