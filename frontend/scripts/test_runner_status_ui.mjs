@@ -7,6 +7,8 @@ const page = fs.readFileSync(path.join(root, "src/pages/PlaygroundPage.jsx"), "u
 assert.match(page, /\/api\/runner\/status/);
 assert.match(page, /runnerConfigured/);
 assert.match(page, /runnerConfigChecked/);
-assert.match(page, /disabled=\{running \|\| !runnerSource\.trim\(\) \|\| !runnerConfigChecked \|\| !runnerConfigured\}/);
+assert.match(page, /disabled=\{running\}/);
+assert.match(page, /if \(!runnerConfigured\)/);
+assert.match(page, /source remains editable and has not been executed/);
 assert.match(page, /The isolated runner is not configured yet/);
 console.log("PASS playground reads non-sensitive runner status and disables server execution until configured");

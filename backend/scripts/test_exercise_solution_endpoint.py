@@ -68,12 +68,29 @@ class ExerciseSolutionEndpointTests(unittest.TestCase):
         self.assertNotIn("correct_answer", serialized)
         self.assertNotIn("SHOULD NOT LEAK", serialized)
 
-    def test_manifest_path_cannot_escape_module_solution_roots(self) -> None:
+    def test_course_level_solution_tree_is_supported(self) -> None:
+        course_solutions = self.course_root / "solutions" / "exercises"
+        course_solutions.mkdir(parents=True)
+        (course_solutions / "demo-solution.json").write_text(json.dumps({
+            "answer": "int main(void) { return 0; }",
+            "explanation": "Course-level solution tree is supported.",
+        }), encoding="utf-8")
         exercise_path = self.exercises_root / "demo-exercise.json"
         exercise_path.write_text(json.dumps({
             "slug": "demo-exercise",
             "lesson_slug": "demo-lesson",
-            "solution_file": "../../../outside.json",
+            "solution_file": "../../../solutions/exercises/demo-solution.json",
+        }), encoding="utf-8")
+        response = self.client.get("/api/courses/demo-course/lessons/demo-lesson/exercises/demo-exercise/solution")
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertIn("Course-level solution tree", response.json()["explanation"])
+
+    def test_manifest_path_cannot_escape_course_solution_roots(self) -> None:
+        exercise_path = self.exercises_root / "demo-exercise.json"
+        exercise_path.write_text(json.dumps({
+            "slug": "demo-exercise",
+            "lesson_slug": "demo-lesson",
+            "solution_file": "../../../../../outside.json",
         }), encoding="utf-8")
         response = self.client.get("/api/courses/demo-course/lessons/demo-lesson/exercises/demo-exercise/solution")
         self.assertEqual(response.status_code, 404, response.text)

@@ -236,11 +236,19 @@ export function getLanguageForFilename(filename) {
   return { key, ...LANGUAGE_CONFIGS[key] };
 }
 
+export function compatibleFilename(candidate, language) {
+  const name = String(candidate || "").trim();
+  if (name && safeWorkspaceFilename(name) && getLanguageForFilename(name).key === language?.key) {
+    return name;
+  }
+  return language?.filename || "notes.txt";
+}
+
 export function isBrowserWorkspace(files) {
   return Array.isArray(files) && files.some((file) => /\.html?$/i.test(file.name)) && files.some((file) => /\.css$/i.test(file.name) || /\.html?$/i.test(file.name));
 }
 
-export function createBrowserDocument(files) {
+export function createBrowserDocument(files, messageSource = "codeleaf-try-output") {
   const htmlFile = files.find((file) => /\.html?$/i.test(file.name));
   const cssFile = files.find((file) => /\.css$/i.test(file.name));
   const jsFile = files.find((file) => /\.(m?js|cjs)$/i.test(file.name));
@@ -248,12 +256,13 @@ export function createBrowserDocument(files) {
   const css = cssFile?.content || "";
   const js = jsFile?.content || "";
   const style = `<style>${css.replace(/<\/style/gi, "<\\/style")}</style>`;
+  const bridge = `<script>(function(){var source=${JSON.stringify(String(messageSource))};var send=function(kind,args){var output=Array.from(args||[]).map(function(value){if(typeof value==='string')return value;try{return JSON.stringify(value)}catch(_){return String(value)}}).join(' ');try{parent.postMessage({source:source,kind:kind,output:output,error:kind==='error'?output:''},'*')}catch(_){}};['log','info','warn','error'].forEach(function(kind){var original=console[kind].bind(console);console[kind]=function(){send(kind,arguments);original.apply(console,arguments)}});window.addEventListener('error',function(event){send('error',[event.message||'Preview error'])})})();<\/script>`;
   const script = js ? `<script>${js.replace(/<\/script/gi, "<\\/script")}<\/script>` : "";
   const csp = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">`;
   if (/<head[\s>]/i.test(html)) {
-    let result = html.replace(/<head([^>]*)>/i, `<head$1><meta charset="utf-8">${csp}${style}`);
+    let result = html.replace(/<head([^>]*)>/i, `<head$1><meta charset="utf-8">${csp}${style}${bridge}`);
     if (script) result = /<\/body>/i.test(result) ? result.replace(/<\/body>/i, `${script}</body>`) : `${result}${script}`;
     return result;
   }
-  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${csp}${style}</head><body>${html}${script}</body></html>`;
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${csp}${style}${bridge}</head><body>${html}${script}</body></html>`;
 }

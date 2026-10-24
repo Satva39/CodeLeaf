@@ -1,27 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2, ChevronDown, Code2, ExternalLink, Eye, Lightbulb, Play, ShieldCheck, Sparkles, Zap } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2, ChevronDown, Code2, Eye, Lightbulb, Play, ShieldCheck, Sparkles, Zap } from "lucide-react";
 import { apiFetch } from "../lib/apiClient.js";
 import { API_BASE } from "../lib/demoState.js";
 import { useGamificationStats } from "../lib/useGamificationStats.js";
-import { openSeededWorkspace, resolveLanguage } from "../lib/languageWorkspace.js";
+import { compatibleFilename, openSeededWorkspace, resolveLanguage } from "../lib/languageWorkspace.js";
 import { EmptyState, PageShell } from "../components/common.jsx";
 
 async function responsePayload(response) {
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(payload.detail || `Request failed (${response.status})`);
   return payload;
-}
-async function allExercises(courseSlug, signal) {
-  const result = []; let offset = 0; let total = Infinity;
-  while (offset < total && offset < 5000) {
-    const payload = await responsePayload(await apiFetch(`${API_BASE}/api/courses/${encodeURIComponent(courseSlug)}/exercises?limit=100&offset=${offset}`, { credentials: "include", signal }));
-    const items = Array.isArray(payload.items) ? payload.items : [];
-    result.push(...items); total = Number(payload.total ?? result.length);
-    if (!items.length) break;
-    offset += items.length;
-  }
-  return result;
 }
 function prettyCode(value) {
   if (typeof value === "string") return value;
@@ -77,9 +66,11 @@ export default function ExerciseDetailPage() {
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true); setError(""); setExercise(null); setSolution(null); setFeedback(null); setAnswer(""); setSelectedOption("");
-    allExercises(courseSlug, controller.signal)
-      .then((items) => {
-        const match = items.find((item) => item.lesson_slug === lessonSlug && item.slug === exerciseSlug);
+    apiFetch(`${API_BASE}/api/courses/${encodeURIComponent(courseSlug)}/lessons/${encodeURIComponent(lessonSlug)}/exercises`, { credentials: "include", signal: controller.signal })
+      .then(responsePayload)
+      .then((payload) => {
+        const items = Array.isArray(payload.items) ? payload.items : [];
+        const match = items.find((item) => item.slug === exerciseSlug);
         if (!match) throw new Error("This exercise is not available. It may be unpublished or moved.");
         setExercise(match);
         setAnswer(starterAnswer(match));
@@ -93,7 +84,7 @@ export default function ExerciseDetailPage() {
   const options = Array.isArray(exercise?.starter?.options) ? exercise.starter.options : [];
   const isCode = usesCodeEditor(exercise) && !isChoice;
   const language = resolveLanguage(courseSlug, exercise?.starter?.language || "");
-  const exerciseFilename = String(exercise?.starter?.file_name || exercise?.starter?.filename || language.filename);
+  const exerciseFilename = compatibleFilename(exercise?.starter?.file_name || exercise?.starter?.filename, language);
   const currentAnswer = isChoice ? selectedOption : answer;
   const criteria = useMemo(() => Array.isArray(exercise?.acceptance_criteria) ? exercise.acceptance_criteria : [], [exercise]);
   const hints = useMemo(() => Array.isArray(exercise?.hints) ? exercise.hints : [], [exercise]);

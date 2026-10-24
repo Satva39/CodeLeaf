@@ -55,6 +55,7 @@ import {
 import { defaultCode, getLessonContent } from "../data/lessonContent.js";
 import DynamicDiagram from "../components/diagrams/DynamicDiagram.jsx";
 import LessonLiveExample from "../components/lessons/LessonLiveExample.jsx";
+import { compatibleFilename, openSeededWorkspace, resolveLanguage } from "../lib/languageWorkspace.js";
 
 const CONCEPT_STEP_ICONS = [FileCode2, BookMarked, Zap, CheckCircle2];
 
@@ -212,6 +213,7 @@ function contentFromPublishedLesson(apiLesson, fallback) {
     tipTitle: callout?.title || "Remember this",
     codeSample: codeBlock?.code || fallback.codeSample,
     codeLanguage: codeBlock?.language || "",
+    codeFileName: codeBlock?.file_name || codeBlock?.filename || codeBlock?.fileName || "",
     codeInstructions: codeBlock?.run_instructions || codeBlock?.instructions || "",
     codeResetSteps: Array.isArray(codeBlock?.reset_steps) ? codeBlock.reset_steps : [],
     extraBlocks,
@@ -305,11 +307,6 @@ export default function LessonPage() {
   const [code, setCode] = useState("");
   const [runResult, setRunResult] = useState(false);
   const [adsSuppressed, setAdsSuppressed] = useState(false);
-  const [exercises, setExercises] = useState([]);
-  const [exerciseAnswers, setExerciseAnswers] = useState({});
-  const [exerciseFeedback, setExerciseFeedback] = useState({});
-  const [exerciseBusy, setExerciseBusy] = useState({});
-  const [exerciseLoading, setExerciseLoading] = useState(true);
   const initialOutlineUrl = `${API_BASE}/api/courses/${encodeURIComponent(courseSlug)}/outline`;
   const [remoteOutline, setRemoteOutline] = useState(
     () => peekApiJson(initialOutlineUrl, "same-origin", true) || null,
@@ -479,6 +476,11 @@ export default function LessonPage() {
     apiLesson?.slug === current?.slug
       ? contentFromPublishedLesson(apiLesson, fallbackContent)
       : fallbackContent;
+  const referenceSources = (Array.isArray(content.sources) ? content.sources : [])
+    .map((source) => typeof source === "string" ? { title: source, url: source } : source)
+    .filter((source) => source && typeof source === "object"
+      && String(source.title || source.label || "").trim()
+      && safeExternalUrl(source.url || source.href));
   const id = current?.slug ? `${course.slug}:${current.slug}` : "";
   const progressAvailable =
     learnerProgress.mode === "remote" || learnerProgress.mode === "guest";
@@ -486,52 +488,6 @@ export default function LessonPage() {
     Boolean(id) &&
     progressAvailable &&
     learnerProgress.completedIds.includes(id);
-  useEffect(() => {
-    let active = true;
-    setExerciseAnswers({});
-    setExerciseFeedback({});
-    if (!current?.slug) {
-      setExercises([]);
-      setExerciseLoading(false);
-      return () => {
-        active = false;
-      };
-    }
-    // Avoid requesting exercises for the static fallback lesson while a
-    // non-HTML course outline is still loading (for example, `sass-home`).
-    if (courseSlug !== "html" && !activeOutline && outlineStatus !== "error") {
-      setExercises([]);
-      setExerciseLoading(outlineStatus === "loading");
-      return () => {
-        active = false;
-      };
-    }
-    const exercisesUrl = `${API_BASE}/api/courses/${encodeURIComponent(course.slug)}/lessons/${encodeURIComponent(current.slug)}/exercises`;
-    const cachedExercises = peekApiJson(exercisesUrl, "same-origin", true);
-    setExercises(cachedExercises?.items || []);
-    setExerciseLoading(!cachedExercises);
-    apiGetJson(exercisesUrl, { ttlMs: 300_000, persist: true })
-      .then((data) => {
-        if (active) setExercises(data.items || []);
-      })
-      .catch(() => {
-        if (active && !cachedExercises) setExercises([]);
-      })
-      .finally(() => {
-        if (active) setExerciseLoading(false);
-      });
-    return () => {
-      active = false;
-    };
-  }, [
-    activeOutline?.slug,
-    course.slug,
-    courseSlug,
-    current?.slug,
-    id,
-    outlineStatus,
-  ]);
-
   const markComplete = async () => {
     if (!current?.slug || completionBusy) return;
     if (completed) {
@@ -609,82 +565,25 @@ export default function LessonPage() {
     }
   };
 
-  const submitExercise = async (exercise) => {
-    const key = exercise.slug;
-    setExerciseBusy((previous) => ({ ...previous, [key]: true }));
-    setExerciseFeedback((previous) => ({ ...previous, [key]: null }));
-    const answer = exerciseAnswers[key] ?? (exercise.starter?.code || "");
-    const isCode =
-      Boolean(exercise.starter?.code) && exercise.type !== "choice";
-    if (!String(answer).trim()) {
-      setExerciseFeedback((previous) => ({
-        ...previous,
-        [key]: { tone: "error", message: "Enter an answer before submitting." },
-      }));
-      setExerciseBusy((previous) => ({ ...previous, [key]: false }));
-      return;
-    }
-    try {
-      const response = await apiFetch(
-        `${API_BASE}/api/me/exercises/${encodeURIComponent(course.slug)}/${encodeURIComponent(current.slug)}/${encodeURIComponent(key)}/submit`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            answer: isCode ? null : answer,
-            source_code: isCode ? answer : null,
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
-          }),
-        },
-      );
-      const data = await response.json().catch(() => ({}));
-      if (response.ok && data.ok) {
-        if (data.completed) {
-          rememberRemoteCompletion(
-            "exercise",
-            `${course.slug}:${current.slug}:${key}`,
-          );
-        }
-        if (data.stats) publishRemoteStats(data.stats);
-        setExerciseFeedback((previous) => ({
-          ...previous,
-          [key]: {
-            tone: data.correct ? "success" : "error",
-            message: data.correct
-              ? data.xp_awarded
-                ? `Correct! ${data.xp_awarded} XP awarded.`
-                : "Correct! This exercise has already been rewarded."
-              : `Not quite. Review the hint and try again. ${data.xp_awarded ? `${data.xp_awarded} XP awarded.` : ""}`,
-          },
-        }));
-      } else {
-        const message =
-          response.status === 401
-            ? "Sign in to submit a graded exercise and save XP."
-            : data.detail || "This exercise could not be graded.";
-        setExerciseFeedback((previous) => ({
-          ...previous,
-          [key]: { tone: "error", message },
-        }));
-      }
-    } catch {
-      setExerciseFeedback((previous) => ({
-        ...previous,
-        [key]: {
-          tone: "error",
-          message: "The API is not reachable. Start the backend and try again.",
-        },
-      }));
-    } finally {
-      setExerciseBusy((previous) => ({ ...previous, [key]: false }));
-    }
-  };
   const runCode = () => setRunResult(true);
   const resetCode = () => {
     setCode(content.codeSample || defaultCode(course.slug));
     setRunResult(false);
   };
+  const workspaceLanguage = resolveLanguage(course.slug, content.codeLanguage || "");
+  const codeFileName = compatibleFilename(content.codeFileName, workspaceLanguage);
+  const workspaceSource = code || content.codeSample || defaultCode(course.slug);
+  const workspaceSeed = {
+    courseSlug: course.slug,
+    lessonSlug: current?.slug || "",
+    title: current?.title || course.title,
+    language: workspaceLanguage.key,
+    code: workspaceSource,
+    expectedOutput: content.output || "",
+    runMode: content.runMode || "",
+  };
+  const openTryIt = () => openSeededWorkspace("try", workspaceSeed);
+  const openFullPlayground = () => openSeededWorkspace("playground", workspaceSeed);
 
   // Prefer imported API content for any course that has it. While the outline
   // request is pending, avoid flashing static fallback lessons from another schema.
@@ -996,23 +895,7 @@ export default function LessonPage() {
             <div className="code-toolbar">
               <div className="code-file">
                 <FileCode2 size={15} />{" "}
-                {course.slug === "html"
-                  ? "index.html"
-                  : course.slug === "css"
-                    ? "styles.css"
-                    : course.slug === "python"
-                      ? "main.py"
-                      : course.slug === "sql"
-                        ? "query.sql"
-                        : course.slug === "php"
-                          ? "example.php"
-                          : course.slug === "swift"
-                            ? "main.swift"
-                            : course.slug === "sqlite"
-                              ? content.codeLanguage === "python"
-                                ? "main.py"
-                                : "query.sql"
-                              : "example.js"}
+                {codeFileName}
               </div>
               <div className="code-toolbar-actions lesson-code-footer-actions">
                 <button
@@ -1077,125 +960,17 @@ export default function LessonPage() {
               <span>
                 <ShieldCheck size={14} /> Safe learning workspace
               </span>
-              <Link to="/playground">
-                Open playground <ExternalLink size={13} />
-              </Link>
+              <div className="code-card-footer-actions">
+                <button type="button" className="button button-secondary button-small" onClick={openTryIt}>
+                  Try it yourself <ExternalLink size={13} />
+                </button>
+                <button type="button" className="button button-primary button-small" onClick={openFullPlayground}>
+                  Open playground <ExternalLink size={13} />
+                </button>
+              </div>
             </div>
           </div>
         </section>
-        {exercises.length > 0 && (
-          <section className="lesson-content-block exercise-section">
-            <div className="section-title-row">
-              <div>
-                <h2>Practice exercises</h2>
-                <p>
-                  Complete an exercise correctly to earn its base XP once. The
-                  server checks the answer.
-                </p>
-              </div>
-              <span className="language-badge">
-                <Zap size={13} /> {stats.exerciseXp} XP each
-              </span>
-            </div>
-            {exercises.map((exercise) => (
-              <div className="exercise-card panel" key={exercise.slug}>
-                <div className="exercise-card-head">
-                  <div>
-                    <span className="eyebrow">
-                      {exercise.difficulty || "PRACTICE"}
-                    </span>
-                    <h3>{exercise.title}</h3>
-                  </div>
-                  <span className="challenge-xp">
-                    <Zap size={13} /> {stats.exerciseXp} XP
-                  </span>
-                </div>
-                <p>{exercise.prompt}</p>
-                {exercise.type === "choice" &&
-                Array.isArray(exercise.starter?.options) ? (
-                  <div className="exercise-options">
-                    {exercise.starter.options.map((option) => (
-                      <label key={option} className="exercise-option">
-                        <input
-                          type="radio"
-                          name={`answer-${exercise.slug}`}
-                          value={option}
-                          checked={exerciseAnswers[exercise.slug] === option}
-                          onChange={() =>
-                            setExerciseAnswers((previous) => ({
-                              ...previous,
-                              [exercise.slug]: option,
-                            }))
-                          }
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                ) : (
-                  <label className="exercise-answer-label">
-                    Your answer
-                    <textarea
-                      rows={exercise.starter?.code ? 5 : 2}
-                      spellCheck="false"
-                      placeholder={
-                        exercise.starter?.code || "Write your answer…"
-                      }
-                      value={
-                        exerciseAnswers[exercise.slug] ??
-                        (exercise.starter?.code || "")
-                      }
-                      onChange={(event) =>
-                        setExerciseAnswers((previous) => ({
-                          ...previous,
-                          [exercise.slug]: event.target.value,
-                        }))
-                      }
-                    />
-                  </label>
-                )}
-                {Array.isArray(exercise.hints) && exercise.hints.length > 0 && (
-                  <details className="exercise-hints">
-                    <summary>Show hint</summary>
-                    {exercise.hints.map((hint) => (
-                      <p key={hint}>{hint}</p>
-                    ))}
-                  </details>
-                )}
-                <div className="exercise-submit-row">
-                  <button
-                    className="button button-primary button-small"
-                    disabled={Boolean(exerciseBusy[exercise.slug])}
-                    onClick={() => submitExercise(exercise)}
-                  >
-                    {exerciseBusy[exercise.slug] ? "Checking…" : "Check answer"}
-                  </button>
-                  {exerciseFeedback[exercise.slug] && (
-                    <p
-                      className={`exercise-feedback ${exerciseFeedback[exercise.slug].tone}`}
-                      role="status"
-                    >
-                      {exerciseFeedback[exercise.slug].message}
-                    </p>
-                  )}
-                </div>
-              </div>
-            ))}
-          </section>
-        )}
-        {!exerciseLoading && exercises.length === 0 && (
-          <section className="lesson-content-block exercise-section exercise-empty">
-            <h2>Practice exercises</h2>
-            <p>
-              {courseSlug === "html"
-                ? "There is no exercise attached to this lesson yet. Continue learning or browse the available practice challenges."
-                : "Exercises will appear here once this course content and its answer checker have been imported and published."}
-            </p>
-            <Link to="/challenges" className="text-link">
-              Browse published exercises <ArrowRight size={14} />
-            </Link>
-          </section>
-        )}
         <section className="lesson-content-block task-block">
           <div className="task-topline">
             <span className="task-icon">
@@ -1258,18 +1033,18 @@ export default function LessonPage() {
             </table>
           </div>
         </section>
-        {content.sources?.length > 0 && (
+        {referenceSources.length > 0 && (
           <section className="lesson-content-block lesson-references">
             <h2>References & further reading</h2>
             <ul>
-              {content.sources.map((source) => (
-                <li key={`${source.url}-${source.title}`}>
+              {referenceSources.map((source) => (
+                <li key={`${source.url || source.href}-${source.title || source.label}`}>
                   <a
-                    href={source.url}
+                    href={safeExternalUrl(source.url || source.href)}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {source.title} <ExternalLink size={12} aria-hidden="true" />
+                    {source.title || source.label} <ExternalLink size={12} aria-hidden="true" />
                   </a>
                   <span>
                     {source.publisher || "Official reference"}
@@ -1319,6 +1094,17 @@ export default function LessonPage() {
               <ArrowRight size={15} />
             </button>
           </div>
+        </section>
+        <section className="lesson-practice-library panel" aria-labelledby="lesson-practice-library-title">
+          <span className="lesson-practice-library-icon"><ListChecks size={20} /></span>
+          <div className="lesson-practice-library-copy">
+            <span className="eyebrow">COURSE PRACTICE</span>
+            <h2 id="lesson-practice-library-title">Ready to practise what you learned?</h2>
+            <p>All {course.title} exercises are collected in one place and grouped by topic. Open an exercise in its own workspace, check your answer, and reveal a hint or worked solution when you need it.</p>
+          </div>
+          <Link className="button button-primary" to={`/practice/${encodeURIComponent(course.slug)}`}>
+            Explore exercises <ArrowRight size={15} />
+          </Link>
         </section>
         <ReviewPrompt courseSlug={course.slug} lessonSlug={current.slug} />
         <div className="lesson-bottom-nav">

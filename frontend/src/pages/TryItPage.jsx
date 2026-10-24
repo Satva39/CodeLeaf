@@ -4,7 +4,7 @@ import { ArrowLeft, Copy, Download, ExternalLink, Play, RotateCcw, ShieldCheck, 
 import { PageShell } from "../components/common.jsx";
 import { apiFetch } from "../lib/apiClient.js";
 import { API_BASE } from "../lib/demoState.js";
-import { createBrowserDocument, defaultSourceForLanguage, resolveLanguage, starterFiles } from "../lib/languageWorkspace.js";
+import { createBrowserDocument, defaultSourceForLanguage, openSeededWorkspace, resolveLanguage, starterFiles } from "../lib/languageWorkspace.js";
 
 const TERMINAL_STATES = new Set(["completed", "failed", "timeout", "output_limit", "cancelled", "expired"]);
 
@@ -205,7 +205,7 @@ export default function TryItPage() {
         </div>
       )}
       <div className="playground-note"><ShieldCheck size={16} /><span>Browser previews use a restricted sandbox and do not share the CodeLeaf app's origin. Server execution is only available for runtimes explicitly supported by the separate runner service.</span></div>
-      <div className="tryit-footer-links"><Link to={`/playground?language=${encodeURIComponent(language.key)}`}>Open the full multi-file Playground <ExternalLink size={13} /></Link></div>
+      <div className="tryit-footer-links"><button type="button" className="button button-secondary" onClick={() => openSeededWorkspace("playground", { courseSlug: course, lessonSlug, title, language: language.key, code, expectedOutput, runMode })}>Open the full multi-file Playground <ExternalLink size={13} /></button></div>
     </PageShell>
   );
 }
