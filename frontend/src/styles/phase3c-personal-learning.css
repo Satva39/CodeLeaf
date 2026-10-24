@@ -45,6 +45,13 @@
 .phase3c-preferences-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; margin-top: 16px; }
 .phase3c-preferences-form > label:not(.phase3c-analytics-toggle) { display: grid; align-content: start; gap: 7px; color: var(--text, inherit); font-size: .9rem; font-weight: 650; }
 .phase3c-preferences-form select, .phase3c-preferences-form input:not([type="checkbox"]) { width: 100%; min-width: 0; box-sizing: border-box; min-height: 44px; border: 1px solid var(--border, rgba(255,255,255,.14)); border-radius: 10px; padding: 10px 12px; background: var(--input-bg, rgba(255,255,255,.035)); color: var(--text, inherit); }
+/* Keep native select menus readable; option colors are rendered by the OS/browser popup. */
+.phase3c-preferences-form select { color-scheme: dark; }
+.phase3c-preferences-form select option { background-color: #172338; color: #e8edf7; }
+.phase3c-preferences-form select option:checked { background-color: #2563eb; color: #ffffff; }
+:root[data-theme="light"] .phase3c-preferences-form select { color-scheme: light; }
+:root[data-theme="light"] .phase3c-preferences-form select option { background-color: #ffffff; color: #182235; }
+:root[data-theme="light"] .phase3c-preferences-form select option:checked { background-color: #2563eb; color: #ffffff; }
 .phase3c-preferences-form small { display: block; color: var(--muted, #a1a1aa); font-size: .78rem; font-weight: 400; line-height: 1.45; }
 .phase3c-timezone-field { grid-column: 1 / -1; }
 .phase3c-analytics-toggle { grid-column: 1 / -1; display: flex; align-items: flex-start; gap: 10px; padding: 14px; border: 1px solid var(--border, rgba(255,255,255,.12)); border-radius: 12px; background: rgba(255,255,255,.02); cursor: pointer; }

@@ -51,7 +51,16 @@ check(/\.account-info-card \.account-logout-button:hover:not\(:disabled\)/, page
 check(/Change password/, profile, "the existing change-password UI must remain available");
 check(/\/api\/auth\/change-password/, profile, "the existing change-password endpoint must remain wired");
 assert.doesNotMatch(profile, /privacy controls|PRIVACY & VISIBILITY|account-setting-unavailable|Not available yet/i, "the unfinished privacy placeholder must be removed from the profile page");
-assert.doesNotMatch(profile, /Download my data|Delete account/, "the associated account export/delete buttons must be removed from the profile UI");
+check(/onClick=\{exportAccount\}/, profile, "Download my data must remain available in account security");
+check(/apiFetch\(`\$\{API_BASE\}\/api\/me\/export`\)/, profile, "Download my data must call the existing export endpoint");
+check(/codeleaf-account-export\.json/, profile, "account export must download a JSON file");
+check(/onClick=\{deleteAccount\}/, profile, "Delete account must remain available in account security");
+check(/apiFetch\(`\$\{API_BASE\}\/api\/me\/delete`/, profile, "Delete account must call the existing deletion endpoint");
+check(/Enter your current password to confirm account deletion/, profile, "account deletion must retain the current-password confirmation");
+
+const preferencesStyles = await source("styles/phase3c-personal-learning.css");
+check(/\.phase3c-preferences-form select option\s*\{[^}]*background-color:\s*#172338;[^}]*color:\s*#e8edf7;/s, preferencesStyles, "dark-theme dropdown options must have readable foreground and background colors");
+check(/:root\[data-theme="light"\] \.phase3c-preferences-form select option\s*\{[^}]*background-color:\s*#ffffff;[^}]*color:\s*#182235;/s, preferencesStyles, "light-theme dropdown options must have readable foreground and background colors");
 
 console.log("PASS auth routes and action-link pages remain wired");
 console.log("PASS successful login publishes a signed-in state transition");
@@ -60,5 +69,5 @@ console.log("PASS resend verification button includes an accessible loading stat
 console.log("PASS the header rechecks /api/me and refreshes on auth changes");
 console.log("PASS password/email changes and account actions publish signed-out state");
 console.log("PASS logout calls the server, clears cached state, and handles failures safely");
-console.log("PASS unfinished privacy UI and associated data-action buttons are removed");
+console.log("PASS privacy placeholder is removed while data export and account deletion remain wired");
 console.log("Frontend authentication UI contract checks passed.");

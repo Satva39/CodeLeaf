@@ -205,6 +205,41 @@ export default function ProfilePage() {
     finally { setSecurityBusy(false); }
   };
 
+  const exportAccount = async () => {
+    setSecurityBusy(true); setSecurityFeedback("");
+    try {
+      const response = await apiFetch(`${API_BASE}/api/me/export`);
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.detail || "Account export could not be prepared.");
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url; link.download = "codeleaf-account-export.json";
+      document.body.appendChild(link); link.click(); link.remove(); window.URL.revokeObjectURL(url);
+      setSecurityFeedback("Your account export has been downloaded.");
+    } catch (error) { setSecurityFeedback(error.message || "Account export could not be prepared."); }
+    finally { setSecurityBusy(false); }
+  };
+
+  const deleteAccount = async () => {
+    const confirmed = window.confirm("Delete your CodeLeaf account? Learning progress and public identity will be removed. Payment/audit records may be retained in anonymized form where required.");
+    if (!confirmed) return;
+    const passwordValue = window.prompt("Enter your current password to confirm account deletion:");
+    if (passwordValue === null) return;
+    setSecurityBusy(true); setSecurityFeedback("");
+    try {
+      const response = await apiFetch(`${API_BASE}/api/me/delete`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: passwordValue }),
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.detail || "Account deletion could not be completed.");
+      window.dispatchEvent(new CustomEvent("codeleaf:auth-changed", { detail: { authenticated: false } }));
+      navigate("/");
+    } catch (error) { setSecurityFeedback(error.message || "Account deletion could not be completed."); }
+    finally { setSecurityBusy(false); }
+  };
+
   const handleLogout = async () => {
     if (logoutBusy || accountMode !== "remote") return;
     setLogoutBusy(true);
@@ -429,6 +464,10 @@ export default function ProfilePage() {
               <label>New password<input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required minLength={10} maxLength={128} autoComplete="new-password" /><small>Use at least 10 characters. Changing it signs out your other sessions.</small></label>
               <button type="submit" className="button button-secondary" disabled={securityBusy}>Change password</button>
             </form>
+            <div className="form-grid profile-account-actions">
+              <button type="button" className="button button-secondary" onClick={exportAccount} disabled={securityBusy}>Download my data</button>
+              <button type="button" className="button button-secondary" onClick={deleteAccount} disabled={securityBusy}>Delete account</button>
+            </div>
             {securityFeedback && <p className="profile-save-note" role="status">{securityFeedback}</p>}
             {securityTestUrl && <p className="profile-save-note" role="status">Local test mode only; no email was sent. <a href={securityTestUrl}>Open confirmation link</a>.</p>}
           </div>}
