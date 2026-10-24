@@ -1,89 +1,85 @@
-CodeLeaf Privacy Settings + Production Deploy Prep Patch
-======================================================
+CodeLeaf Phase 2 — Course and Content Consistency
+=================================================
 
-Purpose
--------
-- Replaces the misleading "Privacy controls — Not available yet" placeholder with a real link to the existing account-backed analytics consent and learning-review preferences.
-- Opens the Learning Hub directly at the privacy preferences section and scrolls to it after the API-backed page loads.
-- Fixes Vercel's production `/api/*` rewrite so it reaches the included same-origin proxy function instead of a placeholder Render hostname.
-- Adds required SMTP and frontend-origin fields to Render's Blueprint so production startup config can be supplied securely during deployment.
-- Adds focused privacy-link and deployment-config contract tests plus a step-by-step deployment guide.
+This is a focused patch for the existing Code_Leaf repository. It preserves the
+React + JavaScript/JSX + Vite frontend, FastAPI API, PostgreSQL database, and
+Vercel/Render deployment. It does not change production data or environment
+variables.
 
-This patch does not add public-profile/certificate visibility toggles, deploy services, publish courses, apply database migrations, or activate live Razorpay payments.
+Files in this patch
+-------------------
+frontend/src/components/course/CourseOverview.jsx
+frontend/src/pages/CourseLandingPage.jsx
+frontend/src/pages/ReferencePage.jsx
+frontend/src/lib/referenceDetails.js
+frontend/src/styles/course-overview-redesign.css
+frontend/src/styles/reference-enrichment.css
+frontend/scripts/test_phase2_content_consistency.mjs
+frontend/scripts/test_reference_details.mjs
+docs/PHASE2_CONTENT_CONSISTENCY.md
+PATCH-INSTRUCTIONS.txt
 
-Apply on Windows PowerShell
----------------------------
-1. Stop the frontend dev server with Ctrl+C.
-2. From the CodeLeaf root, make a backup:
+Before applying
+---------------
+1. Open PowerShell in the folder that contains Code_Leaf.
+2. Run `git status --short`. Commit or back up any unrelated uncommitted edits.
+3. This patch updates shared components/pages. It does not edit `frontend/src/styles.css`.
+   Existing imports such as phase5.css and ui-polish.css are left untouched.
+4. Extract this ZIP into the existing project root (the parent folder of
+   `frontend/` and `backend/`), preserving paths. Allow files in the list above
+   to be replaced only after backing up any local changes to those same files.
 
-   $root = 'E:\Code_Leaf'
-   $backup = Join-Path $root '.patch-backups\privacy-deploy-20261023'
-   $modified = @(
-     'frontend\src\pages\ProfilePage.jsx',
-     'frontend\src\pages\LearningHubPage.jsx',
-     'frontend\src\styles\phase5.css',
-     'frontend\package.json',
-     'frontend\vercel.json',
-     'render.yaml'
-   )
-   foreach ($relative in $modified) {
-     $source = Join-Path $root $relative
-     $destination = Join-Path $backup $relative
-     if (Test-Path $source) {
-       New-Item -ItemType Directory -Force -Path (Split-Path $destination) | Out-Null
-       Copy-Item $source $destination -Force
-     }
-   }
+What changes
+------------
+- Tutorials course overviews show audience, prerequisites, outcomes, and a
+  collapsible course outline in separate sections, with Start Learning visible
+  near the top.
+- References explicitly opt out of tutorial-only details; Projects and Practice
+  rely on the shared component's safe compact default and do not load the outline.
+- Reference pages get a common enriched layout across every course and a
+  full-width detail panel. Authored descriptions/examples are preserved.
+- Related lesson links come from the selected course's outline. External source
+  links are restricted to HTTP/HTTPS schemes.
+- Existing course filtering remains API-authoritative; roadmap/draft/empty
+  course metadata does not become published merely because a page loads.
 
-3. Extract this ZIP into E:\Code_Leaf, preserving folder structure and allowing overwrite of the six modified files.
-4. Do not add real secrets to the repository. render.yaml declares secrets as sync:false prompts; put their real values into Render's private environment settings.
+Validation
+----------
+From `frontend/`, run:
 
-Verify
-------
-From E:\Code_Leaf\frontend:
+node scripts/test_phase2_content_consistency.mjs
+node scripts/test_reference_details.mjs
+node scripts/test_course_catalog_filters.mjs
+node scripts/test_course_overview_cta.mjs
+npm run build
 
-   npm run test:privacy-settings
-   npm run test:deployment-config
-   node scripts/test_api_proxy.mjs
-   npm run test:ui-polish
-   npm run test:workspace
-   npm run test:exercise-ui
-   npm run test:catalog
-   npm run test:api-cache
-   npm run test:api-client
-   npm run test:auth-ui
-   npm run test:course-overview
-   npm run test:lesson-timeout
-   npm run build
+Manual smoke checks:
+- `/courses/html`: Start Learning is near the top; course-fit cards and outline
+  appear before “Explore this course”.
+- `/reference/html/<entry>` and `/reference/angular/<entry>`: shared detail
+  structure; full-width outer panel; related links lead to lessons from that
+  course.
+- `/projects/html` and `/practice/html`: tutorial-only detail cards and outline
+  are not displayed.
+- Test mobile width and keyboard activation for the outline disclosure buttons.
 
-From E:\Code_Leaf\backend (with the backend venv active), also run the project's existing production configuration checks before deployment:
+If tests pass, inspect `git diff --check` and the changes before committing:
 
-   python scripts/check_alembic_heads.py
-   python scripts/check_repository_hygiene.py
-   python scripts/test_phase1_config.py
-   python scripts/check_release_readiness.py --production
-
-Review release-readiness output; do not add --check-db or run write/publish commands unless you explicitly intend to test against the configured database/content.
+cd E:\Code_Leaf
+git diff --check
+git add frontend/src/components/course/CourseOverview.jsx frontend/src/pages/CourseLandingPage.jsx frontend/src/pages/ReferencePage.jsx frontend/src/lib/referenceDetails.js frontend/src/styles/course-overview-redesign.css frontend/src/styles/reference-enrichment.css frontend/scripts/test_phase2_content_consistency.mjs frontend/scripts/test_reference_details.mjs docs/PHASE2_CONTENT_CONSISTENCY.md PATCH-INSTRUCTIONS.txt
+git commit -m "Improve course and content consistency"
+git push origin master
 
 Rollback
 --------
-From PowerShell:
+Before applying, keep a copy of the original files named above. If rollback is
+needed, restore those backups and delete the newly added files:
+- frontend/src/lib/referenceDetails.js (if it did not exist before)
+- frontend/src/styles/course-overview-redesign.css (if it did not exist before)
+- frontend/src/styles/reference-enrichment.css (if it did not exist before)
+- frontend/scripts/test_phase2_content_consistency.mjs (if it did not exist before)
+- frontend/scripts/test_reference_details.mjs (if it did not exist before)
+- docs/PHASE2_CONTENT_CONSISTENCY.md
 
-   $root = 'E:\Code_Leaf'
-   $backup = Join-Path $root '.patch-backups\privacy-deploy-20261023'
-   $modified = @(
-     'frontend\src\pages\ProfilePage.jsx',
-     'frontend\src\pages\LearningHubPage.jsx',
-     'frontend\src\styles\phase5.css',
-     'frontend\package.json',
-     'frontend\vercel.json',
-     'render.yaml'
-   )
-   foreach ($relative in $modified) {
-     $source = Join-Path $backup $relative
-     if (Test-Path $source) { Copy-Item $source (Join-Path $root $relative) -Force }
-   }
-   Remove-Item (Join-Path $root 'frontend\scripts\test_privacy_settings_link.mjs') -ErrorAction SilentlyContinue
-   Remove-Item (Join-Path $root 'frontend\scripts\test_deployment_config.mjs') -ErrorAction SilentlyContinue
-
-Retain the backup until the privacy links and deployment configuration have been checked locally.
+Do not roll back production database rows; this patch makes no database changes.

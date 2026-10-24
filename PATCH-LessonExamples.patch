@@ -1,0 +1,27 @@
+--- a/frontend/src/pages/LessonPage.jsx
++++ b/frontend/src/pages/LessonPage.jsx
+@@ -53,6 +53,7 @@
+ 
+ import { defaultCode, getLessonContent } from "../data/lessonContent.js";
+ import DynamicDiagram from "../components/diagrams/DynamicDiagram.jsx";
++import LessonLiveExample from "../components/lessons/LessonLiveExample.jsx";
+ 
+ const CONCEPT_STEP_ICONS = [FileCode2, BookMarked, Zap, CheckCircle2];
+ 
+@@ -961,6 +962,16 @@
+           </div>
+           {!!content.extraBlocks?.length && <div className="lesson-extra-content-blocks">{content.extraBlocks.map((block, blockIndex) => <StructuredContentBlock key={block.id || `${block.type || "block"}-${blockIndex}`} block={block} courseSlug={course.slug} index={blockIndex} />)}</div>}
+         </section>
++        <LessonLiveExample
++          key={`${course.slug}:${current?.slug || "lesson"}`}
++          courseSlug={course.slug}
++          courseTitle={course.title}
++          lessonTitle={current?.title || course.title}
++          code={code || content.codeSample || ""}
++          codeLanguage={content.codeLanguage || ""}
++          expectedOutput={content.output || ""}
++          intro={content.intro || content.paragraphs?.[0]?.text || ""}
++        />
+         <section className="lesson-content-block">
+           <div className="section-title-row">
+             <div>

@@ -6,7 +6,7 @@ import { API_BASE } from "../lib/demoState.js";
 import { useCourseCatalog } from "../lib/useCourseCatalog.js";
 import { EmptyState, PageShell } from "../components/common.jsx";
 import CourseOverview from "../components/course/CourseOverview.jsx";
-import { buildReferenceDetails, flattenCourseOutline } from "../lib/referenceDetails.js";
+import { buildReferenceDetails, flattenCourseOutline, safeExternalHref } from "../lib/referenceDetails.js";
 import "../styles/reference-enrichment.css";
 
 export default function ReferencePage() {
@@ -83,6 +83,7 @@ export default function ReferencePage() {
   const selectedReferenceDetails = selectedReference
     ? buildReferenceDetails(selectedReference, course, outlineLessons)
     : null;
+  const selectedReferenceHref = safeExternalHref(selectedReference?.url);
 
   if (!course) {
     return (
@@ -102,6 +103,7 @@ export default function ReferencePage() {
         backLabel="All references"
         actionTo={`/learn/${course.slug}`}
         actionLabel="Open tutorial"
+        showLearningSections={false}
       />
       {!referenceSlug && <div className="collection-detail-toolbar">
         <div>
@@ -158,8 +160,8 @@ export default function ReferencePage() {
         </section>
 
         <div className="reference-resource-actions reference-resource-actions-enriched">
-          <a href={selectedReference.url} target="_blank" rel="noreferrer noopener">Open official source <ExternalLink size={14} /></a>
-          <Link to={`/reference/${course.slug}`}>Back to reference index <ArrowUpRight size={14} /></Link>
+          {selectedReferenceHref ? <a href={selectedReferenceHref} target="_blank" rel="noreferrer noopener">Open official source <ExternalLink size={14} /></a> : <span className="reference-source-unavailable">Official source link is not available.</span>}
+          <Link to={`/reference/${encodeURIComponent(course.slug)}`}>Back to reference index <ArrowUpRight size={14} /></Link>
         </div>
 
         <section className="reference-related-lessons reference-related-lessons-enriched" aria-labelledby="reference-related-heading">
@@ -175,7 +177,7 @@ export default function ReferencePage() {
           ) : selectedReferenceDetails.relatedLessons.length ? (
             <div className="reference-related-lesson-grid">
               {selectedReferenceDetails.relatedLessons.map((lesson) => (
-                <Link key={lesson.slug} className="reference-related-lesson" to={`/learn/${course.slug}/${lesson.slug}`}>
+                <Link key={lesson.slug} className="reference-related-lesson" to={`/learn/${encodeURIComponent(course.slug)}/${encodeURIComponent(lesson.slug)}`}>
                   <span>{lesson.title}</span><ArrowUpRight size={14} aria-hidden="true" />
                 </Link>
               ))}
@@ -183,7 +185,7 @@ export default function ReferencePage() {
           ) : (
             <p className="reference-related-status">The lesson outline is not available right now. Open the tutorial to continue learning this topic.</p>
           )}
-          <Link className="reference-open-tutorial" to={`/learn/${course.slug}`}>Explore the full tutorial <ArrowUpRight size={14} /></Link>
+          <Link className="reference-open-tutorial" to={`/learn/${encodeURIComponent(course.slug)}`}>Explore the full tutorial <ArrowUpRight size={14} /></Link>
         </section>
       </article>}
       {referenceSlug && !loading && !error && !selectedReference && <EmptyState title="Reference entry not found" detail="This entry is not present in the course reference index. Return to the index to choose an available entry." action={<Link to={`/reference/${course.slug}`} className="button button-secondary">Back to references</Link>} />}
@@ -201,12 +203,12 @@ export default function ReferencePage() {
                   <span>{String(item.source_type || "reference").replaceAll("_", " ")}</span>
                   {item.publisher && <span>{item.publisher}</span>}
                 </div>
-                <h3><Link to={`/reference/${course.slug}/${item.slug}`}>{item.title}</Link></h3>
+                <h3><Link to={`/reference/${encodeURIComponent(course.slug)}/${encodeURIComponent(item.slug)}`}>{item.title}</Link></h3>
                 {item.supports && <p>{item.supports}</p>}
                 {item.checked_on && <small>Checked {item.checked_on}</small>}
                 <div className="reference-resource-actions">
-                  <Link to={`/reference/${course.slug}/${item.slug}`}>Read reference entry <ArrowUpRight size={14} /></Link>
-                  <a href={item.url} target="_blank" rel="noreferrer noopener">Open source <ExternalLink size={14} /></a>
+                  <Link to={`/reference/${encodeURIComponent(course.slug)}/${encodeURIComponent(item.slug)}`}>Read reference entry <ArrowUpRight size={14} /></Link>
+                  {safeExternalHref(item.url) && <a href={safeExternalHref(item.url)} target="_blank" rel="noreferrer noopener">Open source <ExternalLink size={14} /></a>}
                 </div>
               </div>
             </article>

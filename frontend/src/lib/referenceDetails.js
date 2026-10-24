@@ -11,6 +11,18 @@ function asText(value) {
   return value == null ? "" : String(value).trim();
 }
 
+/** Allow only ordinary web links from reference metadata; never render executable schemes. */
+export function safeExternalHref(value) {
+  const candidate = asText(value);
+  if (!candidate) return "";
+  try {
+    const parsed = new URL(candidate);
+    return parsed.protocol === "https:" || parsed.protocol === "http:" ? parsed.href : "";
+  } catch {
+    return "";
+  }
+}
+
 function words(value) {
   return asText(value)
     .normalize("NFKD")
