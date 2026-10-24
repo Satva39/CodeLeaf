@@ -1,11 +1,13 @@
 import { apiFetch } from "../lib/apiClient.js";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowUpRight, ExternalLink, Search } from "lucide-react";
+import { ArrowUpRight, BookOpen, ExternalLink, Lightbulb, Search } from "lucide-react";
 import { API_BASE } from "../lib/demoState.js";
 import { useCourseCatalog } from "../lib/useCourseCatalog.js";
 import { EmptyState, PageShell } from "../components/common.jsx";
 import CourseOverview from "../components/course/CourseOverview.jsx";
+import { buildReferenceDetails, flattenCourseOutline } from "../lib/referenceDetails.js";
+import "../styles/reference-enrichment.css";
 
 export default function ReferencePage() {
   const { courseSlug, referenceSlug } = useParams();
@@ -16,6 +18,8 @@ export default function ReferencePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
+  const [outlineLessons, setOutlineLessons] = useState([]);
+  const [outlineLoading, setOutlineLoading] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -44,10 +48,41 @@ export default function ReferencePage() {
     return () => controller.abort();
   }, [courseSlug]);
 
+  useEffect(() => {
+    const controller = new AbortController();
+    if (!courseSlug || !referenceSlug) {
+      setOutlineLessons([]);
+      setOutlineLoading(false);
+      return () => controller.abort();
+    }
+
+    setOutlineLoading(true);
+    apiFetch(`${API_BASE}/api/courses/${encodeURIComponent(courseSlug)}/outline`, {
+      credentials: "include",
+      signal: controller.signal,
+    })
+      .then(async (response) => {
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(payload.detail || "Course lessons could not be loaded.");
+        return payload;
+      })
+      .then((payload) => setOutlineLessons(flattenCourseOutline(payload.modules)))
+      .catch((err) => {
+        if (err.name !== "AbortError") setOutlineLessons([]);
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setOutlineLoading(false);
+      });
+    return () => controller.abort();
+  }, [courseSlug, referenceSlug]);
+
   const filteredItems = useMemo(() => items.filter((item) =>
     `${item.title} ${item.publisher || ""} ${item.source_type || ""} ${item.supports || ""}`
       .toLowerCase().includes(query.trim().toLowerCase())), [items, query]);
   const selectedReference = referenceSlug ? items.find((item) => item.slug === referenceSlug) : null;
+  const selectedReferenceDetails = selectedReference
+    ? buildReferenceDetails(selectedReference, course, outlineLessons)
+    : null;
 
   if (!course) {
     return (
@@ -80,14 +115,76 @@ export default function ReferencePage() {
         </label>
       </div>}
       {checkedOn && <p className="collection-checked-note">Reference index last checked: {checkedOn}</p>}
-      {referenceSlug && !loading && !error && selectedReference && <article className="panel reference-entry-detail">
-        <div className="reference-resource-meta"><span>{String(selectedReference.source_type || "reference").replaceAll("_", " ")}</span>{selectedReference.publisher && <span>{selectedReference.publisher}</span>}</div>
+      {referenceSlug && !loading && !error && selectedReference && selectedReferenceDetails && <article className="panel reference-entry-detail reference-entry-enriched">
+        <div className="reference-resource-meta">
+          <span>{String(selectedReference.source_type || "reference").replaceAll("_", " ")}</span>
+          {selectedReference.publisher && <span>{selectedReference.publisher}</span>}
+        </div>
         <h2>{selectedReference.title}</h2>
-        {selectedReference.explanation && <p>{selectedReference.explanation}</p>}
-        {selectedReference.supports && <p><strong>Topics covered:</strong> {selectedReference.supports}</p>}
-        {selectedReference.example && <div className="reference-entry-example"><h3>Example or practical use</h3><pre>{selectedReference.example}</pre></div>}
-        <div className="reference-resource-actions"><a href={selectedReference.url} target="_blank" rel="noreferrer noopener">Open official source <ExternalLink size={14} /></a><Link to={`/reference/${course.slug}`}>Back to reference index <ArrowUpRight size={14} /></Link></div>
-        {!!(selectedReference.related_lesson_slugs || []).length && <section className="reference-related-lessons"><h3>Related lessons</h3><div className="project-guide-chip-list">{selectedReference.related_lesson_slugs.map((slug) => <Link key={slug} className="reference-related-lesson" to={`/learn/${course.slug}/${slug}`}>{slug.replaceAll("-", " ")}</Link>)}</div></section>}
+
+        <section className="reference-detail-section" aria-labelledby="reference-about-heading">
+          <div className="reference-detail-heading">
+            <span className="reference-detail-icon"><BookOpen size={17} aria-hidden="true" /></span>
+            <div>
+              <span className="reference-detail-kicker">RESOURCE GUIDE</span>
+              <h3 id="reference-about-heading">About this resource</h3>
+            </div>
+          </div>
+          <p>{selectedReferenceDetails.explanation}</p>
+        </section>
+
+        <section className="reference-detail-section reference-topics-section" aria-labelledby="reference-topics-heading">
+          <div className="reference-detail-heading">
+            <span className="reference-detail-icon"><Search size={17} aria-hidden="true" /></span>
+            <div>
+              <span className="reference-detail-kicker">AT A GLANCE</span>
+              <h3 id="reference-topics-heading">Topics covered</h3>
+            </div>
+          </div>
+          <div className="reference-topic-list">
+            {selectedReferenceDetails.topics.map((topic) => <span className="reference-topic-chip" key={topic}>{topic}</span>)}
+          </div>
+        </section>
+
+        <section className="reference-entry-example reference-example-enriched" aria-labelledby="reference-example-heading">
+          <div className="reference-detail-heading">
+            <span className="reference-detail-icon"><Lightbulb size={17} aria-hidden="true" /></span>
+            <div>
+              <span className="reference-detail-kicker">PUT IT TO USE</span>
+              <h3 id="reference-example-heading">Example or practical use</h3>
+            </div>
+          </div>
+          <p className="reference-example-text">{selectedReferenceDetails.example}</p>
+        </section>
+
+        <div className="reference-resource-actions reference-resource-actions-enriched">
+          <a href={selectedReference.url} target="_blank" rel="noreferrer noopener">Open official source <ExternalLink size={14} /></a>
+          <Link to={`/reference/${course.slug}`}>Back to reference index <ArrowUpRight size={14} /></Link>
+        </div>
+
+        <section className="reference-related-lessons reference-related-lessons-enriched" aria-labelledby="reference-related-heading">
+          <div className="reference-related-heading-row">
+            <div>
+              <span className="reference-detail-kicker">CONTINUE LEARNING</span>
+              <h3 id="reference-related-heading">{selectedReferenceDetails.usedFallbackLessons ? "Start with these lessons" : "Related lessons"}</h3>
+            </div>
+            {selectedReferenceDetails.relatedLessons.length > 0 && <span className="reference-related-count">{selectedReferenceDetails.relatedLessons.length} lessons</span>}
+          </div>
+          {outlineLoading ? (
+            <p className="reference-related-status">Finding matching lessons…</p>
+          ) : selectedReferenceDetails.relatedLessons.length ? (
+            <div className="reference-related-lesson-grid">
+              {selectedReferenceDetails.relatedLessons.map((lesson) => (
+                <Link key={lesson.slug} className="reference-related-lesson" to={`/learn/${course.slug}/${lesson.slug}`}>
+                  <span>{lesson.title}</span><ArrowUpRight size={14} aria-hidden="true" />
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className="reference-related-status">The lesson outline is not available right now. Open the tutorial to continue learning this topic.</p>
+          )}
+          <Link className="reference-open-tutorial" to={`/learn/${course.slug}`}>Explore the full tutorial <ArrowUpRight size={14} /></Link>
+        </section>
       </article>}
       {referenceSlug && !loading && !error && !selectedReference && <EmptyState title="Reference entry not found" detail="This entry is not present in the course reference index. Return to the index to choose an available entry." action={<Link to={`/reference/${course.slug}`} className="button button-secondary">Back to references</Link>} />}
       {loading ? (

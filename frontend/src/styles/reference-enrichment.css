@@ -1,0 +1,184 @@
+/* Consistent, useful details for every course reference entry. */
+.reference-entry-enriched {
+  display: grid;
+  gap: 18px;
+  max-width: 940px;
+  padding: clamp(18px, 3vw, 32px);
+}
+.reference-entry-enriched > h2 {
+  margin-bottom: 0;
+  overflow-wrap: anywhere;
+}
+.reference-detail-section {
+  min-width: 0;
+  padding: clamp(16px, 2.2vw, 22px);
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: linear-gradient(135deg, var(--panel-soft), color-mix(in srgb, var(--panel-soft) 76%, transparent));
+}
+.reference-detail-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 12px;
+}
+.reference-detail-icon {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  color: var(--mint);
+  border: 1px solid color-mix(in srgb, var(--mint) 28%, var(--line));
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--mint) 9%, var(--panel));
+}
+.reference-detail-kicker {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--muted-2);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+.reference-detail-heading h3,
+.reference-related-heading-row h3 {
+  margin: 0;
+  color: var(--text);
+  font: 750 15px/1.45 Manrope, sans-serif;
+}
+.reference-detail-section > p {
+  max-width: 78ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+}
+.reference-topic-list {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.reference-topic-chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 7px 10px;
+  color: var(--text);
+  background: color-mix(in srgb, var(--panel) 86%, var(--mint));
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.reference-example-enriched {
+  margin: 0;
+  padding: clamp(16px, 2.2vw, 22px);
+  border-color: color-mix(in srgb, var(--mint) 30%, var(--line));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--mint) 7%, var(--panel-soft)), var(--panel-soft));
+}
+.reference-example-enriched .reference-detail-heading { margin-bottom: 10px; }
+.reference-example-text {
+  margin: 0;
+  max-width: 78ch;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.85;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.reference-resource-actions-enriched {
+  gap: 12px 20px;
+  padding: 2px 1px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.reference-related-lessons-enriched {
+  margin-top: 0;
+  padding: 18px 0 0;
+  border-top: 0;
+}
+.reference-related-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 13px;
+}
+.reference-related-count {
+  flex: 0 0 auto;
+  padding: 5px 9px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 10px;
+}
+.reference-related-lesson-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+.reference-related-lessons-enriched .reference-related-lesson {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  padding: 12px 13px;
+  color: var(--text);
+  background: var(--panel-soft);
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 1.55;
+  text-decoration: none;
+  text-transform: none;
+  transition: border-color 140ms ease, background-color 140ms ease, transform 140ms ease;
+}
+.reference-related-lessons-enriched .reference-related-lesson span { min-width: 0; overflow-wrap: anywhere; }
+.reference-related-lessons-enriched .reference-related-lesson svg {
+  flex: 0 0 auto;
+  color: var(--mint);
+}
+.reference-related-lessons-enriched .reference-related-lesson:hover {
+  background: color-mix(in srgb, var(--mint) 7%, var(--panel-soft));
+  border-color: color-mix(in srgb, var(--mint) 38%, var(--line));
+  transform: translateY(-1px);
+}
+.reference-related-lessons-enriched .reference-related-lesson:focus-visible,
+.reference-open-tutorial:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 3px;
+}
+.reference-related-status {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.reference-open-tutorial {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 13px;
+  color: var(--mint);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.reference-open-tutorial:hover { text-decoration: underline; }
+
+@media (max-width: 640px) {
+  .reference-entry-enriched { gap: 14px; }
+  .reference-related-lesson-grid { grid-template-columns: minmax(0, 1fr); }
+  .reference-detail-section > p, .reference-example-text { font-size: 12px; }
+  .reference-related-heading-row { align-items: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reference-related-lessons-enriched .reference-related-lesson { transition: none; }
+  .reference-related-lessons-enriched .reference-related-lesson:hover { transform: none; }
+}
