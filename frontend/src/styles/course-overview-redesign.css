@@ -1,0 +1,349 @@
+/* Course overview redesign: clear primary action, engaging course-fit cards, and an interactive outline. */
+.course-overview-stack {
+  display: grid;
+  gap: clamp(16px, 2.1vw, 24px);
+  min-width: 0;
+  margin-bottom: 24px;
+}
+
+.course-overview-stack .course-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(190px, 224px);
+  align-items: center;
+  gap: clamp(20px, 3vw, 36px);
+  padding: clamp(22px, 3.4vw, 38px);
+  margin: 0;
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--mint) 20%, var(--line));
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at 7% 0%, rgba(39, 214, 160, .14), transparent 38%),
+    radial-gradient(ellipse at 100% 100%, rgba(104, 107, 255, .09), transparent 38%),
+    linear-gradient(135deg, var(--panel), color-mix(in srgb, var(--panel-deep) 48%, var(--panel)));
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .12);
+}
+
+.course-overview-stack .course-overview-main { min-width: 0; }
+.course-overview-stack .course-overview-head { align-items: flex-start; gap: clamp(14px, 2vw, 22px); }
+.course-overview-stack .course-overview-head > .course-icon { flex: 0 0 auto; margin-top: 6px; }
+.course-overview-stack .course-overview-copy { min-width: 0; }
+.course-overview-stack .course-overview-copy > .eyebrow { margin-bottom: 9px; }
+.course-overview-stack .course-overview h1 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  max-width: 920px;
+  margin: 0 0 12px;
+  font-size: clamp(30px, 3.55vw, 45px);
+  line-height: 1.12;
+  letter-spacing: -1.35px;
+  overflow-wrap: anywhere;
+}
+.course-overview-title-suffix {
+  color: var(--muted);
+  font-size: .62em;
+  font-weight: 700;
+  letter-spacing: -.45px;
+  line-height: 1.3;
+}
+.course-overview-stack .course-overview-copy > p {
+  max-width: 820px;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+.course-overview-stack .course-overview-meta { margin-top: 16px; gap: 8px; }
+.course-overview-stack .course-overview-meta span {
+  padding: 7px 10px;
+  font-size: 11px;
+  line-height: 1.3;
+}
+.course-overview-stack .course-overview-meta .course-status-pill { font-weight: 750; }
+.course-overview-stack .course-overview-counts {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 21px 0 0;
+}
+.course-overview-stack .course-overview-counts > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 11px;
+  border: 1px solid color-mix(in srgb, var(--line) 82%, transparent);
+  border-radius: 11px;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--panel-deep) 82%, transparent);
+  font-size: 12px;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+.course-overview-stack .course-overview-counts > span > svg { flex: 0 0 auto; color: var(--mint); }
+.course-overview-stack .course-overview-counts strong { color: var(--text); font-size: 14px; }
+.course-overview-stack .course-overview-actions {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 11px;
+  width: 100%;
+  min-width: 0;
+}
+.course-overview-stack .course-overview-actions .button { min-height: 46px; justify-content: center; }
+.course-overview-stack .course-overview-start {
+  gap: 9px;
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: 13px;
+  box-shadow: 0 9px 24px rgba(39, 214, 160, .16);
+  font-size: 14px;
+  font-weight: 800;
+  white-space: normal;
+}
+.course-overview-stack .course-overview-start svg:last-child { margin-left: auto; flex: 0 0 auto; }
+.course-overview-stack .course-overview-back { order: 2; width: 100%; font-size: 12px; }
+.course-overview-action-note {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--muted-2);
+  font-size: 11px;
+  text-align: center;
+}
+.course-overview-action-note svg { color: var(--mint); }
+
+/* Three short, visually distinct cards replace the long text columns in the hero. */
+.course-overview-stack .course-overview-details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+  margin: 0;
+  align-items: stretch;
+}
+.course-detail-card {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  padding: clamp(18px, 2.1vw, 23px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(155deg, var(--panel), color-mix(in srgb, var(--panel-deep) 44%, var(--panel)));
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .09);
+}
+.course-detail-card::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  content: "";
+  background: color-mix(in srgb, var(--mint) 65%, transparent);
+  opacity: .7;
+}
+.course-detail-card-prerequisites::before { background: color-mix(in srgb, #83aaff 72%, transparent); }
+.course-detail-card-outcomes::before { background: color-mix(in srgb, #b2a1ff 75%, transparent); }
+.course-detail-card-heading { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 15px; }
+.course-detail-card-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid color-mix(in srgb, var(--mint) 24%, var(--line));
+  border-radius: 12px;
+  color: var(--mint);
+  background: var(--mint-wash);
+}
+.course-detail-card-prerequisites .course-detail-card-icon { color: #9dbaff; background: rgba(98, 138, 255, .1); border-color: rgba(130, 165, 255, .2); }
+.course-detail-card-outcomes .course-detail-card-icon { color: #c0b2ff; background: rgba(153, 128, 255, .11); border-color: rgba(153, 128, 255, .22); }
+.course-detail-card-heading h2 { margin: 1px 0 4px; font-size: 17px; line-height: 1.3; letter-spacing: -.2px; }
+.course-detail-card-heading p { margin: 0; color: var(--muted-2); font-size: 11px; line-height: 1.45; }
+.course-detail-list { display: grid; gap: 9px; list-style: none; padding: 0; margin: 0; }
+.course-detail-list li { display: grid; grid-template-columns: 8px minmax(0, 1fr); align-items: start; gap: 10px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+.course-detail-list-dot li::before {
+  width: 6px;
+  height: 6px;
+  margin-top: 7px;
+  border-radius: 50%;
+  background: var(--mint);
+  content: "";
+}
+.course-detail-list-check li { grid-template-columns: 16px minmax(0, 1fr); }
+.course-detail-list-check li svg { margin-top: 3px; color: var(--mint); }
+
+/* Interactive course roadmap, separated from the introductory hero. */
+.course-overview-stack .course-module-outline {
+  margin: 0;
+  min-width: 0;
+  padding: clamp(20px, 3vw, 32px);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(39, 214, 160, .065), transparent 38%),
+    var(--panel);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, .09);
+}
+.course-outline-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 21px;
+}
+.course-outline-heading-copy { display: flex; align-items: flex-start; gap: 13px; min-width: 0; }
+.course-outline-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid color-mix(in srgb, var(--mint) 25%, var(--line));
+  border-radius: 13px;
+  color: var(--mint);
+  background: var(--mint-wash);
+}
+.course-outline-heading-copy .eyebrow { margin: 0 0 5px; font-size: 10px; }
+.course-overview-stack .course-module-outline h2 { margin: 0; font-size: clamp(21px, 2.3vw, 27px); line-height: 1.25; letter-spacing: -.55px; }
+.course-outline-heading-copy p { margin: 7px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.course-outline-total {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--panel-deep);
+}
+.course-outline-total strong { color: var(--text); font-size: 21px; line-height: 1.2; }
+.course-outline-total span { color: var(--muted-2); font-size: 10px; margin-top: 3px; }
+.course-roadmap-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; align-items: start; }
+.course-roadmap-module {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--panel-deep) 74%, transparent);
+  transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+}
+.course-roadmap-module:hover { border-color: color-mix(in srgb, var(--mint) 35%, var(--line)); }
+.course-roadmap-module.is-expanded { grid-column: 1 / -1; border-color: color-mix(in srgb, var(--mint) 42%, var(--line)); background: color-mix(in srgb, var(--panel-deep) 90%, var(--mint-wash)); box-shadow: inset 3px 0 0 var(--mint); }
+.course-roadmap-trigger {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto 18px;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  min-height: 68px;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 0;
+  color: var(--text);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.course-roadmap-trigger:hover { background: rgba(255, 255, 255, .025); }
+.course-roadmap-trigger:focus-visible { outline: var(--focus-outline); outline-offset: -3px; }
+.course-roadmap-number {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  color: var(--muted-2);
+  background: var(--panel);
+  font-size: 11px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.course-roadmap-module.is-expanded .course-roadmap-number { color: var(--mint); border-color: color-mix(in srgb, var(--mint) 34%, var(--line)); background: var(--mint-wash); }
+.course-roadmap-module-copy { display: grid; gap: 5px; min-width: 0; }
+.course-roadmap-module-copy strong { font-size: 13px; line-height: 1.45; overflow-wrap: anywhere; }
+.course-roadmap-module-copy small { color: var(--muted-2); font-size: 9px; letter-spacing: .09em; text-transform: uppercase; }
+.course-roadmap-lesson-count { display: inline-flex; align-items: center; gap: 5px; color: var(--muted); font-size: 11px; white-space: nowrap; }
+.course-roadmap-lesson-count svg { color: var(--mint); }
+.course-roadmap-chevron { color: var(--muted-2); transition: transform .18s ease, color .18s ease; }
+.course-roadmap-module.is-expanded .course-roadmap-chevron { transform: rotate(180deg); color: var(--mint); }
+.course-roadmap-lessons { display: grid; gap: 0; padding: 0 18px 12px 64px; }
+.course-roadmap-lesson { display: grid; grid-template-columns: 8px minmax(0, 1fr) auto; align-items: start; gap: 10px; padding: 8px 0; border-top: 1px solid color-mix(in srgb, var(--line) 72%, transparent); color: var(--muted); font-size: 12px; line-height: 1.5; }
+.course-roadmap-lesson-dot { width: 6px; height: 6px; margin-top: 6px; border-radius: 50%; background: color-mix(in srgb, var(--mint) 80%, var(--line)); }
+.course-roadmap-lesson > span:nth-child(2) { overflow-wrap: anywhere; }
+.course-roadmap-lesson small { color: var(--muted-2); font-size: 10px; white-space: nowrap; }
+.course-roadmap-extra, .course-outline-state { margin: 9px 0 0; color: var(--muted-2); font-size: 11px; line-height: 1.5; }
+.course-outline-more { margin: 15px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.course-outline-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.course-outline-footer > span { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font-size: 12px; }
+.course-outline-footer > span svg { color: var(--mint); }
+.course-outline-footer-link { display: inline-flex; align-items: center; gap: 7px; color: var(--mint); font-size: 12px; font-weight: 800; text-decoration: none; }
+.course-outline-footer-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+@media (max-width: 980px) {
+  .course-overview-stack .course-overview { grid-template-columns: minmax(0, 1fr); gap: 17px; }
+  .course-overview-stack .course-overview-actions { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
+  .course-overview-stack .course-overview-start { grid-column: 1 / -1; grid-row: 1; }
+  .course-overview-stack .course-overview-back { order: 0; grid-column: 1; grid-row: 2; }
+  .course-overview-action-note { grid-column: 2; grid-row: 2; }
+  .course-overview-stack .course-overview-details { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .course-detail-card-outcomes { grid-column: 1 / -1; }
+}
+
+@media (max-width: 620px) {
+  .course-overview-stack { gap: 15px; margin-bottom: 20px; }
+  .course-overview-stack .course-overview { padding: 21px 17px; border-radius: 18px; }
+  .course-overview-stack .course-overview-head { gap: 12px; }
+  .course-overview-stack .course-overview-head > .course-icon { width: 47px; height: 47px; border-radius: 13px; }
+  .course-overview-stack .course-overview h1 { font-size: clamp(27px, 8vw, 35px); letter-spacing: -.85px; }
+  .course-overview-stack .course-overview-copy > p { font-size: 13px; line-height: 1.65; }
+  .course-overview-stack .course-overview-meta { gap: 6px; margin-top: 12px; }
+  .course-overview-stack .course-overview-meta span { padding: 6px 8px; font-size: 10px; }
+  .course-overview-stack .course-overview-counts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin-top: 16px; }
+  .course-overview-stack .course-overview-counts > span { min-width: 0; gap: 6px; padding: 9px; font-size: 11px; white-space: normal; }
+  .course-overview-stack .course-overview-counts strong { font-size: 13px; }
+  .course-overview-stack .course-overview-actions { grid-template-columns: 1fr; gap: 9px; }
+  .course-overview-stack .course-overview-start { grid-column: 1; grid-row: auto; }
+  .course-overview-stack .course-overview-back { grid-column: 1; grid-row: auto; }
+  .course-overview-action-note { grid-column: 1; grid-row: auto; }
+  .course-overview-stack .course-overview-details { grid-template-columns: minmax(0, 1fr); gap: 11px; }
+  .course-detail-card, .course-detail-card-outcomes { grid-column: auto; padding: 18px 17px; }
+  .course-detail-card-heading { margin-bottom: 12px; }
+  .course-detail-list { gap: 7px; }
+  .course-detail-list li { font-size: 12.5px; }
+  .course-overview-stack .course-module-outline { padding: 19px 14px; border-radius: 17px; }
+  .course-outline-header { align-items: flex-start; gap: 10px; margin-bottom: 15px; }
+  .course-outline-heading-copy { gap: 10px; }
+  .course-outline-icon { flex-basis: 37px; width: 37px; height: 37px; border-radius: 11px; }
+  .course-outline-heading-copy p { font-size: 12px; }
+  .course-outline-total { min-width: 57px; padding: 7px 8px; }
+  .course-outline-total strong { font-size: 18px; }
+  .course-roadmap-list { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .course-roadmap-module.is-expanded { grid-column: auto; }
+  .course-roadmap-trigger { grid-template-columns: 33px minmax(0, 1fr) 17px; gap: 9px; min-height: 62px; padding: 10px; }
+  .course-roadmap-number { width: 32px; height: 32px; border-radius: 9px; }
+  .course-roadmap-module-copy strong { font-size: 12px; }
+  .course-roadmap-lesson-count { grid-column: 2; grid-row: 2; font-size: 10px; margin-top: -4px; }
+  .course-roadmap-trigger .course-roadmap-chevron { grid-column: 3; grid-row: 1 / span 2; }
+  .course-roadmap-lessons { padding: 0 12px 11px 52px; }
+  .course-roadmap-lesson { grid-template-columns: 7px minmax(0, 1fr); gap: 8px; font-size: 11.5px; }
+  .course-roadmap-lesson small { grid-column: 2; }
+  .course-outline-footer { align-items: flex-start; flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .course-roadmap-module, .course-roadmap-chevron { transition: none; }
+}
