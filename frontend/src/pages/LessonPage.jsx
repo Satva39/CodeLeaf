@@ -94,7 +94,18 @@ function CourseSidebar({
     (completedCount / Math.max(1, allItems.length)) * 100,
   );
   useEffect(() => {
-    setExpanded(Object.fromEntries(groups.map((group) => [group.title, true])));
+    // Keep each module's expansion state independent. When the outline data
+    // refreshes, preserve the learner's open/closed choices and only initialize
+    // newly appearing modules. Opening one module must never collapse another.
+    setExpanded((previous) => {
+      const next = { ...previous };
+      for (const group of groups) {
+        if (!Object.prototype.hasOwnProperty.call(next, group.title)) {
+          next[group.title] = true;
+        }
+      }
+      return next;
+    });
   }, [groups]);
   return (
     <aside className="course-sidebar" aria-label="Course lessons">
@@ -1035,6 +1046,7 @@ export default function LessonPage() {
           <X size={18} />
         </button>
         <CourseSidebar
+          key={course.slug}
           courseSlug={course.slug}
           currentSlug={current.slug}
           courseGroups={groups}
