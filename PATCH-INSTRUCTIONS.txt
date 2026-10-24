@@ -1,85 +1,37 @@
-CodeLeaf — Phase 3A: Learner Progress & Resume Flow
-=================================================
+CodeLeaf — Implementation and Release Notes
+============================================
 
-Scope
------
-This increment improves the current learner loop without changing the database schema:
-- Home page resumes the most recently recorded, available lesson (rather than merely opening a course root).
-- Completed last lessons are labelled as review, not incorrectly described as unfinished.
-- Draft/roadmap or empty courses cannot become public resume targets.
-- A new learner gets a truthful “Start learning” path instead of the interface implying historical progress.
-- Progress numbers show Loading/Unavailable rather than misleading zeros while account statistics are being fetched or cannot be verified.
-- The progress page no longer displays HTML as an “in progress” course when no lessons have actually been completed.
-- A recent lesson offers a course-scoped practice link.
-- New styles are imported by their pages only. Global `frontend/src/styles.css` and its existing imports are not replaced or edited.
+Project architecture
+--------------------
+- Frontend: React, JavaScript/JSX, Vite.
+- Backend: Python, FastAPI, SQLAlchemy and Alembic.
+- Database: PostgreSQL (production hosted by Neon).
+- Deployment: Vercel frontend, Render API.
 
-No backend files, DB schema, migrations, `.env` files, or production records are changed by this patch.
+Safe change workflow
+--------------------
+1. Back up or commit the current working tree before applying source overlays.
+2. Keep provider credentials only in local/host environment settings. Never commit .env, tokens, passwords, private keys, database dumps or account exports.
+3. Validate course/content manifests before import. Publishing commands write to the configured database; check DATABASE_URL safely before using --apply or --publish.
+4. Test backend and frontend changes locally before pushing. Do not equate a unit test with live provider verification.
+5. Before production schema changes, create and verify a database backup, review the migration, and record the expected Alembic head.
+6. Keep server-executed learner code in a separately isolated runner. Do not run untrusted source in the main API process or on a host with production secrets.
 
-Apply (PowerShell)
+Recommended local verification
+------------------------------
+From backend/:
+    python -m compileall -q app scripts alembic
+    python scripts/check_alembic_heads.py
+    python scripts/check_release_readiness.py --skip-content-validation
+
+From frontend/:
+    node scripts/test_course_catalog_filters.mjs
+    node scripts/test_api_client.mjs
+    node scripts/test_auth_ui_contract.mjs
+    npm run build
+
+For the broader integrated suite, see INSTALL-INSTRUCTIONS.txt in the consolidated patch bundle and docs/REMAINING_WORK_STATUS.md in the repository.
+
+Operational status
 ------------------
-Run from the parent directory containing `Code_Leaf` and this ZIP. Back up files first:
-
-```powershell
-$projectRoot = (Resolve-Path .\Code_Leaf).Path
-$backupRoot = Join-Path (Get-Location).Path 'Code_Leaf_Phase3A_Backup'
-$modifiedFiles = @(
-  'frontend/src/pages/HomePage.jsx',
-  'frontend/src/pages/ProgressPage.jsx'
-)
-foreach ($relative in $modifiedFiles) {
-  $source = Join-Path $projectRoot $relative
-  if (-not (Test-Path -LiteralPath $source)) { throw "Expected file is missing: $relative" }
-  $backupFile = Join-Path $backupRoot $relative
-  New-Item -ItemType Directory -Force -Path (Split-Path $backupFile) | Out-Null
-  Copy-Item -LiteralPath $source -Destination $backupFile -Force
-}
-Expand-Archive -LiteralPath .\CodeLeaf_Phase3_Learning_Loop_Patch.zip -DestinationPath $projectRoot -Force
-```
-
-If you have edited either page locally, compare it with the patch first and merge the changes instead of overwriting them. The added files are:
-- `frontend/src/lib/learningPath.js`
-- `frontend/src/styles/phase3-learning-loop.css`
-- `frontend/scripts/test_learning_path.mjs`
-- `docs/PHASE3_LEARNING_LOOP.md`
-
-Validate (PowerShell)
----------------------
-```powershell
-Push-Location E:\Code_Leaf\frontend
-node .\scripts\test_learning_path.mjs
-npm run test:catalog
-npm run test:api-cache
-npm run test:api-client
-npm run test:auth-ui
-npm run test:course-overview
-npm run build
-Pop-Location
-```
-
-The new standalone test uses only Node.js built-ins. Existing test/build commands require the project's frontend dependencies to be installed.
-
-After validation, review and deploy:
------------------------------------
-```powershell
-cd E:\Code_Leaf
-git diff --check
-git status --short
-git add frontend/src/pages/HomePage.jsx frontend/src/pages/ProgressPage.jsx frontend/src/lib/learningPath.js frontend/src/styles/phase3-learning-loop.css frontend/scripts/test_learning_path.mjs docs/PHASE3_LEARNING_LOOP.md PATCH-INSTRUCTIONS.txt
-git commit -m "Improve learner resume and progress feedback"
-git push origin master
-```
-
-Vercel should deploy after the push. Then test a signed-in account with a recent incomplete lesson, one with a completed recent lesson, and a brand-new account.
-
-Rollback
---------
-Restore `HomePage.jsx` and `ProgressPage.jsx` from the backup directory. Remove only the new files listed above. Do not remove or rewrite any existing global stylesheet imports.
-
-Validation status
------------------
-Passed in the patching environment:
-- 9 grouped learning-target scenarios (including more detailed assertions for latest lesson, completed lesson, unpublished courses, empty catalog, and URL encoding).
-- JSX syntax/transpile checks for HomePage and ProgressPage.
-- CSS brace-balance check.
-
-Not run in this environment: full Vite build, browser visual checks, and live production behavior. Run those locally before deployment.
+Local isolated tests do not confirm live email delivery, payment-provider behavior, production database restore, public runner isolation, or every responsive browser interaction. Verify these separately before declaring a production release complete.

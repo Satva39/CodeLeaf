@@ -1,0 +1,33 @@
+PHASE 3C — PERSONAL LEARNING PATCH
+
+Included files (copy these paths into E:\Code_Leaf):
+- frontend/src/pages/BookmarksPage.jsx
+- frontend/src/pages/ProfilePage.jsx
+- frontend/src/styles/phase3c-personal-learning.css (new)
+- frontend/scripts/test_phase3c_personal_learning.mjs (new)
+- docs/PHASE3C_PERSONAL_LEARNING.md (new)
+
+IMPORTANT
+- This ZIP is an overlay of the listed changed/new files. It does not include a unified git patch.
+- It does not alter backend code, database schemas, environment variables, `frontend/src/styles.css`, or existing stylesheet imports.
+- This preference UI requires the existing Phase 5 endpoints `/api/me/learning-preferences` to be deployed. If the endpoint is absent, the page will show an unavailable message rather than inventing saved preferences.
+- Back up your current versions of BookmarksPage.jsx and ProfilePage.jsx before replacing them. If you already made local changes to either file, compare/merge instead of overwriting them.
+
+Apply
+1. Extract to a temporary folder.
+2. Back up the two existing JSX files.
+3. Copy the listed files while preserving directories.
+4. From E:\Code_Leaf\frontend run:
+   node scripts/test_phase3c_personal_learning.mjs
+   node scripts/test_course_overview_cta.mjs
+   node scripts/test_catalog.mjs (only if this script exists; otherwise use npm run test:catalog)
+   npm run test:catalog
+   npm run test:api-client
+   npm run test:api-cache
+   npm run test:auth-ui
+   npm run build
+5. Check the profile preferences when signed in, check the guest notice while signed out, and test bookmarks in both guest and signed-in modes.
+6. If everything passes, inspect `git diff --check` and the complete `git diff` before committing.
+
+Rollback
+Restore the two JSX backups and delete only the two new files under frontend/scripts, frontend/styles, and docs if those files did not exist before applying this patch.

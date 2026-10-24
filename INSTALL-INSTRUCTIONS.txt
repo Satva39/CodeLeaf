@@ -1,0 +1,22 @@
+CodeLeaf Auth UI Patch
+=====================
+
+Changes:
+- Adds accessible show/hide password controls to the login, register, and password-reset forms.
+- Keeps passwords masked by default; toggles are keyboard-focusable and expose aria-label/aria-pressed.
+- Replaces the browser-default-looking "Resend verification link" control with a themed secondary button and sending state.
+- Extends the existing auth UI contract tests.
+- Does not change auth API endpoints, payloads, verification policy, or secrets.
+
+Apply on Windows PowerShell:
+1. Extract this ZIP to a staging folder (not over your project).
+2. Run:
+   powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Apply-CodeLeaf-Auth-UI-Patch.ps1 -ProjectRoot "E:\Code_Leaf"
+3. The installer verifies the target files match the expected baseline and aborts without changes if they have drifted. It backs up all three original files in the patch folder.
+4. Test:
+   cd E:\Code_Leafrontend
+   npm run test:auth-ui
+   npm run build
+5. Inspect changes with `git diff` before committing or pushing. This patch does not deploy to Vercel automatically.
+
+If the installer reports a baseline mismatch, do not force the copy; send the error so the patch can be merged safely.
