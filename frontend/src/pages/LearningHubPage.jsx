@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowRight, BrainCircuit, CalendarClock, CheckCircle2, Compass, LockKeyhole, Route, Settings2 } from "lucide-react";
 import { EmptyState, PageShell } from "../components/common.jsx";
 import { apiFetch } from "../lib/apiClient.js";
@@ -17,7 +17,6 @@ async function getPayload(path, options = {}) {
 }
 
 export default function LearningHubPage() {
-  const location = useLocation();
   const [recommendations, setRecommendations] = useState([]);
   const [due, setDue] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
@@ -51,17 +50,6 @@ export default function LearningHubPage() {
   }, []);
 
   useEffect(() => { void load(); }, [load]);
-
-  // Account settings links directly to this section; wait until the API-backed page
-  // has finished loading so the anchor exists before scrolling.
-  useEffect(() => {
-    if (loading || location.hash !== "#privacy-preferences") return;
-    const target = document.getElementById("privacy-preferences");
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-      target.focus({ preventScroll: true });
-    }
-  }, [loading, location.hash]);
 
   const savePreferences = async (event) => {
     event.preventDefault();
@@ -118,8 +106,8 @@ export default function LearningHubPage() {
           <p className="phase5-muted">Roadmap stages use explicit track metadata. A stage is counted complete only when its available published courses have recorded completed lessons; unavailable courses are not counted as progress.</p>
           <div className="phase5-roadmap-grid">{roadmaps.map((track) => <article className="phase5-roadmap-card" key={track.slug}><div className="phase5-roadmap-top"><h3>{track.title}</h3><span>{track.progress_percent}%</span></div><p>{track.summary}</p>{track.outcomes?.length > 0 && <p className="phase5-muted"><strong>Outcomes:</strong> {track.outcomes.join(" · ")}</p>}<div className="phase5-progress-track" role="progressbar" aria-label={`${track.title} required stage completion`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={track.progress_percent}><span style={{ width: `${track.progress_percent}%` }} /></div><small>{track.required_stages_completed} of {track.required_stages_total} required stages recorded complete</small><ol>{track.stages.map((stage) => <li key={stage.slug} className={`phase5-stage phase5-stage-${stage.status}`}><span>{stage.status === "completed" ? <CheckCircle2 size={14} /> : <span className="phase5-stage-dot" />}</span><div><strong>{stage.title}</strong><small>{stage.kind} · {stage.status.replaceAll("_", " ")}</small>{stage.prerequisites?.length > 0 && <small>Prerequisites: {stage.prerequisites.join(", ")}</small>}{stage.missing_course_slugs?.length > 0 && <small>Courses not published yet: {stage.missing_course_slugs.slice(0, 3).join(", ")}</small>}{stage.missing_project_slugs?.length > 0 && <small>Projects not published yet: {stage.missing_project_slugs.slice(0, 3).join(", ")}</small>}{stage.projects_awaiting_submission?.length > 0 && <small>Portfolio submission needed: {stage.projects_awaiting_submission.slice(0, 3).join(", ")}</small>}{stage.module_progress?.length > 0 && <small>Modules: {stage.module_progress.slice(0, 2).map((module) => `${module.title || module.module_slug} (${module.status.replaceAll("_", " ")})`).join(" · ")}</small>}</div></li>)}</ol></article>)}</div>
         </section>
-        <section id="privacy-preferences" tabIndex={-1} className="panel phase5-section phase5-privacy-preferences">
-          <div className="phase5-section-title"><div><div className="eyebrow">YOUR CONTROL</div><h2>Privacy & learning preferences</h2></div><Settings2 size={22} /></div>
+        <section className="panel phase5-section">
+          <div className="phase5-section-title"><div><div className="eyebrow">YOUR CONTROL</div><h2>Review and privacy settings</h2></div><Settings2 size={22} /></div>
           <form className="phase5-preferences" onSubmit={savePreferences}>
             <label>Timezone <select value={preferences.timezone_name} onChange={(event) => setPreferences((value) => ({ ...value, timezone_name: event.target.value }))}><option value="Asia/Kolkata">Asia/Kolkata (India)</option><option value="UTC">UTC</option><option value="America/New_York">America/New_York</option><option value="Europe/London">Europe/London</option><option value="Asia/Singapore">Asia/Singapore</option></select><small>Review dates are stored as UTC instants; your timezone is saved as a preference.</small></label>
             <label>Review frequency <select value={preferences.review_frequency_days} onChange={(event) => setPreferences((value) => ({ ...value, review_frequency_days: Number(event.target.value) }))}>{[1,2,3,5,7,14,30].map((days) => <option key={days} value={days}>{days} day{days > 1 ? "s" : ""}</option>)}</select></label>

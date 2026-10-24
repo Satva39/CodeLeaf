@@ -142,9 +142,7 @@ function DiagramNode({
               >
                 <ArrowRight size={12} aria-hidden="true" /> {target.title}
                 {showEdgeLabels && edge.label && (
-                  <small className="dynamic-diagram-edge-label">
-                    {edge.label}
-                  </small>
+                  <small className="dynamic-diagram-edge-label">{edge.label}</small>
                 )}
               </span>
             );
@@ -240,12 +238,7 @@ export default function DynamicDiagram({
       .catch((error) => {
         if (error.name !== "AbortError") {
           setModel(null);
-          void recordAnalyticsEvent({
-            event_type: "broken_asset",
-            course_slug: courseSlug,
-            item_key: dataPath.split("/").pop(),
-            outcome: "missing",
-          });
+          void recordAnalyticsEvent({ event_type: "broken_asset", course_slug: courseSlug, item_key: dataPath.split("/").pop(), outcome: "missing" });
           setLoadError(
             error.message || "The dynamic diagram could not be loaded.",
           );
@@ -281,10 +274,7 @@ export default function DynamicDiagram({
   }
 
   const sourceNodes = [...model.nodes].sort(
-    (a, b) =>
-      (a.row ?? 0) - (b.row ?? 0) ||
-      (a.column ?? 0) - (b.column ?? 0) ||
-      (a.order ?? 0) - (b.order ?? 0),
+    (a, b) => (a.row ?? 0) - (b.row ?? 0) || (a.column ?? 0) - (b.column ?? 0) || (a.order ?? 0) - (b.order ?? 0),
   );
   const edges = model.edges || [];
   const sourceIndexById = new Map(
@@ -305,22 +295,13 @@ export default function DynamicDiagram({
     });
   const sourceColumnCount = Math.max(
     1,
-    ...sourceNodes.map((node) =>
-      Number.isInteger(node.column) && node.column >= 0 ? node.column + 1 : 0,
-    ),
+    ...sourceNodes.map((node) => (Number.isInteger(node.column) && node.column >= 0 ? node.column + 1 : 0)),
   );
   // Linear flows get two roomy columns in a serpentine sequence. Other large
   // diagrams reflow into up to four columns, preserving each source node/edge.
   const columnCount = linearFlow ? 2 : Math.min(sourceColumnCount, 4);
-  const hasCompleteCoordinates = sourceNodes.every(
-    (node) =>
-      Number.isInteger(node.row) &&
-      node.row >= 0 &&
-      Number.isInteger(node.column) &&
-      node.column >= 0,
-  );
-  const reflow =
-    !linearFlow && (!hasCompleteCoordinates || sourceColumnCount > columnCount);
+  const hasCompleteCoordinates = sourceNodes.every((node) => Number.isInteger(node.row) && node.row >= 0 && Number.isInteger(node.column) && node.column >= 0);
+  const reflow = !linearFlow && (!hasCompleteCoordinates || sourceColumnCount > columnCount);
   const nodes = sourceNodes.map((node, index) => {
     const row = Math.floor(index / columnCount);
     const rowOffset = index % columnCount;
@@ -338,38 +319,12 @@ export default function DynamicDiagram({
   const annotations = model.annotations || [];
   const sourceTexts = model.source_text || [];
   const layoutKind = String(model.layout?.kind || "grid").toLowerCase();
-  const stepMode =
-    linearFlow ||
-    layoutKind.includes("algorithm") ||
-    layoutKind.includes("trace") ||
-    layoutKind === "sequence" ||
-    layoutKind === "state";
-  const safeStepIndex = Math.min(
-    Math.max(0, activeStepIndex),
-    Math.max(0, nodes.length - 1),
-  );
-  const selectedNode =
-    nodes.find((node) => node.id === selectedNodeId) ||
-    (stepMode ? nodes[safeStepIndex] : null);
-  const selectedNodeIndex = selectedNode
-    ? nodes.findIndex((node) => node.id === selectedNode.id)
-    : -1;
-  const selectedOutgoing = selectedNode
-    ? edges.filter((edge) => edge.from === selectedNode.id)
-    : [];
-  const layoutLabel =
-    {
-      flow: "CONCEPT FLOW",
-      sequence: "SEQUENCE",
-      branching: "DECISION FLOW",
-      architecture: "ARCHITECTURE",
-      "concept-map": "CONCEPT MAP",
-      timeline: "TIMELINE",
-      comparison: "COMPARISON",
-      table: "COMPARISON TABLE",
-      state: "STATE DIAGRAM",
-      "algorithm-trace": "ALGORITHM TRACE",
-    }[layoutKind] || layoutKind.replace(/[-_]/g, " ").toUpperCase();
+  const stepMode = linearFlow || layoutKind.includes("algorithm") || layoutKind.includes("trace") || layoutKind === "sequence" || layoutKind === "state";
+  const safeStepIndex = Math.min(Math.max(0, activeStepIndex), Math.max(0, nodes.length - 1));
+  const selectedNode = nodes.find((node) => node.id === selectedNodeId) || (stepMode ? nodes[safeStepIndex] : null);
+  const selectedNodeIndex = selectedNode ? nodes.findIndex((node) => node.id === selectedNode.id) : -1;
+  const selectedOutgoing = selectedNode ? edges.filter((edge) => edge.from === selectedNode.id) : [];
+  const layoutLabel = ({flow:"CONCEPT FLOW",sequence:"SEQUENCE",branching:"DECISION FLOW",architecture:"ARCHITECTURE", "concept-map":"CONCEPT MAP",timeline:"TIMELINE",comparison:"COMPARISON",table:"COMPARISON TABLE",state:"STATE DIAGRAM", "algorithm-trace":"ALGORITHM TRACE"})[layoutKind] || layoutKind.replace(/[-_]/g, " ").toUpperCase();
 
   return (
     <figure
@@ -384,12 +339,8 @@ export default function DynamicDiagram({
           <div className="dynamic-diagram-tools">
             <span className="dynamic-diagram-type">{layoutLabel}</span>
             {edges.some((edge) => edge.label) && (
-              <button
-                type="button"
-                className="dynamic-diagram-control"
-                aria-pressed={showEdgeLabels}
-                onClick={() => setShowEdgeLabels((visible) => !visible)}
-              >
+              <button type="button" className="dynamic-diagram-control" aria-pressed={showEdgeLabels}
+                onClick={() => setShowEdgeLabels((visible) => !visible)}>
                 {showEdgeLabels ? "Hide edge labels" : "Show edge labels"}
               </button>
             )}
@@ -432,9 +383,7 @@ export default function DynamicDiagram({
               linearFlow={linearFlow}
               onSelect={(nodeId) => {
                 setSelectedNodeId(nodeId);
-                const nextIndex = nodes.findIndex(
-                  (candidate) => candidate.id === nodeId,
-                );
+                const nextIndex = nodes.findIndex((candidate) => candidate.id === nodeId);
                 if (nextIndex >= 0) setActiveStepIndex(nextIndex);
               }}
               selected={selectedNode?.id === node.id}
@@ -445,92 +394,29 @@ export default function DynamicDiagram({
         ))}
       </div>
       {stepMode && nodes.length > 1 && (
-        <div
-          className="dynamic-diagram-stepper"
-          aria-label="Step through this diagram"
-        >
-          <span>
-            Step {safeStepIndex + 1} of {nodes.length}
-          </span>
+        <div className="dynamic-diagram-stepper" aria-label="Step through this diagram">
+          <span>Step {safeStepIndex + 1} of {nodes.length}</span>
           <div>
-            <button
-              type="button"
-              className="dynamic-diagram-control"
-              disabled={safeStepIndex <= 0}
-              onClick={() => {
-                const next = Math.max(0, safeStepIndex - 1);
-                setActiveStepIndex(next);
-                setSelectedNodeId(nodes[next].id);
-              }}
-            >
-              Previous step
-            </button>
-            <button
-              type="button"
-              className="dynamic-diagram-control"
-              disabled={safeStepIndex >= nodes.length - 1}
-              onClick={() => {
-                const next = Math.min(nodes.length - 1, safeStepIndex + 1);
-                setActiveStepIndex(next);
-                setSelectedNodeId(nodes[next].id);
-              }}
-            >
-              Next step
-            </button>
+            <button type="button" className="dynamic-diagram-control" disabled={safeStepIndex <= 0}
+              onClick={() => { const next = Math.max(0, safeStepIndex - 1); setActiveStepIndex(next); setSelectedNodeId(nodes[next].id); }}>Previous step</button>
+            <button type="button" className="dynamic-diagram-control" disabled={safeStepIndex >= nodes.length - 1}
+              onClick={() => { const next = Math.min(nodes.length - 1, safeStepIndex + 1); setActiveStepIndex(next); setSelectedNodeId(nodes[next].id); }}>Next step</button>
           </div>
         </div>
       )}
       {selectedNode && (
-        <section
-          className="dynamic-diagram-detail"
-          aria-live="polite"
-          aria-label={`Details for ${selectedNode.title || "selected concept"}`}
-        >
+        <section className="dynamic-diagram-detail" aria-live="polite" aria-label={`Details for ${selectedNode.title || "selected concept"}`}>
           <div className="dynamic-diagram-detail-heading">
-            <span className="dynamic-diagram-eyebrow">
-              {stepMode ? `STEP ${selectedNodeIndex + 1}` : "SELECTED CONCEPT"}
-            </span>
+            <span className="dynamic-diagram-eyebrow">{stepMode ? `STEP ${selectedNodeIndex + 1}` : "SELECTED CONCEPT"}</span>
             <h4>{selectedNode.title || `Concept ${selectedNodeIndex + 1}`}</h4>
           </div>
-          {(selectedNode.explanation || selectedNode.description) && (
-            <p>{selectedNode.explanation || selectedNode.description}</p>
+          {(selectedNode.explanation || selectedNode.description) && <p>{selectedNode.explanation || selectedNode.description}</p>}
+          {selectedNode.example && <p><strong>Example:</strong> {selectedNode.example}</p>}
+          {selectedNode.code && <pre tabIndex={0}><code>{selectedNode.code}</code></pre>}
+          {!(selectedNode.explanation || selectedNode.description || selectedNode.example || selectedNode.code) && (
+            <p>{(selectedNode.labels || []).filter((label) => label.role !== "badge").map((label) => label.text).filter(Boolean).join(" · ") || "This node has no additional author-provided explanation."}</p>
           )}
-          {selectedNode.example && (
-            <p>
-              <strong>Example:</strong> {selectedNode.example}
-            </p>
-          )}
-          {selectedNode.code && (
-            <pre tabIndex={0}>
-              <code>{selectedNode.code}</code>
-            </pre>
-          )}
-          {!(
-            selectedNode.explanation ||
-            selectedNode.description ||
-            selectedNode.example ||
-            selectedNode.code
-          ) && (
-            <p>
-              {(selectedNode.labels || [])
-                .filter((label) => label.role !== "badge")
-                .map((label) => label.text)
-                .filter(Boolean)
-                .join(" · ") ||
-                "This node has no additional author-provided explanation."}
-            </p>
-          )}
-          {selectedOutgoing.length > 0 && (
-            <div className="dynamic-diagram-detail-links">
-              <strong>Connects to</strong>
-              {selectedOutgoing.map((edge) => (
-                <span key={`${edge.from}-${edge.to}`}>
-                  {nodesById.get(edge.to)?.title || edge.to}
-                  {edge.label ? ` — ${edge.label}` : ""}
-                </span>
-              ))}
-            </div>
-          )}
+          {selectedOutgoing.length > 0 && <div className="dynamic-diagram-detail-links"><strong>Connects to</strong>{selectedOutgoing.map((edge) => <span key={`${edge.from}-${edge.to}`}>{nodesById.get(edge.to)?.title || edge.to}{edge.label ? ` — ${edge.label}` : ""}</span>)}</div>}
         </section>
       )}
       {edges.some(

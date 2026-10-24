@@ -1,13 +1,20 @@
 import { Link, useParams } from "react-router-dom";
+import { useEffect } from "react";
 import { ArrowRight, BookMarked, Code2, FolderKanban, Search } from "lucide-react";
-import { PageShell, EmptyState } from "../components/common.jsx";
+import { PageShell, CourseIcon, EmptyState } from "../components/common.jsx";
 import CourseOverview from "../components/course/CourseOverview.jsx";
 import { useCourseCatalogState } from "../lib/useCourseCatalog.js";
+import { recordAnalyticsEvent } from "../lib/analytics.js";
 
 export default function CourseLandingPage() {
   const { courseSlug } = useParams();
   const { courses, loading, error } = useCourseCatalogState();
   const course = courses.find((item) => item.slug === courseSlug);
+  useEffect(() => {
+    if (course && ["Published", "Local preview"].includes(course.status)) {
+      void recordAnalyticsEvent({ event_type: "course_start", course_slug: course.slug, outcome: "loaded" });
+    }
+  }, [course?.slug, course?.status]);
 
   if (!course && (loading || error)) {
     return <PageShell><div className="panel collection-state" role="status">{loading ? "Loading course details…" : "Course details could not be loaded. Try the course directory."}</div></PageShell>;

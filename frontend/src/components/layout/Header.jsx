@@ -18,10 +18,7 @@ import {
   X,
 } from "lucide-react";
 import { useCourseCatalogState } from "../../lib/useCourseCatalog.js";
-import {
-  loadBookmarkState,
-  resetBookmarkState,
-} from "../../lib/bookmarkState.js";
+import { loadBookmarkState, resetBookmarkState } from "../../lib/bookmarkState.js";
 import { API_BASE, getProfile, writeDemo } from "../../lib/demoState.js";
 import { apiGetJson, invalidateApiCache } from "../../lib/apiCache.js";
 
@@ -80,15 +77,10 @@ export function Header() {
     async function checkSession() {
       const version = ++sessionRequestVersion;
       try {
-        await apiGetJson(`${API_BASE}/api/me`, {
-          credentials: "include",
-          ttlMs: 10_000,
-        });
-        if (active && version === sessionRequestVersion)
-          setIsAuthenticated(true);
+        await apiGetJson(`${API_BASE}/api/me`, { credentials: "include", ttlMs: 10_000 });
+        if (active && version === sessionRequestVersion) setIsAuthenticated(true);
       } catch (error) {
-        if (active && version === sessionRequestVersion)
-          setIsAuthenticated(error?.status === 401 ? false : null);
+        if (active && version === sessionRequestVersion) setIsAuthenticated(error?.status === 401 ? false : null);
       }
     }
     const recheck = () => {
@@ -114,13 +106,9 @@ export function Header() {
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
-    return courses
-      .filter((course) =>
-        `${course.title} ${course.desc} ${course.category} ${course.level} ${course.slug}`
-          .toLowerCase()
-          .includes(q),
-      )
-      .slice(0, 5);
+    return courses.filter((course) =>
+      `${course.title} ${course.desc} ${course.category} ${course.level} ${course.slug}`.toLowerCase().includes(q),
+    ).slice(0, 5);
   }, [query, courses]);
   const openFirst = () => {
     if (results[0]) navigate(`/courses/${encodeURIComponent(results[0].slug)}`);
@@ -152,6 +140,7 @@ export function Header() {
             </NavLink>
             <NavLink to="/projects">Projects</NavLink>
             <NavLink to="/practice">Practice</NavLink>
+            <NavLink to="/review">Review</NavLink>
             <NavLink to="/learning-hub">Learning hub</NavLink>
             <NavLink to="/portfolio">Portfolio</NavLink>
             <NavLink to="/certificates">Certificates</NavLink>
@@ -283,19 +272,10 @@ export function Header() {
               .replace("++", "pp")
               .replace(" ", "");
             const found = courses.find(
-              (course) =>
-                course.title.toLowerCase() === name.toLowerCase() ||
-                course.slug === slug,
+              (course) => course.title.toLowerCase() === name.toLowerCase() || course.slug === slug,
             );
             return (
-              <Link
-                key={name}
-                to={
-                  found
-                    ? `/courses/${encodeURIComponent(found.slug)}`
-                    : "/tutorials"
-                }
-              >
+              <Link key={name} to={found ? `/courses/${encodeURIComponent(found.slug)}` : "/tutorials"}>
                 {name}
               </Link>
             );

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { ArrowRight, Compass } from "lucide-react";
 import { Header } from "./components/layout/Header.jsx";
@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage.jsx";
 import LessonPage from "./pages/LessonPage.jsx";
 import TutorialsPage from "./pages/TutorialsPage.jsx";
 import ProgressPage from "./pages/ProgressPage.jsx";
+import ReviewPage from "./pages/ReviewPage.jsx";
 import LeaderboardPage from "./pages/LeaderboardPage.jsx";
 import BookmarksPage from "./pages/BookmarksPage.jsx";
 import CertificatesPage from "./pages/CertificatesPage.jsx";
@@ -18,16 +19,13 @@ import PlansPage from "./pages/PlansPage.jsx";
 import ProjectsPage from "./pages/ProjectsPage.jsx";
 import ProjectGuidePage from "./pages/ProjectGuidePage.jsx";
 import PlaygroundPage from "./pages/PlaygroundPage.jsx";
-import TryItPage from "./pages/TryItPage.jsx";
-import ExerciseDetailPage from "./pages/ExerciseDetailPage.jsx";
 import ChallengesPage from "./pages/ChallengesPage.jsx";
 import ReferencePage from "./pages/ReferencePage.jsx";
 import CourseDirectoryPage from "./pages/CourseDirectoryPage.jsx";
 import CourseLandingPage from "./pages/CourseLandingPage.jsx";
-import LearningHubPage from "./pages/LearningHubPage.jsx";
-import PortfolioPage from "./pages/PortfolioPage.jsx";
 import ContentStudioPage from "./pages/ContentStudioPage.jsx";
-import { recordAnalyticsEvent } from "./lib/analytics.js";
+import PortfolioPage from "./pages/PortfolioPage.jsx";
+import LearningHubPage from "./pages/LearningHubPage.jsx";
 
 function LegacyReferenceRedirect() {
   const location = useLocation();
@@ -42,28 +40,8 @@ function LegacyReferenceRedirect() {
 
 export default function App() {
   const location = useLocation();
-  const previousPath = useRef(location.pathname);
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
-  }, [location.pathname]);
-  useEffect(() => {
-    const previous = previousPath.current;
-    if (previous !== location.pathname) {
-      const match = previous.match(/^\/learn\/([^/]+)\/([^/]+)/);
-      if (match) {
-        try {
-          void recordAnalyticsEvent({
-            event_type: "lesson_dropoff",
-            course_slug: decodeURIComponent(match[1]),
-            lesson_slug: decodeURIComponent(match[2]),
-            outcome: "navigated_away",
-          });
-        } catch {
-          /* Analytics must never interfere with navigation. */
-        }
-      }
-      previousPath.current = location.pathname;
-    }
   }, [location.pathname]);
 
   return (
@@ -91,6 +69,7 @@ export default function App() {
         />
         <Route path="/dashboard" element={<ProgressPage />} />
         <Route path="/progress" element={<ProgressPage />} />
+        <Route path="/review" element={<ReviewPage />} />
         <Route path="/learning-hub" element={<LearningHubPage />} />
         <Route path="/portfolio" element={<PortfolioPage />} />
         <Route path="/portfolio/:username" element={<PortfolioPage />} />
@@ -117,14 +96,9 @@ export default function App() {
         />
         <Route path="/projects/:courseSlug" element={<ProjectsPage />} />
         <Route path="/playground" element={<PlaygroundPage />} />
-        <Route path="/try/:courseSlug/:lessonSlug?" element={<TryItPage />} />
         <Route
           path="/practice"
           element={<CourseDirectoryPage collection="practice" />}
-        />
-        <Route
-          path="/practice/:courseSlug/:lessonSlug/:exerciseSlug"
-          element={<ExerciseDetailPage />}
         />
         <Route path="/practice/:courseSlug" element={<ChallengesPage />} />
         <Route

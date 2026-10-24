@@ -67,21 +67,11 @@ class Settings(BaseSettings):
 
     @property
     def allowed_origins(self) -> list[str]:
-        origins = [
+        return [
             origin.strip().rstrip("/")
             for origin in self.frontend_origins.split(",")
             if origin.strip()
         ]
-        # Local Vite development may be opened as either localhost or 127.0.0.1.
-        # Allow only the two known loopback origins, and never add them in production.
-        if self.app_env.strip().lower() not in {"production", "prod"}:
-            for local_origin in (
-                "http://localhost:5173",
-                "http://127.0.0.1:5173",
-            ):
-                if local_origin not in origins:
-                    origins.append(local_origin)
-        return origins
 
     @model_validator(mode="after")
     def validate_production_security(self) -> "Settings":

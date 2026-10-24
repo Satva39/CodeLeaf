@@ -45,6 +45,7 @@ import {
 } from "../lib/useLearnerProgress.js";
 import { BookmarkButton } from "../components/common.jsx";
 import { KnowledgeCheck } from "../components/KnowledgeCheck.jsx";
+import ReviewPrompt from "../components/ReviewPrompt.jsx";
 import {
   apiGetJson,
   peekApiJson,
@@ -53,6 +54,7 @@ import {
 
 import { defaultCode, getLessonContent } from "../data/lessonContent.js";
 import DynamicDiagram from "../components/diagrams/DynamicDiagram.jsx";
+import LessonLiveExample from "../components/lessons/LessonLiveExample.jsx";
 
 const CONCEPT_STEP_ICONS = [FileCode2, BookMarked, Zap, CheckCircle2];
 
@@ -77,32 +79,17 @@ function CourseSidebar({
   progressMode,
 }) {
   const groups = courseGroups || groupsForCourse(courseSlug);
-  // Keep the outline in a single-open accordion: the module containing the
-  // current lesson is open, and opening another module closes the previous one.
   const activeGroupTitle =
-    groups.find((group) => group.items.some(([slug]) => slug === currentSlug))
-      ?.title ?? null;
+    groups.find((group) => group.items.some(([slug]) => slug === currentSlug))?.title ||
+    groups[0]?.title ||
+    "";
   const [expandedGroup, setExpandedGroup] = useState(activeGroupTitle);
   const allItems = flattenGroups(groups);
-  const progressEnabled = progressMode === "remote" || progressMode === "guest";
-  const completedCount = progressEnabled
-    ? allItems.reduce(
-        (count, item) =>
-          count +
-          ((completedIds || []).includes(`${courseSlug}:${item.slug}`) ? 1 : 0),
-        0,
-      )
-    : 0;
-  const progressPercent = Math.round(
-    (completedCount / Math.max(1, allItems.length)) * 100,
-  );
   useEffect(() => {
-    // Route changes should follow the learner into the module containing the
-    // selected lesson, automatically collapsing any previously open module.
     setExpandedGroup(activeGroupTitle);
-  }, [courseSlug, currentSlug, activeGroupTitle]);
+  }, [activeGroupTitle, courseSlug]);
   return (
-    <aside className="course-sidebar" aria-label="Course lessons">
+    <aside className="course-sidebar">
       <div className="sidebar-course-heading">
         <span className="sidebar-eyebrow">COURSE PATH</span>
         <h3>
@@ -110,43 +97,31 @@ function CourseSidebar({
             (
               COURSE_CATALOG.find((c) => c.slug === courseSlug) ||
               COURSE_CATALOG[0]
-            ).title}
+            ).title}{" "}
+          Tutorial
         </h3>
-        <span className="sidebar-course-type">Tutorial</span>
-        <div className="sidebar-progress-meta">
-          <span>LESSONS COMPLETED</span>
-          <strong>
-            {completedCount}
-            <span> / {allItems.length}</span>
-          </strong>
-        </div>
         <div className="sidebar-mini-progress">
-          <span style={{ width: `${progressPercent}%` }} />
+          <span
+            style={{
+              width: `${Math.min(100, ((progressMode === "remote" || progressMode === "guest" ? (completedIds || []).filter((id) => id.startsWith(`${courseSlug}:`)).length : 0) / Math.max(1, allItems.length)) * 100)}%`,
+            }}
+          />
         </div>
       </div>
       {groups.map((g) => (
         <div className="sidebar-group" key={g.title}>
           <button
-            className="sidebar-group-title"
             type="button"
+            className="sidebar-group-title"
             aria-expanded={expandedGroup === g.title}
             onClick={() =>
-              setExpandedGroup((previous) =>
-                previous === g.title ? null : g.title,
-              )
+              setExpandedGroup((previous) => previous === g.title ? "" : g.title)
             }
           >
-            <span className="sidebar-group-title-text">{g.title}</span>
-            <span
-              className="sidebar-group-count"
-              aria-label={`${g.items.length} lessons`}
-            >
-              {g.items.length}
-            </span>
+            {g.title}
             <ChevronDown
               size={14}
               className={expandedGroup === g.title ? "" : "collapsed"}
-              aria-hidden="true"
             />
           </button>
           {expandedGroup === g.title && (
@@ -162,8 +137,6 @@ function CourseSidebar({
                     onClick={onNavigate}
                     to={`/learn/${courseSlug}/${slug}`}
                     className={`sidebar-item ${active ? "active" : ""} ${completed ? "completed" : ""}`}
-                    aria-current={active ? "page" : undefined}
-                    title={title}
                   >
                     <span className="sidebar-item-mark">
                       {completed ? (
@@ -172,7 +145,7 @@ function CourseSidebar({
                         <span className="active-bar" />
                       ) : null}
                     </span>
-                    <span className="sidebar-item-label">{title}</span>
+                    <span>{title}</span>
                     {title.toLowerCase().includes("exam") && (
                       <span className="sidebar-lock">
                         <ShieldCheck size={12} />
@@ -203,41 +176,17 @@ function contentFromPublishedLesson(apiLesson, fallback) {
   if (!apiLesson?.content) return fallback;
   const doc = apiLesson.content;
   const blocks = Array.isArray(doc.content_blocks) ? doc.content_blocks : [];
-  const normalizedType = (block) =>
-    String(block?.type || "")
-      .toLowerCase()
-      .replaceAll("-", "_");
+  const normalizedType = (block) => String(block?.type || "").toLowerCase().replaceAll("-", "_");
   const diagram = blocks.find((block) => normalizedType(block) === "diagram");
   const codeBlock = blocks.find((block) => normalizedType(block) === "code");
   const listBlock = blocks.find((block) => normalizedType(block) === "list");
-  const callout = blocks.find((block) =>
-    ["callout", "note", "tip", "warning"].includes(normalizedType(block)),
-  );
+  const callout = blocks.find((block) => ["callout", "note", "tip", "warning"].includes(normalizedType(block)));
   const paragraphs = blocks
-    .filter(
-      (block) =>
-        ["paragraph", "text"].includes(normalizedType(block)) &&
-        (block.text || block.content),
-    )
-    .map((block) => ({
-      title: block.title || "",
-      text: block.text || block.content,
-    }));
+    .filter((block) => ["paragraph", "text"].includes(normalizedType(block)) && (block.text || block.content))
+    .map((block) => ({ title: block.title || "", text: block.text || block.content }));
   const sections = Array.isArray(listBlock?.items) ? listBlock.items : [];
-  const handledTypes = new Set([
-    "diagram",
-    "paragraph",
-    "text",
-    "list",
-    "code",
-    "callout",
-    "note",
-    "tip",
-    "warning",
-  ]);
-  const extraBlocks = blocks.filter(
-    (block) => !handledTypes.has(normalizedType(block)),
-  );
+  const handledTypes = new Set(["diagram", "paragraph", "text", "list", "code", "callout", "note", "tip", "warning"]);
+  const extraBlocks = blocks.filter((block) => !handledTypes.has(normalizedType(block)));
   const mistakes = (doc.common_mistakes || []).map((mistake) => [
     mistake.problem || "Common mistake",
     mistake.why || "It can make the result confusing or incorrect.",
@@ -263,17 +212,11 @@ function contentFromPublishedLesson(apiLesson, fallback) {
     tipTitle: callout?.title || "Remember this",
     codeSample: codeBlock?.code || fallback.codeSample,
     codeLanguage: codeBlock?.language || "",
-    codeInstructions:
-      codeBlock?.run_instructions || codeBlock?.instructions || "",
-    codeResetSteps: Array.isArray(codeBlock?.reset_steps)
-      ? codeBlock.reset_steps
-      : [],
+    codeInstructions: codeBlock?.run_instructions || codeBlock?.instructions || "",
+    codeResetSteps: Array.isArray(codeBlock?.reset_steps) ? codeBlock.reset_steps : [],
     extraBlocks,
     output:
-      codeBlock?.expected_output ||
-      codeBlock?.output ||
-      doc.expected_output ||
-      fallback.output,
+      codeBlock?.expected_output || codeBlock?.output || doc.expected_output || fallback.output,
     task: doc.task || fallback.task,
     checks: doc.task_acceptance_criteria?.length
       ? doc.task_acceptance_criteria
@@ -291,245 +234,66 @@ function contentFromPublishedLesson(apiLesson, fallback) {
 }
 
 function structuredBlockType(block) {
-  return String(block?.type || "text")
-    .toLowerCase()
-    .replaceAll("-", "_");
+  return String(block?.type || "text").toLowerCase().replaceAll("-", "_");
 }
 
 function safeExternalUrl(value) {
   if (typeof value !== "string") return "";
   try {
     const parsed = new URL(value);
-    return parsed.protocol === "http:" || parsed.protocol === "https:"
-      ? parsed.href
-      : "";
+    return parsed.protocol === "http:" || parsed.protocol === "https:" ? parsed.href : "";
   } catch {
     return "";
   }
 }
 
 function encodeAssetSegments(path) {
-  return String(path || "")
-    .replace(/^\/+/, "")
-    .split("/")
-    .map((part) => encodeURIComponent(part))
-    .join("/");
+  return String(path || "").replace(/^\/+/, "").split("/").map((part) => encodeURIComponent(part)).join("/");
 }
 
 function StructuredContentBlock({ block, courseSlug, index }) {
   if (!block || typeof block !== "object") return null;
   const type = structuredBlockType(block);
-  const title =
-    typeof block.title === "string"
-      ? block.title
-      : typeof block.heading === "string"
-        ? block.heading
-        : "";
-  const text =
-    [block.text, block.content, block.description].find(
-      (value) => typeof value === "string" && value.trim(),
-    ) || "";
+  const title = typeof block.title === "string" ? block.title : typeof block.heading === "string" ? block.heading : "";
+  const text = [block.text, block.content, block.description].find((value) => typeof value === "string" && value.trim()) || "";
   const externalUrl = safeExternalUrl(block.url || block.href || block.src);
-  const assetPath =
-    typeof block.asset_path === "string" ? block.asset_path : "";
-  const localAsset =
-    assetPath &&
-    !assetPath.split("/").includes("..") &&
-    !assetPath.startsWith("/")
-      ? `${API_BASE}/api/courses/${encodeURIComponent(courseSlug)}/assets/${encodeAssetSegments(assetPath)}`
-      : "";
+  const assetPath = typeof block.asset_path === "string" ? block.asset_path : "";
+  const localAsset = assetPath && !assetPath.split("/").includes("..") && !assetPath.startsWith("/")
+    ? `${API_BASE}/api/courses/${encodeURIComponent(courseSlug)}/assets/${encodeAssetSegments(assetPath)}`
+    : "";
   const mediaUrl = externalUrl || localAsset;
   const key = block.id || `${type}-${index}`;
   const heading = title ? <h3>{title}</h3> : null;
   if (["heading", "h2", "h3", "section_heading"].includes(type)) {
     const HeadingTag = type === "h2" ? "h2" : "h3";
-    return (
-      <section className="lesson-structured-block" key={key}>
-        <HeadingTag>{title || text}</HeadingTag>
-        {title && text && <p>{text}</p>}
-      </section>
-    );
+    return <section className="lesson-structured-block" key={key}><HeadingTag>{title || text}</HeadingTag>{title && text && <p>{text}</p>}</section>;
   }
-  if (["paragraph", "text", "description"].includes(type))
-    return (
-      <section className="lesson-structured-block" key={key}>
-        {heading}
-        <p>{text}</p>
-      </section>
-    );
-  if (type === "code")
-    return (
-      <section className="lesson-structured-block" key={key}>
-        {heading}
-        <pre>
-          <code>{String(block.code || block.source || text)}</code>
-        </pre>
-      </section>
-    );
-  if (["output", "expected_output", "result"].includes(type))
-    return (
-      <section className="lesson-structured-block" key={key}>
-        {heading}
-        <pre>{String(block.output || block.value || text)}</pre>
-      </section>
-    );
+  if (["paragraph", "text", "description"].includes(type)) return <section className="lesson-structured-block" key={key}>{heading}<p>{text}</p></section>;
+  if (type === "code") return <section className="lesson-structured-block" key={key}>{heading}<pre><code>{String(block.code || block.source || text)}</code></pre></section>;
+  if (["output", "expected_output", "result"].includes(type)) return <section className="lesson-structured-block" key={key}>{heading}<pre>{String(block.output || block.value || text)}</pre></section>;
   if (["list", "bulleted_list", "ordered_list"].includes(type)) {
     const items = Array.isArray(block.items) ? block.items : [];
     const ListTag = type === "ordered_list" || block.ordered ? "ol" : "ul";
-    return (
-      <section className="lesson-structured-block" key={key}>
-        {heading}
-        <ListTag>
-          {items.map((item, itemIndex) => (
-            <li
-              key={
-                typeof item === "string"
-                  ? `${itemIndex}-${item}`
-                  : item.id || `${itemIndex}-${item.title || "item"}`
-              }
-            >
-              {typeof item === "string" ? (
-                item
-              ) : (
-                <>
-                  {item.title && <strong>{item.title} </strong>}
-                  {item.text || item.description || item.label || ""}
-                </>
-              )}
-            </li>
-          ))}
-        </ListTag>
-      </section>
-    );
+    return <section className="lesson-structured-block" key={key}>{heading}<ListTag>{items.map((item, itemIndex) => <li key={typeof item === "string" ? `${itemIndex}-${item}` : item.id || `${itemIndex}-${item.title || "item"}`}>{typeof item === "string" ? item : <>{item.title && <strong>{item.title} </strong>}{item.text || item.description || item.label || ""}</>}</li>)}</ListTag></section>;
   }
   if (type === "table") {
-    const columns = Array.isArray(block.headers)
-      ? block.headers
-      : Array.isArray(block.columns)
-        ? block.columns
-        : [];
+    const columns = Array.isArray(block.headers) ? block.headers : Array.isArray(block.columns) ? block.columns : [];
     const rows = Array.isArray(block.rows) ? block.rows : [];
-    return (
-      <section className="lesson-structured-block" key={key}>
-        {heading}
-        <div className="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                {columns.map((column, columnIndex) => (
-                  <th key={`${columnIndex}-${String(column)}`}>
-                    {typeof column === "string"
-                      ? column
-                      : column.label || column.title || "Column"}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row, rowIndex) => (
-                <tr key={row.id || rowIndex}>
-                  {(Array.isArray(row)
-                    ? row
-                    : columns.map(
-                        (column) =>
-                          row?.[
-                            typeof column === "string" ? column : column.key
-                          ],
-                      )
-                  ).map((cell, cellIndex) => (
-                    <td key={cellIndex}>
-                      {typeof cell === "string" || typeof cell === "number"
-                        ? cell
-                        : JSON.stringify(cell ?? "")}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-    );
+    return <section className="lesson-structured-block" key={key}>{heading}<div className="table-scroll"><table><thead><tr>{columns.map((column, columnIndex) => <th key={`${columnIndex}-${String(column)}`}>{typeof column === "string" ? column : column.label || column.title || "Column"}</th>)}</tr></thead><tbody>{rows.map((row, rowIndex) => <tr key={row.id || rowIndex}>{(Array.isArray(row) ? row : columns.map((column) => row?.[typeof column === "string" ? column : column.key])).map((cell, cellIndex) => <td key={cellIndex}>{typeof cell === "string" || typeof cell === "number" ? cell : JSON.stringify(cell ?? "")}</td>)}</tr>)}</tbody></table></div></section>;
   }
   if (["image", "media", "video", "audio"].includes(type)) {
-    if (!mediaUrl)
-      return (
-        <section className="lesson-structured-block" key={key}>
-          {heading}
-          <p>
-            {text ||
-              "This media asset is unavailable or has an unsupported URL."}
-          </p>
-        </section>
-      );
-    if (type === "audio" || block.media_type === "audio")
-      return (
-        <section className="lesson-structured-block" key={key}>
-          {heading}
-          <audio controls preload="metadata" src={mediaUrl}>
-            {text || "Your browser cannot play this audio."}
-          </audio>
-        </section>
-      );
-    if (type === "video" || block.media_type === "video")
-      return (
-        <section className="lesson-structured-block" key={key}>
-          {heading}
-          <video
-            controls
-            preload="metadata"
-            poster={safeExternalUrl(block.poster)}
-            src={mediaUrl}
-          >
-            {text || "Your browser cannot play this video."}
-          </video>
-        </section>
-      );
-    return (
-      <figure className="lesson-structured-block" key={key}>
-        {heading}
-        <img
-          src={mediaUrl}
-          alt={String(block.alt || block.alt_text || "")}
-          loading="lazy"
-        />
-        {(block.caption || text) && (
-          <figcaption>{block.caption || text}</figcaption>
-        )}
-      </figure>
-    );
+    if (!mediaUrl) return <section className="lesson-structured-block" key={key}>{heading}<p>{text || "This media asset is unavailable or has an unsupported URL."}</p></section>;
+    if (type === "audio" || block.media_type === "audio") return <section className="lesson-structured-block" key={key}>{heading}<audio controls preload="metadata" src={mediaUrl}>{text || "Your browser cannot play this audio."}</audio></section>;
+    if (type === "video" || block.media_type === "video") return <section className="lesson-structured-block" key={key}>{heading}<video controls preload="metadata" poster={safeExternalUrl(block.poster)} src={mediaUrl}>{text || "Your browser cannot play this video."}</video></section>;
+    return <figure className="lesson-structured-block" key={key}>{heading}<img src={mediaUrl} alt={String(block.alt || block.alt_text || "")} loading="lazy" />{(block.caption || text) && <figcaption>{block.caption || text}</figcaption>}</figure>;
   }
   if (["reference", "source", "link"].includes(type)) {
     const url = safeExternalUrl(block.url || block.href);
-    return (
-      <section className="lesson-structured-block" key={key}>
-        {heading}
-        {text && <p>{text}</p>}
-        {url && (
-          <a href={url} target="_blank" rel="noreferrer noopener">
-            {block.label || url}
-          </a>
-        )}
-      </section>
-    );
+    return <section className="lesson-structured-block" key={key}>{heading}{text && <p>{text}</p>}{url && <a href={url} target="_blank" rel="noreferrer noopener">{block.label || url}</a>}</section>;
   }
-  if (["callout", "note", "tip", "warning"].includes(type))
-    return (
-      <aside className="insight-box lesson-structured-block" key={key}>
-        <div>
-          <strong>{title || type.replaceAll("_", " ")}</strong>
-          <p>{text}</p>
-        </div>
-      </aside>
-    );
+  if (["callout", "note", "tip", "warning"].includes(type)) return <aside className="insight-box lesson-structured-block" key={key}><div><strong>{title || type.replaceAll("_", " ")}</strong><p>{text}</p></div></aside>;
   // Unknown block types still show their authored plain-text content instead of silently disappearing.
-  if (title || text)
-    return (
-      <section className="lesson-structured-block" key={key}>
-        {heading}
-        {text && <p>{text}</p>}
-      </section>
-    );
+  if (title || text) return <section className="lesson-structured-block" key={key}>{heading}{text && <p>{text}</p>}</section>;
   return null;
 }
 
@@ -944,16 +708,14 @@ export default function LessonPage() {
           </div>
           <h1>
             {failed
-              ? unpublished
-                ? `${course.title} learning is coming soon`
-                : `${course.title} course could not be loaded`
+              ? (unpublished ? `${course.title} learning is coming soon` : `${course.title} course could not be loaded`)
               : `Loading your ${course.title} course…`}
           </h1>
           <p>
             {failed
-              ? unpublished
-                ? "This learning path is listed in the catalog, but its lessons have not been published yet. Choose a published course to start learning now."
-                : "The imported course outline is unavailable right now. Retry, or use the catalog to choose another course."
+              ? (unpublished
+                  ? "This learning path is listed in the catalog, but its lessons have not been published yet. Choose a published course to start learning now."
+                  : "The imported course outline is unavailable right now. Retry, or use the catalog to choose another course.")
               : "Fetching the current course outline and lessons. This should only take a moment."}
           </p>
           {failed ? (
@@ -1042,7 +804,6 @@ export default function LessonPage() {
           <X size={18} />
         </button>
         <CourseSidebar
-          key={course.slug}
           courseSlug={course.slug}
           currentSlug={current.slug}
           courseGroups={groups}
@@ -1183,19 +944,11 @@ export default function LessonPage() {
         <section className="lesson-content-block">
           <h2>Understand the idea</h2>
           {content.paragraphs.map((paragraph, paragraphIndex) => {
-            const item =
-              typeof paragraph === "string"
-                ? { title: "", text: paragraph }
-                : paragraph;
-            return (
-              <div
-                className="lesson-paragraph"
-                key={`${paragraphIndex}-${item.title || item.text}`}
-              >
-                {item.title && <h3>{item.title}</h3>}
-                <p>{item.text}</p>
-              </div>
-            );
+            const item = typeof paragraph === "string" ? { title: "", text: paragraph } : paragraph;
+            return <div className="lesson-paragraph" key={`${paragraphIndex}-${item.title || item.text}`}>
+              {item.title && <h3>{item.title}</h3>}
+              <p>{item.text}</p>
+            </div>;
           })}
           {content.sections?.length > 0 && (
             <div className="lesson-topic-sections">
@@ -1209,27 +962,21 @@ export default function LessonPage() {
             </div>
           )}
           <div className="insight-box">
-            <div className="insight-icon">
-              <CircleHelp size={18} />
-            </div>
-            <div>
-              <strong>{content.tipTitle || "Remember this"}</strong>
-              <p>{content.tip}</p>
-            </div>
+            <div className="insight-icon"><CircleHelp size={18} /></div>
+            <div><strong>{content.tipTitle || "Remember this"}</strong><p>{content.tip}</p></div>
           </div>
-          {!!content.extraBlocks?.length && (
-            <div className="lesson-extra-content-blocks">
-              {content.extraBlocks.map((block, blockIndex) => (
-                <StructuredContentBlock
-                  key={block.id || `${block.type || "block"}-${blockIndex}`}
-                  block={block}
-                  courseSlug={course.slug}
-                  index={blockIndex}
-                />
-              ))}
-            </div>
-          )}
+          {!!content.extraBlocks?.length && <div className="lesson-extra-content-blocks">{content.extraBlocks.map((block, blockIndex) => <StructuredContentBlock key={block.id || `${block.type || "block"}-${blockIndex}`} block={block} courseSlug={course.slug} index={blockIndex} />)}</div>}
         </section>
+        <LessonLiveExample
+          key={`${course.slug}:${current?.slug || "lesson"}`}
+          courseSlug={course.slug}
+          courseTitle={course.title}
+          lessonTitle={current?.title || course.title}
+          code={code || content.codeSample || ""}
+          codeLanguage={content.codeLanguage || ""}
+          expectedOutput={content.output || ""}
+          intro={content.intro || content.paragraphs?.[0]?.text || ""}
+        />
         <section className="lesson-content-block">
           <div className="section-title-row">
             <div>
@@ -1267,7 +1014,7 @@ export default function LessonPage() {
                                 : "query.sql"
                               : "example.js"}
               </div>
-              <div className="code-toolbar-actions">
+              <div className="code-toolbar-actions lesson-code-footer-actions">
                 <button
                   onClick={() => {
                     navigator.clipboard?.writeText(code).catch(() => {});
@@ -1322,22 +1069,10 @@ export default function LessonPage() {
                 </div>
               )}
             </div>
-            {(content.codeInstructions ||
-              (content.codeResetSteps?.length || 0) > 0) && (
-              <div className="lesson-code-instructions">
-                {content.codeInstructions && <p>{content.codeInstructions}</p>}
-                {!!content.codeResetSteps.length && (
-                  <details>
-                    <summary>Reset steps</summary>
-                    <ol>
-                      {content.codeResetSteps.map((step, stepIndex) => (
-                        <li key={`${stepIndex}-${step}`}>{step}</li>
-                      ))}
-                    </ol>
-                  </details>
-                )}
-              </div>
-            )}
+            {(content.codeInstructions || (content.codeResetSteps?.length || 0) > 0) && <div className="lesson-code-instructions">
+              {content.codeInstructions && <p>{content.codeInstructions}</p>}
+              {!!content.codeResetSteps.length && <details><summary>Reset steps</summary><ol>{content.codeResetSteps.map((step, stepIndex) => <li key={`${stepIndex}-${step}`}>{step}</li>)}</ol></details>}
+            </div>}
             <div className="code-card-footer">
               <span>
                 <ShieldCheck size={14} /> Safe learning workspace
@@ -1585,6 +1320,7 @@ export default function LessonPage() {
             </button>
           </div>
         </section>
+        <ReviewPrompt courseSlug={course.slug} lessonSlug={current.slug} />
         <div className="lesson-bottom-nav">
           <Link
             to={prev ? `/learn/${course.slug}/${prev.slug}` : "#"}

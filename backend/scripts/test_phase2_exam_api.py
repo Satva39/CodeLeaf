@@ -20,12 +20,14 @@ os.environ["JWT_SECRET"] = (
 os.environ["APP_ENV"] = "development"
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from fastapi import Response  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402
 from sqlalchemy import select, func  # noqa: E402
 
 from app.config import settings  # noqa: E402
 from app.db import Base, SessionLocal, engine  # noqa: E402
 import app.main as main_module  # noqa: E402
+from app.auth_security import create_session  # noqa: E402
 from app.models import (  # noqa: E402
     Certificate,
     Course,
@@ -127,7 +129,19 @@ def make_user(db, suffix: str) -> User:
 
 
 def set_cookie(client: TestClient, user: User) -> None:
-    client.cookies.set(main_module.SESSION_COOKIE, main_module.create_token(user))
+    """Authenticate with a real persisted server session and its CSRF pair."""
+    with SessionLocal() as db:
+        persisted = db.get(User, user.id)
+        if persisted is None:
+            raise AssertionError("test user disappeared before session setup")
+        persisted.is_email_verified = True
+        response = Response()
+        token = create_session(persisted, response, db)
+        claims = main_module.jwt.decode(token, settings.jwt_secret, algorithms=[main_module.TOKEN_ALGORITHM])
+        csrf_value = claims["csrf"]
+    client.cookies.set(main_module.SESSION_COOKIE, token)
+    client.cookies.set("codeleaf_csrf", csrf_value)
+    client.headers.update({"origin": "http://localhost:5173", "x-csrf-token": csrf_value})
 
 
 def answer_map(questions: list[dict], all_correct: bool = True) -> dict[str, str]:

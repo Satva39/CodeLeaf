@@ -7,12 +7,14 @@ import {
   ChevronRight,
   Flame,
   GraduationCap,
+  FolderKanban,
 } from "lucide-react";
+import { formatLearningStat } from "../lib/learningPath.js";
+import "../styles/phase3-learning-loop.css";
+import "../styles/phase3-review.css";
 import { useLearnerProgress } from "../lib/useLearnerProgress.js";
 import { useCourseCatalogState } from "../lib/useCourseCatalog.js";
 import { useGamificationStats } from "../lib/useGamificationStats.js";
-import { formatLearningStat } from "../lib/learningPath.js";
-import "../styles/phase3-learning-loop.css";
 import {
   PageShell,
   SectionTitle,
@@ -90,6 +92,14 @@ export default function ProgressPage() {
           ))}
         </div>
       </div>
+      <section className="panel phase3-review-entry">
+        <div>
+          <span className="eyebrow">RETRIEVAL PRACTICE</span>
+          <h2>Keep useful concepts fresh</h2>
+          <p>Review lessons and exercises when they're due. Your schedule follows recorded learning activity, not invented streaks or page views.</p>
+        </div>
+        <Link className="button button-secondary" to="/review">Open review queue <ArrowRight size={14} /></Link>
+      </section>
       {stats.mode === "loading" && <p role="status" className="phase3-data-note">Loading your latest recorded learning statistics…</p>}
       {stats.mode === "unavailable" && <p role="status" className="phase3-data-note phase3-data-note-warning">We couldn't verify your latest account statistics. Values are shown as unavailable rather than as zero.</p>}
       {learnerProgress.mode === "unavailable" && (
@@ -101,6 +111,10 @@ export default function ProgressPage() {
       {learnerProgress.mode === "guest" && (
         <p role="status" className="catalog-status-note">Guest progress is stored on this device only. Sign in to keep account progress in sync across devices.</p>
       )}
+      <div className="phase5-dashboard-links">
+        <Link to="/learning-hub" className="button button-secondary"><Activity size={15} /> Open learning hub <ArrowRight size={14} /></Link>
+        <Link to="/portfolio" className="button button-secondary"><FolderKanban size={15} /> Manage portfolio <ArrowRight size={14} /></Link>
+      </div>
       <div className="progress-resume-grid">
         <section className="panel progress-resume-card">
           <div className="eyebrow">CONTINUE LEARNING</div>
@@ -108,10 +122,7 @@ export default function ProgressPage() {
           {latestRecorded && latestCourse ? <>
             <p><strong>{latestRecorded.title}</strong> · {latestCourse.title}</p>
             {latestDate && !Number.isNaN(latestDate.getTime()) && <small>Last recorded {latestDate.toLocaleDateString()}</small>}
-            <div className="progress-next-actions">
-              <Link className="button button-primary" to={`/learn/${encodeURIComponent(latestRecorded.course_slug)}/${encodeURIComponent(latestRecorded.lesson_slug)}`}>Open lesson <ArrowRight size={14} /></Link>
-              <Link className="button button-secondary" to={`/practice/${encodeURIComponent(latestRecorded.course_slug)}`}>Practise this course <Activity size={14} /></Link>
-            </div>
+            <Link className="button button-primary" to={`/learn/${encodeURIComponent(latestRecorded.course_slug)}/${encodeURIComponent(latestRecorded.lesson_slug)}`}>Open lesson <ArrowRight size={14} /></Link>
           </> : <>
             <p>{learnerProgress.mode === "guest" ? "Complete a lesson to start a local learning history. Your guest records remain separate from account data." : "Your most recently opened lesson will appear here when a server progress record is available."}</p>
             <Link className="button button-secondary" to="/tutorials">Browse published courses <ArrowRight size={14} /></Link>

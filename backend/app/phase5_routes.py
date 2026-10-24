@@ -31,7 +31,7 @@ from .models import (
     LessonProgress, LearningPreference, Module, ProductAnalyticsEvent,
     ProjectSubmission, ReviewSchedule, RunnerJob, User,
 )
-from .phase5_service import get_or_create_preferences, utc_now
+from .phase5_service import apply_review_rating, get_or_create_preferences, utc_now
 from .diagram_assets import validate_dynamic_diagram_model
 
 router = APIRouter()
@@ -69,6 +69,15 @@ class LearningPreferenceInput(StrictModel):
 
 class SnoozeInput(StrictModel):
     days: int = Field(default=1, ge=1, le=30)
+
+
+class ReviewRatingInput(StrictModel):
+    """Learner self-assessment after opening the scheduled review item."""
+    rating: Literal["again", "hard", "good", "easy"]
+    course_slug: str = Field(min_length=1, max_length=100)
+    lesson_slug: str = Field(min_length=1, max_length=180)
+    item_type: Literal["lesson", "exercise"]
+    item_slug: str = Field(min_length=1, max_length=180)
 
 
 class PortfolioSubmissionInput(StrictModel):
@@ -228,23 +237,76 @@ def _preference_payload(preferences: LearningPreference) -> dict[str, Any]:
     }
 
 
-def _review_payload(db: Session, item: ReviewSchedule) -> dict[str, Any]:
-    title = item.item_slug.replace("-", " ").title()
-    if item.item_type == "lesson":
+def _aware_utc(value: datetime) -> datetime:
+    """Normalize database datetimes for portable comparison and JSON serialization."""
+    if value.tzinfo is None:
+        return value.replace(tzinfo=timezone.utc)
+    return value.astimezone(timezone.utc)
+
+
+def _review_metadata_index(db: Session, items: list[ReviewSchedule]) -> dict[tuple[str, str, str], dict[str, str]]:
+    """Load published review targets in two queries, avoiding per-card query storms."""
+    if not items:
+        return {}
+    course_slugs = {item.course_slug for item in items}
+    lesson_slugs = {item.item_slug for item in items if item.item_type == "lesson"}
+    exercise_slugs = {item.item_slug for item in items if item.item_type == "exercise"}
+    metadata: dict[tuple[str, str, str], dict[str, str]] = {}
+    if lesson_slugs:
+        rows = db.execute(select(Course.slug, Lesson.slug, Lesson.title).join(
+            Module, Module.course_id == Course.id
+        ).join(Lesson, Lesson.module_id == Module.id).where(
+            Course.slug.in_(course_slugs), Course.published.is_(True),
+            Lesson.slug.in_(lesson_slugs), Lesson.is_published.is_(True),
+        )).all()
+        for course_slug, lesson_slug, title in rows:
+            metadata[("lesson", course_slug, lesson_slug)] = {"title": title, "lesson_slug": lesson_slug}
+    if exercise_slugs:
+        rows = db.execute(select(Course.slug, Exercise.slug, Exercise.title, Lesson.slug).join(
+            Module, Module.course_id == Course.id
+        ).join(Lesson, Lesson.module_id == Module.id).join(
+            Exercise, Exercise.lesson_id == Lesson.id
+        ).where(
+            Course.slug.in_(course_slugs), Course.published.is_(True),
+            Lesson.is_published.is_(True), Exercise.slug.in_(exercise_slugs),
+            Exercise.is_published.is_(True),
+        )).all()
+        for course_slug, exercise_slug, title, lesson_slug in rows:
+            metadata[("exercise", course_slug, exercise_slug)] = {"title": title, "lesson_slug": lesson_slug}
+    return metadata
+
+
+def _review_item_lesson_slug(db: Session, item: ReviewSchedule) -> str | None:
+    metadata = _review_metadata_index(db, [item])
+    return metadata.get((item.item_type, item.course_slug, item.item_slug), {}).get("lesson_slug")
+
+
+def _review_item_is_public(db: Session, item: ReviewSchedule) -> bool:
+    return _review_item_lesson_slug(db, item) is not None
+
+
+def _review_payload(db: Session, item: ReviewSchedule, metadata: dict[tuple[str, str, str], dict[str, str]] | None = None) -> dict[str, Any]:
+    entry = (metadata or {}).get((item.item_type, item.course_slug, item.item_slug), {})
+    title = entry.get("title") or item.item_slug.replace("-", " ").title()
+    lesson_slug = entry.get("lesson_slug")
+    if metadata is None and item.item_type == "lesson":
         title_query = select(Lesson.title).join(Module, Lesson.module_id == Module.id).join(Course, Module.course_id == Course.id).where(
             Course.slug == item.course_slug, Lesson.slug == item.item_slug
         )
         title = db.scalar(title_query) or title
-    elif item.item_type == "exercise":
+        lesson_slug = _review_item_lesson_slug(db, item)
+    elif metadata is None and item.item_type == "exercise":
         title_query = select(Exercise.title).join(Lesson, Exercise.lesson_id == Lesson.id).join(Module, Lesson.module_id == Module.id).join(Course, Module.course_id == Course.id).where(
             Course.slug == item.course_slug, Exercise.slug == item.item_slug
         )
         title = db.scalar(title_query) or title
+        lesson_slug = _review_item_lesson_slug(db, item)
     return {
         "id": str(item.id), "course_slug": item.course_slug, "item_type": item.item_type,
-        "item_slug": item.item_slug, "title": title, "due_at": item.due_at.isoformat(),
-        "interval_days": item.interval_days, "repetitions": item.repetitions,
-        "last_result": item.last_result, "dismissed_until": item.dismissed_until.isoformat() if item.dismissed_until else None,
+        "item_slug": item.item_slug, "lesson_slug": lesson_slug, "title": title,
+        "due_at": _aware_utc(item.due_at).isoformat(), "interval_days": item.interval_days,
+        "repetitions": item.repetitions, "last_result": item.last_result,
+        "dismissed_until": item.dismissed_until.isoformat() if item.dismissed_until else None,
     }
 
 
@@ -285,11 +347,16 @@ def list_review_queue(user: User = Depends(require_user), db: Session = Depends(
         ReviewSchedule.user_id == user.id,
         (ReviewSchedule.dismissed_until.is_(None) | (ReviewSchedule.dismissed_until <= now)),
     ).order_by(ReviewSchedule.due_at.asc()).limit(200)).all()
-    due = [row for row in rows if row.due_at <= now][:preferences.daily_review_limit]
-    upcoming = [row for row in rows if row.due_at > now][:20]
+    # Content can be unpublished after a schedule was created. Never surface dead
+    # or draft lesson/exercise targets in the learner's review queue.
+    metadata = _review_metadata_index(db, rows)
+    rows = [row for row in rows if (row.item_type, row.course_slug, row.item_slug) in metadata]
+    due = [row for row in rows if _aware_utc(row.due_at) <= now][:preferences.daily_review_limit]
+    upcoming = [row for row in rows if _aware_utc(row.due_at) > now][:20]
     db.commit()
-    return {"due": [_review_payload(db, item) for item in due], "upcoming": [_review_payload(db, item) for item in upcoming],
-            "daily_limit": preferences.daily_review_limit, "timezone_name": preferences.timezone_name}
+    return {"due": [_review_payload(db, item, metadata) for item in due], "upcoming": [_review_payload(db, item, metadata) for item in upcoming],
+            "daily_limit": preferences.daily_review_limit, "timezone_name": preferences.timezone_name,
+            "preferences": _preference_payload(preferences)}
 
 
 @router.post("/api/me/reviews/{review_id}/snooze")
@@ -302,6 +369,43 @@ def snooze_review(review_id: UUID, body: SnoozeInput, user: User = Depends(requi
     return {"ok": True, "review": _review_payload(db, item)}
 
 
+@router.post("/api/me/reviews/{review_id}/rate")
+def rate_review(
+    review_id: UUID,
+    body: ReviewRatingInput,
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Reschedule a review from the learner's self-reported recall; this never grants XP."""
+    item = db.scalar(select(ReviewSchedule).where(
+        ReviewSchedule.id == review_id, ReviewSchedule.user_id == user.id
+    ))
+    if item is None:
+        raise HTTPException(status_code=404, detail="Review item was not found.")
+    if (item.course_slug != body.course_slug or item.item_type != body.item_type
+            or item.item_slug != body.item_slug):
+        raise HTTPException(status_code=400, detail="This review rating does not match the scheduled item.")
+    metadata = _review_metadata_index(db, [item])
+    target = metadata.get((item.item_type, item.course_slug, item.item_slug))
+    if target is None:
+        raise HTTPException(status_code=404, detail="The published review target is no longer available.")
+    if target.get("lesson_slug") != body.lesson_slug:
+        raise HTTPException(status_code=400, detail="This review rating does not match the lesson being reviewed.")
+
+    preferences = get_or_create_preferences(db, user.id)
+    apply_review_rating(item, preferences, body.rating, now=utc_now())
+    db.commit()
+    db.refresh(item)
+    return {
+        "ok": True,
+        "review": _review_payload(db, item, metadata),
+        "rating": body.rating,
+        "xp_awarded": 0,
+        "mastery_inferred": False,
+        "message": "Your self-assessment was saved. It updates the review schedule only; it does not mark the lesson complete or award XP.",
+    }
+
+
 @router.get("/api/me/recommendations")
 def get_recommendations(user: User = Depends(require_user), db: Session = Depends(get_db)) -> dict[str, Any]:
     """Explain rule-based recommendations using published, account-owned records only."""
@@ -311,9 +415,11 @@ def get_recommendations(user: User = Depends(require_user), db: Session = Depend
     due_items = db.scalars(select(ReviewSchedule).where(
         ReviewSchedule.user_id == user.id, ReviewSchedule.due_at <= now,
         (ReviewSchedule.dismissed_until.is_(None) | (ReviewSchedule.dismissed_until <= now)),
-    ).order_by(ReviewSchedule.due_at.asc()).limit(5)).all()
+    ).order_by(ReviewSchedule.due_at.asc()).limit(50)).all()
+    review_metadata = _review_metadata_index(db, due_items)
+    due_items = [item for item in due_items if (item.item_type, item.course_slug, item.item_slug) in review_metadata][:5]
     for item in due_items:
-        title = _review_payload(db, item)["title"]
+        title = _review_payload(db, item, review_metadata)["title"]
         recommendations.append({"kind": "review", "course_slug": item.course_slug,
             "item_slug": item.item_slug, "item_type": item.item_type, "title": f"Review: {title}",
             "reason": f"This {item.item_type} is due for retrieval practice based on your recorded learning history.",
@@ -728,9 +834,11 @@ def record_analytics_event(body: AnalyticsEventInput, user: User = Depends(requi
 def analytics_summary(days: int = Query(default=30, ge=1, le=90), user: User = Depends(_require_editor), db: Session = Depends(get_db)) -> dict[str, Any]:
     cutoff = utc_now() - timedelta(days=days)
     rows = db.execute(select(ProductAnalyticsEvent.event_type, ProductAnalyticsEvent.course_slug,
-        ProductAnalyticsEvent.outcome, func.count(ProductAnalyticsEvent.id).label("count")).where(
+        ProductAnalyticsEvent.item_key, ProductAnalyticsEvent.outcome,
+        func.count(ProductAnalyticsEvent.id).label("count")).where(
         ProductAnalyticsEvent.occurred_at >= cutoff).group_by(ProductAnalyticsEvent.event_type,
-        ProductAnalyticsEvent.course_slug, ProductAnalyticsEvent.outcome).order_by(func.count(ProductAnalyticsEvent.id).desc())).all()
+        ProductAnalyticsEvent.course_slug, ProductAnalyticsEvent.item_key,
+        ProductAnalyticsEvent.outcome).order_by(func.count(ProductAnalyticsEvent.id).desc())).all()
     daily_rows = db.execute(select(func.date(ProductAnalyticsEvent.occurred_at).label("day"),
         ProductAnalyticsEvent.event_type, func.count(ProductAnalyticsEvent.id).label("count")).where(
         ProductAnalyticsEvent.occurred_at >= cutoff).group_by(func.date(ProductAnalyticsEvent.occurred_at), ProductAnalyticsEvent.event_type).having(
@@ -740,6 +848,24 @@ def analytics_summary(days: int = Query(default=30, ge=1, le=90), user: User = D
                                   "item_key": row.item_key, "outcome": row.outcome, "count": int(row.count)} for row in rows],
         "daily_counts": [{"day": str(row.day), "event_type": row.event_type, "count": int(row.count)} for row in daily_rows],
         "privacy": "Aggregates contain no user ID, raw IP, submitted code, answers or email. Groups with fewer than five events are omitted; this is an event-count threshold, not a unique-learner threshold. Retention cleanup is opportunistic on ingestion and summary requests."}
+
+
+@router.get("/api/runner/status")
+def runner_status() -> dict[str, Any]:
+    """Expose only whether the isolated runner is configured, never its URL or secret."""
+    configured = bool(
+        (settings.runner_service_url or "").strip()
+        and (settings.runner_service_token or "").strip()
+    )
+    return {
+        "configured": configured,
+        "supported_languages": ["python", "javascript"] if configured else [],
+        "message": (
+            "The isolated runner is configured. Sign in to submit a program."
+            if configured
+            else "The isolated runner is not configured yet. Browser HTML/CSS/JavaScript preview remains available."
+        ),
+    }
 
 
 @router.post("/api/runner/jobs", status_code=status.HTTP_202_ACCEPTED)

@@ -48,17 +48,17 @@ def main() -> int:
         with closing(sqlite3.connect(database_path)) as connection:
             tables = {row[0] for row in connection.execute("SELECT name FROM sqlite_master WHERE type='table'")}
             revisions = [row[0] for row in connection.execute("SELECT version_num FROM alembic_version")]
-        required = {"courses", "course_modules", "lessons", "exercises", "users", "auth_sessions", "account_action_tokens", "auth_rate_limit_events", "alembic_version"}
+        required = {"courses", "course_modules", "lessons", "exercises", "users", "auth_sessions", "account_action_tokens", "auth_rate_limit_events", "learning_preferences", "review_schedules", "content_revisions", "audit_logs", "product_analytics_events", "runner_jobs", "alembic_version"}
         missing = sorted(required - tables)
         if missing:
             raise SystemExit("FAIL: migration left missing tables: " + ", ".join(missing))
-        if len(revisions) != 1 or revisions[0] != "0003_auth_lifecycle":
+        if len(revisions) != 1 or revisions[0] != "0004_phase5_capabilities":
             raise SystemExit(f"FAIL: unexpected migration state: {revisions!r}")
         with closing(sqlite3.connect(database_path)) as connection:
             user_columns = {row[1] for row in connection.execute("PRAGMA table_info(users)")}
         if "is_email_verified" not in user_columns:
             raise SystemExit("FAIL: migration left users.is_email_verified missing")
-        print("PASS migration state has one head and all auth lifecycle tables/columns after repeated upgrades")
+        print("PASS migration state has one Phase 5 head and all auth/review/privacy tables after repeated upgrades")
     print("Migration repeatability checks passed; only a temporary SQLite database was used.")
     return 0
 

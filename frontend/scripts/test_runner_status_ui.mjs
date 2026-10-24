@@ -1,0 +1,12 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const page = fs.readFileSync(path.join(root, "src/pages/PlaygroundPage.jsx"), "utf8");
+assert.match(page, /\/api\/runner\/status/);
+assert.match(page, /runnerConfigured/);
+assert.match(page, /runnerConfigChecked/);
+assert.match(page, /disabled=\{running \|\| !runnerSource\.trim\(\) \|\| !runnerConfigChecked \|\| !runnerConfigured\}/);
+assert.match(page, /The isolated runner is not configured yet/);
+console.log("PASS playground reads non-sensitive runner status and disables server execution until configured");

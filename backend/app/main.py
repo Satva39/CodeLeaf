@@ -4,8 +4,6 @@ import base64
 import hashlib
 import hmac
 import json
-import logging
-import time
 import re
 import secrets
 from datetime import date, datetime, timedelta, timezone
@@ -21,7 +19,7 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
 from sqlalchemy import inspect, select, func, or_, and_, text
-from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from .config import settings
@@ -31,7 +29,11 @@ from .phase5_routes import router as phase5_router
 from .phase5_service import record_review_result
 from .diagram_assets import validate_dynamic_diagram_model
 from .db import engine, get_db
-from .project_guide_service import build_project_guide, is_protected_project_path, project_guide_zip
+from .project_guide_service import (
+    build_project_guide,
+    is_protected_project_path,
+    project_guide_zip,
+)
 from .models import (
     Bookmark,
     Certificate,
@@ -64,8 +66,6 @@ app = FastAPI(
     version="0.1.0",
     description="Base API for CodeLeaf. Payment and account endpoints require configured PostgreSQL and provider secrets.",
 )
-logger = logging.getLogger("codeleaf.api")
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
@@ -75,72 +75,45 @@ app.add_middleware(
 )
 
 
-@app.exception_handler(SQLAlchemyError)
-async def handle_database_error(request: Request, exc: SQLAlchemyError) -> JSONResponse:
-    """Return a bounded, non-sensitive response for database/query/pool failures."""
-    logger.error(
-        "Database request failed: %s %s (%s)",
-        request.method,
-        request.url.path,
-        type(exc).__name__,
-        exc_info=(type(exc), exc, exc.__traceback__),
-    )
-    return JSONResponse(
-        status_code=503,
-        content={
-            "detail": "The database request failed or timed out. Check backend logs and /api/ready, then retry."
-        },
-    )
-
-
 @app.middleware("http")
 async def enforce_allowed_origin(request: Request, call_next):
     # Origin validation plus a signed double-submit token protects cookie-authenticated writes.
-    if request.method in {"POST", "PUT", "PATCH", "DELETE"} and request.url.path != "/api/payments/webhook":
+    if (
+        request.method in {"POST", "PUT", "PATCH", "DELETE"}
+        and request.url.path != "/api/payments/webhook"
+    ):
         origin = request.headers.get("origin")
         if origin and origin.rstrip("/") not in settings.allowed_origins:
-            return JSONResponse(status_code=403, content={"detail": "Request origin is not allowed."})
+            return JSONResponse(
+                status_code=403, content={"detail": "Request origin is not allowed."}
+            )
         session_cookie = request.cookies.get("codeleaf_session")
         if session_cookie:
             csrf_cookie = request.cookies.get("codeleaf_csrf", "")
             csrf_header = request.headers.get("x-csrf-token", "")
             try:
-                claims = jwt.decode(session_cookie, settings.jwt_secret, algorithms=[TOKEN_ALGORITHM])
+                claims = jwt.decode(
+                    session_cookie, settings.jwt_secret, algorithms=[TOKEN_ALGORITHM]
+                )
                 csrf_claim = claims.get("csrf", "")
             except jwt.InvalidTokenError:
                 csrf_claim = ""
-            if (not origin or origin.rstrip("/") not in settings.allowed_origins or not csrf_cookie
-                    or not csrf_header or not csrf_claim
-                    or not hmac.compare_digest(csrf_cookie, csrf_header)
-                    or not hmac.compare_digest(csrf_cookie, csrf_claim)):
-                return JSONResponse(status_code=403, content={"detail": "CSRF validation failed. Refresh the page and try again."})
+            if (
+                not origin
+                or origin.rstrip("/") not in settings.allowed_origins
+                or not csrf_cookie
+                or not csrf_header
+                or not csrf_claim
+                or not hmac.compare_digest(csrf_cookie, csrf_header)
+                or not hmac.compare_digest(csrf_cookie, csrf_claim)
+            ):
+                return JSONResponse(
+                    status_code=403,
+                    content={
+                        "detail": "CSRF validation failed. Refresh the page and try again."
+                    },
+                )
     return await call_next(request)
-
-
-@app.middleware("http")
-async def log_slow_api_requests(request: Request, call_next):
-    started = time.perf_counter()
-    try:
-        response = await call_next(request)
-    except Exception:
-        elapsed_ms = (time.perf_counter() - started) * 1000
-        logger.exception(
-            "Unhandled API failure: %s %s after %.0f ms",
-            request.method,
-            request.url.path,
-            elapsed_ms,
-        )
-        raise
-    elapsed_ms = (time.perf_counter() - started) * 1000
-    if request.url.path.startswith("/api/") and elapsed_ms >= 1500:
-        logger.warning(
-            "Slow API response: %s %s -> %s in %.0f ms",
-            request.method,
-            request.url.path,
-            response.status_code,
-            elapsed_ms,
-        )
-    return response
 
 
 app.include_router(auth_router)
@@ -932,7 +905,10 @@ def _catalog_manifest_counts(course_slug: str) -> tuple[int, int]:
         for relative in project_files:
             try:
                 candidate = (course_dir / str(relative)).resolve()
-                if course_dir not in candidate.parents or candidate.suffix.lower() != ".json":
+                if (
+                    course_dir not in candidate.parents
+                    or candidate.suffix.lower() != ".json"
+                ):
                     continue
                 item = json.loads(candidate.read_text(encoding="utf-8"))
             except (OSError, json.JSONDecodeError, ValueError):
@@ -959,7 +935,12 @@ def _catalog_manifest_counts(course_slug: str) -> tuple[int, int]:
         # do not infer availability from stale inline records in course.json.
         return 0, project_count
 
-    rows = index_doc.get("references") or index_doc.get("sources") or index_doc.get("items") or []
+    rows = (
+        index_doc.get("references")
+        or index_doc.get("sources")
+        or index_doc.get("items")
+        or []
+    )
     loaded_rows: list[dict[str, Any]] = []
     if isinstance(rows, list):
         for row in rows:
@@ -968,7 +949,10 @@ def _catalog_manifest_counts(course_slug: str) -> tuple[int, int]:
             elif isinstance(row, str):
                 try:
                     candidate = (course_dir / row).resolve()
-                    if course_dir not in candidate.parents or candidate.suffix.lower() != ".json":
+                    if (
+                        course_dir not in candidate.parents
+                        or candidate.suffix.lower() != ".json"
+                    ):
                         continue
                     entry = json.loads(candidate.read_text(encoding="utf-8"))
                 except (OSError, json.JSONDecodeError, ValueError):
@@ -981,10 +965,13 @@ def _catalog_manifest_counts(course_slug: str) -> tuple[int, int]:
             loaded_rows = [row for row in legacy_rows if isinstance(row, dict)]
 
     from urllib.parse import urlsplit
+
     for row in loaded_rows:
         if row.get("status") not in {None, "published"} and not preview_mode:
             continue
-        title = str(row.get("title") or row.get("name") or row.get("label") or "").strip()
+        title = str(
+            row.get("title") or row.get("name") or row.get("label") or ""
+        ).strip()
         url = str(row.get("url") or row.get("href") or "").strip()
         parsed = urlsplit(url)
         if title and parsed.scheme in {"http", "https"} and parsed.netloc:
@@ -1002,19 +989,38 @@ def _course_manifest_learning_details(course_slug: str) -> dict[str, list[str]]:
         metadata = json.loads((course_dir / "course.json").read_text(encoding="utf-8"))
         if not isinstance(metadata, dict):
             return empty
-        if metadata.get("status") not in {None, "published"} and not draft_course_preview_enabled():
+        if (
+            metadata.get("status") not in {None, "published"}
+            and not draft_course_preview_enabled()
+        ):
             return empty
-        course_meta = metadata.get("course") if isinstance(metadata.get("course"), dict) else {}
+        course_meta = (
+            metadata.get("course") if isinstance(metadata.get("course"), dict) else {}
+        )
+
         def normalise(value: Any) -> list[str]:
             if isinstance(value, str):
                 return [value.strip()] if value.strip() else []
             if isinstance(value, list):
-                return [str(item).strip() for item in value if isinstance(item, (str, int, float)) and str(item).strip()]
+                return [
+                    str(item).strip()
+                    for item in value
+                    if isinstance(item, (str, int, float)) and str(item).strip()
+                ]
             return []
+
         return {
-            "audience": normalise(course_meta.get("audience") or metadata.get("audience")),
-            "prerequisites": normalise(course_meta.get("prerequisites") or metadata.get("prerequisites")),
-            "learning_outcomes": normalise(course_meta.get("learning_outcomes") or course_meta.get("outcomes") or metadata.get("learning_outcomes")),
+            "audience": normalise(
+                course_meta.get("audience") or metadata.get("audience")
+            ),
+            "prerequisites": normalise(
+                course_meta.get("prerequisites") or metadata.get("prerequisites")
+            ),
+            "learning_outcomes": normalise(
+                course_meta.get("learning_outcomes")
+                or course_meta.get("outcomes")
+                or metadata.get("learning_outcomes")
+            ),
         }
     except (OSError, json.JSONDecodeError, ValueError):
         return empty
@@ -1048,15 +1054,23 @@ def list_courses(db: Session = Depends(get_db)) -> dict[str, Any]:
     if preview_mode:
         practice_query = practice_query.where(
             or_(
-                and_(Course.published.is_(True), Lesson.is_published.is_(True), Exercise.is_published.is_(True)),
+                and_(
+                    Course.published.is_(True),
+                    Lesson.is_published.is_(True),
+                    Exercise.is_published.is_(True),
+                ),
                 Lesson.content["_codeleaf_course_slug"].as_string() == Course.slug,
             )
         )
     else:
         practice_query = practice_query.where(
-            Course.published.is_(True), Lesson.is_published.is_(True), Exercise.is_published.is_(True)
+            Course.published.is_(True),
+            Lesson.is_published.is_(True),
+            Exercise.is_published.is_(True),
         )
-    practice_counts = {slug: int(count or 0) for slug, count in db.execute(practice_query).all()}
+    practice_counts = {
+        slug: int(count or 0) for slug, count in db.execute(practice_query).all()
+    }
     course_query = select(Course).order_by(Course.sort_order.asc())
     if not draft_course_preview_enabled():
         course_query = course_query.where(Course.published.is_(True))
@@ -1144,7 +1158,9 @@ def list_courses(db: Session = Depends(get_db)) -> dict[str, Any]:
 
 
 @app.get("/api/courses/{course_slug}/references")
-def list_course_references(course_slug: str, db: Session = Depends(get_db)) -> dict[str, Any]:
+def list_course_references(
+    course_slug: str, db: Session = Depends(get_db)
+) -> dict[str, Any]:
     """Return the learner-safe reference index for one visible course."""
     course = get_course_visible_to_reader(db, course_slug)
     course_dir = (COURSE_CONTENT_ROOT / course_slug).resolve()
@@ -1154,20 +1170,41 @@ def list_course_references(course_slug: str, db: Session = Depends(get_db)) -> d
             raise FileNotFoundError("Course manifest was not found.")
         metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        raise HTTPException(status_code=404, detail="Course reference index was not found.") from exc
+        raise HTTPException(
+            status_code=404, detail="Course reference index was not found."
+        ) from exc
 
     reference_rel = metadata.get("reference_index") or "references/reference-index.json"
     index_path = (course_dir / str(reference_rel)).resolve()
-    if course_dir not in index_path.parents or not index_path.is_file() or index_path.suffix.lower() != ".json":
-        raise HTTPException(status_code=404, detail="Course reference index was not found.")
+    if (
+        course_dir not in index_path.parents
+        or not index_path.is_file()
+        or index_path.suffix.lower() != ".json"
+    ):
+        raise HTTPException(
+            status_code=404, detail="Course reference index was not found."
+        )
     try:
         index_doc = json.loads(index_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        raise HTTPException(status_code=500, detail="Course reference index is invalid.") from exc
-    if index_doc.get("status") not in {None, "published"} and not draft_course_preview_enabled():
-        raise HTTPException(status_code=404, detail="This course reference index has not been published.")
+        raise HTTPException(
+            status_code=500, detail="Course reference index is invalid."
+        ) from exc
+    if (
+        index_doc.get("status") not in {None, "published"}
+        and not draft_course_preview_enabled()
+    ):
+        raise HTTPException(
+            status_code=404,
+            detail="This course reference index has not been published.",
+        )
 
-    raw_items = index_doc.get("references") or index_doc.get("sources") or index_doc.get("items") or []
+    raw_items = (
+        index_doc.get("references")
+        or index_doc.get("sources")
+        or index_doc.get("items")
+        or []
+    )
     if not isinstance(raw_items, list):
         raw_items = []
     # Accept separate structured entry files while retaining support for older inline indexes.
@@ -1190,43 +1227,84 @@ def list_course_references(course_slug: str, db: Session = Depends(get_db)) -> d
             loaded_items = [row for row in legacy_rows if isinstance(row, dict)]
     items: list[dict[str, Any]] = []
     from urllib.parse import urlsplit
+
     for row in loaded_items:
-        if row.get("status") not in {None, "published"} and not draft_course_preview_enabled():
+        if (
+            row.get("status") not in {None, "published"}
+            and not draft_course_preview_enabled()
+        ):
             continue
-        title = str(row.get("title") or row.get("name") or row.get("label") or "").strip()
+        title = str(
+            row.get("title") or row.get("name") or row.get("label") or ""
+        ).strip()
         url = str(row.get("url") or row.get("href") or "").strip()
         parsed = urlsplit(url)
         if not title or parsed.scheme not in {"http", "https"} or not parsed.netloc:
             continue
-        supports = row.get("supports") or row.get("concepts") or row.get("topics") or row.get("description") or ""
+        supports = (
+            row.get("supports")
+            or row.get("concepts")
+            or row.get("topics")
+            or row.get("description")
+            or ""
+        )
         if isinstance(supports, list):
             supports = ", ".join(str(value) for value in supports if value)
         elif not isinstance(supports, str):
             supports = str(supports) if supports else ""
-        generated_slug = re.sub(r"[^a-z0-9]+", "-", title.casefold()).strip("-") or f"reference-{len(items) + 1}"
+        generated_slug = (
+            re.sub(r"[^a-z0-9]+", "-", title.casefold()).strip("-")
+            or f"reference-{len(items) + 1}"
+        )
         reference_slug = str(row.get("slug") or generated_slug).strip()
-        related_lessons = row.get("related_lesson_slugs") or row.get("related_lessons") or []
+        related_lessons = (
+            row.get("related_lesson_slugs") or row.get("related_lessons") or []
+        )
         if isinstance(related_lessons, str):
             related_lessons = [related_lessons]
         if not isinstance(related_lessons, list):
             related_lessons = []
-        items.append({
-            "slug": reference_slug,
-            "title": title,
-            "url": url,
-            "publisher": str(row.get("publisher") or row.get("organization") or row.get("source") or "").strip(),
-            "checked_on": str(row.get("checked_on") or index_doc.get("checked_on") or index_doc.get("version_checked_on") or index_doc.get("last_checked") or "").strip(),
-            "source_type": str(row.get("source_type") or row.get("type") or "reference").strip(),
-            "supports": supports,
-            "explanation": str(row.get("explanation") or row.get("description") or supports).strip(),
-            "example": str(row.get("example") or "").strip(),
-            "related_lesson_slugs": [str(slug).strip() for slug in related_lessons if isinstance(slug, str) and slug.strip()],
-        })
+        items.append(
+            {
+                "slug": reference_slug,
+                "title": title,
+                "url": url,
+                "publisher": str(
+                    row.get("publisher")
+                    or row.get("organization")
+                    or row.get("source")
+                    or ""
+                ).strip(),
+                "checked_on": str(
+                    row.get("checked_on")
+                    or index_doc.get("checked_on")
+                    or index_doc.get("version_checked_on")
+                    or index_doc.get("last_checked")
+                    or ""
+                ).strip(),
+                "source_type": str(
+                    row.get("source_type") or row.get("type") or "reference"
+                ).strip(),
+                "supports": supports,
+                "explanation": str(
+                    row.get("explanation") or row.get("description") or supports
+                ).strip(),
+                "example": str(row.get("example") or "").strip(),
+                "related_lesson_slugs": [
+                    str(slug).strip()
+                    for slug in related_lessons
+                    if isinstance(slug, str) and slug.strip()
+                ],
+            }
+        )
     return {
         "course_slug": course.slug,
         "course_title": course.title,
         "description": course.description,
-        "checked_on": index_doc.get("checked_on") or index_doc.get("version_checked_on") or index_doc.get("last_checked") or "",
+        "checked_on": index_doc.get("checked_on")
+        or index_doc.get("version_checked_on")
+        or index_doc.get("last_checked")
+        or "",
         "items": items,
     }
 
@@ -1247,8 +1325,6 @@ def list_course_exercises(
         select(
             Exercise,
             Lesson.slug,
-            Lesson.title,
-            Module.title,
             Course.title,
             Course.published,
             Lesson.is_published,
@@ -1265,19 +1341,23 @@ def list_course_exercises(
             Lesson.is_published.is_(True),
             Exercise.is_published.is_(True),
         )
-    rows = db.execute(query.order_by(Module.sort_order.asc(), Lesson.sort_order.asc(), Exercise.sequence.asc()).limit(10_000)).all()
+    rows = db.execute(
+        query.order_by(
+            Module.sort_order.asc(), Lesson.sort_order.asc(), Exercise.sequence.asc()
+        ).limit(10_000)
+    ).all()
     items: list[dict[str, Any]] = []
     for (
         exercise,
         lesson_slug,
-        lesson_title,
-        module_title,
         course_title,
         course_is_published,
         lesson_is_published,
         lesson_content,
     ) in rows:
-        published_item = bool(course_is_published and lesson_is_published and exercise.is_published)
+        published_item = bool(
+            course_is_published and lesson_is_published and exercise.is_published
+        )
         imported_draft = (
             preview_mode
             and isinstance(lesson_content, dict)
@@ -1285,26 +1365,28 @@ def list_course_exercises(
         )
         if not (published_item or imported_draft):
             continue
-        items.append({
-            "slug": exercise.slug,
-            "title": exercise.title,
-            "type": exercise.exercise_type,
-            "prompt": exercise.prompt,
-            "difficulty": exercise.difficulty,
-            "course_slug": course_slug,
-            "course_title": course_title,
-            "module_title": module_title,
-            "lesson_slug": lesson_slug,
-            "lesson_title": lesson_title,
-            "status": "published" if published_item else "draft",
-            "sequence": exercise.sequence,
-            "starter": exercise.starter or {},
-            "hints": exercise.hints or [],
-            "acceptance_criteria": exercise.acceptance_criteria or [],
-            "xp_points": XP_REWARDS["exercise"],
-        })
+        items.append(
+            {
+                "slug": exercise.slug,
+                "title": exercise.title,
+                "type": exercise.exercise_type,
+                "prompt": exercise.prompt,
+                "difficulty": exercise.difficulty,
+                "course_slug": course_slug,
+                "course_title": course_title,
+                "lesson_slug": lesson_slug,
+                "sequence": exercise.sequence,
+                "xp_points": XP_REWARDS["exercise"],
+            }
+        )
     total = len(items)
-    return {"items": items[offset:offset + limit], "total": total, "offset": offset, "limit": limit, "preview_mode": preview_mode}
+    return {
+        "items": items[offset : offset + limit],
+        "total": total,
+        "offset": offset,
+        "limit": limit,
+        "preview_mode": preview_mode,
+    }
 
 
 @app.get("/api/courses/{course_slug}/outline")
@@ -1380,10 +1462,14 @@ def get_published_course_outline(
     }
 
 
-
 def _safe_course_json_path(course_dir: Path, relative_path: Any, label: str) -> Path:
     """Resolve a content JSON path inside one course directory."""
-    if not isinstance(relative_path, str) or not relative_path.strip() or "\\" in relative_path or "\x00" in relative_path:
+    if (
+        not isinstance(relative_path, str)
+        or not relative_path.strip()
+        or "\\" in relative_path
+        or "\x00" in relative_path
+    ):
         raise HTTPException(status_code=404, detail=f"{label} was not found.")
     candidate = (course_dir / relative_path).resolve()
     if (
@@ -1395,7 +1481,9 @@ def _safe_course_json_path(course_dir: Path, relative_path: Any, label: str) -> 
     return candidate
 
 
-def _load_exam_blueprint(course_slug: str, db: Session) -> tuple[Course, Path, dict[str, Any]]:
+def _load_exam_blueprint(
+    course_slug: str, db: Session
+) -> tuple[Course, Path, dict[str, Any]]:
     """Load a course's blueprint without exposing answer keys to the public API."""
     course = get_course_visible_to_reader(db, course_slug)
     content_root = COURSE_CONTENT_ROOT.resolve()
@@ -1406,37 +1494,53 @@ def _load_exam_blueprint(course_slug: str, db: Session) -> tuple[Course, Path, d
     try:
         course_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        raise HTTPException(status_code=500, detail="Course manifest is invalid.") from exc
+        raise HTTPException(
+            status_code=500, detail="Course manifest is invalid."
+        ) from exc
 
     candidates = [
-        item for item in course_manifest.get("assessment_files", [])
-        if isinstance(item, str) and Path(item).name.lower() in {"exam-blueprint.json", "exam-blueprint"}
+        item
+        for item in course_manifest.get("assessment_files", [])
+        if isinstance(item, str)
+        and Path(item).name.lower() in {"exam-blueprint.json", "exam-blueprint"}
     ]
     if not candidates:
         candidates = ["exams/exam-blueprint.json"]
     blueprint_path = None
     for relative in candidates:
         try:
-            blueprint_path = _safe_course_json_path(course_dir, relative, "Exam blueprint")
+            blueprint_path = _safe_course_json_path(
+                course_dir, relative, "Exam blueprint"
+            )
             break
         except HTTPException:
             continue
     if blueprint_path is None:
-        raise HTTPException(status_code=404, detail="This course does not have a final exam blueprint.")
+        raise HTTPException(
+            status_code=404, detail="This course does not have a final exam blueprint."
+        )
     try:
         blueprint = json.loads(blueprint_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        raise HTTPException(status_code=500, detail="Exam blueprint is invalid.") from exc
+        raise HTTPException(
+            status_code=500, detail="Exam blueprint is invalid."
+        ) from exc
     if not isinstance(blueprint, dict):
         raise HTTPException(status_code=500, detail="Exam blueprint is invalid.")
     if course_manifest.get("status") == "draft" and not draft_course_preview_enabled():
-        raise HTTPException(status_code=404, detail="This course has not been published.")
+        raise HTTPException(
+            status_code=404, detail="This course has not been published."
+        )
     if blueprint.get("status") != "published" and not draft_course_preview_enabled():
-        raise HTTPException(status_code=404, detail="This final exam has not been published.")
+        raise HTTPException(
+            status_code=404, detail="This final exam has not been published."
+        )
     return course, course_dir, blueprint
 
 
-def _load_exam_question_pool(course_dir: Path, blueprint: dict[str, Any]) -> list[dict[str, Any]]:
+def _load_exam_question_pool(
+    course_dir: Path, blueprint: dict[str, Any]
+) -> list[dict[str, Any]]:
     """Load valid published question records. Private answer keys remain server-only."""
     question_files = blueprint.get("question_files", [])
     if not isinstance(question_files, list):
@@ -1456,74 +1560,107 @@ def _load_exam_question_pool(course_dir: Path, blueprint: dict[str, Any]) -> lis
         except (TypeError, ValueError):
             continue
         if start <= end:
-            topic_ranges.append((str(topic.get("topic") or "General skills"), start, end))
+            topic_ranges.append(
+                (str(topic.get("topic") or "General skills"), start, end)
+            )
 
     for relative in question_files:
         if not isinstance(relative, str) or "\\" in relative:
             continue
         try:
-            question_path = _safe_course_json_path(course_dir, str(Path("exams") / relative), "Exam question set")
+            question_path = _safe_course_json_path(
+                course_dir, f"exams/{relative}", "Exam question set"
+            )
         except HTTPException:
             continue
         try:
             question_set = json.loads(question_path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError) as exc:
-            raise HTTPException(status_code=500, detail="An exam question set is invalid.") from exc
+            raise HTTPException(
+                status_code=500, detail="An exam question set is invalid."
+            ) from exc
         if not isinstance(question_set, dict):
-            raise HTTPException(status_code=500, detail="An exam question set is invalid.")
+            raise HTTPException(
+                status_code=500, detail="An exam question set is invalid."
+            )
         if question_set.get("status") != "published" and not preview:
             continue
         lesson_id = question_set.get("lesson_id")
         lesson_slug = question_set.get("lesson_slug")
         import re
+
         match = re.search(r"(\d+)$", str(lesson_id or question_path.stem))
         lesson_number = int(match.group(1)) if match else 0
         topic_name = next(
-            (name for name, start, end in topic_ranges if start <= lesson_number <= end),
+            (
+                name
+                for name, start, end in topic_ranges
+                if start <= lesson_number <= end
+            ),
             "General skills",
         )
         questions = question_set.get("questions")
         if not isinstance(questions, list):
-            raise HTTPException(status_code=500, detail="An exam question set is malformed.")
+            raise HTTPException(
+                status_code=500, detail="An exam question set is malformed."
+            )
         for question in questions:
             if not isinstance(question, dict):
-                raise HTTPException(status_code=500, detail="An exam question is malformed.")
+                raise HTTPException(
+                    status_code=500, detail="An exam question is malformed."
+                )
             question_id = question.get("id")
             prompt = question.get("prompt")
             options = question.get("options")
             answer_key = question.get("answer_key")
             if (
-                not isinstance(question_id, str) or not question_id.strip()
+                not isinstance(question_id, str)
+                or not question_id.strip()
                 or question_id in seen_ids
-                or not isinstance(prompt, str) or not prompt.strip()
-                or not isinstance(options, list) or len(options) < 2
+                or not isinstance(prompt, str)
+                or not prompt.strip()
+                or not isinstance(options, list)
+                or len(options) < 2
                 or not all(isinstance(option, str) for option in options)
-                or not isinstance(answer_key, str) or answer_key not in options
+                or not isinstance(answer_key, str)
+                or answer_key not in options
             ):
-                raise HTTPException(status_code=500, detail="An exam question is malformed or has a duplicate ID.")
+                raise HTTPException(
+                    status_code=500,
+                    detail="An exam question is malformed or has a duplicate ID.",
+                )
             seen_ids.add(question_id)
-            pool.append({
-                "id": question_id,
-                "lesson_id": str(lesson_id or ""),
-                "lesson_slug": str(lesson_slug or ""),
-                "lesson_number": lesson_number,
-                "topic": topic_name,
-                "prompt": prompt,
-                "options": options,
-                "answer_key": answer_key,
-                "explanation": str(question.get("explanation") or "Review the relevant lesson and try again."),
-            })
+            pool.append(
+                {
+                    "id": question_id,
+                    "lesson_id": str(lesson_id or ""),
+                    "lesson_slug": str(lesson_slug or ""),
+                    "lesson_number": lesson_number,
+                    "topic": topic_name,
+                    "prompt": prompt,
+                    "options": options,
+                    "answer_key": answer_key,
+                    "explanation": str(
+                        question.get("explanation")
+                        or "Review the relevant lesson and try again."
+                    ),
+                }
+            )
     return pool
 
 
-def _choose_exam_questions(pool: list[dict[str, Any]], blueprint: dict[str, Any], count: int = 20) -> list[dict[str, Any]]:
+def _choose_exam_questions(
+    pool: list[dict[str, Any]], blueprint: dict[str, Any], count: int = 20
+) -> list[dict[str, Any]]:
     """Sample unique lesson concepts according to the blueprint's topic weights."""
     if not pool:
         return []
     rng = secrets.SystemRandom()
     by_lesson: dict[int, list[dict[str, Any]]] = {}
     for question in pool:
-        by_lesson.setdefault(int(question.get("lesson_number") or 0), []).append(question)
+        by_lesson.setdefault(int(question.get("lesson_number") or 0), []).append(
+            question
+        )
     lesson_numbers = [number for number in by_lesson if number > 0]
     rng.shuffle(lesson_numbers)
     target_count = min(max(1, int(count)), len(lesson_numbers))
@@ -1538,7 +1675,9 @@ def _choose_exam_questions(pool: list[dict[str, Any]], blueprint: dict[str, Any]
         except (TypeError, ValueError, IndexError):
             continue
         if start <= end and weight > 0:
-            topics.append((str(row.get("topic") or "General skills"), start, end, weight))
+            topics.append(
+                (str(row.get("topic") or "General skills"), start, end, weight)
+            )
     weighted_total = sum(row[3] for row in topics)
     selected: list[dict[str, Any]] = []
     selected_lessons: set[int] = set()
@@ -1546,12 +1685,18 @@ def _choose_exam_questions(pool: list[dict[str, Any]], blueprint: dict[str, Any]
         raw_quotas = [target_count * item[3] / weighted_total for item in topics]
         quotas = [int(value) for value in raw_quotas]
         remaining = target_count - sum(quotas)
-        ranked = sorted(range(len(topics)), key=lambda i: raw_quotas[i] - quotas[i], reverse=True)
+        ranked = sorted(
+            range(len(topics)), key=lambda i: raw_quotas[i] - quotas[i], reverse=True
+        )
         for index in ranked[:remaining]:
             quotas[index] += 1
         for topic_row, quota in zip(topics, quotas):
             name, start, end, _weight = topic_row
-            eligible = [number for number in lesson_numbers if number not in selected_lessons and start <= number <= end]
+            eligible = [
+                number
+                for number in lesson_numbers
+                if number not in selected_lessons and start <= number <= end
+            ]
             rng.shuffle(eligible)
             for number in eligible[:quota]:
                 choices = by_lesson[number]
@@ -1560,7 +1705,9 @@ def _choose_exam_questions(pool: list[dict[str, Any]], blueprint: dict[str, Any]
                 selected.append(candidate)
                 selected_lessons.add(number)
     if len(selected) < target_count:
-        remaining_lessons = [number for number in lesson_numbers if number not in selected_lessons]
+        remaining_lessons = [
+            number for number in lesson_numbers if number not in selected_lessons
+        ]
         rng.shuffle(remaining_lessons)
         for number in remaining_lessons[: target_count - len(selected)]:
             selected.append(dict(rng.choice(by_lesson[number])))
@@ -1570,48 +1717,75 @@ def _choose_exam_questions(pool: list[dict[str, Any]], blueprint: dict[str, Any]
 
 def _course_requires_human_capstone_review(blueprint: dict[str, Any]) -> bool:
     description = str(blueprint.get("project_submission") or "").casefold()
-    if re.search(r"\b(no|not|never|without)\b.{0,55}\b(capstone|human[- ]review(?:ed)?)\b", description):
+    if re.search(
+        r"\b(no|not|never|without)\b.{0,55}\b(capstone|human[- ]review(?:ed)?)\b",
+        description,
+    ):
         return False
-    return "capstone" in description and bool(re.search(r"human[- ]review(?:ed)?", description))
+    return "capstone" in description and bool(
+        re.search(r"human[- ]review(?:ed)?", description)
+    )
 
 
 def _certificate_eligibility_payload(
-    db: Session, user: User, course: Course, blueprint: dict[str, Any],
-    attempt: ExamAttempt | None, issue_if_eligible: bool = False,
+    db: Session,
+    user: User,
+    course: Course,
+    blueprint: dict[str, Any],
+    attempt: ExamAttempt | None,
+    issue_if_eligible: bool = False,
 ) -> dict[str, Any]:
     lesson_rows = db.execute(
         select(Lesson.id, LessonProgress.completed)
         .join(Module, Lesson.module_id == Module.id)
         .outerjoin(
             LessonProgress,
-            (LessonProgress.lesson_id == Lesson.id) & (LessonProgress.user_id == user.id),
+            (LessonProgress.lesson_id == Lesson.id)
+            & (LessonProgress.user_id == user.id),
         )
         .where(Module.course_id == course.id)
     ).all()
     total_lessons = len(lesson_rows)
     completed_lessons = sum(1 for _lesson_id, complete in lesson_rows if complete)
     certificate = db.scalar(
-        select(Certificate).where(
+        select(Certificate)
+        .where(
             Certificate.user_id == user.id,
             Certificate.course_id == course.id,
             Certificate.revoked_at.is_(None),
-        ).order_by(Certificate.issued_at.desc())
+        )
+        .order_by(Certificate.issued_at.desc())
     )
     attempt_passed = bool(attempt and attempt.submitted_at and attempt.passed)
     capstone_required = _course_requires_human_capstone_review(blueprint)
     status_text = "exam_required"
     reason = "Pass the server-graded final exam first."
     if certificate:
-        status_text, reason = "issued", "A verified certificate has been issued for this course."
+        status_text, reason = (
+            "issued",
+            "A verified certificate has been issued for this course.",
+        )
     elif not attempt_passed:
         if attempt and attempt.submitted_at:
-            status_text, reason = "exam_not_passed", "Review the result and pass the final exam to continue."
+            status_text, reason = (
+                "exam_not_passed",
+                "Review the result and pass the final exam to continue.",
+            )
     elif total_lessons and completed_lessons < total_lessons:
-        status_text, reason = "pending_course_completion", "Pass the exam and finish every required lesson to continue."
+        status_text, reason = (
+            "pending_course_completion",
+            "Pass the exam and finish every required lesson to continue.",
+        )
     elif capstone_required:
-        status_text, reason = "pending_capstone_review", "The course blueprint requires human review of the capstone. The submission/review workflow is not implemented, so no completion certificate has been issued."
+        status_text, reason = (
+            "pending_capstone_review",
+            "The course blueprint requires human review of the capstone. The submission/review workflow is not implemented, so no completion certificate has been issued.",
+        )
     else:
-        status_text, reason = "eligible", "The backend verified the passing result and course completion."
+        status_text, reason = (
+            "eligible",
+            "The backend verified the passing result and course completion.",
+        )
         if issue_if_eligible:
             certificate = Certificate(
                 public_id=secrets.token_hex(8).upper(),
@@ -1621,40 +1795,66 @@ def _certificate_eligibility_payload(
             )
             db.add(certificate)
             db.flush()
-            status_text, reason = "issued", "A certificate was issued after backend-verified exam pass and course completion."
+            status_text, reason = (
+                "issued",
+                "A certificate was issued after backend-verified exam pass and course completion.",
+            )
     return {
         "course_slug": course.slug,
         "course_title": course.title,
         "status": status_text,
         "eligible": status_text in {"eligible", "issued"},
         "exam_passed": attempt_passed,
-        "score_percent": (attempt.answers_summary or {}).get("score_percent") if attempt else None,
+        "score_percent": (
+            (attempt.answers_summary or {}).get("score_percent") if attempt else None
+        ),
         "completed_lessons": completed_lessons,
         "total_lessons": total_lessons,
         "capstone_review_required": capstone_required,
-        "capstone_review_status": "pending_not_implemented" if capstone_required else "not_required",
-        "certificate": ({"public_id": certificate.public_id, "issued_at": certificate.issued_at.isoformat()} if certificate else None),
+        "capstone_review_status": (
+            "pending_not_implemented" if capstone_required else "not_required"
+        ),
+        "certificate": (
+            {
+                "public_id": certificate.public_id,
+                "issued_at": certificate.issued_at.isoformat(),
+            }
+            if certificate
+            else None
+        ),
         "message": reason,
     }
 
 
 @app.get("/api/courses/{course_slug}/exam")
-def get_course_exam_info(course_slug: str, db: Session = Depends(get_db)) -> dict[str, Any]:
+def get_course_exam_info(
+    course_slug: str, db: Session = Depends(get_db)
+) -> dict[str, Any]:
     """Return safe exam metadata; no answer keys or explanations are included."""
     _course, course_dir, blueprint = _load_exam_blueprint(course_slug, db)
     pool = _load_exam_question_pool(course_dir, blueprint)
-    available_lessons = len({item["lesson_number"] for item in pool if item["lesson_number"] > 0})
+    available_lessons = len(
+        {item["lesson_number"] for item in pool if item["lesson_number"] > 0}
+    )
     if len(pool) < 1 or available_lessons < 1:
-        raise HTTPException(status_code=409, detail="The exam has no published question bank yet.")
+        raise HTTPException(
+            status_code=409, detail="The exam has no published question bank yet."
+        )
     settings_doc = blueprint.get("recommended_settings") or {}
     return {
         "course_slug": course_slug,
-        "title": str(blueprint.get("title") or f"{course_slug.title()} Skills Assessment"),
+        "title": str(
+            blueprint.get("title") or f"{course_slug.title()} Skills Assessment"
+        ),
         "duration_minutes": int(settings_doc.get("duration_minutes") or 60),
         "pass_percent": int(settings_doc.get("suggested_pass_percent") or 70),
         "question_count": min(20, available_lessons),
         "question_bank_count": len(pool),
-        "status": "preview" if draft_course_preview_enabled() and blueprint.get("status") != "published" else "published",
+        "status": (
+            "preview"
+            if draft_course_preview_enabled() and blueprint.get("status") != "published"
+            else "published"
+        ),
     }
 
 
@@ -1667,10 +1867,25 @@ def start_course_exam(
     pool = _load_exam_question_pool(course_dir, blueprint)
     picked = _choose_exam_questions(pool, blueprint, count=20)
     if not picked:
-        raise HTTPException(status_code=409, detail="The exam has no published question bank yet.")
+        raise HTTPException(
+            status_code=409, detail="The exam has no published question bank yet."
+        )
     recommended = blueprint.get("recommended_settings") or {}
     stored_questions = [
-        {key: item[key] for key in ("id", "lesson_id", "lesson_slug", "lesson_number", "topic", "prompt", "options", "answer_key", "explanation")}
+        {
+            key: item[key]
+            for key in (
+                "id",
+                "lesson_id",
+                "lesson_slug",
+                "lesson_number",
+                "topic",
+                "prompt",
+                "options",
+                "answer_key",
+                "explanation",
+            )
+        }
         for item in picked
     ]
     attempt = ExamAttempt(
@@ -1681,7 +1896,9 @@ def start_course_exam(
         answers_summary={
             "status": "in_progress",
             "course_slug": course_slug,
-            "exam_title": str(blueprint.get("title") or f"{course_slug.title()} Skills Assessment"),
+            "exam_title": str(
+                blueprint.get("title") or f"{course_slug.title()} Skills Assessment"
+            ),
             "pass_percent": int(recommended.get("suggested_pass_percent") or 70),
             "duration_minutes": int(recommended.get("duration_minutes") or 60),
             "question_count": len(stored_questions),
@@ -1710,7 +1927,9 @@ def _find_owned_exam_attempt(attempt_id: str, user: User, db: Session) -> ExamAt
     except (TypeError, ValueError):
         raise HTTPException(status_code=404, detail="Exam attempt was not found.")
     attempt = db.scalar(
-        select(ExamAttempt).where(ExamAttempt.id == parsed_id, ExamAttempt.user_id == user.id)
+        select(ExamAttempt).where(
+            ExamAttempt.id == parsed_id, ExamAttempt.user_id == user.id
+        )
     )
     if not attempt:
         raise HTTPException(status_code=404, detail="Exam attempt was not found.")
@@ -1729,7 +1948,11 @@ def get_my_exam_attempt(
             "status": "submitted",
             "score": attempt.score,
             "passed": attempt.passed,
-            **{key: value for key, value in summary.items() if key not in {"questions", "answer_key"}},
+            **{
+                key: value
+                for key, value in summary.items()
+                if key not in {"questions", "answer_key"}
+            },
         }
     return {
         "attempt_id": str(attempt.id),
@@ -1748,40 +1971,58 @@ def get_my_exam_attempt(
 
 @app.post("/api/me/exams/{attempt_id}/submit")
 def submit_course_exam(
-    attempt_id: str, payload: dict[str, Any],
-    user: User = Depends(require_user), db: Session = Depends(get_db),
+    attempt_id: str,
+    payload: dict[str, Any],
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
 ) -> dict[str, Any]:
     attempt = _find_owned_exam_attempt(attempt_id, user, db)
     if attempt.submitted_at:
-        raise HTTPException(status_code=409, detail="This exam attempt has already been submitted.")
+        raise HTTPException(
+            status_code=409, detail="This exam attempt has already been submitted."
+        )
     summary = attempt.answers_summary or {}
     questions = summary.get("questions")
     answers = payload.get("answers") if isinstance(payload, dict) else None
     if not isinstance(questions, list) or not questions:
-        raise HTTPException(status_code=409, detail="This exam attempt has no question set.")
+        raise HTTPException(
+            status_code=409, detail="This exam attempt has no question set."
+        )
     if not isinstance(answers, dict) or not answers:
-        raise HTTPException(status_code=422, detail="Submit an answers object with one selected option per question.")
+        raise HTTPException(
+            status_code=422,
+            detail="Submit an answers object with one selected option per question.",
+        )
     question_by_id = {str(q.get("id")): q for q in questions if isinstance(q, dict)}
     if set(answers) != set(question_by_id):
-        raise HTTPException(status_code=422, detail="Answer every exam question exactly once.")
+        raise HTTPException(
+            status_code=422, detail="Answer every exam question exactly once."
+        )
     results: list[dict[str, Any]] = []
     correct_count = 0
     for question_id, question in question_by_id.items():
         selected = answers.get(question_id)
         if not isinstance(selected, str) or selected not in question.get("options", []):
-            raise HTTPException(status_code=422, detail="Each exam answer must match one of the offered options.")
+            raise HTTPException(
+                status_code=422,
+                detail="Each exam answer must match one of the offered options.",
+            )
         correct = selected == question.get("answer_key")
         correct_count += int(correct)
-        results.append({
-            "question_id": question_id,
-            "prompt": question.get("prompt", ""),
-            "topic": question.get("topic", "General skills"),
-            "lesson_slug": question.get("lesson_slug", ""),
-            "selected_answer": selected,
-            "is_correct": correct,
-            "correct_answer": question.get("answer_key"),
-            "explanation": question.get("explanation", "Review the relevant lesson and try again."),
-        })
+        results.append(
+            {
+                "question_id": question_id,
+                "prompt": question.get("prompt", ""),
+                "topic": question.get("topic", "General skills"),
+                "lesson_slug": question.get("lesson_slug", ""),
+                "selected_answer": selected,
+                "is_correct": correct,
+                "correct_answer": question.get("answer_key"),
+                "explanation": question.get(
+                    "explanation", "Review the relevant lesson and try again."
+                ),
+            }
+        )
     score_percent = round(correct_count / len(questions) * 100)
     pass_percent = int(summary.get("pass_percent") or 70)
     passed = score_percent >= pass_percent
@@ -1804,7 +2045,9 @@ def submit_course_exam(
     if course is None:
         raise HTTPException(status_code=404, detail="Course was not found.")
     _same_course, _course_dir, blueprint = _load_exam_blueprint(course.slug, db)
-    eligibility = _certificate_eligibility_payload(db, user, course, blueprint, attempt, issue_if_eligible=passed)
+    eligibility = _certificate_eligibility_payload(
+        db, user, course, blueprint, attempt, issue_if_eligible=passed
+    )
     db.commit()
     if eligibility.get("certificate"):
         db.refresh(attempt)
@@ -2020,7 +2263,10 @@ def get_published_course_asset(
     # URL path segments must stay inside the course assets directory even when symlinks
     # or encoded traversal segments are involved.
     requested_parts = Path(asset_path).parts
-    if any(part in {".", ".."} for part in requested_parts) or Path(asset_path).is_absolute():
+    if (
+        any(part in {".", ".."} for part in requested_parts)
+        or Path(asset_path).is_absolute()
+    ):
         raise HTTPException(status_code=404, detail="Course asset was not found.")
     root = (COURSE_CONTENT_ROOT / course_slug / "assets").resolve()
     try:
@@ -2045,11 +2291,15 @@ def get_published_course_asset(
         raise HTTPException(status_code=404, detail="Course asset was not found.")
     if is_dynamic_diagram:
         try:
-            validate_dynamic_diagram_model(target, f"public diagram {course_slug}/{asset_path}")
+            validate_dynamic_diagram_model(
+                target, f"public diagram {course_slug}/{asset_path}"
+            )
         except ValueError as exc:
             # Invalid files in the diagram directory are not public assets. Do not
             # return the file or its contents, and keep private JSON unavailable.
-            raise HTTPException(status_code=404, detail="Course asset was not found.") from exc
+            raise HTTPException(
+                status_code=404, detail="Course asset was not found."
+            ) from exc
     media_types = {
         ".svg": "image/svg+xml",
         ".webp": "image/webp",
@@ -2061,7 +2311,11 @@ def get_published_course_asset(
     }
     return FileResponse(
         target,
-        media_type="application/json" if is_dynamic_diagram else media_types[target.suffix.lower()],
+        media_type=(
+            "application/json"
+            if is_dynamic_diagram
+            else media_types[target.suffix.lower()]
+        ),
         headers={"Cache-Control": "public, max-age=3600"},
     )
 
@@ -2122,10 +2376,15 @@ def list_published_course_projects(
         }
         if isinstance(safe_item.get("starter_files"), list):
             safe_item["starter_files"] = [
-                row for row in safe_item["starter_files"]
+                row
+                for row in safe_item["starter_files"]
                 if not is_protected_project_path(
-                    row if isinstance(row, str) else (
-                        row.get("path") or row.get("name") if isinstance(row, dict) else None
+                    row
+                    if isinstance(row, str)
+                    else (
+                        row.get("path") or row.get("name")
+                        if isinstance(row, dict)
+                        else None
                     )
                 )
             ]
@@ -2134,8 +2393,6 @@ def list_published_course_projects(
         items.append(safe_item)
     items.sort(key=lambda item: item.get("sequence", 0))
     return {"items": items}
-
-
 
 
 def _load_project_manifest_for_guide(
@@ -2148,12 +2405,18 @@ def _load_project_manifest_for_guide(
     metadata_path = (course_dir / "course.json").resolve()
     # Keep the course slug inside the configured content root even if a crafted path
     # reaches this route; only real course directories may be inspected.
-    if content_root not in course_dir.parents or course_dir not in metadata_path.parents or not metadata_path.is_file():
+    if (
+        content_root not in course_dir.parents
+        or course_dir not in metadata_path.parents
+        or not metadata_path.is_file()
+    ):
         raise HTTPException(status_code=404, detail="Course content was not found.")
     try:
         course_metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        raise HTTPException(status_code=500, detail="Course project index is invalid.") from exc
+        raise HTTPException(
+            status_code=500, detail="Course project index is invalid."
+        ) from exc
 
     selected: dict[str, Any] | None = None
     project_files = course_metadata.get("project_files", [])
@@ -2164,16 +2427,26 @@ def _load_project_manifest_for_guide(
             continue
         parts = Path(relative).parts
         # Never expose a solution file even if the course index is accidentally misconfigured.
-        if any(part.lower() in {"solution", "solutions", "answer-keys", "answer_keys"} for part in parts):
+        if any(
+            part.lower() in {"solution", "solutions", "answer-keys", "answer_keys"}
+            for part in parts
+        ):
             continue
         project_path = (course_dir / relative).resolve()
-        if course_dir not in project_path.parents or project_path.suffix.lower() != ".json" or not project_path.is_file():
+        if (
+            course_dir not in project_path.parents
+            or project_path.suffix.lower() != ".json"
+            or not project_path.is_file()
+        ):
             continue
         try:
             project_doc = json.loads(project_path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             continue
-        if project_doc.get("slug") == project_slug or project_doc.get("id") == project_slug:
+        if (
+            project_doc.get("slug") == project_slug
+            or project_doc.get("id") == project_slug
+        ):
             selected = project_doc
             break
 
@@ -2182,7 +2455,9 @@ def _load_project_manifest_for_guide(
     if selected.get("status") != "published" and not (
         draft_course_preview_enabled() and selected.get("status") == "draft"
     ):
-        raise HTTPException(status_code=404, detail="Project guide is not published yet.")
+        raise HTTPException(
+            status_code=404, detail="Project guide is not published yet."
+        )
     return course_dir, course_metadata, selected
 
 
@@ -2191,7 +2466,9 @@ def get_published_course_project_guide(
     course_slug: str, project_slug: str, db: Session = Depends(get_db)
 ) -> dict[str, Any]:
     """Return a complete learner-facing build guide and explicitly declared starter code."""
-    course_dir, course_metadata, project_doc = _load_project_manifest_for_guide(course_slug, project_slug, db)
+    course_dir, course_metadata, project_doc = _load_project_manifest_for_guide(
+        course_slug, project_slug, db
+    )
     return build_project_guide(course_slug, course_metadata, project_doc, course_dir)
 
 
@@ -2200,16 +2477,24 @@ def download_published_course_project_starter_kit(
     course_slug: str, project_slug: str, db: Session = Depends(get_db)
 ) -> Response:
     """Download learner-safe starter files; protected reference solutions are never included."""
-    course_dir, course_metadata, project_doc = _load_project_manifest_for_guide(course_slug, project_slug, db)
+    course_dir, course_metadata, project_doc = _load_project_manifest_for_guide(
+        course_slug, project_slug, db
+    )
     guide = build_project_guide(course_slug, course_metadata, project_doc, course_dir)
     archive_bytes = project_guide_zip(guide)
     raw_name = str(project_doc.get("slug") or project_doc.get("title") or "project")
-    safe_name = "".join(char for char in raw_name if char.isalnum() or char in "-_")[:80] or "project"
+    safe_name = (
+        "".join(char for char in raw_name if char.isalnum() or char in "-_")[:80]
+        or "project"
+    )
     return Response(
         content=archive_bytes,
         media_type="application/zip",
-        headers={"Content-Disposition": f'attachment; filename="{safe_name}-starter-kit.zip"'},
+        headers={
+            "Content-Disposition": f'attachment; filename="{safe_name}-starter-kit.zip"'
+        },
     )
+
 
 @app.get("/api/courses/{course_slug}/projects/{project_slug}/starter-files/{file_id}")
 def get_published_course_project_starter_file(
@@ -2265,7 +2550,11 @@ def get_published_course_project_starter_file(
     else:
         relative_file = None
 
-    if not isinstance(relative_file, str) or not relative_file or is_protected_project_path(relative_file):
+    if (
+        not isinstance(relative_file, str)
+        or not relative_file
+        or is_protected_project_path(relative_file)
+    ):
         raise HTTPException(
             status_code=404, detail="Project starter file was not found."
         )
@@ -3240,16 +3529,33 @@ def mark_lesson_complete(
         record_review_result(db, user.id, course_slug, "lesson", lesson_slug, True)
     course_id = db.scalar(select(Module.course_id).where(Module.id == lesson.module_id))
     db.flush()
-    published_lesson_count = db.scalar(select(func.count(Lesson.id)).join(
-        Module, Module.id == Lesson.module_id
-    ).where(Module.course_id == course_id, Lesson.is_published.is_(True))) or 0
-    completed_lesson_count = db.scalar(select(func.count(LessonProgress.id)).join(
-        Lesson, LessonProgress.lesson_id == Lesson.id
-    ).join(Module, Module.id == Lesson.module_id).where(
-        LessonProgress.user_id == user.id, LessonProgress.completed.is_(True),
-        Module.course_id == course_id, Lesson.is_published.is_(True)
-    )) or 0
-    course_completed_now = bool(newly_completed and published_lesson_count > 0 and completed_lesson_count >= published_lesson_count)
+    published_lesson_count = (
+        db.scalar(
+            select(func.count(Lesson.id))
+            .join(Module, Module.id == Lesson.module_id)
+            .where(Module.course_id == course_id, Lesson.is_published.is_(True))
+        )
+        or 0
+    )
+    completed_lesson_count = (
+        db.scalar(
+            select(func.count(LessonProgress.id))
+            .join(Lesson, LessonProgress.lesson_id == Lesson.id)
+            .join(Module, Module.id == Lesson.module_id)
+            .where(
+                LessonProgress.user_id == user.id,
+                LessonProgress.completed.is_(True),
+                Module.course_id == course_id,
+                Lesson.is_published.is_(True),
+            )
+        )
+        or 0
+    )
+    course_completed_now = bool(
+        newly_completed
+        and published_lesson_count > 0
+        and completed_lesson_count >= published_lesson_count
+    )
     db.commit()
     db.refresh(progress)
     stats = user_gamification_stats(db, user.id, body.timezone)
@@ -3414,96 +3720,6 @@ def list_lesson_exercises(
             }
             for item in rows
         ]
-    }
-
-
-@app.get("/api/courses/{course_slug}/lessons/{lesson_slug}/exercises/{exercise_slug}/solution")
-def reveal_exercise_solution(
-    course_slug: str,
-    lesson_slug: str,
-    exercise_slug: str,
-    db: Session = Depends(get_db),
-) -> dict[str, Any]:
-    """Reveal an authored solution only on explicit request for a visible exercise.
-
-    Normal exercise listings never contain solutions or grading configuration.
-    The response is whitelisted so protected grading keys can never leak here.
-    """
-    exercise = find_published_exercise(db, course_slug, lesson_slug, exercise_slug)
-    solution_doc: dict[str, Any] = {}
-    embedded = exercise.solution if isinstance(exercise.solution, dict) else {}
-    if embedded:
-        solution_doc = embedded
-
-    course_root = (COURSE_CONTENT_ROOT / course_slug).resolve()
-    try:
-        if COURSE_CONTENT_ROOT.resolve() not in course_root.parents:
-            raise HTTPException(status_code=404, detail="Exercise solution was not found.")
-        # Resolve the authored source manifest by slug; do not accept a user-supplied path.
-        source_manifest: dict[str, Any] | None = None
-        source_path: Path | None = None
-        for candidate in course_root.rglob("exercises/*.json"):
-            if candidate.parent.name != "exercises" or "solutions" in candidate.parts:
-                continue
-            try:
-                item = json.loads(candidate.read_text(encoding="utf-8"))
-            except (OSError, json.JSONDecodeError):
-                continue
-            if not isinstance(item, dict) or item.get("slug") != exercise_slug:
-                continue
-            if item.get("lesson_slug") and item.get("lesson_slug") != lesson_slug:
-                continue
-            # Access is already gated by find_published_exercise above. Content manifests
-            # may remain draft while a reviewed database record is published, so the
-            # explicit reveal action follows the visible database record's permissions.
-            source_manifest, source_path = item, candidate
-            break
-
-        if source_manifest and source_path:
-            solution_relative = source_manifest.get("solution_file")
-            if isinstance(solution_relative, str) and solution_relative.strip() and "\\" not in solution_relative and "\x00" not in solution_relative:
-                exercises_root = source_path.parent.resolve()
-                module_root = exercises_root.parent.resolve()
-                solution_path = (exercises_root / solution_relative).resolve()
-                allowed_roots = (
-                    (module_root / "solutions").resolve(),
-                    (exercises_root / "solutions").resolve(),
-                )
-                allowed_solution = any(
-                    solution_path == root or root in solution_path.parents
-                    for root in allowed_roots
-                )
-                if allowed_solution and module_root in solution_path.parents and solution_path.suffix.lower() == ".json" and solution_path.is_file():
-                    loaded = json.loads(solution_path.read_text(encoding="utf-8"))
-                    if isinstance(loaded, dict):
-                        solution_doc = loaded
-            if not solution_doc:
-                direct = source_manifest.get("solution")
-                if isinstance(direct, dict):
-                    solution_doc = direct
-    except (OSError, json.JSONDecodeError, ValueError):
-        # A broken/missing authored solution should not break the exercise itself.
-        solution_doc = {}
-
-    answer = solution_doc.get("answer") or solution_doc.get("code") or solution_doc.get("solution")
-    explanation = solution_doc.get("explanation") or solution_doc.get("notes") or solution_doc.get("description") or ""
-    expected_result = solution_doc.get("expected_result") or solution_doc.get("expected_output") or ""
-    steps = solution_doc.get("steps") if isinstance(solution_doc.get("steps"), list) else []
-    steps = steps or (solution_doc.get("manual_validation_checklist") if isinstance(solution_doc.get("manual_validation_checklist"), list) else [])
-    test_cases = solution_doc.get("test_cases") if isinstance(solution_doc.get("test_cases"), list) else []
-    if not any((answer, explanation, expected_result, steps, test_cases)):
-        raise HTTPException(status_code=404, detail="A worked solution has not been authored for this exercise yet.")
-    return {
-        "slug": exercise.slug,
-        "title": exercise.title,
-        "answer": answer if isinstance(answer, (str, int, float, list, dict)) else "",
-        "explanation": str(explanation) if explanation else "",
-        "expected_result": str(expected_result) if expected_result else "",
-        "steps": [str(step) for step in steps if isinstance(step, (str, int, float))],
-        "test_cases": [
-            {key: str(case.get(key, "")) for key in ("input", "expected") if key in case}
-            for case in test_cases if isinstance(case, dict)
-        ],
     }
 
 
@@ -3672,10 +3888,16 @@ def get_certificate_eligibility(
     _course, _course_dir, blueprint = _load_exam_blueprint(course_slug, db)
     attempt = db.scalar(
         select(ExamAttempt)
-        .where(ExamAttempt.user_id == user.id, ExamAttempt.course_id == course.id, ExamAttempt.submitted_at.is_not(None))
+        .where(
+            ExamAttempt.user_id == user.id,
+            ExamAttempt.course_id == course.id,
+            ExamAttempt.submitted_at.is_not(None),
+        )
         .order_by(ExamAttempt.submitted_at.desc())
     )
-    return _certificate_eligibility_payload(db, user, course, blueprint, attempt, issue_if_eligible=False)
+    return _certificate_eligibility_payload(
+        db, user, course, blueprint, attempt, issue_if_eligible=False
+    )
 
 
 @app.get("/api/certificates/verify/{public_id}")

@@ -28,6 +28,7 @@ import { useGamificationStats } from "../lib/useGamificationStats.js";
 import { PageShell } from "../components/common.jsx";
 import { Avatar } from "../components/layout/Header.jsx";
 import { apiGetJson, invalidateApiCache } from "../lib/apiCache.js";
+import "../styles/phase3c-personal-learning.css";
 
 export default function ProfilePage() {
   const stats = useGamificationStats();
@@ -49,6 +50,20 @@ export default function ProfilePage() {
   const [saveError, setSaveError] = useState("");
   const [saving, setSaving] = useState(false);
   const [avatarPick, setAvatarPick] = useState(profile.avatar || "spark");
+  const browserTimeZone = (() => {
+    try { return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"; } catch { return "UTC"; }
+  })();
+  const [learningPreferences, setLearningPreferences] = useState({
+    timezone_name: browserTimeZone,
+    review_frequency_days: 1,
+    daily_review_limit: 10,
+    analytics_enabled: false,
+  });
+  const [preferencesMode, setPreferencesMode] = useState("idle");
+  const [preferencesSaving, setPreferencesSaving] = useState(false);
+  const [preferencesMessage, setPreferencesMessage] = useState("");
+  const [preferencesError, setPreferencesError] = useState("");
+  const [preferencesReload, setPreferencesReload] = useState(0);
   const avatars = [
     { id: "spark", label: "Spark", Icon: Sparkles },
     { id: "orbit", label: "Orbit", Icon: Compass },
@@ -87,6 +102,73 @@ export default function ProfilePage() {
       });
     return () => { mounted = false; };
   }, []);
+
+  useEffect(() => {
+    if (accountMode !== "remote") return undefined;
+    let mounted = true;
+    setPreferencesMode("loading");
+    setPreferencesError("");
+    apiGetJson(`${API_BASE}/api/me/learning-preferences`, { credentials: "include", ttlMs: 0 })
+      .then((payload) => {
+        if (!mounted) return;
+        const value = payload?.preferences;
+        if (!value || typeof value !== "object") throw new Error("Learning preferences were not returned by the server.");
+        setLearningPreferences({
+          timezone_name: String(value.timezone_name || browserTimeZone),
+          review_frequency_days: Math.min(30, Math.max(1, Number(value.review_frequency_days) || 1)),
+          daily_review_limit: Math.min(50, Math.max(1, Number(value.daily_review_limit) || 10)),
+          analytics_enabled: value.analytics_enabled === true,
+        });
+        setPreferencesMode("ready");
+      })
+      .catch((error) => {
+        if (!mounted) return;
+        setPreferencesMode("unavailable");
+        setPreferencesError(error?.status === 401
+          ? "Sign in again to manage account-wide learning preferences."
+          : "Learning preferences could not be loaded. Your existing settings were not changed.");
+      });
+    return () => { mounted = false; };
+  }, [accountMode, browserTimeZone, preferencesReload]);
+
+  const saveLearningPreferences = async (event) => {
+    event.preventDefault();
+    if (accountMode !== "remote" || preferencesSaving) return;
+    setPreferencesSaving(true);
+    setPreferencesMessage("");
+    setPreferencesError("");
+    try {
+      const response = await apiFetch(`${API_BASE}/api/me/learning-preferences`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          timezone_name: learningPreferences.timezone_name.trim(),
+          review_frequency_days: Number(learningPreferences.review_frequency_days),
+          daily_review_limit: Number(learningPreferences.daily_review_limit),
+          analytics_enabled: learningPreferences.analytics_enabled === true,
+        }),
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.detail || "Learning preferences could not be saved.");
+      const value = payload.preferences;
+      if (value) setLearningPreferences({
+        timezone_name: String(value.timezone_name || browserTimeZone),
+        review_frequency_days: Number(value.review_frequency_days) || 1,
+        daily_review_limit: Number(value.daily_review_limit) || 10,
+        analytics_enabled: value.analytics_enabled === true,
+      });
+      invalidateApiCache("/api/me/learning-preferences");
+      invalidateApiCache("/api/me/reviews");
+      setPreferencesMode("ready");
+      setPreferencesMessage("Your learning preferences are saved to your account.");
+    } catch (error) {
+      setPreferencesError(error?.message || "Learning preferences could not be saved. Please try again.");
+    } finally {
+      setPreferencesSaving(false);
+    }
+  };
+
   const changeEmail = async (event) => {
     event.preventDefault();
     setSecurityBusy(true); setSecurityFeedback(""); setSecurityTestUrl("");
@@ -292,11 +374,54 @@ export default function ProfilePage() {
           </div>
           <div className="profile-section profile-toggles">
             <div className="eyebrow">PRIVACY & VISIBILITY</div>
-            <h2>Privacy preferences</h2>
-            <p>Manage optional product analytics consent and your learning-review preferences. These settings are saved to your account and apply when you are signed in.</p>
-            <Link to="/learning-hub#privacy-preferences" className="button button-secondary profile-privacy-link">
-              Manage privacy settings <ArrowRight size={14} />
-            </Link>
+            <h2>Account visibility</h2>
+            <p>Public profile, certificate visibility, project visibility, and reminder preferences are not connected to account settings yet. This page will not label browser-only switches as account-wide privacy controls.</p>
+          </div>
+          <div className="profile-section phase3c-preferences-section">
+            <div className="eyebrow">LEARNING PREFERENCES</div>
+            <h2>Set a pace that works for you</h2>
+            <p>Choose a comfortable revision rhythm and how many reviews to show per day. These settings guide the review queue; they do not claim mastery or award XP.</p>
+            {accountMode === "guest" ? (
+              <div className="phase3c-preferences-note" role="status">Sign in to save learning preferences across devices. Guest settings have not been sent to the server.</div>
+            ) : accountMode !== "remote" ? (
+              <div className="phase3c-preferences-note" role="status">{preferencesMode === "loading" ? "Loading your learning preferences…" : "Learning preferences are available after your account status is confirmed."}</div>
+            ) : preferencesMode === "loading" || preferencesMode === "idle" ? (
+              <div className="phase3c-preferences-note" role="status">Loading account preferences…</div>
+            ) : preferencesMode === "unavailable" ? (
+              <div className="phase3c-preferences-note" role="status">{preferencesError || "Preferences are temporarily unavailable."} <button type="button" className="text-link phase3c-inline-retry" onClick={() => setPreferencesReload((value) => value + 1)} >Retry preferences</button></div>
+            ) : (
+              <form className="phase3c-preferences-form" onSubmit={saveLearningPreferences}>
+                <label>
+                  Revision interval
+                  <select value={learningPreferences.review_frequency_days} onChange={(event) => setLearningPreferences((current) => ({ ...current, review_frequency_days: Number(event.target.value) }))}>
+                    <option value={1}>Daily</option>
+                    <option value={2}>Every 2 days</option>
+                    <option value={3}>Every 3 days</option>
+                    <option value={7}>Weekly</option>
+                    <option value={14}>Every 2 weeks</option>
+                    <option value={30}>Monthly</option>
+                  </select>
+                </label>
+                <label>
+                  Daily review limit
+                  <select value={learningPreferences.daily_review_limit} onChange={(event) => setLearningPreferences((current) => ({ ...current, daily_review_limit: Number(event.target.value) }))}>
+                    {[5, 10, 15, 20, 30, 50].map((value) => <option key={value} value={value}>{value} reviews per day</option>)}
+                  </select>
+                </label>
+                <label className="phase3c-timezone-field">
+                  Time zone (IANA name)
+                  <input value={learningPreferences.timezone_name} onChange={(event) => setLearningPreferences((current) => ({ ...current, timezone_name: event.target.value }))} maxLength={80} required placeholder="Asia/Kolkata" aria-describedby="phase3c-timezone-help" />
+                  <small id="phase3c-timezone-help">Used to interpret your learning-day preferences. Example: Asia/Kolkata.</small>
+                </label>
+                <label className="phase3c-analytics-toggle">
+                  <input type="checkbox" checked={learningPreferences.analytics_enabled} onChange={(event) => setLearningPreferences((current) => ({ ...current, analytics_enabled: event.target.checked }))} />
+                  <span><strong>Share optional product analytics</strong><small>Allow limited usage events to help improve CodeLeaf. This does not share your passwords or code submissions.</small></span>
+                </label>
+                {preferencesError && <p className="phase3c-preferences-error" role="alert">{preferencesError}</p>}
+                {preferencesMessage && <p className="phase3c-preferences-success" role="status">{preferencesMessage}</p>}
+                <div className="phase3c-preferences-actions"><button type="submit" className="button button-primary" disabled={preferencesSaving}>{preferencesSaving ? "Saving…" : "Save learning preferences"}</button></div>
+              </form>
+            )}
           </div>
           {accountMode === "remote" && <div className="profile-section">
             <div className="eyebrow">ACCOUNT SECURITY</div>
@@ -351,10 +476,10 @@ export default function ProfilePage() {
               </span>
               <ChevronRight size={15} />
             </Link>
-            <Link to="/learning-hub#privacy-preferences" aria-label="Manage privacy and learning preferences">
-              <span><ShieldCheck size={16} /> Privacy & learning preferences</span>
-              <ChevronRight size={15} />
-            </Link>
+            <div className="account-setting-unavailable" aria-label="Privacy controls not available">
+              <span><ShieldCheck size={16} /> Privacy controls</span>
+              <small>Not available yet</small>
+            </div>
           </div>
         </div>
       </div>
