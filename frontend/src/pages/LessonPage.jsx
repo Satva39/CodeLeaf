@@ -77,9 +77,12 @@ function CourseSidebar({
   progressMode,
 }) {
   const groups = courseGroups || groupsForCourse(courseSlug);
-  const [expanded, setExpanded] = useState(() =>
-    Object.fromEntries(groups.map((g) => [g.title, true])),
-  );
+  // Keep the outline in a single-open accordion: the module containing the
+  // current lesson is open, and opening another module closes the previous one.
+  const activeGroupTitle =
+    groups.find((group) => group.items.some(([slug]) => slug === currentSlug))
+      ?.title ?? null;
+  const [expandedGroup, setExpandedGroup] = useState(activeGroupTitle);
   const allItems = flattenGroups(groups);
   const progressEnabled = progressMode === "remote" || progressMode === "guest";
   const completedCount = progressEnabled
@@ -94,19 +97,10 @@ function CourseSidebar({
     (completedCount / Math.max(1, allItems.length)) * 100,
   );
   useEffect(() => {
-    // Keep each module's expansion state independent. When the outline data
-    // refreshes, preserve the learner's open/closed choices and only initialize
-    // newly appearing modules. Opening one module must never collapse another.
-    setExpanded((previous) => {
-      const next = { ...previous };
-      for (const group of groups) {
-        if (!Object.prototype.hasOwnProperty.call(next, group.title)) {
-          next[group.title] = true;
-        }
-      }
-      return next;
-    });
-  }, [groups]);
+    // Route changes should follow the learner into the module containing the
+    // selected lesson, automatically collapsing any previously open module.
+    setExpandedGroup(activeGroupTitle);
+  }, [courseSlug, currentSlug, activeGroupTitle]);
   return (
     <aside className="course-sidebar" aria-label="Course lessons">
       <div className="sidebar-course-heading">
@@ -135,9 +129,11 @@ function CourseSidebar({
           <button
             className="sidebar-group-title"
             type="button"
-            aria-expanded={Boolean(expanded[g.title])}
+            aria-expanded={expandedGroup === g.title}
             onClick={() =>
-              setExpanded((p) => ({ ...p, [g.title]: !p[g.title] }))
+              setExpandedGroup((previous) =>
+                previous === g.title ? null : g.title,
+              )
             }
           >
             <span className="sidebar-group-title-text">{g.title}</span>
@@ -149,11 +145,11 @@ function CourseSidebar({
             </span>
             <ChevronDown
               size={14}
-              className={expanded[g.title] ? "" : "collapsed"}
+              className={expandedGroup === g.title ? "" : "collapsed"}
               aria-hidden="true"
             />
           </button>
-          {expanded[g.title] && (
+          {expandedGroup === g.title && (
             <div className="sidebar-items">
               {g.items.map(([slug, title]) => {
                 const completed = (completedIds || []).includes(
