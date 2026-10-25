@@ -1527,7 +1527,16 @@ def _load_exam_blueprint(
         ) from exc
     if not isinstance(blueprint, dict):
         raise HTTPException(status_code=500, detail="Exam blueprint is invalid.")
-    if course_manifest.get("status") == "draft" and not draft_course_preview_enabled():
+    course_metadata = course_manifest.get("course")
+    manifest_status = (
+        course_metadata.get("status")
+        if isinstance(course_metadata, dict) and course_metadata.get("status")
+        else course_manifest.get("status")
+    )
+    # Current course manifests publish through course.status. Some older manifests
+    # still carry a stale top-level status="draft"; prefer the nested authoritative
+    # field when it exists, otherwise preserve the legacy top-level behavior.
+    if manifest_status == "draft" and not draft_course_preview_enabled():
         raise HTTPException(
             status_code=404, detail="This course has not been published."
         )
@@ -1538,18 +1547,87 @@ def _load_exam_blueprint(
     return course, course_dir, blueprint
 
 
+def _exam_question_file_refs(blueprint: dict[str, Any]) -> list[str]:
+    """Return the authored question-bank index, supporting the legacy source-pool key."""
+    question_files = blueprint.get("question_files")
+    if isinstance(question_files, list) and question_files:
+        return question_files
+    source_pool_files = blueprint.get("source_question_pool_files")
+    if isinstance(source_pool_files, list):
+        return source_pool_files
+    if isinstance(question_files, list):
+        return question_files
+    raise HTTPException(status_code=500, detail="Exam question index is invalid.")
+
+
+def _exam_question_rows(question_set: dict[str, Any]) -> list[dict[str, Any]]:
+    """Support both question-set files and legacy files containing one question."""
+    rows = question_set.get("questions")
+    if isinstance(rows, list):
+        return rows
+    if (
+        isinstance(question_set.get("options"), list)
+        and isinstance(question_set.get("prompt") or question_set.get("question"), str)
+    ):
+        return [question_set]
+    raise HTTPException(status_code=500, detail="An exam question set is malformed.")
+
+
+def _normalize_exam_answer_key(options: list[str], answer_key: Any) -> str | None:
+    """Resolve either an option's literal text or a conventional A/B/C/D key."""
+    if not isinstance(answer_key, str):
+        return None
+    if answer_key in options:
+        return answer_key
+    letter = answer_key.strip().upper()
+    if len(letter) == 1 and "A" <= letter <= "Z":
+        option_index = ord(letter) - ord("A")
+        if 0 <= option_index < len(options):
+            return options[option_index]
+    return None
+
+
+def _exam_lesson_number(
+    question_set_lesson_id: Any,
+    question_lesson_id: Any,
+    question_path: Path,
+    fallback_number: int,
+) -> int:
+    """Get a real lesson number when present, otherwise assign a stable pool slot.
+
+    Single-file final exams often contain topic/module labels rather than a lesson ID.
+    They still need distinct positive sampling slots so the shared exam engine can draw
+    from their bank instead of incorrectly treating every item as lesson zero.
+    """
+    for value in (question_lesson_id, question_set_lesson_id):
+        if not isinstance(value, (str, int)) or not str(value).strip():
+            continue
+        text = str(value)
+        match = re.search(r"lesson[-_ ]?(\d+)", text, re.IGNORECASE)
+        if match:
+            return max(1, int(match.group(1)))
+        match = re.search(r"(\d+)$", text)
+        if match:
+            return max(1, int(match.group(1)))
+    match = re.search(r"lesson[-_ ]?(\d+)", question_path.stem, re.IGNORECASE)
+    if match:
+        return max(1, int(match.group(1)))
+    # Keep synthetic IDs away from authored lesson ranges and avoid collisions between
+    # question IDs such as q001 reused in separate final-exam parts.
+    return 1_000_000 + max(1, fallback_number)
+
+
 def _load_exam_question_pool(
     course_dir: Path, blueprint: dict[str, Any]
 ) -> list[dict[str, Any]]:
-    """Load valid published question records. Private answer keys remain server-only."""
-    question_files = blueprint.get("question_files", [])
-    if not isinstance(question_files, list):
-        raise HTTPException(status_code=500, detail="Exam question index is invalid.")
+    """Load valid published questions. Private answer keys remain server-only."""
+    question_files = _exam_question_file_refs(blueprint)
     preview = draft_course_preview_enabled()
     pool: list[dict[str, Any]] = []
     seen_ids: set[str] = set()
     topic_ranges: list[tuple[str, int, int]] = []
-    for topic in blueprint.get("topic_distribution", []):
+    topic_distribution = blueprint.get("topic_distribution", [])
+    for topic in topic_distribution if isinstance(topic_distribution, list) else []:
         if not isinstance(topic, dict):
             continue
         lesson_range = topic.get("lesson_range")
@@ -1565,11 +1643,12 @@ def _load_exam_question_pool(
             )
 
     for relative in question_files:
-        if not isinstance(relative, str) or "\\" in relative:
+        if not isinstance(relative, str) or not relative.strip() or "\\" in relative:
             continue
+        relative_path = relative if relative.startswith("exams/") else f"exams/{relative}"
         try:
             question_path = _safe_course_json_path(
-                course_dir, f"exams/{relative}", "Exam question set"
+                course_dir, relative_path, "Exam question set"
             )
         except HTTPException:
             continue
@@ -1585,34 +1664,21 @@ def _load_exam_question_pool(
             )
         if question_set.get("status") != "published" and not preview:
             continue
+        questions = _exam_question_rows(question_set)
+        if not questions:
+            raise HTTPException(
+                status_code=500, detail="An exam question set is empty."
+            )
         lesson_id = question_set.get("lesson_id")
         lesson_slug = question_set.get("lesson_slug")
-        import re
-
-        match = re.search(r"(\d+)$", str(lesson_id or question_path.stem))
-        lesson_number = int(match.group(1)) if match else 0
-        topic_name = next(
-            (
-                name
-                for name, start, end in topic_ranges
-                if start <= lesson_number <= end
-            ),
-            "General skills",
-        )
-        questions = question_set.get("questions")
-        if not isinstance(questions, list):
-            raise HTTPException(
-                status_code=500, detail="An exam question set is malformed."
-            )
         for question in questions:
             if not isinstance(question, dict):
                 raise HTTPException(
                     status_code=500, detail="An exam question is malformed."
                 )
             question_id = question.get("id")
-            prompt = question.get("prompt")
+            prompt = question.get("prompt") or question.get("question")
             options = question.get("options")
-            answer_key = question.get("answer_key")
             if (
                 not isinstance(question_id, str)
                 or not question_id.strip()
@@ -1622,19 +1688,42 @@ def _load_exam_question_pool(
                 or not isinstance(options, list)
                 or len(options) < 2
                 or not all(isinstance(option, str) for option in options)
-                or not isinstance(answer_key, str)
-                or answer_key not in options
             ):
                 raise HTTPException(
                     status_code=500,
                     detail="An exam question is malformed or has a duplicate ID.",
                 )
+            answer_key = _normalize_exam_answer_key(options, question.get("answer_key"))
+            if answer_key is None:
+                raise HTTPException(
+                    status_code=500,
+                    detail="An exam question has an answer key that does not match its options.",
+                )
             seen_ids.add(question_id)
+            lesson_number = _exam_lesson_number(
+                lesson_id,
+                question.get("lesson_id"),
+                question_path,
+                len(pool) + 1,
+            )
+            topic_name = str(
+                question.get("topic")
+                or question_set.get("topic")
+                or question_set.get("domain")
+                or next(
+                    (
+                        name
+                        for name, start, end in topic_ranges
+                        if start <= lesson_number <= end
+                    ),
+                    "General skills",
+                )
+            )
             pool.append(
                 {
                     "id": question_id,
-                    "lesson_id": str(lesson_id or ""),
-                    "lesson_slug": str(lesson_slug or ""),
+                    "lesson_id": str(question.get("lesson_id") or lesson_id or ""),
+                    "lesson_slug": str(question.get("lesson_slug") or lesson_slug or ""),
                     "lesson_number": lesson_number,
                     "topic": topic_name,
                     "prompt": prompt,
@@ -1659,17 +1748,19 @@ def _has_published_exam_question_set(
     link. The exam start/info endpoints still load and fully validate the complete
     question pool before a learner can begin an attempt.
     """
-    question_files = blueprint.get("question_files", [])
-    if not isinstance(question_files, list):
+    try:
+        question_files = _exam_question_file_refs(blueprint)
+    except HTTPException:
         return False
 
     preview = draft_course_preview_enabled()
     for relative in question_files:
         if not isinstance(relative, str) or not relative.strip() or "\\" in relative:
             continue
+        relative_path = relative if relative.startswith("exams/") else f"exams/{relative}"
         try:
             question_path = _safe_course_json_path(
-                course_dir, f"exams/{relative}", "Exam question set"
+                course_dir, relative_path, "Exam question set"
             )
             question_set = json.loads(question_path.read_text(encoding="utf-8"))
         except (HTTPException, OSError, json.JSONDecodeError):
@@ -1679,13 +1770,11 @@ def _has_published_exam_question_set(
             continue
         if question_set.get("status") != "published" and not preview:
             continue
-        questions = question_set.get("questions")
-        if not isinstance(questions, list) or not questions:
+        try:
+            questions = _exam_question_rows(question_set)
+        except HTTPException:
             continue
-
-        lesson_id = question_set.get("lesson_id") or question_path.stem
-        lesson_match = re.search(r"(\d+)$", str(lesson_id))
-        if not lesson_match or int(lesson_match.group(1)) < 1:
+        if not questions:
             continue
 
         # Match the core shape checks used by the full pool loader. Avoid declaring
@@ -1698,7 +1787,7 @@ def _has_published_exam_question_set(
                 valid_set = False
                 break
             question_id = question.get("id")
-            prompt = question.get("prompt")
+            prompt = question.get("prompt") or question.get("question")
             options = question.get("options")
             answer_key = question.get("answer_key")
             if (
@@ -1710,8 +1799,7 @@ def _has_published_exam_question_set(
                 or not isinstance(options, list)
                 or len(options) < 2
                 or not all(isinstance(option, str) for option in options)
-                or not isinstance(answer_key, str)
-                or answer_key not in options
+                or _normalize_exam_answer_key(options, answer_key) is None
             ):
                 valid_set = False
                 break
