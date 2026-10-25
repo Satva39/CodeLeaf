@@ -282,6 +282,25 @@ def main() -> None:
             "draft course exam stays hidden when preview is disabled",
         )
 
+        exam_catalog = client.get("/api/exams/catalog")
+        check(exam_catalog.status_code == 200, "exam availability catalog responds successfully")
+        catalog_items = {
+            item["slug"]: item for item in exam_catalog.json().get("items", [])
+        }
+        check(
+            catalog_items.get("html", {}).get("available") is True
+            and catalog_items.get("css", {}).get("available") is True,
+            "published exams appear as available in the certificates catalog",
+        )
+        check(
+            catalog_items.get("ai", {}).get("available") is False,
+            "courses without a published database record remain roadmap entries",
+        )
+        check(
+            "answer_key" not in exam_catalog.text and "explanation" not in exam_catalog.text,
+            "exam availability catalog never exposes private question-bank data",
+        )
+
         # The HTML exam info and generated attempt must not disclose keys/explanations.
         set_cookie(client, users["html_learner"])
         info = client.get("/api/courses/html/exam")

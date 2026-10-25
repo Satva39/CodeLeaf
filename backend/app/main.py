@@ -1649,6 +1649,149 @@ def _load_exam_question_pool(
     return pool
 
 
+def _has_published_exam_question_set(
+    course_dir: Path, blueprint: dict[str, Any]
+) -> bool:
+    """Check cheaply whether a published exam has at least one usable question set.
+
+    The certificates page displays many course tracks at once, so it must not load
+    every question from every course just to decide whether to show a Start exam
+    link. The exam start/info endpoints still load and fully validate the complete
+    question pool before a learner can begin an attempt.
+    """
+    question_files = blueprint.get("question_files", [])
+    if not isinstance(question_files, list):
+        return False
+
+    preview = draft_course_preview_enabled()
+    for relative in question_files:
+        if not isinstance(relative, str) or not relative.strip() or "\\" in relative:
+            continue
+        try:
+            question_path = _safe_course_json_path(
+                course_dir, f"exams/{relative}", "Exam question set"
+            )
+            question_set = json.loads(question_path.read_text(encoding="utf-8"))
+        except (HTTPException, OSError, json.JSONDecodeError):
+            continue
+
+        if not isinstance(question_set, dict):
+            continue
+        if question_set.get("status") != "published" and not preview:
+            continue
+        questions = question_set.get("questions")
+        if not isinstance(questions, list) or not questions:
+            continue
+
+        lesson_id = question_set.get("lesson_id") or question_path.stem
+        lesson_match = re.search(r"(\d+)$", str(lesson_id))
+        if not lesson_match or int(lesson_match.group(1)) < 1:
+            continue
+
+        # Match the core shape checks used by the full pool loader. Avoid declaring
+        # an empty/malformed first file ready; the exam endpoint validates the entire
+        # pool and reports configuration errors before starting an attempt.
+        valid_set = True
+        seen_ids: set[str] = set()
+        for question in questions:
+            if not isinstance(question, dict):
+                valid_set = False
+                break
+            question_id = question.get("id")
+            prompt = question.get("prompt")
+            options = question.get("options")
+            answer_key = question.get("answer_key")
+            if (
+                not isinstance(question_id, str)
+                or not question_id.strip()
+                or question_id in seen_ids
+                or not isinstance(prompt, str)
+                or not prompt.strip()
+                or not isinstance(options, list)
+                or len(options) < 2
+                or not all(isinstance(option, str) for option in options)
+                or not isinstance(answer_key, str)
+                or answer_key not in options
+            ):
+                valid_set = False
+                break
+            seen_ids.add(question_id)
+        if valid_set:
+            return True
+    return False
+
+
+@app.get("/api/exams/catalog")
+def list_exam_catalog(db: Session = Depends(get_db)) -> dict[str, Any]:
+    """Return live exam readiness for roadmap tracks without exposing question data."""
+    items: list[dict[str, Any]] = []
+    for track in PUBLIC_COURSES:
+        slug = str(track.get("slug") or "").strip()
+        if not slug:
+            continue
+        entry: dict[str, Any] = {
+            "slug": slug,
+            "title": str(track.get("title") or slug.title()),
+            "available": False,
+            "status": "roadmap",
+            "message": "The course has not been published to the learner catalog yet.",
+        }
+        try:
+            course, course_dir, blueprint = _load_exam_blueprint(slug, db)
+            entry["title"] = course.title
+            if _has_published_exam_question_set(course_dir, blueprint):
+                settings_doc = blueprint.get("recommended_settings") or {}
+                is_preview = draft_course_preview_enabled() and (
+                    not course.published or blueprint.get("status") != "published"
+                )
+                entry.update(
+                    {
+                        "available": True,
+                        "status": "preview" if is_preview else "published",
+                        "title": str(
+                            blueprint.get("title")
+                            or f"{course.title} Skills Assessment"
+                        ),
+                        "duration_minutes": int(
+                            settings_doc.get("duration_minutes") or 60
+                        ),
+                        "pass_percent": int(
+                            settings_doc.get("suggested_pass_percent") or 70
+                        ),
+                        "message": (
+                            "The draft exam is available in local preview only."
+                            if is_preview
+                            else "The published exam and question bank are available."
+                        ),
+                    }
+                )
+            else:
+                entry.update(
+                    {
+                        "status": "publication_required",
+                        "message": "The course is published, but its exam question bank is not published or is not ready yet.",
+                    }
+                )
+        except HTTPException as exc:
+            detail = str(exc.detail or "")
+            if exc.status_code == 500:
+                entry.update(
+                    {
+                        "status": "configuration_error",
+                        "message": "The exam configuration needs attention before it can be opened.",
+                    }
+                )
+            elif "not published" in detail.lower() or "blueprint" in detail.lower():
+                entry.update(
+                    {
+                        "status": "publication_required",
+                        "message": "A published course blueprint and question bank are required.",
+                    }
+                )
+        items.append(entry)
+    return {"items": items}
+
+
 def _choose_exam_questions(
     pool: list[dict[str, Any]], blueprint: dict[str, Any], count: int = 20
 ) -> list[dict[str, Any]]:
