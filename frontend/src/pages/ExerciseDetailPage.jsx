@@ -12,6 +12,38 @@ async function responsePayload(response) {
   if (!response.ok) throw new Error(payload.detail || `Request failed (${response.status})`);
   return payload;
 }
+
+async function fetchAllCourseExercises(courseSlug, signal) {
+  const collected = [];
+  let offset = 0;
+  let total = Infinity;
+  while (offset < total && offset < 5000) {
+    const payload = await responsePayload(await apiFetch(
+      `${API_BASE}/api/courses/${encodeURIComponent(courseSlug)}/exercises?limit=100&offset=${offset}`,
+      { credentials: "include", signal },
+    ));
+    const items = Array.isArray(payload.items) ? payload.items : [];
+    collected.push(...items);
+    total = Number(payload.total ?? collected.length);
+    if (!items.length) break;
+    offset += items.length;
+  }
+  return collected;
+}
+
+async function fetchCourseExerciseProgress(courseSlug, signal) {
+  const response = await apiFetch(
+    `${API_BASE}/api/me/courses/${encodeURIComponent(courseSlug)}/exercise-progress`,
+    { credentials: "include", signal },
+  );
+  if (response.status === 401) return [];
+  const payload = await responsePayload(response);
+  return Array.isArray(payload.items) ? payload.items : [];
+}
+
+function exerciseRoute(courseSlug, item) {
+  return `/practice/${encodeURIComponent(courseSlug)}/${encodeURIComponent(item.lesson_slug)}/${encodeURIComponent(item.slug)}`;
+}
 function prettyCode(value) {
   if (typeof value === "string") return value;
   if (value === null || value === undefined) return "";
@@ -62,20 +94,45 @@ export default function ExerciseDetailPage() {
   const [solutionError, setSolutionError] = useState("");
   const [checking, setChecking] = useState(false);
   const [feedback, setFeedback] = useState(null);
+  const [navigation, setNavigation] = useState({ previous: null, next: null, index: -1, total: 0 });
 
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true); setError(""); setExercise(null); setSolution(null); setFeedback(null); setAnswer(""); setSelectedOption("");
-    apiFetch(`${API_BASE}/api/courses/${encodeURIComponent(courseSlug)}/lessons/${encodeURIComponent(lessonSlug)}/exercises`, { credentials: "include", signal: controller.signal })
-      .then(responsePayload)
-      .then((payload) => {
-        const items = Array.isArray(payload.items) ? payload.items : [];
-        const match = items.find((item) => item.slug === exerciseSlug);
+    setNavigation({ previous: null, next: null, index: -1, total: 0 });
+    const lessonItemsPromise = apiFetch(
+      `${API_BASE}/api/courses/${encodeURIComponent(courseSlug)}/lessons/${encodeURIComponent(lessonSlug)}/exercises`,
+      { credentials: "include", signal: controller.signal },
+    ).then(responsePayload);
+    const courseItemsPromise = fetchAllCourseExercises(courseSlug, controller.signal).catch(() => []);
+    const progressPromise = fetchCourseExerciseProgress(courseSlug, controller.signal).catch(() => []);
+    Promise.all([lessonItemsPromise, courseItemsPromise, progressPromise])
+      .then(([lessonPayload, courseItems, progressItems]) => {
+        const lessonItems = Array.isArray(lessonPayload.items) ? lessonPayload.items : [];
+        const match = lessonItems.find((item) => item.slug === exerciseSlug);
         if (!match) throw new Error("This exercise is not available. It may be unpublished or moved.");
-        setExercise(match);
-        setAnswer(starterAnswer(match));
+        const ordered = courseItems.length ? courseItems : lessonItems.map((item) => ({ ...item, lesson_slug: lessonSlug }));
+        const index = ordered.findIndex((item) => item.slug === exerciseSlug && item.lesson_slug === lessonSlug);
+        const progress = new Map(progressItems.map((item) => [
+          `${item.lesson_slug}:${item.exercise_slug}`,
+          Boolean(item.completed),
+        ]));
+        const restored = {
+          ...match,
+          completed: progress.get(`${lessonSlug}:${exerciseSlug}`) === true,
+        };
+        setExercise(restored);
+        setAnswer(starterAnswer(restored));
+        if (index >= 0) {
+          setNavigation({
+            previous: index > 0 ? ordered[index - 1] : null,
+            next: index < ordered.length - 1 ? ordered[index + 1] : null,
+            index,
+            total: ordered.length,
+          });
+        }
       })
-      .catch((err) => { if (err.name !== "AbortError") setError(err.message || "Could not load this exercise."); })
+      .catch((err) => { if (err.name !== "AbortError") setError(typeof err.message === "string" ? err.message : "Could not load this exercise."); })
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
   }, [courseSlug, lessonSlug, exerciseSlug]);
@@ -103,6 +160,7 @@ export default function ExerciseDetailPage() {
         return;
       }
       setFeedback({ tone: data.correct ? "success" : "error", message: data.correct ? (data.xp_awarded > 0 ? `Correct! You earned ${data.xp_awarded} XP.` : "Correct! This exercise has already been rewarded.") : "Not quite yet. Review the hint, try another approach, and check again." });
+      setExercise((current) => current ? { ...current, completed: Boolean(data.completed) } : current);
     } catch (err) { setFeedback({ tone: "error", message: err.message || "The API could not be reached." }); }
     finally { setChecking(false); }
   }
@@ -124,7 +182,7 @@ export default function ExerciseDetailPage() {
     <PageShell className="exercise-detail-page">
       <div className="exercise-detail-breadcrumb"><Link to={`/practice/${encodeURIComponent(courseSlug)}`}><ArrowLeft size={14} /> All exercises</Link><span>/</span><Link to={`/learn/${encodeURIComponent(courseSlug)}/${encodeURIComponent(lessonSlug)}`}>{exercise.lesson_title || lessonSlug}</Link></div>
       <header className="exercise-detail-hero panel">
-        <div><span className="eyebrow">{String(exercise.difficulty || "PRACTICE").toUpperCase()} · {String(exercise.type || "exercise").replaceAll("_", " ").toUpperCase()}</span><h1>{exercise.title}</h1><p>{exercise.prompt}</p><div className="exercise-detail-meta"><span><BookOpen size={14} /> {exercise.module_title || "Course practice"}</span><span><Zap size={14} /> {exercise.xp_points ?? stats.exerciseXp} XP on first correct completion</span></div></div>
+        <div><span className="eyebrow">{String(exercise.difficulty || "PRACTICE").toUpperCase()} · {String(exercise.type || "exercise").replaceAll("_", " ").toUpperCase()}</span><h1>{exercise.title}</h1><p>{exercise.prompt}</p><div className="exercise-detail-meta"><span><BookOpen size={14} /> {exercise.module_title || "Course practice"}</span><span><Zap size={14} /> {exercise.xp_points ?? stats.exerciseXp} XP on first correct completion</span>{exercise.completed && <span className="pill pill-mint"><CheckCircle2 size={13} /> Completed</span>}</div></div>
         <Code2 size={32} />
       </header>
       <div className="exercise-detail-layout">
@@ -143,6 +201,21 @@ export default function ExerciseDetailPage() {
             {!solution ? <button type="button" className="button button-secondary" disabled={solutionLoading} onClick={revealSolution}><Eye size={15} /> {solutionLoading ? "Loading solution…" : "Show solution"}</button> : <div className="exercise-solution-content">{solution.answer && <><h3>Answer</h3><pre className={typeof solution.answer === "string" ? "exercise-solution-code" : ""}><code>{prettyCode(solution.answer)}</code></pre></>}{solution.expected_result && <><h3>Expected result</h3><pre>{solution.expected_result}</pre></>}{solution.explanation && <><h3>Explanation</h3><p>{solution.explanation}</p></>}{Array.isArray(solution.steps) && solution.steps.length > 0 && <><h3>Steps</h3><ol>{solution.steps.map((step, index) => <li key={`${index}-${step}`}>{step}</li>)}</ol></>}{Array.isArray(solution.test_cases) && solution.test_cases.length > 0 && <><h3>Test cases</h3><div className="table-scroll"><table><thead><tr><th>Input</th><th>Expected</th></tr></thead><tbody>{solution.test_cases.map((test, index) => <tr key={index}><td>{test.input || "—"}</td><td>{test.expected || "—"}</td></tr>)}</tbody></table></div></>}{!solution.answer && !solution.explanation && !solution.expected_result && <p>The author has not provided a full worked answer yet.</p>}<button type="button" className="button button-secondary button-small" onClick={() => setSolution(null)}>Hide solution</button></div>}
             {solutionError && <p className="exercise-feedback error" role="status">{solutionError}</p>}
           </section>
+          <nav className="hero-actions exercise-detail-navigation" aria-label="Exercise navigation">
+            {navigation.previous ? (
+              <Link className="button button-secondary" to={exerciseRoute(courseSlug, navigation.previous)}><ArrowLeft size={15} /> Previous exercise</Link>
+            ) : (
+              <span className="muted-inline" aria-disabled="true">First exercise</span>
+            )}
+            {navigation.index >= 0 && navigation.total > 0 && (
+              <span className="muted-inline">Exercise {navigation.index + 1} of {navigation.total}</span>
+            )}
+            {navigation.next ? (
+              <Link className="button button-primary" to={exerciseRoute(courseSlug, navigation.next)}>Next exercise <ArrowRight size={15} /></Link>
+            ) : (
+              <Link className="button button-primary" to={`/practice/${encodeURIComponent(courseSlug)}`}>Back to all exercises <ArrowRight size={15} /></Link>
+            )}
+          </nav>
         </main>
         <aside className="exercise-detail-aside">
           <section className="exercise-aside-card panel"><ShieldCheck size={19} /><h3>Fair, server-checked practice</h3><p>Correctness is checked by CodeLeaf's configured grader. XP is awarded by the server once; viewing a solution does not grant XP.</p></section>

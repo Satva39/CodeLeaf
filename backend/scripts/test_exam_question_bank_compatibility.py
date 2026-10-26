@@ -97,9 +97,14 @@ def main() -> None:
                     raise AssertionError("published source blueprint was not returned as published")
                 if slug not in catalog_items:
                     raise AssertionError("published course is absent from the exam catalog")
-                if catalog_items[slug].get("available") is not True:
+                readiness = main_module._exam_bank_readiness(course_dir, resolved_blueprint)
+                catalog_item = catalog_items[slug]
+                if catalog_item.get("available") is not False:
+                    raise AssertionError("exam must remain unavailable until a practical assessment is published")
+                expected_status = "practical_exam_unavailable" if readiness["ready"] else "question_bank_incomplete"
+                if catalog_item.get("status") != expected_status:
                     raise AssertionError(
-                        f"catalog marked a published exam unavailable: {catalog_items[slug].get('message')}"
+                        f"catalog status {catalog_item.get('status')!r} disagrees with readiness {expected_status!r}: {catalog_item.get('message')}"
                     )
             except Exception as exc:
                 failures.append(f"{slug}: exam publication gate: {type(exc).__name__}: {exc}")
@@ -110,21 +115,26 @@ def main() -> None:
         try:
             pool = main_module._load_exam_question_pool(course_dir, blueprint)
             slot_count = len({int(item.get("lesson_number") or 0) for item in pool if int(item.get("lesson_number") or 0) > 0})
-            picked = main_module._choose_exam_questions(pool, blueprint, count=20)
+            readiness = main_module._exam_bank_readiness(course_dir, blueprint)
+            picked = main_module._choose_exam_questions(pool, blueprint, count=80)
             if not pool:
                 raise AssertionError("published question pool contains no usable questions")
             if slot_count < 1:
                 raise AssertionError("question pool has no positive sampling slots")
-            if not picked:
-                raise AssertionError("exam selector returned no questions")
             if len({item["id"] for item in picked}) != len(picked):
                 raise AssertionError("exam selector returned duplicate question IDs")
-            if not main_module._has_published_exam_question_set(course_dir, blueprint):
-                raise AssertionError("catalog readiness disagrees with the full question loader")
+            if len({main_module._normalized_exam_prompt(item["prompt"]) for item in picked}) != len(picked):
+                raise AssertionError("exam selector returned duplicate question prompts")
+            if readiness["ready"] and len(picked) != 80:
+                raise AssertionError(f"ready bank returned {len(picked)} questions instead of 80")
+            if not readiness["ready"] and len(picked) >= 80:
+                raise AssertionError("incomplete bank unexpectedly supplied 80 distinct valid prompts")
+            if main_module._has_published_exam_question_set(course_dir, blueprint) != readiness["ready"]:
+                raise AssertionError("bank readiness helper disagrees with the validated question pool")
         except Exception as exc:  # include HTTPException validation errors in the report
             failures.append(f"{course_dir.name}: {type(exc).__name__}: {exc}")
             continue
-        print(f"PASS {course_dir.name}: {len(pool)} published questions, {slot_count} sampling slots, {len(picked)} selectable")
+        print(f"PASS {course_dir.name}: {len(pool)} valid question rows, {readiness['distinct_prompt_count']} distinct prompts, {len(picked)} selected; mcq_ready={readiness['ready']}")
 
     if failures:
         print("\nExam question-bank compatibility failures:")

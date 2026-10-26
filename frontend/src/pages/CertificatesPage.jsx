@@ -23,6 +23,8 @@ export default function CertificatesPage() {
   const [signedIn, setSignedIn] = useState(null);
   const [loadMessage, setLoadMessage] = useState("");
   const [examAvailability, setExamAvailability] = useState({});
+  const [courseEligibility, setCourseEligibility] = useState({});
+  const [courseEligibilityLoading, setCourseEligibilityLoading] = useState(false);
   const [examCatalogLoading, setExamCatalogLoading] = useState(true);
   const [examCatalogError, setExamCatalogError] = useState("");
   const examCategories = ["All topics", ...COURSE_CATEGORIES];
@@ -86,6 +88,37 @@ export default function CertificatesPage() {
     load();
     return () => controller.abort();
   }, []);
+
+  useEffect(() => {
+    if (signedIn !== true) {
+      setCourseEligibility({});
+      setCourseEligibilityLoading(false);
+      return undefined;
+    }
+    const controller = new AbortController();
+    async function loadCourseEligibility() {
+      setCourseEligibilityLoading(true);
+      try {
+        const response = await apiFetch(`${API_BASE}/api/me/certificate-eligibility`, {
+          credentials: "include",
+          signal: controller.signal,
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(payload.detail || "Course eligibility could not be checked.");
+        const next = {};
+        for (const item of Array.isArray(payload.items) ? payload.items : []) {
+          if (item && typeof item.course_slug === "string") next[item.course_slug] = item;
+        }
+        setCourseEligibility(next);
+      } catch (error) {
+        if (error.name !== "AbortError") setCourseEligibility({});
+      } finally {
+        if (!controller.signal.aborted) setCourseEligibilityLoading(false);
+      }
+    }
+    loadCourseEligibility();
+    return () => controller.abort();
+  }, [signedIn]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -224,17 +257,30 @@ export default function CertificatesPage() {
             {items.map((course) => {
               const exam = examAvailability[course.slug];
               const available = exam?.available === true;
+              const learnerEligibility = courseEligibility[course.slug];
+              const hasLearnerEligibility = signedIn === true
+                && typeof learnerEligibility?.total_lessons === "number"
+                && typeof learnerEligibility?.total_exercises === "number";
+              const lessonsIncomplete = hasLearnerEligibility && learnerEligibility.lessons_complete === false;
+              const exercisesIncomplete = hasLearnerEligibility && learnerEligibility.exercises_complete === false;
+              const prerequisitesComplete = hasLearnerEligibility && learnerEligibility.prerequisites_complete === true;
+              const practicalPending = hasLearnerEligibility && ["practical_exam_required", "practical_exam_not_passed"].includes(learnerEligibility.certificate_status);
+              const canStartExam = available && !practicalPending && (signedIn !== true || (hasLearnerEligibility && prerequisitesComplete && learnerEligibility.start_exam_available === true));
               const htmlCertificateIssued =
                 course.slug === "html" && eligibility?.status === "issued";
-              const statusLabel = examCatalogLoading
-                ? "Checking publication"
-                : !exam
-                  ? "Status unavailable"
-                  : available
-                    ? "Exam published"
-                    : exam.status === "configuration_error"
-                      ? "Needs attention"
-                      : "Publication required";
+              const statusLabel = courseEligibilityLoading
+                ? "Checking progress"
+                : hasLearnerEligibility && !prerequisitesComplete
+                  ? "Prerequisites incomplete"
+                  : examCatalogLoading
+                    ? "Checking publication"
+                    : !exam
+                      ? "Status unavailable"
+                      : available
+                        ? "Exam published"
+                        : exam.status === "configuration_error"
+                          ? "Needs attention"
+                          : "Publication required";
               return (
                 <div className="exam-card panel" key={course.slug}>
                   <CourseIcon course={course} size="md" />
@@ -256,26 +302,36 @@ export default function CertificatesPage() {
                       </span>
                     </div>
                   </div>
-                  {available && !htmlCertificateIssued ? (
-                    <Link
-                      className="button button-primary exam-card-action"
-                      to={`/exam/${encodeURIComponent(course.slug)}`}
-                    >
-                      Start exam <ArrowRight size={15} />
-                    </Link>
-                  ) : htmlCertificateIssued ? (
-                    <span className="pill pill-mint">Issued</span>
-                  ) : (
-                    <span className="pill pill-neutral">
-                      {examCatalogLoading
-                        ? "Checking…"
-                        : exam?.status === "configuration_error"
-                          ? "Needs attention"
-                          : exam
-                            ? "Roadmap"
-                            : "Unavailable"}
-                    </span>
-                  )}
+                  <div className="exam-card-actions">
+                    {hasLearnerEligibility && lessonsIncomplete && (
+                      <Link className="button button-secondary exam-card-action" to={`/learn/${encodeURIComponent(course.slug)}`}>
+                        Complete all lessons <ArrowRight size={15} />
+                      </Link>
+                    )}
+                    {hasLearnerEligibility && exercisesIncomplete && (
+                      <Link className="button button-secondary exam-card-action" to={`/practice/${encodeURIComponent(course.slug)}`}>
+                        Complete all exercises <ArrowRight size={15} />
+                      </Link>
+                    )}
+                    {practicalPending && prerequisitesComplete && available && (
+                      <Link className="button button-primary exam-card-action" to={`/practical/${encodeURIComponent(course.slug)}`}>
+                        {learnerEligibility.certificate_status === "practical_exam_not_passed" ? "Retry practical exam" : "Take practical exam"} <ArrowRight size={15} />
+                      </Link>
+                    )}
+                    {canStartExam && !htmlCertificateIssued && !lessonsIncomplete && !exercisesIncomplete ? (
+                      <Link className="button button-primary exam-card-action" to={`/exam/${encodeURIComponent(course.slug)}`}>
+                        Start exam <ArrowRight size={15} />
+                      </Link>
+                    ) : htmlCertificateIssued || learnerEligibility?.certificate_issued ? (
+                      <span className="pill pill-mint">Issued</span>
+                    ) : hasLearnerEligibility && prerequisitesComplete && !available ? (
+                      <span className="pill pill-neutral">Exam unavailable</span>
+                    ) : !lessonsIncomplete && !exercisesIncomplete && !canStartExam ? (
+                      <span className="pill pill-neutral">
+                        {courseEligibilityLoading || examCatalogLoading ? "Checking…" : exam?.status === "configuration_error" ? "Needs attention" : exam ? "Roadmap" : "Unavailable"}
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
               );
             })}
@@ -332,11 +388,9 @@ export default function CertificatesPage() {
             <h3>How it works</h3>
             <ol>
               <li>Study the published curriculum.</li>
-              <li>Complete required lessons and the server-graded exam.</li>
-              <li>Meet any project review requirements.</li>
-              <li>
-                Certificates appear here only after the backend issues them.
-              </li>
+              <li>Complete all required published lessons and exercises.</li>
+              <li>Pass the 80-question MCQ exam and mandatory practical assessment.</li>
+              <li>Certificates appear here only after the backend verifies and issues them.</li>
             </ol>
           </div>
         </aside>

@@ -31,6 +31,7 @@ export default function ChallengesPage() {
   const course = courses.find((item) => item.slug === courseSlug);
   const stats = useGamificationStats();
   const [exercises, setExercises] = useState([]);
+  const [completedExercises, setCompletedExercises] = useState(() => new Set());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [previewMode, setPreviewMode] = useState(false);
@@ -39,11 +40,26 @@ export default function ChallengesPage() {
 
   useEffect(() => {
     const controller = new AbortController();
-    setExercises([]); setLoading(true); setError("");
+    setExercises([]); setCompletedExercises(new Set()); setLoading(true); setError("");
     fetchAllCourseExercises(courseSlug, controller.signal)
-      .then((items) => {
+      .then(async (items) => {
         setExercises(items);
         setPreviewMode(items.some((item) => item.status === "draft"));
+        try {
+          const response = await apiFetch(
+            `${API_BASE}/api/me/courses/${encodeURIComponent(courseSlug)}/exercise-progress`,
+            { credentials: "include", signal: controller.signal },
+          );
+          if (response.ok) {
+            const payload = await response.json().catch(() => ({}));
+            const keys = (Array.isArray(payload.items) ? payload.items : [])
+              .filter((item) => item.completed)
+              .map((item) => `${item.lesson_slug}:${item.exercise_slug}`);
+            setCompletedExercises(new Set(keys));
+          }
+        } catch (progressError) {
+          if (progressError.name === "AbortError") throw progressError;
+        }
       })
       .catch((err) => { if (err.name !== "AbortError") setError(err.message || "Practice tasks could not be loaded."); })
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
@@ -87,7 +103,7 @@ export default function ChallengesPage() {
             <div className="exercise-topic-list">
               {items.map((exercise) => <article key={`${exercise.course_slug || course.slug}:${exercise.lesson_slug}:${exercise.slug}`} className="exercise-library-row">
                 <span className="challenge-row-icon"><Code2 size={17} /></span>
-                <div className="challenge-row-copy"><div className="practice-task-meta"><span>{exercise.difficulty || "PRACTICE"}</span><span>{String(exercise.type || "exercise").replaceAll("_", " ")}</span></div><h3>{exercise.title}</h3><p>{exercise.prompt || "Open this task to read the instructions."}</p><small>Lesson: {exercise.lesson_title || exercise.lesson_slug}</small></div>
+                <div className="challenge-row-copy"><div className="practice-task-meta"><span>{exercise.difficulty || "PRACTICE"}</span><span>{String(exercise.type || "exercise").replaceAll("_", " ")}</span>{completedExercises.has(`${exercise.lesson_slug}:${exercise.slug}`) && <span className="pill pill-mint"><CheckCircle2 size={12} /> Completed</span>}</div><h3>{exercise.title}</h3><p>{exercise.prompt || "Open this task to read the instructions."}</p><small>Lesson: {exercise.lesson_title || exercise.lesson_slug}</small></div>
                 <span className="challenge-xp"><Zap size={13} /> {exercise.xp_points ?? stats.exerciseXp} XP</span>
                 <Link className="button button-secondary button-small" to={`/practice/${encodeURIComponent(course.slug)}/${encodeURIComponent(exercise.lesson_slug)}/${encodeURIComponent(exercise.slug)}`}>Open exercise <ArrowRight size={13} /></Link>
               </article>)}

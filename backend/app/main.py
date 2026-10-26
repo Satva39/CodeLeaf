@@ -45,6 +45,7 @@ from .models import (
     Lesson,
     LessonProgress,
     Module,
+    PracticalExamAttempt,
     PaymentRecord,
     User,
     UserActivityDay,
@@ -1644,14 +1645,14 @@ def _load_exam_question_pool(
 
     for relative in question_files:
         if not isinstance(relative, str) or not relative.strip() or "\\" in relative:
-            continue
+            raise HTTPException(status_code=500, detail="The exam question index contains an invalid file reference.")
         relative_path = relative if relative.startswith("exams/") else f"exams/{relative}"
         try:
             question_path = _safe_course_json_path(
                 course_dir, relative_path, "Exam question set"
             )
-        except HTTPException:
-            continue
+        except HTTPException as exc:
+            raise HTTPException(status_code=500, detail="A referenced exam question file is missing or invalid.") from exc
         try:
             question_set = json.loads(question_path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError) as exc:
@@ -1682,23 +1683,24 @@ def _load_exam_question_pool(
             if (
                 not isinstance(question_id, str)
                 or not question_id.strip()
-                or question_id in seen_ids
                 or not isinstance(prompt, str)
                 or not prompt.strip()
                 or not isinstance(options, list)
-                or len(options) < 2
-                or not all(isinstance(option, str) for option in options)
+                or len(options) != 4
+                or not all(isinstance(option, str) and option.strip() for option in options)
+                or len({option.strip() for option in options}) != len(options)
             ):
+                # Malformed items are not selectable. The readiness audit reports
+                # them separately; a large valid bank can still remain usable.
+                continue
+            if question_id in seen_ids:
                 raise HTTPException(
                     status_code=500,
-                    detail="An exam question is malformed or has a duplicate ID.",
+                    detail="Exam question IDs must be unique across the complete question bank.",
                 )
             answer_key = _normalize_exam_answer_key(options, question.get("answer_key"))
             if answer_key is None:
-                raise HTTPException(
-                    status_code=500,
-                    detail="An exam question has an answer key that does not match its options.",
-                )
+                continue
             seen_ids.add(question_id)
             lesson_number = _exam_lesson_number(
                 lesson_id,
@@ -1738,75 +1740,51 @@ def _load_exam_question_pool(
     return pool
 
 
+def _normalized_exam_prompt(value: Any) -> str:
+    return re.sub(r"\s+", " ", str(value or "").strip()).casefold()
+
+
+def _unique_exam_questions(pool: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Remove exact duplicate prompts from selection without mutating authored files."""
+    unique: list[dict[str, Any]] = []
+    seen_prompts: set[str] = set()
+    for item in pool:
+        prompt_key = _normalized_exam_prompt(item.get("prompt"))
+        if not prompt_key or prompt_key in seen_prompts:
+            continue
+        seen_prompts.add(prompt_key)
+        unique.append(item)
+    return unique
+
+
+def _exam_bank_readiness_from_pool(pool: list[dict[str, Any]], error: str | None = None) -> dict[str, Any]:
+    selectable = _unique_exam_questions(pool)
+    return {
+        "valid_question_count": len(pool),
+        "distinct_prompt_count": len(selectable),
+        "required_question_count": 80,
+        "available_question_count": min(80, len(selectable)),
+        "ready": len(selectable) >= 80 and error is None,
+        "error": error,
+    }
+
+
+def _exam_bank_readiness(course_dir: Path, blueprint: dict[str, Any]) -> dict[str, Any]:
+    """Validate the selectable bank and report the minimum 80 distinct-question gate."""
+    try:
+        pool = _load_exam_question_pool(course_dir, blueprint)
+        error = None
+    except HTTPException as exc:
+        pool = []
+        error = str(exc.detail or "The exam question bank is invalid.")
+    return _exam_bank_readiness_from_pool(pool, error)
+
+
 def _has_published_exam_question_set(
     course_dir: Path, blueprint: dict[str, Any]
 ) -> bool:
-    """Check cheaply whether a published exam has at least one usable question set.
-
-    The certificates page displays many course tracks at once, so it must not load
-    every question from every course just to decide whether to show a Start exam
-    link. The exam start/info endpoints still load and fully validate the complete
-    question pool before a learner can begin an attempt.
-    """
-    try:
-        question_files = _exam_question_file_refs(blueprint)
-    except HTTPException:
-        return False
-
-    preview = draft_course_preview_enabled()
-    for relative in question_files:
-        if not isinstance(relative, str) or not relative.strip() or "\\" in relative:
-            continue
-        relative_path = relative if relative.startswith("exams/") else f"exams/{relative}"
-        try:
-            question_path = _safe_course_json_path(
-                course_dir, relative_path, "Exam question set"
-            )
-            question_set = json.loads(question_path.read_text(encoding="utf-8"))
-        except (HTTPException, OSError, json.JSONDecodeError):
-            continue
-
-        if not isinstance(question_set, dict):
-            continue
-        if question_set.get("status") != "published" and not preview:
-            continue
-        try:
-            questions = _exam_question_rows(question_set)
-        except HTTPException:
-            continue
-        if not questions:
-            continue
-
-        # Match the core shape checks used by the full pool loader. Avoid declaring
-        # an empty/malformed first file ready; the exam endpoint validates the entire
-        # pool and reports configuration errors before starting an attempt.
-        valid_set = True
-        seen_ids: set[str] = set()
-        for question in questions:
-            if not isinstance(question, dict):
-                valid_set = False
-                break
-            question_id = question.get("id")
-            prompt = question.get("prompt") or question.get("question")
-            options = question.get("options")
-            answer_key = question.get("answer_key")
-            if (
-                not isinstance(question_id, str)
-                or not question_id.strip()
-                or question_id in seen_ids
-                or not isinstance(prompt, str)
-                or not prompt.strip()
-                or not isinstance(options, list)
-                or len(options) < 2
-                or not all(isinstance(option, str) for option in options)
-                or _normalize_exam_answer_key(options, answer_key) is None
-            ):
-                valid_set = False
-                break
-            seen_ids.add(question_id)
-        if valid_set:
-            return True
-    return False
+    """Return true only when the bank can supply 80 valid, distinct prompts."""
+    return bool(_exam_bank_readiness(course_dir, blueprint)["ready"])
 
 
 @app.get("/api/exams/catalog")
@@ -1827,7 +1805,30 @@ def list_exam_catalog(db: Session = Depends(get_db)) -> dict[str, Any]:
         try:
             course, course_dir, blueprint = _load_exam_blueprint(slug, db)
             entry["title"] = course.title
-            if _has_published_exam_question_set(course_dir, blueprint):
+            readiness = _exam_bank_readiness(course_dir, blueprint)
+            entry.update({
+                "valid_question_count": readiness["valid_question_count"],
+                "distinct_question_count": readiness["distinct_prompt_count"],
+                "required_question_count": 80,
+                "question_count": 80 if readiness["ready"] else 0,
+            })
+            practical_ready = False
+            practical_message = "The practical certification assessment has not been published yet."
+            if readiness["ready"]:
+                try:
+                    _load_practical_exam(course_dir)
+                    practical_ready = True
+                    practical_message = "The practical assessment is published."
+                except HTTPException as practical_error:
+                    practical_detail = practical_error.detail
+                    practical_message = (
+                        str(practical_detail.get("message") or practical_message)
+                        if isinstance(practical_detail, dict)
+                        else str(practical_detail or practical_message)
+                    )
+            entry["practical_available"] = practical_ready
+            entry["practical_message"] = practical_message
+            if readiness["ready"] and practical_ready:
                 settings_doc = blueprint.get("recommended_settings") or {}
                 is_preview = draft_course_preview_enabled() and (
                     not course.published or blueprint.get("status") != "published"
@@ -1847,17 +1848,30 @@ def list_exam_catalog(db: Session = Depends(get_db)) -> dict[str, Any]:
                             settings_doc.get("suggested_pass_percent") or 70
                         ),
                         "message": (
-                            "The draft exam is available in local preview only."
+                            "The draft 80-question MCQ stage is available in local preview only."
                             if is_preview
-                            else "The published exam and question bank are available."
+                            else "The published 80-question MCQ stage and question bank are available."
+                        ),
+                    }
+                )
+            elif not readiness["ready"]:
+                entry.update(
+                    {
+                        "status": "question_bank_incomplete",
+                        "message": (
+                            f"The MCQ stage is unavailable: it needs 80 valid, distinct questions; "
+                            f"the bank currently has {readiness['distinct_prompt_count']} distinct prompts."
                         ),
                     }
                 )
             else:
                 entry.update(
                     {
-                        "status": "publication_required",
-                        "message": "The course is published, but its exam question bank is not published or is not ready yet.",
+                        "status": "practical_exam_unavailable",
+                        "message": (
+                            "The MCQ bank is ready, but the certification track remains unavailable "
+                            f"until its practical assessment is published. {practical_message}"
+                        ),
                     }
                 )
         except HTTPException as exc:
@@ -1881,21 +1895,15 @@ def list_exam_catalog(db: Session = Depends(get_db)) -> dict[str, Any]:
 
 
 def _choose_exam_questions(
-    pool: list[dict[str, Any]], blueprint: dict[str, Any], count: int = 20
+    pool: list[dict[str, Any]], blueprint: dict[str, Any], count: int = 80
 ) -> list[dict[str, Any]]:
-    """Sample unique lesson concepts according to the blueprint's topic weights."""
-    if not pool:
-        return []
+    """Sample distinct prompts with topic coverage, never reusing a question concept."""
     rng = secrets.SystemRandom()
-    by_lesson: dict[int, list[dict[str, Any]]] = {}
-    for question in pool:
-        by_lesson.setdefault(int(question.get("lesson_number") or 0), []).append(
-            question
-        )
-    lesson_numbers = [number for number in by_lesson if number > 0]
-    rng.shuffle(lesson_numbers)
-    target_count = min(max(1, int(count)), len(lesson_numbers))
-    topics = []
+    candidates = _unique_exam_questions(pool)
+    if not candidates:
+        return []
+    target_count = min(max(1, int(count)), len(candidates))
+    topics: list[tuple[str, int, int, float]] = []
     for row in blueprint.get("topic_distribution", []):
         if not isinstance(row, dict):
             continue
@@ -1906,55 +1914,258 @@ def _choose_exam_questions(
         except (TypeError, ValueError, IndexError):
             continue
         if start <= end and weight > 0:
-            topics.append(
-                (str(row.get("topic") or "General skills"), start, end, weight)
-            )
-    weighted_total = sum(row[3] for row in topics)
+            topics.append((str(row.get("topic") or "General skills"), start, end, weight))
+
     selected: list[dict[str, Any]] = []
-    selected_lessons: set[int] = set()
-    if topics and weighted_total > 0:
-        raw_quotas = [target_count * item[3] / weighted_total for item in topics]
-        quotas = [int(value) for value in raw_quotas]
-        remaining = target_count - sum(quotas)
-        ranked = sorted(
-            range(len(topics)), key=lambda i: raw_quotas[i] - quotas[i], reverse=True
-        )
-        for index in ranked[:remaining]:
-            quotas[index] += 1
-        for topic_row, quota in zip(topics, quotas):
-            name, start, end, _weight = topic_row
-            eligible = [
-                number
-                for number in lesson_numbers
-                if number not in selected_lessons and start <= number <= end
+    selected_ids: set[str] = set()
+    total_weight = sum(item[3] for item in topics)
+    if topics and total_weight > 0:
+        raw = [target_count * item[3] / total_weight for item in topics]
+        quotas = [int(value) for value in raw]
+        remainder = target_count - sum(quotas)
+        for idx in sorted(range(len(topics)), key=lambda i: raw[i] - quotas[i], reverse=True)[:remainder]:
+            quotas[idx] += 1
+        for (topic_name, start, end, _weight), quota in zip(topics, quotas):
+            matching = [
+                item for item in candidates
+                if item["id"] not in selected_ids
+                and start <= int(item.get("lesson_number") or 0) <= end
             ]
-            rng.shuffle(eligible)
-            for number in eligible[:quota]:
-                choices = by_lesson[number]
-                candidate = dict(rng.choice(choices))
-                candidate["topic"] = name
-                selected.append(candidate)
-                selected_lessons.add(number)
+            rng.shuffle(matching)
+            for item in matching[:quota]:
+                copy = dict(item)
+                copy["topic"] = topic_name
+                selected.append(copy)
+                selected_ids.add(str(copy["id"]))
+
     if len(selected) < target_count:
-        remaining_lessons = [
-            number for number in lesson_numbers if number not in selected_lessons
-        ]
-        rng.shuffle(remaining_lessons)
-        for number in remaining_lessons[: target_count - len(selected)]:
-            selected.append(dict(rng.choice(by_lesson[number])))
+        remaining = [item for item in candidates if item["id"] not in selected_ids]
+        rng.shuffle(remaining)
+        selected.extend(dict(item) for item in remaining[:target_count - len(selected)])
     rng.shuffle(selected)
     return selected
 
 
-def _course_requires_human_capstone_review(blueprint: dict[str, Any]) -> bool:
-    description = str(blueprint.get("project_submission") or "").casefold()
-    if re.search(
-        r"\b(no|not|never|without)\b.{0,55}\b(capstone|human[- ]review(?:ed)?)\b",
-        description,
-    ):
-        return False
-    return "capstone" in description and bool(
-        re.search(r"human[- ]review(?:ed)?", description)
+def _course_progress_requirements(
+    db: Session, user: User, course: Course
+) -> dict[str, Any]:
+    """Calculate prerequisites exclusively from published database content and persisted progress."""
+    lesson_rows = db.execute(
+        select(Lesson.id, LessonProgress.completed)
+        .join(Module, Lesson.module_id == Module.id)
+        .outerjoin(
+            LessonProgress,
+            (LessonProgress.lesson_id == Lesson.id)
+            & (LessonProgress.user_id == user.id),
+        )
+        .where(
+            Module.course_id == course.id,
+            Lesson.is_published.is_(True),
+        )
+        .order_by(Module.sort_order.asc(), Lesson.sort_order.asc())
+    ).all()
+    total_lessons = len(lesson_rows)
+    completed_lessons = sum(1 for _lesson_id, completed in lesson_rows if completed)
+
+    exercise_rows = db.execute(
+        select(Exercise.id, ExerciseProgress.completed)
+        .join(Lesson, Exercise.lesson_id == Lesson.id)
+        .join(Module, Lesson.module_id == Module.id)
+        .outerjoin(
+            ExerciseProgress,
+            (ExerciseProgress.exercise_id == Exercise.id)
+            & (ExerciseProgress.user_id == user.id),
+        )
+        .where(
+            Module.course_id == course.id,
+            Lesson.is_published.is_(True),
+            Exercise.is_published.is_(True),
+        )
+        .order_by(Module.sort_order.asc(), Lesson.sort_order.asc(), Exercise.sequence.asc())
+    ).all()
+    total_exercises = len(exercise_rows)
+    completed_exercises = sum(1 for _exercise_id, completed in exercise_rows if completed)
+
+    missing_lessons = max(0, total_lessons - completed_lessons)
+    missing_exercises = max(0, total_exercises - completed_exercises)
+    return {
+        "total_lessons": total_lessons,
+        "completed_lessons": completed_lessons,
+        "missing_lessons": missing_lessons,
+        "lessons_complete": total_lessons > 0 and missing_lessons == 0,
+        "total_exercises": total_exercises,
+        "completed_exercises": completed_exercises,
+        "missing_exercises": missing_exercises,
+        "exercises_complete": missing_exercises == 0,
+        "prerequisites_complete": total_lessons > 0 and missing_lessons == 0 and missing_exercises == 0,
+    }
+
+
+def _require_course_prerequisites(db: Session, user: User, course: Course) -> dict[str, Any]:
+    progress = _course_progress_requirements(db, user, course)
+    if not progress["prerequisites_complete"]:
+        missing = {}
+        if not progress["lessons_complete"]:
+            missing["lessons"] = {
+                "completed": progress["completed_lessons"],
+                "total": progress["total_lessons"],
+                "remaining": progress["missing_lessons"],
+            }
+        if not progress["exercises_complete"]:
+            missing["exercises"] = {
+                "completed": progress["completed_exercises"],
+                "total": progress["total_exercises"],
+                "remaining": progress["missing_exercises"],
+            }
+        raise HTTPException(
+            status_code=409,
+            detail={
+                "code": "exam_prerequisites_incomplete",
+                "message": "Complete every required published lesson and exercise before starting the certification exam.",
+                "missing_requirements": missing,
+            },
+        )
+    return progress
+
+
+def _load_practical_exam(course_dir: Path) -> dict[str, Any]:
+    """Load only published, author-defined, deterministic practical assessments.
+
+    Code-execution tasks are deliberately not accepted by this evaluator; those need
+    the isolated runner's dedicated hidden-test contract, which this repository does
+    not currently expose. No learner code is ever executed in the API process.
+    """
+    practical_path = (course_dir / "exams" / "practical-exam.json").resolve()
+    resolved_dir = course_dir.resolve()
+    if resolved_dir not in practical_path.parents or not practical_path.is_file():
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "code": "practical_exam_unavailable",
+                "message": "A published practical assessment has not been authored for this course yet.",
+            },
+        )
+    try:
+        practical = json.loads(practical_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise HTTPException(status_code=500, detail="The practical assessment configuration is invalid.") from exc
+    if not isinstance(practical, dict) or practical.get("status") != "published":
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "code": "practical_exam_unavailable",
+                "message": "The practical assessment is not published.",
+            },
+        )
+
+    # Assessment files are publication-controlled by the course manifest.
+    try:
+        manifest = json.loads((resolved_dir / "course.json").read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise HTTPException(status_code=500, detail="The course manifest is invalid.") from exc
+    assessment_files = manifest.get("assessment_files", []) if isinstance(manifest, dict) else []
+    if "exams/practical-exam.json" not in assessment_files:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "code": "practical_exam_unavailable",
+                "message": "The practical assessment is not registered in the published course manifest.",
+            },
+        )
+
+    difficulty = str(practical.get("difficulty") or "intermediate").strip().lower()
+    if difficulty != "intermediate":
+        raise HTTPException(status_code=409, detail="The published practical exam must be configured at intermediate difficulty.")
+    try:
+        pass_percent = int(practical.get("pass_percent") or 70)
+    except (TypeError, ValueError) as exc:
+        raise HTTPException(status_code=500, detail="The practical exam passing threshold is invalid.") from exc
+    if not 1 <= pass_percent <= 100:
+        raise HTTPException(status_code=500, detail="The practical exam passing threshold is invalid.")
+
+    tasks = practical.get("tasks")
+    if not isinstance(tasks, list) or not tasks:
+        raise HTTPException(status_code=409, detail="The practical assessment contains no tasks.")
+    seen_ids: set[str] = set()
+    for task in tasks:
+        if not isinstance(task, dict):
+            raise HTTPException(status_code=500, detail="A practical assessment task is malformed.")
+        task_id = task.get("id")
+        grader = task.get("grader")
+        submission_type = task.get("submission_type", "text")
+        if (
+            not isinstance(task_id, str) or not task_id.strip() or task_id in seen_ids
+            or not isinstance(task.get("prompt"), str) or not task["prompt"].strip()
+            or submission_type != "text"
+            or not isinstance(grader, dict)
+            or grader.get("type") not in {"exact_text", "contains_all", "json_equal"}
+        ):
+            raise HTTPException(
+                status_code=409,
+                detail={
+                    "code": "practical_exam_not_ready",
+                    "message": "The practical assessment has a task without a supported deterministic grader. Code execution must use the isolated runner and cannot run inside the API process.",
+                },
+            )
+        points = task.get("points", 100)
+        if not isinstance(points, int) or points < 1 or points > 1000:
+            raise HTTPException(status_code=500, detail="A practical task has an invalid score weight.")
+        if grader["type"] == "exact_text" and not isinstance(grader.get("expected"), (str, list)):
+            raise HTTPException(status_code=500, detail="A practical exact-text grader is missing its expected answer.")
+        if grader["type"] == "contains_all" and not isinstance(grader.get("required_strings"), list):
+            raise HTTPException(status_code=500, detail="A practical contains-all grader is malformed.")
+        if grader["type"] == "json_equal" and "expected" not in grader:
+            raise HTTPException(status_code=500, detail="A practical JSON grader is missing its expected value.")
+        seen_ids.add(task_id)
+
+    return practical
+
+
+def _practical_task_public(task: dict[str, Any]) -> dict[str, Any]:
+    """Redact grader configuration, expected answers, hidden tests, and solutions."""
+    return {
+        "id": task["id"],
+        "title": str(task.get("title") or "Practical task"),
+        "prompt": task["prompt"],
+        "submission_type": task.get("submission_type", "text"),
+        "starter": str(task.get("starter") or ""),
+        "rubric": [
+            str(item) for item in task.get("rubric", [])
+            if isinstance(item, str) and item.strip()
+        ] if isinstance(task.get("rubric", []), list) else [],
+        "points": int(task.get("points", 100)),
+    }
+
+
+def _latest_passed_mcq_attempt(db: Session, user: User, course: Course) -> ExamAttempt | None:
+    return db.scalar(
+        select(ExamAttempt)
+        .where(
+            ExamAttempt.user_id == user.id,
+            ExamAttempt.course_id == course.id,
+            ExamAttempt.submitted_at.is_not(None),
+            ExamAttempt.passed.is_(True),
+        )
+        .order_by(ExamAttempt.submitted_at.desc())
+        .limit(1)
+    )
+
+
+def _practical_attempt_for_mcq(
+    db: Session, user: User, course: Course, attempt: ExamAttempt | None
+) -> PracticalExamAttempt | None:
+    if attempt is None:
+        return None
+    return db.scalar(
+        select(PracticalExamAttempt)
+        .where(
+            PracticalExamAttempt.user_id == user.id,
+            PracticalExamAttempt.course_id == course.id,
+            PracticalExamAttempt.mcq_attempt_id == attempt.id,
+            PracticalExamAttempt.submitted_at.is_not(None),
+        )
+        .order_by(PracticalExamAttempt.submitted_at.desc())
+        .limit(1)
     )
 
 
@@ -1966,18 +2177,7 @@ def _certificate_eligibility_payload(
     attempt: ExamAttempt | None,
     issue_if_eligible: bool = False,
 ) -> dict[str, Any]:
-    lesson_rows = db.execute(
-        select(Lesson.id, LessonProgress.completed)
-        .join(Module, Lesson.module_id == Module.id)
-        .outerjoin(
-            LessonProgress,
-            (LessonProgress.lesson_id == Lesson.id)
-            & (LessonProgress.user_id == user.id),
-        )
-        .where(Module.course_id == course.id)
-    ).all()
-    total_lessons = len(lesson_rows)
-    completed_lessons = sum(1 for _lesson_id, complete in lesson_rows if complete)
+    progress = _course_progress_requirements(db, user, course)
     certificate = db.scalar(
         select(Certificate)
         .where(
@@ -1986,11 +2186,27 @@ def _certificate_eligibility_payload(
             Certificate.revoked_at.is_(None),
         )
         .order_by(Certificate.issued_at.desc())
+        .limit(1)
     )
     attempt_passed = bool(attempt and attempt.submitted_at and attempt.passed)
-    capstone_required = _course_requires_human_capstone_review(blueprint)
+    practical_available = False
+    practical_unavailable_reason = "A published practical assessment has not been authored for this course yet."
+    try:
+        _load_practical_exam(COURSE_CONTENT_ROOT / course.slug)
+        practical_available = True
+        practical_unavailable_reason = ""
+    except HTTPException as exc:
+        detail = exc.detail
+        practical_unavailable_reason = (
+            str(detail.get("message") or "The practical assessment is not ready.")
+            if isinstance(detail, dict)
+            else str(detail or "The practical assessment is not ready.")
+        )
+    practical_attempt = _practical_attempt_for_mcq(db, user, course, attempt if attempt_passed else None)
+    practical_passed = bool(practical_attempt and practical_attempt.passed)
+
     status_text = "exam_required"
-    reason = "Pass the server-graded final exam first."
+    reason = "Pass the server-graded MCQ exam first."
     if certificate:
         status_text, reason = (
             "issued",
@@ -2000,24 +2216,35 @@ def _certificate_eligibility_payload(
         if attempt and attempt.submitted_at:
             status_text, reason = (
                 "exam_not_passed",
-                "Review the result and pass the final exam to continue.",
+                "Review the result and pass the MCQ exam to continue.",
             )
-    elif total_lessons and completed_lessons < total_lessons:
+    elif not progress["lessons_complete"]:
         status_text, reason = (
-            "pending_course_completion",
-            "Pass the exam and finish every required lesson to continue.",
+            "pending_lessons",
+            "Complete every required published lesson before certification.",
         )
-    elif capstone_required:
+    elif not progress["exercises_complete"]:
         status_text, reason = (
-            "pending_capstone_review",
-            "The course blueprint requires human review of the capstone. The submission/review workflow is not implemented, so no completion certificate has been issued.",
+            "pending_exercises",
+            "Complete every required published exercise before certification.",
+        )
+    elif not practical_available:
+        status_text, reason = (
+            "practical_exam_unavailable",
+            practical_unavailable_reason,
+        )
+    elif not practical_passed:
+        status_text, reason = (
+            "practical_exam_not_passed" if practical_attempt else "practical_exam_required",
+            "Pass the practical examination before a certificate can be issued.",
         )
     else:
         status_text, reason = (
             "eligible",
-            "The backend verified the passing result and course completion.",
+            "The backend verified required lessons, exercises, MCQ and practical passing results.",
         )
         if issue_if_eligible:
+            # Reuse an existing active certificate rather than issuing duplicates.
             certificate = Certificate(
                 public_id=secrets.token_hex(8).upper(),
                 user_id=user.id,
@@ -2028,7 +2255,7 @@ def _certificate_eligibility_payload(
             db.flush()
             status_text, reason = (
                 "issued",
-                "A certificate was issued after backend-verified exam pass and course completion.",
+                "A certificate was issued after backend verification of both exam stages.",
             )
     return {
         "course_slug": course.slug,
@@ -2036,15 +2263,14 @@ def _certificate_eligibility_payload(
         "status": status_text,
         "eligible": status_text in {"eligible", "issued"},
         "exam_passed": attempt_passed,
+        "practical_exam_available": practical_available,
+        "practical_exam_passed": practical_passed,
         "score_percent": (
             (attempt.answers_summary or {}).get("score_percent") if attempt else None
         ),
-        "completed_lessons": completed_lessons,
-        "total_lessons": total_lessons,
-        "capstone_review_required": capstone_required,
-        "capstone_review_status": (
-            "pending_not_implemented" if capstone_required else "not_required"
-        ),
+        **progress,
+        "project_review_required": False,
+        "message": reason,
         "certificate": (
             {
                 "public_id": certificate.public_id,
@@ -2053,7 +2279,6 @@ def _certificate_eligibility_payload(
             if certificate
             else None
         ),
-        "message": reason,
     }
 
 
@@ -2061,17 +2286,39 @@ def _certificate_eligibility_payload(
 def get_course_exam_info(
     course_slug: str, db: Session = Depends(get_db)
 ) -> dict[str, Any]:
-    """Return safe exam metadata; no answer keys or explanations are included."""
+    """Return safe metadata only when the bank can supply 80 distinct, valid MCQs."""
     _course, course_dir, blueprint = _load_exam_blueprint(course_slug, db)
-    pool = _load_exam_question_pool(course_dir, blueprint)
-    available_lessons = len(
-        {item["lesson_number"] for item in pool if item["lesson_number"] > 0}
-    )
-    if len(pool) < 1 or available_lessons < 1:
+    readiness = _exam_bank_readiness(course_dir, blueprint)
+    if not readiness["ready"]:
         raise HTTPException(
-            status_code=409, detail="The exam has no published question bank yet."
+            status_code=409,
+            detail={
+                "code": "exam_content_not_ready",
+                "message": (
+                    f"This MCQ exam needs 80 valid, distinct questions. "
+                    f"The current bank has {readiness['distinct_prompt_count']} distinct prompts."
+                ),
+                **readiness,
+            },
         )
+    try:
+        _load_practical_exam(course_dir)
+    except HTTPException as exc:
+        detail = exc.detail
+        message = (
+            str(detail.get("message") or "The mandatory practical exam is unavailable.")
+            if isinstance(detail, dict)
+            else str(detail or "The mandatory practical exam is unavailable.")
+        )
+        raise HTTPException(
+            status_code=409,
+            detail={
+                "code": "practical_exam_unavailable",
+                "message": f"The certification exam cannot start until its mandatory practical stage is published. {message}",
+            },
+        ) from exc
     settings_doc = blueprint.get("recommended_settings") or {}
+    practical_ready = True
     return {
         "course_slug": course_slug,
         "title": str(
@@ -2079,8 +2326,16 @@ def get_course_exam_info(
         ),
         "duration_minutes": int(settings_doc.get("duration_minutes") or 60),
         "pass_percent": int(settings_doc.get("suggested_pass_percent") or 70),
-        "question_count": min(20, available_lessons),
-        "question_bank_count": len(pool),
+        "question_count": 80,
+        "question_bank_count": readiness["valid_question_count"],
+        "distinct_question_count": readiness["distinct_prompt_count"],
+        "required_question_count": 80,
+        "practical_exam_available": practical_ready,
+        "practical_exam_message": (
+            "A published practical assessment is available after passing the MCQ stage."
+            if practical_ready
+            else "The practical certification stage has not been published for this course yet; passing the MCQ alone cannot issue a certificate."
+        ),
         "status": (
             "preview"
             if draft_course_preview_enabled() and blueprint.get("status") != "published"
@@ -2093,32 +2348,62 @@ def get_course_exam_info(
 def start_course_exam(
     course_slug: str, user: User = Depends(require_user), db: Session = Depends(get_db)
 ) -> dict[str, Any]:
-    """Create a private exam attempt and return only prompts/options."""
+    """Create a private 80-question attempt after server-verified prerequisites."""
     course, course_dir, blueprint = _load_exam_blueprint(course_slug, db)
+    progress = _require_course_prerequisites(db, user, course)
     pool = _load_exam_question_pool(course_dir, blueprint)
-    picked = _choose_exam_questions(pool, blueprint, count=20)
-    if not picked:
+    readiness = _exam_bank_readiness_from_pool(pool)
+    if not readiness["ready"]:
         raise HTTPException(
-            status_code=409, detail="The exam has no published question bank yet."
+            status_code=409,
+            detail={
+                "code": "exam_content_not_ready",
+                "message": (
+                    f"This MCQ exam needs 80 valid, distinct questions. "
+                    f"The current bank has {readiness['distinct_prompt_count']} distinct prompts."
+                ),
+                **readiness,
+            },
         )
+    try:
+        _load_practical_exam(course_dir)
+    except HTTPException as exc:
+        detail = exc.detail
+        message = (
+            str(detail.get("message") or "The mandatory practical exam is unavailable.")
+            if isinstance(detail, dict)
+            else str(detail or "The mandatory practical exam is unavailable.")
+        )
+        raise HTTPException(
+            status_code=409,
+            detail={"code": "practical_exam_unavailable",
+                    "message": f"The certification exam cannot start until its mandatory practical stage is published. {message}"},
+        ) from exc
+    picked = _choose_exam_questions(pool, blueprint, count=80)
+    if len(picked) != 80 or len({q["id"] for q in picked}) != 80:
+        raise HTTPException(status_code=409, detail="The question bank could not supply 80 distinct exam questions.")
     recommended = blueprint.get("recommended_settings") or {}
-    stored_questions = [
-        {
-            key: item[key]
-            for key in (
-                "id",
-                "lesson_id",
-                "lesson_slug",
-                "lesson_number",
-                "topic",
-                "prompt",
-                "options",
-                "answer_key",
-                "explanation",
-            )
-        }
-        for item in picked
-    ]
+    stored_questions = []
+    rng = secrets.SystemRandom()
+    for item in picked:
+        options = list(item["options"])
+        rng.shuffle(options)
+        stored_questions.append(
+            {
+                key: item[key]
+                for key in (
+                    "id",
+                    "lesson_id",
+                    "lesson_slug",
+                    "lesson_number",
+                    "topic",
+                    "prompt",
+                    "answer_key",
+                    "explanation",
+                )
+            }
+            | {"options": options}
+        )
     attempt = ExamAttempt(
         user_id=user.id,
         course_id=course.id,
@@ -2132,7 +2417,7 @@ def start_course_exam(
             ),
             "pass_percent": int(recommended.get("suggested_pass_percent") or 70),
             "duration_minutes": int(recommended.get("duration_minutes") or 60),
-            "question_count": len(stored_questions),
+            "question_count": 80,
             "questions": stored_questions,
         },
     )
@@ -2144,7 +2429,7 @@ def start_course_exam(
         "title": attempt.answers_summary["exam_title"],
         "duration_minutes": attempt.answers_summary["duration_minutes"],
         "pass_percent": attempt.answers_summary["pass_percent"],
-        "question_count": len(stored_questions),
+        "question_count": 80,
         "questions": [
             {key: q[key] for key in ("id", "lesson_slug", "topic", "prompt", "options")}
             for q in stored_questions
@@ -2173,6 +2458,19 @@ def get_my_exam_attempt(
 ) -> dict[str, Any]:
     attempt = _find_owned_exam_attempt(attempt_id, user, db)
     summary = attempt.answers_summary or {}
+    if not attempt.submitted_at:
+        course = db.get(Course, attempt.course_id)
+        if course is None:
+            raise HTTPException(status_code=404, detail="Course was not found.")
+        _require_course_prerequisites(db, user, course)
+        _same_course, course_dir, blueprint = _load_exam_blueprint(course.slug, db)
+        readiness = _exam_bank_readiness(course_dir, blueprint)
+        if not readiness["ready"]:
+            raise HTTPException(
+                status_code=409,
+                detail={"code": "exam_content_not_ready", "message": "This exam's published question bank is no longer ready; restart after the course team restores it."},
+            )
+        _load_practical_exam(course_dir)
     if attempt.submitted_at:
         return {
             "attempt_id": str(attempt.id),
@@ -2212,6 +2510,18 @@ def submit_course_exam(
         raise HTTPException(
             status_code=409, detail="This exam attempt has already been submitted."
         )
+    course = db.get(Course, attempt.course_id)
+    if course is None:
+        raise HTTPException(status_code=404, detail="Course was not found.")
+    _require_course_prerequisites(db, user, course)
+    _same_course, course_dir, current_blueprint = _load_exam_blueprint(course.slug, db)
+    current_readiness = _exam_bank_readiness(course_dir, current_blueprint)
+    if not current_readiness["ready"]:
+        raise HTTPException(
+            status_code=409,
+            detail={"code": "exam_content_not_ready", "message": "The published question bank is no longer ready; this attempt cannot be graded."},
+        )
+    _load_practical_exam(course_dir)
     summary = attempt.answers_summary or {}
     questions = summary.get("questions")
     answers = payload.get("answers") if isinstance(payload, dict) else None
@@ -2272,12 +2582,8 @@ def submit_course_exam(
     }
     db.commit()
     db.refresh(attempt)
-    course = db.get(Course, attempt.course_id)
-    if course is None:
-        raise HTTPException(status_code=404, detail="Course was not found.")
-    _same_course, _course_dir, blueprint = _load_exam_blueprint(course.slug, db)
     eligibility = _certificate_eligibility_payload(
-        db, user, course, blueprint, attempt, issue_if_eligible=passed
+        db, user, course, current_blueprint, attempt, issue_if_eligible=passed
     )
     db.commit()
     if eligibility.get("certificate"):
@@ -2293,6 +2599,279 @@ def submit_course_exam(
         "passed": passed,
         "results": results,
         "certificate": eligibility.get("certificate"),
+        "certificate_status": eligibility.get("status"),
+        "certificate_message": eligibility.get("message"),
+    }
+
+
+def _require_mcq_pass_for_practical(
+    db: Session, user: User, course: Course
+) -> ExamAttempt:
+    _require_course_prerequisites(db, user, course)
+    attempt = _latest_passed_mcq_attempt(db, user, course)
+    if attempt is None:
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "code": "mcq_pass_required",
+                "message": "Pass the 80-question MCQ exam before starting the practical assessment.",
+            },
+        )
+    return attempt
+
+
+def _public_practical_result(attempt: PracticalExamAttempt) -> dict[str, Any]:
+    summary = attempt.answers_summary or {}
+    return {
+        "attempt_id": str(attempt.id),
+        "status": "submitted" if attempt.submitted_at else "in_progress",
+        "score_percent": attempt.score if attempt.submitted_at else None,
+        "passed": attempt.passed if attempt.submitted_at else None,
+        "pass_percent": summary.get("pass_percent", 70),
+        "results": summary.get("results", []) if attempt.submitted_at else [],
+        "message": (
+            "Practical assessment passed."
+            if attempt.submitted_at and attempt.passed
+            else "Practical assessment submitted; review the result and retry if needed."
+            if attempt.submitted_at
+            else "Complete each practical task and submit your answers."
+        ),
+    }
+
+
+def _grade_practical_task(task: dict[str, Any], submitted: str) -> bool:
+    grader = task.get("grader") or {}
+    mode = grader.get("type")
+    case_sensitive = bool(grader.get("case_sensitive", False))
+
+    def normalize(value: Any) -> str:
+        text_value = " ".join(str(value or "").strip().split())
+        return text_value if case_sensitive else text_value.casefold()
+
+    if mode == "exact_text":
+        expected = grader.get("expected")
+        accepted = expected if isinstance(expected, list) else [expected]
+        return any(normalize(submitted) == normalize(item) for item in accepted if isinstance(item, str))
+    if mode == "contains_all":
+        required = grader.get("required_strings")
+        if not isinstance(required, list) or not all(isinstance(item, str) for item in required):
+            return False
+        actual = submitted if case_sensitive else submitted.casefold()
+        return all((item if case_sensitive else item.casefold()) in actual for item in required)
+    if mode == "json_equal":
+        try:
+            actual_json = json.loads(submitted)
+            expected = grader.get("expected")
+            expected_json = json.loads(expected) if isinstance(expected, str) else expected
+            return actual_json == expected_json
+        except (json.JSONDecodeError, TypeError, ValueError):
+            return False
+    return False
+
+
+@app.get("/api/courses/{course_slug}/practical-exam")
+def get_course_practical_exam(
+    course_slug: str, user: User = Depends(require_user), db: Session = Depends(get_db)
+) -> dict[str, Any]:
+    """Expose published practical tasks only after a learner passed the MCQ stage."""
+    course = get_course_visible_to_reader(db, course_slug)
+    mcq_attempt = _require_mcq_pass_for_practical(db, user, course)
+    _same_course, course_dir, _blueprint = _load_exam_blueprint(course_slug, db)
+    practical = _load_practical_exam(course_dir)
+    previous = _practical_attempt_for_mcq(db, user, course, mcq_attempt)
+    return {
+        "course_slug": course_slug,
+        "title": str(practical.get("title") or f"{course.title} Practical Assessment"),
+        "difficulty": str(practical.get("difficulty") or "intermediate"),
+        "pass_percent": int(practical.get("pass_percent") or 70),
+        "mcq_attempt_id": str(mcq_attempt.id),
+        "task_count": len(practical["tasks"]),
+        "tasks": [_practical_task_public(task) for task in practical["tasks"]],
+        "previous_attempt": _public_practical_result(previous) if previous else None,
+    }
+
+
+@app.post("/api/courses/{course_slug}/practical-exam/start", status_code=status.HTTP_201_CREATED)
+def start_course_practical_exam(
+    course_slug: str, user: User = Depends(require_user), db: Session = Depends(get_db)
+) -> dict[str, Any]:
+    """Create or resume an owned practical attempt linked to a passed MCQ attempt."""
+    course = get_course_visible_to_reader(db, course_slug)
+    mcq_attempt = _require_mcq_pass_for_practical(db, user, course)
+    _same_course, course_dir, _blueprint = _load_exam_blueprint(course_slug, db)
+    practical = _load_practical_exam(course_dir)
+    existing = db.scalar(
+        select(PracticalExamAttempt)
+        .where(
+            PracticalExamAttempt.user_id == user.id,
+            PracticalExamAttempt.course_id == course.id,
+            PracticalExamAttempt.mcq_attempt_id == mcq_attempt.id,
+            PracticalExamAttempt.submitted_at.is_(None),
+        )
+        .order_by(PracticalExamAttempt.started_at.desc())
+        .limit(1)
+    )
+    if existing is not None:
+        attempt = existing
+    else:
+        task_definitions = [
+            {
+                **_practical_task_public(task),
+                "grader": task["grader"],
+                "feedback_correct": str(task.get("feedback_correct") or "Accepted."),
+                "feedback_incorrect": str(task.get("feedback_incorrect") or "Review the task requirements and try again."),
+            }
+            for task in practical["tasks"]
+        ]
+        attempt = PracticalExamAttempt(
+            user_id=user.id,
+            course_id=course.id,
+            mcq_attempt_id=mcq_attempt.id,
+            score=0,
+            passed=False,
+            answers_summary={
+                "status": "in_progress",
+                "title": str(practical.get("title") or f"{course.title} Practical Assessment"),
+                "pass_percent": int(practical.get("pass_percent") or 70),
+                "tasks": task_definitions,
+            },
+        )
+        db.add(attempt)
+        db.commit()
+        db.refresh(attempt)
+    summary = attempt.answers_summary or {}
+    return {
+        **_public_practical_result(attempt),
+        "title": summary.get("title") or "Practical Assessment",
+        "tasks": [
+            {key: task[key] for key in ("id", "title", "prompt", "submission_type", "starter", "rubric", "points")}
+            for task in summary.get("tasks", []) if isinstance(task, dict)
+        ],
+    }
+
+
+@app.get("/api/me/practical-exams/{attempt_id}")
+def get_my_practical_exam_attempt(
+    attempt_id: str, user: User = Depends(require_user), db: Session = Depends(get_db)
+) -> dict[str, Any]:
+    try:
+        parsed_id = UUID(attempt_id)
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=404, detail="Practical attempt was not found.")
+    attempt = db.scalar(
+        select(PracticalExamAttempt).where(
+            PracticalExamAttempt.id == parsed_id,
+            PracticalExamAttempt.user_id == user.id,
+        )
+    )
+    if attempt is None:
+        raise HTTPException(status_code=404, detail="Practical attempt was not found.")
+    result = _public_practical_result(attempt)
+    if not attempt.submitted_at:
+        summary = attempt.answers_summary or {}
+        result.update({
+            "title": summary.get("title") or "Practical Assessment",
+            "tasks": [
+                {key: task[key] for key in ("id", "title", "prompt", "submission_type", "starter", "rubric", "points")}
+                for task in summary.get("tasks", []) if isinstance(task, dict)
+            ],
+        })
+    return result
+
+
+@app.post("/api/me/practical-exams/{attempt_id}/submit")
+def submit_course_practical_exam(
+    attempt_id: str,
+    payload: dict[str, Any],
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    try:
+        parsed_id = UUID(attempt_id)
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=404, detail="Practical attempt was not found.")
+    attempt = db.scalar(
+        select(PracticalExamAttempt).where(
+            PracticalExamAttempt.id == parsed_id,
+            PracticalExamAttempt.user_id == user.id,
+        )
+    )
+    if attempt is None:
+        raise HTTPException(status_code=404, detail="Practical attempt was not found.")
+    if attempt.submitted_at:
+        raise HTTPException(status_code=409, detail="This practical attempt has already been submitted.")
+
+    course = db.get(Course, attempt.course_id)
+    mcq_attempt = db.get(ExamAttempt, attempt.mcq_attempt_id)
+    if (
+        course is None or mcq_attempt is None
+        or mcq_attempt.user_id != user.id
+        or mcq_attempt.course_id != course.id
+        or mcq_attempt.submitted_at is None
+        or not mcq_attempt.passed
+    ):
+        raise HTTPException(status_code=403, detail="A passed MCQ attempt for this course is required.")
+    _require_course_prerequisites(db, user, course)
+    _same_course, course_dir, blueprint = _load_exam_blueprint(course.slug, db)
+    practical = _load_practical_exam(course_dir)
+    summary = attempt.answers_summary or {}
+    tasks = summary.get("tasks")
+    answers = payload.get("answers") if isinstance(payload, dict) else None
+    if not isinstance(tasks, list) or not tasks or not isinstance(answers, dict):
+        raise HTTPException(status_code=422, detail="Submit an answers object with one answer per practical task.")
+    task_by_id = {str(task.get("id")): task for task in tasks if isinstance(task, dict)}
+    if set(answers) != set(task_by_id):
+        raise HTTPException(status_code=422, detail="Answer every practical task exactly once.")
+    correct_points = 0
+    maximum_points = 0
+    results = []
+    for task_id, task in task_by_id.items():
+        submitted = answers.get(task_id)
+        if not isinstance(submitted, str) or len(submitted) > 50_000:
+            raise HTTPException(status_code=422, detail="Each practical answer must be text under 50,000 characters.")
+        points = int(task.get("points") or 100)
+        maximum_points += points
+        correct = _grade_practical_task(task, submitted)
+        earned = points if correct else 0
+        correct_points += earned
+        results.append({
+            "task_id": task_id,
+            "title": str(task.get("title") or "Practical task"),
+            "is_correct": correct,
+            "points_earned": earned,
+            "points_possible": points,
+            "feedback": task.get("feedback_correct") if correct else task.get("feedback_incorrect"),
+        })
+    score_percent = round(correct_points * 100 / max(1, maximum_points))
+    pass_percent = int(summary.get("pass_percent") or practical.get("pass_percent") or 70)
+    passed = score_percent >= pass_percent
+    attempt.score = score_percent
+    attempt.passed = passed
+    attempt.submitted_at = utc_now()
+    attempt.answers_summary = {
+        **summary,
+        "status": "submitted",
+        "submitted_answers": answers,
+        "score_percent": score_percent,
+        "pass_percent": pass_percent,
+        "results": results,
+    }
+    db.commit()
+    db.refresh(attempt)
+    eligibility = _certificate_eligibility_payload(
+        db, user, course, blueprint, mcq_attempt, issue_if_eligible=passed
+    )
+    db.commit()
+    certificate = eligibility.get("certificate")
+    return {
+        "attempt_id": str(attempt.id),
+        "status": "submitted",
+        "score_percent": score_percent,
+        "pass_percent": pass_percent,
+        "passed": passed,
+        "task_count": len(tasks),
+        "results": results,
+        "certificate": certificate,
         "certificate_status": eligibility.get("status"),
         "certificate_message": eligibility.get("message"),
     }
@@ -3850,6 +4429,48 @@ def grade_exercise(exercise: Exercise, body: ExerciseSubmission) -> bool:
     )
 
 
+@app.get("/api/me/courses/{course_slug}/exercise-progress")
+def list_my_course_exercise_progress(
+    course_slug: str,
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Return authoritative completion for only the authenticated learner's published exercises."""
+    course = get_course_visible_to_reader(db, course_slug)
+    rows = db.execute(
+        select(Exercise, Lesson.slug, ExerciseProgress.completed, ExerciseProgress.attempts,
+               ExerciseProgress.completed_at)
+        .join(Lesson, Exercise.lesson_id == Lesson.id)
+        .join(Module, Lesson.module_id == Module.id)
+        .join(Course, Module.course_id == Course.id)
+        .outerjoin(
+            ExerciseProgress,
+            (ExerciseProgress.exercise_id == Exercise.id)
+            & (ExerciseProgress.user_id == user.id),
+        )
+        .where(
+            Course.id == course.id,
+            Course.published.is_(True),
+            Lesson.is_published.is_(True),
+            Exercise.is_published.is_(True),
+        )
+        .order_by(Module.sort_order.asc(), Lesson.sort_order.asc(), Exercise.sequence.asc())
+    ).all()
+    return {
+        "course_slug": course.slug,
+        "items": [
+            {
+                "exercise_slug": exercise.slug,
+                "lesson_slug": lesson_slug,
+                "completed": bool(completed),
+                "attempts": int(attempts or 0),
+                "completed_at": completed_at.isoformat() if completed_at else None,
+            }
+            for exercise, lesson_slug, completed, attempts, completed_at in rows
+        ],
+    }
+
+
 @app.get("/api/exercises/featured")
 def list_featured_exercises(
     limit: int = 12, db: Session = Depends(get_db)
@@ -4237,6 +4858,106 @@ def list_certificates(
             for certificate, course_slug, course_title in rows
         ]
     }
+
+
+@app.get("/api/me/certificate-eligibility")
+def list_my_certificate_eligibility(
+    user: User = Depends(require_user), db: Session = Depends(get_db)
+) -> dict[str, Any]:
+    """Return per-course completion and certification readiness for the learner dashboard."""
+    items: list[dict[str, Any]] = []
+    tracks = {str(item.get("slug") or ""): item for item in PUBLIC_COURSES if item.get("slug")}
+    for slug, track in tracks.items():
+        entry: dict[str, Any] = {
+            "course_slug": slug,
+            "course_title": str(track.get("title") or slug.title()),
+            "available": False,
+            "start_exam_available": False,
+            "status": "course_not_published",
+            "total_lessons": None,
+            "completed_lessons": None,
+            "missing_lessons": None,
+            "lessons_complete": False,
+            "total_exercises": None,
+            "completed_exercises": None,
+            "missing_exercises": None,
+            "exercises_complete": False,
+            "message": "The course content has not been published to the learner catalog.",
+        }
+        try:
+            course, course_dir, blueprint = _load_exam_blueprint(slug, db)
+            progress = _course_progress_requirements(db, user, course)
+            readiness = _exam_bank_readiness(course_dir, blueprint)
+            practical_ready = False
+            try:
+                _load_practical_exam(course_dir)
+                practical_ready = True
+            except HTTPException:
+                practical_ready = False
+            latest_attempt = db.scalar(
+                select(ExamAttempt)
+                .where(
+                    ExamAttempt.user_id == user.id,
+                    ExamAttempt.course_id == course.id,
+                    ExamAttempt.submitted_at.is_not(None),
+                )
+                .order_by(ExamAttempt.submitted_at.desc())
+                .limit(1)
+            )
+            certificate = db.scalar(
+                select(Certificate).where(
+                    Certificate.user_id == user.id,
+                    Certificate.course_id == course.id,
+                    Certificate.revoked_at.is_(None),
+                ).order_by(Certificate.issued_at.desc()).limit(1)
+            )
+            entry.update(progress)
+            entry.update({
+                "available": bool(readiness["ready"] and practical_ready),
+                "mcq_ready": bool(readiness["ready"]),
+                "valid_question_count": readiness["valid_question_count"],
+                "distinct_question_count": readiness["distinct_prompt_count"],
+                "required_question_count": 80,
+                "practical_exam_available": practical_ready,
+                "start_exam_available": bool(
+                    progress["prerequisites_complete"] and readiness["ready"] and practical_ready
+                ),
+                "certificate_issued": certificate is not None,
+                "status": "issued" if certificate else (
+                    "prerequisites_incomplete" if not progress["prerequisites_complete"] else
+                    "question_bank_incomplete" if not readiness["ready"] else
+                    "practical_exam_unavailable" if not practical_ready else
+                    "exam_required" if not latest_attempt else
+                    "exam_passed" if latest_attempt.passed else "exam_not_passed"
+                ),
+                "message": (
+                    "Certificate issued." if certificate else
+                    "Complete all required lessons and exercises before starting the exam." if not progress["prerequisites_complete"] else
+                    f"The MCQ bank needs 80 distinct valid questions; {readiness['distinct_prompt_count']} are available." if not readiness["ready"] else
+                    "The practical certification stage has not been published." if not practical_ready else
+                    "Start the certification exam." if latest_attempt is None else
+                    "The latest MCQ attempt passed." if latest_attempt.passed else
+                    "The latest MCQ attempt did not pass; review and retry."
+                ),
+            })
+            if latest_attempt is not None:
+                detailed = _certificate_eligibility_payload(
+                    db, user, course, blueprint, latest_attempt, issue_if_eligible=False
+                )
+                entry["certificate_status"] = detailed["status"]
+                entry["certificate_message"] = detailed["message"]
+        except HTTPException as exc:
+            detail = exc.detail
+            message = (
+                str(detail.get("message") or "The certification track is not ready.")
+                if isinstance(detail, dict)
+                else str(detail or "The certification track is not ready.")
+            )
+            entry["message"] = message
+            if exc.status_code == 500:
+                entry["status"] = "configuration_error"
+        items.append(entry)
+    return {"items": items}
 
 
 @app.get("/api/me/certificate-eligibility/{course_slug}")

@@ -55,26 +55,37 @@ def write_course(root: Path, slug: str, capstone: bool) -> None:
     questions_dir = exam_dir / "question-files"
     questions_dir.mkdir(parents=True, exist_ok=True)
     question_files = []
-    for number in range(1, 4):
-        relative = f"question-files/lesson-{number:03d}-questions.json"
+    for file_number in range(1, 5):
+        relative = f"question-files/lesson-{file_number:03d}-questions.json"
         question_files.append(relative)
+        rows = []
+        for local_index in range(1, 21):
+            number = (file_number - 1) * 20 + local_index
+            correct = f"{slug.upper()} correct answer {number}"
+            rows.append({
+                "id": f"{slug}-q-{number:03d}",
+                "type": "single_choice",
+                "prompt": f"{slug.upper()} test question {number}: which choice is correct?",
+                "options": [
+                    correct,
+                    f"{slug.upper()} distractor A {number}",
+                    f"{slug.upper()} distractor B {number}",
+                    f"{slug.upper()} distractor C {number}",
+                ],
+                "answer_key": correct,
+                "explanation": f"The test explanation for question {number}.",
+                "lesson_id": f"{slug}-lesson-{file_number:03d}",
+                "lesson_slug": f"lesson-{file_number:03d}",
+            })
         question_set = {
-            "id": f"{slug}-lesson-{number:03d}",
-            "lesson_id": f"{slug}-lesson-{number:03d}",
-            "lesson_slug": f"lesson-{number:03d}",
+            "id": f"{slug}-lesson-{file_number:03d}",
+            "lesson_id": f"{slug}-lesson-{file_number:03d}",
+            "lesson_slug": f"lesson-{file_number:03d}",
+            "title": f"{slug.upper()} question set {file_number}",
             "status": "published",
-            "questions": [
-                {
-                    "id": f"{slug}-q-{number:03d}",
-                    "type": "single_choice",
-                    "prompt": f"Question for lesson {number}?",
-                    "options": [f"Correct {number}", f"Wrong {number}"],
-                    "answer_key": f"Correct {number}",
-                    "explanation": f"The test explanation for lesson {number}.",
-                }
-            ],
+            "questions": rows,
         }
-        (questions_dir / f"lesson-{number:03d}-questions.json").write_text(
+        (questions_dir / f"lesson-{file_number:03d}-questions.json").write_text(
             json.dumps(question_set), encoding="utf-8"
         )
     blueprint = {
@@ -89,17 +100,29 @@ def write_course(root: Path, slug: str, capstone: bool) -> None:
         ),
         "recommended_settings": {"duration_minutes": 30, "suggested_pass_percent": 70},
         "topic_distribution": [
-            {
-                "topic": "Test fundamentals",
-                "lesson_range": [1, 3],
-                "weight_percent": 100,
-            }
+            {"topic": "Test fundamentals", "lesson_range": [1, 4], "weight_percent": 100}
         ],
     }
     exam_dir.mkdir(parents=True, exist_ok=True)
-    (exam_dir / "exam-blueprint.json").write_text(
-        json.dumps(blueprint), encoding="utf-8"
-    )
+    (exam_dir / "exam-blueprint.json").write_text(json.dumps(blueprint), encoding="utf-8")
+    practical = {
+        "id": f"{slug}-practical",
+        "title": f"{slug.upper()} Intermediate Practical Assessment",
+        "status": "published",
+        "difficulty": "intermediate",
+        "pass_percent": 70,
+        "tasks": [{
+            "id": "task-safe-response",
+            "title": "Validate the expected response",
+            "prompt": "Enter the exact course-specific validation token shown in this test fixture.",
+            "submission_type": "text",
+            "starter": "",
+            "rubric": ["Return the expected token exactly."],
+            "points": 100,
+            "grader": {"type": "exact_text", "expected": f"{slug}_safe_response"},
+        }],
+    }
+    (exam_dir / "practical-exam.json").write_text(json.dumps(practical), encoding="utf-8")
     manifest = {
         "course": {
             "slug": slug,
@@ -107,12 +130,11 @@ def write_course(root: Path, slug: str, capstone: bool) -> None:
             "description": "temporary test course",
         },
         "status": "published",
-        "assessment_files": ["exams/exam-blueprint.json"],
+        "assessment_files": ["exams/exam-blueprint.json", "exams/practical-exam.json"],
         "module_files": [],
         "project_files": [],
     }
     (course_dir / "course.json").write_text(json.dumps(manifest), encoding="utf-8")
-
 
 def make_user(db, suffix: str) -> User:
     user = User(
@@ -144,13 +166,25 @@ def set_cookie(client: TestClient, user: User) -> None:
     client.headers.update({"origin": "http://localhost:5173", "x-csrf-token": csrf_value})
 
 
-def answer_map(questions: list[dict], all_correct: bool = True) -> dict[str, str]:
+def answer_map(questions: list[dict], attempt_id: str, all_correct: bool = True) -> dict[str, str]:
+    """Read private answer keys only in the isolated test DB to test server grading."""
+    from uuid import UUID
+    with SessionLocal() as db:
+        attempt = db.get(ExamAttempt, UUID(attempt_id))
+        if attempt is None:
+            raise AssertionError("test attempt was not persisted")
+        stored = {
+            item["id"]: item
+            for item in (attempt.answers_summary or {}).get("questions", [])
+            if isinstance(item, dict) and item.get("id")
+        }
     answers = {}
-    for q in questions:
-        options = q["options"]
-        answers[q["id"]] = options[0] if all_correct else options[-1]
+    for question in questions:
+        full = stored[question["id"]]
+        options = question["options"]
+        correct = full["answer_key"]
+        answers[question["id"]] = correct if all_correct else next(option for option in options if option != correct)
     return answers
-
 
 def main() -> None:
     Base.metadata.create_all(bind=engine)
@@ -224,6 +258,9 @@ def main() -> None:
                 "html_learner",
                 "css_learner",
                 "failed_learner",
+                "practical_failed_learner",
+                "blocked_learner",
+                "exercise_blocked_learner",
                 "other_learner",
                 "free",
                 "pro",
@@ -235,17 +272,16 @@ def main() -> None:
                 db.add(
                     Entitlement(user_id=users[plan].id, plan_id=plan, status="active")
                 )
-            # Eligible exam users have completed all required lessons. HTML still has a human-review gate.
-            for suffix, slug in (("html_learner", "html"), ("css_learner", "css")):
+            # Users intended to start CSS exams have completed its required lessons.
+            for suffix, slug in (
+                ("html_learner", "html"),
+                ("css_learner", "css"),
+                ("failed_learner", "css"),
+                ("practical_failed_learner", "css"),
+                ("exercise_blocked_learner", "css"),
+            ):
                 for lesson_id in lesson_ids[slug]:
-                    db.add(
-                        LessonProgress(
-                            user_id=users[suffix].id,
-                            lesson_id=lesson_id,
-                            completed=True,
-                            time_spent_seconds=1,
-                        )
-                    )
+                    db.add(LessonProgress(user_id=users[suffix].id, lesson_id=lesson_id, completed=True, time_spent_seconds=1))
             # An exercise used to prove server XP rules and protected grader config.
             exercise = Exercise(
                 lesson_id=lesson_ids["css"][0],
@@ -268,6 +304,10 @@ def main() -> None:
                 is_published=True,
             )
             db.add(exercise)
+            db.flush()
+            # The two learners who may take CSS exams have completed its only published exercise.
+            for suffix in ("css_learner", "failed_learner", "practical_failed_learner"):
+                db.add(ExerciseProgress(user_id=users[suffix].id, exercise_id=exercise.id, completed=True, attempts=1))
             db.commit()
         client = TestClient(main_module.app)
 
@@ -301,11 +341,52 @@ def main() -> None:
             "exam availability catalog never exposes private question-bank data",
         )
 
+        # The backend rejects direct API starts unless all published lessons and exercises are complete.
+        set_cookie(client, users["blocked_learner"])
+        blocked_start = client.post("/api/courses/html/exam/start", json={})
+        check(
+            blocked_start.status_code == 409
+            and blocked_start.json().get("detail", {}).get("code") == "exam_prerequisites_incomplete",
+            "exam start is blocked by server when required lesson progress is incomplete",
+        )
+        set_cookie(client, users["exercise_blocked_learner"])
+        exercise_blocked = client.post("/api/courses/css/exam/start", json={})
+        check(
+            exercise_blocked.status_code == 409
+            and "exercises" in exercise_blocked.json().get("detail", {}).get("missing_requirements", {}),
+            "exam start is blocked by server when required exercise progress is incomplete",
+        )
+        with SessionLocal() as db:
+            db.add(ExerciseProgress(user_id=users["exercise_blocked_learner"].id, exercise_id=exercise.id, completed=True, attempts=1))
+            db.commit()
+        changed_progress_start = client.post("/api/courses/css/exam/start", json={})
+        changed_progress_attempt = changed_progress_start.json()
+        check(changed_progress_start.status_code == 201, "eligible learner can start an MCQ attempt before progress changes")
+        changed_progress_answers = answer_map(changed_progress_attempt["questions"], changed_progress_attempt["attempt_id"])
+        with SessionLocal() as db:
+            progress_row = db.scalar(select(ExerciseProgress).where(
+                ExerciseProgress.user_id == users["exercise_blocked_learner"].id,
+                ExerciseProgress.exercise_id == exercise.id,
+            ))
+            db.delete(progress_row)
+            db.commit()
+        active_attempt_read = client.get(f"/api/me/exams/{changed_progress_attempt['attempt_id']}")
+        check(active_attempt_read.status_code == 409, "active exam attempt access rechecks current prerequisite progress")
+        changed_progress_submit = client.post(
+            f"/api/me/exams/{changed_progress_attempt['attempt_id']}/submit",
+            json={"answers": changed_progress_answers},
+        )
+        check(
+            changed_progress_submit.status_code == 409
+            and changed_progress_submit.json().get("detail", {}).get("code") == "exam_prerequisites_incomplete",
+            "MCQ submission rechecks course prerequisites on the server",
+        )
+
         # The HTML exam info and generated attempt must not disclose keys/explanations.
         set_cookie(client, users["html_learner"])
         info = client.get("/api/courses/html/exam")
         check(
-            info.status_code == 200 and info.json()["question_count"] == 3,
+            info.status_code == 200 and info.json()["question_count"] == 80,
             "published exam metadata is returned",
         )
         check(
@@ -315,7 +396,7 @@ def main() -> None:
         started = client.post("/api/courses/html/exam/start", json={})
         start_payload = started.json()
         check(
-            started.status_code == 201 and len(start_payload.get("questions", [])) == 3,
+            started.status_code == 201 and len(start_payload.get("questions", [])) == 80,
             "authenticated learner starts a server-stored exam attempt",
         )
         check(
@@ -323,6 +404,15 @@ def main() -> None:
             "exam attempt response excludes answer keys and explanations",
         )
         attempt_id = start_payload["attempt_id"]
+        from uuid import UUID
+        with SessionLocal() as db:
+            private_attempt = db.get(ExamAttempt, UUID(attempt_id))
+            private_questions = (private_attempt.answers_summary or {}).get("questions", [])
+            answer_positions = [q["options"].index(q["answer_key"]) for q in private_questions]
+            check(
+                len(private_questions) == 80 and len(set(answer_positions)) >= 3,
+                "per-attempt option shuffle preserves answer identity and varies correct positions",
+            )
 
         # Ownership is enforced before the correct owner's attempt is submitted.
         set_cookie(client, users["other_learner"])
@@ -357,9 +447,10 @@ def main() -> None:
             unknown_id.status_code == 422,
             "exam rejects unknown question IDs and missing answers",
         )
+        html_answers = answer_map(start_payload["questions"], start_payload["attempt_id"])
         submitted = client.post(
             f"/api/me/exams/{attempt_id}/submit",
-            json={"answers": answer_map(start_payload["questions"])},
+            json={"answers": html_answers},
         )
         result = submitted.json()
         check(
@@ -369,18 +460,41 @@ def main() -> None:
             "exam is graded on the server and passing score is persisted",
         )
         check(
-            result["certificate_status"] == "pending_capstone_review"
+            result["certificate_status"] == "practical_exam_required"
             and result["certificate"] is None,
-            "HTML capstone human-review requirement blocks automatic certificate issuance",
+            "passing the MCQ stage unlocks the practical instead of issuing a certificate or requiring project review",
         )
         repeated = client.post(
             f"/api/me/exams/{attempt_id}/submit",
-            json={"answers": answer_map(start_payload["questions"])},
+            json={"answers": html_answers},
         )
         check(
             repeated.status_code == 409,
             "repeated exam submissions cannot re-grade the same attempt",
         )
+        # Passing MCQ unlocks the mandatory practical, and only a successful practical can issue a certificate.
+        html_practical_start = client.post("/api/courses/html/practical-exam/start", json={})
+        html_practical_payload = html_practical_start.json()
+        check(
+            html_practical_start.status_code == 201 and len(html_practical_payload.get("tasks", [])) == 1,
+            "passed MCQ attempt unlocks the practical assessment",
+        )
+        html_practical_submit = client.post(
+            f"/api/me/practical-exams/{html_practical_payload['attempt_id']}/submit",
+            json={"answers": {"task-safe-response": "html_safe_response"}},
+        )
+        html_practical_result = html_practical_submit.json()
+        check(
+            html_practical_submit.status_code == 200 and html_practical_result["passed"] is True
+            and html_practical_result["certificate"] is not None,
+            "certificate is issued only after all prerequisites, MCQ pass, and practical pass",
+        )
+        html_practical_repeat = client.post(
+            f"/api/me/practical-exams/{html_practical_payload['attempt_id']}/submit",
+            json={"answers": {"task-safe-response": "html_safe_response"}},
+        )
+        check(html_practical_repeat.status_code == 409, "replayed practical submission cannot create another certificate")
+
         completed_attempt = client.get(f"/api/me/exams/{attempt_id}")
         check(
             completed_attempt.status_code == 200
@@ -394,17 +508,29 @@ def main() -> None:
         css_started = client.post("/api/courses/css/exam/start", json={}).json()
         css_result_response = client.post(
             f"/api/me/exams/{css_started['attempt_id']}/submit",
-            json={"answers": answer_map(css_started["questions"])},
+            json={"answers": answer_map(css_started["questions"], css_started["attempt_id"])},
         )
         css_result = css_result_response.json()
         check(
             css_result_response.status_code == 200
-            and css_result["certificate_status"] == "issued"
-            and css_result["certificate"],
-            "eligible course issues a certificate only after server-verified pass and lesson completion",
+            and css_result["certificate_status"] == "practical_exam_required"
+            and css_result["certificate"] is None,
+            "passing CSS MCQ does not issue a certificate without a practical pass",
+        )
+        css_practical_started = client.post("/api/courses/css/practical-exam/start", json={})
+        css_practical = css_practical_started.json()
+        css_practical_result_response = client.post(
+            f"/api/me/practical-exams/{css_practical['attempt_id']}/submit",
+            json={"answers": {"task-safe-response": "css_safe_response"}},
+        )
+        css_practical_result = css_practical_result_response.json()
+        check(
+            css_practical_started.status_code == 201 and css_practical_result_response.status_code == 200
+            and css_practical_result["passed"] is True and css_practical_result["certificate"] is not None,
+            "CSS certificate is issued after both exam stages pass",
         )
         verify = client.get(
-            f"/api/certificates/verify/{css_result['certificate']['public_id']}"
+            f"/api/certificates/verify/{css_practical_result['certificate']['public_id']}"
         )
         check(
             verify.status_code == 200 and verify.json().get("valid") is True,
@@ -414,7 +540,7 @@ def main() -> None:
         check(
             own_certs.status_code == 200
             and any(
-                item["public_id"] == css_result["certificate"]["public_id"]
+                item["public_id"] == css_practical_result["certificate"]["public_id"]
                 for item in own_certs.json().get("items", [])
             ),
             "learner certificate list reads persisted backend-issued credentials",
@@ -425,7 +551,7 @@ def main() -> None:
         failed_start = client.post("/api/courses/css/exam/start", json={}).json()
         failed_response = client.post(
             f"/api/me/exams/{failed_start['attempt_id']}/submit",
-            json={"answers": answer_map(failed_start["questions"], all_correct=False)},
+            json={"answers": answer_map(failed_start["questions"], failed_start["attempt_id"], all_correct=False)},
         )
         failed = failed_response.json()
         check(
@@ -437,6 +563,31 @@ def main() -> None:
         check(
             failed["certificate_status"] == "exam_not_passed",
             "failed exam eligibility has truthful status",
+        )
+
+        # An MCQ pass followed by a failed practical still cannot issue a certificate.
+        set_cookie(client, users["practical_failed_learner"])
+        practical_failed_mcq = client.post("/api/courses/css/exam/start", json={}).json()
+        practical_failed_mcq_result = client.post(
+            f"/api/me/exams/{practical_failed_mcq['attempt_id']}/submit",
+            json={"answers": answer_map(practical_failed_mcq["questions"], practical_failed_mcq["attempt_id"])},
+        ).json()
+        practical_failed_start = client.post("/api/courses/css/practical-exam/start", json={}).json()
+        practical_failed_response = client.post(
+            f"/api/me/practical-exams/{practical_failed_start['attempt_id']}/submit",
+            json={"answers": {"task-safe-response": "not-the-expected-answer"}},
+        )
+        practical_failed = practical_failed_response.json()
+        check(
+            practical_failed_response.status_code == 200 and practical_failed["passed"] is False
+            and practical_failed["certificate"] is None,
+            "failed practical exam does not issue a certificate",
+        )
+        set_cookie(client, users["failed_learner"])
+        no_mcq_practical = client.get("/api/courses/css/practical-exam")
+        check(
+            no_mcq_practical.status_code == 403,
+            "practical assessment cannot be accessed without a passed MCQ attempt",
         )
 
         # XP is server-computed: Free/Pro get 20, Max/Full Access get 30; lesson/exercise duplicates get 0.
@@ -496,6 +647,22 @@ def main() -> None:
             "exercise listing never exposes grading keys or private solution content",
         )
 
+        # The exercise completion readback is server-persisted and scoped to the authenticated learner.
+        set_cookie(client, users["free"])
+        own_progress = client.get("/api/me/courses/css/exercise-progress")
+        check(
+            own_progress.status_code == 200
+            and any(item["exercise_slug"] == "test-exercise" and item["completed"] for item in own_progress.json().get("items", [])),
+            "successful exercise progress is visible from the server after submission",
+        )
+        set_cookie(client, users["other_learner"])
+        foreign_progress = client.get("/api/me/courses/css/exercise-progress")
+        check(
+            foreign_progress.status_code == 200
+            and all(not item["completed"] for item in foreign_progress.json().get("items", [])),
+            "exercise completion is isolated per learner",
+        )
+
         # Exam attempts alone do not create XP transactions.
         with SessionLocal() as db:
             html_xp = (
@@ -508,10 +675,10 @@ def main() -> None:
             )
             attempts = db.scalar(select(func.count(ExamAttempt.id))) or 0
             check(html_xp == 0, "exam submission by itself does not award activity XP")
-            check(attempts == 3, "attempt records persist once per started exam")
+            check(attempts == 5, "attempt records persist once per started MCQ exam, including a prerequisite-change attempt")
             check(
-                (db.scalar(select(func.count(Certificate.id))) or 0) == 1,
-                "only fully eligible non-capstone test learner receives a certificate",
+                (db.scalar(select(func.count(Certificate.id))) or 0) == 2,
+                "only learners who pass both exam stages receive certificates; project review is not a gate",
             )
     finally:
         try:

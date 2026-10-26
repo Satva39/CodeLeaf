@@ -25,8 +25,13 @@ async function requestJson(path, options = {}) {
   });
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) {
-    const error = new Error(payload.detail || "The exam request could not be completed.");
+    const detail = payload.detail;
+    const message = typeof detail === "string"
+      ? detail
+      : (detail?.message || "The exam request could not be completed.");
+    const error = new Error(message);
     error.status = response.status;
+    error.code = typeof detail === "object" ? detail?.code : undefined;
     throw error;
   }
   return payload;
@@ -111,7 +116,7 @@ export default function ExamPage() {
           <span className="exam-large-icon"><CourseIcon course={course} /></span>
           <div className="eyebrow">CODELEAF SKILLS ASSESSMENT</div>
           <h1>{info?.title || `${course.title} Skills Assessment`}</h1>
-          <p>This course-specific assessment draws questions from the published question bank. Answers are checked by the backend; opening an exam does not award XP or a certificate.</p>
+          <p>This course-specific certification stage contains 80 distinct MCQs drawn from the published question bank. Answers are checked by the backend. Passing the MCQ stage is followed by a mandatory practical assessment; the MCQ result alone never awards a certificate.</p>
           <div className="exam-start-stats">
             <span><ListChecks size={16} /> {info?.question_count || 0} questions</span>
             <span><Clock3 size={16} /> About {info?.duration_minutes || 60} minutes</span>
@@ -141,6 +146,19 @@ export default function ExamPage() {
             <div><strong>{result.certificate ? "Verified certificate issued" : passed ? "Exam passed — certificate status" : "Certificate not issued"}</strong><small>{result.certificate ? `Credential ID · ${result.certificate.public_id}` : result.certificate_message || "A passing exam alone does not guarantee certificate eligibility."}</small></div>
             <span className={`pill ${result.certificate ? "pill-mint" : "pill-neutral"}`}>{result.certificate_status || "not_issued"}</span>
           </div>
+          {passed && result.certificate_status === "practical_exam_required" && (
+            <div className="hero-actions">
+              <Link className="button button-primary" to={`/practical/${encodeURIComponent(examSlug)}`}>Take practical exam <ArrowRight size={15} /></Link>
+            </div>
+          )}
+          {passed && result.certificate_status === "practical_exam_not_passed" && (
+            <div className="hero-actions">
+              <Link className="button button-primary" to={`/practical/${encodeURIComponent(examSlug)}`}>Retry practical exam <ArrowRight size={15} /></Link>
+            </div>
+          )}
+          {passed && result.certificate_status === "practical_exam_unavailable" && (
+            <p className="collection-checked-note" role="status">{result.certificate_message || "The practical assessment is not published yet. The MCQ pass alone cannot issue a certificate."}</p>
+          )}
           <section className="exam-answer-review">
             <h2>Review your answers</h2>
             {(result.results || []).map((item, index) => <article className="exam-answer-review-item" key={item.question_id}><h3>{index + 1}. {item.prompt}</h3><p>{item.is_correct ? "Correct" : "Your answer"}: {item.selected_answer}</p>{!item.is_correct && <p><strong>Correct answer:</strong> {item.correct_answer}</p>}<p>{item.explanation}</p>{item.lesson_slug && <Link to={`/learn/${examSlug}/${item.lesson_slug}`}>Review related lesson</Link>}</article>)}

@@ -273,6 +273,33 @@ class ExamAttempt(Base):
     )
 
 
+class PracticalExamAttempt(Base):
+    """Server-owned practical assessment attempt linked to a passed MCQ attempt."""
+
+    __tablename__ = "practical_exam_attempts"
+    id: Mapped[object] = mapped_column(
+        Uuid(as_uuid=True), primary_key=True, default=uuid4
+    )
+    user_id: Mapped[object] = mapped_column(
+        Uuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), index=True
+    )
+    course_id: Mapped[object] = mapped_column(
+        Uuid(as_uuid=True), ForeignKey("courses.id", ondelete="CASCADE"), index=True
+    )
+    mcq_attempt_id: Mapped[object] = mapped_column(
+        Uuid(as_uuid=True), ForeignKey("exam_attempts.id", ondelete="CASCADE"), index=True
+    )
+    score: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    passed: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    answers_summary: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
+    started_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=now_utc, nullable=False
+    )
+    submitted_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+
+
 class Certificate(Base):
     __tablename__ = "certificates"
     id: Mapped[object] = mapped_column(
