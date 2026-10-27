@@ -341,6 +341,56 @@ def main() -> None:
             "exam availability catalog never exposes private question-bank data",
         )
 
+        # Learner progress must still be returned when an assessment stage is unavailable.
+        set_cookie(client, users["blocked_learner"])
+        blocked_progress_response = client.get("/api/me/certificate-eligibility")
+        blocked_progress = {
+            item["course_slug"]: item
+            for item in blocked_progress_response.json().get("items", [])
+        }
+        check(
+            blocked_progress_response.status_code == 200
+            and blocked_progress.get("html", {}).get("total_lessons") == 3
+            and blocked_progress.get("html", {}).get("lessons_complete") is False,
+            "certificate eligibility returns lesson progress for incomplete learners",
+        )
+        set_cookie(client, users["exercise_blocked_learner"])
+        exercise_progress_response = client.get("/api/me/certificate-eligibility")
+        exercise_progress = {
+            item["course_slug"]: item
+            for item in exercise_progress_response.json().get("items", [])
+        }
+        check(
+            exercise_progress_response.status_code == 200
+            and exercise_progress.get("css", {}).get("lessons_complete") is True
+            and exercise_progress.get("css", {}).get("exercises_complete") is False,
+            "certificate eligibility separately identifies incomplete exercises",
+        )
+
+        # Simulate a missing practical assessment: progress remains available and exam
+        # start stays blocked, rather than the frontend falling back to a generic roadmap.
+        practical_path = content_root / "html" / "exams" / "practical-exam.json"
+        practical_contents = practical_path.read_text(encoding="utf-8")
+        try:
+            practical_path.unlink()
+            set_cookie(client, users["html_learner"])
+            missing_practical_response = client.get("/api/me/certificate-eligibility")
+            missing_practical_items = {
+                item["course_slug"]: item
+                for item in missing_practical_response.json().get("items", [])
+            }
+            html_missing_practical = missing_practical_items.get("html", {})
+            check(
+                missing_practical_response.status_code == 200
+                and html_missing_practical.get("total_lessons") == 3
+                and html_missing_practical.get("lessons_complete") is True
+                and html_missing_practical.get("practical_exam_available") is False
+                and html_missing_practical.get("start_exam_available") is False,
+                "missing practical assessment does not hide progress and still blocks exam start",
+            )
+        finally:
+            practical_path.write_text(practical_contents, encoding="utf-8")
+
         # The backend rejects direct API starts unless all published lessons and exercises are complete.
         set_cookie(client, users["blocked_learner"])
         blocked_start = client.post("/api/courses/html/exam/start", json={})

@@ -25,6 +25,8 @@ export default function CertificatesPage() {
   const [examAvailability, setExamAvailability] = useState({});
   const [courseEligibility, setCourseEligibility] = useState({});
   const [courseEligibilityLoading, setCourseEligibilityLoading] = useState(false);
+  const [courseEligibilityError, setCourseEligibilityError] = useState("");
+  const [courseEligibilityReload, setCourseEligibilityReload] = useState(0);
   const [examCatalogLoading, setExamCatalogLoading] = useState(true);
   const [examCatalogError, setExamCatalogError] = useState("");
   const examCategories = ["All topics", ...COURSE_CATEGORIES];
@@ -92,33 +94,58 @@ export default function CertificatesPage() {
   useEffect(() => {
     if (signedIn !== true) {
       setCourseEligibility({});
+      setCourseEligibilityError("");
       setCourseEligibilityLoading(false);
       return undefined;
     }
     const controller = new AbortController();
     async function loadCourseEligibility() {
       setCourseEligibilityLoading(true);
+      setCourseEligibilityError("");
       try {
         const response = await apiFetch(`${API_BASE}/api/me/certificate-eligibility`, {
           credentials: "include",
           signal: controller.signal,
         });
         const payload = await response.json().catch(() => ({}));
-        if (!response.ok) throw new Error(payload.detail || "Course eligibility could not be checked.");
+        if (response.status === 401) {
+          setSignedIn(false);
+          setCourseEligibility({});
+          return;
+        }
+        if (!response.ok) {
+          const detail = payload.detail;
+          throw new Error(
+            typeof detail === "string"
+              ? detail
+              : detail?.message || "Course progress could not be loaded from the server.",
+          );
+        }
+        if (!Array.isArray(payload.items)) {
+          throw new Error("The server returned an unexpected course-progress response.");
+        }
         const next = {};
-        for (const item of Array.isArray(payload.items) ? payload.items : []) {
+        for (const item of payload.items) {
           if (item && typeof item.course_slug === "string") next[item.course_slug] = item;
         }
         setCourseEligibility(next);
+        if (Object.keys(next).length === 0) {
+          setCourseEligibilityError("The server did not return any course-progress records.");
+        }
       } catch (error) {
-        if (error.name !== "AbortError") setCourseEligibility({});
+        if (error.name !== "AbortError") {
+          setCourseEligibility({});
+          setCourseEligibilityError(
+            error.message || "Course progress could not be loaded. Please try again.",
+          );
+        }
       } finally {
         if (!controller.signal.aborted) setCourseEligibilityLoading(false);
       }
     }
     loadCourseEligibility();
     return () => controller.abort();
-  }, [signedIn]);
+  }, [signedIn, courseEligibilityReload]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -253,6 +280,14 @@ export default function CertificatesPage() {
               Live exam availability could not be checked: {examCatalogError}
             </p>
           )}
+          {signedIn === true && courseEligibilityError && (
+            <p className="collection-checked-note" role="status">
+              Course progress could not be checked: {courseEligibilityError}
+              {!courseEligibilityLoading && (
+                <> <button className="text-link" type="button" onClick={() => setCourseEligibilityReload((value) => value + 1)}>Retry progress check</button></>
+              )}
+            </p>
+          )}
           <div className="exam-list">
             {items.map((course) => {
               const exam = examAvailability[course.slug];
@@ -261,26 +296,30 @@ export default function CertificatesPage() {
               const hasLearnerEligibility = signedIn === true
                 && typeof learnerEligibility?.total_lessons === "number"
                 && typeof learnerEligibility?.total_exercises === "number";
-              const lessonsIncomplete = hasLearnerEligibility && learnerEligibility.lessons_complete === false;
-              const exercisesIncomplete = hasLearnerEligibility && learnerEligibility.exercises_complete === false;
+              const lessonsIncomplete = hasLearnerEligibility && learnerEligibility.lessons_complete !== true;
+              const exercisesIncomplete = hasLearnerEligibility && learnerEligibility.exercises_complete !== true;
               const prerequisitesComplete = hasLearnerEligibility && learnerEligibility.prerequisites_complete === true;
               const practicalPending = hasLearnerEligibility && ["practical_exam_required", "practical_exam_not_passed"].includes(learnerEligibility.certificate_status);
               const canStartExam = available && !practicalPending && (signedIn !== true || (hasLearnerEligibility && prerequisitesComplete && learnerEligibility.start_exam_available === true));
               const htmlCertificateIssued =
                 course.slug === "html" && eligibility?.status === "issued";
-              const statusLabel = courseEligibilityLoading
-                ? "Checking progress"
-                : hasLearnerEligibility && !prerequisitesComplete
-                  ? "Prerequisites incomplete"
-                  : examCatalogLoading
-                    ? "Checking publication"
-                    : !exam
-                      ? "Status unavailable"
-                      : available
-                        ? "Exam published"
-                        : exam.status === "configuration_error"
-                          ? "Needs attention"
-                          : "Publication required";
+              const statusLabel = signedIn === false
+                ? "Sign in to check progress"
+                : signedIn !== true || courseEligibilityLoading
+                  ? "Checking progress"
+                  : !hasLearnerEligibility
+                    ? "Progress unavailable"
+                    : !prerequisitesComplete
+                      ? "Prerequisites incomplete"
+                      : examCatalogLoading
+                        ? "Checking publication"
+                        : !exam
+                          ? "Status unavailable"
+                          : available
+                            ? "Exam published"
+                            : exam.status === "configuration_error"
+                              ? "Needs attention"
+                              : "Publication required";
               return (
                 <div className="exam-card panel" key={course.slug}>
                   <CourseIcon course={course} size="md" />
@@ -303,34 +342,47 @@ export default function CertificatesPage() {
                     </div>
                   </div>
                   <div className="exam-card-actions">
-                    {hasLearnerEligibility && lessonsIncomplete && (
-                      <Link className="button button-secondary exam-card-action" to={`/learn/${encodeURIComponent(course.slug)}`}>
-                        Complete all lessons <ArrowRight size={15} />
+                    {signedIn === false ? (
+                      <Link className="button button-secondary exam-card-action" to={`/login?next=${encodeURIComponent("/certificates")}`}>
+                        Sign in to check eligibility <ArrowRight size={15} />
                       </Link>
+                    ) : signedIn !== true || courseEligibilityLoading ? (
+                      <span className="pill pill-neutral" role="status">Checking progress…</span>
+                    ) : !hasLearnerEligibility ? (
+                      <>
+                        <span className="pill pill-neutral" role="status">Progress unavailable</span>
+                        <button className="button button-secondary exam-card-action" type="button" onClick={() => setCourseEligibilityReload((value) => value + 1)}>
+                          Retry <ArrowRight size={15} />
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        {lessonsIncomplete && (
+                          <Link className="button button-secondary exam-card-action" to={`/learn/${encodeURIComponent(course.slug)}`}>
+                            Complete all lessons <ArrowRight size={15} />
+                          </Link>
+                        )}
+                        {exercisesIncomplete && (
+                          <Link className="button button-secondary exam-card-action" to={`/practice/${encodeURIComponent(course.slug)}`}>
+                            Complete all exercises <ArrowRight size={15} />
+                          </Link>
+                        )}
+                        {practicalPending && prerequisitesComplete && available && (
+                          <Link className="button button-primary exam-card-action" to={`/practical/${encodeURIComponent(course.slug)}`}>
+                            {learnerEligibility.certificate_status === "practical_exam_not_passed" ? "Retry practical exam" : "Take practical exam"} <ArrowRight size={15} />
+                          </Link>
+                        )}
+                        {canStartExam && !htmlCertificateIssued && !lessonsIncomplete && !exercisesIncomplete ? (
+                          <Link className="button button-primary exam-card-action" to={`/exam/${encodeURIComponent(course.slug)}`}>
+                            Start exam <ArrowRight size={15} />
+                          </Link>
+                        ) : htmlCertificateIssued || learnerEligibility?.certificate_issued ? (
+                          <span className="pill pill-mint">Issued</span>
+                        ) : hasLearnerEligibility && prerequisitesComplete && !available ? (
+                          <span className="pill pill-neutral" title={exam?.message || "The required exam content is not yet published."}>Exam unavailable</span>
+                        ) : null}
+                      </>
                     )}
-                    {hasLearnerEligibility && exercisesIncomplete && (
-                      <Link className="button button-secondary exam-card-action" to={`/practice/${encodeURIComponent(course.slug)}`}>
-                        Complete all exercises <ArrowRight size={15} />
-                      </Link>
-                    )}
-                    {practicalPending && prerequisitesComplete && available && (
-                      <Link className="button button-primary exam-card-action" to={`/practical/${encodeURIComponent(course.slug)}`}>
-                        {learnerEligibility.certificate_status === "practical_exam_not_passed" ? "Retry practical exam" : "Take practical exam"} <ArrowRight size={15} />
-                      </Link>
-                    )}
-                    {canStartExam && !htmlCertificateIssued && !lessonsIncomplete && !exercisesIncomplete ? (
-                      <Link className="button button-primary exam-card-action" to={`/exam/${encodeURIComponent(course.slug)}`}>
-                        Start exam <ArrowRight size={15} />
-                      </Link>
-                    ) : htmlCertificateIssued || learnerEligibility?.certificate_issued ? (
-                      <span className="pill pill-mint">Issued</span>
-                    ) : hasLearnerEligibility && prerequisitesComplete && !available ? (
-                      <span className="pill pill-neutral">Exam unavailable</span>
-                    ) : !lessonsIncomplete && !exercisesIncomplete && !canStartExam ? (
-                      <span className="pill pill-neutral">
-                        {courseEligibilityLoading || examCatalogLoading ? "Checking…" : exam?.status === "configuration_error" ? "Needs attention" : exam ? "Roadmap" : "Unavailable"}
-                      </span>
-                    ) : null}
                   </div>
                 </div>
               );

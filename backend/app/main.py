@@ -4905,7 +4905,7 @@ def list_certificates(
 def list_my_certificate_eligibility(
     user: User = Depends(require_user), db: Session = Depends(get_db)
 ) -> dict[str, Any]:
-    """Return per-course completion and certification readiness for the learner dashboard."""
+    """Return learner progress even when that course's certification exam is not ready."""
     items: list[dict[str, Any]] = []
     tracks = {str(item.get("slug") or ""): item for item in PUBLIC_COURSES if item.get("slug")}
     for slug, track in tracks.items():
@@ -4925,9 +4925,29 @@ def list_my_certificate_eligibility(
             "exercises_complete": False,
             "message": "The course content has not been published to the learner catalog.",
         }
+
+        # Progress and exam publication are separate concerns. Calculate completion
+        # as soon as the course itself is available, so a missing/unpublished exam
+        # blueprint cannot hide the learner's lesson and exercise actions.
         try:
-            course, course_dir, blueprint = _load_exam_blueprint(slug, db)
+            course = get_course_visible_to_reader(db, slug)
             progress = _course_progress_requirements(db, user, course)
+            entry.update(progress)
+            entry["course_available"] = True
+        except HTTPException as exc:
+            detail = exc.detail
+            entry["message"] = (
+                str(detail.get("message") or "The course progress is unavailable.")
+                if isinstance(detail, dict)
+                else str(detail or "The course progress is unavailable.")
+            )
+            if exc.status_code == 500:
+                entry["status"] = "configuration_error"
+            items.append(entry)
+            continue
+
+        try:
+            _course, course_dir, blueprint = _load_exam_blueprint(slug, db)
             readiness = _exam_bank_readiness(course_dir, blueprint)
             practical_ready = False
             try:
@@ -4952,7 +4972,6 @@ def list_my_certificate_eligibility(
                     Certificate.revoked_at.is_(None),
                 ).order_by(Certificate.issued_at.desc()).limit(1)
             )
-            entry.update(progress)
             entry.update({
                 "available": bool(readiness["ready"] and practical_ready),
                 "mcq_ready": bool(readiness["ready"]),
@@ -4997,6 +5016,11 @@ def list_my_certificate_eligibility(
             entry["message"] = message
             if exc.status_code == 500:
                 entry["status"] = "configuration_error"
+            elif exc.status_code == 404:
+                entry["status"] = "publication_required"
+            entry["mcq_ready"] = False
+            entry["practical_exam_available"] = False
+            entry["start_exam_available"] = False
         items.append(entry)
     return {"items": items}
 
