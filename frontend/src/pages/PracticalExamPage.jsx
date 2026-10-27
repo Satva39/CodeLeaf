@@ -120,7 +120,15 @@ export default function PracticalExamPage() {
             ))}
           </section>
           <div className="hero-actions">
-            <Link className="button button-primary" to="/certificates">View certificates</Link>
+            {result.certificate?.public_id && (
+              <Link
+                className="button button-primary"
+                to={`/certificates/view/${encodeURIComponent(result.certificate.public_id)}`}
+              >
+                View certificate <ArrowRight size={15} />
+              </Link>
+            )}
+            <Link className={`button ${result.certificate?.public_id ? "button-secondary" : "button-primary"}`} to="/certificates">View certificates</Link>
             {!passed && <Link className="button button-secondary" to={`/practical/${encodeURIComponent(examSlug)}`}>Retry practical exam</Link>}
           </div>
         </div>

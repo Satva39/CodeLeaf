@@ -12,6 +12,7 @@ import ReviewPage from "./pages/ReviewPage.jsx";
 import LeaderboardPage from "./pages/LeaderboardPage.jsx";
 import BookmarksPage from "./pages/BookmarksPage.jsx";
 import CertificatesPage from "./pages/CertificatesPage.jsx";
+import CertificateViewPage from "./pages/CertificateViewPage.jsx";
 import ExamPage from "./pages/ExamPage.jsx";
 import PracticalExamPage from "./pages/PracticalExamPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
@@ -80,6 +81,10 @@ export default function App() {
         <Route path="/leaderboard" element={<LeaderboardPage />} />
         <Route path="/bookmarks" element={<BookmarksPage />} />
         <Route path="/certificates" element={<CertificatesPage />} />
+        <Route
+          path="/certificates/view/:publicId"
+          element={<CertificateViewPage />}
+        />
         <Route path="/exam/:examSlug" element={<ExamPage />} />
         <Route path="/practical/:examSlug" element={<PracticalExamPage />} />
         <Route path="/profile" element={<ProfilePage />} />

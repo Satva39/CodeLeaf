@@ -3995,3 +3995,270 @@
   .certificate-proof { align-items: flex-start; flex-wrap: wrap; }
   .certificate-proof .pill { margin-left: 0; }
 }
+
+/* Issued certificate viewing and print layout */
+.earned-cert-row .earned-cert-view-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  gap: 6px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 7px 10px;
+  margin-top: 3px;
+  color: #081b16;
+  font-size: 10px;
+  line-height: 1.3;
+  text-decoration: none;
+}
+.certificate-view-page {
+  max-width: 1120px;
+}
+.certificate-view-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.certificate-view-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.certificate-print-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.certificate-document {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  max-width: 1080px;
+  min-height: 600px;
+  margin: 0 auto;
+  padding: 34px 48px 30px;
+  color: #183a32;
+  background:
+    radial-gradient(ellipse at 50% 43%, rgba(255, 255, 255, 0.96), transparent 64%),
+    #edf8f3;
+  border: 8px double #a3cdbf;
+  outline: 1px solid rgba(39, 154, 120, 0.28);
+  box-shadow: 0 24px 55px rgba(0, 0, 0, 0.18);
+}
+.certificate-document::before,
+.certificate-document::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 210px;
+  height: 210px;
+  border: 1px solid rgba(39, 154, 120, 0.15);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.certificate-document::before {
+  top: -105px;
+  left: -105px;
+  box-shadow: 0 0 0 12px rgba(39, 154, 120, 0.035), 0 0 0 28px rgba(39, 154, 120, 0.025);
+}
+.certificate-document::after {
+  right: -105px;
+  bottom: -105px;
+  box-shadow: 0 0 0 12px rgba(39, 154, 120, 0.035), 0 0 0 28px rgba(39, 154, 120, 0.025);
+}
+.certificate-document-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #c2dfd4;
+  color: #367b67;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+}
+.certificate-document-mark {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  color: #087d5c;
+  border: 1px solid #afd6c8;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.55);
+}
+.certificate-document-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 9px;
+  border: 1px solid #b8d8cc;
+  border-radius: 100px;
+  font-size: 8px;
+  letter-spacing: 0.7px;
+  white-space: nowrap;
+}
+.certificate-document-content {
+  max-width: 760px;
+  margin: 48px auto 38px;
+  text-align: center;
+}
+.certificate-document-eyebrow {
+  margin: 0 0 12px;
+  color: #278568;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 2.6px;
+}
+.certificate-document-content h1 {
+  margin: 0;
+  color: #183a32;
+  font: 800 clamp(28px, 4vw, 44px)/1.15 Manrope, sans-serif;
+  letter-spacing: -1.2px;
+}
+.certificate-document-intro {
+  margin: 28px 0 7px;
+  color: #567f72;
+  font-size: 13px;
+}
+.certificate-recipient {
+  margin: 0;
+  color: #087d5c;
+  font: 800 clamp(27px, 3.5vw, 38px)/1.25 Manrope, sans-serif;
+  overflow-wrap: anywhere;
+}
+.certificate-document-rule {
+  width: min(360px, 78%);
+  height: 1px;
+  margin: 17px auto 18px;
+  background: linear-gradient(90deg, transparent, #8abbaa, transparent);
+}
+.certificate-document-description {
+  max-width: 570px;
+  margin: 0 auto 14px;
+  color: #507568;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.certificate-course-title {
+  margin: 0 auto;
+  color: #1f4b3f;
+  font: 750 clamp(19px, 2.6vw, 27px)/1.4 Manrope, sans-serif;
+  overflow-wrap: anywhere;
+}
+.certificate-document-confirmation {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin: 22px 0 0;
+  color: #278568;
+  font-size: 10px;
+  line-height: 1.6;
+}
+.certificate-document-confirmation svg {
+  flex: 0 0 auto;
+}
+.certificate-document-footer {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr auto;
+  align-items: end;
+  gap: 24px;
+  padding-top: 19px;
+  border-top: 1px solid #c2dfd4;
+}
+.certificate-document-footer > div:not(.certificate-document-seal) {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.certificate-document-footer span {
+  color: #5b8a7a;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+.certificate-document-footer strong {
+  color: #234e41;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+.certificate-document-id strong {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  letter-spacing: 0.6px;
+}
+.certificate-document-seal {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  color: #087d5c;
+}
+.certificate-document-seal svg {
+  width: 37px;
+  height: 37px;
+  padding: 7px;
+  border: 1px solid #a3cdbf;
+  border-radius: 50%;
+}
+.certificate-view-verification {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 1080px;
+  margin: 16px auto 0;
+  padding: 13px 15px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+}
+.certificate-view-verification > svg {
+  flex: 0 0 auto;
+  color: var(--mint);
+}
+.certificate-view-verification p {
+  flex: 1;
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+.certificate-view-verification a {
+  flex: 0 0 auto;
+  color: var(--mint);
+  font-size: 11px;
+  font-weight: 700;
+}
+@media print {
+  body:has(.certificate-view-page) {
+    background: #ffffff !important;
+  }
+  body:has(.certificate-view-page) .topbar,
+  body:has(.certificate-view-page) .site-footer,
+  body:has(.certificate-view-page) .certificate-view-toolbar,
+  body:has(.certificate-view-page) .certificate-view-verification {
+    display: none !important;
+  }
+  .page-shell.certificate-view-page {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .certificate-document {
+    width: 100%;
+    max-width: none;
+    min-height: 175mm;
+    margin: 0;
+    padding: 25px 34px;
+    border-width: 6px;
+    box-shadow: none;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    break-inside: avoid;
+  }
+}

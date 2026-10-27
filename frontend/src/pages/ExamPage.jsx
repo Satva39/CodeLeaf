@@ -163,7 +163,18 @@ export default function ExamPage() {
             <h2>Review your answers</h2>
             {(result.results || []).map((item, index) => <article className="exam-answer-review-item" key={item.question_id}><h3>{index + 1}. {item.prompt}</h3><p>{item.is_correct ? "Correct" : "Your answer"}: {item.selected_answer}</p>{!item.is_correct && <p><strong>Correct answer:</strong> {item.correct_answer}</p>}<p>{item.explanation}</p>{item.lesson_slug && <Link to={`/learn/${examSlug}/${item.lesson_slug}`}>Review related lesson</Link>}</article>)}
           </section>
-          <div className="hero-actions"><Link className="button button-primary" to="/certificates">View certificates</Link><Link className="button button-secondary" to={`/exam/${examSlug}`}>Back to exam</Link></div>
+          <div className="hero-actions">
+            {result.certificate?.public_id && (
+              <Link
+                className="button button-primary"
+                to={`/certificates/view/${encodeURIComponent(result.certificate.public_id)}`}
+              >
+                View certificate <ArrowRight size={15} />
+              </Link>
+            )}
+            <Link className={`button ${result.certificate?.public_id ? "button-secondary" : "button-primary"}`} to="/certificates">View certificates</Link>
+            <Link className="button button-secondary" to={`/exam/${examSlug}`}>Back to exam</Link>
+          </div>
         </div>
       </PageShell>
     );

@@ -4901,6 +4901,41 @@ def list_certificates(
     }
 
 
+@app.get("/api/me/certificates/{public_id}")
+def get_my_certificate(
+    public_id: str,
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Return printable certificate details only to the learner who owns it."""
+    row = db.execute(
+        select(Certificate, Course.slug, Course.title)
+        .join(Course, Certificate.course_id == Course.id)
+        .where(
+            Certificate.public_id == public_id,
+            Certificate.user_id == user.id,
+            Certificate.revoked_at.is_(None),
+        )
+        .limit(1)
+    ).first()
+    # Use the same not-found response for unknown, revoked, and other users' IDs.
+    if row is None:
+        raise HTTPException(
+            status_code=404,
+            detail="This certificate is not available for the signed-in account.",
+        )
+    certificate, course_slug, course_title = row
+    return {
+        "valid": True,
+        "public_id": certificate.public_id,
+        "recipient_name": user.display_name,
+        "course_id": str(certificate.course_id),
+        "course_slug": course_slug,
+        "course_title": course_title,
+        "issued_at": certificate.issued_at.isoformat(),
+    }
+
+
 @app.get("/api/me/certificate-eligibility")
 def list_my_certificate_eligibility(
     user: User = Depends(require_user), db: Session = Depends(get_db)

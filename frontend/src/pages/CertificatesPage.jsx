@@ -417,6 +417,12 @@ export default function CertificatesPage() {
                           ? new Date(certificate.issued_at).toLocaleDateString()
                           : "date unavailable"}
                       </small>
+                      <Link
+                        className="button button-primary earned-cert-view-action"
+                        to={`/certificates/view/${encodeURIComponent(certificate.public_id)}`}
+                      >
+                        View certificate <ArrowRight size={13} />
+                      </Link>
                       <a
                         href={`${API_BASE}/api/certificates/verify/${encodeURIComponent(certificate.public_id)}`}
                         target="_blank"

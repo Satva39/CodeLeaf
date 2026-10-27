@@ -595,6 +595,24 @@ def main() -> None:
             ),
             "learner certificate list reads persisted backend-issued credentials",
         )
+        certificate_id = css_practical_result["certificate"]["public_id"]
+        certificate_detail = client.get(f"/api/me/certificates/{certificate_id}")
+        check(
+            certificate_detail.status_code == 200
+            and certificate_detail.json().get("valid") is True
+            and certificate_detail.json().get("public_id") == certificate_id
+            and certificate_detail.json().get("course_title") == "CSS test course"
+            and certificate_detail.json().get("recipient_name") == "css_learner learner",
+            "certificate detail endpoint returns printable details to its owner",
+        )
+
+        # Certificate details must not reveal another learner's credential.
+        set_cookie(client, users["failed_learner"])
+        other_certificate_detail = client.get(f"/api/me/certificates/{certificate_id}")
+        check(
+            other_certificate_detail.status_code == 404,
+            "certificate detail endpoint denies another learner access without revealing ownership",
+        )
 
         # Failed exam: never issues a certificate and repeated wrong answers cannot earn XP.
         set_cookie(client, users["failed_learner"])
