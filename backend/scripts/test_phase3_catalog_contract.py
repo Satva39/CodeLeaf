@@ -160,10 +160,21 @@ def main() -> None:
                         lesson_id=lesson.id,
                         slug=f"{slug}-exercise",
                         title=f"{title} Exercise",
-                        exercise_type="short_answer",
+                        exercise_type="coding",
                         prompt=f"Practice {title}.",
+                        starter={"language": slug, "code": "# code challenge starter"},
                         is_published=True,
                         sequence=1,
+                    ),
+                    Exercise(
+                        lesson_id=lesson.id,
+                        slug=f"{slug}-short-answer",
+                        title=f"{title} Short Answer (must be hidden)",
+                        exercise_type="short_answer",
+                        prompt="Write a short paragraph about this topic.",
+                        starter={"response_template": "Answer:"},
+                        is_published=True,
+                        sequence=2,
                     ),
                     Exercise(
                         lesson_id=lesson.id,
@@ -186,7 +197,7 @@ def main() -> None:
             check(row["status"] == "published" and row["lesson_count"] == 1, f"{slug} status and lesson count use published database records")
             check(row["module_count"] == 1 and row["estimated_minutes"] == 15, f"{slug} module/time counts exclude unpublished lessons")
             check(row["reference_count"] == 1 and row["project_count"] == 1, f"{slug} reference/project counts include only published manifest entries")
-            check(row["practice_count"] == 1, f"{slug} practice count excludes unpublished exercises")
+            check(row["practice_count"] == 1, f"{slug} practice count includes only MCQs and code challenges")
             check(row["audience"] == [f"Learners studying {row['title']}"] and row["learning_outcomes"], f"{slug} catalog details retain authored learning metadata")
 
         html_refs = client.get("/api/courses/html/references")
@@ -201,8 +212,8 @@ def main() -> None:
 
         html_practice = client.get("/api/courses/html/exercises?limit=100")
         python_practice = client.get("/api/courses/python/exercises?limit=100")
-        check(html_practice.status_code == 200 and [x["slug"] for x in html_practice.json()["items"]] == ["html-exercise"], "HTML practice contains only HTML published exercises")
-        check(python_practice.status_code == 200 and [x["slug"] for x in python_practice.json()["items"]] == ["python-exercise"], "Python practice contains only Python published exercises")
+        check(html_practice.status_code == 200 and [x["slug"] for x in html_practice.json()["items"]] == ["html-exercise"], "HTML practice contains only published code challenges and excludes short answers")
+        check(python_practice.status_code == 200 and [x["slug"] for x in python_practice.json()["items"]] == ["python-exercise"], "Python practice contains only published code challenges and excludes short answers")
         check("Draft" not in html_refs.text + html_projects.text + html_practice.text, "unpublished reference/project/practice fixtures stay hidden")
 
         unauthenticated_bookmarks = client.get("/api/me/bookmarks")

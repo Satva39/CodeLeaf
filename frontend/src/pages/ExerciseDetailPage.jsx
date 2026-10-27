@@ -5,6 +5,7 @@ import { apiFetch } from "../lib/apiClient.js";
 import { API_BASE } from "../lib/demoState.js";
 import { useGamificationStats } from "../lib/useGamificationStats.js";
 import { compatibleFilename, openSeededWorkspace, resolveLanguage } from "../lib/languageWorkspace.js";
+import { isSupportedPracticeExercise, practiceExerciseLabel } from "../lib/practiceExerciseTypes.js";
 import { EmptyState, PageShell } from "../components/common.jsx";
 
 async function responsePayload(response) {
@@ -55,9 +56,9 @@ function starterAnswer(exercise) {
   for (const key of ["code", "source_code"]) {
     if (typeof starter[key] === "string" && starter[key].trim()) return starter[key];
   }
-  const type = String(exercise?.type || "").toLowerCase();
+  const type = String(exercise?.type || "").toLowerCase().replaceAll("-", "_");
   if (["coding", "code", "implementation"].includes(type) && typeof starter.starter === "string") return starter.starter;
-  if (["practical", "workbook-practice"].includes(type) && typeof starter.content === "string") return starter.content;
+  if (["practical", "workbook_practice"].includes(type) && typeof starter.content === "string") return starter.content;
   if (typeof starter.starter === "string" && /solidity/i.test(String(starter.language || ""))) return starter.starter;
   if (typeof starter.template === "string") return starter.template;
   if (typeof starter.response_template === "string") return starter.response_template;
@@ -72,11 +73,12 @@ function starterAnswer(exercise) {
 
 function usesCodeEditor(exercise) {
   const starter = exercise?.starter && typeof exercise.starter === "object" ? exercise.starter : {};
-  const type = String(exercise?.type || "").toLowerCase();
+  const type = String(exercise?.type || "").toLowerCase().replaceAll("-", "_");
   if (["choice", "multiple_choice", "mcq"].includes(type) || Array.isArray(starter.options)) return false;
   if (["coding", "code", "implementation"].includes(type)) return true;
   if (typeof starter.code === "string" || typeof starter.source_code === "string") return true;
-  if (["practical", "workbook-practice"].includes(type) && typeof starter.content === "string") return true;
+  if (["practical", "workbook_practice"].includes(type) && (typeof starter.content === "string" || (Array.isArray(starter.headers) && starter.headers.length > 0))) return true;
+  if (type === "workbook_practice" && Array.isArray(starter.headers)) return true;
   return typeof starter.starter === "string" && /solidity/i.test(String(starter.language || ""));
 }
 
@@ -108,10 +110,12 @@ export default function ExerciseDetailPage() {
     const progressPromise = fetchCourseExerciseProgress(courseSlug, controller.signal).catch(() => []);
     Promise.all([lessonItemsPromise, courseItemsPromise, progressPromise])
       .then(([lessonPayload, courseItems, progressItems]) => {
-        const lessonItems = Array.isArray(lessonPayload.items) ? lessonPayload.items : [];
+        const lessonItems = (Array.isArray(lessonPayload.items) ? lessonPayload.items : [])
+          .filter((item) => isSupportedPracticeExercise(item.type));
         const match = lessonItems.find((item) => item.slug === exerciseSlug);
         if (!match) throw new Error("This exercise is not available. It may be unpublished or moved.");
-        const ordered = courseItems.length ? courseItems : lessonItems.map((item) => ({ ...item, lesson_slug: lessonSlug }));
+        const supportedCourseItems = courseItems.filter((item) => isSupportedPracticeExercise(item.type));
+        const ordered = supportedCourseItems.length ? supportedCourseItems : lessonItems.map((item) => ({ ...item, lesson_slug: lessonSlug }));
         const index = ordered.findIndex((item) => item.slug === exerciseSlug && item.lesson_slug === lessonSlug);
         const progress = new Map(progressItems.map((item) => [
           `${item.lesson_slug}:${item.exercise_slug}`,
@@ -140,7 +144,9 @@ export default function ExerciseDetailPage() {
   const isChoice = Boolean(exercise && (Array.isArray(exercise.starter?.options) || ["choice", "multiple_choice", "mcq"].includes(String(exercise.type || "").toLowerCase())));
   const options = Array.isArray(exercise?.starter?.options) ? exercise.starter.options : [];
   const isCode = usesCodeEditor(exercise) && !isChoice;
-  const language = resolveLanguage(courseSlug, exercise?.starter?.language || "");
+  // The course route is authoritative: a Java exercise must use Java, a SQL exercise
+  // must use its course's SQL dialect, and AI/data-science tasks use the Python workspace.
+  const language = resolveLanguage(courseSlug, "");
   const exerciseFilename = compatibleFilename(exercise?.starter?.file_name || exercise?.starter?.filename, language);
   const currentAnswer = isChoice ? selectedOption : answer;
   const criteria = useMemo(() => Array.isArray(exercise?.acceptance_criteria) ? exercise.acceptance_criteria : [], [exercise]);
@@ -182,7 +188,7 @@ export default function ExerciseDetailPage() {
     <PageShell className="exercise-detail-page">
       <div className="exercise-detail-breadcrumb"><Link to={`/practice/${encodeURIComponent(courseSlug)}`}><ArrowLeft size={14} /> All exercises</Link><span>/</span><Link to={`/learn/${encodeURIComponent(courseSlug)}/${encodeURIComponent(lessonSlug)}`}>{exercise.lesson_title || lessonSlug}</Link></div>
       <header className="exercise-detail-hero panel">
-        <div><span className="eyebrow">{String(exercise.difficulty || "PRACTICE").toUpperCase()} · {String(exercise.type || "exercise").replaceAll("_", " ").toUpperCase()}</span><h1>{exercise.title}</h1><p>{exercise.prompt}</p><div className="exercise-detail-meta"><span><BookOpen size={14} /> {exercise.module_title || "Course practice"}</span><span><Zap size={14} /> {exercise.xp_points ?? stats.exerciseXp} XP on first correct completion</span>{exercise.completed && <span className="pill pill-mint"><CheckCircle2 size={13} /> Completed</span>}</div></div>
+        <div><span className="eyebrow">{String(exercise.difficulty || "PRACTICE").toUpperCase()} · {practiceExerciseLabel(exercise.type).toUpperCase()}</span><h1>{exercise.title}</h1><p>{exercise.prompt}</p><div className="exercise-detail-meta"><span><BookOpen size={14} /> {exercise.module_title || "Course practice"}</span><span><Zap size={14} /> {exercise.xp_points ?? stats.exerciseXp} XP on first correct completion</span>{exercise.completed && <span className="pill pill-mint practice-completed-badge" role="status" aria-label="Exercise completed"><CheckCircle2 size={13} /> Completed</span>}</div></div>
         <Code2 size={32} />
       </header>
       <div className="exercise-detail-layout">

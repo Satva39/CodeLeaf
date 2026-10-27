@@ -5,6 +5,7 @@ import { apiFetch } from "../lib/apiClient.js";
 import { API_BASE } from "../lib/demoState.js";
 import { useGamificationStats } from "../lib/useGamificationStats.js";
 import { useCourseCatalog } from "../lib/useCourseCatalog.js";
+import { isSupportedPracticeExercise, practiceExerciseLabel } from "../lib/practiceExerciseTypes.js";
 import { EmptyState, PageShell } from "../components/common.jsx";
 import CourseOverview from "../components/course/CourseOverview.jsx";
 
@@ -43,8 +44,9 @@ export default function ChallengesPage() {
     setExercises([]); setCompletedExercises(new Set()); setLoading(true); setError("");
     fetchAllCourseExercises(courseSlug, controller.signal)
       .then(async (items) => {
-        setExercises(items);
-        setPreviewMode(items.some((item) => item.status === "draft"));
+        const supportedItems = items.filter((item) => isSupportedPracticeExercise(item.type));
+        setExercises(supportedItems);
+        setPreviewMode(supportedItems.some((item) => item.status === "draft"));
         try {
           const response = await apiFetch(
             `${API_BASE}/api/me/courses/${encodeURIComponent(courseSlug)}/exercise-progress`,
@@ -69,7 +71,9 @@ export default function ChallengesPage() {
   const levels = useMemo(() => ["All levels", ...new Set(exercises.map((item) => item.difficulty || "Practice").filter(Boolean))], [exercises]);
   const filtered = useMemo(() => exercises.filter((exercise) => {
     const text = `${exercise.title} ${exercise.prompt || ""} ${exercise.type || ""} ${exercise.difficulty || ""} ${exercise.module_title || ""} ${exercise.lesson_title || ""}`.toLowerCase();
-    return (difficulty === "All levels" || (exercise.difficulty || "Practice") === difficulty) && text.includes(query.trim().toLowerCase());
+    return isSupportedPracticeExercise(exercise.type)
+      && (difficulty === "All levels" || (exercise.difficulty || "Practice") === difficulty)
+      && text.includes(query.trim().toLowerCase());
   }), [exercises, difficulty, query]);
   const grouped = useMemo(() => {
     const result = new Map();
@@ -103,7 +107,7 @@ export default function ChallengesPage() {
             <div className="exercise-topic-list">
               {items.map((exercise) => <article key={`${exercise.course_slug || course.slug}:${exercise.lesson_slug}:${exercise.slug}`} className="exercise-library-row">
                 <span className="challenge-row-icon"><Code2 size={17} /></span>
-                <div className="challenge-row-copy"><div className="practice-task-meta"><span>{exercise.difficulty || "PRACTICE"}</span><span>{String(exercise.type || "exercise").replaceAll("_", " ")}</span>{completedExercises.has(`${exercise.lesson_slug}:${exercise.slug}`) && <span className="pill pill-mint"><CheckCircle2 size={12} /> Completed</span>}</div><h3>{exercise.title}</h3><p>{exercise.prompt || "Open this task to read the instructions."}</p><small>Lesson: {exercise.lesson_title || exercise.lesson_slug}</small></div>
+                <div className="challenge-row-copy"><div className="practice-task-meta"><span>{exercise.difficulty || "PRACTICE"}</span><span>{practiceExerciseLabel(exercise.type)}</span>{completedExercises.has(`${exercise.lesson_slug}:${exercise.slug}`) && <span className="pill pill-mint practice-completed-badge" role="status" aria-label="Exercise completed"><CheckCircle2 size={13} aria-hidden="true" /> Completed</span>}</div><h3>{exercise.title}</h3><p>{exercise.prompt || "Open this task to read the instructions."}</p><small>Lesson: {exercise.lesson_title || exercise.lesson_slug}</small></div>
                 <span className="challenge-xp"><Zap size={13} /> {exercise.xp_points ?? stats.exerciseXp} XP</span>
                 <Link className="button button-secondary button-small" to={`/practice/${encodeURIComponent(course.slug)}/${encodeURIComponent(exercise.lesson_slug)}/${encodeURIComponent(exercise.slug)}`}>Open exercise <ArrowRight size={13} /></Link>
               </article>)}

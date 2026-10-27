@@ -27,6 +27,11 @@ from .auth_security import require_user, user_payload, TOKEN_ALGORITHM
 from .auth_routes import router as auth_router
 from .phase5_routes import router as phase5_router
 from .phase5_service import record_review_result
+from .practice_policy import (
+    is_supported_practice_exercise,
+    practice_exercise_kind,
+    public_practice_type,
+)
 from .diagram_assets import validate_dynamic_diagram_model
 from .db import engine, get_db
 from .project_guide_service import (
@@ -1046,11 +1051,10 @@ def list_courses(db: Session = Depends(get_db)) -> dict[str, Any]:
     }
     preview_mode = draft_course_preview_enabled()
     practice_query = (
-        select(Course.slug, func.count(Exercise.id))
+        select(Course.slug, Exercise.exercise_type, Exercise.starter, Exercise.prompt)
         .join(Module, Module.course_id == Course.id)
         .join(Lesson, Lesson.module_id == Module.id)
         .join(Exercise, Exercise.lesson_id == Lesson.id)
-        .group_by(Course.slug)
     )
     if preview_mode:
         practice_query = practice_query.where(
@@ -1069,9 +1073,10 @@ def list_courses(db: Session = Depends(get_db)) -> dict[str, Any]:
             Lesson.is_published.is_(True),
             Exercise.is_published.is_(True),
         )
-    practice_counts = {
-        slug: int(count or 0) for slug, count in db.execute(practice_query).all()
-    }
+    practice_counts: dict[str, int] = {}
+    for slug, exercise_type, starter, prompt in db.execute(practice_query).all():
+        if is_supported_practice_exercise(exercise_type, starter, slug, prompt):
+            practice_counts[slug] = practice_counts.get(slug, 0) + 1
     course_query = select(Course).order_by(Course.sort_order.asc())
     if not draft_course_preview_enabled():
         course_query = course_query.where(Course.published.is_(True))
@@ -1366,11 +1371,16 @@ def list_course_exercises(
         )
         if not (published_item or imported_draft):
             continue
+        public_type = public_practice_type(
+            exercise.exercise_type, exercise.starter, course_slug, exercise.prompt
+        )
+        if public_type is None:
+            continue
         items.append(
             {
                 "slug": exercise.slug,
                 "title": exercise.title,
-                "type": exercise.exercise_type,
+                "type": public_type,
                 "prompt": exercise.prompt,
                 "difficulty": exercise.difficulty,
                 "course_slug": course_slug,
@@ -1967,8 +1977,8 @@ def _course_progress_requirements(
     total_lessons = len(lesson_rows)
     completed_lessons = sum(1 for _lesson_id, completed in lesson_rows if completed)
 
-    exercise_rows = db.execute(
-        select(Exercise.id, ExerciseProgress.completed)
+    exercise_records = db.execute(
+        select(Exercise, ExerciseProgress.completed)
         .join(Lesson, Exercise.lesson_id == Lesson.id)
         .join(Module, Lesson.module_id == Module.id)
         .outerjoin(
@@ -1983,6 +1993,15 @@ def _course_progress_requirements(
         )
         .order_by(Module.sort_order.asc(), Lesson.sort_order.asc(), Exercise.sequence.asc())
     ).all()
+    # Match the exact Practice task set shown to learners. Hidden short-answer and
+    # ungraded review prompts must not remain a secret certification prerequisite.
+    exercise_rows = [
+        (exercise.id, completed)
+        for exercise, completed in exercise_records
+        if is_supported_practice_exercise(
+            exercise.exercise_type, exercise.starter, course.slug, exercise.prompt
+        )
+    ]
     total_exercises = len(exercise_rows)
     completed_exercises = sum(1 for _exercise_id, completed in exercise_rows if completed)
 
@@ -4397,6 +4416,13 @@ def find_published_exercise(
             status_code=404,
             detail="Published exercise was not found. Import course content first; draft preview is available only in explicitly enabled local development.",
         )
+    if practice_exercise_kind(
+        exercise.exercise_type, exercise.starter, course_slug, exercise.prompt
+    ) is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Only multiple-choice questions and code challenges are available in Practice.",
+        )
     return exercise
 
 
@@ -4456,9 +4482,13 @@ def list_my_course_exercise_progress(
         )
         .order_by(Module.sort_order.asc(), Lesson.sort_order.asc(), Exercise.sequence.asc())
     ).all()
-    return {
-        "course_slug": course.slug,
-        "items": [
+    items = []
+    for exercise, lesson_slug, completed, attempts, completed_at in rows:
+        if not is_supported_practice_exercise(
+            exercise.exercise_type, exercise.starter, course_slug, exercise.prompt
+        ):
+            continue
+        items.append(
             {
                 "exercise_slug": exercise.slug,
                 "lesson_slug": lesson_slug,
@@ -4466,9 +4496,8 @@ def list_my_course_exercise_progress(
                 "attempts": int(attempts or 0),
                 "completed_at": completed_at.isoformat() if completed_at else None,
             }
-            for exercise, lesson_slug, completed, attempts, completed_at in rows
-        ],
-    }
+        )
+    return {"course_slug": course.slug, "items": items}
 
 
 @app.get("/api/exercises/featured")
@@ -4527,12 +4556,17 @@ def list_featured_exercises(
         )
         if not (published_item or imported_draft):
             continue
+        public_type = public_practice_type(
+            exercise.exercise_type, exercise.starter, course_slug, exercise.prompt
+        )
+        if public_type is None:
+            continue
         # Never expose the grader, solution or answer key in this learner-facing list.
         visible_items.append(
             {
                 "slug": exercise.slug,
                 "title": exercise.title,
-                "type": exercise.exercise_type,
+                "type": public_type,
                 "prompt": exercise.prompt,
                 "difficulty": exercise.difficulty,
                 "course_slug": course_slug,
@@ -4557,12 +4591,18 @@ def list_lesson_exercises(
     rows = db.scalars(exercise_query.order_by(Exercise.sequence.asc())).all()
     module = db.get(Module, lesson.module_id)
     course = db.get(Course, module.course_id) if module else None
-    return {
-        "items": [
+    items = []
+    for item in rows:
+        public_type = public_practice_type(
+            item.exercise_type, item.starter, course_slug, item.prompt
+        )
+        if public_type is None:
+            continue
+        items.append(
             {
                 "slug": item.slug,
                 "title": item.title,
-                "type": item.exercise_type,
+                "type": public_type,
                 "prompt": item.prompt,
                 "starter": item.starter,
                 "public_tests": item.public_tests,
@@ -4577,8 +4617,9 @@ def list_lesson_exercises(
                 "lesson_title": lesson.title,
                 "module_title": module.title if module else "",
             }
-            for item in rows
-        ]
+        )
+    return {
+        "items": items
     }
 
 
