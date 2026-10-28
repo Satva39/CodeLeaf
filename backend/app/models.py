@@ -10,6 +10,7 @@ from sqlalchemy import (
     Index,
     Integer,
     JSON,
+    LargeBinary,
     String,
     Text,
     UniqueConstraint,
@@ -418,6 +419,9 @@ class ProjectSubmission(Base):
     project_slug: Mapped[str] = mapped_column(String(120), nullable=False)
     title: Mapped[str] = mapped_column(String(200), nullable=False)
     code_bundle: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
+    # Uploaded archives live in the database so downloads survive ephemeral app restarts.
+    zip_bundle: Mapped[bytes | None] = mapped_column(LargeBinary, nullable=True, deferred=True)
+    zip_filename: Mapped[str | None] = mapped_column(String(180), nullable=True)
     visibility: Mapped[str] = mapped_column(
         String(20), default="private", nullable=False
     )
