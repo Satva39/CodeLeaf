@@ -27,11 +27,11 @@ from sqlalchemy.orm import Session
 
 from .auth_security import require_user
 from .config import settings
-from .db import get_db
+from .db import SessionLocal, get_db
 from .models import (
     AuditLog, ContentRevision, Course, Exercise, ExerciseProgress, Lesson,
     LessonProgress, LearningPreference, Module, ProductAnalyticsEvent,
-    Certificate, ProjectSubmission, ReviewSchedule, RunnerJob, User,
+    Certificate, ProjectSubmission, ProjectSubmissionZipChunk, ReviewSchedule, RunnerJob, User,
 )
 from .phase5_service import apply_review_rating, get_or_create_preferences, utc_now
 from .diagram_assets import validate_dynamic_diagram_model
@@ -41,10 +41,13 @@ COURSE_CONTENT_ROOT = Path(__file__).resolve().parents[1] / "content" / "courses
 ROADMAP_FILE = Path(__file__).resolve().parents[1] / "content" / "career-roadmaps.json"
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,179}$")
 COURSE_SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,99}$")
-MAX_PROJECT_ZIP_BYTES = 10 * 1024 * 1024
-MAX_PROJECT_ZIP_FILES = 100
-MAX_PROJECT_ZIP_FILE_BYTES = 5 * 1024 * 1024
-MAX_PROJECT_ZIP_UNCOMPRESSED_BYTES = 20 * 1024 * 1024
+MAX_PROJECT_ZIP_BYTES = 500 * 1024 * 1024
+MAX_PROJECT_ZIP_FILES = 10_000
+MAX_PROJECT_ZIP_FILE_BYTES = 500 * 1024 * 1024
+MAX_PROJECT_ZIP_UNCOMPRESSED_BYTES = 1024 * 1024 * 1024
+PROJECT_ZIP_CHUNK_BYTES = 1024 * 1024
+PROJECT_ZIP_DB_BATCH_BYTES = 8 * 1024 * 1024
+PROJECT_ZIP_DOWNLOAD_BATCH_CHUNKS = 4
 EDITOR_ROLES = {"editor", "admin"}
 ALLOWED_CONTENT_TYPES = {"course", "module", "lesson", "project", "reference", "diagram"}
 ALLOWED_ANALYTICS_EVENTS = {
@@ -580,16 +583,22 @@ def _find_project_manifest(course_slug: str, project_slug: str) -> dict[str, Any
     return None
 
 
-def validate_project_zip(payload: bytes) -> list[str]:
-    """Validate ZIP structure and paths before storing user-uploaded project bytes."""
-    if not payload:
+def validate_project_zip_size(size: int) -> None:
+    """Reject oversized archives without allocating a second copy in memory."""
+    if size <= 0:
         raise HTTPException(status_code=400, detail="Choose a non-empty ZIP archive to upload.")
-    if len(payload) > MAX_PROJECT_ZIP_BYTES:
-        raise HTTPException(status_code=413, detail="Project ZIP files must be 10 MB or smaller.")
+    if size > MAX_PROJECT_ZIP_BYTES:
+        raise HTTPException(status_code=413, detail="Project ZIP files must be 500 MB or smaller.")
+
+
+def validate_project_zip_file(file_obj) -> list[str]:
+    """Validate ZIP structure without loading the entire archive into RAM."""
     try:
-        archive = zipfile.ZipFile(io.BytesIO(payload))
+        file_obj.seek(0)
+        archive = zipfile.ZipFile(file_obj)
     except (zipfile.BadZipFile, OSError, ValueError) as exc:
         raise HTTPException(status_code=400, detail="The uploaded file is not a valid ZIP archive.") from exc
+
     with archive:
         files = []
         total_size = 0
@@ -599,31 +608,77 @@ def validate_project_zip(payload: bytes) -> list[str]:
             raw_path = info.filename
             normalized = raw_path.replace("\\", "/")
             path = PurePosixPath(normalized)
+            raw_parts = normalized.split("/")
             mode = (info.external_attr >> 16) & 0xFFFF
             if (not raw_path or "\x00" in raw_path or normalized.startswith("/")
                     or re.match(r"^[A-Za-z]:", normalized)
-                    or any(part in {"", ".", ".."} for part in path.parts)
+                    or any(part in {"", ".", ".."} for part in raw_parts)
                     or ":" in normalized or (mode and (mode & 0o170000) == 0o120000)):
                 raise HTTPException(status_code=400, detail="ZIP contains an unsafe file path or symbolic link.")
             if len(normalized) > 180:
                 raise HTTPException(status_code=400, detail="A ZIP file path exceeds the 180-character limit.")
             if info.file_size > MAX_PROJECT_ZIP_FILE_BYTES:
-                raise HTTPException(status_code=413, detail="Each file inside the ZIP must be 5 MB or smaller.")
+                raise HTTPException(status_code=413, detail="Each file inside the ZIP must be 500 MB or smaller.")
             total_size += info.file_size
             if total_size > MAX_PROJECT_ZIP_UNCOMPRESSED_BYTES:
-                raise HTTPException(status_code=413, detail="The uncompressed contents of a ZIP must be 20 MB or smaller.")
+                raise HTTPException(status_code=413, detail="The uncompressed contents of a ZIP must total 1 GB or less.")
             files.append(normalized)
             if len(files) > MAX_PROJECT_ZIP_FILES:
-                raise HTTPException(status_code=413, detail="A project ZIP may contain at most 100 files.")
+                raise HTTPException(status_code=413, detail="A project ZIP may contain at most 10,000 files.")
         if not files:
             raise HTTPException(status_code=400, detail="The ZIP archive must contain at least one file.")
         try:
             bad_member = archive.testzip()
-        except (zipfile.BadZipFile, RuntimeError, OSError) as exc:
+        except (zipfile.BadZipFile, RuntimeError, OSError, EOFError) as exc:
             raise HTTPException(status_code=400, detail="The ZIP archive could not be verified.") from exc
         if bad_member:
             raise HTTPException(status_code=400, detail="A file inside the ZIP archive is corrupted.")
+    file_obj.seek(0)
     return files
+
+
+def validate_project_zip(payload: bytes) -> list[str]:
+    """Compatibility wrapper used by the regression tests and any legacy callers."""
+    validate_project_zip_size(len(payload))
+    return validate_project_zip_file(io.BytesIO(payload))
+
+
+def _normalize_portfolio_slug(value: str, *, fallback: str, max_length: int = 180) -> str:
+    """Convert a user-entered project name or technology into a safe URL-style slug."""
+    candidate = (value or fallback or "my-project").strip().lower()
+    candidate = re.sub(r"[^a-z0-9]+", "-", candidate).strip("-")
+    candidate = candidate[:max_length].strip("-")
+    if not candidate:
+        candidate = "my-project"
+    if not SLUG_RE.fullmatch(candidate):
+        raise HTTPException(status_code=422, detail="Enter a project name using letters, numbers, spaces, or hyphens.")
+    return candidate
+
+
+def _store_project_zip_chunks(db: Session, submission_id, file_obj) -> int:
+    """Store an archive in small database rows so 500 MB uploads do not need 500 MB of RAM."""
+    file_obj.seek(0)
+    sequence = 0
+    batch: list[ProjectSubmissionZipChunk] = []
+    batch_size = 0
+    while True:
+        payload = file_obj.read(PROJECT_ZIP_CHUNK_BYTES)
+        if not payload:
+            break
+        batch.append(ProjectSubmissionZipChunk(submission_id=submission_id, sequence=sequence, payload=payload))
+        batch_size += len(payload)
+        sequence += 1
+        if batch_size >= PROJECT_ZIP_DB_BATCH_BYTES:
+            db.add_all(batch)
+            db.commit()
+            batch = []
+            batch_size = 0
+    if batch:
+        db.add_all(batch)
+        db.commit()
+    if sequence == 0:
+        raise HTTPException(status_code=400, detail="Choose a non-empty ZIP archive to upload.")
+    return sequence
 
 
 def _portfolio_certificate_items(db: Session, owner: User) -> list[dict[str, Any]]:
@@ -645,41 +700,81 @@ def _portfolio_certificate_items(db: Session, owner: User) -> list[dict[str, Any
     ]
 
 
-def _download_project_zip(submission: ProjectSubmission, is_public: bool) -> Response:
-    """Return the submitted archive or build a ZIP for older JSON-bundle submissions."""
+def _download_project_zip(submission: ProjectSubmission, is_public: bool, db: Session | None = None) -> Response:
+    """Stream chunk-stored ZIPs; keep compatibility with old inline and JSON-bundle submissions."""
+    filename = submission.zip_filename or f"{submission.project_slug}.zip"
+    safe_filename = re.sub(r"[^A-Za-z0-9._-]+", "-", filename).strip(".-") or "project.zip"
     if submission.zip_bundle:
         payload = bytes(submission.zip_bundle)
-        filename = submission.zip_filename or f"{submission.project_slug}.zip"
-    else:
-        bundle = submission.code_bundle or {}
-        if not isinstance(bundle, dict) or not bundle:
-            raise HTTPException(status_code=404, detail="This submission has no downloadable project archive.")
-        stream = io.BytesIO()
-        try:
-            with zipfile.ZipFile(stream, "w", compression=zipfile.ZIP_DEFLATED) as archive:
-                for file_path, content in bundle.items():
-                    if not isinstance(file_path, str) or not isinstance(content, str):
-                        continue
-                    normalized = file_path.replace("\\", "/")
-                    safe_path = PurePosixPath(normalized)
-                    if normalized.startswith("/") or any(part in {"", ".", ".."} for part in safe_path.parts):
-                        continue
-                    archive.writestr(normalized, content)
-        except (OSError, ValueError, zipfile.BadZipFile) as exc:
-            raise HTTPException(status_code=500, detail="The project archive could not be prepared.") from exc
-        payload = stream.getvalue()
-        filename = f"{submission.project_slug}.zip"
-    safe_filename = re.sub(r"[^A-Za-z0-9._-]+", "-", filename).strip(".-") or "project.zip"
-    return Response(
-        content=payload,
-        media_type="application/zip",
-        headers={
+        return Response(content=payload, media_type="application/zip", headers={
             "Content-Disposition": f'attachment; filename="{safe_filename}"',
             "Content-Length": str(len(payload)),
             "Cache-Control": "public, max-age=300" if is_public else "private, no-store",
             "X-Content-Type-Options": "nosniff",
-        },
-    )
+        })
+
+    if db is not None:
+        first_chunk = db.scalar(select(ProjectSubmissionZipChunk.sequence).where(
+            ProjectSubmissionZipChunk.submission_id == submission.id
+        ).order_by(ProjectSubmissionZipChunk.sequence).limit(1))
+        if first_chunk is not None:
+            submission_id = submission.id
+
+            def archive_chunks():
+                # Separate short-lived sessions keep each database query bounded and avoid
+                # holding a 500 MB result set (or a long transaction) in application memory.
+                if SessionLocal is None:
+                    return
+                next_sequence = 0
+                while True:
+                    with SessionLocal() as download_db:
+                        rows = download_db.execute(
+                            select(ProjectSubmissionZipChunk.sequence, ProjectSubmissionZipChunk.payload)
+                            .where(
+                                ProjectSubmissionZipChunk.submission_id == submission_id,
+                                ProjectSubmissionZipChunk.sequence >= next_sequence,
+                            )
+                            .order_by(ProjectSubmissionZipChunk.sequence)
+                            .limit(PROJECT_ZIP_DOWNLOAD_BATCH_CHUNKS)
+                        ).all()
+                    if not rows:
+                        break
+                    for _, chunk in rows:
+                        yield bytes(chunk)
+                    next_sequence = int(rows[-1][0]) + 1
+
+            from starlette.responses import StreamingResponse
+            return StreamingResponse(archive_chunks(), media_type="application/zip", headers={
+                "Content-Disposition": f'attachment; filename="{safe_filename}"',
+                "Cache-Control": "public, max-age=300" if is_public else "private, no-store",
+                "X-Content-Type-Options": "nosniff",
+            })
+
+    bundle = submission.code_bundle or {}
+    if not isinstance(bundle, dict) or not bundle:
+        raise HTTPException(status_code=404, detail="This submission has no downloadable project archive.")
+    stream = io.BytesIO()
+    try:
+        with zipfile.ZipFile(stream, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            for file_path, content in bundle.items():
+                if not isinstance(file_path, str) or not isinstance(content, str):
+                    continue
+                normalized = file_path.replace("\\", "/")
+                safe_path = PurePosixPath(normalized)
+                if normalized.startswith("/") or any(part in {"", ".", ".."} for part in safe_path.parts):
+                    continue
+                archive.writestr(normalized, content)
+    except (OSError, ValueError, zipfile.BadZipFile) as exc:
+        raise HTTPException(status_code=500, detail="The project archive could not be prepared.") from exc
+    payload = stream.getvalue()
+    filename = f"{submission.project_slug}.zip"
+    safe_filename = re.sub(r"[^A-Za-z0-9._-]+", "-", filename).strip(".-") or "project.zip"
+    return Response(content=payload, media_type="application/zip", headers={
+        "Content-Disposition": f'attachment; filename="{safe_filename}"',
+        "Content-Length": str(len(payload)),
+        "Cache-Control": "public, max-age=300" if is_public else "private, no-store",
+        "X-Content-Type-Options": "nosniff",
+    })
 
 
 def _portfolio_item(submission: ProjectSubmission, owner: User | None = None) -> dict[str, Any]:
@@ -691,7 +786,11 @@ def _portfolio_item(submission: ProjectSubmission, owner: User | None = None) ->
         "summary": metadata.get("summary", ""), "skills": metadata.get("skills", []),
         "technologies": metadata.get("technologies", []),
         "screenshot_urls": metadata.get("screenshot_urls", []),
-        "has_downloadable_zip": bool(submission.zip_filename or submission.code_bundle),
+        "has_downloadable_zip": bool(
+            metadata.get("archive_upload_complete")
+            or (submission.zip_filename and not metadata.get("custom_project"))
+            or submission.code_bundle
+        ),
         "zip_filename": submission.zip_filename or f"{submission.project_slug}.zip",
         "visibility": submission.visibility, "submitted_at": submission.submitted_at.isoformat(),
         "username": owner.username if owner else None,
@@ -701,16 +800,11 @@ def _portfolio_item(submission: ProjectSubmission, owner: User | None = None) ->
 
 @router.post("/api/me/portfolio/submissions", status_code=status.HTTP_201_CREATED)
 def create_portfolio_submission(body: PortfolioSubmissionInput, user: User = Depends(require_user), db: Session = Depends(get_db)) -> dict[str, Any]:
-    course = db.scalar(select(Course).where(Course.slug == body.course_slug, Course.published.is_(True)))
-    if course is None:
-        raise HTTPException(status_code=404, detail="Published course was not found.")
-    project = _find_project_manifest(body.course_slug, body.project_slug)
-    if project is None:
-        raise HTTPException(status_code=404, detail="A matching course project was not found in the reviewed course manifest.")
+    """Accept legacy text-bundle submissions for any learner-created project."""
     submission = ProjectSubmission(user_id=user.id, project_slug=body.project_slug,
-        title=(body.title or project.get("title") or body.project_slug.replace("-", " ").title()).strip(),
+        title=(body.title or body.project_slug.replace("-", " ").title()).strip(),
         code_bundle=body.code_bundle, visibility="private",
-        portfolio_metadata={"course_slug": body.course_slug, "summary": "", "skills": [], "technologies": [], "screenshot_urls": []})
+        portfolio_metadata={"course_slug": body.course_slug, "custom_project": True, "summary": "", "skills": [], "technologies": [], "screenshot_urls": []})
     db.add(submission)
     db.commit()
     db.refresh(submission)
@@ -718,45 +812,76 @@ def create_portfolio_submission(body: PortfolioSubmissionInput, user: User = Dep
 
 
 @router.post("/api/me/portfolio/submissions/upload", status_code=status.HTTP_201_CREATED)
-async def upload_portfolio_submission(
-    course_slug: str = Form(..., min_length=1, max_length=100),
-    project_slug: str = Form(..., min_length=1, max_length=180),
+def upload_portfolio_submission(
+    course_slug: str = Form(default="", max_length=100),
+    project_slug: str = Form(default="", max_length=180),
     title: str | None = Form(default=None, max_length=200),
     archive_file: UploadFile = File(...),
     user: User = Depends(require_user),
     db: Session = Depends(get_db),
 ) -> dict[str, Any]:
-    """Store a validated project ZIP privately; it becomes public only with project metadata."""
-    course_slug = course_slug.strip().lower()
-    project_slug = project_slug.strip().lower()
-    if not COURSE_SLUG_RE.fullmatch(course_slug) or not SLUG_RE.fullmatch(project_slug):
-        raise HTTPException(status_code=422, detail="Invalid course or project slug.")
+    """Accept any learner-created ZIP; no reviewed-course project manifest is required."""
     filename = (archive_file.filename or "").strip()
     if not filename.lower().endswith(".zip"):
         raise HTTPException(status_code=400, detail="Upload a .zip archive of your project files.")
-    payload = await archive_file.read(MAX_PROJECT_ZIP_BYTES + 1)
-    await archive_file.close()
-    validate_project_zip(payload)
-    course = db.scalar(select(Course).where(Course.slug == course_slug, Course.published.is_(True)))
-    if course is None:
-        raise HTTPException(status_code=404, detail="Published course was not found.")
-    project = _find_project_manifest(course_slug, project_slug)
-    if project is None:
-        raise HTTPException(status_code=404, detail="A matching course project was not found in the reviewed course manifest.")
-    safe_filename = re.sub(r"[^A-Za-z0-9._-]+", "-", Path(filename).name).strip(".-") or f"{project_slug}.zip"
-    if not safe_filename.lower().endswith(".zip"):
-        safe_filename += ".zip"
-    submission = ProjectSubmission(
-        user_id=user.id,
-        project_slug=project_slug,
-        title=(title or project.get("title") or project_slug.replace("-", " ").title()).strip(),
-        code_bundle={}, zip_bundle=payload, zip_filename=safe_filename, visibility="private",
-        portfolio_metadata={"course_slug": course_slug, "summary": "", "skills": [], "technologies": [], "screenshot_urls": []},
-    )
-    db.add(submission)
-    db.commit()
-    db.refresh(submission)
-    return {"submission": _portfolio_item(submission, user), "message": "Project ZIP saved privately. Add portfolio details and enable sharing when you are ready."}
+    try:
+        archive_file.file.seek(0, 2)
+        payload_size = archive_file.file.tell()
+        validate_project_zip_size(payload_size)
+        archive_file.file.seek(0)
+        validate_project_zip_file(archive_file.file)
+        archive_file.file.seek(0)
+
+        course_slug = _normalize_portfolio_slug(course_slug, fallback="", max_length=100) if course_slug.strip() else ""
+        title_value = (title or "").strip()
+        project_base = project_slug.strip() or title_value or Path(filename).stem or "my-project"
+        normalized_project_slug = _normalize_portfolio_slug(
+            project_base, fallback="my-project", max_length=180
+        )
+        safe_filename = re.sub(r"[^A-Za-z0-9._-]+", "-", Path(filename).name).strip(".-") or f"{normalized_project_slug}.zip"
+        if not safe_filename.lower().endswith(".zip"):
+            safe_filename += ".zip"
+
+        submission = ProjectSubmission(
+            user_id=user.id,
+            project_slug=normalized_project_slug,
+            title=(title_value or normalized_project_slug.replace("-", " ").title()).strip()[:200],
+            code_bundle={}, zip_bundle=None, zip_filename=safe_filename, visibility="private",
+            portfolio_metadata={
+                "course_slug": course_slug,
+                "custom_project": True,
+                "archive_upload_complete": False,
+                "summary": "", "skills": [], "technologies": [], "screenshot_urls": [],
+            },
+        )
+        db.add(submission)
+        db.commit()
+        db.refresh(submission)
+        try:
+            _store_project_zip_chunks(db, submission.id, archive_file.file)
+            metadata = dict(submission.portfolio_metadata or {})
+            metadata["archive_upload_complete"] = True
+            submission.portfolio_metadata = metadata
+            db.add(submission)
+            db.commit()
+        except Exception as exc:
+            db.rollback()
+            try:
+                db.execute(delete(ProjectSubmissionZipChunk).where(ProjectSubmissionZipChunk.submission_id == submission.id))
+                db.execute(delete(ProjectSubmission).where(ProjectSubmission.id == submission.id))
+                db.commit()
+            except Exception:
+                db.rollback()
+            if isinstance(exc, HTTPException):
+                raise
+            raise HTTPException(status_code=503, detail="The project ZIP could not be stored completely. Please retry the upload.") from exc
+        db.refresh(submission)
+        return {"submission": _portfolio_item(submission, user), "message": "Your project ZIP was saved privately. Add a summary, then enable public sharing when you are ready."}
+    finally:
+        try:
+            archive_file.file.close()
+        except Exception:
+            pass
 
 
 @router.get("/api/me/portfolio")
@@ -794,7 +919,7 @@ def download_my_project_submission(
     item = db.scalar(select(ProjectSubmission).where(ProjectSubmission.id == submission_id, ProjectSubmission.user_id == user.id))
     if item is None:
         raise HTTPException(status_code=404, detail="Project submission was not found.")
-    return _download_project_zip(item, is_public=False)
+    return _download_project_zip(item, is_public=False, db=db)
 
 
 @router.get("/api/portfolio/{username}/projects/{submission_id}/download")
@@ -811,7 +936,7 @@ def download_public_project_submission(
     ))
     if item is None:
         raise HTTPException(status_code=404, detail="This project is not shared publicly.")
-    return _download_project_zip(item, is_public=True)
+    return _download_project_zip(item, is_public=True, db=db)
 
 
 @router.get("/api/portfolio/{username}")

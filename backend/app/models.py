@@ -431,6 +431,16 @@ class ProjectSubmission(Base):
     )
 
 
+class ProjectSubmissionZipChunk(Base):
+    """One 1 MiB piece of a learner's uploaded archive, for bounded-memory uploads/downloads."""
+    __tablename__ = "project_submission_zip_chunks"
+    submission_id: Mapped[object] = mapped_column(
+        Uuid(as_uuid=True), ForeignKey("project_submissions.id", ondelete="CASCADE"), primary_key=True
+    )
+    sequence: Mapped[int] = mapped_column(Integer, primary_key=True)
+    payload: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
+
+
 Index("ix_payment_plan_status", PaymentRecord.plan_id, PaymentRecord.status)
 
 
