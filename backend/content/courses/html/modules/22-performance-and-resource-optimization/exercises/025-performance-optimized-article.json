@@ -42,8 +42,9 @@
     "Run a validator or manually inspect the relevant browser behavior."
   ],
   "solution": {
-    "answer": null,
-    "explanation": "Reference approach: Do not lazy-load the main image likely visible at page start; use high priority only for a genuinely critical resource. Required structural evidence: width=, height=, loading=\"lazy\", fetchpriority."
+    "answer": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Explore the Mountains</title>\n</head>\n<body>\n  <main>\n    <article>\n      <h1>Explore the Mountains</h1>\n      <img src=\"mountain-hero.jpg\" alt=\"Mountain ridge in the early morning light\" width=\"1400\" height=\"800\" fetchpriority=\"high\">\n      <p>This primary image is visible immediately, so it is not lazy-loaded.</p>\n      <h2>More from the trail</h2>\n      <p>Additional images lower on the page can be loaded when they approach the viewport.</p>\n      <img src=\"trail-view.jpg\" alt=\"A narrow trail winding through a mountain meadow\" width=\"900\" height=\"600\" loading=\"lazy\">\n    </article>\n  </main>\n</body>\n</html>",
+    "explanation": "One complete example is shown above. Reference approach: Do not lazy-load the main image likely visible at page start; use high priority only for a genuinely critical resource. Required structural evidence: width=, height=, loading=\"lazy\", fetchpriority.",
+    "expected_result": "A valid, inspectable HTML example demonstrating: resource priority, responsive images, loading."
   },
   "grading_config": {
     "mode": "contains_all",

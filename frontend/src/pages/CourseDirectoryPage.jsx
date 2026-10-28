@@ -116,7 +116,7 @@ export default function CourseDirectoryPage({ collection = "references" }) {
           {filtersOpen ? "Hide filters" : "More filters & sort"}
         </button>
         <span>{loading ? "Refreshing catalog…" : `${filtered.length} of ${courses.length} tracks`}</span>
-        {(category !== "All" || level !== "All levels" || status !== "All availability" || sort !== "name-asc" || query) && <button type="button" className="text-link" onClick={clearFilters}>Clear filters</button>}
+        {(category !== "All" || level !== "All levels" || status !== "All availability" || sort !== "name-asc" || query) && <button type="button" className="button button-secondary button-small collection-clear-filters" onClick={clearFilters} aria-label="Clear all project filters">Clear filters</button>}
       </div>
       {filtersOpen && <div className="collection-filter-grid collection-secondary-filter-grid panel" aria-label="Additional course filters">
         <label>Skill level

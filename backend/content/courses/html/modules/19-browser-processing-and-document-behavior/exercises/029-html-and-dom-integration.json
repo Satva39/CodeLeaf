@@ -39,8 +39,9 @@
     "Run a validator or manually inspect the relevant browser behavior."
   ],
   "solution": {
-    "answer": null,
-    "explanation": "Reference approach: The HTML should remain meaningful even when the script is unavailable. Required structural evidence: id=\"action-button\", id=\"status-message\", <button."
+    "answer": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Button Interaction</title>\n</head>\n<body>\n  <main>\n    <h1>Try the Button</h1>\n    <p id=\"status-message\" role=\"status\" aria-live=\"polite\">The button has not been pressed yet.</p>\n    <button id=\"action-button\" type=\"button\">Update message</button>\n  </main>\n  <script>\n    const actionButton = document.querySelector(\"#action-button\");\n    const statusMessage = document.querySelector(\"#status-message\");\n\n    actionButton.addEventListener(\"click\", () => {\n      statusMessage.textContent = \"The button was pressed successfully.\";\n    });\n  </script>\n</body>\n</html>",
+    "explanation": "One complete example is shown above. Reference approach: The HTML should remain meaningful even when the script is unavailable. Required structural evidence: id=\"action-button\", id=\"status-message\", <button.",
+    "expected_result": "A valid, inspectable HTML example demonstrating: element identification, template concepts."
   },
   "grading_config": {
     "mode": "contains_all",

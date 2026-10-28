@@ -89,6 +89,30 @@ class ExerciseSolutionEndpointTests(unittest.TestCase):
         self.assertEqual(response.json()["answer"], "print('worked answer')")
         self.assertNotIn("protected reference solution is stored", response.json()["explanation"].lower())
 
+    def test_inline_manifest_solution_returns_complete_answer_code(self) -> None:
+        exercise_path = self.exercises_root / "demo-exercise.json"
+        exercise_path.write_text(json.dumps({
+            "slug": "demo-exercise",
+            "lesson_slug": "demo-lesson",
+            "solution": {
+                "answer": "<!doctype html>\n<html lang=\"en\">\n<body><h1>About Me</h1><p>Hello.</p><p>I enjoy <em>learning</em>.</p></body>\n</html>",
+                "explanation": "A complete worked HTML example.",
+                "expected_result": "A document with a heading, paragraphs, and semantic emphasis.",
+            },
+        }), encoding="utf-8")
+        main.find_published_exercise = lambda _db, _course, _lesson, _exercise: SimpleNamespace(
+            slug="demo-exercise", title="Demo exercise", solution={
+                "answer": None,
+                "explanation": "Reference approach: Use an h1 and paragraphs; this is guidance, not the full code.",
+            }
+        )
+        response = self.client.get("/api/courses/demo-course/lessons/demo-lesson/exercises/demo-exercise/solution")
+        self.assertEqual(response.status_code, 200, response.text)
+        payload = response.json()
+        self.assertIn("<h1>About Me</h1>", payload["answer"])
+        self.assertIn("<em>learning</em>", payload["answer"])
+        self.assertEqual(payload["expected_result"], "A document with a heading, paragraphs, and semantic emphasis.")
+
     def test_course_level_solution_tree_is_supported(self) -> None:
         course_solutions = self.course_root / "solutions" / "exercises"
         course_solutions.mkdir(parents=True)

@@ -4745,15 +4745,34 @@ def reveal_exercise_solution(
             if any(payload.get(key) for key in ("answer", "explanation", "expected_result", "steps", "test_cases")):
                 return {"exercise_slug": exercise_slug, **payload}
 
-    # Compatibility fallback for older exercises without a usable linked solution file.
+    # Older database rows can contain only a generic explanation while the checked-in
+    # manifest has since gained the complete worked answer. Do not let that stale row
+    # mask the fuller, versioned source content.
     stored_solution = exercise.solution if isinstance(exercise.solution, dict) else {}
     stored_payload = _safe_exercise_solution_payload(stored_solution)
+    inline_solution = manifest.get("solution") if isinstance(manifest.get("solution"), dict) else {}
+    inline_payload = _safe_exercise_solution_payload(inline_solution)
+
+    stored_answer = str(stored_payload.get("answer") or "").strip()
+    inline_answer = str(inline_payload.get("answer") or "").strip()
+    generic_answer_markers = (
+        "reference approach:",
+        "a strong solution should",
+        "implement ",
+        "protected reference solution is stored",
+        "required implementation evidence includes",
+        "this exercise checks",
+    )
+    stored_answer_is_generic = not stored_answer or any(
+        marker in stored_answer.lower() for marker in generic_answer_markers
+    )
+    if inline_answer and stored_answer_is_generic:
+        return {"exercise_slug": exercise_slug, **inline_payload}
+
     if any(stored_payload.get(key) for key in ("answer", "explanation", "expected_result", "steps", "test_cases")):
         if "protected reference solution is stored" not in str(stored_payload.get("explanation", "")).lower():
             return {"exercise_slug": exercise_slug, **stored_payload}
 
-    inline_solution = manifest.get("solution") if isinstance(manifest.get("solution"), dict) else {}
-    inline_payload = _safe_exercise_solution_payload(inline_solution)
     if any(inline_payload.get(key) for key in ("answer", "explanation", "expected_result", "steps", "test_cases")):
         return {"exercise_slug": exercise_slug, **inline_payload}
     raise HTTPException(status_code=404, detail="A worked solution has not been authored for this exercise yet.")

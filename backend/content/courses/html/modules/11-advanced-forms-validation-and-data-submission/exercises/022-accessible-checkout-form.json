@@ -44,8 +44,9 @@
     "Run a validator or manually inspect the relevant browser behavior."
   ],
   "solution": {
-    "answer": null,
-    "explanation": "Reference approach: This exercise is markup only. Payment authorization, server validation, CSRF protections, and data persistence live in application code. Required structural evidence: <fieldset>, <legend>, <label, aria-describedby, required."
+    "answer": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Checkout Details</title>\n</head>\n<body>\n  <main>\n    <h1>Checkout Details</h1>\n    <p id=\"privacy-note\">Use this form to enter delivery information. This demonstration does not process payments.</p>\n    <form action=\"/checkout\" method=\"post\">\n      <fieldset>\n        <legend>Delivery details</legend>\n        <p><label for=\"name\">Full name</label><input id=\"name\" name=\"name\" type=\"text\" autocomplete=\"name\" aria-describedby=\"privacy-note\" required></p>\n        <p><label for=\"address\">Street address</label><input id=\"address\" name=\"address\" type=\"text\" autocomplete=\"street-address\" aria-describedby=\"privacy-note\" required></p>\n        <p><label for=\"email\">Email address</label><input id=\"email\" name=\"email\" type=\"email\" autocomplete=\"email\" aria-describedby=\"privacy-note\" required></p>\n      </fieldset>\n      <button type=\"submit\">Continue to review</button>\n    </form>\n  </main>\n</body>\n</html>",
+    "explanation": "One complete example is shown above. Reference approach: This exercise is markup only. Payment authorization, server validation, CSRF protections, and data persistence live in application code. Required structural evidence: <fieldset>, <legend>, <label, aria-describedby, required.",
+    "expected_result": "A valid, inspectable HTML example demonstrating: form structure, errors, privacy."
   },
   "grading_config": {
     "mode": "contains_all",

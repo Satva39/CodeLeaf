@@ -43,8 +43,9 @@
     "Run a validator or manually inspect the relevant browser behavior."
   ],
   "solution": {
-    "answer": null,
-    "explanation": "Reference approach: Automated checks can identify some problems; keyboard and screen-reader-oriented manual checks are also needed. Required structural evidence: alt=, <label, <main>, <h1>."
+    "answer": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Accessibility Audit Checklist</title>\n</head>\n<body>\n  <main>\n    <h1>Accessibility Audit Checklist</h1>\n    <section aria-labelledby=\"content-checks\">\n      <h2 id=\"content-checks\">Content checks</h2>\n      <figure>\n        <img src=\"sample-chart.png\" alt=\"Bar chart comparing sample monthly visits: January 120, February 150, and March 180\" width=\"640\" height=\"360\">\n        <figcaption>Sample chart with its key information provided in the alternative text.</figcaption>\n      </figure>\n      <form action=\"#\" method=\"get\">\n        <p><label for=\"page-url\">Page URL to review</label><input id=\"page-url\" name=\"page-url\" type=\"url\" required></p>\n        <button type=\"submit\">Review page</button>\n      </form>\n    </section>\n  </main>\n</body>\n</html>",
+    "explanation": "One complete example is shown above. Reference approach: Automated checks can identify some problems; keyboard and screen-reader-oriented manual checks are also needed. Required structural evidence: alt=, <label, <main>, <h1>.",
+    "expected_result": "A valid, inspectable HTML example demonstrating: alternative text, labels, landmarks, keyboard access."
   },
   "grading_config": {
     "mode": "contains_all",

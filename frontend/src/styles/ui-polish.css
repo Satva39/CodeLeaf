@@ -81,6 +81,26 @@
 
 /* Replace large language/category chip walls with one predictable category dropdown. */
 .collection-directory-toolbar { align-items: center; gap: 12px; }
+.collection-directory-toolbar .collection-clear-filters {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid color-mix(in srgb, var(--mint) 34%, var(--line-strong));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--mint) 7%, var(--panel-soft));
+  color: var(--mint);
+  font-weight: 750;
+  white-space: nowrap;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+.collection-directory-toolbar .collection-clear-filters:hover {
+  border-color: color-mix(in srgb, var(--mint) 58%, var(--line-strong));
+  background: color-mix(in srgb, var(--mint) 13%, var(--panel-soft));
+  transform: translateY(-1px);
+}
+.collection-directory-toolbar .collection-clear-filters:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 3px;
+}
 .collection-category-picker {
   display: inline-grid;
   grid-template-columns: auto minmax(160px, 260px);
@@ -162,7 +182,7 @@
   .collection-directory-toolbar { align-items: stretch; }
   .collection-directory-toolbar > .button { width: 100%; justify-content: center; }
   .collection-directory-toolbar > span { order: 3; width: 100%; }
-  .collection-directory-toolbar > .text-link { order: 4; }
+  .collection-directory-toolbar > .collection-clear-filters { order: 4; }
   .collection-secondary-filter-grid { grid-template-columns: 1fr; }
   .profile-account-actions { grid-template-columns: 1fr 1fr; gap: 10px; }
   .profile-account-actions .button { font-size: 12px; padding: 9px 7px; }

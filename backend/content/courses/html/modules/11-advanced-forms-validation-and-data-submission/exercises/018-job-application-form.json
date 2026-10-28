@@ -44,8 +44,9 @@
     "Run a validator or manually inspect the relevant browser behavior."
   ],
   "solution": {
-    "answer": null,
-    "explanation": "Reference approach: The accept attribute is a selection hint, not file validation. The server must verify file size, type, and contents. Required structural evidence: <fieldset>, <legend>, type=\"file\", accept=, <label."
+    "answer": "<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Job Application</title>\n</head>\n<body>\n  <main>\n    <h1>Job Application</h1>\n    <form action=\"/applications\" method=\"post\" enctype=\"multipart/form-data\">\n      <fieldset>\n        <legend>Applicant details</legend>\n        <p><label for=\"name\">Full name</label><input id=\"name\" name=\"name\" type=\"text\" required autocomplete=\"name\"></p>\n        <p><label for=\"email\">Email</label><input id=\"email\" name=\"email\" type=\"email\" required autocomplete=\"email\"></p>\n      </fieldset>\n      <fieldset>\n        <legend>Supporting documents</legend>\n        <p><label for=\"resume\">Resume (PDF or Word document)</label><input id=\"resume\" name=\"resume\" type=\"file\" accept=\".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document\" required></p>\n      </fieldset>\n      <p>File type and file size must also be checked on the server after upload.</p>\n      <button type=\"submit\">Submit application</button>\n    </form>\n  </main>\n</body>\n</html>",
+    "explanation": "One complete example is shown above. Reference approach: The accept attribute is a selection hint, not file validation. The server must verify file size, type, and contents. Required structural evidence: <fieldset>, <legend>, type=\"file\", accept=, <label.",
+    "expected_result": "A valid, inspectable HTML example demonstrating: file uploads, groups, validation."
   },
   "grading_config": {
     "mode": "contains_all",
