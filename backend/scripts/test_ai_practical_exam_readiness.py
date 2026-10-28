@@ -29,6 +29,7 @@ def main() -> None:
     practical = json.loads((COURSE_DIR / "exams" / "practical-exam.json").read_text(encoding="utf-8"))
     assert practical.get("status") == "published"
     assert practical.get("difficulty") == "intermediate"
+    assert practical.get("execution_mode") == "structured_text_validation"
     tasks = practical.get("tasks")
     assert isinstance(tasks, list) and len(tasks) >= 3
     assert len({task.get("id") for task in tasks}) == len(tasks)

@@ -5,6 +5,7 @@ import {
   Award,
   BadgeCheck,
   CheckCircle2,
+  Download,
   Printer,
   ShieldCheck,
 } from "lucide-react";
@@ -30,6 +31,8 @@ export default function CertificateViewPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [unauthenticated, setUnauthenticated] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState("");
 
   useEffect(() => {
     const controller = new AbortController();
@@ -78,6 +81,49 @@ export default function CertificateViewPage() {
     return () => controller.abort();
   }, [publicId]);
 
+  async function downloadCertificate() {
+    if (!certificate?.public_id || downloading) return;
+    setDownloading(true);
+    setDownloadError("");
+    try {
+      const response = await apiFetch(
+        `${API_BASE}/api/me/certificates/${encodeURIComponent(certificate.public_id)}/download`,
+        { credentials: "include" },
+      );
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        const detail = payload.detail;
+        throw new Error(
+          typeof detail === "string"
+            ? detail
+            : detail?.message || "The certificate PDF could not be downloaded.",
+        );
+      }
+      const blob = await response.blob();
+      if (blob.type && !blob.type.toLowerCase().includes("application/pdf")) {
+        throw new Error("The server returned an unexpected certificate file format.");
+      }
+      const safeCourse = String(certificate.course_slug || "course")
+        .replace(/[^a-z0-9_-]+/gi, "-")
+        .replace(/^-+|-+$/g, "") || "course";
+      const objectUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = `CodeLeaf-${safeCourse}-certificate.pdf`;
+      link.style.display = "none";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+    } catch (requestError) {
+      setDownloadError(
+        requestError.message || "The certificate PDF could not be downloaded. Please try again.",
+      );
+    } finally {
+      setDownloading(false);
+    }
+  }
+
   if (loading) {
     return (
       <PageShell className="narrow-page certificate-view-page">
@@ -120,14 +166,27 @@ export default function CertificateViewPage() {
         <Link to="/certificates" className="text-link certificate-view-back">
           <ArrowLeft size={15} /> Back to certificates
         </Link>
-        <button
-          className="button button-secondary certificate-print-action"
-          type="button"
-          onClick={() => window.print()}
-        >
-          <Printer size={16} /> Print / Save as PDF
-        </button>
+        <div className="certificate-view-actions">
+          <button
+            className="button button-primary certificate-download-action"
+            type="button"
+            onClick={downloadCertificate}
+            disabled={downloading}
+          >
+            <Download size={16} /> {downloading ? "Preparing download…" : "Download certificate"}
+          </button>
+          <button
+            className="button button-secondary certificate-print-action"
+            type="button"
+            onClick={() => window.print()}
+          >
+            <Printer size={16} /> Print / Save as PDF
+          </button>
+        </div>
       </div>
+      {downloadError && (
+        <p className="certificate-download-error" role="alert">{downloadError}</p>
+      )}
 
       <article className="certificate-document" aria-labelledby="certificate-title">
         <div className="certificate-document-topline">

@@ -605,6 +605,15 @@ def main() -> None:
             and certificate_detail.json().get("recipient_name") == "css_learner learner",
             "certificate detail endpoint returns printable details to its owner",
         )
+        certificate_pdf = client.get(f"/api/me/certificates/{certificate_id}/download")
+        check(
+            certificate_pdf.status_code == 200
+            and certificate_pdf.headers.get("content-type", "").startswith("application/pdf")
+            and certificate_pdf.headers.get("content-disposition", "").lower().endswith('.pdf"')
+            and certificate_pdf.content.startswith(b"%PDF-")
+            and b"CSS test course" in certificate_pdf.content,
+            "certificate download endpoint returns a real PDF attachment to its owner",
+        )
 
         # Certificate details must not reveal another learner's credential.
         set_cookie(client, users["failed_learner"])
@@ -612,6 +621,11 @@ def main() -> None:
         check(
             other_certificate_detail.status_code == 404,
             "certificate detail endpoint denies another learner access without revealing ownership",
+        )
+        other_certificate_pdf = client.get(f"/api/me/certificates/{certificate_id}/download")
+        check(
+            other_certificate_pdf.status_code == 404,
+            "certificate PDF download denies another learner access without revealing ownership",
         )
 
         # Failed exam: never issues a certificate and repeated wrong answers cannot earn XP.

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+from io import BytesIO
 import hashlib
 import hmac
 import json
@@ -1822,20 +1823,21 @@ def list_exam_catalog(db: Session = Depends(get_db)) -> dict[str, Any]:
                 "required_question_count": 80,
                 "question_count": 80 if readiness["ready"] else 0,
             })
+            # Report practical publication independently from MCQ-bank readiness so
+            # a learner can distinguish a missing practical from an undersized MCQ bank.
             practical_ready = False
             practical_message = "The practical certification assessment has not been published yet."
-            if readiness["ready"]:
-                try:
-                    _load_practical_exam(course_dir)
-                    practical_ready = True
-                    practical_message = "The practical assessment is published."
-                except HTTPException as practical_error:
-                    practical_detail = practical_error.detail
-                    practical_message = (
-                        str(practical_detail.get("message") or practical_message)
-                        if isinstance(practical_detail, dict)
-                        else str(practical_detail or practical_message)
-                    )
+            try:
+                _load_practical_exam(course_dir)
+                practical_ready = True
+                practical_message = "The practical assessment is published."
+            except HTTPException as practical_error:
+                practical_detail = practical_error.detail
+                practical_message = (
+                    str(practical_detail.get("message") or practical_message)
+                    if isinstance(practical_detail, dict)
+                    else str(practical_detail or practical_message)
+                )
             entry["practical_available"] = practical_ready
             entry["practical_message"] = practical_message
             if readiness["ready"] and practical_ready:
@@ -1871,6 +1873,7 @@ def list_exam_catalog(db: Session = Depends(get_db)) -> dict[str, Any]:
                         "message": (
                             f"The MCQ stage is unavailable: it needs 80 valid, distinct questions; "
                             f"the bank currently has {readiness['distinct_prompt_count']} distinct prompts."
+                            + (" The practical assessment is published." if practical_ready else f" {practical_message}")
                         ),
                     }
                 )
@@ -4899,6 +4902,144 @@ def list_certificates(
             for certificate, course_slug, course_title in rows
         ]
     }
+
+
+def _build_certificate_pdf(
+    recipient_name: str, course_title: str, public_id: str, issued_at: datetime
+) -> bytes:
+    """Build a downloadable, one-page PDF credential using reportlab."""
+    from reportlab.lib import colors
+    from reportlab.lib.pagesizes import A4, landscape
+    from reportlab.pdfbase.pdfmetrics import stringWidth
+    from reportlab.pdfgen import canvas
+
+    output = BytesIO()
+    page_width, page_height = landscape(A4)
+    pdf = canvas.Canvas(output, pagesize=(page_width, page_height), pageCompression=0)
+    pdf.setTitle(f"CodeLeaf Certificate - {course_title}")
+    pdf.setAuthor("CodeLeaf")
+    pdf.setSubject(f"Verified learning credential {public_id}")
+
+    dark = colors.HexColor("#183A32")
+    green = colors.HexColor("#087D5C")
+    muted = colors.HexColor("#507568")
+    border = colors.HexColor("#A3CDBF")
+    paper = colors.HexColor("#EDF8F3")
+    pdf.setFillColor(paper)
+    pdf.rect(0, 0, page_width, page_height, fill=1, stroke=0)
+    pdf.setStrokeColor(border)
+    pdf.setLineWidth(3)
+    pdf.rect(18, 18, page_width - 36, page_height - 36, fill=0, stroke=1)
+    pdf.setLineWidth(1)
+    pdf.rect(27, 27, page_width - 54, page_height - 54, fill=0, stroke=1)
+
+    def centered_lines(value: str, y: float, font: str, size: float, max_width: float, color) -> float:
+        safe_text = str(value or "").replace("\r", " ").replace("\n", " ").strip()
+        words = safe_text.split()
+        lines: list[str] = []
+        current = ""
+        for word in words:
+            candidate = f"{current} {word}".strip()
+            if current and stringWidth(candidate, font, size) > max_width:
+                lines.append(current)
+                current = word
+            else:
+                current = candidate
+        if current:
+            lines.append(current)
+        pdf.setFillColor(color)
+        pdf.setFont(font, size)
+        for line in lines[:3]:
+            pdf.drawCentredString(page_width / 2, y, line)
+            y -= size * 1.35
+        return y
+
+    pdf.setFillColor(green)
+    pdf.setFont("Helvetica-Bold", 10)
+    pdf.drawCentredString(page_width / 2, page_height - 63, "CODELEAF  |  VERIFIED LEARNING")
+    pdf.setStrokeColor(border)
+    pdf.line(82, page_height - 78, page_width - 82, page_height - 78)
+
+    y = page_height - 132
+    y = centered_lines("CERTIFICATE OF ACHIEVEMENT", y, "Helvetica-Bold", 10, page_width - 150, green) - 10
+    y = centered_lines("Certificate of Completion", y, "Helvetica-Bold", 27, page_width - 150, dark) - 15
+    y = centered_lines("This certificate is proudly presented to", y, "Helvetica", 12, page_width - 150, muted) - 8
+    y = centered_lines(recipient_name or "CodeLeaf learner", y, "Helvetica-Bold", 24, page_width - 170, green) - 12
+    pdf.setStrokeColor(border)
+    pdf.line(page_width / 2 - 105, y, page_width / 2 + 105, y)
+    y -= 26
+    y = centered_lines("for completing the published learning requirements and passing the", y, "Helvetica", 11, page_width - 150, muted)
+    y = centered_lines("required theoretical and practical certification assessments for", y - 2, "Helvetica", 11, page_width - 150, muted) - 7
+    y = centered_lines(course_title, y, "Helvetica-Bold", 17, page_width - 170, dark) - 15
+    y = centered_lines("Issued after verification by the CodeLeaf certification service", y, "Helvetica", 9, page_width - 150, green) - 24
+
+    footer_y = 66
+    pdf.setStrokeColor(border)
+    pdf.line(58, footer_y + 28, page_width - 58, footer_y + 28)
+    pdf.setFillColor(muted)
+    pdf.setFont("Helvetica-Bold", 7)
+    pdf.drawString(70, footer_y + 10, "DATE ISSUED")
+    pdf.drawString(280, footer_y + 10, "CREDENTIAL ID")
+    pdf.setFillColor(dark)
+    pdf.setFont("Helvetica", 9)
+    try:
+        formatted_date = issued_at.strftime("%d %B %Y")
+    except (AttributeError, ValueError):
+        formatted_date = "Date unavailable"
+    pdf.drawString(70, footer_y - 5, formatted_date)
+    pdf.setFont("Courier", 8)
+    pdf.drawString(280, footer_y - 5, str(public_id))
+    pdf.setFillColor(green)
+    pdf.setFont("Helvetica-Bold", 9)
+    pdf.drawRightString(page_width - 70, footer_y - 5, "VERIFIED CREDENTIAL")
+    pdf.setFillColor(muted)
+    pdf.setFont("Helvetica", 7)
+    pdf.drawCentredString(page_width / 2, 37, "Keep the credential ID to verify this certificate on CodeLeaf.")
+    pdf.showPage()
+    pdf.save()
+    return output.getvalue()
+
+
+@app.get("/api/me/certificates/{public_id}/download")
+def download_my_certificate(
+    public_id: str,
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+) -> Response:
+    """Download an active certificate as a PDF, scoped to its authenticated owner."""
+    row = db.execute(
+        select(Certificate, Course.slug, Course.title)
+        .join(Course, Certificate.course_id == Course.id)
+        .where(
+            Certificate.public_id == public_id,
+            Certificate.user_id == user.id,
+            Certificate.revoked_at.is_(None),
+        )
+        .limit(1)
+    ).first()
+    # Use the same not-found response for unknown, revoked, and another user's ID.
+    if row is None:
+        raise HTTPException(
+            status_code=404,
+            detail="This certificate is not available for the signed-in account.",
+        )
+    certificate, course_slug, course_title = row
+    pdf_bytes = _build_certificate_pdf(
+        user.display_name or "CodeLeaf learner",
+        course_title,
+        certificate.public_id,
+        certificate.issued_at,
+    )
+    safe_slug = re.sub(r"[^a-zA-Z0-9_-]+", "-", str(course_slug)).strip("-") or "course"
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f'attachment; filename="CodeLeaf-{safe_slug}-certificate.pdf"',
+            "Cache-Control": "private, no-store",
+            "X-Content-Type-Options": "nosniff",
+        },
+    )
 
 
 @app.get("/api/me/certificates/{public_id}")

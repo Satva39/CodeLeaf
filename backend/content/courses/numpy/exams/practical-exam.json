@@ -1,0 +1,109 @@
+{
+  "id": "numpy-intermediate-practical-v1",
+  "title": "NumPy — From Beginner to Professional — Intermediate Practical Assessment",
+  "status": "published",
+  "difficulty": "intermediate",
+  "pass_percent": 75,
+  "execution_mode": "structured_text_validation",
+  "instructions": "This is a course-specific, intermediate practical assessment for NumPy — From Beginner to Professional. Submit the requested code, query, configuration, or operational artifact as text. The backend applies deterministic content checks to required implementation elements; it does not execute arbitrary learner code. Do not include secrets or production credentials. A task is accepted only when its required elements are present.",
+  "tasks": [
+    {
+      "id": "implement-core-artifact",
+      "title": "Implement: Normalize a numeric matrix row-wise while preserving",
+      "prompt": "Create an intermediate NumPy — From Beginner to Professional solution for this task: normalize a numeric matrix row-wise while preserving invalid-value masks and avoiding Python loops. Submit the relevant code, query, configuration, or worked artifact. Include the required data flow and handle invalid or missing input. Use the starter below as a starting point, not as the complete solution.",
+      "submission_type": "text",
+      "starter": "import numpy as np\n\ndef normalize_rows(values):\n    # Validate shape, handle non-finite values, and normalize rows.\n    ...\n",
+      "rubric": [
+        "Implements the stated NumPy — From Beginner to Professional task.",
+        "Handles invalid or missing input.",
+        "Uses the expected language or tool constructs."
+      ],
+      "points": 25,
+      "grader": {
+        "type": "contains_all",
+        "required_strings": [
+          "np.asarray",
+          "np.isfinite",
+          "axis=1",
+          "np.where",
+          "dtype"
+        ]
+      },
+      "feedback_correct": "The required implementation elements were detected.",
+      "feedback_incorrect": "The submission is missing one or more required implementation elements. Review the task requirements and resubmit on a new attempt if allowed."
+    },
+    {
+      "id": "repair-defect",
+      "title": "Repair: The implementation divides by zero for an",
+      "prompt": "A production NumPy — From Beginner to Professional implementation has this defect: the implementation divides by zero for an all-zero row and treats NaN as an ordinary measurement. Return a corrected artifact and a concise explanation of why the correction works. Your solution must show a concrete fix, not only describe the problem.",
+      "submission_type": "text",
+      "starter": "Defect report: the implementation divides by zero for an all-zero row and treats NaN as an ordinary measurement\n\nCorrection:\n\nReasoning:",
+      "rubric": [
+        "Identifies the failure mode.",
+        "Provides an applicable correction.",
+        "Explains how the correction prevents recurrence."
+      ],
+      "points": 25,
+      "grader": {
+        "type": "contains_all",
+        "required_strings": [
+          "np.isfinite",
+          "zero",
+          "axis",
+          "mask"
+        ]
+      },
+      "feedback_correct": "The required implementation elements were detected.",
+      "feedback_incorrect": "The submission is missing one or more required implementation elements. Review the task requirements and resubmit on a new attempt if allowed."
+    },
+    {
+      "id": "regression-tests",
+      "title": "Regression tests: Normalize a numeric matrix row-wise",
+      "prompt": "Write a small regression-test set for the normalize a numeric matrix row-wise while preserving invalid-value masks and avoiding Python loops. Include the normal case, an invalid or empty input case, and a boundary or failure case. Show assertions or equivalent verification commands and the expected outcome.",
+      "submission_type": "text",
+      "starter": "Normal case:\n\nInvalid/empty case:\n\nBoundary/failure case:\n\nAssertions or commands:",
+      "rubric": [
+        "Covers normal behavior.",
+        "Covers at least one edge case.",
+        "Includes an assertion or runnable verification command."
+      ],
+      "points": 25,
+      "grader": {
+        "type": "contains_all",
+        "required_strings": [
+          "np.testing",
+          "all-zero",
+          "nan",
+          "shape",
+          "dtype"
+        ]
+      },
+      "feedback_correct": "The required implementation elements were detected.",
+      "feedback_incorrect": "The submission is missing one or more required implementation elements. Review the task requirements and resubmit on a new attempt if allowed."
+    },
+    {
+      "id": "production-reliability",
+      "title": "Production hardening: NumPy",
+      "prompt": "Review your NumPy — From Beginner to Professional solution for reliability, security, and maintainability. Describe and implement a small set of concrete safeguards in the code, query, configuration, or runbook. Do not expose secrets or rely on client-controlled authorization.",
+      "submission_type": "text",
+      "starter": "Risk:\n\nMitigation in the artifact:\n\nVerification:\n\nOperational signal:",
+      "rubric": [
+        "Includes a concrete reliability or security safeguard.",
+        "Explains how the safeguard is verified.",
+        "Avoids unsafe default behavior."
+      ],
+      "points": 25,
+      "grader": {
+        "type": "contains_all",
+        "required_strings": [
+          "vectorized",
+          "memory",
+          "finite",
+          "reproducible"
+        ]
+      },
+      "feedback_correct": "The required implementation elements were detected.",
+      "feedback_incorrect": "The submission is missing one or more required implementation elements. Review the task requirements and resubmit on a new attempt if allowed."
+    }
+  ]
+}

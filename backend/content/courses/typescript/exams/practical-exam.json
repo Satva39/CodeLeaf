@@ -1,0 +1,109 @@
+{
+  "id": "typescript-intermediate-practical-v1",
+  "title": "TypeScript — From Beginner to Professional — Intermediate Practical Assessment",
+  "status": "published",
+  "difficulty": "intermediate",
+  "pass_percent": 75,
+  "execution_mode": "structured_text_validation",
+  "instructions": "This is a course-specific, intermediate practical assessment for TypeScript — From Beginner to Professional. Submit the requested code, query, configuration, or operational artifact as text. The backend applies deterministic content checks to required implementation elements; it does not execute arbitrary learner code. Do not include secrets or production credentials. A task is accepted only when its required elements are present.",
+  "tasks": [
+    {
+      "id": "implement-core-artifact",
+      "title": "Implement: Design a type-safe API result with discriminated",
+      "prompt": "Create an intermediate TypeScript — From Beginner to Professional solution for this task: design a type-safe API result with discriminated unions and exhaustive handling of success and failure states. Submit the relevant code, query, configuration, or worked artifact. Include the required data flow and handle invalid or missing input. Use the starter below as a starting point, not as the complete solution.",
+      "submission_type": "text",
+      "starter": "type ApiResult<T> =\n  | { status: 'success'; data: T }\n  | { status: 'error'; message: string };\n\nfunction handleResult<T>(result: ApiResult<T>) {\n  // Narrow and exhaustively handle each case.\n}\n",
+      "rubric": [
+        "Implements the stated TypeScript — From Beginner to Professional task.",
+        "Handles invalid or missing input.",
+        "Uses the expected language or tool constructs."
+      ],
+      "points": 25,
+      "grader": {
+        "type": "contains_all",
+        "required_strings": [
+          "type apiresult",
+          "status: 'success'",
+          "status: 'error'",
+          "switch",
+          "never"
+        ]
+      },
+      "feedback_correct": "The required implementation elements were detected.",
+      "feedback_incorrect": "The submission is missing one or more required implementation elements. Review the task requirements and resubmit on a new attempt if allowed."
+    },
+    {
+      "id": "repair-defect",
+      "title": "Repair: A response casts untrusted JSON to a",
+      "prompt": "A production TypeScript — From Beginner to Professional implementation has this defect: a response casts untrusted JSON to a domain type and an unknown status silently falls through. Return a corrected artifact and a concise explanation of why the correction works. Your solution must show a concrete fix, not only describe the problem.",
+      "submission_type": "text",
+      "starter": "Defect report: a response casts untrusted JSON to a domain type and an unknown status silently falls through\n\nCorrection:\n\nReasoning:",
+      "rubric": [
+        "Identifies the failure mode.",
+        "Provides an applicable correction.",
+        "Explains how the correction prevents recurrence."
+      ],
+      "points": 25,
+      "grader": {
+        "type": "contains_all",
+        "required_strings": [
+          "unknown",
+          "type guard",
+          "never",
+          "validation"
+        ]
+      },
+      "feedback_correct": "The required implementation elements were detected.",
+      "feedback_incorrect": "The submission is missing one or more required implementation elements. Review the task requirements and resubmit on a new attempt if allowed."
+    },
+    {
+      "id": "regression-tests",
+      "title": "Regression tests: Design a type-safe API result",
+      "prompt": "Write a small regression-test set for the design a type-safe API result with discriminated unions and exhaustive handling of success and failure states. Include the normal case, an invalid or empty input case, and a boundary or failure case. Show assertions or equivalent verification commands and the expected outcome.",
+      "submission_type": "text",
+      "starter": "Normal case:\n\nInvalid/empty case:\n\nBoundary/failure case:\n\nAssertions or commands:",
+      "rubric": [
+        "Covers normal behavior.",
+        "Covers at least one edge case.",
+        "Includes an assertion or runnable verification command."
+      ],
+      "points": 25,
+      "grader": {
+        "type": "contains_all",
+        "required_strings": [
+          "vitest",
+          "expect(",
+          "success case",
+          "error case",
+          "unknown status"
+        ]
+      },
+      "feedback_correct": "The required implementation elements were detected.",
+      "feedback_incorrect": "The submission is missing one or more required implementation elements. Review the task requirements and resubmit on a new attempt if allowed."
+    },
+    {
+      "id": "production-reliability",
+      "title": "Production hardening: TypeScript",
+      "prompt": "Review your TypeScript — From Beginner to Professional solution for reliability, security, and maintainability. Describe and implement a small set of concrete safeguards in the code, query, configuration, or runbook. Do not expose secrets or rely on client-controlled authorization.",
+      "submission_type": "text",
+      "starter": "Risk:\n\nMitigation in the artifact:\n\nVerification:\n\nOperational signal:",
+      "rubric": [
+        "Includes a concrete reliability or security safeguard.",
+        "Explains how the safeguard is verified.",
+        "Avoids unsafe default behavior."
+      ],
+      "points": 25,
+      "grader": {
+        "type": "contains_all",
+        "required_strings": [
+          "strict",
+          "unknown",
+          "runtime validation",
+          "exhaustive"
+        ]
+      },
+      "feedback_correct": "The required implementation elements were detected.",
+      "feedback_incorrect": "The submission is missing one or more required implementation elements. Review the task requirements and resubmit on a new attempt if allowed."
+    }
+  ]
+}

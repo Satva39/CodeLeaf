@@ -99,9 +99,18 @@ def main() -> None:
                     raise AssertionError("published course is absent from the exam catalog")
                 readiness = main_module._exam_bank_readiness(course_dir, resolved_blueprint)
                 catalog_item = catalog_items[slug]
-                if catalog_item.get("available") is not False:
-                    raise AssertionError("exam must remain unavailable until a practical assessment is published")
-                expected_status = "practical_exam_unavailable" if readiness["ready"] else "question_bank_incomplete"
+                # Practical readiness is reported independently from MCQ readiness.
+                practical = main_module._load_practical_exam(course_dir)
+                if not practical.get("tasks"):
+                    raise AssertionError("published practical assessment has no tasks")
+                if catalog_item.get("practical_available") is not True:
+                    raise AssertionError("course-specific practical should be reported as published")
+                expected_available = readiness["ready"]
+                expected_status = "published" if readiness["ready"] else "question_bank_incomplete"
+                if catalog_item.get("available") is not expected_available:
+                    raise AssertionError(
+                        f"catalog availability {catalog_item.get('available')!r} disagrees with MCQ readiness {expected_available!r}"
+                    )
                 if catalog_item.get("status") != expected_status:
                     raise AssertionError(
                         f"catalog status {catalog_item.get('status')!r} disagrees with readiness {expected_status!r}: {catalog_item.get('message')}"
