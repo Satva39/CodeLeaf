@@ -35,4 +35,12 @@ assert.match(backendTest, /certificate detail endpoint denies another learner ac
 assert.match(styles, /\.certificate-document/);
 assert.match(styles, /@media print/);
 
+
+assert.match(certificates, /const issuedCertificate = certificates\.find/);
+assert.match(certificates, /to=\{`\/certificates\/view\/\$\{encodeURIComponent\(issuedCertificate\.public_id\)\}`\}/);
+assert.match(certificates, /!certificateIssued && lessonsIncomplete/);
+assert.match(certificates, /!certificateIssued && exercisesIncomplete/);
+assert.match(backend, /prefer the linked reference file over legacy placeholders/);
+assert.match(backend, /solution_doc\.get\("reference_code"\) or solution_doc\.get\("example_code"\)/);
+
 console.log("Certificate viewing contract checks passed.");

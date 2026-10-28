@@ -301,9 +301,16 @@ export default function CertificatesPage() {
               const prerequisitesComplete = hasLearnerEligibility && learnerEligibility.prerequisites_complete === true;
               const practicalPending = hasLearnerEligibility && ["practical_exam_required", "practical_exam_not_passed"].includes(learnerEligibility.certificate_status);
               const canStartExam = available && !practicalPending && (signedIn !== true || (hasLearnerEligibility && prerequisitesComplete && learnerEligibility.start_exam_available === true));
+              const issuedCertificate = certificates.find((certificate) =>
+                String(certificate.course_slug || "").toLowerCase() === course.slug.toLowerCase()
+                || String(certificate.course_title || "").toLowerCase() === `${course.title} certification`.toLowerCase()
+              );
               const htmlCertificateIssued =
                 course.slug === "html" && eligibility?.status === "issued";
-              const statusLabel = signedIn === false
+              const certificateIssued = Boolean(issuedCertificate) || htmlCertificateIssued || learnerEligibility?.certificate_issued === true;
+              const statusLabel = certificateIssued
+                ? "Certificate issued"
+                : signedIn === false
                 ? "Sign in to check progress"
                 : signedIn !== true || courseEligibilityLoading
                   ? "Checking progress"
@@ -357,27 +364,31 @@ export default function CertificatesPage() {
                       </>
                     ) : (
                       <>
-                        {lessonsIncomplete && (
+                        {!certificateIssued && lessonsIncomplete && (
                           <Link className="button button-secondary exam-card-action" to={`/learn/${encodeURIComponent(course.slug)}`}>
                             Complete all lessons <ArrowRight size={15} />
                           </Link>
                         )}
-                        {exercisesIncomplete && (
+                        {!certificateIssued && exercisesIncomplete && (
                           <Link className="button button-secondary exam-card-action" to={`/practice/${encodeURIComponent(course.slug)}`}>
                             Complete all exercises <ArrowRight size={15} />
                           </Link>
                         )}
-                        {practicalPending && prerequisitesComplete && available && (
+                        {!certificateIssued && practicalPending && prerequisitesComplete && available && (
                           <Link className="button button-primary exam-card-action" to={`/practical/${encodeURIComponent(course.slug)}`}>
                             {learnerEligibility.certificate_status === "practical_exam_not_passed" ? "Retry practical exam" : "Take practical exam"} <ArrowRight size={15} />
                           </Link>
                         )}
-                        {canStartExam && !htmlCertificateIssued && !lessonsIncomplete && !exercisesIncomplete ? (
+                        {certificateIssued && issuedCertificate ? (
+                          <Link className="button button-primary exam-card-action" to={`/certificates/view/${encodeURIComponent(issuedCertificate.public_id)}`}>
+                            View certificate <ArrowRight size={15} />
+                          </Link>
+                        ) : canStartExam && !certificateIssued && !lessonsIncomplete && !exercisesIncomplete ? (
                           <Link className="button button-primary exam-card-action" to={`/exam/${encodeURIComponent(course.slug)}`}>
                             Start exam <ArrowRight size={15} />
                           </Link>
-                        ) : htmlCertificateIssued || learnerEligibility?.certificate_issued ? (
-                          <span className="pill pill-mint">Issued</span>
+                        ) : certificateIssued ? (
+                          <span className="pill pill-mint">Certificate issued</span>
                         ) : hasLearnerEligibility && prerequisitesComplete && !available ? (
                           <span className="pill pill-neutral" title={exam?.message || "The required exam content is not yet published."}>Exam unavailable</span>
                         ) : null}

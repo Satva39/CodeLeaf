@@ -68,6 +68,27 @@ class ExerciseSolutionEndpointTests(unittest.TestCase):
         self.assertNotIn("correct_answer", serialized)
         self.assertNotIn("SHOULD NOT LEAK", serialized)
 
+    def test_linked_reference_code_replaces_database_placeholder(self) -> None:
+        (self.exercises_root / "demo-exercise.json").write_text(json.dumps({
+            "slug": "demo-exercise",
+            "lesson_slug": "demo-lesson",
+            "solution_file": "../solutions/demo-solution.json",
+        }), encoding="utf-8")
+        (self.solutions_root / "demo-solution.json").write_text(json.dumps({
+            "answer": "Implement the exercise and include the required evidence.",
+            "example_code": "print('worked answer')",
+            "explanation": "Run the example to verify the output.",
+        }), encoding="utf-8")
+        main.find_published_exercise = lambda _db, _course, _lesson, _exercise: SimpleNamespace(
+            slug="demo-exercise", title="Demo exercise", solution={
+                "explanation": "The protected reference solution is stored in a file; it is not exposed in learner-facing responses."
+            }
+        )
+        response = self.client.get("/api/courses/demo-course/lessons/demo-lesson/exercises/demo-exercise/solution")
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(response.json()["answer"], "print('worked answer')")
+        self.assertNotIn("protected reference solution is stored", response.json()["explanation"].lower())
+
     def test_course_level_solution_tree_is_supported(self) -> None:
         course_solutions = self.course_root / "solutions" / "exercises"
         course_solutions.mkdir(parents=True)

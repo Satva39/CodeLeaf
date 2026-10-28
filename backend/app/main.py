@@ -4627,7 +4627,7 @@ def list_lesson_exercises(
 
 
 def _safe_exercise_solution_payload(solution_doc: dict[str, Any]) -> dict[str, Any]:
-    """Return only learner-facing worked-solution fields; never serialize grading data."""
+    """Return learner-facing worked-solution fields, preferring complete examples over placeholders."""
     def display_text(value: Any) -> str:
         if value is None:
             return ""
@@ -4637,6 +4637,24 @@ def _safe_exercise_solution_payload(solution_doc: dict[str, Any]) -> dict[str, A
             return json.dumps(value, ensure_ascii=False, indent=2)
         except (TypeError, ValueError):
             return str(value)
+
+    answer = solution_doc.get("answer", "")
+    example_code = solution_doc.get("reference_code") or solution_doc.get("example_code") or solution_doc.get("solution_code")
+    answer_text = display_text(answer).strip()
+    # Older exercise rows contain an explanation that only points to the protected file, or a
+    # generic "implement X" summary. When the linked solution has worked code, show that code.
+    placeholder_markers = (
+        "protected reference solution is stored",
+        "not exposed in learner-facing",
+        "implement ",
+        "a strong solution should",
+        "reference approach:",
+        "required implementation evidence includes",
+    )
+    if example_code and (not answer_text or any(marker in answer_text.lower() for marker in placeholder_markers)):
+        answer = example_code
+    elif not answer_text and solution_doc.get("starter_code"):
+        answer = solution_doc.get("starter_code")
 
     steps = solution_doc.get("steps")
     if not isinstance(steps, list) or not steps:
@@ -4648,10 +4666,13 @@ def _safe_exercise_solution_payload(solution_doc: dict[str, Any]) -> dict[str, A
     test_cases = solution_doc.get("test_cases")
     if not isinstance(test_cases, list):
         test_cases = []
+    explanation = solution_doc.get("explanation", "")
+    if not display_text(explanation).strip() and solution_doc.get("review_notes"):
+        explanation = "\n".join(display_text(note) for note in solution_doc["review_notes"] if note)
     return {
-        "answer": solution_doc.get("answer", ""),
+        "answer": answer,
         "expected_result": display_text(solution_doc.get("expected_result") or solution_doc.get("expected_output")),
-        "explanation": display_text(solution_doc.get("explanation", "")),
+        "explanation": display_text(explanation),
         "steps": [display_text(step) for step in steps if isinstance(step, (str, int, float, dict, list)) and str(step).strip()],
         "test_cases": [
             {"input": display_text(item.get("input", "")), "expected": display_text(item.get("expected", item.get("expected_output", "")))}
@@ -4694,57 +4715,48 @@ def reveal_exercise_solution(
     exercise_slug: str,
     db: Session = Depends(get_db),
 ) -> dict[str, Any]:
-    """Reveal a worked answer only on explicit request, with repository path checks and redaction."""
+    """Reveal the authored worked answer on request; prefer the linked reference file over legacy placeholders."""
     exercise = find_published_exercise(db, course_slug, lesson_slug, exercise_slug)
+    manifest_path, manifest = _load_exercise_manifest(course_slug, lesson_slug, exercise_slug)
+    content_root = COURSE_CONTENT_ROOT.resolve()
+    course_root = (content_root / course_slug).resolve()
+    solution_rel = manifest.get("solution_file")
 
-    # If the exercise has an authored solution in the database, use only the public solution fields.
+    if isinstance(solution_rel, str) and solution_rel.strip():
+        solution_path = (manifest_path.parent / solution_rel).resolve()
+        try:
+            relative_solution = solution_path.relative_to(course_root)
+        except ValueError as exc:
+            raise HTTPException(status_code=404, detail="Exercise solution was not found.") from exc
+        if solution_path.suffix.lower() != ".json" or "solutions" not in {part.lower() for part in relative_solution.parts}:
+            raise HTTPException(status_code=404, detail="Exercise solution was not found.")
+        if solution_path.is_file():
+            try:
+                solution_doc = json.loads(solution_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError, UnicodeDecodeError) as exc:
+                raise HTTPException(status_code=500, detail="The worked solution file is invalid.") from exc
+            if not isinstance(solution_doc, dict):
+                raise HTTPException(status_code=500, detail="The worked solution file is invalid.")
+            expected_exercise_id = str(manifest.get("id") or "").strip()
+            linked_exercise_id = str(solution_doc.get("exercise_id") or "").strip()
+            if linked_exercise_id and expected_exercise_id and linked_exercise_id != expected_exercise_id:
+                raise HTTPException(status_code=404, detail="Exercise solution was not found.")
+            payload = _safe_exercise_solution_payload(solution_doc)
+            if any(payload.get(key) for key in ("answer", "explanation", "expected_result", "steps", "test_cases")):
+                return {"exercise_slug": exercise_slug, **payload}
+
+    # Compatibility fallback for older exercises without a usable linked solution file.
     stored_solution = exercise.solution if isinstance(exercise.solution, dict) else {}
     stored_payload = _safe_exercise_solution_payload(stored_solution)
     if any(stored_payload.get(key) for key in ("answer", "explanation", "expected_result", "steps", "test_cases")):
-        return {"exercise_slug": exercise_slug, **stored_payload}
+        if "protected reference solution is stored" not in str(stored_payload.get("explanation", "")).lower():
+            return {"exercise_slug": exercise_slug, **stored_payload}
 
-    manifest_path, manifest = _load_exercise_manifest(course_slug, lesson_slug, exercise_slug)
-    solution_rel = manifest.get("solution_file")
-    if not isinstance(solution_rel, str) or not solution_rel.strip():
-        # Older course manifests may keep a limited solution inline. Never expose the whole exercise object.
-        inline_solution = manifest.get("solution") if isinstance(manifest.get("solution"), dict) else {}
-        payload = _safe_exercise_solution_payload(inline_solution)
-        if payload["answer"] or payload["explanation"] or payload["expected_result"]:
-            return {"exercise_slug": exercise_slug, **payload}
-        raise HTTPException(status_code=404, detail="A worked solution has not been authored for this exercise yet.")
-
-    content_root = COURSE_CONTENT_ROOT.resolve()
-    course_root = (content_root / course_slug).resolve()
-    solution_path = (manifest_path.parent / solution_rel).resolve()
-    # Course content uses both module-local solutions/ and course-level solutions/ trees.
-    # Accept either layout, but never follow a solution reference outside this course.
-    try:
-        relative_solution = solution_path.relative_to(course_root)
-    except ValueError as exc:
-        raise HTTPException(status_code=404, detail="Exercise solution was not found.") from exc
-    if (
-        solution_path.suffix.lower() != ".json"
-        or "solutions" not in {part.lower() for part in relative_solution.parts}
-        or not solution_path.is_file()
-    ):
-        raise HTTPException(status_code=404, detail="Exercise solution was not found.")
-    if not solution_path.is_file():
-        raise HTTPException(status_code=404, detail="A worked solution has not been authored for this exercise yet.")
-    try:
-        solution_doc = json.loads(solution_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError, UnicodeDecodeError) as exc:
-        raise HTTPException(status_code=500, detail="The worked solution file is invalid.") from exc
-    if not isinstance(solution_doc, dict):
-        raise HTTPException(status_code=500, detail="The worked solution file is invalid.")
-    expected_exercise_id = str(manifest.get("id") or "").strip()
-    linked_exercise_id = str(solution_doc.get("exercise_id") or "").strip()
-    if linked_exercise_id and expected_exercise_id and linked_exercise_id != expected_exercise_id:
-        raise HTTPException(status_code=404, detail="Exercise solution was not found.")
-
-    payload = _safe_exercise_solution_payload(solution_doc)
-    if not payload["answer"] and not payload["explanation"] and not payload["expected_result"] and not payload["steps"]:
-        raise HTTPException(status_code=404, detail="A worked solution has not been authored for this exercise yet.")
-    return {"exercise_slug": exercise_slug, **payload}
+    inline_solution = manifest.get("solution") if isinstance(manifest.get("solution"), dict) else {}
+    inline_payload = _safe_exercise_solution_payload(inline_solution)
+    if any(inline_payload.get(key) for key in ("answer", "explanation", "expected_result", "steps", "test_cases")):
+        return {"exercise_slug": exercise_slug, **inline_payload}
+    raise HTTPException(status_code=404, detail="A worked solution has not been authored for this exercise yet.")
 
 
 @app.post("/api/me/exercises/{course_slug}/{lesson_slug}/{exercise_slug}/submit")
