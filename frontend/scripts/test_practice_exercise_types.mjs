@@ -23,6 +23,7 @@ const backend = readFileSync(new URL("../../backend/app/main.py", import.meta.ur
 
 assert.match(practice, /items\.filter\(\(item\) => item\.is_locked \|\| isSupportedPracticeExercise\(item\.type\)\)/);
 assert.match(practice, /item\.is_locked/);
+assert.match(practice, /required_plan === "max" \? "Max" : "Pro"/, "premium practice cards explain the actual required plan");
 assert.match(practice, /\/plans/);
 assert.match(practice, /practice-completed-badge/);
 assert.match(detail, /\.filter\(\(item\) => isSupportedPracticeExercise\(item\.type\)\)/);

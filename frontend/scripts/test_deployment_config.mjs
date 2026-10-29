@@ -10,6 +10,7 @@ const packageJson = JSON.parse(fs.readFileSync(path.join(root, "package.json"), 
 const render = fs.readFileSync(path.join(root, "../render.yaml"), "utf8");
 assert.equal(vercel.rewrites?.[0]?.source, "/api/:path*");
 assert.equal(vercel.rewrites?.[0]?.destination, "/api/proxy/:path*");
+assert.match(proxy, /CODELEAF_API_ORIGIN/);
 assert.equal(vercel.rewrites?.[1]?.source, "/(.*)");
 assert.match(proxy, /process\.env\.CODELEAF_API_ORIGIN/);
 assert.match(proxy, /\/api\/\$\{path\}/);

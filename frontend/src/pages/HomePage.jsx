@@ -242,16 +242,28 @@ export default function HomePage() {
             </Link>
           }
         />
-        <div className="category-tabs">
-          {categories.map((c) => (
-            <button
-              key={c}
-              onClick={() => setCategory(c)}
-              className={category === c ? "active" : ""}
+        <div className="course-category-filter" aria-label="Filter courses by category">
+          <div className="course-category-filter__select">
+            <label htmlFor="home-course-category">Category</label>
+            <select
+              id="home-course-category"
+              value={category}
+              onChange={(event) => setCategory(event.target.value)}
             >
-              {c}
+              <option value="All">All categories</option>
+              {categories.slice(1).map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+          </div>
+          <div className="course-category-filter__result" aria-live="polite">
+            <strong>{courses.length}</strong> {courses.length === 1 ? "course" : "courses"}
+          </div>
+          {category !== "All" && (
+            <button type="button" className="course-category-filter__clear" onClick={() => setCategory("All")}>
+              Clear filter
             </button>
-          ))}
+          )}
         </div>
         <div className="course-grid">
           {courses.slice(0, 8).map((course) => (

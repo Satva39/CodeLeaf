@@ -46,7 +46,7 @@ const lesson = await readFile(new URL('../src/pages/LessonPage.jsx', import.meta
 assert.match(lesson, /usableReferenceSources\(content\.sources\)/);
 assert.match(lesson, /referenceSources\.length > 0/);
 assert.match(lesson, /setExpandedGroup/);
-assert.match(lesson, /Browse all exercises/);
+assert.match(lesson, /(?:Browse all exercises|Explore exercises)/, 'lesson page links to the course exercise collection');
 const app = await readFile(new URL('../src/App.jsx', import.meta.url), 'utf8');
 assert.match(app, /TryItPage/);
 assert.match(app, /ExerciseDetailPage/);

@@ -248,6 +248,18 @@ function safeExternalUrl(value) {
   }
 }
 
+function usableReferenceSources(sources) {
+  return (Array.isArray(sources) ? sources : [])
+    .map((source) => typeof source === "string" ? { title: source, url: source } : source)
+    .filter((source) => source && typeof source === "object")
+    .map((source) => {
+      const title = String(source.title || source.label || "").trim();
+      const url = safeExternalUrl(source.url || source.href);
+      return title && url ? { ...source, title, url } : null;
+    })
+    .filter(Boolean);
+}
+
 function encodeAssetSegments(path) {
   return String(path || "").replace(/^\/+/, "").split("/").map((part) => encodeURIComponent(part)).join("/");
 }
@@ -318,6 +330,7 @@ export default function LessonPage() {
   const [outlineRetry, setOutlineRetry] = useState(0);
   const [apiLesson, setApiLesson] = useState(null);
   const [lessonContentStatus, setLessonContentStatus] = useState("idle");
+  const [lessonContentError, setLessonContentError] = useState("");
   const [lessonRetry, setLessonRetry] = useState(0);
   const stats = useGamificationStats();
   const learnerProgress = useLearnerProgress();
@@ -368,7 +381,7 @@ export default function LessonPage() {
       setRemoteOutline(null);
       setOutlineStatus("loading");
     }
-    apiGetJson(outlineUrl, { ttlMs: 300_000, persist: true })
+    apiGetJson(outlineUrl, { ttlMs: 300_000, persist: true, timeoutMs: 12_000 })
       .then((payload) => {
         if (payload?.slug !== courseSlug || !payload?.modules?.length)
           throw new Error("The course has no available lessons.");
@@ -408,7 +421,8 @@ export default function LessonPage() {
     setLessonContentStatus(
       cachedLesson?.slug === current.slug ? "ready" : "loading",
     );
-    apiGetJson(lessonUrl, { ttlMs: 300_000, persist: true })
+    setLessonContentError("");
+    apiGetJson(lessonUrl, { ttlMs: 300_000, persist: true, timeoutMs: 12_000 })
       .then((payload) => {
         if (payload?.slug !== current.slug)
           throw new Error("Lesson content did not match the requested lesson.");
@@ -417,10 +431,15 @@ export default function LessonPage() {
           setLessonContentStatus("ready");
         }
       })
-      .catch(() => {
+      .catch((error) => {
         if (active) {
           setApiLesson(null);
           setLessonContentStatus("error");
+          setLessonContentError(
+            typeof error?.message === "string" && error.message.trim()
+              ? error.message
+              : "The lesson request failed. Please retry.",
+          );
         }
       });
     return () => {
@@ -473,11 +492,7 @@ export default function LessonPage() {
     apiLesson?.slug === current?.slug
       ? contentFromPublishedLesson(apiLesson, fallbackContent)
       : fallbackContent;
-  const referenceSources = (Array.isArray(content.sources) ? content.sources : [])
-    .map((source) => typeof source === "string" ? { title: source, url: source } : source)
-    .filter((source) => source && typeof source === "object"
-      && String(source.title || source.label || "").trim()
-      && safeExternalUrl(source.url || source.href));
+  const referenceSources = usableReferenceSources(content.sources);
   const id = current?.slug ? `${course.slug}:${current.slug}` : "";
   const progressAvailable =
     learnerProgress.mode === "remote" || learnerProgress.mode === "guest";
@@ -661,7 +676,7 @@ export default function LessonPage() {
           </h1>
           <p>
             {failed
-              ? "The lesson content could not be retrieved. We have hidden fallback content to avoid showing material that is not part of the imported course."
+              ? (lessonContentError || "The lesson content could not be retrieved. We have hidden fallback content to avoid showing material that is not part of the imported course.")
               : "Fetching the current lesson content and references."}
           </p>
           {failed ? (

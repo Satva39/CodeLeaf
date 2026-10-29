@@ -103,6 +103,7 @@ export default function PlansPage() {
     { label: "Advanced learning analytics and performance reports", kind: "feature", key: "advanced_analytics" },
     { label: "Activity-based personalized recommendations", kind: "feature", key: "personalized_recommendations" },
     { label: "Expanded practice collections and timed mock assessments", kind: "feature", key: "premium_practice" },
+    { label: "Professional, specialist and capstone practice sets", kind: "feature", key: "premium_practice_sets" },
     { label: "Saved project milestone checklists", kind: "feature", key: "project_planning" },
     { label: "Weekly and all-time learning leaderboards", kind: "feature", key: "leaderboards" },
     { label: "Premium capstones and interview-preparation projects", kind: "feature", key: "premium_projects" },
@@ -370,6 +371,13 @@ export default function PlansPage() {
           );
         })}
       </div>
+      <section className="lifetime-terms panel" aria-labelledby="lifetime-access-terms-title">
+        <div className="eyebrow">FULL ACCESS · LIFETIME TERMS</div>
+        <h2 id="lifetime-access-terms-title">One payment, while CodeLeaf continues to operate</h2>
+        <p>Full Access is a ₹49,999 one-time purchase and does not renew monthly. “Lifetime” means the lifetime of CodeLeaf’s standard individual learning service; it cannot guarantee service if CodeLeaf permanently discontinues that product.</p>
+        <p>Fair-use limits still apply: up to 100 GB of project storage, 200 saved workspaces, 500 MB per ZIP, and 1,500 supported code executions per UTC day. The allowance of up to 150 AI requests per UTC day applies only while a supported AI provider is configured and available. Provider outages, supported-runtime limits, and reasonable abuse-prevention controls still apply; third-party API access is not promised as unlimited.</p>
+        <p>Earned certificates and existing learner work are retained if a monthly subscription expires. Full Access remains independent of monthly subscription renewal.</p>
+      </section>
       <section className="plan-comparison panel">
         <div className="section-title-row">
           <div>

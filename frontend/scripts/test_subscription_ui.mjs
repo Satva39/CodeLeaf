@@ -19,8 +19,14 @@ for (const [id, price, billing] of [
 }
 assert.match(plansPage, /api\/me\/entitlements/);
 assert.match(plansPage, /plan-comparison-table/);
+assert.match(plansPage, /Professional, specialist and capstone practice sets/);
 assert.match(plansPage, /usage-grid/);
 assert.match(plansPage, /one-time · lifetime access/);
+assert.match(plansPage, /FULL ACCESS · LIFETIME TERMS/);
+assert.match(plansPage, /lifetime of CodeLeaf’s standard individual learning service/);
+assert.match(plansPage, /up to 100 GB of project storage, 200 saved workspaces, 500 MB per ZIP/);
+assert.match(plansPage, /1,500 supported code executions per UTC day/);
+assert.match(plansPage, /150 AI requests per UTC day/);
 assert.match(adsController, /api\/me\/entitlements/);
 assert.match(adsController, /snapshot\?\.features\?\.ad_free !== true/);
 assert.match(adsController, /isAdSafeRoute/);

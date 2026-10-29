@@ -23,7 +23,9 @@ try {
   );
   assert.equal(aborted, true, "the underlying fetch must be aborted");
   assert.match(source, /timeoutMs:\s*12_000/, "lesson content has a bounded 12-second timeout");
-  assert.match(source, /setLessonContentError\(error\?\.message/, "the visible page retains the request error");
+  assert.match(source, /setLessonContentError\(/, "lesson errors are retained for display");
+  assert.match(source, /typeof error\?\.message === "string"/, "only readable error messages are displayed");
+  assert.match(source, /timeoutMs:\s*12_000/, "lesson requests have a bounded timeout");
   assert.match(source, /Retry lesson/, "the learner can retry without reloading the browser");
   invalidateApiCache(url);
   console.log("PASS stalled lesson/API requests are aborted and produce a visible retryable error");

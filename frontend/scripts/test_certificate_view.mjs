@@ -12,7 +12,7 @@ const backendTest = read("../../backend/scripts/test_phase2_exam_api.py");
 const styles = read("../src/styles/pages.css");
 
 assert.match(app, /import CertificateViewPage from "\.\/pages\/CertificateViewPage\.jsx"/);
-assert.match(app, /path="\/certificates\/view\/:publicId" element=\{<CertificateViewPage \/>\}/);
+assert.match(app, /path="\/certificates\/view\/:publicId"\s+element=\{<CertificateViewPage \/>\}/);
 assert.match(certificates, /View certificate/);
 assert.match(certificates, /\/certificates\/view\/\$\{encodeURIComponent\(certificate\.public_id\)\}/);
 assert.match(view, /\/api\/me\/certificates\/\$\{encodeURIComponent\(publicId\)\}/);

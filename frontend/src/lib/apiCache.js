@@ -82,11 +82,14 @@ export function apiGetJson(
     .then(async (response) => {
       const payload = await response.json().catch(() => null);
       if (!response.ok) {
-        throw new ApiRequestError(
-          payload?.detail || `Request failed with HTTP ${response.status}`,
-          response.status,
-          payload,
-        );
+        const detail = payload?.detail;
+        const message = typeof detail === "string" && detail.trim()
+          ? detail
+          : detail && typeof detail === "object"
+            ? [detail.message, detail.detail, detail.error].find((value) => typeof value === "string" && value.trim())
+              || `Request failed with HTTP ${response.status}`
+            : `Request failed with HTTP ${response.status}`;
+        throw new ApiRequestError(message, response.status, payload);
       }
       if (ttlMs > 0 && generationAtStart === cacheGeneration) {
         const item = { value: payload, expiresAt: Date.now() + ttlMs };

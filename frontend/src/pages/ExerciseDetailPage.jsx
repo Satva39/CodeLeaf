@@ -188,7 +188,10 @@ export default function ExerciseDetailPage() {
 
   if (loading) return <PageShell className="exercise-detail-page"><div className="panel collection-state">Loading exercise…</div></PageShell>;
   if (!exercise) return <PageShell className="exercise-detail-page"><EmptyState title="Exercise unavailable" detail={error || "This exercise may not be published yet."} action={<Link to={`/practice/${encodeURIComponent(courseSlug)}`} className="button button-primary">Back to exercise library</Link>} /></PageShell>;
-  if (exercise.is_locked) return <PageShell className="exercise-detail-page"><div className="exercise-locked-panel panel"><span className="eyebrow">PRO PRACTICE COLLECTION</span><h1>{exercise.title}</h1><p>This practice task is included with Pro, Max and Full Access. Its prompt, starter files, grader and worked solution remain protected until your account has the required entitlement.</p><div className="hero-actions"><Link className="button button-primary" to="/plans">View plans <ArrowRight size={15} /></Link><Link className="button button-secondary" to={`/practice/${encodeURIComponent(courseSlug)}`}>Back to practice library</Link></div></div></PageShell>;
+  if (exercise.is_locked) {
+    const requiredPlan = exercise.required_plan === "max" ? "Max" : "Pro";
+    return <PageShell className="exercise-detail-page"><div className="exercise-locked-panel panel"><span className="eyebrow">{requiredPlan.toUpperCase()} PRACTICE COLLECTION</span><h1>{exercise.title}</h1><p>This practice task requires {requiredPlan} or Full Access. Its prompt, starter files, grader and worked solution remain protected until your account has the required entitlement.</p><div className="hero-actions"><Link className="button button-primary" to="/plans">Compare plans <ArrowRight size={15} /></Link><Link className="button button-secondary" to={`/practice/${encodeURIComponent(courseSlug)}`}>Back to practice library</Link></div></div></PageShell>;
+  }
 
   return (
     <PageShell className="exercise-detail-page">

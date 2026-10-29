@@ -6,6 +6,8 @@ Uses an isolated SQLite database and mocked question-bank loader; no payments or
 from __future__ import annotations
 
 import json
+import io
+import zipfile
 import os
 import sys
 import tempfile
@@ -30,7 +32,7 @@ from sqlalchemy import select  # noqa: E402
 from app.config import settings  # noqa: E402
 from app.db import Base, SessionLocal, engine  # noqa: E402
 from app.auth_security import create_session  # noqa: E402
-from app.models import Course, Entitlement, MockAssessmentAttempt, User  # noqa: E402
+from app.models import Course, Entitlement, Exercise, Lesson, MockAssessmentAttempt, Module, User  # noqa: E402
 from app.plan_entitlements import PLAN_DEFINITIONS  # noqa: E402
 import app.main as main_module  # noqa: E402
 import jwt  # noqa: E402
@@ -84,6 +86,57 @@ def main() -> None:
         check([PLAN_DEFINITIONS[p]["limits"]["saved_snippets"] for p in ("free", "pro", "max", "full_access")] == [10, 100, 500, 1000], "saved snippet quotas are configurable for all four plans")
         free_user = make_user("remaining_free")
         authenticate(client, free_user.id)
+
+        # Practice differentiation is derived from the trusted imported difficulty
+        # field, so it applies to the existing 3,800+ exercises without a bulk rewrite.
+        tier_course = Course(
+            slug="plan-tier-test", title="Plan Tier Test", description="Test only",
+            category="Test", level="Beginner", published=True, sort_order=9999,
+        )
+        with SessionLocal() as db:
+            db.add(tier_course)
+            db.flush()
+            tier_module = Module(course_id=tier_course.id, slug="tiers", title="Practice tiers", sort_order=1)
+            db.add(tier_module)
+            db.flush()
+            tier_lesson = Lesson(module_id=tier_module.id, slug="practice-tiers", title="Practice tiers", content={}, sort_order=1, is_published=True)
+            db.add(tier_lesson)
+            db.flush()
+            for slug, difficulty, sequence in (("standard-task", "beginner", 1), ("advanced-task", "advanced", 2), ("professional-task", "professional", 3)):
+                db.add(Exercise(
+                    lesson_id=tier_lesson.id, slug=slug, title=slug.replace("-", " ").title(),
+                    exercise_type="choice", prompt="Choose the correct answer.", starter={},
+                    public_tests=[], acceptance_criteria=[], hints=[], solution={"answer": "yes"},
+                    grading_config={"mode": "choice", "correct_answer": "yes"}, sequence=sequence,
+                    difficulty=difficulty, xp_points=20, is_published=True, is_premium=False,
+                ))
+            db.commit()
+        free_tiers = client.get("/api/courses/plan-tier-test/lessons/practice-tiers/exercises").json()["items"]
+        by_slug = {item["slug"]: item for item in free_tiers}
+        check(by_slug["standard-task"].get("is_locked") is not True, "Free retains standard practice exercises")
+        check(by_slug["advanced-task"].get("required_plan") == "pro" and by_slug["professional-task"].get("required_plan") == "max", "Free sees accurate Pro and Max locks on advanced exercise tiers")
+        denied_max_task = client.post("/api/me/exercises/plan-tier-test/practice-tiers/professional-task/submit", json={"answer": "yes"})
+        check(denied_max_task.status_code == 403 and denied_max_task.json()["detail"]["required_plan"] == "max", "direct exercise submissions cannot bypass Max-only practice restrictions")
+        tier_pro_user = make_user("remaining_tier_pro")
+        grant(tier_pro_user.id, "pro")
+        authenticate(client, tier_pro_user.id)
+        pro_tiers = client.get("/api/courses/plan-tier-test/lessons/practice-tiers/exercises").json()["items"]
+        pro_by_slug = {item["slug"]: item for item in pro_tiers}
+        check(pro_by_slug["advanced-task"].get("is_locked") is not True, "Pro unlocks advanced/hard practice")
+        check(pro_by_slug["professional-task"].get("required_plan") == "max", "Pro does not unlock professional/specialist practice")
+        pro_solution = client.get("/api/courses/plan-tier-test/lessons/practice-tiers/exercises/professional-task/solution")
+        check(pro_solution.status_code == 403 and pro_solution.json()["detail"]["required_plan"] == "max", "Pro cannot bypass Max-only practice gating by requesting a worked solution directly")
+        pro_advanced_submit = client.post("/api/me/exercises/plan-tier-test/practice-tiers/advanced-task/submit", json={"answer": "yes"})
+        check(pro_advanced_submit.status_code == 200 and pro_advanced_submit.json()["ok"] is True, "Pro can submit an advanced exercise through the authenticated API")
+        tier_max_user = make_user("remaining_tier_max")
+        grant(tier_max_user.id, "max")
+        authenticate(client, tier_max_user.id)
+        max_tiers = client.get("/api/courses/plan-tier-test/lessons/practice-tiers/exercises").json()["items"]
+        check(all(item.get("is_locked") is not True for item in max_tiers), "Max unlocks standard, advanced and professional exercise tiers")
+        tier_max_submit = client.post("/api/me/exercises/plan-tier-test/practice-tiers/professional-task/submit", json={"answer": "yes"})
+        check(tier_max_submit.status_code == 200 and tier_max_submit.json()["ok"] is True, "Max can submit a professional exercise through the authenticated API")
+        authenticate(client, free_user.id)
+
         listing = client.get("/api/me/snippets")
         check(listing.status_code == 200 and listing.json()["usage"] == {"used": 0, "limit": 10, "storage_used_bytes": 0, "storage_limit_bytes": 1024 ** 3}, "snippet endpoint returns real account usage and Free allowance")
         saved = client.post("/api/me/snippets", json={"name": "Useful helper", "language": "javascript", "code": "const x = 1;"})
@@ -106,6 +159,64 @@ def main() -> None:
         authenticate(client, foreign.id)
         check(client.get(f"/api/me/snippets").status_code == 200 and all(row["id"] != snippet_id for row in client.get("/api/me/snippets").json()["items"]), "saved snippets are private to their owner")
         check(client.delete(f"/api/me/snippets/{snippet_id}").status_code == 404, "another account cannot delete a private snippet")
+
+        authenticate(client, free_user.id)
+
+        # Large archive transport is chunked below Vercel's function body limit.
+        archive_stream = io.BytesIO()
+        with zipfile.ZipFile(archive_stream, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            archive.writestr("index.html", "<h1>Chunked upload test</h1>")
+            archive.writestr("assets/site.css", "body { color: green; }")
+        archive_bytes = archive_stream.getvalue()
+        started = client.post("/api/me/portfolio/submissions/upload-session", json={
+            "course_slug": "html", "project_slug": "chunked-test", "title": "Chunked test",
+            "filename": "chunked-test.zip", "total_bytes": len(archive_bytes),
+        })
+        check(started.status_code == 201 and started.json()["chunk_size"] <= 4 * 1024 * 1024,
+              "portfolio upload session reserves quota and returns sub-4.5-MB chunk sizing")
+        upload_id = started.json()["upload_id"]
+        own_listing = client.get("/api/me/portfolio").json().get("items", [])
+        public_listing = client.get(f"/api/portfolio/{free_user.username}").json().get("items", [])
+        pending_edit = client.patch(f"/api/me/portfolio/{upload_id}", json={"visibility": "public"})
+        check(all(row["id"] != upload_id for row in own_listing), "incomplete ZIP uploads are hidden from the owner's completed portfolio list")
+        check(pending_edit.status_code == 409 and all(row["id"] != upload_id for row in public_listing), "an incomplete upload cannot be made public and is hidden from public portfolios")
+        check(client.get(f"/api/me/portfolio/{upload_id}/download").status_code == 409, "an incomplete upload cannot be downloaded as a saved archive")
+        upload_chunk_url = f"/api/me/portfolio/submissions/upload-session/{upload_id}/chunks/0"
+        first_chunk = client.put(upload_chunk_url, content=archive_bytes, headers={"content-type": "application/octet-stream"})
+        duplicate_chunk = client.put(upload_chunk_url, content=archive_bytes, headers={"content-type": "application/octet-stream"})
+        check(first_chunk.status_code == 200 and duplicate_chunk.status_code == 200 and duplicate_chunk.json()["duplicate"],
+              "identical chunk retries are idempotent")
+        foreign_upload_user = make_user("remaining_upload_foreign")
+        authenticate(client, foreign_upload_user.id)
+        denied_chunk = client.put(upload_chunk_url, content=archive_bytes, headers={"content-type": "application/octet-stream"})
+        check(denied_chunk.status_code == 404, "another learner cannot append chunks to a private upload session")
+        authenticate(client, free_user.id)
+        finalized = client.post(f"/api/me/portfolio/submissions/upload-session/{upload_id}/finalize")
+        check(finalized.status_code == 201 and finalized.json()["submission"]["has_downloadable_zip"],
+              "finalize validates and makes the chunked ZIP available as a private portfolio submission")
+        submission_id = finalized.json()["submission"]["id"]
+        downloaded = client.get(f"/api/me/portfolio/{submission_id}/download")
+        with zipfile.ZipFile(io.BytesIO(downloaded.content)) as downloaded_zip:
+            check(downloaded.status_code == 200 and downloaded_zip.read("index.html").decode() == "<h1>Chunked upload test</h1>",
+                  "chunk-uploaded portfolio ZIP downloads byte-correctly")
+
+        # An upload reservation counts against storage before chunks arrive and is released on cancellation.
+        reservation = client.post("/api/me/portfolio/submissions/upload-session", json={
+            "project_slug": "reserved-upload", "filename": "reserved-upload.zip", "total_bytes": 500 * 1024 * 1024,
+        })
+        check(reservation.status_code == 201, "storage quota is reserved before a large upload begins")
+        second_reservation = client.post("/api/me/portfolio/submissions/upload-session", json={
+            "project_slug": "second-reserved-upload", "filename": "second-reserved.zip", "total_bytes": 500 * 1024 * 1024,
+        })
+        check(second_reservation.status_code == 201, "quota allows a second individually valid ZIP within the total allowance")
+        over_quota = client.post("/api/me/portfolio/submissions/upload-session", json={
+            "project_slug": "over-quota-upload", "filename": "over-quota.zip", "total_bytes": 100 * 1024 * 1024,
+        })
+        check(over_quota.status_code == 413, "concurrent/reserved ZIP bytes cannot bypass the storage allowance")
+        canceled = client.delete(f"/api/me/portfolio/submissions/upload-session/{reservation.json()['upload_id']}")
+        canceled_second = client.delete(f"/api/me/portfolio/submissions/upload-session/{second_reservation.json()['upload_id']}")
+        check(canceled.status_code == 200 and canceled.json()["deleted"] and canceled_second.status_code == 200 and canceled_second.json()["deleted"], "canceling incomplete uploads releases their reserved storage")
+
 
         free_support_user = make_user("remaining_support_free")
         authenticate(client, free_support_user.id)

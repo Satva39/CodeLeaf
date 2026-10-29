@@ -34,3 +34,13 @@ assert.match(styles, /\.support-page/, 'support has dedicated styling');
 assert.match(styles, /\.project-milestone-progress-check/, 'project checklist has dedicated styling');
 
 console.log('Subscription remaining-features UI contract checks passed.');
+
+const portfolio = read("../src/pages/PortfolioPage.jsx");
+const uploadApi = readFileSync(new URL("../../backend/app/phase5_routes.py", import.meta.url), "utf8");
+assert.match(portfolio, /upload-session/);
+assert.match(portfolio, /application\/octet-stream/);
+assert.match(portfolio, /uploadProgress/);
+assert.match(uploadApi, /PROJECT_ZIP_UPLOAD_CHUNK_BYTES = 4 \* 1024 \* 1024/);
+assert.match(uploadApi, /archive_upload_complete/);
+assert.match(uploadApi, /validate_project_zip_file\(archive_file\)/);
+console.log("PASS portfolio ZIP uploads use bounded binary chunks and backend final validation");

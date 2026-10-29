@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   Code2,
@@ -6,6 +6,7 @@ import {
   FilePlus2,
   FileCode2,
   FileDown,
+  FileUp,
   FolderOpen,
   Monitor,
   Play,
@@ -124,6 +125,7 @@ export default function PlaygroundPage() {
   const [fileDialog, setFileDialog] = useState("");
   const [fileNameDraft, setFileNameDraft] = useState("");
   const [fileDialogError, setFileDialogError] = useState("");
+  const importInputRef = useRef(null);
   const [savedWorkspaces, setSavedWorkspaces] = useState([]);
   const [selectedSavedWorkspaceId, setSelectedSavedWorkspaceId] = useState("");
   const [workspaceName, setWorkspaceName] = useState(seed?.title || "My workspace");
@@ -419,6 +421,53 @@ export default function PlaygroundPage() {
     downloadText("codeleaf-workspace.json", JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), files }, null, 2), "application/json;charset=utf-8");
   }
 
+  async function importWorkspaceFile(event) {
+    const input = event.currentTarget;
+    const file = input.files?.[0];
+    if (!file) return;
+    setWorkspaceNotice("");
+    try {
+      if (file.size > 2 * 1024 * 1024) {
+        throw new Error("Workspace JSON must be 2 MB or smaller.");
+      }
+      const document = JSON.parse(await file.text());
+      if (document?.version !== 1 || !Array.isArray(document.files)) {
+        throw new Error("Choose a CodeLeaf workspace JSON exported from the playground.");
+      }
+      if (document.files.length < 1 || document.files.length > 100) {
+        throw new Error("A workspace import must contain between 1 and 100 files.");
+      }
+      const normalized = [];
+      const names = new Set();
+      for (const source of document.files) {
+        if (!source || typeof source.name !== "string" || !safeWorkspaceFilename(source.name)) {
+          throw new Error("The workspace contains an unsafe file path. No files were imported.");
+        }
+        if (typeof source.content !== "string" || source.content.length > 100_000) {
+          throw new Error(`File ${source.name} must contain text of 100,000 characters or less.`);
+        }
+        const key = source.name.toLowerCase();
+        if (names.has(key)) throw new Error(`The workspace contains a duplicate filename: ${source.name}.`);
+        names.add(key);
+        normalized.push({
+          id: fileId(source.name),
+          name: source.name,
+          language: getLanguageForFilename(source.name).key,
+          content: source.content,
+        });
+      }
+      setWorkspace({ files: normalized, activeFileId: normalized[0]?.id || "" });
+      setRunnerResult(null);
+      setRunnerStatus("idle");
+      setBrowserOutput([]);
+      setWorkspaceNotice(`Imported ${normalized.length} file${normalized.length === 1 ? "" : "s"}. Your browser draft is now auto-saved.`);
+    } catch (error) {
+      setWorkspaceNotice(error instanceof Error ? error.message : "Could not import this workspace.");
+    } finally {
+      input.value = "";
+    }
+  }
+
   async function runRemoteCode(language, source) {
     if (!runnerConfigChecked) {
       setRunnerMessage("Checking isolated runner availability. Try again in a moment.");
@@ -550,6 +599,8 @@ export default function PlaygroundPage() {
             {!files.length && <p className="workspace-no-files">No files yet. Create your first file.</p>}
           </div>
           <div className="workspace-file-actions">
+            <button type="button" onClick={() => importInputRef.current?.click()}><FileUp size={14} /> Import project</button>
+            <input ref={importInputRef} type="file" accept=".json,application/json" className="sr-only" aria-label="Choose exported CodeLeaf workspace JSON" onChange={importWorkspaceFile} />
             <button type="button" onClick={openNewFileDialog}><FilePlus2 size={14} /> New file</button>
             <button type="button" onClick={openRenameDialog} disabled={!activeFile}><Pencil size={14} /> Rename</button>
             <button type="button" onClick={deleteActiveFile} disabled={!activeFile}><Trash2 size={14} /> Delete</button>
@@ -589,7 +640,7 @@ export default function PlaygroundPage() {
         <section className="workspace-editor" aria-label="Code editor">
           <div className="workspace-tabbar" role="tablist" aria-label="Open files">
             {files.map((file) => <button type="button" role="tab" aria-selected={file.id === activeFile?.id} key={file.id} className={file.id === activeFile?.id ? "active" : ""} onClick={() => setWorkspace((current) => ({ ...current, activeFileId: file.id }))}><FileCode2 size={13} /> {file.name}</button>)}
-            <div className="workspace-tabbar-actions"><button type="button" title="Download active file" aria-label="Download active file" onClick={downloadActiveFile} disabled={!activeFile}><Download size={14} /></button><button type="button" title="Export all files" aria-label="Export all files" onClick={exportWorkspace}><FileDown size={14} /></button></div>
+            <div className="workspace-tabbar-actions"><button type="button" title="Download active file" aria-label="Download active file" onClick={downloadActiveFile} disabled={!activeFile}><Download size={14} /></button><button type="button" title="Export all files" aria-label="Export project" onClick={exportWorkspace}><FileDown size={14} /></button></div>
           </div>
           {fileDialog && <form className="workspace-file-dialog" onSubmit={submitFileDialog}>
             <label htmlFor="workspace-filename">{fileDialog === "rename" ? "Rename current file" : "New file name"}</label>
@@ -603,7 +654,7 @@ export default function PlaygroundPage() {
             <label htmlFor="workspace-source" className="sr-only">Edit {activeFile.name}</label>
             <textarea id="workspace-source" className="workspace-source" spellCheck="false" autoCapitalize="off" autoCorrect="off" value={activeFile.content} onChange={(event) => updateActiveContent(event.target.value)} maxLength={100_000} />
           </> : <div className="workspace-empty-editor"><FilePlus2 size={24} /><h2>No file selected</h2><p>Create a file to start writing.</p><button type="button" className="button button-primary" onClick={openNewFileDialog}>Create file</button></div>}
-          <div className="workspace-statusbar"><span><span className="live-dot" /> {runnerStatus.replaceAll("_", " ")}</span><span>Browser auto-save · account save optional</span><span>{languageLabel}</span></div>
+          <div className="workspace-statusbar"><span><span className="live-dot" /> {runnerStatus.replaceAll("_", " ")}</span><span>Auto-saved in this browser · account save optional</span><span>{languageLabel}</span></div>
         </section>
 
         <section className="workspace-output" aria-label="Run result">

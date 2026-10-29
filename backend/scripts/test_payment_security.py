@@ -198,6 +198,40 @@ def main() -> None:
             refunded_record = db.scalar(select(PaymentRecord).where(PaymentRecord.provider_order_id == "order_full_access_refunded"))
             refunded_entitlement = db.scalar(select(Entitlement).where(Entitlement.user_id == refunded_buyer.id, Entitlement.plan_id == "full_access", Entitlement.status == "active"))
             check(late_response.status_code == 200 and refunded_record.status == "refunded" and refunded_entitlement is None, "late paid webhook cannot revive a refunded lifetime purchase")
+        # Subscription events with older provider timestamps must not overwrite newer state.
+        subscription_buyer = make_user("webhook_subscription_buyer")
+        with SessionLocal() as db:
+            subscription_record = PaymentRecord(
+                user_id=subscription_buyer.id, plan_id="pro", amount_paise=29_900,
+                currency="INR", kind="subscription", status="created",
+                provider_subscription_id="sub_ordered_test",
+            )
+            db.add(subscription_record)
+            db.commit()
+
+        def send_subscription_event(event_name: str, status_value: str, created_at: int, event_id: str):
+            event_raw = json.dumps({
+                "event": event_name,
+                "created_at": created_at,
+                "payload": {"subscription": {"entity": {
+                    "id": "sub_ordered_test", "status": status_value, "current_end": 2_000_000_000,
+                }}},
+            }, separators=(",", ":")).encode()
+            event_signature = hmac.new(settings.razorpay_webhook_secret.encode(), event_raw, hashlib.sha256).hexdigest()
+            return client.post("/api/payments/webhook", content=event_raw, headers={
+                "x-razorpay-signature": event_signature, "x-razorpay-event-id": event_id,
+                "content-type": "application/json",
+            })
+
+        newer_event = send_subscription_event("subscription.activated", "active", 1_800_000_100, "evt-sub-new")
+        older_event = send_subscription_event("subscription.halted", "halted", 1_800_000_000, "evt-sub-old")
+        with SessionLocal() as db:
+            subscription_record = db.scalar(select(PaymentRecord).where(PaymentRecord.provider_subscription_id == "sub_ordered_test"))
+            subscription_entitlement = db.scalar(select(Entitlement).where(Entitlement.user_id == subscription_buyer.id, Entitlement.plan_id == "pro"))
+            check(newer_event.status_code == 200 and older_event.status_code == 200, "signed subscription events accept retries and older event deliveries")
+            check(subscription_record is not None and subscription_record.status == "active", "an out-of-order halted webhook cannot overwrite newer active subscription state")
+            check(subscription_entitlement is not None and subscription_entitlement.status == "active", "an out-of-order halted webhook cannot revoke the newer paid entitlement")
+
         check(provider_calls == [("POST", "/orders"), ("GET", "/payments/pay_full_access_test")], "no real provider network calls were made")
     finally:
         client.close()

@@ -43,6 +43,9 @@ from .plan_entitlements import (
     effective_plan_id,
     plan_features,
     plan_limits,
+    can_access_exercise,
+    required_exercise_plan,
+    require_exercise_access,
     require_feature,
 )
 from .db import engine, get_db
@@ -1417,6 +1420,7 @@ def list_course_exercises(
         ).limit(10_000)
     ).all()
     items: list[dict[str, Any]] = []
+    current_plan_id = effective_plan_id(db, user.id) if user else "free"
     for (
         exercise,
         lesson_slug,
@@ -1435,27 +1439,26 @@ def list_course_exercises(
         )
         if not (published_item or imported_draft):
             continue
-        has_premium_practice = bool(
-            user and plan_features(effective_plan_id(db, user.id)).get("premium_practice")
+        public_type = public_practice_type(
+            exercise.exercise_type, exercise.starter, course_slug, exercise.prompt
         )
-        if exercise.is_premium and not has_premium_practice:
+        if public_type is None:
+            continue
+        if not can_access_exercise(current_plan_id, exercise):
+            required_plan = required_exercise_plan(exercise)
             items.append({
                 "slug": exercise.slug,
                 "title": exercise.title,
                 "type": "locked",
                 "is_locked": True,
-                "required_plan": "pro",
+                "required_plan": required_plan,
                 "upgrade_url": "/plans",
                 "course_slug": course_slug,
                 "course_title": course_title,
                 "lesson_slug": lesson_slug,
                 "sequence": exercise.sequence,
+                "difficulty": exercise.difficulty,
             })
-            continue
-        public_type = public_practice_type(
-            exercise.exercise_type, exercise.starter, course_slug, exercise.prompt
-        )
-        if public_type is None:
             continue
         items.append(
             {
@@ -4946,7 +4949,12 @@ def list_my_course_exercise_progress(
         .order_by(Module.sort_order.asc(), Lesson.sort_order.asc(), Exercise.sequence.asc())
     ).all()
     items = []
+    current_plan_id = effective_plan_id(db, user.id)
     for exercise, lesson_slug, completed, attempts, completed_at in rows:
+        if not can_access_exercise(current_plan_id, exercise):
+            # Preserve historical progress in the database, but don't expose a
+            # restricted practice collection in an account's visible progress set.
+            continue
         if not is_supported_practice_exercise(
             exercise.exercise_type, exercise.starter, course_slug, exercise.prompt
         ):
@@ -5002,6 +5010,7 @@ def list_featured_exercises(
     ).all()
 
     visible_items = []
+    current_plan_id = effective_plan_id(db, user.id) if user else "free"
     for (
         exercise,
         course_slug,
@@ -5021,15 +5030,12 @@ def list_featured_exercises(
         )
         if not (published_item or imported_draft):
             continue
-        has_premium_practice = bool(
-            user and plan_features(effective_plan_id(db, user.id)).get("premium_practice")
-        )
-        if exercise.is_premium and not has_premium_practice:
-            continue
         public_type = public_practice_type(
             exercise.exercise_type, exercise.starter, course_slug, exercise.prompt
         )
         if public_type is None:
+            continue
+        if not can_access_exercise(current_plan_id, exercise):
             continue
         # Never expose the grader, solution or answer key in this learner-facing list.
         visible_items.append(
@@ -5065,27 +5071,27 @@ def list_lesson_exercises(
     module = db.get(Module, lesson.module_id)
     course = db.get(Course, module.course_id) if module else None
     items = []
-    has_premium_practice = bool(
-        user and plan_features(effective_plan_id(db, user.id)).get("premium_practice")
-    )
+    current_plan_id = effective_plan_id(db, user.id) if user else "free"
     for item in rows:
-        if item.is_premium and not has_premium_practice:
+        public_type = public_practice_type(
+            item.exercise_type, item.starter, course_slug, item.prompt
+        )
+        if public_type is None:
+            continue
+        if not can_access_exercise(current_plan_id, item):
+            required_plan = required_exercise_plan(item)
             items.append({
                 "slug": item.slug,
                 "title": item.title,
                 "type": "locked",
                 "is_locked": True,
-                "required_plan": "pro",
+                "required_plan": required_plan,
                 "upgrade_url": "/plans",
                 "sequence": item.sequence,
                 "course_slug": course_slug,
                 "lesson_slug": lesson_slug,
+                "difficulty": item.difficulty,
             })
-            continue
-        public_type = public_practice_type(
-            item.exercise_type, item.starter, course_slug, item.prompt
-        )
-        if public_type is None:
             continue
         items.append(
             {
@@ -5204,19 +5210,7 @@ def reveal_exercise_solution(
 ) -> dict[str, Any]:
     """Reveal the authored worked answer on request; prefer the linked reference file over legacy placeholders."""
     exercise = find_published_exercise(db, course_slug, lesson_slug, exercise_slug)
-    if exercise.is_premium:
-        if user is None:
-            raise HTTPException(status_code=403, detail={
-                "code": "FEATURE_REQUIRES_UPGRADE", "feature": "premium_practice",
-                "current_plan": "free", "required_plan": "pro", "upgrade_url": "/plans",
-                "message": "This practice item requires the Pro plan or higher.",
-            })
-        if not plan_features(effective_plan_id(db, user.id)).get("premium_practice"):
-            raise HTTPException(status_code=403, detail={
-                "code": "FEATURE_REQUIRES_UPGRADE", "feature": "premium_practice",
-                "current_plan": effective_plan_id(db, user.id), "required_plan": "pro", "upgrade_url": "/plans",
-                "message": "This practice item requires the Pro plan or higher.",
-            })
+    require_exercise_access(db, user, exercise)
     manifest_path, manifest = _load_exercise_manifest(course_slug, lesson_slug, exercise_slug)
     content_root = COURSE_CONTENT_ROOT.resolve()
     course_root = (content_root / course_slug).resolve()
@@ -5288,9 +5282,7 @@ def submit_exercise(
     db: Session = Depends(get_db),
 ) -> dict[str, Any]:
     exercise = find_published_exercise(db, course_slug, lesson_slug, exercise_slug)
-    if exercise.is_premium:
-        from .plan_entitlements import require_feature
-        require_feature(db, user, "premium_practice")
+    require_exercise_access(db, user, exercise)
     progress = db.scalar(
         select(ExerciseProgress).where(
             ExerciseProgress.user_id == user.id,

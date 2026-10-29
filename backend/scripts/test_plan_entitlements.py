@@ -8,6 +8,7 @@ from __future__ import annotations
 import os
 import sys
 import tempfile
+from types import SimpleNamespace
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from uuid import uuid4
@@ -32,6 +33,7 @@ from app.auth_security import create_session  # noqa: E402
 from app.models import Entitlement, PlanUsage, User, UsageReservation, SavedWorkspace  # noqa: E402
 from app.plan_entitlements import (  # noqa: E402
     PLAN_DEFINITIONS, effective_plan_id, plan_limits, reserve_daily_usage, finalize_daily_usage,
+    plan_features, required_exercise_plan, can_access_exercise,
 )
 import app.main as main_module  # noqa: E402
 import jwt  # noqa: E402
@@ -90,6 +92,16 @@ def main() -> None:
         check([limits[p]["max_single_zip_bytes"] for p in limits] == [500*1024**2]*4, "individual ZIP cap is 500 MiB on every tier")
         check([limits[p]["ads_enabled"] for p in limits] == [True, True, False, False], "ad entitlement is enabled only for Free and Pro")
         check([limits[p]["xp_multiplier"] for p in limits] == [1.0, 1.0, 1.5, 1.5], "XP multiplier is 1× for Free/Pro and 1.5× for Max/Lifetime")
+        check([plan_features(p)["premium_practice_sets"] for p in ("free", "pro", "max", "full_access")] == [False, False, True, True], "only Max and Full Access include premium practice sets")
+        standard_exercise = SimpleNamespace(difficulty="beginner", is_premium=False)
+        pro_exercise = SimpleNamespace(difficulty="advanced", is_premium=False)
+        max_exercise = SimpleNamespace(difficulty="professional", is_premium=False)
+        legacy_premium_exercise = SimpleNamespace(difficulty="intermediate", is_premium=True)
+        check(required_exercise_plan(standard_exercise) == "free", "standard difficulty exercises remain Free")
+        check(required_exercise_plan(pro_exercise) == "pro", "advanced and hard exercises require Pro")
+        check(required_exercise_plan(max_exercise) == "max", "professional, specialist and capstone exercises require Max")
+        check(required_exercise_plan(legacy_premium_exercise) == "pro", "existing database premium flags keep their Pro requirement")
+        check(not can_access_exercise("pro", max_exercise) and can_access_exercise("full_access", max_exercise), "exercise tier checks use the effective plan hierarchy")
 
         user = make_user("plan_free")
         authenticate(client, user.id)

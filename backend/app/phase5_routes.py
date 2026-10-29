@@ -54,6 +54,10 @@ MAX_PROJECT_ZIP_FILES = 10_000
 MAX_PROJECT_ZIP_FILE_BYTES = 500 * 1024 * 1024
 MAX_PROJECT_ZIP_UNCOMPRESSED_BYTES = 1024 * 1024 * 1024
 PROJECT_ZIP_CHUNK_BYTES = 1024 * 1024
+# Keep individual browser-to-Vercel-function payloads comfortably below Vercel's
+# 4.5 MB function request-body ceiling. The browser sends raw binary chunks.
+PROJECT_ZIP_UPLOAD_CHUNK_BYTES = 4 * 1024 * 1024
+PROJECT_ZIP_UPLOAD_SESSION_TTL = timedelta(hours=24)
 PROJECT_ZIP_DB_BATCH_BYTES = 8 * 1024 * 1024
 PROJECT_ZIP_DOWNLOAD_BATCH_CHUNKS = 4
 EDITOR_ROLES = {"editor", "admin"}
@@ -138,6 +142,14 @@ class PortfolioSubmissionInput(StrictModel):
         if total > 100_000:
             raise ValueError("A submission may be at most 100 KB of text")
         return cleaned
+
+
+class PortfolioUploadSessionInput(StrictModel):
+    course_slug: str = Field(default="", max_length=100)
+    project_slug: str = Field(default="", max_length=180)
+    title: str | None = Field(default=None, max_length=200)
+    filename: str = Field(min_length=1, max_length=512)
+    total_bytes: int = Field(gt=0, le=500 * 1024 * 1024)
 
 
 class PortfolioEditInput(StrictModel):
@@ -717,8 +729,17 @@ def _portfolio_certificate_items(db: Session, owner: User) -> list[dict[str, Any
     ]
 
 
+def _portfolio_upload_is_complete(submission: ProjectSubmission) -> bool:
+    """Return False only for a pending chunked upload, not ordinary legacy submissions."""
+    raw_metadata = getattr(submission, "portfolio_metadata", None)
+    metadata = raw_metadata if isinstance(raw_metadata, dict) else {}
+    return not (metadata.get("upload_state") == "uploading" and not metadata.get("archive_upload_complete"))
+
+
 def _download_project_zip(submission: ProjectSubmission, is_public: bool, db: Session | None = None) -> Response:
     """Stream chunk-stored ZIPs; keep compatibility with old inline and JSON-bundle submissions."""
+    if not _portfolio_upload_is_complete(submission):
+        raise HTTPException(status_code=409, detail="This project ZIP upload is not complete yet.")
     filename = submission.zip_filename or f"{submission.project_slug}.zip"
     safe_filename = re.sub(r"[^A-Za-z0-9._-]+", "-", filename).strip(".-") or "project.zip"
     if submission.zip_bundle:
@@ -830,6 +851,241 @@ def create_portfolio_submission(body: PortfolioSubmissionInput, user: User = Dep
     return {"submission": _portfolio_item(submission, user), "message": "Submission saved privately. Choose its visible fields before sharing."}
 
 
+def _cleanup_expired_portfolio_uploads(db: Session, user_id) -> int:
+    """Release abandoned upload reservations after 24 hours; never delete completed work."""
+    cutoff = utc_now() - PROJECT_ZIP_UPLOAD_SESSION_TTL
+    stale_rows = db.scalars(
+        select(ProjectSubmission).where(
+            ProjectSubmission.user_id == user_id,
+            ProjectSubmission.submitted_at < cutoff,
+        )
+    ).all()
+    removed = 0
+    for row in stale_rows:
+        metadata = row.portfolio_metadata if isinstance(row.portfolio_metadata, dict) else {}
+        if metadata.get("upload_state") == "uploading" and not metadata.get("archive_upload_complete"):
+            db.delete(row)
+            removed += 1
+    if removed:
+        db.flush()
+    return removed
+
+
+def _owned_upload_submission(db: Session, submission_id: UUID, user: User, *, lock: bool = False) -> ProjectSubmission:
+    query = select(ProjectSubmission).where(
+        ProjectSubmission.id == submission_id,
+        ProjectSubmission.user_id == user.id,
+    )
+    if lock:
+        query = query.with_for_update()
+    row = db.scalar(query)
+    if row is None:
+        # Do not reveal whether another learner has an upload with this ID.
+        raise HTTPException(status_code=404, detail="Upload session was not found.")
+    return row
+
+
+@router.post("/api/me/portfolio/submissions/upload-session", status_code=status.HTTP_201_CREATED)
+def create_portfolio_upload_session(
+    body: PortfolioUploadSessionInput,
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Reserve storage and create a chunk-upload session without sending a large body through Vercel."""
+    filename = Path(body.filename).name.strip()
+    if not filename.lower().endswith(".zip"):
+        raise HTTPException(status_code=400, detail="Upload a .zip archive of your project files.")
+    validate_project_zip_size(body.total_bytes)
+    _cleanup_expired_portfolio_uploads(db, user.id)
+
+    course_slug = _normalize_portfolio_slug(body.course_slug, fallback="", max_length=100) if body.course_slug.strip() else ""
+    title_value = (body.title or "").strip()
+    project_base = body.project_slug.strip() or title_value or Path(filename).stem or "my-project"
+    normalized_project_slug = _normalize_portfolio_slug(project_base, fallback="my-project", max_length=180)
+    safe_filename = re.sub(r"[^A-Za-z0-9._-]+", "-", Path(filename).name).strip(".-") or f"{normalized_project_slug}.zip"
+    if not safe_filename.lower().endswith(".zip"):
+        safe_filename += ".zip"
+    safe_filename = safe_filename[:180]
+
+    ensure_storage_capacity(db, user, incoming_bytes=body.total_bytes)
+    chunk_count = (body.total_bytes + PROJECT_ZIP_UPLOAD_CHUNK_BYTES - 1) // PROJECT_ZIP_UPLOAD_CHUNK_BYTES
+    submission = ProjectSubmission(
+        user_id=user.id,
+        project_slug=normalized_project_slug,
+        title=(title_value or normalized_project_slug.replace("-", " ").title()).strip()[:200],
+        code_bundle={},
+        zip_bundle=None,
+        zip_filename=safe_filename,
+        stored_bytes=body.total_bytes,
+        visibility="private",
+        portfolio_metadata={
+            "course_slug": course_slug,
+            "custom_project": True,
+            "archive_upload_complete": False,
+            "upload_state": "uploading",
+            "upload_expected_bytes": body.total_bytes,
+            "upload_chunk_size": PROJECT_ZIP_UPLOAD_CHUNK_BYTES,
+            "upload_chunk_count": chunk_count,
+            "upload_protocol": "chunked-v1",
+            "summary": "",
+            "skills": [],
+            "technologies": [],
+            "screenshot_urls": [],
+        },
+    )
+    db.add(submission)
+    db.commit()
+    db.refresh(submission)
+    return {
+        "upload_id": str(submission.id),
+        "chunk_size": PROJECT_ZIP_UPLOAD_CHUNK_BYTES,
+        "chunk_count": chunk_count,
+        "expires_after_hours": int(PROJECT_ZIP_UPLOAD_SESSION_TTL.total_seconds() // 3600),
+        "message": "Upload session created. Send each binary chunk, then finalize the archive.",
+    }
+
+
+@router.put("/api/me/portfolio/submissions/upload-session/{submission_id}/chunks/{sequence}")
+async def upload_portfolio_submission_chunk(
+    submission_id: UUID,
+    sequence: int,
+    request: Request,
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Accept one bounded raw-binary chunk; identical retries are idempotent."""
+    submission = _owned_upload_submission(db, submission_id, user, lock=True)
+    metadata = dict(submission.portfolio_metadata or {})
+    if metadata.get("upload_state") != "uploading" or metadata.get("archive_upload_complete"):
+        raise HTTPException(status_code=409, detail="This upload session is no longer accepting chunks.")
+    total_bytes = int(metadata.get("upload_expected_bytes") or 0)
+    chunk_size = int(metadata.get("upload_chunk_size") or 0)
+    chunk_count = int(metadata.get("upload_chunk_count") or 0)
+    if chunk_size != PROJECT_ZIP_UPLOAD_CHUNK_BYTES or sequence < 0 or sequence >= chunk_count:
+        raise HTTPException(status_code=400, detail="Invalid upload chunk number.")
+    expected_size = min(chunk_size, total_bytes - sequence * chunk_size)
+    if expected_size <= 0:
+        raise HTTPException(status_code=400, detail="Invalid upload chunk size.")
+
+    # Stream into a small bounded buffer instead of trusting Content-Length or
+    # materializing an arbitrarily large request body in memory.
+    parts: list[bytes] = []
+    received = 0
+    async for part in request.stream():
+        if not part:
+            continue
+        received += len(part)
+        if received > expected_size:
+            raise HTTPException(status_code=413, detail="Upload chunk exceeds its expected size.")
+        parts.append(part)
+    payload = b"".join(parts)
+    if len(payload) != expected_size:
+        raise HTTPException(status_code=400, detail="Upload chunk size does not match the expected size.")
+
+    existing = db.scalar(select(ProjectSubmissionZipChunk).where(
+        ProjectSubmissionZipChunk.submission_id == submission.id,
+        ProjectSubmissionZipChunk.sequence == sequence,
+    ))
+    if existing is not None:
+        if bytes(existing.payload) == payload:
+            db.rollback()
+            return {"stored": True, "duplicate": True, "sequence": sequence, "received_bytes": len(payload)}
+        raise HTTPException(status_code=409, detail="A different chunk is already stored at this sequence number.")
+
+    db.add(ProjectSubmissionZipChunk(submission_id=submission.id, sequence=sequence, payload=payload))
+    db.commit()
+    return {"stored": True, "duplicate": False, "sequence": sequence, "received_bytes": len(payload)}
+
+
+@router.post("/api/me/portfolio/submissions/upload-session/{submission_id}/finalize", status_code=status.HTTP_201_CREATED)
+def finalize_portfolio_upload_session(
+    submission_id: UUID,
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Verify all chunks and validate the reconstructed ZIP before publishing it as a saved submission."""
+    submission = _owned_upload_submission(db, submission_id, user, lock=True)
+    metadata = dict(submission.portfolio_metadata or {})
+    if metadata.get("archive_upload_complete") and metadata.get("upload_state") == "completed":
+        return {"submission": _portfolio_item(submission, user), "message": "This upload was already finalized."}
+    if metadata.get("upload_state") != "uploading":
+        raise HTTPException(status_code=409, detail="This upload session cannot be finalized.")
+
+    expected_bytes = int(metadata.get("upload_expected_bytes") or 0)
+    expected_chunks = int(metadata.get("upload_chunk_count") or 0)
+    actual_count = db.scalar(select(func.count()).select_from(ProjectSubmissionZipChunk).where(
+        ProjectSubmissionZipChunk.submission_id == submission.id,
+    )) or 0
+    if expected_bytes <= 0 or expected_chunks <= 0 or int(actual_count) != expected_chunks:
+        raise HTTPException(status_code=409, detail={
+            "code": "UPLOAD_INCOMPLETE",
+            "message": "Some ZIP chunks are still missing. Retry failed chunks, then finalize again.",
+            "expected_chunks": expected_chunks,
+            "received_chunks": int(actual_count),
+        })
+
+    total_written = 0
+    next_sequence = 0
+    with tempfile.TemporaryFile(mode="w+b") as archive_file:
+        while next_sequence < expected_chunks:
+            batch = db.execute(
+                select(ProjectSubmissionZipChunk.sequence, ProjectSubmissionZipChunk.payload)
+                .where(
+                    ProjectSubmissionZipChunk.submission_id == submission.id,
+                    ProjectSubmissionZipChunk.sequence >= next_sequence,
+                )
+                .order_by(ProjectSubmissionZipChunk.sequence)
+                .limit(4)
+            ).all()
+            if not batch:
+                raise HTTPException(status_code=409, detail="Some ZIP chunks are missing. Retry the upload and finalize again.")
+            for stored_sequence, payload in batch:
+                if int(stored_sequence) != next_sequence:
+                    raise HTTPException(status_code=409, detail="ZIP chunks are not in a complete sequence.")
+                archive_file.write(bytes(payload))
+                total_written += len(payload)
+                next_sequence += 1
+        if total_written != expected_bytes:
+            raise HTTPException(status_code=409, detail="Uploaded byte count does not match the declared ZIP size.")
+        try:
+            validate_project_zip_file(archive_file)
+        except HTTPException:
+            # Invalid/unsafe archives do not occupy storage indefinitely.
+            db.delete(submission)
+            db.commit()
+            raise
+
+    metadata["archive_upload_complete"] = True
+    metadata["upload_state"] = "completed"
+    metadata["upload_completed_at"] = utc_now().isoformat()
+    submission.portfolio_metadata = metadata
+    db.add(submission)
+    db.commit()
+    db.refresh(submission)
+    return {"submission": _portfolio_item(submission, user), "message": "Your project ZIP was validated and saved privately."}
+
+
+@router.delete("/api/me/portfolio/submissions/upload-session/{submission_id}")
+def cancel_portfolio_upload_session(
+    submission_id: UUID,
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Cancel an incomplete upload and atomically release its reserved storage quota."""
+    submission = db.scalar(select(ProjectSubmission).where(
+        ProjectSubmission.id == submission_id,
+        ProjectSubmission.user_id == user.id,
+    ).with_for_update())
+    if submission is None:
+        return {"deleted": False}
+    metadata = dict(submission.portfolio_metadata or {})
+    if metadata.get("upload_state") != "uploading" or metadata.get("archive_upload_complete"):
+        raise HTTPException(status_code=409, detail="A completed project submission cannot be canceled as an upload session.")
+    db.delete(submission)
+    db.commit()
+    return {"deleted": True}
+
+
 @router.post("/api/me/portfolio/submissions/upload", status_code=status.HTTP_201_CREATED)
 def upload_portfolio_submission(
     course_slug: str = Form(default="", max_length=100),
@@ -902,7 +1158,8 @@ def upload_portfolio_submission(
 @router.get("/api/me/portfolio")
 def get_my_portfolio(user: User = Depends(require_user), db: Session = Depends(get_db)) -> dict[str, Any]:
     rows = db.scalars(select(ProjectSubmission).where(ProjectSubmission.user_id == user.id).order_by(ProjectSubmission.submitted_at.desc())).all()
-    return {"username": user.username, "items": [_portfolio_item(row, user) for row in rows], "certificates": _portfolio_certificate_items(db, user), "default_visibility": "private"}
+    visible_rows = [row for row in rows if _portfolio_upload_is_complete(row)]
+    return {"username": user.username, "items": [_portfolio_item(row, user) for row in visible_rows], "certificates": _portfolio_certificate_items(db, user), "default_visibility": "private"}
 
 
 @router.patch("/api/me/portfolio/{submission_id}")
@@ -910,6 +1167,8 @@ def update_portfolio_item(submission_id: UUID, body: PortfolioEditInput, user: U
     item = db.scalar(select(ProjectSubmission).where(ProjectSubmission.id == submission_id, ProjectSubmission.user_id == user.id))
     if item is None:
         raise HTTPException(status_code=404, detail="Portfolio submission was not found.")
+    if not _portfolio_upload_is_complete(item):
+        raise HTTPException(status_code=409, detail="Finish or cancel the ZIP upload before editing or sharing this project.")
     metadata = dict(item.portfolio_metadata or {})
     changes = body.model_dump(exclude_unset=True)
     if "visibility" in changes and changes["visibility"] is not None:
@@ -961,8 +1220,9 @@ def get_public_portfolio(username: str, db: Session = Depends(get_db)) -> dict[s
         raise HTTPException(status_code=404, detail="Public portfolio was not found.")
     rows = db.scalars(select(ProjectSubmission).where(ProjectSubmission.user_id == owner.id,
         ProjectSubmission.visibility == "public").order_by(ProjectSubmission.submitted_at.desc())).all()
+    visible_rows = [row for row in rows if _portfolio_upload_is_complete(row)]
     return {"username": owner.username, "display_name": owner.display_name,
-            "items": [_portfolio_item(row, owner) for row in rows],
+            "items": [_portfolio_item(row, owner) for row in visible_rows],
             "certificates": _portfolio_certificate_items(db, owner)}
 
 

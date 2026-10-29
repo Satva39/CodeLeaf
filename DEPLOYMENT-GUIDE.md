@@ -104,3 +104,24 @@ Because `PREVIEW_DRAFT_COURSES=false`, unpublished content is intentionally hidd
 - Monitor Render deploy logs and service events, and check Vercel function logs for proxy errors.
 - Keep a staging database/project separate from production, test migrations in staging first, and keep secrets in provider environment settings rather than source files.
 - Do not announce a fully production-ready platform until payment flows, privacy/legal notices, course publishing, accessible mobile workflows, and isolated execution have been independently verified.
+
+
+## Vercel API proxy configuration
+
+The frontend routes `/api/*` through the same-origin Vercel serverless proxy in `frontend/api/proxy/[...path].js`. Configure the following **server-side Vercel environment variable** for Production and Preview as appropriate:
+
+- `CODELEAF_API_ORIGIN=https://codeleaf-api.onrender.com`
+
+Enter only the API origin (scheme + hostname, no `/api` suffix, path, credentials, query, or trailing custom path). The proxy forwards cookies and raw request bodies to `/api/*`, including signed payment webhook payloads. Never prefix this variable with `VITE_`; it must not be exposed in the browser bundle. After adding or changing it, redeploy the Vercel project.
+
+The proxy is configured as the `/api/:path*` rewrite destination in `frontend/vercel.json`; do not replace it with a direct cross-origin rewrite unless the proxy is deliberately removed and cookie/webhook behavior is revalidated.
+
+## Chunked portfolio ZIP uploads
+
+Portfolio ZIP uploads now use authenticated 4 MiB binary chunk requests through the same-origin Vercel API proxy rather than sending a near-500 MiB archive in one function request. The backend reserves the whole archive's storage allowance up front, scopes chunks to the authenticated owner, permits identical chunk retries, verifies all chunk sequences and byte counts, validates the reconstructed ZIP, and keeps an incomplete upload private. Chunks are stored in PostgreSQL; this patch does not add third-party object storage.
+
+Before broad production use, perform a staging smoke test with a small ZIP, a ZIP spanning multiple chunks, cancellation/retry cases, and a near-limit upload only when staging capacity permits. Confirm PostgreSQL storage use and Render/Vercel request and timeout logs. Abandoned sessions are eligible for cleanup after 24 hours when the account starts another upload.
+
+## Practice collection plan tiers
+
+Exercise access is determined server-side from the imported exercise difficulty and any legacy database premium flag. Standard/beginner/intermediate exercises are Free, `advanced` and `hard` exercises require Pro, and `professional`, `specialist`, `specialization`, and `capstone` exercises require Max or Full Access. The same access rule is used by lesson/course exercise lists, the featured-practice endpoint, progress visibility, worked-solution retrieval, and answer submission. This uses the existing stored `difficulty` field, so no bulk manifest rewrite or new migration is needed; tests should still check that imported difficulty values are preserved for new course content.

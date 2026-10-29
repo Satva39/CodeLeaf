@@ -41,6 +41,7 @@ FEATURES_FREE = {
     "advanced_analytics": False,
     "personalized_recommendations": False,
     "premium_practice": False,
+    "premium_practice_sets": False,
     "project_planning": False,
     "premium_projects": False,
     "ai_tutor": False,
@@ -54,11 +55,15 @@ FEATURES_PRO = {
     "advanced_analytics": True,
     "personalized_recommendations": True,
     "premium_practice": True,
+    # Pro unlocks expanded practice and mock assessments, but the Max-only
+    # professional/specialist exercise collections stay locked.
+    "premium_practice_sets": False,
     "project_planning": True,
     "leaderboards": True,
 }
 FEATURES_MAX = {
     **FEATURES_PRO,
+    "premium_practice_sets": True,
     "premium_projects": True,
     "ai_tutor": True,
     "ai_code_review": True,
@@ -142,6 +147,7 @@ FEATURE_REQUIRED_PLAN = {
     "advanced_analytics": "pro",
     "personalized_recommendations": "pro",
     "premium_practice": "pro",
+    "premium_practice_sets": "max",
     "project_planning": "pro",
     "premium_projects": "max",
     "ai_tutor": "max",
@@ -150,6 +156,57 @@ FEATURE_REQUIRED_PLAN = {
     "priority_support": "max",
     "leaderboards": "pro",
 }
+
+# The source course library already classifies exercises by difficulty. Use those
+# existing values to create a genuine tier distinction without requiring thousands
+# of content-file edits or a schema migration. Explicit legacy premium flags remain
+# honored as a minimum Pro requirement; specialist classifications take precedence.
+MAX_PRACTICE_DIFFICULTIES = {
+    "professional",
+    "specialist",
+    "specialization",
+    "capstone",
+    "advanced-capstone",
+    "interview-prep",
+}
+PRO_PRACTICE_DIFFICULTIES = {"advanced", "hard", "expert"}
+
+
+def required_exercise_plan(exercise: Any) -> str:
+    """Return the minimum plan for an exercise using trusted stored exercise metadata."""
+    difficulty = str(getattr(exercise, "difficulty", "") or "").strip().lower().replace("_", "-")
+    if difficulty in MAX_PRACTICE_DIFFICULTIES:
+        return "max"
+    if bool(getattr(exercise, "is_premium", False)) or difficulty in PRO_PRACTICE_DIFFICULTIES:
+        return "pro"
+    return "free"
+
+
+def can_access_exercise(plan_id: str, exercise: Any) -> bool:
+    """Check exercise access from the current trusted plan and exercise metadata."""
+    required = required_exercise_plan(exercise)
+    return PLAN_PRIORITY.get(plan_id, 0) >= PLAN_PRIORITY[required]
+
+
+def require_exercise_access(db: Session, user: User | None, exercise: Any) -> str:
+    """Enforce Pro/Max exercise tiers for direct API calls as well as the UI."""
+    required = required_exercise_plan(exercise)
+    plan_id = effective_plan_id(db, user.id) if user else "free"
+    if PLAN_PRIORITY.get(plan_id, 0) < PLAN_PRIORITY[required]:
+        feature = "premium_practice_sets" if required == "max" else "premium_practice"
+        required_title = PLAN_DEFINITIONS[required]["title"]
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "code": "FEATURE_REQUIRES_UPGRADE",
+                "feature": feature,
+                "current_plan": plan_id,
+                "required_plan": required,
+                "upgrade_url": "/plans",
+                "message": f"This practice item requires the {required_title} plan or higher.",
+            },
+        )
+    return plan_id
 
 
 def utc_now() -> datetime:
