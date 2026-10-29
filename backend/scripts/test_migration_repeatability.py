@@ -52,7 +52,7 @@ def main() -> int:
         missing = sorted(required - tables)
         if missing:
             raise SystemExit("FAIL: migration left missing tables: " + ", ".join(missing))
-        if len(revisions) != 1 or revisions[0] != "0009_snippets_support_mock_assessments":
+        if len(revisions) != 1 or revisions[0] != "0009_snippets_support":
             raise SystemExit(f"FAIL: unexpected migration state: {revisions!r}")
         with closing(sqlite3.connect(database_path)) as connection:
             user_columns = {row[1] for row in connection.execute("PRAGMA table_info(users)")}

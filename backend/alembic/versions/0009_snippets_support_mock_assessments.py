@@ -1,6 +1,6 @@
 """Add persisted code snippets, support triage, and timed mock assessment attempts.
 
-Revision ID: 0009_snippets_support_mock_assessments
+Revision ID: 0009_snippets_support
 Revises: 0008_plan_entitlements_usage
 """
 from __future__ import annotations
@@ -8,7 +8,7 @@ from __future__ import annotations
 from alembic import op
 import sqlalchemy as sa
 
-revision = "0009_snippets_support_mock_assessments"
+revision = "0009_snippets_support"
 down_revision = "0008_plan_entitlements_usage"
 branch_labels = None
 depends_on = None
