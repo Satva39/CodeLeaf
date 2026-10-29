@@ -15,6 +15,7 @@ import {
   Zap,
 } from "lucide-react";
 import { PLANS } from "../data.js";
+import { hasCompletePlanCatalog, mergePlanCatalog, normalizePlanCatalogPayload } from "../lib/planCatalog.js";
 import { API_BASE } from "../lib/demoState.js";
 import { PageShell } from "../components/common.jsx";
 
@@ -57,6 +58,7 @@ export default function PlansPage() {
   const [billing, setBilling] = useState(null);
   const [entitlements, setEntitlements] = useState(null);
   const [planCatalog, setPlanCatalog] = useState([]);
+  const [catalogStatus, setCatalogStatus] = useState("loading");
   const [integrations, setIntegrations] = useState({ ai_available: false, supported_runner_languages: ["python", "javascript"] });
   const [cancelPending, setCancelPending] = useState("");
   const navigate = useNavigate();
@@ -73,11 +75,18 @@ export default function PlansPage() {
       else if (entitlementResponse.status === 401) setEntitlements(null);
       if (catalogResponse.ok) {
         const catalog = await catalogResponse.json();
-        setPlanCatalog(Array.isArray(catalog.items) ? catalog.items : []);
+        const items = normalizePlanCatalogPayload(catalog);
+        setPlanCatalog(items);
+        setCatalogStatus(hasCompletePlanCatalog(items) ? "live" : "fallback");
         setIntegrations(catalog.integrations || { ai_available: false, supported_runner_languages: ["python", "javascript"] });
+      } else {
+        setPlanCatalog([]);
+        setCatalogStatus("fallback");
       }
     } catch {
-      /* Public pricing remains available when the account API is offline. */
+      setPlanCatalog([]);
+      setCatalogStatus("fallback");
+      /* The public comparison has a complete local fallback if the API is offline. */
     }
   }
   useEffect(() => {
@@ -87,7 +96,7 @@ export default function PlansPage() {
     || billing?.current_plan?.id
     || (typeof billing?.current_plan === "string" ? billing.current_plan : "");
   const planPriority = { free: 0, pro: 1, max: 2, full_access: 3 };
-  const planById = useMemo(() => new Map(planCatalog.map((plan) => [plan.id, plan])), [planCatalog]);
+  const planById = useMemo(() => new Map(mergePlanCatalog(planCatalog).map((plan) => [plan.id, plan])), [planCatalog]);
   const money = (paise) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format((Number(paise) || 0) / 100);
   const formatBytes = (value) => {
     const bytes = Number(value) || 0;
@@ -383,7 +392,7 @@ export default function PlansPage() {
           <div>
             <div className="eyebrow">COMPARE PLANS</div>
             <h2>Know exactly what changes</h2>
-            <p>Prices and allowances come from CodeLeaf's server-side plan catalog.</p>
+            <p>{catalogStatus === "live" ? "Prices and allowances come from CodeLeaf's server-side plan catalog." : "Plan inclusions are shown from CodeLeaf's configured defaults until the live catalog is available."}</p>
           </div>
         </div>
         <div className="plan-comparison-scroll">
@@ -395,17 +404,21 @@ export default function PlansPage() {
                 const plan = planById.get(p.id);
                 const value = row.kind === "feature" ? plan?.features?.[row.key] : plan?.limits?.[row.key];
                 let shown;
-                if (row.kind === "feature") shown = value ? "Included" : "—";
+                if (row.kind === "feature") {
+                  if (value === true && row.key === "ai_tutor" && !integrations.ai_available) shown = "Included · provider unavailable";
+                  else shown = value === true ? "Included" : "Not included";
+                }
                 else if (row.kind === "support") shown = p.id === "max" || p.id === "full_access" ? "Priority" : p.id === "pro" ? "Standard" : "No priority queue";
                 else if (row.kind === "lifetime") shown = p.id === "full_access" ? "Yes · one-time" : "No";
                 else if (row.kind === "retained_data") shown = "Yes";
                 else shown = row.format ? row.format(value ?? (row.key === "max_single_zip_bytes" ? 500 * 1024 * 1024 : 0)) : new Intl.NumberFormat("en-IN").format(Number(value) || 0);
-                const included = (row.kind === "feature" && value) || (row.kind === "support" && p.id !== "free") || (row.kind === "lifetime" && p.id === "full_access") || row.kind === "retained_data";
+                const included = (row.kind === "feature" && value === true) || (row.kind === "support" && p.id !== "free") || (row.kind === "lifetime" && p.id === "full_access") || row.kind === "retained_data";
                 return <td key={p.id} className={included ? "plan-cell-included" : ""}>{shown}</td>;
               })}</tr>)}
             </tbody>
           </table>
         </div>
+        {catalogStatus !== "live" && <p className="plan-catalog-fallback" role="status">The live plan catalog is unavailable or incomplete, so this table is using CodeLeaf's configured plan defaults. These display values do not grant access; the backend still enforces account entitlements. Refresh the page or check the Render API deployment if this message persists.</p>}
         <p className="plan-comparison-note">Daily usage windows reset at 00:00 UTC. The execution quota applies only to the configured runtimes ({(integrations.supported_runner_languages || ["python", "javascript"]).join(" and ")}). {integrations.ai_available ? "An AI provider is configured; service availability and daily allowances still apply." : "AI is currently unavailable because the backend has no complete AI provider configuration. No simulated responses are supplied."}</p>
       </section>
       {entitlements?.current_plan && (
