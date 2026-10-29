@@ -55,25 +55,71 @@ export default function PlansPage() {
   const [pending, setPending] = useState("");
   const [checkoutMessage, setCheckoutMessage] = useState("");
   const [billing, setBilling] = useState(null);
+  const [entitlements, setEntitlements] = useState(null);
+  const [planCatalog, setPlanCatalog] = useState([]);
+  const [integrations, setIntegrations] = useState({ ai_available: false, supported_runner_languages: ["python", "javascript"] });
   const [cancelPending, setCancelPending] = useState("");
   const navigate = useNavigate();
   async function refreshBilling() {
     try {
-      const response = await apiFetch(`${API_BASE}/api/me/billing`, {
-        credentials: "include",
-      });
-      if (!response.ok) {
-        if (response.status === 401) setBilling(null);
-        return;
+      const [billingResponse, entitlementResponse, catalogResponse] = await Promise.all([
+        apiFetch(`${API_BASE}/api/me/billing`, { credentials: "include" }),
+        apiFetch(`${API_BASE}/api/me/entitlements`, { credentials: "include" }),
+        apiFetch(`${API_BASE}/api/plans`, { credentials: "include" }),
+      ]);
+      if (billingResponse.ok) setBilling(await billingResponse.json());
+      else if (billingResponse.status === 401) setBilling(null);
+      if (entitlementResponse.ok) setEntitlements(await entitlementResponse.json());
+      else if (entitlementResponse.status === 401) setEntitlements(null);
+      if (catalogResponse.ok) {
+        const catalog = await catalogResponse.json();
+        setPlanCatalog(Array.isArray(catalog.items) ? catalog.items : []);
+        setIntegrations(catalog.integrations || { ai_available: false, supported_runner_languages: ["python", "javascript"] });
       }
-      setBilling(await response.json());
     } catch {
       /* Public pricing remains available when the account API is offline. */
     }
   }
   useEffect(() => {
-    refreshBilling();
+    void refreshBilling();
   }, []);
+  const currentPlanId = entitlements?.current_plan?.id
+    || billing?.current_plan?.id
+    || (typeof billing?.current_plan === "string" ? billing.current_plan : "");
+  const planPriority = { free: 0, pro: 1, max: 2, full_access: 3 };
+  const planById = useMemo(() => new Map(planCatalog.map((plan) => [plan.id, plan])), [planCatalog]);
+  const money = (paise) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format((Number(paise) || 0) / 100);
+  const formatBytes = (value) => {
+    const bytes = Number(value) || 0;
+    if (bytes >= 1024 ** 3) return `${(bytes / (1024 ** 3)).toFixed(bytes % (1024 ** 3) ? 1 : 0)} GB`;
+    if (bytes >= 1024 ** 2) return `${Math.round(bytes / (1024 ** 2))} MB`;
+    return `${bytes} B`;
+  };
+  const comparisonRows = [
+    { label: "Published tutorials, references and standard lessons", kind: "feature", key: "published_learning" },
+    { label: "Standard exercises, progress, XP and streaks", kind: "feature", key: "learning_progress" },
+    { label: "Available course certification exams and earned certificates", kind: "feature", key: "course_exams" },
+    { label: "Public project browsing and personal portfolio", kind: "feature", key: "portfolio" },
+    { label: "Advanced learning analytics and performance reports", kind: "feature", key: "advanced_analytics" },
+    { label: "Activity-based personalized recommendations", kind: "feature", key: "personalized_recommendations" },
+    { label: "Expanded practice collections and timed mock assessments", kind: "feature", key: "premium_practice" },
+    { label: "Saved project milestone checklists", kind: "feature", key: "project_planning" },
+    { label: "Weekly and all-time learning leaderboards", kind: "feature", key: "leaderboards" },
+    { label: "Premium capstones and interview-preparation projects", kind: "feature", key: "premium_projects" },
+    { label: "AI tutor and AI code review when configured", kind: "feature", key: "ai_tutor" },
+    { label: "Ad-free learning", kind: "feature", key: "ad_free" },
+    { label: "XP multiplier", kind: "limit", key: "xp_multiplier", format: (value) => `${value}×` },
+    { label: "Saved workspaces", kind: "limit", key: "workspaces" },
+    { label: "Saved code snippets", kind: "limit", key: "saved_snippets" },
+    { label: "Total portfolio / project storage", kind: "limit", key: "project_storage_bytes", format: formatBytes },
+    { label: "Supported code executions per day", kind: "limit", key: "code_executions_per_day" },
+    { label: "AI requests per day", kind: "limit", key: "ai_requests_per_day" },
+    { label: "Maximum individual ZIP size", kind: "limit", key: "max_single_zip_bytes", format: formatBytes },
+    { label: "Advertisements", kind: "limit", key: "ads_enabled", format: (value) => value ? "Shown" : "Ad-free" },
+    { label: "Support queue", kind: "support" },
+    { label: "Lifetime entitlement", kind: "lifetime" },
+    { label: "Earned certificates and saved work after paid expiry", kind: "retained_data" },
+  ];
   async function cancelSubscription(subscription) {
     if (
       !window.confirm(
@@ -246,7 +292,18 @@ export default function PlansPage() {
         </div>
       </div>
       <div className="plan-grid">
-        {PLANS.map((p) => (
+        {PLANS.map((basePlan) => {
+          const serverPlan = planById.get(basePlan.id);
+          const p = serverPlan ? {
+            ...basePlan,
+            title: serverPlan.title || basePlan.title,
+            price: money(serverPlan.amount_paise),
+            billing: serverPlan.billing === "monthly" ? "per month" : serverPlan.billing === "lifetime" ? "one-time · lifetime access" : "Free forever",
+          } : basePlan;
+          const isCurrent = currentPlanId === p.id;
+          const includedInCurrent = Boolean(currentPlanId && (planPriority[currentPlanId] ?? -1) > (planPriority[p.id] ?? -1));
+          const lifetimeActive = currentPlanId === "full_access";
+          return (
           <div
             key={p.id}
             className={`plan-card plan-${p.tone} panel ${p.popular ? "plan-popular" : ""}`}
@@ -272,8 +329,8 @@ export default function PlansPage() {
             </div>
             <div className="plan-card-title-row">
               <h2>{p.title}</h2>
-              {p.id === "free" && (
-                <span className="plan-current">START HERE</span>
+              {isCurrent && (
+                <span className="plan-current">CURRENT PLAN</span>
               )}
             </div>
             <p className="plan-note">{p.note}</p>
@@ -292,10 +349,10 @@ export default function PlansPage() {
             </ul>
             <button
               className={`button ${p.id === "max" ? "button-violet" : p.id === "full_access" ? "button-dark" : "button-primary"} button-wide`}
-              disabled={pending === p.id}
+              disabled={pending === p.id || isCurrent || includedInCurrent || lifetimeActive}
               onClick={() => choosePlan(p)}
             >
-              {pending === p.id ? "Preparing..." : p.action}{" "}
+              {pending === p.id ? "Preparing..." : isCurrent ? "Current plan" : includedInCurrent ? `Included with ${PLANS.find((item) => item.id === currentPlanId)?.title || currentPlanId}` : lifetimeActive ? "Lifetime access active" : p.action}{" "}
               <ArrowRight size={15} />
             </button>
             {p.id !== "full_access" && p.id !== "free" && (
@@ -310,8 +367,61 @@ export default function PlansPage() {
               </small>
             )}
           </div>
-        ))}
+          );
+        })}
       </div>
+      <section className="plan-comparison panel">
+        <div className="section-title-row">
+          <div>
+            <div className="eyebrow">COMPARE PLANS</div>
+            <h2>Know exactly what changes</h2>
+            <p>Prices and allowances come from CodeLeaf's server-side plan catalog.</p>
+          </div>
+        </div>
+        <div className="plan-comparison-scroll">
+          <table className="plan-comparison-table">
+            <thead><tr><th scope="col">Feature or allowance</th>{PLANS.map((p) => <th key={p.id} scope="col">{p.title}</th>)}</tr></thead>
+            <tbody>
+              <tr className="plan-comparison-price-row"><th scope="row">Price</th>{PLANS.map((p) => { const serverPlan = planById.get(p.id); return <td key={p.id}>{serverPlan ? money(serverPlan.amount_paise) : p.price}<small>{p.id === "pro" || p.id === "max" ? "/month" : p.id === "full_access" ? "one-time" : "forever"}</small></td>; })}</tr>
+              {comparisonRows.map((row) => <tr key={row.label}><th scope="row">{row.label}</th>{PLANS.map((p) => {
+                const plan = planById.get(p.id);
+                const value = row.kind === "feature" ? plan?.features?.[row.key] : plan?.limits?.[row.key];
+                let shown;
+                if (row.kind === "feature") shown = value ? "Included" : "—";
+                else if (row.kind === "support") shown = p.id === "max" || p.id === "full_access" ? "Priority" : p.id === "pro" ? "Standard" : "No priority queue";
+                else if (row.kind === "lifetime") shown = p.id === "full_access" ? "Yes · one-time" : "No";
+                else if (row.kind === "retained_data") shown = "Yes";
+                else shown = row.format ? row.format(value ?? (row.key === "max_single_zip_bytes" ? 500 * 1024 * 1024 : 0)) : new Intl.NumberFormat("en-IN").format(Number(value) || 0);
+                const included = (row.kind === "feature" && value) || (row.kind === "support" && p.id !== "free") || (row.kind === "lifetime" && p.id === "full_access") || row.kind === "retained_data";
+                return <td key={p.id} className={included ? "plan-cell-included" : ""}>{shown}</td>;
+              })}</tr>)}
+            </tbody>
+          </table>
+        </div>
+        <p className="plan-comparison-note">Daily usage windows reset at 00:00 UTC. The execution quota applies only to the configured runtimes ({(integrations.supported_runner_languages || ["python", "javascript"]).join(" and ")}). {integrations.ai_available ? "An AI provider is configured; service availability and daily allowances still apply." : "AI is currently unavailable because the backend has no complete AI provider configuration. No simulated responses are supplied."}</p>
+      </section>
+      {entitlements?.current_plan && (
+        <section className="membership-usage-panel panel">
+          <div className="section-title-row">
+            <div><div className="eyebrow">ACCOUNT OVERVIEW</div><h2>{entitlements.current_plan.title} membership</h2><p>{entitlements.current_plan.lifetime ? "Lifetime individual access · no recurring renewal." : entitlements.current_plan.period_ends_at ? `Current paid period ends ${new Date(entitlements.current_plan.period_ends_at).toLocaleDateString("en-IN")}.` : entitlements.current_plan.id === "free" ? "Free access remains available after any paid period ends." : "Membership status is derived from verified account records."}</p></div>
+            <button className="button button-secondary button-small" onClick={() => void refreshBilling()}>Refresh status</button>
+          </div>
+          <div className="usage-grid">
+            {[
+              { key: "workspaces", title: "Saved workspaces", format: (v) => `${v.used} / ${v.limit}` },
+              { key: "saved_snippets", title: "Saved snippets", format: (v) => `${v.used} / ${v.limit}` },
+              { key: "project_storage_bytes", title: "Project storage", format: (v) => `${formatBytes(v.used)} / ${formatBytes(v.limit)}` },
+              { key: "code_executions_per_day", title: "Code runs today", format: (v) => `${v.used} / ${v.limit}` },
+              { key: "ai_requests_per_day", title: "AI requests today", format: (v) => `${v.used} / ${v.limit}` },
+            ].map((item) => {
+              const usage = entitlements.usage?.[item.key] || { used: 0, limit: 0 };
+              const percent = Number(usage.limit) > 0 ? Math.min(100, Math.max(0, Number(usage.used) / Number(usage.limit) * 100)) : 0;
+              return <div className="usage-meter" key={item.key}><div className="usage-meter-top"><strong>{item.title}</strong><span>{item.format(usage)}</span></div><div className="usage-meter-track" aria-label={`${item.title}: ${item.format(usage)}`}><span style={{ width: `${percent}%` }} /></div></div>;
+            })}
+          </div>
+          <small className="usage-timezone">Usage date: {entitlements.usage?.date || "—"} · timezone: {entitlements.usage?.timezone || "UTC"}</small>
+        </section>
+      )}
       {billing &&
         ((billing.entitlements || []).length > 0 ||
           (billing.subscriptions || []).length > 0) && (
@@ -367,6 +477,8 @@ export default function PlansPage() {
                       ? ` · Current period ends ${new Date(subscription.ends_at).toLocaleDateString("en-IN")}`
                       : ""}
                   </small>
+                  {subscription.cancellation_scheduled && <small className="billing-warning">Auto-renewal cancellation is scheduled. Current verified access remains subject to the provider period end.</small>}
+                  {subscription.cancellation_required && <small className="billing-warning">Action required: CodeLeaf could not confirm cancellation of this older subscription. Contact support and check Razorpay to avoid overlapping renewals.</small>}
                 </div>
                 {subscription.cancelable && (
                   <button
@@ -416,6 +528,7 @@ export default function PlansPage() {
         Final production checkout requires an authenticated account, verified
         Razorpay payment callbacks, signed webhooks, billing terms and
         successful test-mode reconciliation.
+        <p>Need account or billing help? <a href="/support">Open a CodeLeaf support request</a>. Max and Full Access requests enter the priority queue; Pro requests enter the standard queue.</p>
       </div>
     </PageShell>
   );

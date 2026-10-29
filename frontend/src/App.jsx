@@ -30,6 +30,10 @@ import CourseLandingPage from "./pages/CourseLandingPage.jsx";
 import ContentStudioPage from "./pages/ContentStudioPage.jsx";
 import PortfolioPage from "./pages/PortfolioPage.jsx";
 import LearningHubPage from "./pages/LearningHubPage.jsx";
+import AIAssistantPage from "./pages/AIAssistantPage.jsx";
+import MockExamPage from "./pages/MockExamPage.jsx";
+import SupportPage from "./pages/SupportPage.jsx";
+import AdSenseController from "./components/monetization/AdSenseController.jsx";
 
 function LegacyReferenceRedirect() {
   const location = useLocation();
@@ -51,6 +55,7 @@ export default function App() {
   return (
     <div className="app-root">
       <Header />
+      <AdSenseController />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/tutorials" element={<TutorialsPage />} />
@@ -87,6 +92,7 @@ export default function App() {
         />
         <Route path="/exam/:examSlug" element={<ExamPage />} />
         <Route path="/practical/:examSlug" element={<PracticalExamPage />} />
+        <Route path="/mock-exam/:examSlug" element={<MockExamPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/register" element={<AuthPage />} />
@@ -95,6 +101,8 @@ export default function App() {
         <Route path="/verify-email-change" element={<AuthPage />} />
         <Route path="/reset-password" element={<AuthPage />} />
         <Route path="/plans" element={<PlansPage />} />
+        <Route path="/ai" element={<AIAssistantPage />} />
+        <Route path="/support" element={<SupportPage />} />
         <Route
           path="/projects"
           element={<CourseDirectoryPage collection="projects" />}

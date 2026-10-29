@@ -46,6 +46,12 @@ class Settings(BaseSettings):
     razorpay_pro_plan_id: str | None = None
     razorpay_max_plan_id: str | None = None
     razorpay_subscription_total_count: int = Field(default=1200, gt=0)
+    # Optional OpenAI-compatible AI endpoint. AI features stay disabled unless all three values exist.
+    ai_api_base_url: str | None = None
+    ai_api_key: str | None = None
+    ai_model: str | None = None
+    ai_timeout_seconds: int = Field(default=25, ge=5, le=90)
+    ai_max_output_tokens: int = Field(default=1200, ge=128, le=4000)
     # Optional URL for the isolated runner control plane. The main API never executes learner code.
     runner_service_url: str | None = None
     runner_service_token: str | None = None

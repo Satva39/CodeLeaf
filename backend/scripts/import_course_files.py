@@ -112,6 +112,11 @@ def upsert_exercise(db, lesson, data, published: bool):
         "grading_config": data.get("grading_config", {}), "sequence": int(data.get("sequence", 0)),
         "difficulty": data.get("difficulty", "easy"), "xp_points": 20, "is_published": published,
     }
+    # Premium flags may be managed in the database while course manifests are
+    # being migrated. Do not silently clear an existing lock if a routine import
+    # omits the optional flag; only an explicit manifest value changes it.
+    if "is_premium" in data or "premium" in data:
+        values["is_premium"] = bool(data.get("is_premium", data.get("premium", False)))
     if row is None:
         row = Exercise(lesson_id=lesson.id, slug=data["slug"], **values)
         db.add(row)

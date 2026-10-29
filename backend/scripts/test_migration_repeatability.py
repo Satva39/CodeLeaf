@@ -48,17 +48,22 @@ def main() -> int:
         with closing(sqlite3.connect(database_path)) as connection:
             tables = {row[0] for row in connection.execute("SELECT name FROM sqlite_master WHERE type='table'")}
             revisions = [row[0] for row in connection.execute("SELECT version_num FROM alembic_version")]
-        required = {"courses", "course_modules", "lessons", "exercises", "users", "auth_sessions", "account_action_tokens", "auth_rate_limit_events", "learning_preferences", "review_schedules", "content_revisions", "audit_logs", "product_analytics_events", "runner_jobs", "practical_exam_attempts", "alembic_version"}
+        required = {"courses", "course_modules", "lessons", "exercises", "users", "auth_sessions", "account_action_tokens", "auth_rate_limit_events", "learning_preferences", "review_schedules", "content_revisions", "audit_logs", "product_analytics_events", "runner_jobs", "practical_exam_attempts", "saved_workspaces", "plan_usage", "usage_reservations", "saved_snippets", "support_requests", "project_milestone_progress", "mock_assessment_attempts", "alembic_version"}
         missing = sorted(required - tables)
         if missing:
             raise SystemExit("FAIL: migration left missing tables: " + ", ".join(missing))
-        if len(revisions) != 1 or revisions[0] != "0005_practical_exam_attempts":
+        if len(revisions) != 1 or revisions[0] != "0009_snippets_support_mock_assessments":
             raise SystemExit(f"FAIL: unexpected migration state: {revisions!r}")
         with closing(sqlite3.connect(database_path)) as connection:
             user_columns = {row[1] for row in connection.execute("PRAGMA table_info(users)")}
         if "is_email_verified" not in user_columns:
             raise SystemExit("FAIL: migration left users.is_email_verified missing")
-        print("PASS migration state has one practical-exam head and all auth/review/privacy/practical tables after repeated upgrades")
+        with closing(sqlite3.connect(database_path)) as connection:
+            submission_columns = {row[1] for row in connection.execute("PRAGMA table_info(project_submissions)")}
+            runner_columns = {row[1] for row in connection.execute("PRAGMA table_info(runner_jobs)")}
+        if "stored_bytes" not in submission_columns or "request_key" not in runner_columns:
+            raise SystemExit("FAIL: plan usage migration did not add storage or runner idempotency columns")
+        print("PASS migration state has one 0009 head and all auth/review/privacy/practical/plan-usage/snippet/support/mock-assessment tables after repeated upgrades")
     print("Migration repeatability checks passed; only a temporary SQLite database was used.")
     return 0
 

@@ -93,6 +93,10 @@ export default function ProjectGuidePage() {
   const [activeFilePath, setActiveFilePath] = useState("");
   const [copied, setCopied] = useState("");
   const [treeMode, setTreeMode] = useState("tree");
+  const [milestoneProgress, setMilestoneProgress] = useState({});
+  const [milestoneAccess, setMilestoneAccess] = useState("checking");
+  const [milestoneSaving, setMilestoneSaving] = useState({});
+  const [milestoneNotice, setMilestoneNotice] = useState("");
 
   useEffect(() => {
     const controller = new AbortController();
@@ -105,7 +109,10 @@ export default function ProjectGuidePage() {
     })
       .then(async (response) => {
         const payload = await response.json().catch(() => ({}));
-        if (!response.ok) throw new Error(payload.detail || "This project guide could not be loaded.");
+        if (!response.ok) {
+          const detail = payload.detail;
+          throw new Error((detail && typeof detail === "object" ? detail.message : detail) || "This project guide could not be loaded.");
+        }
         return payload;
       })
       .then((payload) => {
@@ -129,6 +136,36 @@ export default function ProjectGuidePage() {
   );
   const activeFile = codeFiles.find((file) => file.path === activeFilePath) || codeFiles[0];
   const courseTitle = guide?.course?.title || course?.title || courseSlug;
+
+  useEffect(() => {
+    if (!guide || !(Array.isArray(guide.milestones) && guide.milestones.length)) {
+      setMilestoneAccess("unavailable");
+      return undefined;
+    }
+    const controller = new AbortController();
+    setMilestoneAccess("checking");
+    apiFetch(`${API_BASE}/api/me/project-milestones?course_slug=${encodeURIComponent(courseSlug)}&project_slug=${encodeURIComponent(projectSlug)}`, { credentials: "include", signal: controller.signal })
+      .then(async (response) => {
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          const detail = payload.detail;
+          const error = new Error(typeof detail === "string" ? detail : detail?.message || "Project checklist is unavailable.");
+          error.status = response.status;
+          throw error;
+        }
+        const next = {};
+        for (const item of (Array.isArray(payload.items) ? payload.items : [])) next[String(item.milestone_key)] = Boolean(item.completed);
+        setMilestoneProgress(next);
+        setMilestoneAccess("enabled");
+      })
+      .catch((err) => {
+        if (err.name === "AbortError") return;
+        if (err.status === 401) setMilestoneAccess("signed_out");
+        else if (err.status === 403) setMilestoneAccess("locked");
+        else { setMilestoneAccess("unavailable"); setMilestoneNotice(err.message || "Milestone progress could not be loaded."); }
+      });
+    return () => controller.abort();
+  }, [guide, courseSlug, projectSlug]);
   const milestones = Array.isArray(guide?.milestones) ? guide.milestones : [];
   const requiredFeatures = Array.isArray(guide?.required_features) ? guide.required_features : [];
   const stretchFeatures = Array.isArray(guide?.stretch_features) ? guide.stretch_features : [];
@@ -137,6 +174,31 @@ export default function ProjectGuidePage() {
   const fileSummary = guide?.file_summary || {};
   const prerequisites = Array.isArray(project?.prerequisites) ? project.prerequisites : Array.isArray(project?.prerequisite_lesson_ids) ? project.prerequisite_lesson_ids : [];
   const skillList = Array.isArray(project?.skills) ? project.skills : Array.isArray(project?.target_skills) ? project.target_skills : [];
+
+  async function toggleMilestone(milestone, index, completed) {
+    const key = String(Number(milestone.sequence) > 0 ? Number(milestone.sequence) : index + 1);
+    const previous = Boolean(milestoneProgress[key]);
+    setMilestoneProgress((current) => ({ ...current, [key]: completed }));
+    setMilestoneSaving((current) => ({ ...current, [key]: true }));
+    setMilestoneNotice("");
+    try {
+      const response = await apiFetch(`${API_BASE}/api/me/project-milestones/${encodeURIComponent(courseSlug)}/${encodeURIComponent(projectSlug)}/${encodeURIComponent(key)}`, {
+        method: "PUT", credentials: "include", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ completed }),
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const detail = payload.detail;
+        throw new Error(typeof detail === "string" ? detail : detail?.message || "Could not save milestone progress.");
+      }
+      setMilestoneNotice("Project checklist progress saved to your account.");
+    } catch (err) {
+      setMilestoneProgress((current) => ({ ...current, [key]: previous }));
+      setMilestoneNotice(err.message || "Could not save milestone progress.");
+    } finally {
+      setMilestoneSaving((current) => ({ ...current, [key]: false }));
+    }
+  }
 
   async function handleCopy(file) {
     try {
@@ -245,7 +307,11 @@ export default function ProjectGuidePage() {
       {!!(guide.architecture || []).length && <section className="project-guide-section panel"><div className="project-guide-section-heading"><span className="eyebrow">03 · ARCHITECTURE</span><h2>How the project fits together</h2><p>Use this map to understand each file’s responsibility before you implement the milestones.</p></div><div className="project-guide-feature-grid">{guide.architecture.map((item, index) => <div key={`${index}-${describeCriterion(item)}`}><FileText size={16} /><div><strong>{typeof item === "string" ? item : item.component || item.name || item.title || item.path || `Component ${index + 1}`}</strong><p>{typeof item === "string" ? "" : item.responsibility || item.description || item.purpose || "Review the file and its imports to understand its role."}</p></div></div>)}</div></section>}
 
       <section className="project-guide-section panel">
-        <div className="project-guide-section-heading"><span className="eyebrow">03 · BUILD</span><h2>Step-by-step implementation</h2><p>Each step includes a result you can check before continuing.</p></div>
+        <div className="project-guide-section-heading"><span className="eyebrow">03 · BUILD</span><h2>Step-by-step implementation</h2><p>Each step includes a result you can check before continuing. Pro, Max, and Full Access learners can save checklist completion to their account.</p></div>
+        {milestoneAccess === "enabled" && <div className="project-checklist-summary"><strong>{milestones.filter((item, index) => milestoneProgress[String(Number(item.sequence) > 0 ? Number(item.sequence) : index + 1)]).length} of {milestones.length} milestones completed</strong><span>Saved to your account</span></div>}
+        {milestoneAccess === "locked" && <p className="project-checklist-gate">Save milestone checklists and track project completion with Pro or higher. <Link to="/plans">Compare plans <ArrowRight size={13}/></Link></p>}
+        {milestoneAccess === "signed_out" && <p className="project-checklist-gate">Sign in with a Pro, Max, or Full Access account to save project milestone progress. <Link to={`/login?next=${encodeURIComponent(`/projects/${courseSlug}/${projectSlug}`)}`}>Sign in <ArrowRight size={13}/></Link></p>}
+        {milestoneNotice && <p className="project-checklist-notice" role="status">{milestoneNotice}</p>}
         <div className="project-milestone-list">
           {milestones.map((milestone, index) => {
             const checks = Array.isArray(milestone.acceptance_criteria) ? milestone.acceptance_criteria : [];
@@ -255,6 +321,7 @@ export default function ProjectGuidePage() {
                 {milestone.description && <p>{milestone.description}</p>}
                 {!!checks.length && <div className="project-milestone-checks"><strong>Done when:</strong><ul>{checks.map((criterion) => <li key={criterion}>{criterion}</li>)}</ul></div>}
                 {milestone.expected_result && <p className="project-milestone-result"><CheckCircle2 size={15} /> Expected result: {milestone.expected_result}</p>}
+                {milestoneAccess === "enabled" && <label className="project-milestone-progress-check"><input type="checkbox" checked={Boolean(milestoneProgress[String(Number(milestone.sequence) > 0 ? Number(milestone.sequence) : index + 1)])} onChange={(event) => void toggleMilestone(milestone, index, event.target.checked)} disabled={Boolean(milestoneSaving[String(Number(milestone.sequence) > 0 ? Number(milestone.sequence) : index + 1)])} /><span>{milestoneSaving[String(Number(milestone.sequence) > 0 ? Number(milestone.sequence) : index + 1)] ? "Saving…" : "Mark milestone complete"}</span></label>}
               </div>
             </article>;
           })}

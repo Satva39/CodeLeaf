@@ -157,6 +157,7 @@ class Exercise(Base):
     difficulty: Mapped[str] = mapped_column(String(30), default="easy", nullable=False)
     xp_points: Mapped[int] = mapped_column(Integer, default=20, nullable=False)
     is_published: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    is_premium: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     __table_args__ = (
         UniqueConstraint("lesson_id", "slug", name="uq_exercise_lesson_slug"),
     )
@@ -426,6 +427,7 @@ class ProjectSubmission(Base):
         String(20), default="private", nullable=False
     )
     portfolio_metadata: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
+    stored_bytes: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     submitted_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=now_utc, nullable=False
     )
@@ -562,11 +564,124 @@ class ProductAnalyticsEvent(Base):
 class RunnerJob(Base):
     """Owned reference to an isolated external runner job; source code is not persisted."""
     __tablename__ = "runner_jobs"
+    __table_args__ = (UniqueConstraint("user_id", "request_key", name="uq_runner_user_request_key"),)
     id: Mapped[object] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
     user_id: Mapped[object] = mapped_column(Uuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False)
     external_job_id: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
     language: Mapped[str] = mapped_column(String(20), nullable=False)
     status: Mapped[str] = mapped_column(String(20), default="queued", nullable=False)
     result_json: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
+    request_key: Mapped[str | None] = mapped_column(String(100), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, onupdate=now_utc, nullable=False)
+
+
+class SavedWorkspace(Base):
+    """A user's server-persisted playground workspace and files."""
+    __tablename__ = "saved_workspaces"
+    id: Mapped[object] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
+    user_id: Mapped[object] = mapped_column(Uuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False)
+    name: Mapped[str] = mapped_column(String(120), nullable=False)
+    language: Mapped[str] = mapped_column(String(40), default="plain", nullable=False)
+    files: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
+    byte_size: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, onupdate=now_utc, nullable=False)
+
+
+class PlanUsage(Base):
+    """Successful consumption counters keyed by UTC calendar day."""
+    __tablename__ = "plan_usage"
+    __table_args__ = (
+        UniqueConstraint("user_id", "metric", "window_start", name="uq_plan_usage_user_metric_day"),
+        Index("ix_plan_usage_metric_day", "metric", "window_start"),
+    )
+    id: Mapped[object] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
+    user_id: Mapped[object] = mapped_column(Uuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False)
+    metric: Mapped[str] = mapped_column(String(60), nullable=False)
+    window_start: Mapped[date] = mapped_column(Date, nullable=False)
+    used_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, onupdate=now_utc, nullable=False)
+
+
+class UsageReservation(Base):
+    """Idempotent in-flight usage reservations to avoid concurrent quota overspend."""
+    __tablename__ = "usage_reservations"
+    __table_args__ = (
+        UniqueConstraint("user_id", "metric", "idempotency_key", name="uq_usage_reservation_idempotency"),
+        Index("ix_usage_reservations_window", "user_id", "metric", "window_start", "status"),
+    )
+    id: Mapped[object] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
+    user_id: Mapped[object] = mapped_column(Uuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False)
+    metric: Mapped[str] = mapped_column(String(60), nullable=False)
+    window_start: Mapped[date] = mapped_column(Date, nullable=False)
+    idempotency_key: Mapped[str] = mapped_column(String(140), nullable=False)
+    status: Mapped[str] = mapped_column(String(20), default="reserved", nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, onupdate=now_utc, nullable=False)
+
+
+class SavedSnippet(Base):
+    """A reusable code fragment saved to the signed-in learner's account."""
+    __tablename__ = "saved_snippets"
+    __table_args__ = (
+        UniqueConstraint("user_id", "name", name="uq_saved_snippets_user_name"),
+        Index("ix_saved_snippets_user_updated", "user_id", "updated_at"),
+    )
+    id: Mapped[object] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
+    user_id: Mapped[object] = mapped_column(Uuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False)
+    name: Mapped[str] = mapped_column(String(120), nullable=False)
+    language: Mapped[str] = mapped_column(String(40), default="plain", nullable=False)
+    code: Mapped[str] = mapped_column(Text, nullable=False)
+    byte_size: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, onupdate=now_utc, nullable=False)
+
+
+class SupportRequest(Base):
+    """Persisted learner support requests with plan-derived triage priority."""
+    __tablename__ = "support_requests"
+    __table_args__ = (Index("ix_support_requests_status_priority_created", "status", "priority", "created_at"),)
+    id: Mapped[object] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
+    user_id: Mapped[object] = mapped_column(Uuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False)
+    subject: Mapped[str] = mapped_column(String(160), nullable=False)
+    category: Mapped[str] = mapped_column(String(40), default="general", nullable=False)
+    message: Mapped[str] = mapped_column(Text, nullable=False)
+    status: Mapped[str] = mapped_column(String(20), default="open", nullable=False)
+    priority: Mapped[str] = mapped_column(String(20), default="standard", nullable=False)
+    plan_at_submission: Mapped[str] = mapped_column(String(40), default="free", nullable=False)
+    staff_reply: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, onupdate=now_utc, nullable=False)
+    resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class MockAssessmentAttempt(Base):
+    """Timed, non-certification practice assessment; never issues certificates or XP."""
+    __tablename__ = "mock_assessment_attempts"
+    __table_args__ = (Index("ix_mock_assessment_user_course_started", "user_id", "course_id", "started_at"),)
+    id: Mapped[object] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
+    user_id: Mapped[object] = mapped_column(Uuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False)
+    course_id: Mapped[object] = mapped_column(Uuid(as_uuid=True), ForeignKey("courses.id", ondelete="CASCADE"), index=True, nullable=False)
+    score: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    passed: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    answers_summary: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, nullable=False)
+    submitted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class ProjectMilestoneProgress(Base):
+    """Per-learner project milestone checklist state for plan-enabled project planning."""
+    __tablename__ = "project_milestone_progress"
+    __table_args__ = (
+        UniqueConstraint("user_id", "course_slug", "project_slug", "milestone_key", name="uq_project_milestone_user_project_key"),
+        Index("ix_project_milestone_user_project", "user_id", "course_slug", "project_slug"),
+    )
+    id: Mapped[object] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
+    user_id: Mapped[object] = mapped_column(Uuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False)
+    course_slug: Mapped[str] = mapped_column(String(100), nullable=False)
+    project_slug: Mapped[str] = mapped_column(String(120), nullable=False)
+    milestone_key: Mapped[str] = mapped_column(String(12), nullable=False)
+    completed: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, onupdate=now_utc, nullable=False)

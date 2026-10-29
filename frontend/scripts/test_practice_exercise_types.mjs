@@ -21,7 +21,9 @@ const detail = readFileSync(new URL("../src/pages/ExerciseDetailPage.jsx", impor
 const styles = readFileSync(new URL("../src/styles/collections.css", import.meta.url), "utf8");
 const backend = readFileSync(new URL("../../backend/app/main.py", import.meta.url), "utf8");
 
-assert.match(practice, /items\.filter\(\(item\) => isSupportedPracticeExercise\(item\.type\)\)/);
+assert.match(practice, /items\.filter\(\(item\) => item\.is_locked \|\| isSupportedPracticeExercise\(item\.type\)\)/);
+assert.match(practice, /item\.is_locked/);
+assert.match(practice, /\/plans/);
 assert.match(practice, /practice-completed-badge/);
 assert.match(detail, /\.filter\(\(item\) => isSupportedPracticeExercise\(item\.type\)\)/);
 assert.match(detail, /resolveLanguage\(courseSlug, ""\)/, "workspace follows the current course's language");

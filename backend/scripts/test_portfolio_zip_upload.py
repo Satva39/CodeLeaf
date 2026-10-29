@@ -68,6 +68,10 @@ def main() -> None:
             self.commits = 0
         def add_all(self, rows):
             self.pending.extend(rows)
+        def flush(self):
+            # Simulate rows becoming visible to the current transaction after flush.
+            self.persisted.extend(self.pending)
+            self.pending = []
         def commit(self):
             self.persisted.extend(self.pending)
             self.pending = []

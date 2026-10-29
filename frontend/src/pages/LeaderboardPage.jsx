@@ -25,14 +25,20 @@ export default function LeaderboardPage() {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [planLocked, setPlanLocked] = useState(false);
   useEffect(() => {
     let active = true;
     setLoading(true);
     setError("");
+    setPlanLocked(false);
     apiFetch(`${API_BASE}/api/leaderboard?period=${period}&limit=50`)
       .then(async (response) => {
+        if (response.status === 403) {
+          if (active) setPlanLocked(true);
+          return { items: [] };
+        }
         if (!response.ok)
-          throw new Error("The leaderboard could not be loaded.");
+          throw new Error(response.status === 401 ? "Sign in and choose Pro or above to view the leaderboard." : "The leaderboard could not be loaded.");
         return response.json();
       })
       .then((data) => {
@@ -137,9 +143,16 @@ export default function LeaderboardPage() {
           <div className="empty-state">
             <p>Loading rankings…</p>
           </div>
+        ) : planLocked ? (
+          <div className="empty-state">
+            <h3>Leaderboards are included with Pro and above</h3>
+            <p>Free learners can keep earning XP through standard lessons and exercises. Upgrade to join the weekly and all-time learning leagues.</p>
+            <Link className="button button-primary" to="/plans">Compare plans <ArrowRight size={14} /></Link>
+          </div>
         ) : error ? (
           <div className="empty-state">
             <p>{error}</p>
+            {error.startsWith("Sign in") && <Link className="button button-primary" to={`/login?next=${encodeURIComponent("/leaderboard")}`}>Sign in</Link>}
           </div>
         ) : rows.length ? (
           rows.map((row) => (

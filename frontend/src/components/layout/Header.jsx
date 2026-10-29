@@ -142,6 +142,7 @@ export function Header() {
             <NavLink to="/practice">Practice</NavLink>
             <NavLink to="/review">Review</NavLink>
             <NavLink to="/learning-hub">Learning hub</NavLink>
+            <NavLink to="/ai">AI coach</NavLink>
             <NavLink to="/portfolio">Portfolio</NavLink>
             <NavLink to="/certificates">Certificates</NavLink>
           </nav>

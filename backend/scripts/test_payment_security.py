@@ -126,6 +126,26 @@ def main() -> None:
             entitlement = db.scalar(select(Entitlement).where(Entitlement.user_id == buyer.id, Entitlement.plan_id == "full_access"))
             check(entitlement is not None and entitlement.status == "active" and entitlement.ends_at is None, "lifetime entitlement has no expiry and is persisted")
 
+        refunded_buyer = make_user("payment_refunded_buyer")
+        with SessionLocal() as db:
+            refunded_record = PaymentRecord(
+                user_id=refunded_buyer.id, plan_id="full_access", amount_paise=4_999_900,
+                currency="INR", kind="order", status="refunded",
+                provider_order_id="order_full_access_refunded", provider_payment_id="pay_full_access_refunded",
+            )
+            db.add(refunded_record)
+            db.commit()
+        authenticate(client, refunded_buyer.id)
+        refunded_signature = hmac.new(
+            settings.razorpay_key_secret.encode(),
+            b"order_full_access_refunded|pay_full_access_refunded", hashlib.sha256,
+        ).hexdigest()
+        refunded_retry = client.post("/api/payments/verify", json={
+            "plan_id": "full_access", "razorpay_order_id": "order_full_access_refunded",
+            "razorpay_payment_id": "pay_full_access_refunded", "razorpay_signature": refunded_signature,
+        })
+        check(refunded_retry.status_code == 409, "a refunded Full Access order cannot be reactivated by retrying the checkout callback")
+
         # Verify webhook signature validation and event-id deduplication in isolation.
         webhook_buyer = make_user("webhook_buyer")
         with SessionLocal() as db:
@@ -161,6 +181,23 @@ def main() -> None:
             check(events == 1, "duplicate webhook event is stored only once")
             check(record is not None and record.status == "paid", "valid order.paid webhook updates the matching payment record")
             check(webhook_entitlement is not None and webhook_entitlement.ends_at is None, "valid webhook grants idempotent lifetime entitlement")
+
+        # A late order.paid event must not restore a refunded purchase.
+        late_paid = json.dumps({
+            "event": "order.paid",
+            "payload": {
+                "order": {"entity": {"id": "order_full_access_refunded", "amount": 4_999_900, "currency": "INR"}},
+                "payment": {"entity": {"id": "pay_full_access_refunded", "order_id": "order_full_access_refunded", "amount": 4_999_900, "currency": "INR"}},
+            },
+        }, separators=(",", ":")).encode()
+        late_signature = hmac.new(settings.razorpay_webhook_secret.encode(), late_paid, hashlib.sha256).hexdigest()
+        late_response = client.post("/api/payments/webhook", content=late_paid, headers={
+            "x-razorpay-signature": late_signature, "x-razorpay-event-id": "evt-late-refunded-paid", "content-type": "application/json",
+        })
+        with SessionLocal() as db:
+            refunded_record = db.scalar(select(PaymentRecord).where(PaymentRecord.provider_order_id == "order_full_access_refunded"))
+            refunded_entitlement = db.scalar(select(Entitlement).where(Entitlement.user_id == refunded_buyer.id, Entitlement.plan_id == "full_access", Entitlement.status == "active"))
+            check(late_response.status_code == 200 and refunded_record.status == "refunded" and refunded_entitlement is None, "late paid webhook cannot revive a refunded lifetime purchase")
         check(provider_calls == [("POST", "/orders"), ("GET", "/payments/pay_full_access_test")], "no real provider network calls were made")
     finally:
         client.close()

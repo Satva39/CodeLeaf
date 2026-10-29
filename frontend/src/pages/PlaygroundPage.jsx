@@ -124,6 +124,16 @@ export default function PlaygroundPage() {
   const [fileDialog, setFileDialog] = useState("");
   const [fileNameDraft, setFileNameDraft] = useState("");
   const [fileDialogError, setFileDialogError] = useState("");
+  const [savedWorkspaces, setSavedWorkspaces] = useState([]);
+  const [selectedSavedWorkspaceId, setSelectedSavedWorkspaceId] = useState("");
+  const [workspaceName, setWorkspaceName] = useState(seed?.title || "My workspace");
+  const [workspaceBusy, setWorkspaceBusy] = useState(false);
+  const [workspaceNotice, setWorkspaceNotice] = useState("");
+  const [workspaceUsage, setWorkspaceUsage] = useState({ used: 0, limit: 3, current_plan: "free" });
+  const [savedSnippets, setSavedSnippets] = useState([]);
+  const [snippetUsage, setSnippetUsage] = useState({ used: 0, limit: 10 });
+  const [snippetName, setSnippetName] = useState("");
+  const [selectedSnippetId, setSelectedSnippetId] = useState("");
 
   const files = workspace.files;
   const activeFile = files.find((file) => file.id === workspace.activeFileId) || files[0] || null;
@@ -141,6 +151,175 @@ export default function PlaygroundPage() {
   useEffect(() => {
     try { window.localStorage.setItem(WORKSPACE_STORAGE_KEY, JSON.stringify(workspace)); } catch { /* Editing still works without local persistence. */ }
   }, [workspace]);
+
+  async function refreshSavedWorkspaces() {
+    try {
+      const payload = await responsePayload(await apiFetch(`${API_BASE}/api/me/workspaces`));
+      setSavedWorkspaces(Array.isArray(payload.items) ? payload.items : []);
+      setWorkspaceUsage(payload.usage || { used: 0, limit: 3, current_plan: payload.current_plan || "free" });
+      setSelectedSavedWorkspaceId((current) => current && payload.items?.some((item) => item.id === current) ? current : "");
+    } catch (error) {
+      const status = Number(error?.status);
+      if (status === 401 || /401|unauthorized|not authenticated/i.test(error?.message || "")) {
+        setWorkspaceNotice("Sign in to save workspaces to your CodeLeaf account. Your browser draft will continue to auto-save.");
+      } else {
+        setWorkspaceNotice(error?.message || "Account workspaces could not be loaded.");
+      }
+    }
+  }
+
+  async function refreshSavedSnippets() {
+    try {
+      const payload = await responsePayload(await apiFetch(`${API_BASE}/api/me/snippets`));
+      setSavedSnippets(Array.isArray(payload.items) ? payload.items : []);
+      setSnippetUsage(payload.usage || { used: 0, limit: 10 });
+      setSelectedSnippetId((current) => current && payload.items?.some((item) => item.id === current) ? current : "");
+    } catch (error) {
+      if (Number(error?.status) !== 401 && !/401|unauthorized|not authenticated/i.test(error?.message || "")) {
+        setWorkspaceNotice(error?.message || "Saved snippets could not be loaded.");
+      }
+    }
+  }
+
+  useEffect(() => {
+    void refreshSavedWorkspaces();
+    void refreshSavedSnippets();
+  }, []);
+
+  async function saveWorkspaceToAccount(createNew = false) {
+    const cleanName = workspaceName.trim();
+    if (!cleanName) {
+      setWorkspaceNotice("Enter a name for this saved workspace.");
+      return;
+    }
+    if (!files.length) {
+      setWorkspaceNotice("Add at least one file before saving this workspace.");
+      return;
+    }
+    setWorkspaceBusy(true);
+    setWorkspaceNotice("");
+    const body = { name: cleanName, language: activeLanguage?.key || "plain", files: files.map(({ id, name, language, content }) => ({ id, name, language, content })) };
+    try {
+      const isUpdate = !createNew && Boolean(selectedSavedWorkspaceId);
+      const response = await apiFetch(`${API_BASE}/api/me/workspaces${isUpdate ? `/${encodeURIComponent(selectedSavedWorkspaceId)}` : ""}`, {
+        method: isUpdate ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const payload = await responsePayload(response);
+      const saved = payload.workspace;
+      if (saved?.id) setSelectedSavedWorkspaceId(saved.id);
+      setWorkspaceName(saved?.name || cleanName);
+      setWorkspaceNotice(isUpdate ? "Workspace updated in your account." : "Workspace saved to your account.");
+      await refreshSavedWorkspaces();
+    } catch (error) {
+      setWorkspaceNotice(error instanceof Error ? error.message : "Could not save this workspace.");
+    } finally {
+      setWorkspaceBusy(false);
+    }
+  }
+
+  async function saveActiveSnippet(createNew = false) {
+    if (!activeFile) {
+      setWorkspaceNotice("Create or open a file before saving a snippet.");
+      return;
+    }
+    const name = snippetName.trim() || activeFile.name;
+    const selected = savedSnippets.find((item) => item.id === selectedSnippetId);
+    const update = !createNew && Boolean(selected);
+    setWorkspaceBusy(true);
+    setWorkspaceNotice("");
+    try {
+      const response = await apiFetch(`${API_BASE}/api/me/snippets${update ? `/${encodeURIComponent(selectedSnippetId)}` : ""}`, {
+        method: update ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, language: activeLanguage?.key || activeFile.language || "plain", code: activeFile.content }),
+      });
+      const payload = await responsePayload(response);
+      const saved = payload.snippet;
+      setSnippetName(saved?.name || name);
+      if (saved?.id) setSelectedSnippetId(saved.id);
+      setWorkspaceNotice(update ? "Snippet updated in your account." : "Snippet saved to your account.");
+      await refreshSavedSnippets();
+    } catch (error) {
+      setWorkspaceNotice(error instanceof Error ? error.message : "Could not save this snippet.");
+    } finally {
+      setWorkspaceBusy(false);
+    }
+  }
+
+  function loadSavedSnippet() {
+    const saved = savedSnippets.find((item) => item.id === selectedSnippetId);
+    if (!saved) {
+      setWorkspaceNotice("Choose a saved snippet first.");
+      return;
+    }
+    if (activeFile) {
+      setWorkspace((current) => ({ ...current, files: current.files.map((file) => file.id === current.activeFileId ? { ...file, content: saved.code } : file) }));
+    } else {
+      const language = getLanguageForFilename(saved.name);
+      const newFile = { id: fileId(saved.name), name: saved.name, language: language.key, content: saved.code };
+      setWorkspace({ files: [newFile], activeFileId: newFile.id });
+    }
+    setWorkspaceNotice(`Loaded snippet “${saved.name}” into the current file. Save the workspace separately to persist the complete project.`);
+    setRunnerResult(null);
+    setRunnerStatus("idle");
+  }
+
+  async function deleteSavedSnippet() {
+    if (!selectedSnippetId) return;
+    const selected = savedSnippets.find((item) => item.id === selectedSnippetId);
+    if (!window.confirm(`Delete saved snippet “${selected?.name || "snippet"}”?`)) return;
+    setWorkspaceBusy(true);
+    try {
+      await responsePayload(await apiFetch(`${API_BASE}/api/me/snippets/${encodeURIComponent(selectedSnippetId)}`, { method: "DELETE" }));
+      setSelectedSnippetId("");
+      setSnippetName("");
+      setWorkspaceNotice("Saved snippet deleted.");
+      await refreshSavedSnippets();
+    } catch (error) {
+      setWorkspaceNotice(error instanceof Error ? error.message : "Could not delete this snippet.");
+    } finally {
+      setWorkspaceBusy(false);
+    }
+  }
+
+  function loadSavedWorkspace() {
+    const saved = savedWorkspaces.find((item) => item.id === selectedSavedWorkspaceId);
+    if (!saved) {
+      setWorkspaceNotice("Choose a saved workspace to load.");
+      return;
+    }
+    const files = normalizeFiles(saved.files);
+    if (!files.length) {
+      setWorkspaceNotice("This saved workspace has no valid files.");
+      return;
+    }
+    setWorkspace({ files, activeFileId: files[0].id });
+    setWorkspaceName(saved.name);
+    setWorkspaceNotice(`Loaded “${saved.name}” from your account. Your browser draft now mirrors these files.`);
+    setRunnerResult(null);
+    setRunnerStatus("idle");
+    setBrowserOutput([]);
+  }
+
+  async function deleteSavedWorkspace() {
+    if (!selectedSavedWorkspaceId) return;
+    const selected = savedWorkspaces.find((item) => item.id === selectedSavedWorkspaceId);
+    if (!window.confirm(`Delete the saved account workspace “${selected?.name || "workspace"}”? This does not delete your browser draft.`)) return;
+    setWorkspaceBusy(true);
+    setWorkspaceNotice("");
+    try {
+      await responsePayload(await apiFetch(`${API_BASE}/api/me/workspaces/${encodeURIComponent(selectedSavedWorkspaceId)}`, { method: "DELETE" }));
+      setSelectedSavedWorkspaceId("");
+      setWorkspaceNotice("Saved account workspace deleted. Your browser draft remains available.");
+      await refreshSavedWorkspaces();
+    } catch (error) {
+      setWorkspaceNotice(error instanceof Error ? error.message : "Could not delete this workspace.");
+    } finally {
+      setWorkspaceBusy(false);
+    }
+  }
 
   useEffect(() => {
     let active = true;
@@ -258,7 +437,12 @@ export default function PlaygroundPage() {
       const created = await responsePayload(await apiFetch(`${API_BASE}/api/runner/jobs`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ language, source, stdin }),
+        body: JSON.stringify({
+          language,
+          source,
+          stdin,
+          idempotency_key: typeof crypto !== "undefined" && typeof crypto.randomUUID === "function" ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2, 12)}`,
+        }),
       }));
       const jobId = created.job?.id;
       if (!jobId) throw new Error("The API did not return a valid job reference.");
@@ -370,6 +554,36 @@ export default function PlaygroundPage() {
             <button type="button" onClick={openRenameDialog} disabled={!activeFile}><Pencil size={14} /> Rename</button>
             <button type="button" onClick={deleteActiveFile} disabled={!activeFile}><Trash2 size={14} /> Delete</button>
           </div>
+          <div className="account-workspace-panel">
+            <div className="account-workspace-heading"><strong>Account saves</strong><button type="button" title="Refresh saved workspaces" onClick={() => void refreshSavedWorkspaces()} disabled={workspaceBusy}><RefreshCw size={12} /></button></div>
+            <small className="account-workspace-usage">{workspaceUsage.used} / {workspaceUsage.limit} workspaces · {workspaceUsage.current_plan || "free"} plan</small>
+            <label htmlFor="account-workspace-name">Workspace name</label>
+            <input id="account-workspace-name" value={workspaceName} onChange={(event) => setWorkspaceName(event.target.value)} maxLength={120} placeholder="My workspace" />
+            <label htmlFor="account-workspace-select">Saved workspace</label>
+            <select id="account-workspace-select" value={selectedSavedWorkspaceId} onChange={(event) => { setSelectedSavedWorkspaceId(event.target.value); const match = savedWorkspaces.find((item) => item.id === event.target.value); if (match) setWorkspaceName(match.name); }}>
+              <option value="">Choose a workspace…</option>
+              {savedWorkspaces.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
+            </select>
+            <button type="button" onClick={() => void saveWorkspaceToAccount(true)} disabled={workspaceBusy || !files.length}><ShieldCheck size={13} /> {workspaceBusy ? "Saving…" : "Save as new"}</button>
+            <button type="button" onClick={() => void saveWorkspaceToAccount(false)} disabled={workspaceBusy || !selectedSavedWorkspaceId}><Pencil size={13} /> Update selected</button>
+            <button type="button" onClick={loadSavedWorkspace} disabled={workspaceBusy || !selectedSavedWorkspaceId}><FolderOpen size={13} /> Load selected</button>
+            <button type="button" onClick={() => void deleteSavedWorkspace()} disabled={workspaceBusy || !selectedSavedWorkspaceId}><Trash2 size={13} /> Delete saved</button>
+            <div className="account-snippet-divider" />
+            <div className="account-workspace-heading"><strong>Saved snippets</strong><button type="button" title="Refresh saved snippets" onClick={() => void refreshSavedSnippets()} disabled={workspaceBusy}><RefreshCw size={12} /></button></div>
+            <small className="account-workspace-usage">{snippetUsage.used} / {snippetUsage.limit} snippets · included in project storage</small>
+            <label htmlFor="account-snippet-name">Snippet name</label>
+            <input id="account-snippet-name" value={snippetName} onChange={(event) => setSnippetName(event.target.value)} maxLength={120} placeholder={activeFile?.name || "Reusable code snippet"} />
+            <label htmlFor="account-snippet-select">Saved snippet</label>
+            <select id="account-snippet-select" value={selectedSnippetId} onChange={(event) => { setSelectedSnippetId(event.target.value); const match = savedSnippets.find((item) => item.id === event.target.value); if (match) setSnippetName(match.name); }}>
+              <option value="">Choose a snippet…</option>
+              {savedSnippets.map((item) => <option key={item.id} value={item.id}>{item.name} · {item.language}</option>)}
+            </select>
+            <button type="button" onClick={() => void saveActiveSnippet(true)} disabled={workspaceBusy || !activeFile}><ShieldCheck size={13} /> Save new snippet</button>
+            <button type="button" onClick={() => void saveActiveSnippet(false)} disabled={workspaceBusy || !activeFile || !selectedSnippetId}><Pencil size={13} /> Update selected</button>
+            <button type="button" onClick={loadSavedSnippet} disabled={workspaceBusy || !selectedSnippetId}><FolderOpen size={13} /> Load into file</button>
+            <button type="button" onClick={() => void deleteSavedSnippet()} disabled={workspaceBusy || !selectedSnippetId}><Trash2 size={13} /> Delete snippet</button>
+            {workspaceNotice && <p role="status" className="account-workspace-notice">{workspaceNotice}</p>}
+          </div>
         </aside>
 
         <section className="workspace-editor" aria-label="Code editor">
@@ -389,7 +603,7 @@ export default function PlaygroundPage() {
             <label htmlFor="workspace-source" className="sr-only">Edit {activeFile.name}</label>
             <textarea id="workspace-source" className="workspace-source" spellCheck="false" autoCapitalize="off" autoCorrect="off" value={activeFile.content} onChange={(event) => updateActiveContent(event.target.value)} maxLength={100_000} />
           </> : <div className="workspace-empty-editor"><FilePlus2 size={24} /><h2>No file selected</h2><p>Create a file to start writing.</p><button type="button" className="button button-primary" onClick={openNewFileDialog}>Create file</button></div>}
-          <div className="workspace-statusbar"><span><span className="live-dot" /> {runnerStatus.replaceAll("_", " ")}</span><span>Auto-saved in this browser</span><span>{languageLabel}</span></div>
+          <div className="workspace-statusbar"><span><span className="live-dot" /> {runnerStatus.replaceAll("_", " ")}</span><span>Browser auto-save · account save optional</span><span>{languageLabel}</span></div>
         </section>
 
         <section className="workspace-output" aria-label="Run result">
@@ -404,7 +618,7 @@ export default function PlaygroundPage() {
         </section>
       </div>
 
-      <div className="playground-note"><ShieldCheck size={16} /><span>Files stay in this browser unless you export them. HTML previews run in a sandboxed frame with restrictive Content Security Policy. Server-side code is sent only to CodeLeaf's separate isolated runner; unsupported languages are not executed.</span></div>
+      <div className="playground-note"><ShieldCheck size={16} /><span>Files auto-save in this browser. Use Account saves to persist workspaces and reusable snippets to your signed-in account; these are subject to plan-specific count and storage allowances. HTML previews run in a sandboxed frame with restrictive Content Security Policy. Server-side code is sent only to CodeLeaf's separate isolated runner; unsupported languages are not executed.</span></div>
     </PageShell>
   );
 }

@@ -126,6 +126,31 @@ def require_user(request: Request, db: Session = Depends(get_db)) -> User:
     return user
 
 
+def optional_user(request: Request, db: Session = Depends(get_db)) -> User | None:
+    """Resolve an authenticated user when present; invalid/expired sessions fail closed to guest."""
+    token = request.cookies.get(SESSION_COOKIE)
+    if not token:
+        auth = request.headers.get("authorization", "")
+        if auth.lower().startswith("bearer "):
+            token = auth[7:].strip()
+    if not token:
+        return None
+    try:
+        claims = jwt.decode(token, settings.jwt_secret, algorithms=[TOKEN_ALGORITHM])
+        user_id = UUID(claims["sub"])
+    except (jwt.InvalidTokenError, KeyError, ValueError):
+        return None
+    session = db.scalar(select(AuthSession).where(
+        AuthSession.token_hash == token_digest(token),
+        AuthSession.revoked_at.is_(None),
+        AuthSession.expires_at > utc_now(),
+    ))
+    user = db.get(User, user_id)
+    if not session or not user or not user.is_active or not user.is_email_verified:
+        return None
+    return user
+
+
 def record_auth_attempt(db: Session, request: Request, action: str, subject: str = "") -> None:
     """Persist per-IP and per-subject attempts so limits survive process restarts."""
     now = utc_now()

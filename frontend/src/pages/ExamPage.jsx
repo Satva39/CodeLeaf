@@ -125,6 +125,7 @@ export default function ExamPage() {
           <div className="notice-box"><CircleHelp size={17} /><p>Every question must be answered. Your score and any certificate eligibility are determined by the server. Draft curriculum stays hidden outside local preview.</p></div>
           {error && <p className="form-error" role="alert">{error} {error.toLowerCase().includes("sign in") && <Link to="/login" className="text-link">Sign in</Link>}</p>}
           <button className="button button-primary button-wide" disabled={busy || !info?.question_count} onClick={startExam}>{busy ? "Starting…" : "Begin exam"} <ArrowRight size={16} /></button>
+          <Link className="button button-secondary button-wide mock-exam-entry" to={`/mock-exam/${encodeURIComponent(examSlug)}`}>Try a timed practice mock (Pro+) <ArrowRight size={15} /></Link>
           <Link className="text-link center-link" to="/certificates">Back to certificates</Link>
         </div>
       </PageShell>

@@ -24,9 +24,10 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from .config import settings
-from .auth_security import require_user, user_payload, TOKEN_ALGORITHM
+from .auth_security import require_user, optional_user, user_payload, TOKEN_ALGORITHM
 from .auth_routes import router as auth_router
 from .phase5_routes import router as phase5_router
+from .plan_routes import router as plan_router
 from .phase5_service import record_review_result
 from .practice_policy import (
     is_supported_practice_exercise,
@@ -34,6 +35,16 @@ from .practice_policy import (
     public_practice_type,
 )
 from .diagram_assets import validate_dynamic_diagram_model
+from .plan_entitlements import (
+    PLAN_DEFINITIONS,
+    PLAN_PRIORITY,
+    active_entitlements as resolve_active_entitlements,
+    build_plan_snapshot,
+    effective_plan_id,
+    plan_features,
+    plan_limits,
+    require_feature,
+)
 from .db import engine, get_db
 from .project_guide_service import (
     build_project_guide,
@@ -41,6 +52,7 @@ from .project_guide_service import (
     project_guide_zip,
 )
 from .models import (
+    AuditLog,
     Bookmark,
     Certificate,
     Course,
@@ -51,6 +63,7 @@ from .models import (
     Lesson,
     LessonProgress,
     Module,
+    MockAssessmentAttempt,
     PracticalExamAttempt,
     PaymentRecord,
     User,
@@ -125,6 +138,7 @@ async def enforce_allowed_origin(request: Request, call_next):
 
 app.include_router(auth_router)
 app.include_router(phase5_router)
+app.include_router(plan_router)
 
 
 SESSION_COOKIE = "codeleaf_session"
@@ -135,24 +149,14 @@ XP_REWARDS = {"lesson": 20, "exercise": 20, "max_multiplier": 1.5}
 
 # Integer INR subunits (paise) are fixed by the server; the browser never supplies an amount.
 PLAN_CONFIG: dict[str, dict[str, Any]] = {
-    "pro": {
-        "title": "Pro",
-        "amount_paise": 29_900,
+    plan_id: {
+        "title": definition["title"],
+        "amount_paise": definition["amount_paise"],
         "currency": "INR",
-        "kind": "subscription",
-    },
-    "max": {
-        "title": "Max",
-        "amount_paise": 69_900,
-        "currency": "INR",
-        "kind": "subscription",
-    },
-    "full_access": {
-        "title": "Full Access",
-        "amount_paise": 4_999_900,
-        "currency": "INR",
-        "kind": "order",
-    },
+        "kind": "subscription" if definition["billing"] == "monthly" else "order",
+    }
+    for plan_id, definition in PLAN_DEFINITIONS.items()
+    if plan_id != "free"
 }
 COURSE_CONTENT_ROOT = Path(__file__).resolve().parents[1] / "content" / "courses"
 
@@ -753,25 +757,8 @@ def ensure_payment_config() -> tuple[str, str]:
 
 
 def active_entitlements(db: Session, user_id: UUID) -> list[Entitlement]:
-    now = utc_now()
-    rows = db.scalars(
-        select(Entitlement).where(
-            Entitlement.user_id == user_id, Entitlement.status == "active"
-        )
-    ).all()
-
-    # SQLite returns naive datetimes even for timezone=True columns; PostgreSQL preserves timezone.
-    def is_current(row: Entitlement) -> bool:
-        if row.ends_at is None:
-            return True  # Lifetime Full Access has no expiry.
-        end = (
-            row.ends_at.replace(tzinfo=timezone.utc)
-            if row.ends_at.tzinfo is None
-            else row.ends_at.astimezone(timezone.utc)
-        )
-        return end > now
-
-    return [row for row in rows if is_current(row)]
+    """Compatibility wrapper; central plan service owns expiration semantics."""
+    return resolve_active_entitlements(db, user_id)
 
 
 async def razorpay_request(
@@ -825,6 +812,8 @@ def grant_entitlement(
     else:
         query = query.where(Entitlement.source_payment_id == payment_record.id)
     ent = db.scalar(query)
+    is_new = ent is None
+    old_end = ent.ends_at if ent is not None else None
     if ent is None:
         ent = Entitlement(
             user_id=user_id,
@@ -836,10 +825,83 @@ def grant_entitlement(
             ends_at=ends_at,
         )
         db.add(ent)
+        db.flush()
     else:
         ent.status = "active"
         ent.ends_at = ends_at
+    if is_new or old_end != ends_at:
+        db.add(
+            AuditLog(
+                actor_user_id=user_id,
+                action="entitlement.granted" if is_new else "entitlement.renewed",
+                resource_type="entitlement",
+                resource_id=str(ent.id),
+                details={
+                    "plan_id": plan_id,
+                    "payment_record_id": str(payment_record.id),
+                    "provider_subscription_id": subscription_id,
+                    "ends_at": ends_at.isoformat() if ends_at else None,
+                },
+                created_at=utc_now(),
+            )
+        )
     return ent
+
+
+async def schedule_superseded_subscriptions_for_cancellation(
+    db: Session,
+    *,
+    user_id: UUID,
+    target_plan_id: str,
+    excluding_subscription_id: str | None = None,
+) -> None:
+    """Schedule lower-tier monthly memberships to stop renewing after an upgrade.
+
+    Provider failures never roll back a verified higher-tier entitlement. Instead,
+    the failed cancellation is recorded for the account billing UI and retried on a
+    subsequent trusted event or authenticated payment verification.
+    """
+    target_priority = PLAN_PRIORITY.get(target_plan_id, 0)
+    records = db.scalars(
+        select(PaymentRecord).where(
+            PaymentRecord.user_id == user_id,
+            PaymentRecord.kind == "subscription",
+        ).order_by(PaymentRecord.created_at.desc())
+    ).all()
+    for record in records:
+        sub_id = record.provider_subscription_id
+        status_value = str(record.status or "").lower()
+        provider_payload = dict(record.provider_payload or {})
+        if (
+            not sub_id
+            or sub_id == excluding_subscription_id
+            or PLAN_PRIORITY.get(record.plan_id, 0) >= target_priority
+            or status_value in {"cancelled", "completed", "expired", "failed", "refunded", "reversed"}
+            or provider_payload.get("cancel_at_cycle_end") is True
+        ):
+            continue
+        try:
+            provider = await razorpay_request(
+                "POST",
+                f"/subscriptions/{sub_id}/cancel",
+                {"cancel_at_cycle_end": 1},
+            )
+            record.status = str(provider.get("status") or record.status)
+            record.provider_payload = {
+                **provider_payload,
+                "cancel_at_cycle_end": True,
+                "cancellation_requested_at": utc_now().isoformat(),
+                "cancellation_reason": f"superseded_by_{target_plan_id}",
+                "cancellation_required": False,
+            }
+        except Exception as exc:
+            detail = exc.detail if isinstance(exc, HTTPException) else str(exc)
+            record.provider_payload = {
+                **provider_payload,
+                "cancellation_required": True,
+                "cancellation_reason": f"superseded_by_{target_plan_id}",
+                "cancellation_error": str(detail)[:240],
+            }
 
 
 def parse_epoch(value: Any) -> datetime | None:
@@ -1321,6 +1383,7 @@ def list_course_exercises(
     course_slug: str,
     limit: int = 100,
     offset: int = 0,
+    user: User | None = Depends(optional_user),
     db: Session = Depends(get_db),
 ) -> dict[str, Any]:
     """Return learner-safe practice tasks for one course, without solutions or grading keys."""
@@ -1371,6 +1434,23 @@ def list_course_exercises(
             and lesson_content.get("_codeleaf_course_slug") == course_slug
         )
         if not (published_item or imported_draft):
+            continue
+        has_premium_practice = bool(
+            user and plan_features(effective_plan_id(db, user.id)).get("premium_practice")
+        )
+        if exercise.is_premium and not has_premium_practice:
+            items.append({
+                "slug": exercise.slug,
+                "title": exercise.title,
+                "type": "locked",
+                "is_locked": True,
+                "required_plan": "pro",
+                "upgrade_url": "/plans",
+                "course_slug": course_slug,
+                "course_title": course_title,
+                "lesson_slug": lesson_slug,
+                "sequence": exercise.sequence,
+            })
             continue
         public_type = public_practice_type(
             exercise.exercise_type, exercise.starter, course_slug, exercise.prompt
@@ -2304,6 +2384,202 @@ def _certificate_eligibility_payload(
     }
 
 
+def _mock_public_questions(questions: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return [
+        {key: question[key] for key in ("id", "lesson_slug", "topic", "prompt", "options") if key in question}
+        for question in questions if isinstance(question, dict)
+    ]
+
+
+def _mock_attempt_payload(attempt: MockAssessmentAttempt, *, include_report: bool = False) -> dict[str, Any]:
+    summary = attempt.answers_summary or {}
+    started_at = attempt.started_at
+    if started_at is not None and started_at.tzinfo is None:
+        started_at = started_at.replace(tzinfo=timezone.utc)
+    out = {
+        "attempt_id": str(attempt.id),
+        "status": "submitted" if attempt.submitted_at else "in_progress",
+        "course_slug": summary.get("course_slug", ""),
+        "title": summary.get("title", "Timed mock assessment"),
+        "duration_minutes": int(summary.get("duration_minutes") or 20),
+        "question_count": int(summary.get("question_count") or 20),
+        "expires_at": (started_at + timedelta(minutes=int(summary.get("duration_minutes") or 20))).isoformat() if started_at else None,
+        "started_at": started_at.isoformat() if started_at else None,
+        "submitted_at": attempt.submitted_at.isoformat() if attempt.submitted_at else None,
+        "score_percent": int(attempt.score) if attempt.submitted_at else None,
+        "passed": bool(attempt.passed) if attempt.submitted_at else None,
+    }
+    if attempt.submitted_at:
+        if include_report:
+            out["report"] = summary.get("report", {})
+            out["message"] = "Mock assessment submitted. This practice result does not issue a certificate or award XP."
+        return out
+    out["questions"] = _mock_public_questions(summary.get("questions", []))
+    return out
+
+
+@app.get("/api/courses/{course_slug}/mock-exam")
+def get_course_mock_exam_info(
+    course_slug: str,
+    user: User | None = Depends(optional_user),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Expose mock-exam availability without exposing question keys or bypassing tier checks."""
+    course, course_dir, blueprint = _load_exam_blueprint(course_slug, db)
+    pool = _unique_exam_questions(_load_exam_question_pool(course_dir, blueprint))
+    required_count = 20
+    if len(pool) < required_count:
+        return {
+            "available": False, "course_slug": course.slug, "course_title": course.title,
+            "title": f"{course.title} Timed Mock Assessment", "question_count": required_count,
+            "available_question_count": len(pool), "duration_minutes": 20,
+            "required_plan": "pro", "upgrade_url": "/plans",
+            "message": f"This mock assessment needs at least {required_count} distinct published questions; {len(pool)} are currently available.",
+        }
+    plan_id = effective_plan_id(db, user.id) if user else "free"
+    entitled = bool(plan_features(plan_id).get("premium_practice"))
+    return {
+        "available": True, "can_start": bool(user and entitled),
+        "course_slug": course.slug, "course_title": course.title,
+        "title": f"{course.title} Timed Mock Assessment", "question_count": required_count,
+        "available_question_count": len(pool), "duration_minutes": 20,
+        "pass_percent": int((blueprint.get("recommended_settings") or {}).get("suggested_pass_percent") or 70),
+        "current_plan": plan_id, "required_plan": "pro", "upgrade_url": "/plans",
+        "message": "20 distinct questions in 20 minutes. Results include topic-level feedback and do not affect certificates or XP.",
+    }
+
+
+@app.post("/api/courses/{course_slug}/mock-exam/start", status_code=status.HTTP_201_CREATED)
+def start_course_mock_exam(
+    course_slug: str,
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Start a Pro+ timed mock from the published course bank, separate from certification."""
+    require_feature(db, user, "premium_practice")
+    course, course_dir, blueprint = _load_exam_blueprint(course_slug, db)
+    pool = _unique_exam_questions(_load_exam_question_pool(course_dir, blueprint))
+    question_count = 20
+    if len(pool) < question_count:
+        raise HTTPException(status_code=409, detail={
+            "code": "MOCK_ASSESSMENT_UNAVAILABLE", "available_question_count": len(pool),
+            "required_question_count": question_count,
+            "message": f"This mock assessment needs {question_count} distinct published questions; {len(pool)} are currently available.",
+        })
+    picked = secrets.SystemRandom().sample(pool, question_count)
+    stored_questions = []
+    for item in picked:
+        options = list(item["options"])
+        secrets.SystemRandom().shuffle(options)
+        stored_questions.append({key: item[key] for key in ("id", "lesson_id", "lesson_slug", "lesson_number", "topic", "prompt", "answer_key", "explanation")} | {"options": options})
+    recommended = blueprint.get("recommended_settings") or {}
+    pass_percent = int(recommended.get("suggested_pass_percent") or 70)
+    attempt = MockAssessmentAttempt(
+        user_id=user.id, course_id=course.id, score=0, passed=False,
+        answers_summary={
+            "status": "in_progress", "course_slug": course_slug,
+            "title": f"{course.title} Timed Mock Assessment", "question_count": question_count,
+            "duration_minutes": 20, "pass_percent": pass_percent,
+            "questions": stored_questions,
+        },
+    )
+    db.add(attempt)
+    db.commit()
+    db.refresh(attempt)
+    return {
+        **_mock_attempt_payload(attempt),
+        "pass_percent": pass_percent,
+        "questions": _mock_public_questions(stored_questions),
+    }
+
+
+@app.get("/api/me/mock-exams/{attempt_id}")
+def get_my_mock_exam_attempt(
+    attempt_id: str, user: User = Depends(require_user), db: Session = Depends(get_db)
+) -> dict[str, Any]:
+    try:
+        parsed_id = UUID(attempt_id)
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=404, detail="Mock assessment attempt was not found.")
+    attempt = db.scalar(select(MockAssessmentAttempt).where(MockAssessmentAttempt.id == parsed_id, MockAssessmentAttempt.user_id == user.id))
+    if attempt is None:
+        raise HTTPException(status_code=404, detail="Mock assessment attempt was not found.")
+    return _mock_attempt_payload(attempt, include_report=True)
+
+
+@app.post("/api/me/mock-exams/{attempt_id}/submit")
+def submit_my_mock_exam_attempt(
+    attempt_id: str,
+    payload: dict[str, Any],
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    try:
+        parsed_id = UUID(attempt_id)
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=404, detail="Mock assessment attempt was not found.")
+    attempt = db.scalar(select(MockAssessmentAttempt).where(MockAssessmentAttempt.id == parsed_id, MockAssessmentAttempt.user_id == user.id).with_for_update())
+    if attempt is None:
+        raise HTTPException(status_code=404, detail="Mock assessment attempt was not found.")
+    if attempt.submitted_at:
+        raise HTTPException(status_code=409, detail="This mock assessment attempt has already been submitted.")
+    # Copy the top-level JSON object before replacing it. SQLAlchemy JSON does not
+    # reliably track in-place nested mutations, which could persist the score but
+    # lose the detailed report returned after submission.
+    summary = dict(attempt.answers_summary or {})
+    questions = summary.get("questions") if isinstance(summary.get("questions"), list) else []
+    answers = payload.get("answers") if isinstance(payload, dict) else None
+    if not isinstance(answers, dict):
+        raise HTTPException(status_code=422, detail="Submit an answers object for the mock assessment.")
+    by_id = {str(question.get("id")): question for question in questions if isinstance(question, dict)}
+    if not set(answers.keys()).issubset(set(by_id.keys())):
+        raise HTTPException(status_code=422, detail="The submission contains an unknown mock question.")
+    for question_id, value in answers.items():
+        if not isinstance(value, str) or value not in by_id[question_id].get("options", []):
+            raise HTTPException(status_code=422, detail="Each selected answer must match an option in that question.")
+    started = attempt.started_at if attempt.started_at.tzinfo else attempt.started_at.replace(tzinfo=timezone.utc)
+    now = datetime.now(timezone.utc)
+    duration_seconds = int(summary.get("duration_minutes") or 20) * 60
+    expired = (now - started).total_seconds() > duration_seconds + 5
+    results = []
+    correct_count = 0
+    topics: dict[str, dict[str, int]] = {}
+    for question in questions:
+        qid = str(question.get("id"))
+        selected = None if expired else answers.get(qid)
+        correct = bool(selected is not None and selected == question.get("answer_key"))
+        correct_count += int(correct)
+        topic = str(question.get("topic") or "General skills")
+        item = topics.setdefault(topic, {"correct": 0, "total": 0})
+        item["correct"] += int(correct)
+        item["total"] += 1
+        results.append({
+            "question_id": qid, "prompt": question.get("prompt", ""), "topic": topic,
+            "lesson_slug": question.get("lesson_slug", ""), "selected_answer": selected or "",
+            "correct_answer": question.get("answer_key", ""), "is_correct": correct,
+            "explanation": question.get("explanation", "Review the related published lesson and try again."),
+        })
+    score = round(correct_count / max(1, len(questions)) * 100)
+    pass_percent = int(summary.get("pass_percent") or 70)
+    summary["status"] = "submitted"
+    summary["timed_out"] = expired
+    summary["report"] = {
+        "score_percent": score, "correct_count": correct_count, "question_count": len(questions),
+        "pass_percent": pass_percent, "passed": score >= pass_percent,
+        "timed_out": expired,
+        "topic_performance": [{"topic": name, "correct": values["correct"], "total": values["total"], "percent": round(values["correct"] / max(1, values["total"]) * 100)} for name, values in sorted(topics.items())],
+        "results": results,
+        "notice": "This is a practice assessment only. It does not issue or change certificates and does not award XP.",
+    }
+    attempt.score = score
+    attempt.passed = score >= pass_percent
+    attempt.answers_summary = summary
+    attempt.submitted_at = now
+    db.commit()
+    db.refresh(attempt)
+    return _mock_attempt_payload(attempt, include_report=True)
+
+
 @app.get("/api/courses/{course_slug}/exam")
 def get_course_exam_info(
     course_slug: str, db: Session = Depends(get_db)
@@ -3152,9 +3428,23 @@ def get_published_course_asset(
     )
 
 
+def _is_premium_project(project_doc: dict[str, Any]) -> bool:
+    """Keep explicit flags and advanced project tiers aligned with Max entitlements.
+
+    Existing project manifests commonly identify capstones through `tier` instead
+    of an `is_premium` flag, so relying only on the flag leaves those projects open.
+    """
+    if project_doc.get("is_premium") is True or project_doc.get("premium") is True:
+        return True
+    tier = re.sub(r"[_\s]+", "-", str(project_doc.get("tier") or "").strip().casefold())
+    return tier in {"capstone", "advanced-capstone", "professional", "specialist", "interview-prep"}
+
+
 @app.get("/api/courses/{course_slug}/projects")
 def list_published_course_projects(
-    course_slug: str, db: Session = Depends(get_db)
+    course_slug: str,
+    user: User | None = Depends(optional_user),
+    db: Session = Depends(get_db),
 ) -> dict[str, Any]:
     """Return learner-facing project briefs while withholding protected reference solutions."""
     get_course_visible_to_reader(db, course_slug)
@@ -3181,6 +3471,18 @@ def list_published_course_projects(
         if item.get("status") != "published" and not (
             draft_course_preview_enabled() and item.get("status") == "draft"
         ):
+            continue
+        is_premium_project = _is_premium_project(item)
+        has_premium_projects = bool(
+            user and plan_features(effective_plan_id(db, user.id)).get("premium_projects")
+        )
+        if is_premium_project and not has_premium_projects:
+            items.append({
+                "id": item.get("id"), "slug": item.get("slug"),
+                "title": item.get("title"), "sequence": item.get("sequence"),
+                "tier": item.get("tier"), "status": item.get("status"),
+                "is_locked": True, "required_plan": "max", "upgrade_url": "/plans",
+            })
             continue
         safe_item = {
             key: item.get(key)
@@ -3228,7 +3530,7 @@ def list_published_course_projects(
 
 
 def _load_project_manifest_for_guide(
-    course_slug: str, project_slug: str, db: Session
+    course_slug: str, project_slug: str, db: Session, user: User | None = None
 ) -> tuple[Path, dict[str, Any], dict[str, Any]]:
     """Load one visible project manifest without opening protected solution files."""
     get_course_visible_to_reader(db, course_slug)
@@ -3290,27 +3592,41 @@ def _load_project_manifest_for_guide(
         raise HTTPException(
             status_code=404, detail="Project guide is not published yet."
         )
+    if _is_premium_project(selected):
+        current = effective_plan_id(db, user.id) if user else "free"
+        if not (user and plan_features(current).get("premium_projects")):
+            raise HTTPException(status_code=403, detail={
+                "code": "FEATURE_REQUIRES_UPGRADE", "feature": "premium_projects",
+                "current_plan": current, "required_plan": "max", "upgrade_url": "/plans",
+                "message": "This project requires the Max plan or Full Access.",
+            })
     return course_dir, course_metadata, selected
 
 
 @app.get("/api/courses/{course_slug}/projects/{project_slug}")
 def get_published_course_project_guide(
-    course_slug: str, project_slug: str, db: Session = Depends(get_db)
+    course_slug: str,
+    project_slug: str,
+    user: User | None = Depends(optional_user),
+    db: Session = Depends(get_db),
 ) -> dict[str, Any]:
     """Return a complete learner-facing build guide and explicitly declared starter code."""
     course_dir, course_metadata, project_doc = _load_project_manifest_for_guide(
-        course_slug, project_slug, db
+        course_slug, project_slug, db, user
     )
     return build_project_guide(course_slug, course_metadata, project_doc, course_dir)
 
 
 @app.get("/api/courses/{course_slug}/projects/{project_slug}/starter-kit.zip")
 def download_published_course_project_starter_kit(
-    course_slug: str, project_slug: str, db: Session = Depends(get_db)
+    course_slug: str,
+    project_slug: str,
+    user: User | None = Depends(optional_user),
+    db: Session = Depends(get_db),
 ) -> Response:
     """Download learner-safe starter files; protected reference solutions are never included."""
     course_dir, course_metadata, project_doc = _load_project_manifest_for_guide(
-        course_slug, project_slug, db
+        course_slug, project_slug, db, user
     )
     guide = build_project_guide(course_slug, course_metadata, project_doc, course_dir)
     archive_bytes = project_guide_zip(guide)
@@ -3333,6 +3649,7 @@ def get_published_course_project_starter_file(
     course_slug: str,
     project_slug: str,
     file_id: str,
+    user: User | None = Depends(optional_user),
     db: Session = Depends(get_db),
 ) -> Response:
     """Download an explicitly declared learner starter file, never a reference solution."""
@@ -3368,6 +3685,14 @@ def get_published_course_project_starter_file(
         draft_course_preview_enabled() and selected.get("status") == "draft"
     ):
         raise HTTPException(status_code=404, detail="Project is not published yet.")
+    if _is_premium_project(selected):
+        current = effective_plan_id(db, user.id) if user else "free"
+        if not (user and plan_features(current).get("premium_projects")):
+            raise HTTPException(status_code=403, detail={
+                "code": "FEATURE_REQUIRES_UPGRADE", "feature": "premium_projects",
+                "current_plan": current, "required_plan": "max", "upgrade_url": "/plans",
+                "message": "This project requires the Max plan or Full Access.",
+            })
 
     if file_id == "readme":
         relative_file = selected.get("starter_readme")
@@ -3437,36 +3762,26 @@ def get_published_course_project_starter_file(
 
 @app.get("/api/plans")
 def list_plans() -> dict[str, Any]:
+    """Public, server-owned plan catalog; prices and quotas come from one definition."""
     return {
+        "integrations": {
+            "ai_available": bool(
+                settings.ai_api_base_url and settings.ai_api_key and settings.ai_model
+            ),
+            "supported_runner_languages": ["python", "javascript"],
+        },
         "items": [
             {
-                "id": "free",
-                "title": "Free",
-                "amount_paise": 0,
+                "id": plan_id,
+                "title": definition["title"],
+                "amount_paise": definition["amount_paise"],
                 "currency": "INR",
-                "billing": "free",
-            },
-            {
-                "id": "pro",
-                "title": "Pro",
-                "amount_paise": 29_900,
-                "currency": "INR",
-                "billing": "monthly",
-            },
-            {
-                "id": "max",
-                "title": "Max",
-                "amount_paise": 69_900,
-                "currency": "INR",
-                "billing": "monthly",
-            },
-            {
-                "id": "full_access",
-                "title": "Full Access",
-                "amount_paise": 4_999_900,
-                "currency": "INR",
-                "billing": "lifetime",
-            },
+                "billing": definition["billing"],
+                "description": definition["description"],
+                "features": dict(definition["features"]),
+                "limits": dict(definition["limits"]),
+            }
+            for plan_id, definition in PLAN_DEFINITIONS.items()
         ]
     }
 
@@ -3504,8 +3819,17 @@ def who_am_i(
         )
         or 0
     )
+    current_plan = effective_plan_id(db, user.id)
     return {
         "user": user_payload(user),
+        "current_plan": {
+            "id": current_plan,
+            "title": PLAN_DEFINITIONS[current_plan]["title"],
+            "billing": PLAN_DEFINITIONS[current_plan]["billing"],
+            "lifetime": current_plan == "full_access",
+        },
+        "features": plan_features(current_plan),
+        "limits": plan_limits(current_plan),
         "entitlements": [
             {
                 "plan_id": e.plan_id,
@@ -3560,15 +3884,57 @@ async def create_payment(
     key_id, _ = ensure_payment_config()
     plan = PLAN_CONFIG[body.plan_id]
     current_entitlements = active_entitlements(db, user.id)
-    if current_entitlements:
-        current_names = sorted(
-            {e.plan_id.replace("_", " ").title() for e in current_entitlements}
-        )
+    current_plan = effective_plan_id(db, user.id)
+    if current_plan == "full_access":
         raise HTTPException(
             status_code=409,
-            detail=f"This account already has active access ({', '.join(current_names)}). Manage or wait for that membership to end before starting another paid plan.",
+            detail="Full Access is already active on this account. It is a lifetime entitlement and does not renew.",
+        )
+    if body.plan_id == current_plan:
+        raise HTTPException(
+            status_code=409,
+            detail=f"The {PLAN_DEFINITIONS[current_plan]['title']} plan is already active on this account.",
+        )
+    if body.plan_id == "pro" and current_plan in {"pro", "max"}:
+        raise HTTPException(
+            status_code=409,
+            detail=f"This account already has {PLAN_DEFINITIONS[current_plan]['title']} access. Choose Max or Full Access to upgrade.",
+        )
+    if body.plan_id == "max" and current_plan == "max":
+        raise HTTPException(status_code=409, detail="Max is already active on this account.")
+    # Pro -> Max and either paid monthly plan -> Full Access are supported upgrade paths.
+    # Verified upgrades schedule superseded monthly plans for cancellation at period end.
+    pending_statuses = {"created", "authenticated", "active", "pending", "halted", "past_due"}
+    pending_records = db.scalars(
+        select(PaymentRecord).where(
+            PaymentRecord.user_id == user.id,
+            PaymentRecord.kind == "subscription",
+        ).order_by(PaymentRecord.created_at.desc())
+    ).all()
+    same_plan_pending = [
+        record for record in pending_records
+        if record.plan_id == body.plan_id and record.status.lower() in pending_statuses
+    ]
+    if body.plan_id in {"pro", "max"} and same_plan_pending:
+        raise HTTPException(
+            status_code=409,
+            detail="A subscription checkout for this plan is already open or active. Refresh billing status before starting another checkout.",
         )
     if body.plan_id == "full_access":
+        recent_lifetime_order = db.scalar(
+            select(PaymentRecord).where(
+                PaymentRecord.user_id == user.id,
+                PaymentRecord.plan_id == "full_access",
+                PaymentRecord.kind == "order",
+                PaymentRecord.status.in_({"created", "authorized", "authenticated", "pending"}),
+                PaymentRecord.created_at >= utc_now() - timedelta(minutes=30),
+            ).order_by(PaymentRecord.created_at.desc())
+        )
+        if recent_lifetime_order is not None:
+            raise HTTPException(
+                status_code=409,
+                detail="A recent Full Access checkout is already pending for this account. Finish or wait for that checkout before creating another order.",
+            )
         receipt = f"ca-{secrets.token_hex(12)}"
         provider = await razorpay_request(
             "POST",
@@ -3689,6 +4055,11 @@ async def verify_full_access_payment(
             status_code=404,
             detail="Matching payment order was not found for this account.",
         )
+    if str(record.status or "").lower() in {"refunded", "reversed", "failed", "cancelled"}:
+        raise HTTPException(
+            status_code=409,
+            detail="This order is no longer eligible to grant Full Access. Contact support if you believe this is incorrect.",
+        )
     expected = hmac.new(
         key_secret.encode(),
         f"{body.razorpay_order_id}|{body.razorpay_payment_id}".encode(),
@@ -3720,6 +4091,9 @@ async def verify_full_access_payment(
         "captured_payment_status": payment.get("status"),
     }
     grant_entitlement(db, user_id=user.id, plan_id="full_access", payment_record=record)
+    await schedule_superseded_subscriptions_for_cancellation(
+        db, user_id=user.id, target_plan_id="full_access"
+    )
     db.commit()
     return {
         "ok": True,
@@ -3817,7 +4191,16 @@ def get_billing(
         if e.provider_subscription_id
     }
     terminal = {"cancelled", "completed", "expired"}
+    current_plan = effective_plan_id(db, user.id)
     return {
+        "current_plan": {
+            "id": current_plan,
+            "title": PLAN_DEFINITIONS[current_plan]["title"],
+            "billing": PLAN_DEFINITIONS[current_plan]["billing"],
+            "lifetime": current_plan == "full_access",
+        },
+        "features": plan_features(current_plan),
+        "limits": plan_limits(current_plan),
         "entitlements": [
             {
                 "plan_id": e.plan_id,
@@ -3841,8 +4224,13 @@ def get_billing(
                     else None
                 ),
                 "cancelable": bool(
-                    r.provider_subscription_id and r.status.lower() not in terminal
+                    r.provider_subscription_id
+                    and r.status.lower() not in terminal
+                    and not (r.provider_payload or {}).get("cancel_at_cycle_end")
                 ),
+                "cancellation_scheduled": bool((r.provider_payload or {}).get("cancel_at_cycle_end")),
+                "cancellation_required": bool((r.provider_payload or {}).get("cancellation_required")),
+                "cancellation_error": (r.provider_payload or {}).get("cancellation_error"),
             }
             for r in records
             if r.provider_subscription_id
@@ -3875,7 +4263,13 @@ async def cancel_subscription(
     provider = await razorpay_request(
         "POST", f"/subscriptions/{subscription_id}/cancel", {"cancel_at_cycle_end": 1}
     )
-    record.status = provider.get("status", "cancelled")
+    record.status = provider.get("status", record.status)
+    record.provider_payload = {
+        **(record.provider_payload or {}),
+        "cancel_at_cycle_end": True,
+        "cancellation_requested_at": utc_now().isoformat(),
+    }
+    # Existing entitlement remains effective through the verified period end.
     db.commit()
     return {
         "ok": True,
@@ -3921,11 +4315,13 @@ async def payment_webhook(
         db.rollback()
         return {"ok": True}  # The provider retried an event we already accepted.
 
-    event_name = payload.get("event")
+    event_name = str(payload.get("event") or "unknown")
     entities = payload.get("payload") or {}
     order_entity = (entities.get("order") or {}).get("entity") or {}
     payment_entity = (entities.get("payment") or {}).get("entity") or {}
     subscription_entity = (entities.get("subscription") or {}).get("entity") or {}
+    refund_entity = (entities.get("refund") or {}).get("entity") or {}
+    event_created_at = int(payload.get("created_at") or 0)
 
     if event_name == "order.paid":
         order_id = order_entity.get("id") or payment_entity.get("order_id")
@@ -3941,6 +4337,7 @@ async def payment_webhook(
         if (
             record
             and record.plan_id == "full_access"
+            and record.status not in {"refunded", "reversed"}
             and int(amount or 0) == record.amount_paise
             and currency == "INR"
         ):
@@ -3950,6 +4347,9 @@ async def payment_webhook(
             grant_entitlement(
                 db, user_id=record.user_id, plan_id="full_access", payment_record=record
             )
+            await schedule_superseded_subscriptions_for_cancellation(
+                db, user_id=record.user_id, target_plan_id="full_access"
+            )
     elif event_name in {
         "subscription.activated",
         "subscription.charged",
@@ -3958,6 +4358,8 @@ async def payment_webhook(
         "subscription.halted",
         "subscription.paused",
         "subscription.resumed",
+        "subscription.completed",
+        "subscription.expired",
     }:
         sub_id = subscription_entity.get("id")
         record = (
@@ -3970,64 +4372,118 @@ async def payment_webhook(
             else None
         )
         if record:
-            provider_status = str(
-                subscription_entity.get("status", event_name.split(".")[-1])
-            )
-            record.status = provider_status
-            existing = db.scalar(
-                select(Entitlement).where(
-                    Entitlement.provider_subscription_id == sub_id,
-                    Entitlement.user_id == record.user_id,
-                )
-            )
-            period_end = parse_epoch(subscription_entity.get("current_end"))
-            if (
-                (
-                    event_name
-                    in {
-                        "subscription.activated",
-                        "subscription.charged",
-                        "subscription.resumed",
-                    }
-                    or provider_status == "active"
-                )
-                and provider_status == "active"
-                and period_end is not None
-            ):
-                grant_entitlement(
-                    db,
-                    user_id=record.user_id,
-                    plan_id=record.plan_id,
-                    payment_record=record,
-                    subscription_id=sub_id,
-                    ends_at=period_end,
-                )
-            elif existing:
-                existing.ends_at = (
-                    parse_epoch(subscription_entity.get("current_end"))
-                    or existing.ends_at
-                )
-                existing.cancelled_at = (
-                    utc_now()
-                    if event_name == "subscription.cancelled"
-                    else existing.cancelled_at
-                )
-                if event_name in {"subscription.halted", "subscription.paused"}:
-                    existing.status = (
-                        "past_due" if event_name == "subscription.halted" else "paused"
+            stored_payload = dict(record.provider_payload or {})
+            last_event_at = int(stored_payload.get("last_subscription_event_at") or 0)
+            # Provider events may be delivered out of order. Apply only the newest
+            # subscription transition; duplicate event IDs are already deduplicated above.
+            if event_created_at >= last_event_at:
+                provider_status = str(
+                    subscription_entity.get("status", event_name.split(".")[-1])
+                ).lower()
+                record.status = provider_status
+                stored_payload["last_subscription_event_at"] = event_created_at
+                stored_payload["last_subscription_event_type"] = event_name
+                record.provider_payload = stored_payload
+                existing = db.scalar(
+                    select(Entitlement).where(
+                        Entitlement.provider_subscription_id == sub_id,
+                        Entitlement.user_id == record.user_id,
                     )
-                elif event_name == "subscription.cancelled" and (
-                    not existing.ends_at or existing.ends_at <= utc_now()
-                ):
-                    existing.status = "cancelled"
-    elif event_name == "payment.failed" and payment_entity.get("order_id"):
-        record = db.scalar(
-            select(PaymentRecord).where(
-                PaymentRecord.provider_order_id == payment_entity.get("order_id")
+                )
+                period_end = parse_epoch(subscription_entity.get("current_end"))
+                if provider_status == "active" and period_end is not None:
+                    grant_entitlement(
+                        db,
+                        user_id=record.user_id,
+                        plan_id=record.plan_id,
+                        payment_record=record,
+                        subscription_id=sub_id,
+                        ends_at=period_end,
+                    )
+                    if record.plan_id == "max":
+                        await schedule_superseded_subscriptions_for_cancellation(
+                            db, user_id=record.user_id, target_plan_id="max",
+                            excluding_subscription_id=sub_id,
+                        )
+                elif existing:
+                    existing.ends_at = period_end or existing.ends_at
+                    existing.cancelled_at = (
+                        utc_now()
+                        if event_name in {"subscription.cancelled", "subscription.completed", "subscription.expired"}
+                        else existing.cancelled_at
+                    )
+                    if event_name in {"subscription.halted", "subscription.paused"}:
+                        existing.status = "past_due" if event_name == "subscription.halted" else "paused"
+                    elif event_name in {"subscription.completed", "subscription.expired"}:
+                        existing.status = "expired"
+                    elif event_name == "subscription.cancelled" and (
+                        not existing.ends_at or (existing.ends_at.replace(tzinfo=timezone.utc) if existing.ends_at.tzinfo is None else existing.ends_at.astimezone(timezone.utc)) <= utc_now()
+                    ):
+                        existing.status = "cancelled"
+    elif event_name == "payment.failed":
+        order_id = payment_entity.get("order_id")
+        sub_id = payment_entity.get("subscription_id")
+        record = None
+        if order_id:
+            record = db.scalar(
+                select(PaymentRecord).where(PaymentRecord.provider_order_id == order_id)
             )
-        )
-        if record and record.status != "paid":
+        if record is None and sub_id:
+            record = db.scalar(
+                select(PaymentRecord).where(PaymentRecord.provider_subscription_id == sub_id)
+            )
+        if record and record.status not in {"paid", "refunded"}:
             record.status = "failed"
+    elif event_name in {"payment.refunded", "refund.processed"}:
+        payment_id = payment_entity.get("id") or refund_entity.get("payment_id")
+        order_id = payment_entity.get("order_id")
+        record = None
+        if payment_id:
+            record = db.scalar(
+                select(PaymentRecord).where(PaymentRecord.provider_payment_id == payment_id)
+            )
+        if record is None and order_id:
+            record = db.scalar(
+                select(PaymentRecord).where(PaymentRecord.provider_order_id == order_id)
+            )
+        if record and record.plan_id == "full_access":
+            provider_details = dict(record.provider_payload or {})
+            previous_refunds = int(provider_details.get("refund_amount_paise_total") or 0)
+            refund_event_amount = int(refund_entity.get("amount") or 0)
+            if event_name == "payment.refunded" and payment_entity.get("amount_refunded") is not None:
+                cumulative_refund = int(payment_entity.get("amount_refunded") or 0)
+            else:
+                cumulative_refund = previous_refunds + refund_event_amount
+            provider_details["refund_amount_paise_total"] = max(previous_refunds, cumulative_refund)
+            if provider_details["refund_amount_paise_total"] >= record.amount_paise:
+                record.status = "refunded"
+                provider_details = dict(record.provider_payload or {})
+                provider_details["refund_amount_paise_total"] = max(previous_refunds, cumulative_refund)
+                provider_details["fully_refunded_at"] = utc_now().isoformat()
+                record.provider_payload = provider_details
+                entitlement = db.scalar(
+                    select(Entitlement).where(
+                        Entitlement.user_id == record.user_id,
+                        Entitlement.plan_id == "full_access",
+                        Entitlement.source_payment_id == record.id,
+                    )
+                )
+                if entitlement and entitlement.status == "active":
+                    entitlement.status = "refunded"
+                    entitlement.cancelled_at = utc_now()
+                    db.add(
+                        AuditLog(
+                            actor_user_id=record.user_id,
+                            action="entitlement.revoked_refund",
+                            resource_type="entitlement",
+                            resource_id=str(entitlement.id),
+                            details={"plan_id": "full_access", "payment_record_id": str(record.id)},
+                            created_at=utc_now(),
+                        )
+                    )
+            else:
+                provider_details["partial_refund_amount_paise"] = provider_details["refund_amount_paise_total"]
+                record.provider_payload = provider_details
 
     event.processed = True
     event.processed_at = utc_now()
@@ -4203,8 +4659,12 @@ def get_my_gamification_stats(
 
 @app.get("/api/leaderboard")
 def get_leaderboard(
-    period: str = "week", limit: int = 20, db: Session = Depends(get_db)
+    period: str = "week", limit: int = 20,
+    user: User = Depends(require_user), db: Session = Depends(get_db),
 ) -> dict[str, Any]:
+    # Pro introduces competitive learning leagues; standard lesson XP stays available
+    # on Free, but the expanded leaderboard view is a plan-gated productivity feature.
+    require_feature(db, user, "leaderboards")
     if period not in {"week", "all_time"}:
         raise HTTPException(status_code=422, detail="period must be week or all_time")
     limit = max(1, min(limit, 100))
@@ -4505,7 +4965,9 @@ def list_my_course_exercise_progress(
 
 @app.get("/api/exercises/featured")
 def list_featured_exercises(
-    limit: int = 12, db: Session = Depends(get_db)
+    limit: int = 12,
+    user: User | None = Depends(optional_user),
+    db: Session = Depends(get_db),
 ) -> dict[str, Any]:
     """List published exercises, plus learner-safe imported drafts in local preview."""
     limit = max(1, min(limit, 50))
@@ -4559,6 +5021,11 @@ def list_featured_exercises(
         )
         if not (published_item or imported_draft):
             continue
+        has_premium_practice = bool(
+            user and plan_features(effective_plan_id(db, user.id)).get("premium_practice")
+        )
+        if exercise.is_premium and not has_premium_practice:
+            continue
         public_type = public_practice_type(
             exercise.exercise_type, exercise.starter, course_slug, exercise.prompt
         )
@@ -4585,7 +5052,10 @@ def list_featured_exercises(
 
 @app.get("/api/courses/{course_slug}/lessons/{lesson_slug}/exercises")
 def list_lesson_exercises(
-    course_slug: str, lesson_slug: str, db: Session = Depends(get_db)
+    course_slug: str,
+    lesson_slug: str,
+    user: User | None = Depends(optional_user),
+    db: Session = Depends(get_db),
 ) -> dict[str, Any]:
     lesson = find_published_lesson(db, course_slug, lesson_slug)
     exercise_query = select(Exercise).where(Exercise.lesson_id == lesson.id)
@@ -4595,7 +5065,23 @@ def list_lesson_exercises(
     module = db.get(Module, lesson.module_id)
     course = db.get(Course, module.course_id) if module else None
     items = []
+    has_premium_practice = bool(
+        user and plan_features(effective_plan_id(db, user.id)).get("premium_practice")
+    )
     for item in rows:
+        if item.is_premium and not has_premium_practice:
+            items.append({
+                "slug": item.slug,
+                "title": item.title,
+                "type": "locked",
+                "is_locked": True,
+                "required_plan": "pro",
+                "upgrade_url": "/plans",
+                "sequence": item.sequence,
+                "course_slug": course_slug,
+                "lesson_slug": lesson_slug,
+            })
+            continue
         public_type = public_practice_type(
             item.exercise_type, item.starter, course_slug, item.prompt
         )
@@ -4713,10 +5199,24 @@ def reveal_exercise_solution(
     course_slug: str,
     lesson_slug: str,
     exercise_slug: str,
+    user: User | None = Depends(optional_user),
     db: Session = Depends(get_db),
 ) -> dict[str, Any]:
     """Reveal the authored worked answer on request; prefer the linked reference file over legacy placeholders."""
     exercise = find_published_exercise(db, course_slug, lesson_slug, exercise_slug)
+    if exercise.is_premium:
+        if user is None:
+            raise HTTPException(status_code=403, detail={
+                "code": "FEATURE_REQUIRES_UPGRADE", "feature": "premium_practice",
+                "current_plan": "free", "required_plan": "pro", "upgrade_url": "/plans",
+                "message": "This practice item requires the Pro plan or higher.",
+            })
+        if not plan_features(effective_plan_id(db, user.id)).get("premium_practice"):
+            raise HTTPException(status_code=403, detail={
+                "code": "FEATURE_REQUIRES_UPGRADE", "feature": "premium_practice",
+                "current_plan": effective_plan_id(db, user.id), "required_plan": "pro", "upgrade_url": "/plans",
+                "message": "This practice item requires the Pro plan or higher.",
+            })
     manifest_path, manifest = _load_exercise_manifest(course_slug, lesson_slug, exercise_slug)
     content_root = COURSE_CONTENT_ROOT.resolve()
     course_root = (content_root / course_slug).resolve()
@@ -4788,6 +5288,9 @@ def submit_exercise(
     db: Session = Depends(get_db),
 ) -> dict[str, Any]:
     exercise = find_published_exercise(db, course_slug, lesson_slug, exercise_slug)
+    if exercise.is_premium:
+        from .plan_entitlements import require_feature
+        require_feature(db, user, "premium_practice")
     progress = db.scalar(
         select(ExerciseProgress).where(
             ExerciseProgress.user_id == user.id,

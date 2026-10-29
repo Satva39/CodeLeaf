@@ -16,7 +16,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path, PurePosixPath
 from typing import Any, Literal
 from urllib.parse import urlsplit
-from uuid import UUID
+from uuid import UUID, uuid4
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import httpx
@@ -34,6 +34,14 @@ from .models import (
     Certificate, ProjectSubmission, ProjectSubmissionZipChunk, ReviewSchedule, RunnerJob, User,
 )
 from .phase5_service import apply_review_rating, get_or_create_preferences, utc_now
+from .plan_entitlements import (
+    effective_plan_id,
+    ensure_storage_capacity,
+    finalize_daily_usage,
+    plan_limits,
+    require_feature,
+    reserve_daily_usage,
+)
 from .diagram_assets import validate_dynamic_diagram_model
 
 router = APIRouter()
@@ -215,6 +223,14 @@ class RunnerCreateInput(StrictModel):
     language: Literal["python", "javascript"]
     source: str = Field(min_length=1, max_length=16000)
     stdin: str = Field(default="", max_length=8000)
+    idempotency_key: str | None = Field(default=None, min_length=8, max_length=100)
+
+    @field_validator("idempotency_key")
+    @classmethod
+    def safe_idempotency_key(cls, value: str | None) -> str | None:
+        if value is not None and not re.fullmatch(r"[A-Za-z0-9._:-]{8,100}", value):
+            raise ValueError("idempotency_key contains unsupported characters")
+        return value
 
 
 class RunnerResultInput(StrictModel):
@@ -418,6 +434,7 @@ def rate_review(
 @router.get("/api/me/recommendations")
 def get_recommendations(user: User = Depends(require_user), db: Session = Depends(get_db)) -> dict[str, Any]:
     """Explain rule-based recommendations using published, account-owned records only."""
+    require_feature(db, user, "personalized_recommendations")
     now = utc_now()
     recommendations: list[dict[str, Any]] = []
     # Due reviews rank first; review queue entries are created only by server-side outcomes.
@@ -670,12 +687,12 @@ def _store_project_zip_chunks(db: Session, submission_id, file_obj) -> int:
         sequence += 1
         if batch_size >= PROJECT_ZIP_DB_BATCH_BYTES:
             db.add_all(batch)
-            db.commit()
+            db.flush()
             batch = []
             batch_size = 0
     if batch:
         db.add_all(batch)
-        db.commit()
+        db.flush()
     if sequence == 0:
         raise HTTPException(status_code=400, detail="Choose a non-empty ZIP archive to upload.")
     return sequence
@@ -801,9 +818,11 @@ def _portfolio_item(submission: ProjectSubmission, owner: User | None = None) ->
 @router.post("/api/me/portfolio/submissions", status_code=status.HTTP_201_CREATED)
 def create_portfolio_submission(body: PortfolioSubmissionInput, user: User = Depends(require_user), db: Session = Depends(get_db)) -> dict[str, Any]:
     """Accept legacy text-bundle submissions for any learner-created project."""
+    encoded_bundle_size = len(json.dumps(body.code_bundle, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
+    ensure_storage_capacity(db, user, incoming_bytes=encoded_bundle_size)
     submission = ProjectSubmission(user_id=user.id, project_slug=body.project_slug,
         title=(body.title or body.project_slug.replace("-", " ").title()).strip(),
-        code_bundle=body.code_bundle, visibility="private",
+        code_bundle=body.code_bundle, stored_bytes=encoded_bundle_size, visibility="private",
         portfolio_metadata={"course_slug": body.course_slug, "custom_project": True, "summary": "", "skills": [], "technologies": [], "screenshot_urls": []})
     db.add(submission)
     db.commit()
@@ -842,11 +861,12 @@ def upload_portfolio_submission(
         if not safe_filename.lower().endswith(".zip"):
             safe_filename += ".zip"
 
+        ensure_storage_capacity(db, user, incoming_bytes=payload_size)
         submission = ProjectSubmission(
             user_id=user.id,
             project_slug=normalized_project_slug,
             title=(title_value or normalized_project_slug.replace("-", " ").title()).strip()[:200],
-            code_bundle={}, zip_bundle=None, zip_filename=safe_filename, visibility="private",
+            code_bundle={}, zip_bundle=None, zip_filename=safe_filename, stored_bytes=payload_size, visibility="private",
             portfolio_metadata={
                 "course_slug": course_slug,
                 "custom_project": True,
@@ -855,8 +875,7 @@ def upload_portfolio_submission(
             },
         )
         db.add(submission)
-        db.commit()
-        db.refresh(submission)
+        db.flush()
         try:
             _store_project_zip_chunks(db, submission.id, archive_file.file)
             metadata = dict(submission.portfolio_metadata or {})
@@ -865,13 +884,9 @@ def upload_portfolio_submission(
             db.add(submission)
             db.commit()
         except Exception as exc:
+            # The submission row, quota check and chunks share one transaction. Rollback
+            # removes the partial upload and releases the user's quota lock atomically.
             db.rollback()
-            try:
-                db.execute(delete(ProjectSubmissionZipChunk).where(ProjectSubmissionZipChunk.submission_id == submission.id))
-                db.execute(delete(ProjectSubmission).where(ProjectSubmission.id == submission.id))
-                db.commit()
-            except Exception:
-                db.rollback()
             if isinstance(exc, HTTPException):
                 raise
             raise HTTPException(status_code=503, detail="The project ZIP could not be stored completely. Please retry the upload.") from exc
@@ -1179,6 +1194,18 @@ async def create_runner_job(body: RunnerCreateInput, user: User = Depends(requir
     token = settings.runner_service_token or ""
     if not base_url or not token:
         raise HTTPException(status_code=503, detail="The isolated runner service is not configured. Browser HTML/CSS/JavaScript preview remains available.")
+
+    request_key = body.idempotency_key or uuid4().hex
+    if body.idempotency_key:
+        previous = db.scalar(
+            select(RunnerJob).where(
+                RunnerJob.user_id == user.id,
+                RunnerJob.request_key == request_key,
+            )
+        )
+        if previous is not None:
+            return {"job": {"id": str(previous.id), "language": previous.language, "status": previous.status, "created_at": previous.created_at.isoformat()}}
+
     now = utc_now()
     db.execute(update(RunnerJob).where(
         RunnerJob.user_id == user.id,
@@ -1189,22 +1216,65 @@ async def create_runner_job(body: RunnerCreateInput, user: User = Depends(requir
     recent = db.scalar(select(func.count(RunnerJob.id)).where(RunnerJob.user_id == user.id, RunnerJob.created_at >= now - timedelta(minutes=1))) or 0
     active = db.scalar(select(func.count(RunnerJob.id)).where(RunnerJob.user_id == user.id, RunnerJob.status.in_(["queued", "running"]))) or 0
     if recent >= 8 or active >= 2:
-        raise HTTPException(status_code=429, detail="Runner quota reached. Finish or wait for an existing job before starting another.")
-    async with httpx.AsyncClient(timeout=8.0) as client:
-        try:
-            response = await client.post(f"{base_url}/v1/jobs", headers={"X-Runner-Key": token}, json={
-                "owner_id": str(user.id), "language": body.language, "source": body.source, "stdin": body.stdin})
-        except httpx.HTTPError:
-            raise HTTPException(status_code=503, detail="The isolated runner service could not be reached.")
+        raise HTTPException(status_code=429, detail="Runner rate limit reached. Finish or wait for an existing job before starting another.")
+
+    plan_id = effective_plan_id(db, user.id)
+    allowance = int(plan_limits(plan_id)["code_executions_per_day"])
+    reservation, duplicate = reserve_daily_usage(
+        db, user, metric="code_execution", allowance=allowance,
+        idempotency_key=request_key,
+    )
+    if duplicate:
+        previous = db.scalar(
+            select(RunnerJob).where(
+                RunnerJob.user_id == user.id,
+                RunnerJob.request_key == request_key,
+            )
+        )
+        if previous is not None:
+            return {"job": {"id": str(previous.id), "language": previous.language, "status": previous.status, "created_at": previous.created_at.isoformat()}}
+        raise HTTPException(status_code=409, detail="This code execution request is already being processed. Check your runner status before retrying.")
+
+    try:
+        async with httpx.AsyncClient(timeout=8.0) as client:
+            response = await client.post(
+                f"{base_url}/v1/jobs",
+                headers={"X-Runner-Key": token},
+                json={
+                    "owner_id": str(user.id),
+                    "language": body.language,
+                    "source": body.source,
+                    "stdin": body.stdin,
+                },
+            )
+    except httpx.HTTPError as exc:
+        finalize_daily_usage(db, reservation.id, success=False)
+        raise HTTPException(status_code=503, detail="The isolated runner service could not be reached. Your daily execution allowance was not consumed.") from exc
     if response.status_code >= 400:
-        raise HTTPException(status_code=503, detail="The isolated runner service rejected this request.")
-    result = response.json()
-    external_id = result.get("job_id")
+        finalize_daily_usage(db, reservation.id, success=False)
+        raise HTTPException(status_code=503, detail="The isolated runner service rejected this request. Your daily execution allowance was not consumed.")
+    try:
+        result = response.json()
+    except ValueError as exc:
+        finalize_daily_usage(db, reservation.id, success=False)
+        raise HTTPException(status_code=502, detail="The runner service returned an invalid response. Your daily execution allowance was not consumed.") from exc
+    external_id = result.get("job_id") if isinstance(result, dict) else None
     if not isinstance(external_id, str) or not external_id:
-        raise HTTPException(status_code=502, detail="The runner service returned an invalid job reference.")
-    row = RunnerJob(user_id=user.id, external_job_id=external_id, language=body.language,
-                    status=result.get("status", "queued"), result_json={}, created_at=now, updated_at=now)
+        finalize_daily_usage(db, reservation.id, success=False)
+        raise HTTPException(status_code=502, detail="The runner service returned an invalid job reference. Your daily execution allowance was not consumed.")
+    row = RunnerJob(
+        user_id=user.id,
+        external_job_id=external_id,
+        request_key=request_key,
+        language=body.language,
+        status=str(result.get("status", "queued"))[:20],
+        result_json={},
+        created_at=now,
+        updated_at=now,
+    )
     db.add(row)
+    # Count the execution once, in the same DB transaction that records the accepted job.
+    finalize_daily_usage(db, reservation.id, success=True, commit=False)
     db.commit()
     db.refresh(row)
     return {"job": {"id": str(row.id), "language": row.language, "status": row.status, "created_at": row.created_at.isoformat()}}

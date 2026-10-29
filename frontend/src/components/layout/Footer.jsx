@@ -12,6 +12,7 @@ export default function Footer() {
           <Link to="/certificates">Certificates</Link>
           <Link to="/practice">Practice</Link>
           <Link to="/profile">Profile</Link>
+          <Link to="/support">Support</Link>
         </div>
       </div>
       <div className="footer-columns">

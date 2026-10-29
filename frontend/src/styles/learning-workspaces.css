@@ -213,3 +213,19 @@
 .workspace-terminal-idle { display: block; box-sizing: border-box; min-height: 300px; }
 .workspace-terminal-prompt { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding-bottom: 10px; border-bottom: 1px solid rgba(148,163,184,.18); color: #91a2ba; font: 10px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .08em; }
 .workspace-terminal-idle pre { margin-top: 15px; color: #cbd5e1; }
+
+/* Account-backed workspace controls, separate from browser draft actions */
+.account-workspace-panel { display: grid; gap: 7px; padding: 13px 10px 14px; border-top: 1px solid rgba(148,163,184,.16); color: #d7e2f1; }
+.account-workspace-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 11px; }
+.account-workspace-heading button { display: grid; place-items: center; width: 24px; height: 24px; border: 0; border-radius: 6px; color: #9fb0c7; background: transparent; cursor: pointer; }
+.account-workspace-heading button:hover { color: #2bd5a2; background: rgba(45,212,164,.1); }
+.account-workspace-usage { color: #8da0ba; font-size: 9px; }
+.account-workspace-panel label { margin-top: 4px; color: #9fb0c7; font-size: 9px; }
+.account-workspace-panel input,
+.account-workspace-panel select { width: 100%; min-width: 0; box-sizing: border-box; padding: 8px; border: 1px solid rgba(148,163,184,.23); border-radius: 7px; color: #e5edf8; background: #101d2f; font-size: 10px; }
+.account-workspace-panel button:not(.account-workspace-heading button) { display: flex; align-items: center; justify-content: flex-start; gap: 7px; min-height: 29px; padding: 7px 8px; border: 1px solid rgba(148,163,184,.16); border-radius: 7px; color: #b9c8dc; background: rgba(148,163,184,.06); text-align: left; font-size: 10px; cursor: pointer; }
+.account-workspace-panel button:hover:not(:disabled) { color: #eaf2fc; border-color: rgba(45,212,164,.3); background: rgba(45,212,164,.08); }
+.account-workspace-panel button:disabled { opacity: .45; cursor: not-allowed; }
+.account-workspace-notice { margin: 2px 0 0; color: #a8b8cc; overflow-wrap: anywhere; font-size: 9px; line-height: 1.6; }
+@media (max-width: 800px) { .account-workspace-panel { grid-template-columns: repeat(2,minmax(0,1fr)); } .account-workspace-heading, .account-workspace-usage, .account-workspace-panel label, .account-workspace-panel input, .account-workspace-panel select, .account-workspace-notice { grid-column: 1 / -1; } }
+@media (max-width: 520px) { .account-workspace-panel { grid-template-columns: minmax(0,1fr); } }

@@ -103,9 +103,17 @@ def main() -> int:
         progress_id = progress.id
         learner_id = user.id
 
+    # A database-managed premium flag survives routine manifest imports when
+    # the optional flag is omitted; an explicit manifest flag remains supported.
+    with TestSession() as db:
+        exercise = db.scalar(select(Exercise))
+        exercise.is_premium = True
+        db.commit()
     importer.import_course_transaction(course_data, tree, published=False, session_factory=TestSession)
     with TestSession() as db:
         repeated_counts = (count_rows(db, Course), count_rows(db, Module), count_rows(db, Lesson), count_rows(db, Exercise))
+        exercise = db.scalar(select(Exercise))
+        require(exercise.is_premium is True, "routine manifest import preserves an existing premium exercise flag when omitted")
     require(first_counts == repeated_counts, "importing the same course twice leaves row counts unchanged")
 
     renamed_course_data, renamed_tree = make_tree("repeat-import", lesson_slug="lesson-start-corrected")

@@ -9,8 +9,9 @@ import { useCourseCatalog } from "../lib/useCourseCatalog.js";
 import CourseOverview from "../components/course/CourseOverview.jsx";
 
 function ProjectCard({ project, courseSlug }) {
-  const milestoneCount = Array.isArray(project.milestones) ? project.milestones.length : 0;
-  const skills = Array.isArray(project.skills) ? project.skills : [];
+  const locked = project.is_locked === true;
+  const milestoneCount = locked ? 0 : (Array.isArray(project.milestones) ? project.milestones.length : 0);
+  const skills = locked ? [] : (Array.isArray(project.skills) ? project.skills : []);
   const projectSlug = project.slug || project.id;
   return (
     <article className="project-card panel project-card-course" key={project.id || projectSlug}>
@@ -20,13 +21,13 @@ function ProjectCard({ project, courseSlug }) {
       </div>
       <div className="project-card-body">
         <h3>{project.title}</h3>
-        <p>{project.objective || project.description || "A practical project that applies the concepts from this course."}</p>
+        <p>{locked ? "This advanced project is included with Max and Full Access. Upgrade to unlock the full guide and starter files." : (project.objective || project.description || "A practical project that applies the concepts from this course.")}</p>
         {!!skills.length && <div className="project-tags">{skills.slice(0, 5).map((skill) => <span key={skill}>{skill}</span>)}</div>}
         <div className="project-card-footer">
-          <span><ListChecks size={14} /> {milestoneCount} milestones</span>
-          <Link className="button button-secondary button-small" to={`/projects/${encodeURIComponent(courseSlug)}/${encodeURIComponent(projectSlug)}`}>
+          {locked ? <span><ListChecks size={14} /> Max project</span> : <span><ListChecks size={14} /> {milestoneCount} milestones</span>}
+          {locked ? <Link className="button button-primary button-small" to="/plans">Upgrade to Max <ArrowRight size={13} /></Link> : <Link className="button button-secondary button-small" to={`/projects/${encodeURIComponent(courseSlug)}/${encodeURIComponent(projectSlug)}`}>
             Open guide <ArrowRight size={13} />
-          </Link>
+          </Link>}
         </div>
       </div>
     </article>

@@ -450,21 +450,19 @@ export default function LessonPage() {
   }, [course.slug, current?.slug]);
   useEffect(() => {
     let active = true;
-    apiGetJson(`${API_BASE}/api/me/billing`, {
+    apiGetJson(`${API_BASE}/api/me/entitlements`, {
       credentials: "include",
-      ttlMs: 30_000,
+      ttlMs: 10_000,
     })
       .then((data) => {
         if (!active || !data) return;
-        const adFree = (data.entitlements || []).some((item) =>
-          ["max", "full_access"].includes(item.plan_id),
-        );
-        setAdsSuppressed(adFree);
+        // Ad display is driven by the backend's effective plan, never local UI state.
+        setAdsSuppressed(data.features?.ad_free === true);
       })
-      .catch(() => {});
-    return () => {
-      active = false;
-    };
+      .catch(() => {
+        if (active) setAdsSuppressed(false);
+      });
+    return () => { active = false; };
   }, []);
   const fallbackContent = getLessonContent(
     course.slug,
