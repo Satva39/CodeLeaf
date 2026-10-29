@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
@@ -60,6 +60,8 @@ export function Header() {
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreMenuRef = useRef(null);
   const [dark, setDark] = useState(() => getProfile().theme !== "light");
   // null means the session check is still in progress. This avoids briefly showing
   // the Sign in action to a returning signed-in user while /api/me is loading.
@@ -70,7 +72,24 @@ export function Header() {
   useEffect(() => {
     setSearchOpen(false);
     setMobileOpen(false);
+    setMoreOpen(false);
   }, [location.pathname]);
+  useEffect(() => {
+    const handlePointerDown = (event) => {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target)) {
+        setMoreOpen(false);
+      }
+    };
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") setMoreOpen(false);
+    };
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
   useEffect(() => {
     let active = true;
     let sessionRequestVersion = 0;
@@ -140,11 +159,25 @@ export function Header() {
             </NavLink>
             <NavLink to="/projects">Projects</NavLink>
             <NavLink to="/practice">Practice</NavLink>
-            <NavLink to="/review">Review</NavLink>
-            <NavLink to="/learning-hub">Learning hub</NavLink>
-            <NavLink to="/ai">AI coach</NavLink>
-            <NavLink to="/portfolio">Portfolio</NavLink>
-            <NavLink to="/certificates">Certificates</NavLink>
+            <div className={`primary-nav-more ${moreOpen ? "primary-nav-more-open" : ""}`} ref={moreMenuRef}>
+              <button
+                className={`primary-nav-more-trigger ${["/review", "/learning-hub", "/ai", "/portfolio", "/certificates"].some((path) => location.pathname === path || location.pathname.startsWith(`${path}/`)) ? "active" : ""}`}
+                type="button"
+                aria-haspopup="true"
+                aria-expanded={moreOpen}
+                aria-controls="primary-nav-more-menu"
+                onClick={() => setMoreOpen((open) => !open)}
+              >
+                More <ChevronDown size={13} />
+              </button>
+              {moreOpen && <div className="primary-nav-more-menu" id="primary-nav-more-menu" aria-label="More navigation links">
+                <NavLink to="/review" onClick={() => { setMoreOpen(false); setMobileOpen(false); }}>Review</NavLink>
+                <NavLink to="/learning-hub" onClick={() => { setMoreOpen(false); setMobileOpen(false); }}>Learning hub</NavLink>
+                <NavLink to="/ai" onClick={() => { setMoreOpen(false); setMobileOpen(false); }}>AI coach</NavLink>
+                <NavLink to="/portfolio" onClick={() => { setMoreOpen(false); setMobileOpen(false); }}>Portfolio</NavLink>
+                <NavLink to="/certificates" onClick={() => { setMoreOpen(false); setMobileOpen(false); }}>Certificates</NavLink>
+              </div>}
+            </div>
           </nav>
           <div className="header-search">
             <Search size={16} />

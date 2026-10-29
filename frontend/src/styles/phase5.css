@@ -149,3 +149,53 @@
 .runner-output small, .runner-output p { grid-column: 1 / -1; overflow-wrap: anywhere; }
 @media (max-width: 640px) { .runner-heading { flex-direction: column; } .runner-output { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .runner-panel *, .runner-panel *::before, .runner-panel *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+
+.phase5-upgrade-prompt {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 17px;
+  border: 1px solid rgba(146, 113, 250, .28);
+  border-radius: 12px;
+  background: rgba(146, 113, 250, .055);
+}
+.phase5-upgrade-prompt-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(146, 113, 250, .28);
+  border-radius: 11px;
+  color: #b5a0ff;
+  background: rgba(146, 113, 250, .1);
+}
+.phase5-upgrade-prompt-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.phase5-upgrade-prompt-copy strong {
+  display: block;
+}
+.phase5-upgrade-prompt-copy p {
+  margin: 4px 0 0;
+  color: var(--text-muted, #9ba9bb);
+  line-height: 1.55;
+  font-size: 13px;
+}
+.phase5-upgrade-prompt > .button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .phase5-upgrade-prompt {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .phase5-upgrade-prompt-copy {
+    flex-basis: calc(100% - 56px);
+  }
+  .phase5-upgrade-prompt > .button {
+    margin-left: 54px;
+  }
+}

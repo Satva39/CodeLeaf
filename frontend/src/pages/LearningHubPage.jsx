@@ -9,8 +9,17 @@ async function getPayload(path, options = {}) {
   const response = await apiFetch(`${API_BASE}${path}`, options);
   const body = await response.json().catch(() => ({}));
   if (!response.ok) {
-    const error = new Error(body.detail || "The learning hub could not be loaded.");
+    // FastAPI may return detail as an object for structured entitlement errors.
+    // Passing that object directly to Error renders the unhelpful text
+    // "[object Object]" in the UI.
+    const detail = body?.detail;
+    const message = typeof detail === "string"
+      ? detail
+      : detail?.message || body?.message || "The learning hub could not be loaded.";
+    const error = new Error(message);
     error.status = response.status;
+    error.code = typeof detail === "object" && detail !== null ? detail.code : body?.code;
+    error.details = typeof detail === "object" && detail !== null ? detail : {};
     throw error;
   }
   return body;
@@ -21,6 +30,7 @@ export default function LearningHubPage() {
   const [due, setDue] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
   const [roadmaps, setRoadmaps] = useState([]);
+  const [recommendationsLocked, setRecommendationsLocked] = useState(false);
   const [preferences, setPreferences] = useState({ timezone_name: "Asia/Kolkata", review_frequency_days: 1, daily_review_limit: 10, analytics_enabled: false });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -30,23 +40,52 @@ export default function LearningHubPage() {
   const load = useCallback(async () => {
     setLoading(true);
     setError("");
-    try {
-      const [rec, queue, map, prefs] = await Promise.all([
-        getPayload("/api/me/recommendations"),
-        getPayload("/api/me/reviews"),
-        getPayload("/api/me/roadmaps"),
-        getPayload("/api/me/learning-preferences"),
-      ]);
-      setRecommendations(rec.items || []);
-      setDue(queue.due || []);
-      setUpcoming(queue.upcoming || []);
-      setRoadmaps(map.tracks || []);
-      setPreferences(prefs.preferences || preferences);
-    } catch (err) {
-      setError(err.message || "Learning data is unavailable.");
-    } finally {
-      setLoading(false);
+    setRecommendationsLocked(false);
+    const results = await Promise.allSettled([
+      getPayload("/api/me/recommendations"),
+      getPayload("/api/me/reviews"),
+      getPayload("/api/me/roadmaps"),
+      getPayload("/api/me/learning-preferences"),
+    ]);
+
+    const problems = [];
+    const [recResult, queueResult, mapResult, prefsResult] = results;
+
+    if (recResult.status === "fulfilled") {
+      setRecommendations(recResult.value.items || []);
+    } else {
+      const err = recResult.reason;
+      if (err?.status === 403 && err?.code === "FEATURE_REQUIRES_UPGRADE") {
+        // This is an expected plan restriction, not a Learning Hub failure.
+        // Reviews, roadmaps, and preferences should still load for Free users.
+        setRecommendationsLocked(true);
+        setRecommendations([]);
+      } else {
+        problems.push(err?.message || "Personalized recommendations are unavailable.");
+      }
     }
+
+    if (queueResult.status === "fulfilled") {
+      setDue(queueResult.value.due || []);
+      setUpcoming(queueResult.value.upcoming || []);
+    } else {
+      problems.push(queueResult.reason?.message || "Your review queue is unavailable.");
+    }
+
+    if (mapResult.status === "fulfilled") {
+      setRoadmaps(mapResult.value.tracks || []);
+    } else {
+      problems.push(mapResult.reason?.message || "Career roadmaps are unavailable.");
+    }
+
+    if (prefsResult.status === "fulfilled") {
+      setPreferences((current) => prefsResult.value.preferences || current);
+    } else {
+      problems.push(prefsResult.reason?.message || "Learning preferences are unavailable.");
+    }
+
+    setError(problems.join(" "));
+    setLoading(false);
   }, []);
 
   useEffect(() => { void load(); }, [load]);
@@ -84,7 +123,7 @@ export default function LearningHubPage() {
   return (
     <PageShell className="phase5-page">
       <div className="phase5-hero panel">
-        <div><div className="eyebrow">YOUR NEXT USEFUL STEP</div><h1>Learning hub</h1><p>Recommendations are based on recorded lesson progress, exercise attempts, and review dates. XP is not treated as a mastery score.</p></div>
+        <div><div className="eyebrow">YOUR NEXT USEFUL STEP</div><h1>Learning hub</h1><p>Your review queue and career roadmaps use recorded learning activity. Personalized recommendations are available on eligible plans; XP is not treated as a mastery score.</p></div>
         <BrainCircuit size={34} aria-hidden="true" />
       </div>
       {error && <p className="phase5-alert" role="alert">{error}</p>}
@@ -92,7 +131,11 @@ export default function LearningHubPage() {
       {loading ? <div className="panel phase5-state">Loading your learning history…</div> : <>
         <section className="panel phase5-section">
           <div className="phase5-section-title"><div><div className="eyebrow">RULE-BASED GUIDANCE</div><h2>Recommended next</h2></div><Compass size={22} /></div>
-          {recommendations.length ? <div className="phase5-list">{recommendations.map((item, index) => <article className="phase5-row" key={`${item.kind}-${item.course_slug}-${item.item_slug}-${index}`}>
+          {recommendationsLocked ? <div className="phase5-upgrade-prompt">
+            <div className="phase5-upgrade-prompt-icon"><LockKeyhole size={19} /></div>
+            <div className="phase5-upgrade-prompt-copy"><strong>Unlock personalized recommendations</strong><p>Activity-based recommendations are included with Pro and above. Your review queue, career roadmaps, and learning preferences remain available on your current plan.</p></div>
+            <Link className="button button-primary button-small" to="/plans">Compare plans <ArrowRight size={13} /></Link>
+          </div> : recommendations.length ? <div className="phase5-list">{recommendations.map((item, index) => <article className="phase5-row" key={`${item.kind}-${item.course_slug}-${item.item_slug}-${index}`}>
             <span className="phase5-number">{index + 1}</span><div className="phase5-row-main"><strong>{item.title}</strong><p>{item.reason}</p><small>{item.kind.replaceAll("_", " ")}</small></div><Link className="button button-secondary button-small" to={item.href || "/tutorials"}>Open <ArrowRight size={13} /></Link>
           </article>)}</div> : <p className="phase5-muted">No rule-based recommendation is available yet. Start a published lesson or complete an exercise to create real learning history.</p>}
         </section>
