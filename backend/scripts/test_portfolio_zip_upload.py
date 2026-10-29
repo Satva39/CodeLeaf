@@ -4,6 +4,7 @@ from __future__ import annotations
 import asyncio
 import io
 import sys
+import tempfile
 import zipfile
 from pathlib import Path
 
@@ -81,44 +82,44 @@ def main() -> None:
     assert all(isinstance(chunk, ProjectSubmissionZipChunk) for chunk in fake_db.persisted)
 
     # Chunk-backed downloads stream from the database in bounded batches.
-    test_db_path = Path("/tmp/codeleaf-portfolio-chunks-test.sqlite")
-    if test_db_path.exists():
-        test_db_path.unlink()
-    engine = create_engine(f"sqlite:///{test_db_path}", connect_args={"check_same_thread": False})
-    Base.metadata.create_all(engine)
-    TestSessionLocal = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
-    session = TestSessionLocal()
-    old_session_factory = phase5_routes.SessionLocal
-    try:
-        owner = User(email="zip-test@example.test", display_name="ZIP Test", password_hash="test-hash", username="zip-test")
-        session.add(owner)
-        session.commit()
-        submission = ProjectSubmission(
-            user_id=owner.id, project_slug="stream-test", title="Stream Test", code_bundle={},
-            zip_bundle=None, zip_filename="stream-test.zip", visibility="public",
-            portfolio_metadata={"custom_project": True, "archive_upload_complete": True},
-        )
-        session.add(submission)
-        session.commit()
-        session.add_all([
-            ProjectSubmissionZipChunk(submission_id=submission.id, sequence=0, payload=b"chunk-a"),
-            ProjectSubmissionZipChunk(submission_id=submission.id, sequence=1, payload=b"chunk-b"),
-        ])
-        session.commit()
-        phase5_routes.SessionLocal = TestSessionLocal
-        response = _download_project_zip(submission, is_public=True, db=session)
-        async def collect_stream():
-            parts = []
-            async for part in response.body_iterator:
-                parts.append(part)
-            return b"".join(parts)
-        assert asyncio.run(collect_stream()) == b"chunk-achunk-b"
-    finally:
-        phase5_routes.SessionLocal = old_session_factory
-        session.close()
-        engine.dispose()
-        if test_db_path.exists():
-            test_db_path.unlink()
+    # Use a platform-managed temporary directory; /tmp does not exist on many
+    # Windows installations, and SQLite must receive a correctly formatted URL.
+    with tempfile.TemporaryDirectory(prefix="codeleaf-portfolio-test-") as temp_dir:
+        test_db_path = Path(temp_dir) / "portfolio-chunks-test.sqlite"
+        sqlite_url = "sqlite:///" + test_db_path.resolve().as_posix()
+        engine = create_engine(sqlite_url, connect_args={"check_same_thread": False})
+        Base.metadata.create_all(engine)
+        TestSessionLocal = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
+        session = TestSessionLocal()
+        old_session_factory = phase5_routes.SessionLocal
+        try:
+            owner = User(email="zip-test@example.test", display_name="ZIP Test", password_hash="test-hash", username="zip-test")
+            session.add(owner)
+            session.commit()
+            submission = ProjectSubmission(
+                user_id=owner.id, project_slug="stream-test", title="Stream Test", code_bundle={},
+                zip_bundle=None, zip_filename="stream-test.zip", visibility="public",
+                portfolio_metadata={"custom_project": True, "archive_upload_complete": True},
+            )
+            session.add(submission)
+            session.commit()
+            session.add_all([
+                ProjectSubmissionZipChunk(submission_id=submission.id, sequence=0, payload=b"chunk-a"),
+                ProjectSubmissionZipChunk(submission_id=submission.id, sequence=1, payload=b"chunk-b"),
+            ])
+            session.commit()
+            phase5_routes.SessionLocal = TestSessionLocal
+            response = _download_project_zip(submission, is_public=True, db=session)
+            async def collect_stream():
+                parts = []
+                async for part in response.body_iterator:
+                    parts.append(part)
+                return b"".join(parts)
+            assert asyncio.run(collect_stream()) == b"chunk-achunk-b"
+        finally:
+            phase5_routes.SessionLocal = old_session_factory
+            session.close()
+            engine.dispose()
 
     # Old JSON-bundle submissions must remain downloadable as a generated ZIP.
     class LegacySubmission:
