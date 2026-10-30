@@ -1,8 +1,0 @@
-{
-  "id": "expressjs-exercise-solution-018",
-  "exercise_id": "expressjs-exercise-018",
-  "visibility": "protected_content_repository_only",
-  "status": "draft",
-  "answer": "Reference approach for External API Integration:\n\napp.get('/api/external-status', async (_req, res, next) => {\n  try {\n    const response = await fetch('https://api.example.com/status', { signal: AbortSignal.timeout(3000) });\n    if (!response.ok) return res.status(502).json({ error: 'Upstream service failed' });\n    const data = await response.json();\n    if (typeof data.status !== 'string') return res.status(502).json({ error: 'Unexpected upstream response' });\n    res.json({ status: data.status });\n  } catch (error) { next(error); }\n});\n\nReview the prompt's acceptance criteria. This is a teaching fragment; integrate it into a complete app, install listed external packages, and run it locally with a supported Node.js LTS release.\n\nRequired markers checked by the current CodeLeaf static grader: AbortSignal.timeout, response.ok.",
-  "explanation": "The grader for External API Integration checks required strings only. It does not execute arbitrary JavaScript, validate runtime semantics, or prove security. A reviewer should test normal input, invalid input, route order, error propagation, and cleanup where relevant."
-}

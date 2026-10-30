@@ -1,8 +1,0 @@
-{
-  "id": "expressjs-exercise-solution-005",
-  "exercise_id": "expressjs-exercise-005",
-  "visibility": "protected_content_repository_only",
-  "status": "draft",
-  "answer": "Reference approach for Calculator API:\n\nimport express from 'express';\nconst app = express();\napp.use(express.json({ limit: '100kb' }));\napp.post('/api/items', (req, res) => { if (!req.body?.name) return res.status(400).json({ error: 'name required' }); res.status(201).json({ name: req.body.name }); });\napp.listen(3000);\n\nReview the prompt's acceptance criteria. This is a teaching fragment; integrate it into a complete app, install listed external packages, and run it locally with a supported Node.js LTS release.\n\nRequired markers checked by the current CodeLeaf static grader: express.json, res.status, 400.",
-  "explanation": "The grader for Calculator API checks required strings only. It does not execute arbitrary JavaScript, validate runtime semantics, or prove security. A reviewer should test normal input, invalid input, route order, error propagation, and cleanup where relevant."
-}

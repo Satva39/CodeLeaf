@@ -1,8 +1,0 @@
-{
-  "id": "expressjs-exercise-solution-016",
-  "exercise_id": "expressjs-exercise-016",
-  "visibility": "protected_content_repository_only",
-  "status": "draft",
-  "answer": "Reference approach for Role-Based Permissions:\n\n// Authorization should use verified server-side identity.\nfunction requireRole(role) { return (req, res, next) => req.user?.roles?.includes(role) ? next() : res.status(403).json({ error: 'Forbidden' }); }\napp.get('/api/admin', requireRole('admin'), (_req, res) => res.json({ ok: true }));\n\nReview the prompt's acceptance criteria. This is a teaching fragment; integrate it into a complete app, install listed external packages, and run it locally with a supported Node.js LTS release.\n\nRequired markers checked by the current CodeLeaf static grader: requireRole, 403.",
-  "explanation": "The grader for Role-Based Permissions checks required strings only. It does not execute arbitrary JavaScript, validate runtime semantics, or prove security. A reviewer should test normal input, invalid input, route order, error propagation, and cleanup where relevant."
-}

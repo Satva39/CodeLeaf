@@ -1,8 +1,0 @@
-{
-  "id": "expressjs-exercise-solution-010",
-  "exercise_id": "expressjs-exercise-010",
-  "visibility": "protected_content_repository_only",
-  "status": "draft",
-  "answer": "Reference approach for Error Response Practice:\n\nimport express from 'express';\nconst app = express();\napp.get('/api/example', (_req, _res) => { throw new Error('lab failure'); });\napp.use((err, req, res, next) => { if (res.headersSent) return next(err); res.status(500).json({ error: 'Internal server error' }); });\napp.listen(3000);\n\nReview the prompt's acceptance criteria. This is a teaching fragment; integrate it into a complete app, install listed external packages, and run it locally with a supported Node.js LTS release.\n\nRequired markers checked by the current CodeLeaf static grader: err, res.status, next.",
-  "explanation": "The grader for Error Response Practice checks required strings only. It does not execute arbitrary JavaScript, validate runtime semantics, or prove security. A reviewer should test normal input, invalid input, route order, error propagation, and cleanup where relevant."
-}

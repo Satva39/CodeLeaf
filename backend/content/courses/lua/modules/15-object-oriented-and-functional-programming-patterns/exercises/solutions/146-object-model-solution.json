@@ -1,9 +1,0 @@
-{
-  "id": "lua-exercise-solution-146",
-  "exercise_id": "lua-exercise-146",
-  "visibility": "protected_content_repository_only",
-  "answer": "local Player = {}\nPlayer.__index = Player\nfunction Player.new(name, score)\n    assert(type(name) == \"string\" and name ~= \"\", \"name required\")\n    return setmetatable({ name = name, score = score or 0 }, Player)\nend\nfunction Player:add_points(points) self.score = self.score + points end\nlocal player = Player.new(\"Mina\", 5)\nplayer:add_points(3)\nprint(player.name, player.score)",
-  "explanation": "Reference implementation for Object Model. Review it against the prompt, run under the supported runtime, and test normal plus boundary/error cases. This answer is repository-only and must never be returned by a public course API.",
-  "status": "draft",
-  "solution_code": "local Player = {}\nPlayer.__index = Player\nfunction Player.new(name, score)\n    assert(type(name) == \"string\" and name ~= \"\", \"name required\")\n    return setmetatable({ name = name, score = score or 0 }, Player)\nend\nfunction Player:add_points(points) self.score = self.score + points end\nlocal player = Player.new(\"Mina\", 5)\nplayer:add_points(3)\nprint(player.name, player.score)"
-}

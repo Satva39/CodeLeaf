@@ -1,8 +1,0 @@
-{
-  "id": "expressjs-exercise-solution-003",
-  "exercise_id": "expressjs-exercise-003",
-  "visibility": "protected_content_repository_only",
-  "status": "draft",
-  "answer": "Reference approach for User Profile API:\n\nimport express from 'express';\nconst app = express();\napp.get('/api/users/:id', (req, res) => {\n  const id = req.params.id;\n  if (!/^\\d+$/.test(id)) return res.status(400).json({ error: 'Invalid id' });\n  res.json({ id: Number(id) });\n});\napp.listen(3000);\n\nReview the prompt's acceptance criteria. This is a teaching fragment; integrate it into a complete app, install listed external packages, and run it locally with a supported Node.js LTS release.\n\nRequired markers checked by the current CodeLeaf static grader: req.params, res.json.",
-  "explanation": "The grader for User Profile API checks required strings only. It does not execute arbitrary JavaScript, validate runtime semantics, or prove security. A reviewer should test normal input, invalid input, route order, error propagation, and cleanup where relevant."
-}

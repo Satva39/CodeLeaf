@@ -1,9 +1,0 @@
-{
-  "id": "lua-exercise-solution-070",
-  "exercise_id": "lua-exercise-070",
-  "visibility": "protected_content_repository_only",
-  "answer": "local function deep_copy(value, seen)\n    if type(value) ~= \"table\" then return value end\n    seen = seen or {}\n    if seen[value] then return seen[value] end\n    local copy = {}; seen[value] = copy\n    for key, child in pairs(value) do\n        copy[deep_copy(key, seen)] = deep_copy(child, seen)\n    end\n    return setmetatable(copy, getmetatable(value))\nend\nlocal original = { label = \"sample\" }; original.self = original\nlocal clone = deep_copy(original)\nprint(clone ~= original, clone.self == clone)",
-  "explanation": "Reference implementation for Deep-Copy Utility. Review it against the prompt, run under the supported runtime, and test normal plus boundary/error cases. This answer is repository-only and must never be returned by a public course API.",
-  "status": "draft",
-  "solution_code": "local function deep_copy(value, seen)\n    if type(value) ~= \"table\" then return value end\n    seen = seen or {}\n    if seen[value] then return seen[value] end\n    local copy = {}; seen[value] = copy\n    for key, child in pairs(value) do\n        copy[deep_copy(key, seen)] = deep_copy(child, seen)\n    end\n    return setmetatable(copy, getmetatable(value))\nend\nlocal original = { label = \"sample\" }; original.self = original\nlocal clone = deep_copy(original)\nprint(clone ~= original, clone.self == clone)"
-}

@@ -1,8 +1,0 @@
-{
-  "id": "expressjs-exercise-solution-028",
-  "exercise_id": "expressjs-exercise-028",
-  "visibility": "protected_content_repository_only",
-  "status": "draft",
-  "answer": "Reference approach for Graceful Shutdown:\n\nconst server = app.listen(process.env.PORT || 3000);\nlet stopping = false;\nprocess.on('SIGTERM', () => {\n  if (stopping) return;\n  stopping = true;\n  server.close(async (error) => {\n    await closeDatabasePool();\n    if (error) process.exitCode = 1;\n  });\n});\n\nReview the prompt's acceptance criteria. This is a teaching fragment; integrate it into a complete app, install listed external packages, and run it locally with a supported Node.js LTS release.\n\nRequired markers checked by the current CodeLeaf static grader: server.close, SIGTERM, closeDatabasePool.",
-  "explanation": "The grader for Graceful Shutdown checks required strings only. It does not execute arbitrary JavaScript, validate runtime semantics, or prove security. A reviewer should test normal input, invalid input, route order, error propagation, and cleanup where relevant."
-}

@@ -1,9 +1,0 @@
-{
-  "id": "lua-exercise-solution-152",
-  "exercise_id": "lua-exercise-152",
-  "visibility": "protected_content_repository_only",
-  "answer": "local function memoize(fn)\n    local cache = {}\n    return function(n)\n        if cache[n] == nil then cache[n] = fn(n) end\n        return cache[n]\n    end\nend\nlocal function square(n) return n * n end\nlocal fast_square = memoize(square)\nprint(fast_square(8), fast_square(8))",
-  "explanation": "Reference implementation for Memoization Utility. Review it against the prompt, run under the supported runtime, and test normal plus boundary/error cases. This answer is repository-only and must never be returned by a public course API.",
-  "status": "draft",
-  "solution_code": "local function memoize(fn)\n    local cache = {}\n    return function(n)\n        if cache[n] == nil then cache[n] = fn(n) end\n        return cache[n]\n    end\nend\nlocal function square(n) return n * n end\nlocal fast_square = memoize(square)\nprint(fast_square(8), fast_square(8))"
-}

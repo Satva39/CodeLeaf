@@ -1,8 +1,0 @@
-{
-  "id": "expressjs-exercise-solution-009",
-  "exercise_id": "expressjs-exercise-009",
-  "visibility": "protected_content_repository_only",
-  "status": "draft",
-  "answer": "Reference approach for Form Processing:\n\nimport express from 'express';\nconst app = express();\napp.use(express.json({ limit: '100kb' }));\napp.post('/api/tasks', (req, res) => {\n  const title = typeof req.body?.title === 'string' ? req.body.title.trim() : '';\n  if (!title) return res.status(400).json({ error: 'title is required' });\n  res.status(201).json({ id: 1, title });\n});\napp.listen(3000);\n\nReview the prompt's acceptance criteria. This is a teaching fragment; integrate it into a complete app, install listed external packages, and run it locally with a supported Node.js LTS release.\n\nRequired markers checked by the current CodeLeaf static grader: express.urlencoded, req.body.",
-  "explanation": "The grader for Form Processing checks required strings only. It does not execute arbitrary JavaScript, validate runtime semantics, or prove security. A reviewer should test normal input, invalid input, route order, error propagation, and cleanup where relevant."
-}

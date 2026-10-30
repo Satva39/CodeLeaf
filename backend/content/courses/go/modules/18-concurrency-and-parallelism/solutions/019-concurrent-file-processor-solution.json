@@ -1,8 +1,0 @@
-{
-  "id": "go-exercise-solution-019",
-  "exercise_id": "go-exercise-019",
-  "visibility": "protected_content_repository_only",
-  "status": "draft",
-  "answer": "package main\nimport (\"context\"; \"fmt\"; \"sync\")\nfunc worker(ctx context.Context,jobs <-chan string,results chan<- string,wg *sync.WaitGroup){defer wg.Done();for{select{case <-ctx.Done():return;case job,ok:=<-jobs:if !ok{return};select{case results<-job+\" processed\":case <-ctx.Done():return}}}}\nfunc main(){ctx,cancel:=context.WithCancel(context.Background());defer cancel();jobs:=make(chan string,3);results:=make(chan string,3);var wg sync.WaitGroup;for i:=0;i<2;i++{wg.Add(1);go worker(ctx,jobs,results,&wg)};for _,f:=range []string{\"a.txt\",\"b.txt\",\"c.txt\"}{jobs<-f};close(jobs);wg.Wait();close(results);for r:=range results{fmt.Println(r)}}",
-  "explanation": "This protected reference solution for Concurrent File Processor demonstrates the central idea (concurrency, worker pool). Complete the stated edge cases, add tests, and validate with a Go toolchain matching the course version before publication."
-}

@@ -1,9 +1,0 @@
-{
-  "id": "nextjs-exercise-solution-022",
-  "exercise_id": "nextjs-exercise-022",
-  "title": "Reference solution: Implement a secure webhook endpoint",
-  "status": "draft",
-  "visibility": "protected_content_repository_only",
-  "answer": "Suggested approach for Implement a secure webhook endpoint:\n1. Implement the requirement in the named App Router convention or trusted server layer.\n2. Add explicit input validation and a user-friendly empty/error/denied state.\n3. Exercise the normal case and at least one boundary case.\n4. Run lint/tests and a production build in the target Next.js version.\n\nStarter to adapt:\nexport async function POST(request) {\n  const signature = request.headers.get('x-provider-signature');\n  if (!signature || !verifySignature(signature, await request.text())) return new Response('Invalid signature', { status: 401 });\n  return Response.json({ received: true });\n}\n\nRequired static markers: x-provider-signature, verifySignature, status: 401. These only provide a limited automatic signal; acceptance criteria must be manually reviewed.",
-  "explanation": "This reference outlines a maintainable solution path for “Implement a secure webhook endpoint” in the context of the supplied course. It is not represented as a complete, production-tested application; adapt the structure, test the edge cases, and verify version-sensitive details. Protected operations must revalidate identity, authorization, and input on the server."
-}

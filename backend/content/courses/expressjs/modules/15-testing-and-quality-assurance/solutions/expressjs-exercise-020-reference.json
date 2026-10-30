@@ -1,8 +1,0 @@
-{
-  "id": "expressjs-exercise-solution-020",
-  "exercise_id": "expressjs-exercise-020",
-  "visibility": "protected_content_repository_only",
-  "status": "draft",
-  "answer": "Reference approach for Automated API Tests:\n\nimport test from 'node:test';\nimport assert from 'node:assert/strict';\nimport express from 'express';\nimport request from 'supertest';\nconst app = express();\napp.get('/health', (_req, res) => res.status(200).json({ status: 'ok' }));\ntest('health endpoint returns an explicit success response', async () => {\n  const response = await request(app).get('/health');\n  assert.equal(response.status, 200);\n  assert.deepEqual(response.body, { status: 'ok' });\n});\n\nReview the prompt's acceptance criteria. This is a teaching fragment; integrate it into a complete app, install listed external packages, and run it locally with a supported Node.js LTS release.\n\nRequired markers checked by the current CodeLeaf static grader: node:test, assert.equal, request(app).",
-  "explanation": "The grader for Automated API Tests checks required strings only. It does not execute arbitrary JavaScript, validate runtime semantics, or prove security. A reviewer should test normal input, invalid input, route order, error propagation, and cleanup where relevant."
-}

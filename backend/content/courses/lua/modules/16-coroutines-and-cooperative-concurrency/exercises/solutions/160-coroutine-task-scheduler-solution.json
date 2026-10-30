@@ -1,9 +1,0 @@
-{
-  "id": "lua-exercise-solution-160",
-  "exercise_id": "lua-exercise-160",
-  "visibility": "protected_content_repository_only",
-  "answer": "local function task(name)\n    coroutine.yield(name .. \": waiting\")\n    return name .. \": complete\"\nend\nlocal jobs = {\n    coroutine.create(function() return task(\"A\") end),\n    coroutine.create(function() return task(\"B\") end),\n}\nfor _, job in ipairs(jobs) do\n    local ok, status = coroutine.resume(job); print(ok, status)\n    local ok2, result = coroutine.resume(job); print(ok2, result)\nend",
-  "explanation": "Reference implementation for Coroutine Task Scheduler. Review it against the prompt, run under the supported runtime, and test normal plus boundary/error cases. This answer is repository-only and must never be returned by a public course API.",
-  "status": "draft",
-  "solution_code": "local function task(name)\n    coroutine.yield(name .. \": waiting\")\n    return name .. \": complete\"\nend\nlocal jobs = {\n    coroutine.create(function() return task(\"A\") end),\n    coroutine.create(function() return task(\"B\") end),\n}\nfor _, job in ipairs(jobs) do\n    local ok, status = coroutine.resume(job); print(ok, status)\n    local ok2, result = coroutine.resume(job); print(ok2, result)\nend"
-}

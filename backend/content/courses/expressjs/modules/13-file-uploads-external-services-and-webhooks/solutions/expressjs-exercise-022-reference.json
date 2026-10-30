@@ -1,8 +1,0 @@
-{
-  "id": "expressjs-exercise-solution-022",
-  "exercise_id": "expressjs-exercise-022",
-  "visibility": "protected_content_repository_only",
-  "status": "draft",
-  "answer": "Reference approach for Secure Webhook:\n\n// Register this route before a general express.json() parser when exact raw bytes are required.\napp.post('/webhooks/provider', express.raw({ type: 'application/json', limit: '256kb' }), (req, res) => {\n  const rawBody = req.body;\n  const signature = req.get('X-Provider-Signature');\n  if (!verifyProviderSignature(rawBody, signature, process.env.WEBHOOK_SECRET)) {\n    return res.status(401).json({ error: 'Invalid signature' });\n  }\n  // Persist provider event ID before performing an idempotent state transition.\n  return res.sendStatus(204);\n});\n\nReview the prompt's acceptance criteria. This is a teaching fragment; integrate it into a complete app, install listed external packages, and run it locally with a supported Node.js LTS release.\n\nRequired markers checked by the current CodeLeaf static grader: express.raw, verifyProviderSignature, eventId.",
-  "explanation": "The grader for Secure Webhook checks required strings only. It does not execute arbitrary JavaScript, validate runtime semantics, or prove security. A reviewer should test normal input, invalid input, route order, error propagation, and cleanup where relevant."
-}

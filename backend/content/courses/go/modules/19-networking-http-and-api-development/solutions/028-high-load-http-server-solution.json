@@ -1,8 +1,0 @@
-{
-  "id": "go-exercise-solution-028",
-  "exercise_id": "go-exercise-028",
-  "visibility": "protected_content_repository_only",
-  "status": "draft",
-  "answer": "package main\nimport (\"fmt\"; \"net/http\"; \"time\")\nfunc main(){mux:=http.NewServeMux();mux.HandleFunc(\"GET /health\",func(w http.ResponseWriter,r *http.Request){w.WriteHeader(http.StatusOK);fmt.Fprintln(w,\"ok\")});srv:=http.Server{Addr:\":8080\",Handler:mux,ReadHeaderTimeout:5*time.Second,ReadTimeout:15*time.Second,WriteTimeout:15*time.Second,IdleTimeout:60*time.Second};fmt.Println(srv.Addr,srv.ReadHeaderTimeout,srv.IdleTimeout)}",
-  "explanation": "This protected reference solution for High-Load HTTP Server demonstrates the central idea (http, timeouts, server). Complete the stated edge cases, add tests, and validate with a Go toolchain matching the course version before publication."
-}

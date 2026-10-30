@@ -1,9 +1,0 @@
-{
-  "id": "nextjs-exercise-solution-026",
-  "exercise_id": "nextjs-exercise-026",
-  "title": "Reference solution: Conduct a security review",
-  "status": "draft",
-  "visibility": "protected_content_repository_only",
-  "answer": "Suggested approach for Conduct a security review:\n1. Implement the requirement in the named App Router convention or trusted server layer.\n2. Add explicit input validation and a user-friendly empty/error/denied state.\n3. Exercise the normal case and at least one boundary case.\n4. Run lint/tests and a production build in the target Next.js version.\n\nStarter to adapt:\nconst user = await verifySession();\nif (!user) throw new Error('Authentication required');\nif (!canEdit(user, resource)) throw new Error('Forbidden');\n\nRequired static markers: verifySession, canEdit, Forbidden. These only provide a limited automatic signal; acceptance criteria must be manually reviewed.",
-  "explanation": "This reference outlines a maintainable solution path for “Conduct a security review” in the context of the supplied course. It is not represented as a complete, production-tested application; adapt the structure, test the edge cases, and verify version-sensitive details. Protected operations must revalidate identity, authorization, and input on the server."
-}

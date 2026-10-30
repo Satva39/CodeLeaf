@@ -1,8 +1,0 @@
-{
-  "id": "go-exercise-solution-029",
-  "exercise_id": "go-exercise-029",
-  "visibility": "protected_content_repository_only",
-  "status": "draft",
-  "answer": "package main\nimport (\"context\"; \"database/sql\"; \"fmt\")\n// The transaction value is a *sql.Tx and is rolled back on every early return.\nfunc transfer(ctx context.Context,db *sql.DB,fromID,toID string,amount int64)error{tx,err:=db.BeginTx(ctx,nil);if err!=nil{return err};defer tx.Rollback();if _,err:=tx.ExecContext(ctx,\"UPDATE accounts SET balance=balance-? WHERE id=? AND balance>=?\",amount,fromID,amount);err!=nil{return err};if _,err:=tx.ExecContext(ctx,\"UPDATE accounts SET balance=balance+? WHERE id=?\",amount,toID);err!=nil{return err};return tx.Commit()}\nfunc main(){fmt.Println(\"Configure a local database/sql driver before invoking transfer.\")}",
-  "explanation": "This protected reference solution for Database Transaction Workflow demonstrates the central idea (sql, transactions). Complete the stated edge cases, add tests, and validate with a Go toolchain matching the course version before publication."
-}

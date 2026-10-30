@@ -1,8 +1,0 @@
-{
-  "id": "go-exercise-solution-024",
-  "exercise_id": "go-exercise-024",
-  "visibility": "protected_content_repository_only",
-  "status": "draft",
-  "answer": "package parser\n\nimport (\"strconv\"; \"testing\")\n\nfunc ParseInt(s string)(int,error){return strconv.Atoi(s)}\n\nfunc FuzzParseInt(f *testing.F){f.Add(\"42\");f.Add(\"not-a-number\");f.Fuzz(func(t *testing.T,input string){_,err:=ParseInt(input);if err!=nil{return}})}\n\n// Run with: go test -fuzz=FuzzParseInt",
-  "explanation": "This protected reference solution for Fuzzing Lab demonstrates the central idea (fuzzing, tests). Complete the stated edge cases, add tests, and validate with a Go toolchain matching the course version before publication."
-}
