@@ -159,14 +159,53 @@ export default function PlansPage() {
         { method: "POST", credentials: "include" },
       );
       const data = await response.json().catch(() => ({}));
-      if (!response.ok)
-        throw new Error(data.detail || "Could not request cancellation.");
+      if (!response.ok) {
+        const detail = data.detail;
+        throw new Error(
+          typeof detail === "string"
+            ? detail
+            : detail?.message || "Could not request cancellation.",
+        );
+      }
       setCheckoutMessage(
-        "Cancellation requested. Your paid access should remain available until the current cycle ends.",
+        data.message || "Auto-renewal cancellation was requested.",
       );
       await refreshBilling();
     } catch (error) {
       setCheckoutMessage(error.message || "Could not cancel the subscription.");
+    } finally {
+      setCancelPending("");
+    }
+  }
+  async function cancelPendingSubscription(checkout) {
+    const subscriptionId = checkout.subscription_id;
+    if (!subscriptionId) return;
+    if (!window.confirm(
+      "This checkout has not created an active membership. Cancel the unpaid Razorpay authorization now?"
+    )) return;
+
+    setCancelPending(subscriptionId);
+    setCheckoutMessage("");
+    try {
+      const response = await apiFetch(
+        `${API_BASE}/api/payments/${encodeURIComponent(subscriptionId)}/cancel`,
+        { method: "POST", credentials: "include" },
+      );
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const detail = data.detail;
+        throw new Error(
+          typeof detail === "string"
+            ? detail
+            : detail?.message || "Could not close the pending checkout.",
+        );
+      }
+      setCheckoutMessage(
+        data.message || "Unpaid checkout closed. No membership was active.",
+      );
+      await refreshBilling();
+    } catch (error) {
+      setCheckoutMessage(error.message || "Could not close the pending checkout.");
     } finally {
       setCancelPending("");
     }
@@ -560,6 +599,65 @@ export default function PlansPage() {
             ))}
           </section>
         )}
+      {(billing?.pending_checkouts || []).length > 0 && (
+        <section className="billing-panel pending-checkouts-panel panel" aria-labelledby="pending-checkouts-title">
+          <div className="section-title-row">
+            <div>
+              <div className="eyebrow">CHECKOUTS NOT YET PAID</div>
+              <h2 id="pending-checkouts-title">Continue or close an unfinished checkout</h2>
+              <p>These attempts are not memberships. Paid access appears only after CodeLeaf verifies the payment.</p>
+            </div>
+            <button
+              className="button button-secondary button-small"
+              onClick={() => void refreshBilling()}
+            >
+              Refresh status
+            </button>
+          </div>
+          {(billing.pending_checkouts || []).map((checkout) => {
+            const plan = PLANS.find((item) => item.id === checkout.plan_id);
+            const busy = pending === checkout.plan_id || cancelPending === checkout.subscription_id;
+            return (
+              <div className="billing-subscription pending-checkout-row" key={checkout.subscription_id || checkout.order_id}>
+                <div>
+                  <strong>{plan?.title || checkout.plan_id} checkout</strong>
+                  <small>Status: {checkout.status} · {checkout.state === "awaiting_payment" ? "Payment not completed" : "Waiting for provider verification"}</small>
+                  <small>{checkout.message}</small>
+                </div>
+                <div className="pending-checkout-actions">
+                  {checkout.kind === "order" && checkout.state === "awaiting_payment" && (
+                    <button
+                      className="button button-primary button-small"
+                      disabled={busy}
+                      onClick={() => plan && void choosePlan(plan)}
+                    >
+                      {busy ? "Opening…" : "Resume payment"}
+                    </button>
+                  )}
+                  {checkout.kind === "subscription" && checkout.state === "awaiting_payment" && checkout.cancelable && (
+                    <button
+                      className="button button-secondary button-small"
+                      disabled={busy}
+                      onClick={() => void cancelPendingSubscription(checkout)}
+                    >
+                      {busy ? "Closing…" : "Cancel unpaid checkout"}
+                    </button>
+                  )}
+                  {checkout.state === "awaiting_verification" && (
+                    <button
+                      className="button button-secondary button-small"
+                      disabled={busy}
+                      onClick={() => void refreshBilling()}
+                    >
+                      Refresh verification
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </section>
+      )}
       {checkoutMessage && (
         <div role="status" className="checkout-message panel">
           <CircleHelp size={17} />
