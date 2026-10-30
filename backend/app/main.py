@@ -4153,7 +4153,7 @@ async def create_payment(
                     "message": "The existing subscription is attached to a different Razorpay plan. Contact support before creating another subscription.",
                 },
             )
-        if provider_status in {"created", "authenticated"}:
+        if provider_status == "created":
             expire_by = parse_epoch(provider_state.get("expire_by"))
             if expire_by is not None and expire_by <= utc_now():
                 try:
@@ -4183,7 +4183,7 @@ async def create_payment(
             return subscription_checkout_response(
                 record, resumed=True, provider_status=provider_status
             )
-        if provider_status in {"active", "pending"}:
+        if provider_status in {"authenticated", "active", "pending"}:
             db.commit()
             raise HTTPException(
                 status_code=409,
@@ -4479,7 +4479,7 @@ def get_billing(
             continue
 
         status_value = record.status.lower()
-        if status_value in {"created", "authenticated"} and record.plan_id not in seen_pending_plans:
+        if status_value == "created" and record.plan_id not in seen_pending_plans:
             pending_checkouts.append({
                 "kind": "subscription",
                 "subscription_id": subscription_id,
@@ -4488,6 +4488,17 @@ def get_billing(
                 "state": "awaiting_payment",
                 "cancelable": True,
                 "message": "Payment has not been confirmed. This is not an active membership.",
+            })
+            seen_pending_plans.add(record.plan_id)
+        elif status_value == "authenticated" and record.plan_id not in seen_pending_plans:
+            pending_checkouts.append({
+                "kind": "subscription",
+                "subscription_id": subscription_id,
+                "plan_id": record.plan_id,
+                "status": status_value,
+                "state": "awaiting_verification",
+                "cancelable": True,
+                "message": "Razorpay has authenticated the subscription, but CodeLeaf has not received a verified paid billing period yet.",
             })
             seen_pending_plans.add(record.plan_id)
         elif status_value in {"active", "pending", "halted", "past_due"} and record.plan_id not in seen_pending_plans:
