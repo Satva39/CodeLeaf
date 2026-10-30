@@ -634,13 +634,17 @@ export default function PlansPage() {
                       {busy ? "Opening…" : "Resume payment"}
                     </button>
                   )}
-                  {checkout.kind === "subscription" && checkout.state === "awaiting_payment" && checkout.cancelable && (
+                  {checkout.kind === "subscription" && checkout.cancelable && (
                     <button
                       className="button button-secondary button-small"
                       disabled={busy}
                       onClick={() => void cancelPendingSubscription(checkout)}
                     >
-                      {busy ? "Closing…" : "Cancel unpaid checkout"}
+                      {busy
+                        ? "Closing…"
+                        : checkout.state === "awaiting_verification"
+                          ? "Cancel pending authorization"
+                          : "Cancel unpaid checkout"}
                     </button>
                   )}
                   {checkout.state === "awaiting_verification" && (
