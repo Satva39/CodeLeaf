@@ -109,6 +109,14 @@ def main() -> None:
             }
         if method == "POST" and path == "/subscriptions/sub-pending-pro-cancel/cancel":
             return {"id": "sub-pending-pro-cancel", "status": "cancelled"}
+        if method == "GET" and path == "/subscriptions/sub-authenticated-pro":
+            return {
+                "id": "sub-authenticated-pro",
+                "status": "authenticated",
+                "plan_id": "plan_pro_test",
+            }
+        if method == "POST" and path == "/subscriptions/sub-authenticated-pro/cancel":
+            return {"id": "sub-authenticated-pro", "status": "cancelled"}
         if method == "GET" and path == "/subscriptions/sub-active-pro":
             return {
                 "id": "sub-active-pro",
@@ -206,6 +214,48 @@ def main() -> None:
         )
         check(close_pending.status_code == 200 and close_pending.json()["cancelled_pending"] is True, "unpaid subscription checkout can be closed without removing a membership")
         check(cancellation_call[2] == {"cancel_at_cycle_end": False}, "unpaid subscription uses immediate cancellation instead of cycle-end cancellation")
+
+        # Authenticated provider authorization is not the same as a fresh created checkout.
+        # It must not reopen a duplicate checkout, but the learner can close it immediately.
+        auth_user = make_user("authenticated")
+        with SessionLocal() as db:
+            db.add(PaymentRecord(
+                user_id=auth_user.id,
+                plan_id="pro",
+                amount_paise=29_900,
+                currency="INR",
+                kind="subscription",
+                status="authenticated",
+                provider_subscription_id="sub-authenticated-pro",
+                provider_payload={"provider_plan_id": "plan_pro_test"},
+            ))
+            db.commit()
+        authenticate(client, auth_user.id)
+        auth_billing = client.get("/api/me/billing").json()
+        auth_pending = auth_billing["pending_checkouts"][0]
+        check(
+            auth_pending["state"] == "awaiting_verification" and auth_pending["cancelable"] is True,
+            "authenticated but unpaid subscription is shown as pending verification, not active membership",
+        )
+        duplicate_auth_checkout = client.post("/api/payments/create", json={"plan_id": "pro"})
+        check(
+            duplicate_auth_checkout.status_code == 409
+            and duplicate_auth_checkout.json()["detail"]["code"] == "SUBSCRIPTION_CONFIRMATION_PENDING",
+            "authenticated subscription does not open another checkout",
+        )
+        auth_cancel = client.post("/api/payments/sub-authenticated-pro/cancel")
+        auth_cancel_call = next(
+            call for call in provider_calls
+            if call[0] == "POST" and call[1] == "/subscriptions/sub-authenticated-pro/cancel"
+        )
+        check(
+            auth_cancel.status_code == 200 and auth_cancel.json()["cancelled_pending"] is True,
+            "authenticated unpaid authorization can be cancelled without changing plan access",
+        )
+        check(
+            auth_cancel_call[2] == {"cancel_at_cycle_end": False},
+            "authenticated unpaid authorization is cancelled immediately",
+        )
 
         # A verified paid subscription must remain a membership and use cycle-end cancellation.
         paid_user = make_user("paid")
