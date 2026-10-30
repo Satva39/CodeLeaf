@@ -321,7 +321,7 @@ export default function PlansPage() {
                   verified.detail || "Subscription verification is pending.",
                 );
               setCheckoutMessage(
-                `${plan.title} subscription payment verified. Account access is being reconciled with Razorpay.`,
+                `${plan.title} checkout details verified. Membership access will appear only after Razorpay confirms the paid billing period.`,
               );
               await refreshBilling();
             } catch (error) {
