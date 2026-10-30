@@ -60,6 +60,7 @@ export default function PlansPage() {
   const [planCatalog, setPlanCatalog] = useState([]);
   const [catalogStatus, setCatalogStatus] = useState("loading");
   const [integrations, setIntegrations] = useState({ ai_available: false, supported_runner_languages: ["python", "javascript"] });
+  const [paymentReadiness, setPaymentReadiness] = useState(null);
   const [cancelPending, setCancelPending] = useState("");
   const navigate = useNavigate();
   async function refreshBilling() {
@@ -79,13 +80,16 @@ export default function PlansPage() {
         setPlanCatalog(items);
         setCatalogStatus(hasCompletePlanCatalog(items) ? "live" : "fallback");
         setIntegrations(catalog.integrations || { ai_available: false, supported_runner_languages: ["python", "javascript"] });
+        setPaymentReadiness(catalog.payments || null);
       } else {
         setPlanCatalog([]);
         setCatalogStatus("fallback");
+        setPaymentReadiness(null);
       }
     } catch {
       setPlanCatalog([]);
       setCatalogStatus("fallback");
+      setPaymentReadiness(null);
       /* The public comparison has a complete local fallback if the API is offline. */
     }
   }
@@ -97,6 +101,16 @@ export default function PlansPage() {
     || (typeof billing?.current_plan === "string" ? billing.current_plan : "");
   const planPriority = { free: 0, pro: 1, max: 2, full_access: 3 };
   const planById = useMemo(() => new Map(mergePlanCatalog(planCatalog).map((plan) => [plan.id, plan])), [planCatalog]);
+  const paymentReadinessUnavailable = !paymentReadiness?.plans;
+  const unavailableCheckoutPlans = useMemo(() => {
+    return ["pro", "max", "full_access"]
+      .filter((planId) => paymentReadiness?.plans?.[planId]?.ready !== true)
+      .map((planId) => ({
+        id: planId,
+        title: PLANS.find((plan) => plan.id === planId)?.title || planId,
+        missing: paymentReadiness?.plans?.[planId]?.missing_environment || [],
+      }));
+  }, [paymentReadiness]);
   const money = (paise) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format((Number(paise) || 0) / 100);
   const formatBytes = (value) => {
     const bytes = Number(value) || 0;
@@ -178,8 +192,18 @@ export default function PlansPage() {
         navigate(`/login?next=${encodeURIComponent("/plans")}`);
         return;
       }
-      if (!response.ok)
-        throw new Error(data.detail || "Payment setup is not configured yet.");
+      if (!response.ok) {
+        const detail = data.detail;
+        const message = typeof detail === "string"
+          ? detail
+          : typeof detail?.message === "string"
+            ? detail.message
+            : "Secure checkout is not configured yet.";
+        const missing = Array.isArray(detail?.missing_environment)
+          ? detail.missing_environment
+          : [];
+        throw new Error(missing.length ? `${message} Missing backend settings: ${missing.join(", ")}.` : message);
+      }
       await loadRazorpayCheckout();
       if (data.kind === "order") {
         const checkout = new window.Razorpay({
@@ -313,6 +337,7 @@ export default function PlansPage() {
           const isCurrent = currentPlanId === p.id;
           const includedInCurrent = Boolean(currentPlanId && (planPriority[currentPlanId] ?? -1) > (planPriority[p.id] ?? -1));
           const lifetimeActive = currentPlanId === "full_access";
+          const checkoutUnavailable = p.id !== "free" && paymentReadiness?.plans?.[p.id]?.ready !== true;
           return (
           <div
             key={p.id}
@@ -359,10 +384,11 @@ export default function PlansPage() {
             </ul>
             <button
               className={`button ${p.id === "max" ? "button-violet" : p.id === "full_access" ? "button-dark" : "button-primary"} button-wide`}
-              disabled={pending === p.id || isCurrent || includedInCurrent || lifetimeActive}
+              disabled={pending === p.id || isCurrent || includedInCurrent || lifetimeActive || checkoutUnavailable}
               onClick={() => choosePlan(p)}
+              title={checkoutUnavailable ? "Secure checkout is not configured for this plan yet." : undefined}
             >
-              {pending === p.id ? "Preparing..." : isCurrent ? "Current plan" : includedInCurrent ? `Included with ${PLANS.find((item) => item.id === currentPlanId)?.title || currentPlanId}` : lifetimeActive ? "Lifetime access active" : p.action}{" "}
+              {pending === p.id ? "Preparing..." : isCurrent ? "Current plan" : includedInCurrent ? `Included with ${PLANS.find((item) => item.id === currentPlanId)?.title || currentPlanId}` : lifetimeActive ? "Lifetime access active" : checkoutUnavailable ? "Checkout unavailable" : p.action}{" "}
               <ArrowRight size={15} />
             </button>
             {p.id !== "full_access" && p.id !== "free" && (
@@ -380,6 +406,24 @@ export default function PlansPage() {
           );
         })}
       </div>
+      {unavailableCheckoutPlans.length > 0 && (
+        <section className="plan-payment-status panel" role="status" aria-live="polite">
+          <div className="eyebrow">SECURE CHECKOUT SETUP</div>
+          <h2>{paymentReadinessUnavailable ? "Payment status cannot be verified" : "Online payments are not configured yet"}</h2>
+          <p>{paymentReadinessUnavailable
+            ? "The live plan API has not confirmed checkout readiness. Paid checkout stays disabled until the backend can be reached and validates its payment configuration."
+            : "Plan access is not granted by a checkout button. CodeLeaf will enable purchases only after the authorized payment account holder completes server-side payment setup and webhook configuration."}</p>
+          {!paymentReadinessUnavailable && <ul>
+            {unavailableCheckoutPlans.map((item) => (
+              <li key={item.id}>
+                <strong>{item.title}:</strong>{" "}
+                {item.missing.length ? `backend settings required: ${item.missing.join(", ")}` : "provider configuration needs to be completed"}
+              </li>
+            ))}
+          </ul>}
+          <small>Only configuration names are shown here. Secret values are never sent to the browser.</small>
+        </section>
+      )}
       <section className="lifetime-terms panel" aria-labelledby="lifetime-access-terms-title">
         <div className="eyebrow">FULL ACCESS · LIFETIME TERMS</div>
         <h2 id="lifetime-access-terms-title">One payment, while CodeLeaf continues to operate</h2>

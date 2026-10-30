@@ -93,8 +93,35 @@ def main() -> None:
     main_module.razorpay_request = fake_provider
     client = TestClient(main_module.app)
     try:
+        catalog_response = client.get("/api/plans")
+        check(catalog_response.status_code == 200, "public plan catalog is available without authentication")
+        catalog = catalog_response.json()
+        check({item["id"] for item in catalog["items"]} == {"free", "pro", "max", "full_access"}, "public catalog returns all four server-owned plans")
+        check(catalog["payments"]["plans"]["full_access"]["ready"] is True, "Full Access readiness requires common credentials and the webhook secret")
+        check("RAZORPAY_PRO_PLAN_ID" in catalog["payments"]["plans"]["pro"]["missing_environment"], "Pro readiness identifies a missing monthly provider plan ID")
+        check("RAZORPAY_MAX_PLAN_ID" in catalog["payments"]["plans"]["max"]["missing_environment"], "Max readiness identifies a missing monthly provider plan ID")
+
         buyer = make_user("payment_buyer")
         authenticate(client, buyer.id)
+
+        # Incomplete checkout configuration must fail clearly without creating an order.
+        saved_payment_settings = (
+            settings.razorpay_key_id,
+            settings.razorpay_key_secret,
+            settings.razorpay_webhook_secret,
+        )
+        settings.razorpay_key_id = None
+        settings.razorpay_key_secret = None
+        settings.razorpay_webhook_secret = None
+        blocked = client.post("/api/payments/create", json={"plan_id": "full_access"})
+        detail = blocked.json().get("detail", {})
+        check(blocked.status_code == 503 and detail.get("code") == "PAYMENT_CONFIGURATION_INCOMPLETE", "checkout fails closed with structured configuration diagnostics")
+        check(set(detail.get("missing_environment", [])) == {"RAZORPAY_KEY_ID", "RAZORPAY_KEY_SECRET", "RAZORPAY_WEBHOOK_SECRET"}, "checkout identifies all missing server settings without exposing secret values")
+        (
+            settings.razorpay_key_id,
+            settings.razorpay_key_secret,
+            settings.razorpay_webhook_secret,
+        ) = saved_payment_settings
 
         created = client.post("/api/payments/create", json={"plan_id": "full_access", "amount": 1})
         check(created.status_code == 200, "Full Access order is created through the mocked provider")

@@ -749,14 +749,58 @@ def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
 
+def payment_checkout_readiness() -> dict[str, Any]:
+    """Expose safe configuration readiness without returning any secret values."""
+    common_missing: list[str] = []
+    if not settings.razorpay_key_id:
+        common_missing.append("RAZORPAY_KEY_ID")
+    if not settings.razorpay_key_secret:
+        common_missing.append("RAZORPAY_KEY_SECRET")
+    if not settings.razorpay_webhook_secret:
+        common_missing.append("RAZORPAY_WEBHOOK_SECRET")
+
+    def plan_status(plan_id: str) -> dict[str, Any]:
+        missing = list(common_missing)
+        if plan_id == "pro" and not settings.razorpay_pro_plan_id:
+            missing.append("RAZORPAY_PRO_PLAN_ID")
+        elif plan_id == "max" and not settings.razorpay_max_plan_id:
+            missing.append("RAZORPAY_MAX_PLAN_ID")
+        return {"ready": not missing, "missing_environment": missing}
+
+    return {
+        "provider": "razorpay",
+        "common_credentials_ready": not common_missing,
+        "webhook_secret_configured": bool(settings.razorpay_webhook_secret),
+        "plans": {
+            "pro": plan_status("pro"),
+            "max": plan_status("max"),
+            "full_access": plan_status("full_access"),
+        },
+        # The API cannot prove that the merchant also saved the webhook URL/events
+        # in the provider dashboard; that is an explicit deployment checklist item.
+        "dashboard_webhook_setup_must_be_verified": True,
+    }
+
+
 def ensure_payment_config() -> tuple[str, str]:
     key_id, key_secret = settings.razorpay_key_id, settings.razorpay_key_secret
-    if not key_id or not key_secret:
+    missing: list[str] = []
+    if not key_id:
+        missing.append("RAZORPAY_KEY_ID")
+    if not key_secret:
+        missing.append("RAZORPAY_KEY_SECRET")
+    if not settings.razorpay_webhook_secret:
+        missing.append("RAZORPAY_WEBHOOK_SECRET")
+    if missing:
         raise HTTPException(
             status_code=503,
-            detail="Razorpay is not configured. Add test-mode credentials to backend/.env.",
+            detail={
+                "code": "PAYMENT_CONFIGURATION_INCOMPLETE",
+                "message": "Secure checkout is temporarily unavailable because the payment provider is not fully configured.",
+                "missing_environment": missing,
+            },
         )
-    return key_id, key_secret
+    return str(key_id), str(key_secret)
 
 
 def active_entitlements(db: Session, user_id: UUID) -> list[Entitlement]:
@@ -3785,7 +3829,8 @@ def list_plans() -> dict[str, Any]:
                 "limits": dict(definition["limits"]),
             }
             for plan_id, definition in PLAN_DEFINITIONS.items()
-        ]
+        ],
+        "payments": payment_checkout_readiness(),
     }
 
 

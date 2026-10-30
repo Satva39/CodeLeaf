@@ -4,6 +4,8 @@ import { pipeline } from "node:stream/promises";
 // Preserve raw request bytes for webhook signature verification and other APIs.
 export const config = { api: { bodyParser: false } };
 
+const DEFAULT_API_ORIGIN = "https://codeleaf-api.onrender.com";
+
 const HOP_BY_HOP_HEADERS = new Set([
   "connection",
   "content-encoding",
@@ -19,8 +21,10 @@ const HOP_BY_HOP_HEADERS = new Set([
 ]);
 
 function configuredApiOrigin() {
-  const configured = process.env.CODELEAF_API_ORIGIN;
-  if (!configured) throw new Error("CODELEAF_API_ORIGIN is not configured.");
+  // Use the known production API origin by default so a missing Vercel env var
+  // cannot silently break the public plan catalog and same-origin API calls.
+  // Deployments can still override this server-side without exposing it to Vite.
+  const configured = (process.env.CODELEAF_API_ORIGIN || DEFAULT_API_ORIGIN).trim();
   const parsed = new URL(configured);
   if (
     !["http:", "https:"].includes(parsed.protocol) ||

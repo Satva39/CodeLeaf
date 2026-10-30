@@ -60,17 +60,17 @@ async function main() {
     };
     process.env.NODE_ENV = "production";
     delete process.env.CODELEAF_API_ORIGIN;
-    const missing = await invoke(request());
-    assert.equal(missing.statusCode, 503);
-    assert.match(missing.body, /CODELEAF_API_ORIGIN is not configured/);
-    assert.equal(fetchCalls.length, 0);
-    console.log("PASS missing API origin fails closed with 503 and no upstream request");
+    const defaulted = await invoke(request());
+    assert.equal(defaulted.statusCode, 201);
+    assert.equal(fetchCalls.length, 1);
+    assert.equal(fetchCalls[0].target, "https://codeleaf-api.onrender.com/api/courses?limit=1");
+    console.log("PASS missing Vercel API origin uses the known production backend without exposing a Vite variable");
 
     process.env.CODELEAF_API_ORIGIN = "https://api.codeleaf.test/base-path";
     const invalid = await invoke(request());
     assert.equal(invalid.statusCode, 502);
     assert.equal(invalid.body, '{"detail":"API proxy unavailable."}');
-    assert.equal(fetchCalls.length, 0);
+    assert.equal(fetchCalls.length, 1);
     console.log("PASS invalid origin is rejected without leaking origin details");
 
     process.env.CODELEAF_API_ORIGIN = "https://api.codeleaf.test";
@@ -83,11 +83,11 @@ async function main() {
       body: postBody,
     }));
     assert.equal(forwarded.statusCode, 201);
-    assert.equal(fetchCalls.length, 1);
-    assert.equal(fetchCalls[0].target, "https://api.codeleaf.test/api/courses?mode=preview");
-    assert.equal(Buffer.from(fetchCalls[0].options.body).toString("utf8"), postBody);
-    assert.equal(fetchCalls[0].options.headers.get("cookie"), "session=incoming");
-    assert.equal(fetchCalls[0].options.headers.has("host"), false);
+    assert.equal(fetchCalls.length, 2);
+    assert.equal(fetchCalls[1].target, "https://api.codeleaf.test/api/courses?mode=preview");
+    assert.equal(Buffer.from(fetchCalls[1].options.body).toString("utf8"), postBody);
+    assert.equal(fetchCalls[1].options.headers.get("cookie"), "session=incoming");
+    assert.equal(fetchCalls[1].options.headers.has("host"), false);
     assert.deepEqual(forwarded.getHeader("set-cookie"), ["session=abc; Path=/; HttpOnly"]);
     assert.equal(forwarded.body, '{"ok":true}');
     console.log("PASS same-origin proxy forwards query/body/cookies and preserves upstream Set-Cookie");
@@ -95,7 +95,7 @@ async function main() {
     const unsafe = await invoke(request({ path: ["..", "private"] }));
     assert.equal(unsafe.statusCode, 400);
     assert.equal(unsafe.body, '{"detail":"Invalid API path."}');
-    assert.equal(fetchCalls.length, 1);
+    assert.equal(fetchCalls.length, 2);
     console.log("PASS path traversal rejected without making an upstream request");
   } finally {
     globalThis.fetch = originalFetch;
