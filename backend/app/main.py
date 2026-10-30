@@ -902,12 +902,7 @@ async def schedule_superseded_subscriptions_for_cancellation(
     target_plan_id: str,
     excluding_subscription_id: str | None = None,
 ) -> None:
-    """Schedule lower-tier monthly memberships to stop renewing after an upgrade.
-
-    Provider failures never roll back a verified higher-tier entitlement. Instead,
-    the failed cancellation is recorded for the account billing UI and retried on a
-    subsequent trusted event or authenticated payment verification.
-    """
+    """Stop lower-tier renewals without sending cycle-end cancellation to unpaid checkouts."""
     target_priority = PLAN_PRIORITY.get(target_plan_id, 0)
     records = db.scalars(
         select(PaymentRecord).where(
@@ -915,28 +910,61 @@ async def schedule_superseded_subscriptions_for_cancellation(
             PaymentRecord.kind == "subscription",
         ).order_by(PaymentRecord.created_at.desc())
     ).all()
+    terminal = {"cancelled", "completed", "expired", "failed", "refunded", "reversed"}
     for record in records:
         sub_id = record.provider_subscription_id
-        status_value = str(record.status or "").lower()
-        provider_payload = dict(record.provider_payload or {})
+        stored_payload = dict(record.provider_payload or {})
         if (
             not sub_id
             or sub_id == excluding_subscription_id
             or PLAN_PRIORITY.get(record.plan_id, 0) >= target_priority
-            or status_value in {"cancelled", "completed", "expired", "failed", "refunded", "reversed"}
-            or provider_payload.get("cancel_at_cycle_end") is True
+            or record.status.lower() in terminal
+            or stored_payload.get("cancel_at_cycle_end") is True
+            or stored_payload.get("pending_checkout_cancelled") is True
         ):
             continue
         try:
-            provider = await razorpay_request(
+            provider_state = await razorpay_request("GET", f"/subscriptions/{sub_id}")
+            provider_status = str(provider_state.get("status") or record.status).lower()
+            if provider_status in terminal:
+                record.status = provider_status
+                continue
+
+            current_start = parse_epoch(provider_state.get("current_start"))
+            current_end = parse_epoch(provider_state.get("current_end"))
+            has_paid_cycle = (
+                provider_status == "active"
+                and current_start is not None
+                and current_end is not None
+                and current_end > utc_now()
+            )
+            if has_paid_cycle:
+                cancel_at_cycle_end = True
+            elif provider_status in {"created", "authenticated"}:
+                # No paid cycle exists yet. Cancel immediately; cycle-end cancellation
+                # is invalid for these provider states.
+                cancel_at_cycle_end = False
+            else:
+                record.provider_payload = {
+                    **stored_payload,
+                    "cancellation_required": True,
+                    "cancellation_reason": f"superseded_by_{target_plan_id}",
+                    "cancellation_error": (
+                        "Provider state has no verifiable current paid billing cycle."
+                    ),
+                }
+                continue
+
+            provider_result = await razorpay_request(
                 "POST",
                 f"/subscriptions/{sub_id}/cancel",
-                {"cancel_at_cycle_end": 1},
+                {"cancel_at_cycle_end": cancel_at_cycle_end},
             )
-            record.status = str(provider.get("status") or record.status)
+            record.status = str(provider_result.get("status") or provider_status)
             record.provider_payload = {
-                **provider_payload,
-                "cancel_at_cycle_end": True,
+                **stored_payload,
+                "cancel_at_cycle_end": cancel_at_cycle_end,
+                "pending_checkout_cancelled": not cancel_at_cycle_end,
                 "cancellation_requested_at": utc_now().isoformat(),
                 "cancellation_reason": f"superseded_by_{target_plan_id}",
                 "cancellation_required": False,
@@ -944,7 +972,7 @@ async def schedule_superseded_subscriptions_for_cancellation(
         except Exception as exc:
             detail = exc.detail if isinstance(exc, HTTPException) else str(exc)
             record.provider_payload = {
-                **provider_payload,
+                **stored_payload,
                 "cancellation_required": True,
                 "cancellation_reason": f"superseded_by_{target_plan_id}",
                 "cancellation_error": str(detail)[:240],
@@ -3929,9 +3957,11 @@ async def create_payment(
     user: User = Depends(require_user),
     db: Session = Depends(get_db),
 ) -> dict[str, Any]:
+    # Serialize checkout creation per account. This prevents parallel clicks from
+    # creating multiple provider orders/subscriptions for the same user and plan.
+    db.scalar(select(User).where(User.id == user.id).with_for_update())
     key_id, _ = ensure_payment_config()
     plan = PLAN_CONFIG[body.plan_id]
-    current_entitlements = active_entitlements(db, user.id)
     current_plan = effective_plan_id(db, user.id)
     if current_plan == "full_access":
         raise HTTPException(
@@ -3948,41 +3978,107 @@ async def create_payment(
             status_code=409,
             detail=f"This account already has {PLAN_DEFINITIONS[current_plan]['title']} access. Choose Max or Full Access to upgrade.",
         )
-    if body.plan_id == "max" and current_plan == "max":
-        raise HTTPException(status_code=409, detail="Max is already active on this account.")
-    # Pro -> Max and either paid monthly plan -> Full Access are supported upgrade paths.
-    # Verified upgrades schedule superseded monthly plans for cancellation at period end.
-    pending_statuses = {"created", "authenticated", "active", "pending", "halted", "past_due"}
-    pending_records = db.scalars(
-        select(PaymentRecord).where(
-            PaymentRecord.user_id == user.id,
-            PaymentRecord.kind == "subscription",
-        ).order_by(PaymentRecord.created_at.desc())
-    ).all()
-    same_plan_pending = [
-        record for record in pending_records
-        if record.plan_id == body.plan_id and record.status.lower() in pending_statuses
-    ]
-    if body.plan_id in {"pro", "max"} and same_plan_pending:
-        raise HTTPException(
-            status_code=409,
-            detail="A subscription checkout for this plan is already open or active. Refresh billing status before starting another checkout.",
-        )
+
+    def order_checkout_response(record: PaymentRecord, *, resumed: bool) -> dict[str, Any]:
+        return {
+            "kind": "order",
+            "key_id": key_id,
+            "order_id": record.provider_order_id,
+            "amount": record.amount_paise,
+            "currency": record.currency,
+            "name": "CodeLeaf",
+            "description": "Full Access — lifetime platform access",
+            "prefill": {"email": user.email, "name": user.display_name},
+            "resumed": resumed,
+        }
+
+    def subscription_checkout_response(
+        record: PaymentRecord, *, resumed: bool, provider_status: str
+    ) -> dict[str, Any]:
+        return {
+            "kind": "subscription",
+            "key_id": key_id,
+            "subscription_id": record.provider_subscription_id,
+            "plan_id": body.plan_id,
+            "name": "CodeLeaf",
+            "description": f"{plan['title']} monthly membership",
+            "prefill": {"email": user.email, "name": user.display_name},
+            "status": provider_status,
+            "billing_cycles": int((record.provider_payload or {}).get("total_count") or settings.razorpay_subscription_total_count),
+            "resumed": resumed,
+        }
+
     if body.plan_id == "full_access":
-        recent_lifetime_order = db.scalar(
+        # A created/attempted Razorpay order remains payable. Reuse it instead of
+        # creating a new order or blocking the learner with a permanent 409.
+        open_orders = db.scalars(
             select(PaymentRecord).where(
                 PaymentRecord.user_id == user.id,
                 PaymentRecord.plan_id == "full_access",
                 PaymentRecord.kind == "order",
-                PaymentRecord.status.in_({"created", "authorized", "authenticated", "pending"}),
-                PaymentRecord.created_at >= utc_now() - timedelta(minutes=30),
+                PaymentRecord.status.in_({"created", "attempted", "authorized", "authenticated", "pending", "failed"}),
             ).order_by(PaymentRecord.created_at.desc())
-        )
-        if recent_lifetime_order is not None:
+        ).all()
+        for record in open_orders:
+            if not record.provider_order_id:
+                continue
+            try:
+                provider_order = await razorpay_request(
+                    "GET", f"/orders/{record.provider_order_id}"
+                )
+            except HTTPException as exc:
+                if exc.status_code == 404:
+                    record.status = "expired"
+                    continue
+                raise HTTPException(
+                    status_code=503,
+                    detail={
+                        "code": "PENDING_ORDER_CHECK_FAILED",
+                        "message": "CodeLeaf could not verify the unfinished Full Access checkout. Refresh billing status and try again; no new order was created.",
+                    },
+                ) from exc
+
+            provider_status = str(provider_order.get("status") or "").lower()
+            if provider_status in {"created", "attempted"}:
+                if (
+                    int(provider_order.get("amount") or 0) != record.amount_paise
+                    or provider_order.get("currency") != record.currency
+                ):
+                    raise HTTPException(
+                        status_code=409,
+                        detail={
+                            "code": "PENDING_ORDER_MISMATCH",
+                            "message": "The existing checkout does not match the configured Full Access price. Contact support before retrying.",
+                        },
+                    )
+                record.status = "created"
+                db.commit()
+                return order_checkout_response(record, resumed=True)
+            if provider_status == "paid":
+                record.provider_payload = {
+                    **(record.provider_payload or {}),
+                    "provider_order_paid_seen": True,
+                    "payment_reconciliation_pending": True,
+                }
+                db.commit()
+                raise HTTPException(
+                    status_code=409,
+                    detail={
+                        "code": "PAYMENT_RECONCILIATION_PENDING",
+                        "message": "Razorpay reports that this order has been paid. CodeLeaf is waiting for verified payment confirmation; refresh your membership status before starting another payment.",
+                    },
+                )
+            if provider_status in {"cancelled", "expired"}:
+                record.status = provider_status
+                continue
             raise HTTPException(
                 status_code=409,
-                detail="A recent Full Access checkout is already pending for this account. Finish or wait for that checkout before creating another order.",
+                detail={
+                    "code": "PENDING_ORDER_STATUS_UNCLEAR",
+                    "message": "The previous Full Access checkout is still being checked by Razorpay. Please refresh billing status before trying again.",
+                },
             )
+
         receipt = f"ca-{secrets.token_hex(12)}"
         provider = await razorpay_request(
             "POST",
@@ -4006,16 +4102,7 @@ async def create_payment(
         )
         db.add(record)
         db.commit()
-        return {
-            "kind": "order",
-            "key_id": key_id,
-            "order_id": provider["id"],
-            "amount": plan["amount_paise"],
-            "currency": "INR",
-            "name": "CodeLeaf",
-            "description": "Full Access — lifetime platform access",
-            "prefill": {"email": user.email, "name": user.display_name},
-        }
+        return order_checkout_response(record, resumed=False)
 
     provider_plan_id = (
         settings.razorpay_pro_plan_id
@@ -4027,6 +4114,119 @@ async def create_payment(
             status_code=503,
             detail=f"Set RAZORPAY_{body.plan_id.upper()}_PLAN_ID after creating the matching monthly plan in Razorpay.",
         )
+
+    pending_statuses = {"created", "authenticated", "pending", "active", "halted", "past_due"}
+    pending_records = db.scalars(
+        select(PaymentRecord).where(
+            PaymentRecord.user_id == user.id,
+            PaymentRecord.plan_id == body.plan_id,
+            PaymentRecord.kind == "subscription",
+            PaymentRecord.status.in_(pending_statuses),
+        ).order_by(PaymentRecord.created_at.desc())
+    ).all()
+    for record in pending_records:
+        if not record.provider_subscription_id:
+            continue
+        try:
+            provider_state = await razorpay_request(
+                "GET", f"/subscriptions/{record.provider_subscription_id}"
+            )
+        except HTTPException as exc:
+            if exc.status_code == 404:
+                record.status = "expired"
+                continue
+            raise HTTPException(
+                status_code=503,
+                detail={
+                    "code": "PENDING_SUBSCRIPTION_CHECK_FAILED",
+                    "message": "CodeLeaf could not verify the unfinished subscription. Refresh billing status and try again; a duplicate subscription was not created.",
+                },
+            ) from exc
+
+        provider_status = str(provider_state.get("status") or "").lower()
+        record.status = provider_status or record.status
+        if provider_state.get("plan_id") and provider_state.get("plan_id") != provider_plan_id:
+            raise HTTPException(
+                status_code=409,
+                detail={
+                    "code": "PENDING_SUBSCRIPTION_PLAN_MISMATCH",
+                    "message": "The existing subscription is attached to a different Razorpay plan. Contact support before creating another subscription.",
+                },
+            )
+        if provider_status in {"created", "authenticated"}:
+            expire_by = parse_epoch(provider_state.get("expire_by"))
+            if expire_by is not None and expire_by <= utc_now():
+                try:
+                    cancelled = await razorpay_request(
+                        "POST",
+                        f"/subscriptions/{record.provider_subscription_id}/cancel",
+                        {"cancel_at_cycle_end": False},
+                    )
+                    record.status = str(cancelled.get("status") or "cancelled")
+                    record.provider_payload = {
+                        **(record.provider_payload or {}),
+                        "pending_checkout_cancelled": True,
+                        "expired_authorization_cancelled_at": utc_now().isoformat(),
+                    }
+                    db.flush()
+                    continue
+                except Exception as exc:
+                    detail = exc.detail if isinstance(exc, HTTPException) else str(exc)
+                    raise HTTPException(
+                        status_code=409,
+                        detail={
+                            "code": "EXPIRED_CHECKOUT_CLEANUP_REQUIRED",
+                            "message": f"The previous authorization window has expired and Razorpay could not close it automatically. Contact support before retrying. {str(detail)[:180]}",
+                        },
+                    ) from exc
+            db.commit()
+            return subscription_checkout_response(
+                record, resumed=True, provider_status=provider_status
+            )
+        if provider_status in {"active", "pending"}:
+            db.commit()
+            raise HTTPException(
+                status_code=409,
+                detail={
+                    "code": "SUBSCRIPTION_CONFIRMATION_PENDING",
+                    "message": "Razorpay has already advanced this subscription. CodeLeaf is waiting for its signed billing event; refresh membership status instead of creating another subscription.",
+                },
+            )
+        if provider_status == "halted":
+            try:
+                cancelled = await razorpay_request(
+                    "POST",
+                    f"/subscriptions/{record.provider_subscription_id}/cancel",
+                    {"cancel_at_cycle_end": False},
+                )
+                record.status = str(cancelled.get("status") or "cancelled")
+                record.provider_payload = {
+                    **(record.provider_payload or {}),
+                    "superseded_after_halt_at": utc_now().isoformat(),
+                }
+                db.flush()
+                continue
+            except Exception as exc:
+                detail = exc.detail if isinstance(exc, HTTPException) else str(exc)
+                raise HTTPException(
+                    status_code=409,
+                    detail={
+                        "code": "HALTED_SUBSCRIPTION_CLEANUP_REQUIRED",
+                        "message": f"The previous subscription is halted and must be reconciled before another can be created. {str(detail)[:180]}",
+                    },
+                ) from exc
+        if provider_status in {"cancelled", "completed", "expired"}:
+            record.status = provider_status
+            db.flush()
+            continue
+        raise HTTPException(
+            status_code=409,
+            detail={
+                "code": "SUBSCRIPTION_STATUS_UNCLEAR",
+                "message": "The previous subscription has an unrecognized provider state. Contact support before creating another subscription.",
+            },
+        )
+
     provider_plan = await razorpay_request("GET", f"/plans/{provider_plan_id}")
     item = provider_plan.get("item") or {}
     if (
@@ -4071,17 +4271,11 @@ async def create_payment(
     )
     db.add(record)
     db.commit()
-    return {
-        "kind": "subscription",
-        "key_id": key_id,
-        "subscription_id": provider["id"],
-        "plan_id": body.plan_id,
-        "name": "CodeLeaf",
-        "description": f"{plan['title']} monthly membership",
-        "prefill": {"email": user.email, "name": user.display_name},
-        "status": provider.get("status", "created"),
-        "billing_cycles": total_count,
-    }
+    return subscription_checkout_response(
+        record,
+        resumed=False,
+        provider_status=str(provider.get("status") or "created").lower(),
+    )
 
 
 @app.post("/api/payments/verify")
@@ -4228,9 +4422,18 @@ def get_billing(
     user: User = Depends(require_user), db: Session = Depends(get_db)
 ) -> dict[str, Any]:
     entitlements = active_entitlements(db, user.id)
-    records = db.scalars(
+    subscription_records = db.scalars(
         select(PaymentRecord)
         .where(PaymentRecord.user_id == user.id, PaymentRecord.kind == "subscription")
+        .order_by(PaymentRecord.created_at.desc())
+    ).all()
+    order_records = db.scalars(
+        select(PaymentRecord)
+        .where(
+            PaymentRecord.user_id == user.id,
+            PaymentRecord.kind == "order",
+            PaymentRecord.plan_id == "full_access",
+        )
         .order_by(PaymentRecord.created_at.desc())
     ).all()
     entitlement_by_subscription = {
@@ -4238,8 +4441,84 @@ def get_billing(
         for e in entitlements
         if e.provider_subscription_id
     }
-    terminal = {"cancelled", "completed", "expired"}
     current_plan = effective_plan_id(db, user.id)
+    now = utc_now()
+
+    memberships: list[dict[str, Any]] = []
+    pending_checkouts: list[dict[str, Any]] = []
+    seen_pending_plans: set[str] = set()
+
+    # A subscription is shown as a membership only when it has a matching,
+    # currently valid, server-verified entitlement.
+    for record in subscription_records:
+        subscription_id = record.provider_subscription_id
+        if not subscription_id:
+            continue
+        entitlement = entitlement_by_subscription.get(subscription_id)
+        payload = dict(record.provider_payload or {})
+        if entitlement is not None:
+            period_end = entitlement.ends_at
+            if period_end is not None and period_end.tzinfo is None:
+                period_end = period_end.replace(tzinfo=timezone.utc)
+            memberships.append({
+                "subscription_id": subscription_id,
+                "plan_id": record.plan_id,
+                "status": record.status,
+                "amount_paise": record.amount_paise,
+                "ends_at": period_end.isoformat() if period_end else None,
+                "cancelable": bool(
+                    record.status.lower() in {"active", "halted"}
+                    and period_end is not None
+                    and period_end > now
+                    and not payload.get("cancel_at_cycle_end")
+                ),
+                "cancellation_scheduled": bool(payload.get("cancel_at_cycle_end")),
+                "cancellation_required": bool(payload.get("cancellation_required")),
+                "cancellation_error": payload.get("cancellation_error"),
+            })
+            continue
+
+        status_value = record.status.lower()
+        if status_value in {"created", "authenticated"} and record.plan_id not in seen_pending_plans:
+            pending_checkouts.append({
+                "kind": "subscription",
+                "subscription_id": subscription_id,
+                "plan_id": record.plan_id,
+                "status": status_value,
+                "state": "awaiting_payment",
+                "cancelable": True,
+                "message": "Payment has not been confirmed. This is not an active membership.",
+            })
+            seen_pending_plans.add(record.plan_id)
+        elif status_value in {"active", "pending", "halted", "past_due"} and record.plan_id not in seen_pending_plans:
+            pending_checkouts.append({
+                "kind": "subscription",
+                "subscription_id": subscription_id,
+                "plan_id": record.plan_id,
+                "status": status_value,
+                "state": "awaiting_verification",
+                "cancelable": False,
+                "message": "Razorpay has advanced this subscription, but CodeLeaf has not received a verified active entitlement yet.",
+            })
+            seen_pending_plans.add(record.plan_id)
+
+    if current_plan != "full_access":
+        for record in order_records:
+            if record.status.lower() not in {"created", "attempted", "authorized", "authenticated", "pending", "failed"}:
+                continue
+            if "full_access" in seen_pending_plans:
+                break
+            pending_checkouts.append({
+                "kind": "order",
+                "order_id": record.provider_order_id,
+                "plan_id": "full_access",
+                "status": record.status,
+                "state": "awaiting_payment",
+                "cancelable": False,
+                "message": "Full Access has not been purchased yet. Resume this checkout to continue; no lifetime entitlement is active.",
+            })
+            seen_pending_plans.add("full_access")
+
     return {
         "current_plan": {
             "id": current_plan,
@@ -4251,38 +4530,14 @@ def get_billing(
         "limits": plan_limits(current_plan),
         "entitlements": [
             {
-                "plan_id": e.plan_id,
-                "status": e.status,
-                "ends_at": e.ends_at.isoformat() if e.ends_at else None,
+                "plan_id": entitlement.plan_id,
+                "status": entitlement.status,
+                "ends_at": entitlement.ends_at.isoformat() if entitlement.ends_at else None,
             }
-            for e in entitlements
+            for entitlement in entitlements
         ],
-        "subscriptions": [
-            {
-                "subscription_id": r.provider_subscription_id,
-                "plan_id": r.plan_id,
-                "status": r.status,
-                "amount_paise": r.amount_paise,
-                "ends_at": (
-                    entitlement_by_subscription.get(
-                        r.provider_subscription_id
-                    ).ends_at.isoformat()
-                    if entitlement_by_subscription.get(r.provider_subscription_id)
-                    and entitlement_by_subscription[r.provider_subscription_id].ends_at
-                    else None
-                ),
-                "cancelable": bool(
-                    r.provider_subscription_id
-                    and r.status.lower() not in terminal
-                    and not (r.provider_payload or {}).get("cancel_at_cycle_end")
-                ),
-                "cancellation_scheduled": bool((r.provider_payload or {}).get("cancel_at_cycle_end")),
-                "cancellation_required": bool((r.provider_payload or {}).get("cancellation_required")),
-                "cancellation_error": (r.provider_payload or {}).get("cancellation_error"),
-            }
-            for r in records
-            if r.provider_subscription_id
-        ],
+        "subscriptions": memberships,
+        "pending_checkouts": pending_checkouts,
     }
 
 
@@ -4303,26 +4558,99 @@ async def cancel_subscription(
         raise HTTPException(
             status_code=404, detail="Subscription was not found for this account."
         )
-    if record.status.lower() in {"cancelled", "completed", "expired"}:
+
+    try:
+        provider_state = await razorpay_request(
+            "GET", f"/subscriptions/{subscription_id}"
+        )
+    except HTTPException as exc:
+        if exc.status_code == 404:
+            record.status = "expired"
+            db.commit()
+            return {
+                "ok": True,
+                "cancelled": True,
+                "message": "The unpaid checkout no longer exists with Razorpay. No membership was active.",
+            }
+        raise
+
+    provider_status = str(provider_state.get("status") or record.status).lower()
+    if provider_status in {"cancelled", "completed", "expired"}:
+        record.status = provider_status
+        db.commit()
+        return {
+            "ok": True,
+            "cancelled": True,
+            "message": "This subscription is already closed. No further cancellation is required.",
+        }
+
+    user_entitlements = active_entitlements(db, user.id)
+    matching_entitlement = next(
+        (
+            entitlement
+            for entitlement in user_entitlements
+            if entitlement.provider_subscription_id == subscription_id
+        ),
+        None,
+    )
+    current_start = parse_epoch(provider_state.get("current_start"))
+    current_end = parse_epoch(provider_state.get("current_end"))
+    has_paid_current_cycle = (
+        matching_entitlement is not None
+        and provider_status in {"active", "halted"}
+        and current_start is not None
+        and current_end is not None
+        and current_end > utc_now()
+    )
+    payload = dict(record.provider_payload or {})
+    if payload.get("cancel_at_cycle_end") is True:
+        return {
+            "ok": True,
+            "status": provider_status,
+            "cancellation_scheduled": True,
+            "message": "Auto-renewal cancellation is already scheduled.",
+        }
+
+    if has_paid_current_cycle:
+        cancel_at_cycle_end = True
+    elif matching_entitlement is None and provider_status in {"created", "authenticated"}:
+        # An unpaid/unauthorized checkout has no paid cycle to preserve. Close it now.
+        cancel_at_cycle_end = False
+    else:
         raise HTTPException(
             status_code=409,
-            detail="This subscription is already cancelled or completed.",
+            detail={
+                "code": "SUBSCRIPTION_NOT_CANCELLABLE",
+                "message": "This subscription has no verified paid billing cycle to cancel at period end. Refresh membership status; no cancellation request was sent.",
+                "provider_status": provider_status,
+            },
         )
-    provider = await razorpay_request(
-        "POST", f"/subscriptions/{subscription_id}/cancel", {"cancel_at_cycle_end": 1}
+
+    provider_result = await razorpay_request(
+        "POST",
+        f"/subscriptions/{subscription_id}/cancel",
+        {"cancel_at_cycle_end": cancel_at_cycle_end},
     )
-    record.status = provider.get("status", record.status)
+    record.status = str(provider_result.get("status") or provider_status)
     record.provider_payload = {
-        **(record.provider_payload or {}),
-        "cancel_at_cycle_end": True,
+        **payload,
+        "cancel_at_cycle_end": cancel_at_cycle_end,
+        "pending_checkout_cancelled": not cancel_at_cycle_end,
         "cancellation_requested_at": utc_now().isoformat(),
     }
-    # Existing entitlement remains effective through the verified period end.
     db.commit()
+    if cancel_at_cycle_end:
+        return {
+            "ok": True,
+            "status": record.status,
+            "cancellation_scheduled": True,
+            "message": "Auto-renewal is scheduled to stop at the end of the paid billing period. Existing paid access remains until then.",
+        }
     return {
         "ok": True,
         "status": record.status,
-        "message": "Cancellation was requested at the end of the current billing cycle.",
+        "cancelled_pending": True,
+        "message": "Unpaid checkout cancelled immediately. No membership access was removed because no paid entitlement was active.",
     }
 
 
@@ -4480,8 +4808,16 @@ async def payment_webhook(
             record = db.scalar(
                 select(PaymentRecord).where(PaymentRecord.provider_subscription_id == sub_id)
             )
-        if record and record.status not in {"paid", "refunded"}:
-            record.status = "failed"
+        if record and record.status not in {"paid", "refunded", "reversed"}:
+            record.provider_payload = {
+                **(record.provider_payload or {}),
+                "last_payment_failed_at": utc_now().isoformat(),
+                "last_payment_failure_code": str(payment_entity.get("error_code") or "")[:80],
+                "last_payment_failure_description": str(payment_entity.get("error_description") or "")[:240],
+            }
+            # A failed attempt does not close a Razorpay order or prove a subscription
+            # is terminal. Keep the provider object resumable; signed subscription
+            # lifecycle events remain authoritative for access.
     elif event_name in {"payment.refunded", "refund.processed"}:
         payment_id = payment_entity.get("id") or refund_entity.get("payment_id")
         order_id = payment_entity.get("order_id")
