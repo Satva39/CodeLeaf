@@ -22,6 +22,7 @@ from .models import (
     ExamAttempt, ExerciseProgress, LessonProgress, PaymentRecord, ProjectSubmission,
     User, UserActivityDay, XPTransaction,
 )
+from .storage import StorageError, get_catalyst_storage
 from .schemas import (
     AccountDeleteInput, ChangeEmailInput, ChangePasswordInput, EmailInput,
     LoginInput, RegisterInput, ResetPasswordInput, VerifyEmailInput,
@@ -225,6 +226,38 @@ def delete_account(body: AccountDeleteInput, request: Request, response: Respons
     record_auth_attempt(db, request, "delete_account", str(user.id))
     if not verify_password(body.password, user.password_hash):
         raise HTTPException(status_code=400, detail="Password is incorrect.")
+    # Persist deletion intent before touching external objects. If Stratus is unavailable,
+    # account deletion remains retryable and project metadata is not detached from its files.
+    project_rows = db.scalars(
+        select(ProjectSubmission).where(ProjectSubmission.user_id == user.id)
+    ).all()
+    stratus_rows = [
+        row for row in project_rows
+        if row.storage_provider == "catalyst_stratus" and row.storage_key and row.object_status != "object_deleted"
+    ]
+    if stratus_rows:
+        storage = get_catalyst_storage()
+        if storage is None:
+            raise HTTPException(
+                status_code=503,
+                detail="Catalyst storage is not configured. Account deletion was not completed; retry when storage is available.",
+            )
+        for row in stratus_rows:
+            row.object_status = "delete_pending"
+            db.add(row)
+        db.commit()
+        for row in stratus_rows:
+            try:
+                storage.delete_object(row.storage_key)
+                row.object_status = "object_deleted"
+                db.add(row)
+                db.commit()
+            except StorageError as exc:
+                raise HTTPException(
+                    status_code=503,
+                    detail="A project archive could not be removed from Catalyst. Account deletion is paused and can be retried.",
+                ) from exc
+
     # Preserve payment/audit rows for accounting, but remove learning and public-identity data.
     for model in (LessonProgress, ExerciseProgress, Bookmark, UserActivityDay, XPTransaction, Certificate, ExamAttempt, ProjectSubmission):
         db.execute(delete(model).where(model.user_id == user.id))

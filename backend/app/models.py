@@ -3,6 +3,7 @@
 from datetime import date, datetime, timezone
 from uuid import uuid4
 from sqlalchemy import (
+    BigInteger,
     Boolean,
     Date,
     DateTime,
@@ -428,6 +429,15 @@ class ProjectSubmission(Base):
     )
     portfolio_metadata: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
     stored_bytes: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    # Metadata-only reference to external object storage; legacy rows default to database.
+    storage_provider: Mapped[str] = mapped_column(String(32), default="database", nullable=False)
+    storage_bucket: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    storage_key: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    file_size_bytes: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
+    checksum_sha256: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    object_status: Mapped[str] = mapped_column(String(24), default="legacy", nullable=False)
+    uploaded_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    migrated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     submitted_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=now_utc, nullable=False
     )

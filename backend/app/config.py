@@ -55,6 +55,22 @@ class Settings(BaseSettings):
     # Optional URL for the isolated runner control plane. The main API never executes learner code.
     runner_service_url: str | None = None
     runner_service_token: str | None = None
+    # Portfolio archives remain in PostgreSQL unless Catalyst Stratus is explicitly selected.
+    portfolio_storage_provider: str = "database"
+    catalyst_stratus_enabled: bool = False
+    catalyst_project_id: str | None = None
+    catalyst_project_zaid: str | None = None
+    catalyst_environment: str = "Development"
+    catalyst_client_id: str | None = None
+    catalyst_client_secret: str | None = None
+    catalyst_refresh_token: str | None = None
+    catalyst_stratus_bucket: str | None = None
+    catalyst_project_domain: str = "https://api.catalyst.zoho.in"
+    catalyst_accounts_url: str = "https://accounts.zoho.in"
+    catalyst_stratus_resource_suffix: str = ".zohostratus.in"
+    catalyst_multipart_part_size_mb: int = Field(default=25, ge=5, le=100)
+    catalyst_max_retries: int = Field(default=3, ge=0, le=6)
+    catalyst_verify_upload_checksum: bool = True
     # Optional JDoodle hosted code execution provider.
     jdoodle_client_id: str | None = None
     jdoodle_client_secret: str | None = None
@@ -85,6 +101,10 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def validate_production_security(self) -> "Settings":
         """Fail closed when deployed with insecure or incomplete production settings."""
+        if self.portfolio_storage_provider.strip().lower() not in {"database", "catalyst_stratus"}:
+            raise ValueError("PORTFOLIO_STORAGE_PROVIDER must be 'database' or 'catalyst_stratus'")
+        if self.catalyst_environment.strip().lower() not in {"development", "production"}:
+            raise ValueError("CATALYST_ENVIRONMENT must be Development or Production")
         if self.app_env.strip().lower() not in {"production", "prod"}:
             return self
 

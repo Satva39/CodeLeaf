@@ -52,7 +52,7 @@ def main() -> int:
         missing = sorted(required - tables)
         if missing:
             raise SystemExit("FAIL: migration left missing tables: " + ", ".join(missing))
-        if len(revisions) != 1 or revisions[0] != "0009_snippets_support":
+        if len(revisions) != 1 or revisions[0] != "0010_catalyst_stratus":
             raise SystemExit(f"FAIL: unexpected migration state: {revisions!r}")
         with closing(sqlite3.connect(database_path)) as connection:
             user_columns = {row[1] for row in connection.execute("PRAGMA table_info(users)")}
@@ -61,9 +61,15 @@ def main() -> int:
         with closing(sqlite3.connect(database_path)) as connection:
             submission_columns = {row[1] for row in connection.execute("PRAGMA table_info(project_submissions)")}
             runner_columns = {row[1] for row in connection.execute("PRAGMA table_info(runner_jobs)")}
+        catalyst_columns = {
+            "storage_provider", "storage_bucket", "storage_key", "file_size_bytes",
+            "checksum_sha256", "object_status", "uploaded_at", "migrated_at",
+        }
+        if catalyst_columns - submission_columns:
+            raise SystemExit("FAIL: Catalyst archive migration is missing columns: " + ", ".join(sorted(catalyst_columns - submission_columns)))
         if "stored_bytes" not in submission_columns or "request_key" not in runner_columns:
             raise SystemExit("FAIL: plan usage migration did not add storage or runner idempotency columns")
-        print("PASS migration state has one 0009 head and all auth/review/privacy/practical/plan-usage/snippet/support/mock-assessment tables after repeated upgrades")
+        print("PASS migration state has one 0010 head, Catalyst archive metadata, and all existing auth/review/privacy/practical/plan-usage/snippet/support/mock-assessment tables after repeated upgrades")
     print("Migration repeatability checks passed; only a temporary SQLite database was used.")
     return 0
 

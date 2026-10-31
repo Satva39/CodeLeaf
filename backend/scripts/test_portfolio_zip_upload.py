@@ -54,6 +54,8 @@ def main() -> None:
     expect_http_error(lambda: validate_project_zip(make_zip({"../escape.txt": "no"})), 400)
     expect_http_error(lambda: validate_project_zip(make_zip({"C:/escape.txt": "no"})), 400)
     expect_http_error(lambda: validate_project_zip(make_zip({})), 400)
+    # Highly compressible payloads that exceed the per-member ratio are ZIP-bomb-like.
+    expect_http_error(lambda: validate_project_zip(make_zip({"repeat.bin": b"0" * (2 * 1024 * 1024)})), 413)
     assert MAX_PROJECT_ZIP_BYTES == 500 * 1024 * 1024
     validate_project_zip_size(MAX_PROJECT_ZIP_BYTES)
     expect_http_error(lambda: validate_project_zip_size(MAX_PROJECT_ZIP_BYTES + 1), 413)
