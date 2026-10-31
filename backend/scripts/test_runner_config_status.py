@@ -1,8 +1,4 @@
-"""Unit tests for the non-sensitive isolated runner configuration status endpoint.
 
-Run from backend/: python scripts/test_runner_config_status.py
-No database connection or provider secrets are required.
-"""
 from pathlib import Path
 import sys
 import unittest
@@ -21,35 +17,81 @@ class RunnerConfigStatusTests(unittest.TestCase):
         app.include_router(phase5_routes.router)
         self.client = TestClient(app)
 
+        for attribute, value in (
+            ("runner_service_url", None),
+            ("runner_service_token", None),
+            ("jdoodle_client_id", None),
+            ("jdoodle_client_secret", None),
+        ):
+            patcher = patch.object(
+                phase5_routes.settings, attribute, value
+            )
+            patcher.start()
+            self.addCleanup(patcher.stop)
+
     def tearDown(self):
         self.client.close()
 
-    def test_unconfigured_runner_is_reported_without_revealing_secrets(self):
-        with patch.object(phase5_routes.settings, "runner_service_url", None), patch.object(
-            phase5_routes.settings, "runner_service_token", None
-        ):
-            response = self.client.get("/api/runner/status")
-        self.assertEqual(response.status_code, 200, response.text)
+    def test_unconfigured_runner_is_reported_safely(self):
+        response = self.client.get("/api/runner/status")
+
+        self.assertEqual(response.status_code, 200)
         payload = response.json()
+
         self.assertFalse(payload["configured"])
+        self.assertIsNone(payload["provider"])
         self.assertEqual(payload["supported_languages"], [])
         self.assertIn("Browser HTML/CSS/JavaScript preview", payload["message"])
-        self.assertNotIn("runner_service_token", response.text)
-        self.assertNotIn("runner_service_url", response.text)
 
-    def test_configured_runner_reports_supported_languages_without_returning_url_or_token(self):
-        fake_url = "https://runner.example.invalid"
-        fake_token = "TEST_SECRET_DO_NOT_RETURN"
-        with patch.object(phase5_routes.settings, "runner_service_url", fake_url), patch.object(
-            phase5_routes.settings, "runner_service_token", fake_token
+    def test_jdoodle_is_reported_without_revealing_credentials(self):
+        with (
+            patch.object(
+                phase5_routes.settings,
+                "jdoodle_client_id",
+                "TEST_CLIENT_ID",
+            ),
+            patch.object(
+                phase5_routes.settings,
+                "jdoodle_client_secret",
+                "TEST_SECRET",
+            ),
         ):
             response = self.client.get("/api/runner/status")
-        self.assertEqual(response.status_code, 200, response.text)
+
+        self.assertEqual(response.status_code, 200)
         payload = response.json()
+
         self.assertTrue(payload["configured"])
-        self.assertEqual(payload["supported_languages"], ["python", "javascript"])
-        self.assertNotIn(fake_url, response.text)
-        self.assertNotIn(fake_token, response.text)
+        self.assertEqual(payload["provider"], "jdoodle")
+        self.assertEqual(
+            payload["supported_languages"],
+            ["python", "javascript"],
+        )
+        self.assertNotIn("TEST_CLIENT_ID", response.text)
+        self.assertNotIn("TEST_SECRET", response.text)
+
+    def test_existing_runner_remains_supported(self):
+        with (
+            patch.object(
+                phase5_routes.settings,
+                "runner_service_url",
+                "https://runner.example.invalid",
+            ),
+            patch.object(
+                phase5_routes.settings,
+                "runner_service_token",
+                "TEST_RUNNER_SECRET",
+            ),
+        ):
+            response = self.client.get("/api/runner/status")
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+
+        self.assertTrue(payload["configured"])
+        self.assertEqual(payload["provider"], "external")
+        self.assertNotIn("runner.example.invalid", response.text)
+        self.assertNotIn("TEST_RUNNER_SECRET", response.text)
 
 
 if __name__ == "__main__":

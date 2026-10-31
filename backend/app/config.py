@@ -55,6 +55,9 @@ class Settings(BaseSettings):
     # Optional URL for the isolated runner control plane. The main API never executes learner code.
     runner_service_url: str | None = None
     runner_service_token: str | None = None
+    # Optional JDoodle hosted code execution provider.
+    jdoodle_client_id: str | None = None
+    jdoodle_client_secret: str | None = None
 
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", extra="ignore"
