@@ -3,13 +3,20 @@ from __future__ import annotations
 
 import hashlib
 import io
+import logging
+import time
 from uuid import uuid4
 
+
+logger = logging.getLogger(__name__)
 
 _PAYLOAD = (
     b"CodeLeaf temporary Catalyst Stratus connectivity diagnostic. "
     b"This object contains no student or portfolio data.\n"
 )
+CLEANUP_CONFIRMATION_TIMEOUT_SECONDS = 15.0
+CLEANUP_POLL_INTERVAL_SECONDS = 0.5
+
 _CHECK_NAMES = (
     "upload",
     "object_exists",
@@ -99,15 +106,38 @@ def run_stratus_smoke_test(storage, *, key_prefix: str = "smoke-tests/local") ->
     finally:
         # Check first because Catalyst may reject deletion of a non-existent key.
         # If an upload partially created an object before failing, it is deleted here.
+        # Stratus deletion can take a short time to become visible to HEAD checks, so
+        # confirm absence with bounded polling instead of checking immediately once.
         if upload_attempted:
             try:
                 if storage.object_exists(key):
-                    storage.delete_object(key)
-                checks["cleanup"] = (
-                    "PASS" if not storage.object_exists(key) else "FAIL"
-                )
-            except Exception:
+                    delete_result = storage.delete_object(key)
+                    if delete_result is False:
+                        raise RuntimeError("Storage adapter did not confirm deletion.")
+
+                deadline = time.monotonic() + CLEANUP_CONFIRMATION_TIMEOUT_SECONDS
+                while True:
+                    if not storage.object_exists(key):
+                        checks["cleanup"] = "PASS"
+                        break
+
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        checks["cleanup"] = "FAIL"
+                        logger.warning(
+                            "Catalyst temporary smoke-test deletion was not confirmed "
+                            "within %.1f seconds.",
+                            CLEANUP_CONFIRMATION_TIMEOUT_SECONDS,
+                        )
+                        break
+                    time.sleep(min(CLEANUP_POLL_INTERVAL_SECONDS, remaining))
+            except Exception as exc:
                 checks["cleanup"] = "FAIL"
+                # Do not log exception text: SDK errors can contain URLs or request data.
+                logger.warning(
+                    "Catalyst temporary smoke-test cleanup failed (%s).",
+                    type(exc).__name__,
+                )
 
     return {
         "status": "PASS" if all(value == "PASS" for value in checks.values()) else "FAIL",

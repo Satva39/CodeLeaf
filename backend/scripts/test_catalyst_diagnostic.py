@@ -70,6 +70,30 @@ class FakeStorage:
         return True
 
 
+class EventuallyConsistentDeleteStorage(FakeStorage):
+    """Model Stratus where a successful delete is reflected by HEAD later."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.pending_delete_checks = 2
+        self.delete_pending = False
+
+    def delete_object(self, key):
+        self.deleted.append(key)
+        self.delete_pending = True
+        return True
+
+    def object_exists(self, key):
+        if self.delete_pending and key in self.objects:
+            if self.pending_delete_checks > 0:
+                self.pending_delete_checks -= 1
+                return True
+            self.objects.pop(key, None)
+            self.delete_pending = False
+            return False
+        return key in self.objects
+
+
 class CatalystDiagnosticTests(unittest.TestCase):
     def setUp(self) -> None:
         self.client = TestClient(app)
@@ -95,6 +119,22 @@ class CatalystDiagnosticTests(unittest.TestCase):
     def tearDown(self) -> None:
         for name, value in self.original_settings.items():
             setattr(settings, name, value)
+
+    def test_cleanup_waits_for_eventual_delete_visibility(self):
+        storage = EventuallyConsistentDeleteStorage()
+        with patch("app.storage.catalyst_smoke_test.time.sleep", return_value=None):
+            result = run_stratus_smoke_test(storage, key_prefix="smoke-tests/render")
+        self.assertEqual(result["checks"]["cleanup"], "PASS")
+        self.assertEqual(storage.objects, {})
+        self.assertEqual(len(storage.deleted), 1)
+
+    def test_cleanup_fails_when_deleted_object_remains_visible(self):
+        storage = EventuallyConsistentDeleteStorage()
+        storage.pending_delete_checks = 10_000
+        with patch("app.storage.catalyst_smoke_test.CLEANUP_CONFIRMATION_TIMEOUT_SECONDS", 0):
+            result = run_stratus_smoke_test(storage, key_prefix="smoke-tests/render")
+        self.assertEqual(result["checks"]["cleanup"], "FAIL")
+        self.assertEqual(len(storage.deleted), 1)
 
     def test_missing_token_returns_404_and_does_not_initialize_storage(self):
         with patch("app.diagnostic_routes.get_catalyst_storage") as getter:
