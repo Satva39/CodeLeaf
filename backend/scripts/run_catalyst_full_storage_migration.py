@@ -38,6 +38,50 @@ def run(label: str, args: list[str]) -> int:
         return 127
 
 
+
+def verify_all_lesson_bundles(py: str, *, label: str) -> bool:
+    command = [py, "scripts/migrate_lesson_content_to_stratus.py", "--verify"]
+    print(f"\n=== {label} ===", flush=True)
+    try:
+        completed = subprocess.run(
+            command, cwd=BACKEND_ROOT, check=False, capture_output=True, text=True
+        )
+    except OSError as exc:
+        print(f"Unable to start lesson verification: {type(exc).__name__}: {exc}", file=sys.stderr)
+        return False
+    if completed.stdout:
+        print(completed.stdout, end="" if completed.stdout.endswith("\n") else "\n")
+    if completed.stderr:
+        print(completed.stderr, end="" if completed.stderr.endswith("\n") else "\n", file=sys.stderr)
+    if completed.returncode:
+        print("STOP: lesson bundle verification failed; no project ZIP upload was started.", file=sys.stderr)
+        return False
+
+    counts = {}
+    for line in completed.stdout.splitlines():
+        if ":" not in line:
+            continue
+        key, value = line.split(":", 1)
+        if key.strip() in {"courses_discovered", "courses_verified", "failed_courses"}:
+            try:
+                counts[key.strip()] = int(value.strip().replace(",", ""))
+            except ValueError:
+                pass
+    discovered = counts.get("courses_discovered", 0)
+    verified = counts.get("courses_verified", 0)
+    failed = counts.get("failed_courses", -1)
+    if discovered != 64 or verified != 64 or failed != 0:
+        print(
+            "STOP: expected all 64 course bundles to verify "
+            f"(discovered={discovered}, verified={verified}, failed={failed}). "
+            "No lesson or project ZIP upload was started.",
+            file=sys.stderr,
+        )
+        return False
+    print("All 64 existing lesson bundles verified; skipping lesson re-upload.")
+    return True
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group()
@@ -83,35 +127,32 @@ def main() -> int:
     if project_code:
         return project_code
 
-    phrase = input('\nAfter reviewing both inventories, type MIGRATE ALL CONTENT to copy lessons and ZIPs: ').strip()
-    if phrase != "MIGRATE ALL CONTENT":
-        print("Cancelled. No archive or lesson transfer was started.")
+    # Lesson bundles were copied in the earlier combined migration. Verify all
+    # 64 before touching ZIPs; do not repeat the lesson uploads.
+    if not verify_all_lesson_bundles(py, label="Preflight: verify existing course lesson bundles"):
+        return 1
+
+    phrase = input('\nAfter reviewing the project ZIP inventory, type MIGRATE PROJECT ZIP ARCHIVES to resume ZIP migration: ').strip()
+    if phrase != "MIGRATE PROJECT ZIP ARCHIVES":
+        print("Cancelled. No project ZIP transfer was started.")
         return 0
 
-    lesson_code = run(
-        "Copy lesson content to course bundles (Neon bodies retained)",
-        lessons + ["--execute", "--billing-reviewed", "--backup-ready", "--batch-size", str(args.batch_size)],
-    )
-    if lesson_code:
-        print("Lesson bundle copy failed; project ZIP migration was not started.", file=sys.stderr)
-        return lesson_code
-
     project_code = run(
-        "Copy project ZIP archives (Neon payloads retained)",
+        "Resume project ZIP migration (Neon payloads retained)",
         projects + ["--execute", "--batch-size", str(min(args.batch_size, 10))],
     )
     if project_code:
-        print("Project ZIP copy failed. Lesson bundle copies remain in Catalyst and can be verified/resumed.", file=sys.stderr)
+        print("Project ZIP copy failed. Existing lesson bundles remain in Catalyst and Neon originals remain intact.", file=sys.stderr)
         return project_code
 
-    lesson_verify = run("Verify every course lesson bundle", lessons + ["--verify"])
-    project_verify = run("Verify every project ZIP", projects + ["--verify"])
+    lesson_verify = run("Final verification: every course lesson bundle", lessons + ["--verify"])
+    project_verify = run("Final verification: every project ZIP", projects + ["--verify"])
     if lesson_verify or project_verify:
         print("At least one object family did not fully verify. Neon originals remain intact; do not run cleanup.", file=sys.stderr)
         return 1
 
     print("\nFULL STORAGE COPY + VERIFICATION: PASS")
-    print("Course lessons: copied to compressed course bundles and verified.")
+    print("Course lessons: pre-existing compressed bundles verified; no duplicate upload performed.")
     print("Project ZIPs: copied to Catalyst and verified.")
     print("Neon lesson JSON and ZIP payloads: retained.")
     print("Portfolio provider: database; Catalyst portfolio writes: disabled.")

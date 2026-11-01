@@ -8,7 +8,7 @@ import tempfile
 import zipfile
 from pathlib import Path
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,6 +24,81 @@ from app.phase5_routes import (
     validate_project_zip, validate_project_zip_file, validate_project_zip_size,
 )  # noqa: E402
 from fastapi import HTTPException  # noqa: E402
+
+
+
+def test_chunk_streaming_select_then_metadata_update_same_session() -> None:
+    """A streamed chunk SELECT must not leave the Session connection in server-cursor mode."""
+    from scripts import migrate_portfolio_archives_to_stratus as archive_migration
+
+    with tempfile.TemporaryDirectory(prefix="codeleaf-stream-update-") as temp_dir:
+        db_path = Path(temp_dir) / "stream-update.sqlite"
+        engine = create_engine("sqlite:///" + db_path.resolve().as_posix())
+        Session = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
+        payloads = (b"first-chunk", b"second-chunk")
+        try:
+            with engine.begin() as connection:
+                connection.execute(text(
+                    "CREATE TABLE project_submission_zip_chunks "
+                    "(submission_id TEXT NOT NULL, sequence INTEGER NOT NULL, payload BLOB NOT NULL)"
+                ))
+                connection.execute(text(
+                    "CREATE TABLE project_submissions (id TEXT PRIMARY KEY, object_status TEXT)"
+                ))
+                connection.execute(
+                    text("INSERT INTO project_submissions (id, object_status) VALUES ('submission-1', 'pending')")
+                )
+                connection.execute(
+                    text("INSERT INTO project_submission_zip_chunks "
+                         "(submission_id, sequence, payload) VALUES "
+                         "('submission-1', 0, :first), ('submission-1', 1, :second)"),
+                    {"first": payloads[0], "second": payloads[1]},
+                )
+
+            original_size = archive_migration.archive_source_size
+
+            def sqlite_archive_size(db, submission_id, *, has_inline):
+                value = db.execute(
+                    text("SELECT COALESCE(SUM(length(payload)), 0) "
+                         "FROM project_submission_zip_chunks WHERE submission_id=:id"),
+                    {"id": submission_id},
+                ).scalar_one()
+                return int(value or 0)
+
+            archive_migration.archive_source_size = sqlite_archive_size
+            try:
+                with Session() as db:
+                    staged, total, digest = archive_migration.source_to_temporary_file(
+                        db,
+                        {
+                            "id": "submission-1",
+                            "has_inline": False,
+                            "chunk_count": 2,
+                        },
+                    )
+                    try:
+                        assert staged.read() == b"".join(payloads)
+                        assert total == sum(map(len, payloads))
+                        import hashlib
+                        assert digest == hashlib.sha256(b"".join(payloads)).hexdigest()
+                        assert not db.connection().get_execution_options().get("stream_results", False)
+
+                        # This normal UPDATE used to fail on PostgreSQL because
+                        # stream_results leaked onto the Session-bound Connection.
+                        db.execute(
+                            text("UPDATE project_submissions SET object_status='verified' WHERE id=:id"),
+                            {"id": "submission-1"},
+                        )
+                        db.commit()
+                        assert db.execute(
+                            text("SELECT object_status FROM project_submissions WHERE id='submission-1'")
+                        ).scalar_one() == "verified"
+                    finally:
+                        staged.close()
+            finally:
+                archive_migration.archive_source_size = original_size
+        finally:
+            engine.dispose()
 
 
 def make_zip(entries: dict[str, bytes | str]) -> bytes:
@@ -139,7 +214,8 @@ def main() -> None:
         assert archive.read("index.html").decode("utf-8") == "<h1>Saved before ZIP uploads</h1>"
     assert response.headers["content-type"] == "application/zip"
 
-    print("Portfolio ZIP validation and legacy archive download checks passed.")
+    test_chunk_streaming_select_then_metadata_update_same_session()
+    print("Portfolio ZIP validation, legacy archive download, and streamed SELECT-to-UPDATE checks passed.")
 
 
 if __name__ == "__main__":

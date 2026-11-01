@@ -118,23 +118,28 @@ def source_to_temporary_file(db: Session, row: dict[str, Any]):
             offset += len(block)
     else:
         # Existing chunk table stores ordered 1 MiB pieces.
-        result = db.connection().execution_options(stream_results=True).execute(
-            text(
-                "SELECT sequence, payload FROM project_submission_zip_chunks "
-                "WHERE submission_id = :id ORDER BY sequence"
-            ),
-            {"id": submission_id},
-        )
+        statement = text(
+            "SELECT sequence, payload FROM project_submission_zip_chunks "
+            "WHERE submission_id = :id ORDER BY sequence"
+        ).execution_options(stream_results=True)
+        result = db.execute(statement, {"id": submission_id})
         expected_sequence = 0
-        for sequence, payload in result.yield_per(4):
-            if int(sequence) != expected_sequence:
-                output.close()
-                raise RuntimeError(f"Archive {submission_id} has a missing chunk at sequence {expected_sequence}.")
-            block = bytes(payload)
-            output.write(block)
-            digest.update(block)
-            total += len(block)
-            expected_sequence += 1
+        try:
+            for sequence, payload in result.yield_per(4):
+                if int(sequence) != expected_sequence:
+                    raise RuntimeError(
+                        f"Archive {submission_id} has a missing chunk at sequence {expected_sequence}."
+                    )
+                block = bytes(payload)
+                output.write(block)
+                digest.update(block)
+                total += len(block)
+                expected_sequence += 1
+        except Exception:
+            output.close()
+            raise
+        finally:
+            result.close()
 
     expected_size = archive_source_size(db, submission_id, has_inline=has_inline)
     if total != expected_size or total <= 0:
@@ -149,22 +154,27 @@ def source_to_temporary_file(db: Session, row: dict[str, Any]):
     if has_inline and int(row.get("chunk_count") or 0) > 0:
         chunk_digest = hashlib.sha256()
         chunk_total = 0
-        result = db.connection().execution_options(stream_results=True).execute(
-            text(
-                "SELECT sequence, payload FROM project_submission_zip_chunks "
-                "WHERE submission_id = :id ORDER BY sequence"
-            ),
-            {"id": submission_id},
-        )
+        statement = text(
+            "SELECT sequence, payload FROM project_submission_zip_chunks "
+            "WHERE submission_id = :id ORDER BY sequence"
+        ).execution_options(stream_results=True)
+        result = db.execute(statement, {"id": submission_id})
         expected_sequence = 0
-        for sequence, payload in result.yield_per(4):
-            if int(sequence) != expected_sequence:
-                output.close()
-                raise RuntimeError(f"Archive {submission_id} has a missing secondary chunk at sequence {expected_sequence}.")
-            block = bytes(payload)
-            chunk_digest.update(block)
-            chunk_total += len(block)
-            expected_sequence += 1
+        try:
+            for sequence, payload in result.yield_per(4):
+                if int(sequence) != expected_sequence:
+                    raise RuntimeError(
+                        f"Archive {submission_id} has a missing secondary chunk at sequence {expected_sequence}."
+                    )
+                block = bytes(payload)
+                chunk_digest.update(block)
+                chunk_total += len(block)
+                expected_sequence += 1
+        except Exception:
+            output.close()
+            raise
+        finally:
+            result.close()
         if chunk_total != total or chunk_digest.digest() != digest.digest():
             output.close()
             raise RuntimeError(
@@ -305,9 +315,15 @@ def run_execute(SessionFactory, rows: list[dict[str, Any]], batch_size: int) -> 
                 key = f"projects/{UUID(row['id'])}/archive.zip"
                 try:
                     source, size, source_digest = source_to_temporary_file(db, row)
+                    # Reuse the deterministic key on every retry. upload_stream overwrites
+                    # that exact key; verify both the upload receipt and a fresh remote
+                    # checksum before committing the Neon reference.
                     stored = storage.upload_stream(key, source, expected_size=size)
                     if stored.checksum_sha256.lower() != source_digest.lower():
                         raise StorageError("Uploaded archive checksum did not match the Neon source.")
+                    remote_digest = storage.checksum_object(key)
+                    if remote_digest.lower() != source_digest.lower():
+                        raise StorageError("Catalyst object checksum did not match the Neon source after upload.")
                     set_migrated_metadata(db, row, stored)
                     db.commit()
                     summary["successfully_transferred"] += 1
