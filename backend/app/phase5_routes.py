@@ -1991,6 +1991,29 @@ def download_public_project_submission(
     return _download_project_zip(item, is_public=True, db=db)
 
 
+@router.get("/api/me/portfolio")
+def get_my_portfolio(
+    user: User = Depends(require_user), db: Session = Depends(get_db)
+) -> dict[str, Any]:
+    """Return the authenticated learner's completed portfolio and certificates.
+
+    Pending chunked uploads are intentionally excluded. Submission metadata is
+    read from Neon; archive bytes remain in their configured storage provider.
+    """
+    rows = db.scalars(
+        select(ProjectSubmission)
+        .where(ProjectSubmission.user_id == user.id)
+        .order_by(ProjectSubmission.submitted_at.desc())
+    ).all()
+    completed_rows = [row for row in rows if _portfolio_upload_is_complete(row)]
+    return {
+        "username": user.username,
+        "display_name": user.display_name,
+        "items": [_portfolio_item(row, user) for row in completed_rows],
+        "certificates": _portfolio_certificate_items(db, user),
+    }
+
+
 @router.get("/api/portfolio/{username}")
 def get_public_portfolio(
     username: str, db: Session = Depends(get_db)
