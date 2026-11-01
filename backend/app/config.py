@@ -3,7 +3,7 @@ from __future__ import annotations
 from functools import lru_cache
 from urllib.parse import urlsplit
 
-from pydantic import Field, SecretStr, model_validator
+from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _INSECURE_SECRET_VALUES = {
@@ -71,8 +71,6 @@ class Settings(BaseSettings):
     catalyst_multipart_part_size_mb: int = Field(default=25, ge=5, le=100)
     catalyst_max_retries: int = Field(default=3, ge=0, le=6)
     catalyst_verify_upload_checksum: bool = True
-    # Optional 32+ character token used only by the temporary production diagnostic.
-    catalyst_diagnostic_token: SecretStr | None = None
     # Optional JDoodle hosted code execution provider.
     jdoodle_client_id: str | None = None
     jdoodle_client_secret: str | None = None
