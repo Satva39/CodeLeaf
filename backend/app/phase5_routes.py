@@ -71,7 +71,7 @@ from .plan_entitlements import (
     reserve_daily_usage,
 )
 from .diagram_assets import validate_dynamic_diagram_model
-from .storage import StorageError, get_active_storage, get_catalyst_storage
+from .storage import StorageError, get_catalyst_storage
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -1142,6 +1142,50 @@ def _project_archive_object_key(submission_id) -> str:
     return f"projects/{submission_id}/archive.zip"
 
 
+def _project_staging_chunk_key(submission_id, sequence: int) -> str:
+    return f"projects/{submission_id}/staging/chunks/{sequence:06d}.part"
+
+
+def _portfolio_upload_storage(*, required: bool = False):
+    """Resolve the selected provider; Catalyst selection must never fall back to Neon."""
+    provider = (settings.portfolio_storage_provider or "database").strip().lower()
+    if provider == "database":
+        return None
+    if provider != "catalyst_stratus":
+        raise HTTPException(status_code=503, detail="The configured portfolio storage provider is unsupported.")
+    if not settings.catalyst_stratus_enabled:
+        raise HTTPException(status_code=503, detail="Catalyst portfolio storage is selected but not enabled.")
+    storage = get_catalyst_storage()
+    if storage is None:
+        raise HTTPException(status_code=503, detail="Catalyst portfolio storage is unavailable. Please retry later.")
+    return storage
+
+
+def _verify_catalyst_object(storage, key: str, *, expected_size: int, expected_sha256: str):
+    """Independently verify object existence, bucket, size and remote read-back digest."""
+    details = storage.object_metadata(key)
+    remote_size = int(details.get("size") or details.get("size_bytes") or 0)
+    if remote_size != int(expected_size):
+        raise StorageError("Catalyst object size does not match the expected archive size.")
+    remote_sha256 = storage.checksum_object(key)
+    if remote_sha256.lower() != expected_sha256.lower():
+        raise StorageError("Catalyst object checksum does not match the expected archive checksum.")
+    return remote_size, remote_sha256
+
+
+def _delete_staging_objects(storage, keys: list[str]) -> list[str]:
+    """Delete only deterministic staging keys owned by this upload; return failures."""
+    failed = []
+    for key in dict.fromkeys(str(value) for value in keys if value):
+        try:
+            if storage.object_exists(key):
+                storage.delete_object(key)
+        except StorageError:
+            logger.exception("Catalyst staging cleanup failed for an owned project upload object.")
+            failed.append(key)
+    return failed
+
+
 def _file_sha256(file_obj) -> str:
     digest = hashlib.sha256()
     file_obj.seek(0)
@@ -1289,80 +1333,41 @@ def _stream_inline_zip(submission_id, size: int, dialect: str):
 def _download_project_zip(
     submission: ProjectSubmission, is_public: bool, db: Session | None = None
 ) -> Response:
-    """Prefer Stratus, then safely fall back to legacy Neon archive formats."""
+    """Stream verified Catalyst objects; preserve legacy Neon formats for DB rows."""
     if not _portfolio_upload_is_complete(submission):
-        raise HTTPException(
-            status_code=409, detail="This project ZIP upload is not complete yet."
-        )
+        raise HTTPException(status_code=409, detail="This project ZIP upload is not complete yet.")
     filename = submission.zip_filename or f"{submission.project_slug}.zip"
-    safe_filename = (
-        re.sub(r"[^A-Za-z0-9._-]+", "-", filename).strip(".-") or "project.zip"
-    )
+    safe_filename = re.sub(r"[^A-Za-z0-9._-]+", "-", filename).strip(".-") or "project.zip"
     cache_control = "public, max-age=300" if is_public else "private, no-store"
-
-    if (
-        getattr(submission, "storage_provider", "database") == "catalyst_stratus"
-        and getattr(submission, "storage_key", None)
-        and getattr(submission, "object_status", "") == "verified"
-    ):
+    if getattr(submission, "storage_provider", "database") == "catalyst_stratus":
+        key = getattr(submission, "storage_key", None)
+        expected_bucket = getattr(submission, "storage_bucket", None)
+        if not key or not expected_bucket or getattr(submission, "object_status", "") != "verified":
+            raise HTTPException(status_code=503, detail="The project archive storage reference is not verified.")
         storage = get_catalyst_storage()
-        if storage is not None:
-            try:
-                key = submission.storage_key
-                if storage.object_exists(key):
-                    details = storage.object_metadata(key)
-                    remote_size = int(details.get("size") or 0)
-                    expected_size = int(submission.file_size_bytes or submission.stored_bytes or 0)
-                    if expected_size and remote_size != expected_size:
-                        raise StorageError("Catalyst archive size no longer matches PostgreSQL metadata.")
-                    from starlette.responses import StreamingResponse
-
-                    headers = {
-                        "Content-Disposition": f'attachment; filename="{safe_filename}"',
-                        "Cache-Control": cache_control,
-                        "X-Content-Type-Options": "nosniff",
-                    }
-                    if remote_size > 0:
-                        headers["Content-Length"] = str(remote_size)
-                    return StreamingResponse(
-                        storage.iter_download(key),
-                        media_type="application/zip",
-                        headers=headers,
-                    )
-                raise StorageError("Catalyst object was not found; checking retained Neon archive data.")
-            except StorageError as exc:
-                logger.exception("Stratus download failed for project submission %s", submission.id)
-                # A migrated row keeps its Neon payload until explicit cleanup. If one
-                # remains, use it; otherwise fail closed rather than serving a broken link.
-                inline_size, _, _ = _inline_zip_info(db, submission)
-                if inline_size <= 0:
-                    legacy_exists = False
-                    if db is not None:
-                        legacy_exists = db.scalar(
-                            select(ProjectSubmissionZipChunk.sequence)
-                            .where(ProjectSubmissionZipChunk.submission_id == submission.id)
-                            .limit(1)
-                        ) is not None
-                    if not legacy_exists:
-                        raise HTTPException(
-                            status_code=503,
-                            detail="The project archive is temporarily unavailable. Please try again later.",
-                        ) from exc
-        else:
-            # An archive moved to Stratus cannot be served without the configured
-            # server-side credentials. Legacy payloads remain available during rollout.
-            inline_size, _, _ = _inline_zip_info(db, submission)
-            if inline_size <= 0 and db is not None:
-                has_chunks = db.scalar(
-                    select(ProjectSubmissionZipChunk.sequence)
-                    .where(ProjectSubmissionZipChunk.submission_id == submission.id)
-                    .limit(1)
-                ) is not None
-                if not has_chunks:
-                    raise HTTPException(
-                        status_code=503,
-                        detail="The project archive storage service is not configured.",
-                    )
+        if storage is None or storage.bucket_name != expected_bucket:
+            raise HTTPException(status_code=503, detail="The project archive storage service is not configured.")
+        try:
+            details = storage.object_metadata(key)
+            remote_size = int(details.get("size") or details.get("size_bytes") or 0)
+            expected_size = int(submission.file_size_bytes or submission.stored_bytes or 0)
+            if not remote_size or (expected_size and remote_size != expected_size):
+                raise StorageError("Catalyst archive size does not match Neon metadata.")
+            # Read-back verification is intentional: a Catalyst-backed record must never
+            # silently serve a stale Neon copy if its authoritative object is unavailable.
+            if submission.checksum_sha256 and storage.checksum_object(key) != submission.checksum_sha256:
+                raise StorageError("Catalyst archive checksum does not match Neon metadata.")
+            from starlette.responses import StreamingResponse
+            headers = {
+                "Content-Disposition": f'attachment; filename="{safe_filename}"',
+                "Cache-Control": cache_control,
+                "X-Content-Type-Options": "nosniff",
+                "Content-Length": str(remote_size),
+            }
+            return StreamingResponse(storage.iter_download(key), media_type="application/zip", headers=headers)
+        except StorageError as exc:
+            logger.exception("Verified Catalyst download failed for project submission %s", submission.id)
+            raise HTTPException(status_code=503, detail="The project archive is temporarily unavailable. Please try again later.") from exc
 
     inline_size, inline_payload, inline_dialect = _inline_zip_info(db, submission)
     if inline_size > 0:
@@ -1373,101 +1378,41 @@ def _download_project_zip(
             "X-Content-Type-Options": "nosniff",
         }
         if inline_payload is not None:
-            return Response(
-                content=inline_payload,
-                media_type="application/zip",
-                headers=headers,
-            )
+            return Response(content=inline_payload, media_type="application/zip", headers=headers)
         from starlette.responses import StreamingResponse
-
-        return StreamingResponse(
-            _stream_inline_zip(submission.id, inline_size, inline_dialect or "postgresql"),
-            media_type="application/zip",
-            headers=headers,
-        )
+        return StreamingResponse(_stream_inline_zip(submission.id, inline_size, inline_dialect or "postgresql"), media_type="application/zip", headers=headers)
 
     if db is not None:
-        first_chunk = db.scalar(
-            select(ProjectSubmissionZipChunk.sequence)
-            .where(ProjectSubmissionZipChunk.submission_id == submission.id)
-            .order_by(ProjectSubmissionZipChunk.sequence)
-            .limit(1)
-        )
+        first_chunk = db.scalar(select(ProjectSubmissionZipChunk.sequence).where(ProjectSubmissionZipChunk.submission_id == submission.id).order_by(ProjectSubmissionZipChunk.sequence).limit(1))
         if first_chunk is not None:
             submission_id = submission.id
-
             def archive_chunks():
-                # Separate short-lived sessions keep each query bounded and avoid
-                # holding a large result set or long read transaction in memory.
                 if SessionLocal is None:
                     return
                 next_sequence = 0
                 while True:
                     with SessionLocal() as download_db:
-                        rows = download_db.execute(
-                            select(
-                                ProjectSubmissionZipChunk.sequence,
-                                ProjectSubmissionZipChunk.payload,
-                            )
-                            .where(
-                                ProjectSubmissionZipChunk.submission_id == submission_id,
-                                ProjectSubmissionZipChunk.sequence >= next_sequence,
-                            )
-                            .order_by(ProjectSubmissionZipChunk.sequence)
-                            .limit(PROJECT_ZIP_DOWNLOAD_BATCH_CHUNKS)
-                        ).all()
+                        rows = download_db.execute(select(ProjectSubmissionZipChunk.sequence, ProjectSubmissionZipChunk.payload).where(ProjectSubmissionZipChunk.submission_id == submission_id, ProjectSubmissionZipChunk.sequence >= next_sequence).order_by(ProjectSubmissionZipChunk.sequence).limit(PROJECT_ZIP_DOWNLOAD_BATCH_CHUNKS)).all()
                     if not rows:
                         break
-                    for _, chunk in rows:
-                        yield bytes(chunk)
-                    next_sequence = int(rows[-1][0]) + 1
-
+                    for sequence, payload in rows:
+                        if int(sequence) != next_sequence:
+                            raise StorageError("Legacy project ZIP chunks are incomplete.")
+                        yield bytes(payload)
+                        next_sequence += 1
             from starlette.responses import StreamingResponse
+            return StreamingResponse(archive_chunks(), media_type="application/zip", headers={"Content-Disposition": f'attachment; filename="{safe_filename}"', "Cache-Control": cache_control, "X-Content-Type-Options": "nosniff"})
 
-            return StreamingResponse(
-                archive_chunks(),
-                media_type="application/zip",
-                headers={
-                    "Content-Disposition": f'attachment; filename="{safe_filename}"',
-                    "Cache-Control": cache_control,
-                    "X-Content-Type-Options": "nosniff",
-                },
-            )
-
-    bundle = submission.code_bundle or {}
-    if not isinstance(bundle, dict) or not bundle:
-        raise HTTPException(
-            status_code=404,
-            detail="This submission has no downloadable project archive.",
-        )
+    if not submission.code_bundle:
+        raise HTTPException(status_code=404, detail="This submission has no downloadable project archive.")
     stream = io.BytesIO()
     try:
         with zipfile.ZipFile(stream, "w", compression=zipfile.ZIP_DEFLATED) as archive:
-            for file_path, content in bundle.items():
-                if not isinstance(file_path, str) or not isinstance(content, str):
-                    continue
-                normalized = file_path.replace("\\", "/")
-                safe_path = PurePosixPath(normalized)
-                if normalized.startswith("/") or any(
-                    part in {"", ".", ".."} for part in safe_path.parts
-                ):
-                    continue
-                archive.writestr(normalized, content)
+            for path, content in (submission.code_bundle or {}).items():
+                archive.writestr(path, content)
     except (OSError, ValueError, zipfile.BadZipFile) as exc:
-        raise HTTPException(
-            status_code=500, detail="The project archive could not be prepared."
-        ) from exc
-    payload = stream.getvalue()
-    return Response(
-        content=payload,
-        media_type="application/zip",
-        headers={
-            "Content-Disposition": f'attachment; filename="{safe_filename}"',
-            "Content-Length": str(len(payload)),
-            "Cache-Control": cache_control,
-            "X-Content-Type-Options": "nosniff",
-        },
-    )
+        raise HTTPException(status_code=500, detail="The project files could not be packaged.") from exc
+    return Response(content=stream.getvalue(), media_type="application/zip", headers={"Content-Disposition": f'attachment; filename="{safe_filename}"', "Cache-Control": cache_control, "X-Content-Type-Options": "nosniff"})
 
 
 def _portfolio_item(
@@ -1536,25 +1481,33 @@ def create_portfolio_submission(
 
 
 def _cleanup_expired_portfolio_uploads(db: Session, user_id) -> int:
-    """Release abandoned upload reservations after 24 hours; never delete completed work."""
+    """Remove expired reservations only after all Catalyst staging objects are removed."""
     cutoff = utc_now() - PROJECT_ZIP_UPLOAD_SESSION_TTL
-    stale_rows = db.scalars(
-        select(ProjectSubmission).where(
-            ProjectSubmission.user_id == user_id,
-            ProjectSubmission.submitted_at < cutoff,
-        )
-    ).all()
+    stale_rows = db.scalars(select(ProjectSubmission).where(ProjectSubmission.user_id == user_id, ProjectSubmission.submitted_at < cutoff)).all()
     removed = 0
     for row in stale_rows:
-        metadata = (
-            row.portfolio_metadata if isinstance(row.portfolio_metadata, dict) else {}
-        )
-        if metadata.get("upload_state") == "uploading" and not metadata.get(
-            "archive_upload_complete"
-        ):
-            db.delete(row)
-            removed += 1
-    if removed:
+        metadata = row.portfolio_metadata if isinstance(row.portfolio_metadata, dict) else {}
+        if metadata.get("upload_state") not in {"uploading", "cancel_pending_cleanup"} or metadata.get("archive_upload_complete"):
+            continue
+        keys = list((metadata.get("upload_chunks") or {}).values())
+        keys = [entry.get("key") for entry in keys if isinstance(entry, dict) and entry.get("key")]
+        keys.extend(metadata.get("staging_cleanup_pending") or [])
+        if keys:
+            storage = get_catalyst_storage() if row.storage_provider == "catalyst_stratus" else None
+            if storage is None:
+                metadata["staging_cleanup_pending"] = list(dict.fromkeys(keys))
+                row.portfolio_metadata = metadata
+                db.add(row)
+                continue
+            failed = _delete_staging_objects(storage, keys)
+            if failed:
+                metadata["staging_cleanup_pending"] = failed
+                row.portfolio_metadata = metadata
+                db.add(row)
+                continue
+        db.delete(row)
+        removed += 1
+    if removed or any(db.is_modified(row) for row in stale_rows):
         db.flush()
     return removed
 
@@ -1590,6 +1543,7 @@ def create_portfolio_upload_session(
             status_code=400, detail="Upload a .zip archive of your project files."
         )
     validate_project_zip_size(body.total_bytes)
+    upload_storage = _portfolio_upload_storage()
     _cleanup_expired_portfolio_uploads(db, user.id)
 
     course_slug = (
@@ -1626,6 +1580,8 @@ def create_portfolio_upload_session(
         zip_bundle=None,
         zip_filename=safe_filename,
         stored_bytes=body.total_bytes,
+        storage_provider="catalyst_stratus" if upload_storage is not None else "database",
+        object_status="uploading" if upload_storage is not None else "legacy",
         visibility="private",
         portfolio_metadata={
             "course_slug": course_slug,
@@ -1636,6 +1592,7 @@ def create_portfolio_upload_session(
             "upload_chunk_size": PROJECT_ZIP_UPLOAD_CHUNK_BYTES,
             "upload_chunk_count": chunk_count,
             "upload_protocol": "chunked-v1",
+            "upload_chunks": {},
             "summary": "",
             "skills": [],
             "technologies": [],
@@ -1660,86 +1617,88 @@ def create_portfolio_upload_session(
     "/api/me/portfolio/submissions/upload-session/{submission_id}/chunks/{sequence}"
 )
 async def upload_portfolio_submission_chunk(
-    submission_id: UUID,
-    sequence: int,
-    request: Request,
-    user: User = Depends(require_user),
-    db: Session = Depends(get_db),
+    submission_id: UUID, sequence: int, request: Request,
+    user: User = Depends(require_user), db: Session = Depends(get_db),
 ) -> dict[str, Any]:
-    """Accept one bounded raw-binary chunk; identical retries are idempotent."""
+    """Store browser chunks in Catalyst staging objects, or legacy DB in database mode."""
     submission = _owned_upload_submission(db, submission_id, user, lock=True)
     metadata = dict(submission.portfolio_metadata or {})
-    if metadata.get("upload_state") != "uploading" or metadata.get(
-        "archive_upload_complete"
-    ):
-        raise HTTPException(
-            status_code=409, detail="This upload session is no longer accepting chunks."
-        )
+    if metadata.get("upload_state") != "uploading" or metadata.get("archive_upload_complete"):
+        raise HTTPException(status_code=409, detail="This upload session is no longer accepting chunks.")
     total_bytes = int(metadata.get("upload_expected_bytes") or 0)
     chunk_size = int(metadata.get("upload_chunk_size") or 0)
     chunk_count = int(metadata.get("upload_chunk_count") or 0)
-    if (
-        chunk_size != PROJECT_ZIP_UPLOAD_CHUNK_BYTES
-        or sequence < 0
-        or sequence >= chunk_count
-    ):
+    if chunk_size != PROJECT_ZIP_UPLOAD_CHUNK_BYTES or sequence < 0 or sequence >= chunk_count:
         raise HTTPException(status_code=400, detail="Invalid upload chunk number.")
     expected_size = min(chunk_size, total_bytes - sequence * chunk_size)
     if expected_size <= 0:
         raise HTTPException(status_code=400, detail="Invalid upload chunk size.")
-
-    # Stream into a small bounded buffer instead of trusting Content-Length or
-    # materializing an arbitrarily large request body in memory.
-    parts: list[bytes] = []
-    received = 0
+    parts, received = [], 0
     async for part in request.stream():
-        if not part:
-            continue
+        if not part: continue
         received += len(part)
         if received > expected_size:
-            raise HTTPException(
-                status_code=413, detail="Upload chunk exceeds its expected size."
-            )
+            raise HTTPException(status_code=413, detail="Upload chunk exceeds its expected size.")
         parts.append(part)
     payload = b"".join(parts)
     if len(payload) != expected_size:
-        raise HTTPException(
-            status_code=400,
-            detail="Upload chunk size does not match the expected size.",
-        )
+        raise HTTPException(status_code=400, detail="Upload chunk size does not match the expected size.")
+    digest = hashlib.sha256(payload).hexdigest()
+    storage = _portfolio_upload_storage()
+    if storage is None:
+        existing = db.scalar(select(ProjectSubmissionZipChunk).where(ProjectSubmissionZipChunk.submission_id == submission.id, ProjectSubmissionZipChunk.sequence == sequence))
+        if existing is not None:
+            if bytes(existing.payload) == payload:
+                db.rollback(); return {"stored": True, "duplicate": True, "sequence": sequence, "received_bytes": len(payload)}
+            raise HTTPException(status_code=409, detail="A different chunk is already stored at this sequence number.")
+        db.add(ProjectSubmissionZipChunk(submission_id=submission.id, sequence=sequence, payload=payload))
+        db.commit()
+        return {"stored": True, "duplicate": False, "sequence": sequence, "received_bytes": len(payload)}
 
-    existing = db.scalar(
-        select(ProjectSubmissionZipChunk).where(
-            ProjectSubmissionZipChunk.submission_id == submission.id,
-            ProjectSubmissionZipChunk.sequence == sequence,
-        )
-    )
+    chunks = dict(metadata.get("upload_chunks") or {})
+    existing = chunks.get(str(sequence))
+    key = _project_staging_chunk_key(submission.id, sequence)
     if existing is not None:
-        if bytes(existing.payload) == payload:
-            db.rollback()
-            return {
-                "stored": True,
-                "duplicate": True,
-                "sequence": sequence,
-                "received_bytes": len(payload),
-            }
-        raise HTTPException(
-            status_code=409,
-            detail="A different chunk is already stored at this sequence number.",
-        )
+        if int(existing.get("size", -1)) != len(payload) or existing.get("sha256") != digest:
+            raise HTTPException(status_code=409, detail="A different chunk is already stored at this sequence number.")
+        try:
+            if not storage.object_exists(key):
+                raise StorageError("Previously staged chunk is missing.")
+            staged_details = storage.object_metadata(key)
+            staged_size = int(staged_details.get("size") or staged_details.get("size_bytes") or 0)
+            if staged_size != len(payload) or storage.checksum_object(key) != digest:
+                raise StorageError("Previously staged chunk has a different size or checksum.")
+        except StorageError as exc:
+            raise HTTPException(status_code=503, detail="The staged upload chunk could not be verified. Retry later.") from exc
+        return {"stored": True, "duplicate": True, "sequence": sequence, "received_bytes": len(payload)}
 
-    db.add(
-        ProjectSubmissionZipChunk(
-            submission_id=submission.id, sequence=sequence, payload=payload
-        )
-    )
-    db.commit()
-    return {
-        "stored": True,
-        "duplicate": False,
-        "sequence": sequence,
-        "received_bytes": len(payload),
-    }
+    # Persist the deterministic key before network I/O so failed attempts remain reconcilable.
+    pending = list(metadata.get("staging_cleanup_pending") or [])
+    if key not in pending: pending.append(key)
+    metadata["staging_cleanup_pending"] = pending
+    submission.portfolio_metadata = metadata
+    db.add(submission); db.commit()
+    try:
+        stored = storage.upload_stream(key, io.BytesIO(payload), expected_size=len(payload))
+        _verify_catalyst_object(storage, key, expected_size=len(payload), expected_sha256=digest)
+        if stored.bucket != storage.bucket_name or stored.checksum_sha256 != digest:
+            raise StorageError("Catalyst staged chunk receipt did not match the source chunk.")
+    except StorageError as exc:
+        raise HTTPException(status_code=503, detail="Catalyst could not safely store this chunk. Retry the same chunk later.") from exc
+    metadata = dict(submission.portfolio_metadata or {})
+    chunks = dict(metadata.get("upload_chunks") or {})
+    chunks[str(sequence)] = {"key": key, "size": len(payload), "sha256": digest}
+    metadata["upload_chunks"] = chunks
+    metadata["staging_cleanup_pending"] = [item for item in (metadata.get("staging_cleanup_pending") or []) if item != key]
+    submission.portfolio_metadata = metadata
+    db.add(submission)
+    try:
+        db.commit()
+    except Exception as exc:
+        db.rollback()
+        # Pending key was committed before upload; keep it for a safe retry/reconciliation.
+        raise HTTPException(status_code=503, detail="The chunk reached Catalyst but its metadata commit failed. Retry this same chunk; it is safe and idempotent.") from exc
+    return {"stored": True, "duplicate": False, "sequence": sequence, "received_bytes": len(payload)}
 
 
 @router.post(
@@ -1747,471 +1706,250 @@ async def upload_portfolio_submission_chunk(
     status_code=status.HTTP_201_CREATED,
 )
 def finalize_portfolio_upload_session(
-    submission_id: UUID,
-    user: User = Depends(require_user),
-    db: Session = Depends(get_db),
+    submission_id: UUID, user: User = Depends(require_user), db: Session = Depends(get_db),
 ) -> dict[str, Any]:
-    """Verify all chunks and validate the reconstructed ZIP before publishing it as a saved submission."""
+    """Reassemble to disk, validate, upload one verified archive, then clean staging."""
     submission = _owned_upload_submission(db, submission_id, user, lock=True)
     metadata = dict(submission.portfolio_metadata or {})
-    if (
-        metadata.get("archive_upload_complete")
-        and metadata.get("upload_state") == "completed"
-    ):
-        return {
-            "submission": _portfolio_item(submission, user),
-            "message": "This upload was already finalized.",
-        }
+    if metadata.get("archive_upload_complete") and metadata.get("upload_state") == "completed":
+        return {"submission": _portfolio_item(submission, user), "message": "This upload was already finalized."}
     if metadata.get("upload_state") != "uploading":
-        raise HTTPException(
-            status_code=409, detail="This upload session cannot be finalized."
-        )
-
+        raise HTTPException(status_code=409, detail="This upload session cannot be finalized.")
     expected_bytes = int(metadata.get("upload_expected_bytes") or 0)
     expected_chunks = int(metadata.get("upload_chunk_count") or 0)
-    actual_count = (
-        db.scalar(
-            select(func.count())
-            .select_from(ProjectSubmissionZipChunk)
-            .where(
-                ProjectSubmissionZipChunk.submission_id == submission.id,
-            )
-        )
-        or 0
-    )
-    if (
-        expected_bytes <= 0
-        or expected_chunks <= 0
-        or int(actual_count) != expected_chunks
-    ):
-        raise HTTPException(
-            status_code=409,
-            detail={
-                "code": "UPLOAD_INCOMPLETE",
-                "message": "Some ZIP chunks are still missing. Retry failed chunks, then finalize again.",
-                "expected_chunks": expected_chunks,
-                "received_chunks": int(actual_count),
-            },
-        )
+    storage = _portfolio_upload_storage()
+    if storage is None:
+        actual_count = db.scalar(select(func.count()).select_from(ProjectSubmissionZipChunk).where(ProjectSubmissionZipChunk.submission_id == submission.id)) or 0
+        if expected_bytes <= 0 or expected_chunks <= 0 or int(actual_count) != expected_chunks:
+            raise HTTPException(status_code=409, detail={"code":"UPLOAD_INCOMPLETE","message":"Some ZIP chunks are still missing. Retry failed chunks, then finalize again.","expected_chunks":expected_chunks,"received_chunks":int(actual_count)})
+    else:
+        chunks = dict(metadata.get("upload_chunks") or {})
+        if expected_bytes <= 0 or expected_chunks <= 0 or len(chunks) != expected_chunks or any(str(i) not in chunks for i in range(expected_chunks)):
+            raise HTTPException(status_code=409, detail={"code":"UPLOAD_INCOMPLETE","message":"Some ZIP chunks are still missing. Retry failed chunks, then finalize again.","expected_chunks":expected_chunks,"received_chunks":len(chunks)})
 
-    total_written = 0
-    next_sequence = 0
+    total_written, next_sequence = 0, 0
+    source_digest = hashlib.sha256()
+    staging_keys = []
     stored_object = None
-    active_storage = get_active_storage()
     with tempfile.TemporaryFile(mode="w+b") as archive_file:
-        while next_sequence < expected_chunks:
-            batch = db.execute(
-                select(
-                    ProjectSubmissionZipChunk.sequence,
-                    ProjectSubmissionZipChunk.payload,
-                )
-                .where(
-                    ProjectSubmissionZipChunk.submission_id == submission.id,
-                    ProjectSubmissionZipChunk.sequence >= next_sequence,
-                )
-                .order_by(ProjectSubmissionZipChunk.sequence)
-                .limit(4)
-            ).all()
-            if not batch:
-                raise HTTPException(
-                    status_code=409,
-                    detail="Some ZIP chunks are missing. Retry the upload and finalize again.",
-                )
-            for stored_sequence, payload in batch:
-                if int(stored_sequence) != next_sequence:
-                    raise HTTPException(
-                        status_code=409,
-                        detail="ZIP chunks are not in a complete sequence.",
-                    )
-                archive_file.write(bytes(payload))
-                total_written += len(payload)
+        if storage is None:
+            while next_sequence < expected_chunks:
+                batch = db.execute(select(ProjectSubmissionZipChunk.sequence, ProjectSubmissionZipChunk.payload).where(ProjectSubmissionZipChunk.submission_id == submission.id, ProjectSubmissionZipChunk.sequence >= next_sequence).order_by(ProjectSubmissionZipChunk.sequence).limit(4)).all()
+                if not batch: raise HTTPException(status_code=409, detail="Some ZIP chunks are missing. Retry the upload and finalize again.")
+                for stored_sequence, payload in batch:
+                    if int(stored_sequence) != next_sequence: raise HTTPException(status_code=409, detail="ZIP chunks are not in a complete sequence.")
+                    block = bytes(payload); archive_file.write(block); source_digest.update(block); total_written += len(block); next_sequence += 1
+        else:
+            chunks = dict(metadata.get("upload_chunks") or {})
+            for sequence in range(expected_chunks):
+                entry = chunks.get(str(sequence)) or {}
+                key = str(entry.get("key") or "")
+                expected_size = int(entry.get("size") or 0)
+                expected_hash = str(entry.get("sha256") or "")
+                if key != _project_staging_chunk_key(submission.id, sequence) or expected_size <= 0 or not expected_hash:
+                    raise HTTPException(status_code=409, detail="A staged chunk metadata record is invalid.")
+                chunk_digest = hashlib.sha256(); chunk_total = 0
+                try:
+                    for block in storage.iter_download(key):
+                        chunk_total += len(block); chunk_digest.update(block); archive_file.write(block); source_digest.update(block); total_written += len(block)
+                except StorageError as exc:
+                    raise HTTPException(status_code=503, detail="A staged ZIP chunk is temporarily unavailable. Retry finalization later.") from exc
+                if chunk_total != expected_size or chunk_digest.hexdigest() != expected_hash:
+                    raise HTTPException(status_code=409, detail="A staged ZIP chunk failed size or checksum verification.")
+                staging_keys.append(key)
                 next_sequence += 1
         if total_written != expected_bytes:
-            raise HTTPException(
-                status_code=409,
-                detail="Uploaded byte count does not match the declared ZIP size.",
-            )
+            raise HTTPException(status_code=409, detail="Uploaded byte count does not match the declared ZIP size.")
         try:
             validate_project_zip_file(archive_file)
         except HTTPException:
-            # Invalid/unsafe archives do not occupy storage indefinitely.
-            db.delete(submission)
-            db.commit()
+            # Preserve recoverable staging state; invalid archives can be explicitly canceled.
+            metadata["upload_error"] = "invalid_zip"; submission.portfolio_metadata = metadata; db.add(submission); db.commit()
             raise
-
         archive_file.seek(0)
-        if active_storage is not None:
+        if storage is not None:
+            final_key = _project_archive_object_key(submission.id)
             try:
-                stored_object = active_storage.upload_stream(
-                    _project_archive_object_key(submission.id),
-                    archive_file,
-                    expected_size=expected_bytes,
-                )
+                stored_object = storage.upload_stream(final_key, archive_file, expected_size=expected_bytes)
+                remote_size, remote_digest = _verify_catalyst_object(storage, final_key, expected_size=expected_bytes, expected_sha256=source_digest.hexdigest())
+                if stored_object.bucket != storage.bucket_name or stored_object.size_bytes != remote_size or stored_object.checksum_sha256 != remote_digest:
+                    raise StorageError("Catalyst final archive receipt did not match remote verification.")
             except StorageError as exc:
-                # Preserve the already-complete Neon chunks during an outage. A later
-                # retry or the standalone migration tool can move this archive safely.
-                logger.warning(
-                    "Stratus upload failed for submission %s; retaining Neon chunks.",
-                    submission.id,
-                )
+                metadata["upload_error"] = "catalyst_unavailable_or_verification_failed"; metadata["upload_retryable"] = True
                 metadata["stratus_orphan_object_key"] = _project_archive_object_key(submission.id)
                 metadata["stratus_orphan_cleanup_required"] = True
                 if exc.upload_id:
                     metadata["stratus_pending_multipart_upload_id"] = exc.upload_id
                     metadata["stratus_pending_object_key"] = _project_archive_object_key(submission.id)
                     metadata["stratus_pending_multipart_cleanup_required"] = True
-
-        if stored_object is not None:
+                submission.portfolio_metadata = metadata; db.add(submission); db.commit()
+                raise HTTPException(status_code=503, detail="Catalyst could not verify the final project ZIP. Your staged chunks are retained; retry finalization later.") from exc
             _apply_storage_result(submission, stored_object)
-            for cleanup_key in (
-                "stratus_orphan_object_key",
-                "stratus_orphan_cleanup_required",
-                "stratus_pending_multipart_upload_id",
-                "stratus_pending_object_key",
-                "stratus_pending_multipart_cleanup_required",
-            ):
-                metadata.pop(cleanup_key, None)
-            # Keep the source in this PostgreSQL transaction until the object upload
-            # has completed and passed remote size + SHA-256 verification.
-            db.execute(
-                delete(ProjectSubmissionZipChunk).where(
-                    ProjectSubmissionZipChunk.submission_id == submission.id
-                )
-            )
-        else:
-            submission.storage_provider = "database"
-            submission.storage_bucket = None
-            submission.storage_key = None
+            metadata = dict(submission.portfolio_metadata or {})
+            submission.storage_provider = "catalyst_stratus"
+            submission.storage_bucket = stored_object.bucket
+            submission.storage_key = final_key
             submission.file_size_bytes = expected_bytes
-            submission.checksum_sha256 = _file_sha256(archive_file)
-            submission.object_status = "stored"
-
-    metadata["archive_upload_complete"] = True
-    metadata["upload_state"] = "completed"
-    metadata["upload_completed_at"] = utc_now().isoformat()
-    submission.portfolio_metadata = metadata
-    db.add(submission)
+            submission.checksum_sha256 = remote_digest
+            submission.object_status = "verified"
+            # Staging keys stay in metadata until after the final object reference commits.
+            metadata["staging_cleanup_pending"] = staging_keys
+        else:
+            db.execute(delete(ProjectSubmissionZipChunk).where(ProjectSubmissionZipChunk.submission_id == submission.id))
+            # Legacy development/test mode retains the payload in PostgreSQL chunks.
+            archive_file.seek(0); _store_project_zip_chunks(db, submission.id, archive_file)
+            submission.storage_provider = "database"; submission.storage_bucket = None; submission.storage_key = None
+            submission.file_size_bytes = expected_bytes; submission.checksum_sha256 = source_digest.hexdigest(); submission.object_status = "stored"
+    metadata["archive_upload_complete"] = True; metadata["upload_state"] = "completed"; metadata["upload_completed_at"] = utc_now().isoformat(); metadata.pop("upload_error", None); metadata.pop("upload_retryable", None)
+    submission.portfolio_metadata = metadata; db.add(submission)
     try:
         db.commit()
     except Exception as exc:
         db.rollback()
-        if stored_object is not None and active_storage is not None:
-            try:
-                active_storage.delete_object(stored_object.key)
-            except StorageError:
-                logger.exception("Could not remove unreferenced Stratus object after DB commit failure.")
-                try:
-                    orphan_row = db.get(ProjectSubmission, submission.id)
-                    if orphan_row is not None:
-                        orphan_metadata = dict(orphan_row.portfolio_metadata or {})
-                        orphan_metadata["stratus_orphan_object_key"] = stored_object.key
-                        orphan_metadata["stratus_orphan_cleanup_required"] = True
-                        orphan_row.portfolio_metadata = orphan_metadata
-                        db.commit()
-                except Exception:
-                    db.rollback()
-                    logger.exception("Could not persist the orphan-object cleanup marker.")
-        raise HTTPException(
-            status_code=503,
-            detail="The ZIP could not be finalized in the database. Your original uploaded chunks were retained; retry finalization.",
-        ) from exc
+        # Staging references remain committed from chunk receipt; deterministic final key is reusable.
+        raise HTTPException(status_code=503, detail="The final archive was uploaded but its Neon metadata commit failed. Staged chunks were retained; retry finalization.") from exc
+    if storage is not None and staging_keys:
+        failed = _delete_staging_objects(storage, staging_keys)
+        if failed:
+            current = db.get(ProjectSubmission, submission.id)
+            current_metadata = dict(current.portfolio_metadata or {}); current_metadata["staging_cleanup_pending"] = failed
+            current.portfolio_metadata = current_metadata; db.add(current); db.commit()
+        else:
+            current = db.get(ProjectSubmission, submission.id)
+            current_metadata = dict(current.portfolio_metadata or {}); current_metadata.pop("staging_cleanup_pending", None); current.portfolio_metadata = current_metadata; db.add(current); db.commit()
     db.refresh(submission)
-    return {
-        "submission": _portfolio_item(submission, user),
-        "message": "Your project ZIP was validated and saved privately.",
-    }
+    return {"submission": _portfolio_item(submission, user), "message": "Your project ZIP was validated, uploaded to Catalyst, and verified." if storage is not None else "Your project ZIP was validated and saved privately."}
 
 
 @router.delete("/api/me/portfolio/submissions/upload-session/{submission_id}")
 def cancel_portfolio_upload_session(
-    submission_id: UUID,
-    user: User = Depends(require_user),
-    db: Session = Depends(get_db),
+    submission_id: UUID, user: User = Depends(require_user), db: Session = Depends(get_db),
 ) -> dict[str, Any]:
-    """Cancel an incomplete upload and atomically release its reserved storage quota."""
-    submission = db.scalar(
-        select(ProjectSubmission)
-        .where(
-            ProjectSubmission.id == submission_id,
-            ProjectSubmission.user_id == user.id,
-        )
-        .with_for_update()
-    )
-    if submission is None:
-        return {"deleted": False}
+    """Cancel a pending upload only after owned Catalyst staging objects are removed."""
+    submission = db.scalar(select(ProjectSubmission).where(ProjectSubmission.id == submission_id, ProjectSubmission.user_id == user.id).with_for_update())
+    if submission is None: return {"deleted": False}
     metadata = dict(submission.portfolio_metadata or {})
-    if metadata.get("upload_state") != "uploading" or metadata.get(
-        "archive_upload_complete"
-    ):
-        raise HTTPException(
-            status_code=409,
-            detail="A completed project submission cannot be canceled as an upload session.",
-        )
-    db.delete(submission)
-    db.commit()
-    return {"deleted": True}
+    if metadata.get("upload_state") not in {"uploading", "cancel_pending_cleanup"} or metadata.get("archive_upload_complete"): 
+        raise HTTPException(status_code=409, detail="A completed project submission cannot be canceled as an upload session.")
+    entries = dict(metadata.get("upload_chunks") or {})
+    keys = [entry.get("key") for entry in entries.values() if isinstance(entry, dict) and entry.get("key")]
+    keys.extend(metadata.get("staging_cleanup_pending") or [])
+    if keys:
+        storage = get_catalyst_storage()
+        if storage is None: raise HTTPException(status_code=503, detail="Catalyst is unavailable; upload cancellation is pending and can be retried.")
+        failed = _delete_staging_objects(storage, keys)
+        if failed:
+            metadata["staging_cleanup_pending"] = failed; metadata["upload_state"] = "cancel_pending_cleanup"; submission.portfolio_metadata = metadata; db.add(submission); db.commit()
+            raise HTTPException(status_code=503, detail="Some staging objects could not be deleted. The upload reservation is retained for safe cleanup; retry cancellation.")
+    db.delete(submission); db.commit(); return {"deleted": True}
 
 
 @router.post(
     "/api/me/portfolio/submissions/upload", status_code=status.HTTP_201_CREATED
 )
 def upload_portfolio_submission(
-    course_slug: str = Form(default="", max_length=100),
-    project_slug: str = Form(default="", max_length=180),
-    title: str | None = Form(default=None, max_length=200),
-    archive_file: UploadFile = File(...),
-    user: User = Depends(require_user),
-    db: Session = Depends(get_db),
+    course_slug: str = Form(default="", max_length=100), project_slug: str = Form(default="", max_length=180),
+    title: str | None = Form(default=None, max_length=200), archive_file: UploadFile = File(...),
+    user: User = Depends(require_user), db: Session = Depends(get_db),
 ) -> dict[str, Any]:
-    """Accept any learner-created ZIP; no reviewed-course project manifest is required."""
+    """Validate and store a direct ZIP in the selected provider without silent fallback."""
     filename = (archive_file.filename or "").strip()
     if not filename.lower().endswith(".zip"):
-        raise HTTPException(
-            status_code=400, detail="Upload a .zip archive of your project files."
-        )
+        raise HTTPException(status_code=400, detail="Upload a .zip archive of your project files.")
     try:
-        archive_file.file.seek(0, 2)
-        payload_size = archive_file.file.tell()
-        validate_project_zip_size(payload_size)
-        archive_file.file.seek(0)
-        validate_project_zip_file(archive_file.file)
-        archive_file.file.seek(0)
-
-        course_slug = (
-            _normalize_portfolio_slug(course_slug, fallback="", max_length=100)
-            if course_slug.strip()
-            else ""
-        )
-        title_value = (title or "").strip()
-        project_base = (
-            project_slug.strip() or title_value or Path(filename).stem or "my-project"
-        )
-        normalized_project_slug = _normalize_portfolio_slug(
-            project_base, fallback="my-project", max_length=180
-        )
-        safe_filename = (
-            re.sub(r"[^A-Za-z0-9._-]+", "-", Path(filename).name).strip(".-")
-            or f"{normalized_project_slug}.zip"
-        )
-        if not safe_filename.lower().endswith(".zip"):
-            safe_filename += ".zip"
-
+        archive_file.file.seek(0, 2); payload_size = archive_file.file.tell(); validate_project_zip_size(payload_size); archive_file.file.seek(0); validate_project_zip_file(archive_file.file); archive_file.file.seek(0)
+        storage = _portfolio_upload_storage()
+        course_slug = _normalize_portfolio_slug(course_slug, fallback="", max_length=100) if course_slug.strip() else ""
+        title_value = (title or "").strip(); project_base = project_slug.strip() or title_value or Path(filename).stem or "my-project"
+        normalized_project_slug = _normalize_portfolio_slug(project_base, fallback="my-project", max_length=180)
+        safe_filename = re.sub(r"[^A-Za-z0-9._-]+", "-", Path(filename).name).strip(".-") or f"{normalized_project_slug}.zip"
+        if not safe_filename.lower().endswith(".zip"): safe_filename += ".zip"
         ensure_storage_capacity(db, user, incoming_bytes=payload_size)
-        submission = ProjectSubmission(
-            user_id=user.id,
-            project_slug=normalized_project_slug,
-            title=(
-                title_value or normalized_project_slug.replace("-", " ").title()
-            ).strip()[:200],
-            code_bundle={},
-            zip_bundle=None,
-            zip_filename=safe_filename,
-            stored_bytes=payload_size,
-            visibility="private",
-            portfolio_metadata={
-                "course_slug": course_slug,
-                "custom_project": True,
-                "archive_upload_complete": False,
-                "summary": "",
-                "skills": [],
-                "technologies": [],
-                "screenshot_urls": [],
-            },
-        )
-        db.add(submission)
-        db.flush()
-        active_storage = get_active_storage()
+        submission = ProjectSubmission(user_id=user.id, project_slug=normalized_project_slug, title=(title_value or normalized_project_slug.replace("-", " ").title()).strip()[:200], code_bundle={}, zip_bundle=None, zip_filename=safe_filename, stored_bytes=payload_size, visibility="private", storage_provider="catalyst_stratus" if storage is not None else "database", object_status="uploading" if storage is not None else "legacy", portfolio_metadata={"course_slug":course_slug,"custom_project":True,"archive_upload_complete":False,"upload_state":"uploading","summary":"","skills":[],"technologies":[],"screenshot_urls":[]})
+        db.add(submission); db.commit(); db.refresh(submission)
         stored_object = None
-        metadata = dict(submission.portfolio_metadata or {})
-        try:
-            if active_storage is not None:
-                try:
-                    stored_object = active_storage.upload_stream(
-                        _project_archive_object_key(submission.id),
-                        archive_file.file,
-                        expected_size=payload_size,
-                    )
-                except StorageError as storage_exc:
-                    logger.warning(
-                        "Stratus upload failed for direct portfolio upload %s; using Neon fallback.",
-                        submission.id,
-                    )
-                    metadata["stratus_orphan_object_key"] = _project_archive_object_key(submission.id)
-                    metadata["stratus_orphan_cleanup_required"] = True
-                    if storage_exc.upload_id:
-                        metadata["stratus_pending_multipart_upload_id"] = storage_exc.upload_id
-                        metadata["stratus_pending_object_key"] = _project_archive_object_key(submission.id)
-                        metadata["stratus_pending_multipart_cleanup_required"] = True
-            if stored_object is not None:
-                _apply_storage_result(submission, stored_object)
-                for cleanup_key in (
-                    "stratus_orphan_object_key",
-                    "stratus_orphan_cleanup_required",
-                    "stratus_pending_multipart_upload_id",
-                    "stratus_pending_object_key",
-                    "stratus_pending_multipart_cleanup_required",
-                ):
-                    metadata.pop(cleanup_key, None)
-                submission.checksum_sha256 = stored_object.checksum_sha256
-            else:
-                archive_file.file.seek(0)
-                _store_project_zip_chunks(db, submission.id, archive_file.file)
-                submission.storage_provider = "database"
-                submission.storage_bucket = None
-                submission.storage_key = None
-                submission.file_size_bytes = payload_size
-                archive_file.file.seek(0)
-                submission.checksum_sha256 = _file_sha256(archive_file.file)
-                submission.object_status = "stored"
-            metadata["archive_upload_complete"] = True
-            metadata["upload_state"] = "completed"
-            submission.portfolio_metadata = metadata
-            db.add(submission)
+        if storage is not None:
+            key = _project_archive_object_key(submission.id); source_hash = _file_sha256(archive_file.file)
             try:
-                db.commit()
-            except Exception:
-                db.rollback()
-                if stored_object is not None and active_storage is not None:
-                    try:
-                        active_storage.delete_object(stored_object.key)
-                    except StorageError:
-                        logger.exception("Could not remove unreferenced Stratus object after direct upload commit failure.")
-                        try:
-                            orphan_row = db.get(ProjectSubmission, submission.id)
-                            if orphan_row is not None:
-                                orphan_metadata = dict(orphan_row.portfolio_metadata or {})
-                                orphan_metadata["stratus_orphan_object_key"] = stored_object.key
-                                orphan_metadata["stratus_orphan_cleanup_required"] = True
-                                orphan_row.portfolio_metadata = orphan_metadata
-                                db.commit()
-                        except Exception:
-                            db.rollback()
-                            logger.exception("Could not persist the direct-upload orphan marker.")
-                raise
-        except Exception as exc:
-            # The submission row and any fallback chunks share one transaction.
-            db.rollback()
-            if isinstance(exc, HTTPException):
-                raise
-            raise HTTPException(
-                status_code=503,
-                detail="The project ZIP could not be stored completely. Please retry the upload.",
-            ) from exc
-        db.refresh(submission)
-        return {
-            "submission": _portfolio_item(submission, user),
-            "message": "Your project ZIP was saved privately. Add a summary, then enable public sharing when you are ready.",
-        }
-    finally:
+                stored_object = storage.upload_stream(key, archive_file.file, expected_size=payload_size)
+                _verify_catalyst_object(storage, key, expected_size=payload_size, expected_sha256=source_hash)
+                if stored_object.bucket != storage.bucket_name or stored_object.checksum_sha256 != source_hash:
+                    raise StorageError("Catalyst upload receipt did not match source archive.")
+                _apply_storage_result(submission, stored_object)
+                submission.storage_provider = "catalyst_stratus"; submission.storage_bucket = storage.bucket_name; submission.storage_key = key; submission.file_size_bytes = payload_size; submission.checksum_sha256 = source_hash; submission.object_status = "verified"
+            except StorageError as exc:
+                cleanup_failed = False
+                try:
+                    if storage.object_exists(key): storage.delete_object(key)
+                except StorageError:
+                    cleanup_failed = True
+                    logger.exception("Direct ZIP upload left an owned Catalyst object requiring cleanup.")
+                metadata = dict(submission.portfolio_metadata or {})
+                metadata["upload_error"] = "catalyst_upload_failed"; metadata["upload_retryable"] = True
+                if cleanup_failed:
+                    metadata["stratus_orphan_object_key"] = key; metadata["stratus_orphan_cleanup_required"] = True
+                if exc.upload_id:
+                    metadata["stratus_pending_multipart_upload_id"] = exc.upload_id
+                    metadata["stratus_pending_object_key"] = key
+                    metadata["stratus_pending_multipart_cleanup_required"] = True
+                submission.portfolio_metadata = metadata; db.add(submission); db.commit()
+                raise HTTPException(status_code=503, detail="Catalyst could not safely store the project ZIP. No PostgreSQL ZIP fallback was created.") from exc
+        else:
+            archive_file.file.seek(0); _store_project_zip_chunks(db, submission.id, archive_file.file); submission.storage_provider = "database"; submission.file_size_bytes = payload_size; submission.checksum_sha256 = _file_sha256(archive_file.file); submission.object_status = "stored"
+        metadata = dict(submission.portfolio_metadata or {}); metadata["archive_upload_complete"] = True; metadata["upload_state"] = "completed"; metadata["upload_completed_at"] = utc_now().isoformat(); metadata.pop("upload_error", None); metadata.pop("upload_retryable", None); submission.portfolio_metadata = metadata; db.add(submission)
         try:
-            archive_file.file.close()
-        except Exception:
-            pass
-
-
-@router.get("/api/me/portfolio")
-def get_my_portfolio(
-    user: User = Depends(require_user), db: Session = Depends(get_db)
-) -> dict[str, Any]:
-    rows = db.scalars(
-        select(ProjectSubmission)
-        .where(ProjectSubmission.user_id == user.id)
-        .order_by(ProjectSubmission.submitted_at.desc())
-    ).all()
-    visible_rows = [row for row in rows if _portfolio_upload_is_complete(row)]
-    return {
-        "username": user.username,
-        "items": [_portfolio_item(row, user) for row in visible_rows],
-        "certificates": _portfolio_certificate_items(db, user),
-        "default_visibility": "private",
-    }
-
-
-@router.patch("/api/me/portfolio/{submission_id}")
-def update_portfolio_item(
-    submission_id: UUID,
-    body: PortfolioEditInput,
-    user: User = Depends(require_user),
-    db: Session = Depends(get_db),
-) -> dict[str, Any]:
-    item = db.scalar(
-        select(ProjectSubmission).where(
-            ProjectSubmission.id == submission_id, ProjectSubmission.user_id == user.id
-        )
-    )
-    if item is None:
-        raise HTTPException(
-            status_code=404, detail="Portfolio submission was not found."
-        )
-    if not _portfolio_upload_is_complete(item):
-        raise HTTPException(
-            status_code=409,
-            detail="Finish or cancel the ZIP upload before editing or sharing this project.",
-        )
-    metadata = dict(item.portfolio_metadata or {})
-    changes = body.model_dump(exclude_unset=True)
-    if "visibility" in changes and changes["visibility"] is not None:
-        item.visibility = changes.pop("visibility")
-    if "title" in changes and changes["title"] is not None:
-        metadata["title"] = changes.pop("title").strip()
-    for key, value in changes.items():
-        if value is not None:
-            metadata[key] = value
-    if len(json.dumps(metadata, ensure_ascii=False).encode("utf-8")) > 12_000:
-        raise HTTPException(status_code=413, detail="Portfolio metadata is too large.")
-    item.portfolio_metadata = metadata
-    db.commit()
-    db.refresh(item)
-    return {
-        "item": _portfolio_item(item, user),
-        "message": "Visibility and selected portfolio fields were saved.",
-    }
+            db.commit()
+        except Exception as exc:
+            db.rollback()
+            if stored_object is not None and storage is not None:
+                cleanup_failed = False
+                try: storage.delete_object(stored_object.key)
+                except StorageError:
+                    cleanup_failed = True
+                    logger.exception("Direct upload orphan cleanup failed; reservation retained for reconciliation.")
+                row = db.get(ProjectSubmission, submission.id)
+                if row is not None:
+                    marker = dict(row.portfolio_metadata or {}); marker["upload_error"] = "metadata_commit_failed"; marker["upload_retryable"] = True
+                    if cleanup_failed:
+                        marker["stratus_orphan_object_key"] = stored_object.key; marker["stratus_orphan_cleanup_required"] = True
+                    row.portfolio_metadata = marker; db.add(row); db.commit()
+            raise HTTPException(status_code=503, detail="The ZIP was stored but its metadata could not be finalized. Retry or contact support; no Neon payload fallback was created.") from exc
+        db.refresh(submission)
+        return {"submission":_portfolio_item(submission,user),"message":"Your project ZIP was uploaded to Catalyst and verified." if storage is not None else "Your project ZIP was saved privately."}
+    except HTTPException: raise
+    except Exception as exc:
+        db.rollback(); logger.exception("Portfolio ZIP upload failed.")
+        raise HTTPException(status_code=503, detail="The project ZIP could not be stored completely. Please retry the upload.") from exc
+    finally:
+        try: archive_file.file.close()
+        except Exception: pass
 
 
 @router.delete("/api/me/portfolio/submissions/{submission_id}")
 def delete_portfolio_submission(
-    submission_id: UUID,
-    user: User = Depends(require_user),
-    db: Session = Depends(get_db),
+    submission_id: UUID, user: User = Depends(require_user), db: Session = Depends(get_db),
 ) -> dict[str, bool]:
-    """Delete only the authenticated owner's project and its external object."""
-    item = db.scalar(
-        select(ProjectSubmission)
-        .where(
-            ProjectSubmission.id == submission_id,
-            ProjectSubmission.user_id == user.id,
-        )
-        .with_for_update()
-    )
-    if item is None:
-        return {"deleted": False}
-
+    """Delete owned Catalyst objects first; retain the row if remote deletion fails."""
+    item = db.scalar(select(ProjectSubmission).where(ProjectSubmission.id == submission_id, ProjectSubmission.user_id == user.id).with_for_update())
+    if item is None: return {"deleted": False}
+    metadata = dict(item.portfolio_metadata or {})
+    keys = []
     if item.storage_provider == "catalyst_stratus" and item.storage_key and item.object_status != "object_deleted":
-        # Persist intent first. If Stratus is unavailable, the row remains available
-        # for a safe retry and does not get detached from its object reference.
-        item.object_status = "delete_pending"
-        db.add(item)
-        db.commit()
-        storage = get_catalyst_storage()
-        if storage is None:
-            raise HTTPException(
-                status_code=503,
-                detail="Catalyst storage is not configured; the project is marked for deletion and can be retried later.",
-            )
-        try:
-            storage.delete_object(item.storage_key)
-            item.object_status = "object_deleted"
-            db.add(item)
-            db.commit()
-        except StorageError as exc:
-            raise HTTPException(
-                status_code=503,
-                detail="The project archive could not be deleted from storage. Retry the deletion later.",
-            ) from exc
-
-    db.delete(item)
-    db.commit()
-    return {"deleted": True}
+        keys.append(item.storage_key); item.object_status = "delete_pending"
+    for entry in (metadata.get("upload_chunks") or {}).values():
+        if isinstance(entry, dict) and entry.get("key"): keys.append(entry["key"])
+    keys.extend(metadata.get("staging_cleanup_pending") or [])
+    keys.extend(metadata.get("delete_cleanup_pending") or [])
+    orphan = metadata.get("stratus_orphan_object_key")
+    if orphan: keys.append(orphan)
+    if keys:
+        db.add(item); db.commit(); storage = get_catalyst_storage()
+        if storage is None: raise HTTPException(status_code=503, detail="Catalyst is unavailable; deletion is pending and the submission is retained for retry.")
+        failed = _delete_staging_objects(storage, keys)
+        if failed:
+            metadata["delete_cleanup_pending"] = failed; item.portfolio_metadata = metadata; db.add(item); db.commit()
+            raise HTTPException(status_code=503, detail="The Catalyst archive could not be fully deleted. The submission is retained; retry deletion later.")
+    db.delete(item); db.commit(); return {"deleted": True}
 
 
 @router.get("/api/me/portfolio/{submission_id}/download")

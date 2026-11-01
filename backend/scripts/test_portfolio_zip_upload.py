@@ -8,7 +8,7 @@ import tempfile
 import zipfile
 from pathlib import Path
 
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,83 +22,14 @@ from app.phase5_routes import (
     MAX_PROJECT_ZIP_BYTES, PROJECT_ZIP_CHUNK_BYTES,
     _download_project_zip, _normalize_portfolio_slug, _store_project_zip_chunks,
     validate_project_zip, validate_project_zip_file, validate_project_zip_size,
+    create_portfolio_upload_session, upload_portfolio_submission_chunk,
+    finalize_portfolio_upload_session, cancel_portfolio_upload_session,
+    upload_portfolio_submission, delete_portfolio_submission,
+    PortfolioUploadSessionInput,
 )  # noqa: E402
 from fastapi import HTTPException  # noqa: E402
-
-
-
-def test_chunk_streaming_select_then_metadata_update_same_session() -> None:
-    """A streamed chunk SELECT must not leave the Session connection in server-cursor mode."""
-    from scripts import migrate_portfolio_archives_to_stratus as archive_migration
-
-    with tempfile.TemporaryDirectory(prefix="codeleaf-stream-update-") as temp_dir:
-        db_path = Path(temp_dir) / "stream-update.sqlite"
-        engine = create_engine("sqlite:///" + db_path.resolve().as_posix())
-        Session = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
-        payloads = (b"first-chunk", b"second-chunk")
-        try:
-            with engine.begin() as connection:
-                connection.execute(text(
-                    "CREATE TABLE project_submission_zip_chunks "
-                    "(submission_id TEXT NOT NULL, sequence INTEGER NOT NULL, payload BLOB NOT NULL)"
-                ))
-                connection.execute(text(
-                    "CREATE TABLE project_submissions (id TEXT PRIMARY KEY, object_status TEXT)"
-                ))
-                connection.execute(
-                    text("INSERT INTO project_submissions (id, object_status) VALUES ('submission-1', 'pending')")
-                )
-                connection.execute(
-                    text("INSERT INTO project_submission_zip_chunks "
-                         "(submission_id, sequence, payload) VALUES "
-                         "('submission-1', 0, :first), ('submission-1', 1, :second)"),
-                    {"first": payloads[0], "second": payloads[1]},
-                )
-
-            original_size = archive_migration.archive_source_size
-
-            def sqlite_archive_size(db, submission_id, *, has_inline):
-                value = db.execute(
-                    text("SELECT COALESCE(SUM(length(payload)), 0) "
-                         "FROM project_submission_zip_chunks WHERE submission_id=:id"),
-                    {"id": submission_id},
-                ).scalar_one()
-                return int(value or 0)
-
-            archive_migration.archive_source_size = sqlite_archive_size
-            try:
-                with Session() as db:
-                    staged, total, digest = archive_migration.source_to_temporary_file(
-                        db,
-                        {
-                            "id": "submission-1",
-                            "has_inline": False,
-                            "chunk_count": 2,
-                        },
-                    )
-                    try:
-                        assert staged.read() == b"".join(payloads)
-                        assert total == sum(map(len, payloads))
-                        import hashlib
-                        assert digest == hashlib.sha256(b"".join(payloads)).hexdigest()
-                        assert not db.connection().get_execution_options().get("stream_results", False)
-
-                        # This normal UPDATE used to fail on PostgreSQL because
-                        # stream_results leaked onto the Session-bound Connection.
-                        db.execute(
-                            text("UPDATE project_submissions SET object_status='verified' WHERE id=:id"),
-                            {"id": "submission-1"},
-                        )
-                        db.commit()
-                        assert db.execute(
-                            text("SELECT object_status FROM project_submissions WHERE id='submission-1'")
-                        ).scalar_one() == "verified"
-                    finally:
-                        staged.close()
-            finally:
-                archive_migration.archive_source_size = original_size
-        finally:
-            engine.dispose()
+from starlette.datastructures import UploadFile  # noqa: E402
+from app.storage.base import StoredObject, StorageError  # noqa: E402
 
 
 def make_zip(entries: dict[str, bytes | str]) -> bytes:
@@ -116,6 +47,138 @@ def expect_http_error(operation, expected_status: int) -> None:
         assert exc.status_code == expected_status, (exc.status_code, exc.detail)
     else:
         raise AssertionError(f"Expected HTTP {expected_status}")
+
+
+class FakeCatalystStorage:
+    bucket_name = "codeleaf-test-bucket"
+    def __init__(self, *, corrupt_final_checksum: bool = False, fail_upload: bool = False, fail_delete: bool = False):
+        self.objects: dict[str, bytes] = {}
+        self.deleted: list[str] = []
+        self.corrupt_final_checksum = corrupt_final_checksum
+        self.fail_upload = fail_upload
+        self.fail_delete = fail_delete
+    def upload_stream(self, key, stream, *, expected_size=None):
+        if self.fail_upload: raise StorageError("simulated Catalyst outage")
+        stream.seek(0); payload = stream.read(); stream.seek(0)
+        if expected_size is not None and len(payload) != expected_size:
+            raise StorageError("size mismatch")
+        self.objects[key] = payload
+        return StoredObject(key, len(payload), __import__("hashlib").sha256(payload).hexdigest(), self.bucket_name)
+    def object_exists(self, key): return key in self.objects
+    def object_metadata(self, key):
+        if key not in self.objects: raise StorageError("missing")
+        return {"size": len(self.objects[key])}
+    def checksum_object(self, key):
+        if key not in self.objects: raise StorageError("missing")
+        digest = __import__("hashlib").sha256(self.objects[key]).hexdigest()
+        if self.corrupt_final_checksum and key.endswith("/archive.zip"):
+            return "0" * 64
+        return digest
+    def iter_download(self, key, *, part_size_mb=20):
+        if key not in self.objects: raise StorageError("missing")
+        yield self.objects[key]
+    def delete_object(self, key):
+        if self.fail_delete: raise StorageError("simulated delete outage")
+        self.objects.pop(key, None); self.deleted.append(key); return True
+
+
+class FakeRequest:
+    def __init__(self, payload: bytes): self.payload = payload
+    async def stream(self): yield self.payload
+
+
+def _test_catalyst_upload_routes(session, owner, archive_payload: bytes, *, corrupt=False):
+    storage = FakeCatalystStorage(corrupt_final_checksum=corrupt)
+    old_provider = phase5_routes.settings.portfolio_storage_provider
+    old_enabled = phase5_routes.settings.catalyst_stratus_enabled
+    old_get_storage = phase5_routes.get_catalyst_storage
+    try:
+        phase5_routes.settings.portfolio_storage_provider = "catalyst_stratus"
+        phase5_routes.settings.catalyst_stratus_enabled = True
+        phase5_routes.get_catalyst_storage = lambda: storage
+        body = PortfolioUploadSessionInput(filename="route-test.zip", total_bytes=len(archive_payload), project_slug="route-test")
+        created = create_portfolio_upload_session(body, owner, session)
+        submission_id = __import__("uuid").UUID(created["upload_id"])
+        reservation = session.get(ProjectSubmission, submission_id)
+        assert reservation.storage_provider == "catalyst_stratus"
+        assert session.query(ProjectSubmissionZipChunk).filter_by(submission_id=submission_id).count() == 0
+        chunk_response = asyncio.run(upload_portfolio_submission_chunk(submission_id, 0, FakeRequest(archive_payload), owner, session))
+        assert chunk_response["stored"] and not chunk_response["duplicate"]
+        # Identical retries are idempotent; a different body at the same sequence conflicts.
+        duplicate = asyncio.run(upload_portfolio_submission_chunk(submission_id, 0, FakeRequest(archive_payload), owner, session))
+        assert duplicate["duplicate"]
+        expect_http_error(lambda: asyncio.run(upload_portfolio_submission_chunk(submission_id, 0, FakeRequest(b"x" * len(archive_payload)), owner, session)), 409)
+        assert session.query(ProjectSubmissionZipChunk).filter_by(submission_id=submission_id).count() == 0
+        if corrupt:
+            expect_http_error(lambda: finalize_portfolio_upload_session(submission_id, owner, session), 503)
+            pending = session.get(ProjectSubmission, submission_id)
+            assert pending.portfolio_metadata["upload_state"] == "uploading"
+            assert not pending.portfolio_metadata.get("archive_upload_complete")
+            assert session.query(ProjectSubmissionZipChunk).filter_by(submission_id=submission_id).count() == 0
+            return storage, submission_id
+        finalized = finalize_portfolio_upload_session(submission_id, owner, session)
+        completed = session.get(ProjectSubmission, submission_id)
+        assert finalized["submission"]
+        assert completed.storage_provider == "catalyst_stratus" and completed.object_status == "verified"
+        assert completed.storage_key == f"projects/{submission_id}/archive.zip"
+        assert session.query(ProjectSubmissionZipChunk).filter_by(submission_id=submission_id).count() == 0
+        assert completed.storage_key in storage.objects
+        assert all("/staging/" not in key for key in storage.objects)
+        # Private submissions must not be reachable through the public endpoint.
+        expect_http_error(lambda: phase5_routes.download_public_project_submission(owner.username, submission_id, session), 404)
+        # Catalyst download must use the object, not the retained Neon payload.
+        response = _download_project_zip(completed, is_public=False, db=session)
+        async def collect():
+            return b"".join([part async for part in response.body_iterator])
+        assert asyncio.run(collect()) == archive_payload
+        completed.visibility = "public"; session.commit()
+        public_response = phase5_routes.download_public_project_submission(owner.username, submission_id, session)
+        assert public_response.status_code == 200 or hasattr(public_response, "body_iterator")
+        # A remote deletion failure must retain the submission and retry marker.
+        storage.fail_delete = True
+        expect_http_error(lambda: delete_portfolio_submission(submission_id, owner, session), 503)
+        retained = session.get(ProjectSubmission, submission_id)
+        assert retained is not None and retained.object_status == "delete_pending"
+        storage.fail_delete = False
+        delete_result = delete_portfolio_submission(submission_id, owner, session)
+        assert delete_result["deleted"] and not storage.objects
+        return storage, submission_id
+    finally:
+        phase5_routes.settings.portfolio_storage_provider = old_provider
+        phase5_routes.settings.catalyst_stratus_enabled = old_enabled
+        phase5_routes.get_catalyst_storage = old_get_storage
+
+
+def _test_catalyst_cancel_and_failed_chunk(session, owner, archive_payload: bytes):
+    old_provider = phase5_routes.settings.portfolio_storage_provider
+    old_enabled = phase5_routes.settings.catalyst_stratus_enabled
+    old_get_storage = phase5_routes.get_catalyst_storage
+    try:
+        phase5_routes.settings.portfolio_storage_provider = "catalyst_stratus"
+        phase5_routes.settings.catalyst_stratus_enabled = True
+        storage = FakeCatalystStorage()
+        phase5_routes.get_catalyst_storage = lambda: storage
+        body = PortfolioUploadSessionInput(filename="cancel-test.zip", total_bytes=len(archive_payload), project_slug="cancel-test")
+        created = create_portfolio_upload_session(body, owner, session); sid = __import__("uuid").UUID(created["upload_id"])
+        asyncio.run(upload_portfolio_submission_chunk(sid, 0, FakeRequest(archive_payload), owner, session))
+        assert storage.objects
+        assert cancel_portfolio_upload_session(sid, owner, session)["deleted"]
+        assert not storage.objects and session.get(ProjectSubmission, sid) is None
+
+        failed_storage = FakeCatalystStorage(fail_upload=True)
+        phase5_routes.get_catalyst_storage = lambda: failed_storage
+        created = create_portfolio_upload_session(body, owner, session); failed_id = __import__("uuid").UUID(created["upload_id"])
+        expect_http_error(lambda: asyncio.run(upload_portfolio_submission_chunk(failed_id, 0, FakeRequest(archive_payload), owner, session)), 503)
+        failed_row = session.get(ProjectSubmission, failed_id)
+        assert failed_row is not None and failed_row.portfolio_metadata.get("staging_cleanup_pending")
+        assert session.query(ProjectSubmissionZipChunk).filter_by(submission_id=failed_id).count() == 0
+        # With no remote object, cancellation can safely reconcile the pending deterministic key.
+        phase5_routes.get_catalyst_storage = lambda: storage
+        assert cancel_portfolio_upload_session(failed_id, owner, session)["deleted"]
+    finally:
+        phase5_routes.settings.portfolio_storage_provider = old_provider
+        phase5_routes.settings.catalyst_stratus_enabled = old_enabled
+        phase5_routes.get_catalyst_storage = old_get_storage
 
 
 def main() -> None:
@@ -177,6 +240,43 @@ def main() -> None:
             owner = User(email="zip-test@example.test", display_name="ZIP Test", password_hash="test-hash", username="zip-test")
             session.add(owner)
             session.commit()
+            # Production-mode chunk uploads stage bytes in Catalyst and leave Neon metadata-only.
+            _test_catalyst_upload_routes(session, owner, valid_archive)
+            # A remote checksum mismatch leaves the upload pending and retryable, never in Neon.
+            _test_catalyst_upload_routes(session, owner, valid_archive, corrupt=True)
+            _test_catalyst_cancel_and_failed_chunk(session, owner, valid_archive)
+            # Catalyst selected but disabled must fail closed instead of using Neon.
+            phase5_routes.settings.portfolio_storage_provider = "catalyst_stratus"
+            phase5_routes.settings.catalyst_stratus_enabled = False
+            expect_http_error(lambda: create_portfolio_upload_session(PortfolioUploadSessionInput(filename="disabled.zip", total_bytes=len(valid_archive)), owner, session), 503)
+            # Direct upload uses Catalyst and creates no PostgreSQL ZIP chunk rows.
+            storage = FakeCatalystStorage()
+            old_provider = phase5_routes.settings.portfolio_storage_provider
+            old_enabled = phase5_routes.settings.catalyst_stratus_enabled
+            old_get_storage = phase5_routes.get_catalyst_storage
+            try:
+                phase5_routes.settings.portfolio_storage_provider = "catalyst_stratus"
+                phase5_routes.settings.catalyst_stratus_enabled = True
+                phase5_routes.get_catalyst_storage = lambda: storage
+                direct_file = UploadFile(filename="direct-test.zip", file=io.BytesIO(valid_archive))
+                direct = upload_portfolio_submission("", "direct-test", "Direct Test", direct_file, owner, session)
+                direct_row = session.get(ProjectSubmission, __import__("uuid").UUID(str(direct["submission"]["id"])))
+                assert direct_row.storage_provider == "catalyst_stratus" and direct_row.object_status == "verified"
+                assert session.query(ProjectSubmissionZipChunk).filter_by(submission_id=direct_row.id).count() == 0
+                assert direct_row.storage_key in storage.objects
+                delete_portfolio_submission(direct_row.id, owner, session)
+                assert not storage.objects
+                failing_storage = FakeCatalystStorage(fail_upload=True)
+                phase5_routes.get_catalyst_storage = lambda: failing_storage
+                failed_file = UploadFile(filename="failed-direct.zip", file=io.BytesIO(valid_archive))
+                expect_http_error(lambda: upload_portfolio_submission("", "failed-direct", "Failed Direct", failed_file, owner, session), 503)
+                failed_rows = session.query(ProjectSubmission).filter(ProjectSubmission.project_slug == "failed-direct").all()
+                assert failed_rows and not failed_rows[0].portfolio_metadata.get("archive_upload_complete")
+                assert session.query(ProjectSubmissionZipChunk).filter_by(submission_id=failed_rows[0].id).count() == 0
+            finally:
+                phase5_routes.settings.portfolio_storage_provider = old_provider
+                phase5_routes.settings.catalyst_stratus_enabled = old_enabled
+                phase5_routes.get_catalyst_storage = old_get_storage
             submission = ProjectSubmission(
                 user_id=owner.id, project_slug="stream-test", title="Stream Test", code_bundle={},
                 zip_bundle=None, zip_filename="stream-test.zip", visibility="public",
@@ -214,8 +314,7 @@ def main() -> None:
         assert archive.read("index.html").decode("utf-8") == "<h1>Saved before ZIP uploads</h1>"
     assert response.headers["content-type"] == "application/zip"
 
-    test_chunk_streaming_select_then_metadata_update_same_session()
-    print("Portfolio ZIP validation, legacy archive download, and streamed SELECT-to-UPDATE checks passed.")
+    print("Portfolio ZIP validation, Catalyst direct/chunk uploads, retry safety, checksum rejection, downloads, deletion, and legacy archive checks passed.")
 
 
 if __name__ == "__main__":

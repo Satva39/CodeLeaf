@@ -6,6 +6,7 @@ from functools import lru_cache
 
 from ..config import settings
 from .catalyst_stratus import CatalystStratusStorage
+from .base import StorageError
 
 logger = logging.getLogger(__name__)
 
@@ -49,13 +50,15 @@ def get_catalyst_storage() -> CatalystStratusStorage | None:
 
 
 def get_active_storage():
-    """Return Stratus only when explicitly selected and enabled for new uploads."""
+    """Resolve the selected write provider and fail closed when Catalyst is selected."""
     provider = (settings.portfolio_storage_provider or "database").strip().lower()
-    if provider != "catalyst_stratus" or not settings.catalyst_stratus_enabled:
+    if provider == "database":
         return None
+    if provider != "catalyst_stratus":
+        raise StorageError("The configured portfolio storage provider is unsupported.")
+    if not settings.catalyst_stratus_enabled:
+        raise StorageError("Catalyst portfolio storage is selected but not enabled.")
     storage = get_catalyst_storage()
     if storage is None:
-        logger.warning(
-            "Catalyst Stratus was selected but is not fully configured; using PostgreSQL archive storage."
-        )
+        raise StorageError("Catalyst portfolio storage is selected but is not fully configured.")
     return storage

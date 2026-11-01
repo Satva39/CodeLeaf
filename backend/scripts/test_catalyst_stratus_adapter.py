@@ -275,9 +275,30 @@ def main() -> None:
     # Unconfigured Catalyst must not prevent the database-only configuration.
     storage_factory._cached_catalyst_storage.cache_clear()
     with patch.object(storage_factory.settings, "catalyst_project_id", None), \
-         patch.object(storage_factory.settings, "catalyst_project_zaid", None):
+         patch.object(storage_factory.settings, "catalyst_project_zaid", None), \
+         patch.object(storage_factory.settings, "portfolio_storage_provider", "database"), \
+         patch.object(storage_factory.settings, "catalyst_stratus_enabled", False):
         assert storage_factory.get_catalyst_storage() is None
         assert storage_factory.get_active_storage() is None
+    # Explicit Catalyst selection must fail closed if disabled or incomplete.
+    with patch.object(storage_factory.settings, "portfolio_storage_provider", "catalyst_stratus"), \
+         patch.object(storage_factory.settings, "catalyst_stratus_enabled", False):
+        try:
+            storage_factory.get_active_storage()
+        except StorageError:
+            pass
+        else:
+            raise AssertionError("Selected but disabled Catalyst must not fall back to Neon")
+    with patch.object(storage_factory.settings, "portfolio_storage_provider", "catalyst_stratus"), \
+         patch.object(storage_factory.settings, "catalyst_stratus_enabled", True), \
+         patch.object(storage_factory.settings, "catalyst_project_id", None), \
+         patch.object(storage_factory.settings, "catalyst_project_zaid", None):
+        try:
+            storage_factory.get_active_storage()
+        except StorageError:
+            pass
+        else:
+            raise AssertionError("Incomplete Catalyst configuration must fail closed")
     storage_factory._cached_catalyst_storage.cache_clear()
 
     print("Mocked Stratus checks passed: SDK credential mapping, small/multipart upload, retries, authorization failure, range/download, checksum mismatch, delete and disabled configuration.")
