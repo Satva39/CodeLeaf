@@ -15,6 +15,7 @@ from sqlalchemy import (
     String,
     Text,
     UniqueConstraint,
+    func,
 )
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.types import Uuid
@@ -66,6 +67,49 @@ class Course(Base):
     level: Mapped[str] = mapped_column(String(30), default="Beginner", nullable=False)
     published: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     sort_order: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+
+
+class CourseContentBundle(Base):
+    """Verified immutable Stratus bundle reference for one course's lesson JSON.
+
+    This mapping intentionally mirrors Alembic revision 0011 exactly. Lesson/module
+    membership remains normalized in course_modules and lessons; the bundle is keyed
+    by its owning course and therefore does not introduce a module-level FK.
+    """
+
+    __tablename__ = "course_content_bundles"
+    __table_args__ = (
+        Index("ix_course_content_bundles_status", "object_status"),
+    )
+
+    course_id: Mapped[object] = mapped_column(
+        Uuid(as_uuid=True),
+        ForeignKey("courses.id", ondelete="CASCADE"),
+        primary_key=True,
+        nullable=False,
+    )
+    storage_provider: Mapped[str] = mapped_column(
+        String(32), default="catalyst_stratus", server_default="catalyst_stratus", nullable=False
+    )
+    storage_bucket: Mapped[str] = mapped_column(String(120), nullable=False)
+    storage_key: Mapped[str] = mapped_column(String(500), unique=True, nullable=False)
+    checksum_sha256: Mapped[str] = mapped_column(String(64), nullable=False)
+    compressed_size_bytes: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    raw_size_bytes: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    lesson_count: Mapped[int] = mapped_column(Integer, nullable=False)
+    schema_version: Mapped[int] = mapped_column(
+        Integer, default=1, server_default="1", nullable=False
+    )
+    object_status: Mapped[str] = mapped_column(
+        String(24), default="pending", server_default="pending", nullable=False
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=now_utc, server_default=func.now(), nullable=False
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=now_utc, onupdate=now_utc,
+        server_default=func.now(), nullable=False
+    )
 
 
 class Module(Base):
