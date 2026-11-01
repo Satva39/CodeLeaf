@@ -41,7 +41,12 @@ from sqlalchemy.orm import Session
 
 from .auth_security import require_user
 from .config import settings
-from .jdoodle_runner import execute_jdoodle
+from .jdoodle_runner import (
+    execute_jdoodle,
+    get_jdoodle_supported_languages,
+    is_jdoodle_language_supported,
+    normalize_language_key,
+)
 from .db import SessionLocal, get_db
 from .models import (
     AuditLog,
@@ -295,10 +300,19 @@ class AnalyticsEventInput(StrictModel):
 
 
 class RunnerCreateInput(StrictModel):
-    language: Literal["python", "javascript"]
+    language: str = Field(min_length=1, max_length=24)
     source: str = Field(min_length=1, max_length=16000)
     stdin: str = Field(default="", max_length=8000)
     idempotency_key: str | None = Field(default=None, min_length=8, max_length=100)
+
+    @field_validator("language")
+    @classmethod
+    def supported_runner_language(cls, value: str) -> str:
+        normalized = normalize_language_key(value)
+        external_languages = {"python", "javascript"}
+        if normalized not in external_languages and not is_jdoodle_language_supported(normalized):
+            raise ValueError("This language does not have a configured execution adapter.")
+        return normalized
 
     @field_validator("idempotency_key")
     @classmethod
@@ -2490,39 +2504,41 @@ def analytics_summary(
 
 @router.get("/api/runner/status")
 def runner_status() -> dict[str, Any]:
-    """Report runner availability without revealing provider credentials."""
+    """Report only runtimes backed by configured, real execution providers."""
 
     external_configured = bool(
         (settings.runner_service_url or "").strip()
         and (settings.runner_service_token or "").strip()
     )
-
     jdoodle_configured = bool(
         (settings.jdoodle_client_id or "").strip()
         and (settings.jdoodle_client_secret or "").strip()
     )
 
-    # Preserve the original runner as the preferred provider when configured.
-    configured = external_configured or jdoodle_configured
+    supported = set(get_jdoodle_supported_languages()) if jdoodle_configured else set()
+    if external_configured:
+        # The separately hosted CodeLeaf runner is intentionally limited to
+        # Python and JavaScript. Other languages are dispatched to JDoodle.
+        supported.update({"python", "javascript"})
 
-    provider = (
-        "external" if external_configured else "jdoodle" if jdoodle_configured else None
-    )
+    if external_configured and jdoodle_configured:
+        provider = "hybrid"
+        message = "CodeLeaf uses its isolated runner for Python/JavaScript and JDoodle for the additional enabled runtimes."
+    elif external_configured:
+        provider = "external"
+        message = "The CodeLeaf isolated runner is configured for Python and JavaScript."
+    elif jdoodle_configured:
+        provider = "jdoodle"
+        message = "JDoodle is configured for the languages listed in supported_languages."
+    else:
+        provider = None
+        message = "No server-side execution provider is configured. Browser HTML/CSS/React preview remains available."
 
     return {
-        "configured": configured,
+        "configured": bool(supported),
         "provider": provider,
-        "supported_languages": (["python", "javascript"] if configured else []),
-        "message": (
-            "The existing isolated runner is configured."
-            if external_configured
-            else (
-                "JDoodle code execution is configured."
-                if jdoodle_configured
-                else "The isolated runner is not configured yet. "
-                "Browser HTML/CSS/JavaScript preview remains available."
-            )
-        ),
+        "supported_languages": sorted(supported),
+        "message": message,
     }
 
 
@@ -2541,12 +2557,16 @@ async def create_runner_job(
         and (settings.jdoodle_client_secret or "").strip()
     )
 
-    if not external_configured and not jdoodle_configured:
+    external_language_supported = body.language in {"python", "javascript"}
+    use_external = external_configured and external_language_supported
+    use_jdoodle = jdoodle_configured and is_jdoodle_language_supported(body.language)
+
+    if not use_external and not use_jdoodle:
         raise HTTPException(
             status_code=503,
             detail=(
-                "No code execution provider is configured. "
-                "Browser HTML/CSS/JavaScript preview remains available."
+                f"No configured execution provider can run {body.language}. "
+                "No code was executed. Check the backend runner configuration."
             ),
         )
 
@@ -2655,8 +2675,9 @@ async def create_runner_job(
         )
 
     try:
-        if external_configured:
-            # Existing external runner takes priority.
+        if use_external:
+            # The dedicated CodeLeaf sandbox remains preferred for its two
+            # supported runtimes; all other languages use JDoodle below.
             async with httpx.AsyncClient(timeout=8.0) as client:
                 response = await client.post(
                     f"{base_url}/v1/jobs",
@@ -2703,7 +2724,7 @@ async def create_runner_job(
             job_status = str(result.get("status", "queued"))[:20]
             saved_result: dict[str, Any] = {}
 
-        else:
+        elif use_jdoodle:
             # JDoodle executes synchronously and returns the finished output.
             jdoodle_result = await execute_jdoodle(
                 language=body.language,
@@ -2718,6 +2739,11 @@ async def create_runner_job(
                 "provider": "jdoodle",
                 "result": jdoodle_result,
             }
+        else:
+            raise HTTPException(
+                status_code=503,
+                detail=f"No configured runner can execute {body.language}.",
+            )
 
     except HTTPException:
         finalize_daily_usage(db, reservation.id, success=False)

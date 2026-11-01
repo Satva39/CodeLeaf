@@ -67,7 +67,7 @@ function normalizeFiles(value) {
     .map((file) => ({
       id: typeof file.id === "string" && file.id ? file.id : fileId(file.name),
       name: file.name,
-      language: getLanguageForFilename(file.name).key,
+      language: getLanguageForFilename(file.name, file.language).key,
       content: typeof file.content === "string" ? file.content.slice(0, 100_000) : "",
     }));
 }
@@ -80,7 +80,7 @@ function normalizeWorkspace(value) {
   const files = normalizeFiles(rawFiles);
   const candidate = value?.webConnection || savedConfig?.webConnection || null;
   const validEntry = files.some((file) => file.name === candidate?.entryFile && /\.html?$/i.test(file.name));
-  const validLanguage = files.some((file) => file.name === candidate?.languageFile && getLanguageForFilename(file.name).key === candidate?.language);
+  const validLanguage = files.some((file) => file.name === candidate?.languageFile && getLanguageForFilename(file.name, file.language).key === candidate?.language);
   const webConnection = candidate?.enabled === true && validEntry && validLanguage
     ? { enabled: true, mode: "stdout-bridge", entryFile: candidate.entryFile, languageFile: candidate.languageFile, language: candidate.language }
     : null;
@@ -172,7 +172,7 @@ export default function PlaygroundPage() {
 
   const files = workspace.files;
   const activeFile = files.find((file) => file.id === workspace.activeFileId) || files[0] || null;
-  const activeLanguage = activeFile ? getLanguageForFilename(activeFile.name) : null;
+  const activeLanguage = activeFile ? getLanguageForFilename(activeFile.name, activeFile.language) : null;
   const outputMode = detectOutputMode({ currentFile: activeFile, files, runnerCapabilities: runnerSupportedLanguages, webConnection: workspace.webConnection });
   const isConnectedPreview = outputMode.mode === "connected-preview";
   const isReactPreview = outputMode.mode === "react-preview";
@@ -186,11 +186,11 @@ export default function PlaygroundPage() {
   }), [files, refresh, outputMode.entryFile, activeFile?.name, connectedOutput]);
   const reactDocument = useMemo(() => createReactPreviewDocument(files, outputMode.entryFile || activeFile?.name, "codeleaf-playground-output"), [files, outputMode.entryFile, activeFile?.name, refresh]);
   const htmlEntryFiles = files.filter((file) => /\.html?$/i.test(file.name));
-  const connectableFiles = files.filter((file) => runnerSupportedLanguages.includes(getLanguageForFilename(file.name).key));
+  const connectableFiles = files.filter((file) => runnerSupportedLanguages.includes(getLanguageForFilename(file.name, file.language).key));
 
   useEffect(() => {
     setConnectionEntryDraft((current) => htmlEntryFiles.some((file) => file.name === current) ? current : workspace.webConnection?.entryFile || htmlEntryFiles[0]?.name || "");
-    setConnectionLanguageDraft((current) => connectableFiles.some((file) => file.name === current) ? current : workspace.webConnection?.languageFile || connectableFiles.find((file) => getLanguageForFilename(file.name).key === "python")?.name || connectableFiles[0]?.name || "");
+    setConnectionLanguageDraft((current) => connectableFiles.some((file) => file.name === current) ? current : workspace.webConnection?.languageFile || connectableFiles.find((file) => getLanguageForFilename(file.name, file.language).key === "python")?.name || connectableFiles[0]?.name || "");
   }, [files, workspace.webConnection, runnerSupportedLanguages]);
 
   useEffect(() => {
@@ -382,7 +382,7 @@ export default function PlaygroundPage() {
         if (!active) return;
         setRunnerConfigured(payload.configured === true);
         setRunnerSupportedLanguages(Array.isArray(payload.supported_languages) ? payload.supported_languages.map((item) => String(item).toLowerCase()) : []);
-        if (payload.configured !== true) setRunnerMessage(payload.message || "The isolated runner is not configured yet.");
+        if (payload.configured !== true) setRunnerMessage(payload.message || "No server-side execution provider is configured yet.");
       } catch {
         if (!active) return;
         setRunnerConfigured(false);
@@ -509,13 +509,13 @@ export default function PlaygroundPage() {
         normalized.push({
           id: fileId(source.name),
           name: source.name,
-          language: getLanguageForFilename(source.name).key,
+          language: getLanguageForFilename(source.name, source.language).key,
           content: source.content,
         });
       }
       const candidate = document.webConnection || null;
       const validEntry = normalized.some((item) => item.name === candidate?.entryFile && /\.html?$/i.test(item.name));
-      const validLanguage = normalized.some((item) => item.name === candidate?.languageFile && getLanguageForFilename(item.name).key === candidate?.language);
+      const validLanguage = normalized.some((item) => item.name === candidate?.languageFile && getLanguageForFilename(item.name, item.language).key === candidate?.language);
       const webConnection = candidate?.enabled === true && validEntry && validLanguage
         ? { enabled: true, mode: "stdout-bridge", entryFile: candidate.entryFile, languageFile: candidate.languageFile, language: candidate.language }
         : null;
@@ -534,12 +534,12 @@ export default function PlaygroundPage() {
 
   async function runRemoteCode(language, source) {
     if (!runnerConfigChecked) {
-      setRunnerMessage("Checking isolated runner availability. Try again in a moment.");
+      setRunnerMessage("Checking execution-provider availability. Try again in a moment.");
       return;
     }
     if (!runnerConfigured) {
       setRunnerStatus("unavailable");
-      setRunnerMessage("The isolated runner is not configured. Your source remains editable and has not been executed.");
+      setRunnerMessage("No server-side execution provider is configured. Your source remains editable and has not been executed.");
       return;
     }
     setRunning(true);
@@ -623,7 +623,7 @@ export default function PlaygroundPage() {
       return;
     }
     setRunnerStatus("unsupported");
-    setRunnerMessage(`${activeLanguage?.label || "This file type"} is editable, saveable, and downloadable. The configured isolated runner does not report a compatible runtime for this language, so CodeLeaf has not executed the code.`);
+    setRunnerMessage(`No execution adapter is enabled for ${activeLanguage?.label || "this file type"}. The source is unchanged and downloadable, but no program was run.`);
   }
 
   function connectLanguageToHtml() {
@@ -633,7 +633,7 @@ export default function PlaygroundPage() {
       setWorkspaceNotice("Choose an existing HTML entry file and a file whose language is supported by the configured runner.");
       return;
     }
-    const language = getLanguageForFilename(languageFile.name).key;
+    const language = getLanguageForFilename(languageFile.name, languageFile.language).key;
     if (!runnerSupportedLanguages.includes(language)) {
       setWorkspaceNotice(`The configured runner does not currently support ${getLanguageForFilename(languageFile.name).label}.`);
       return;
@@ -642,7 +642,7 @@ export default function PlaygroundPage() {
     setConnectedOutput(null);
     setRunnerResult(null);
     setRunnerStatus("idle");
-    setWorkspaceNotice(`${languageFile.name} is connected to ${entry.name}. Run the language file to execute it on the isolated runner. The preview receives the real result through window.CODELEAF_CONNECTED_OUTPUT and the codeleaf:language-output event.`);
+    setWorkspaceNotice(`${languageFile.name} is connected to ${entry.name}. Run the language file through the configured server-side provider. The preview receives the real result through window.CODELEAF_CONNECTED_OUTPUT and the codeleaf:language-output event.`);
   }
 
   function removeLanguageConnection() {
@@ -733,7 +733,7 @@ export default function PlaygroundPage() {
           {htmlEntryFiles.length > 0 && <section className="workspace-web-connection" aria-label="HTML project connection">
             <div className="workspace-web-connection-title"><strong>Web project connection</strong><span>{workspace.webConnection ? "Connected" : "Optional"}</span></div>
             <label>HTML entry file<select value={connectionEntryDraft} onChange={(event) => setConnectionEntryDraft(event.target.value)}><option value="">Choose HTML file…</option>{htmlEntryFiles.map((file) => <option key={file.id} value={file.name}>{file.name}</option>)}</select></label>
-            <label>Run this file<select value={connectionLanguageDraft} onChange={(event) => setConnectionLanguageDraft(event.target.value)}><option value="">Choose supported file…</option>{connectableFiles.map((file) => <option key={file.id} value={file.name}>{file.name} · {getLanguageForFilename(file.name).label}</option>)}</select></label>
+            <label>Run this file<select value={connectionLanguageDraft} onChange={(event) => setConnectionLanguageDraft(event.target.value)}><option value="">Choose supported file…</option>{connectableFiles.map((file) => <option key={file.id} value={file.name}>{file.name} · {getLanguageForFilename(file.name, file.language).label}</option>)}</select></label>
             <small>Only an explicit connection enables backend output to reach the HTML preview. The selected file still runs on CodeLeaf’s isolated server runner.</small>
             <div className="workspace-web-connection-actions"><button type="button" onClick={connectLanguageToHtml} disabled={!runnerConfigChecked || !runnerConfigured || !connectionEntryDraft || !connectionLanguageDraft}>Connect files</button>{workspace.webConnection && <button type="button" className="is-muted" onClick={removeLanguageConnection}>Remove</button>}</div>
             {workspace.webConnection && <small className="workspace-web-connection-active">{workspace.webConnection.languageFile} → {workspace.webConnection.entryFile}</small>}
@@ -795,19 +795,24 @@ export default function PlaygroundPage() {
 
         <section className="workspace-output" aria-label="Run result">
           <div className="workspace-output-heading"><span>{showPreview ? <Monitor size={15} /> : <TerminalSquare size={15} />} {showPreview ? (isReactPreview ? "React Preview" : "Preview") : "Terminal"}</span><span className={`runner-status runner-status-${runnerStatus}`}>{runnerStatus.replaceAll("_", " ")}</span></div>
-          {isConnectedPreview && !showPreview && !runnerResult?.job_id && <p className="workspace-connected-pending">Run the connected {activeLanguage?.label || "language"} file successfully to start the web preview. No browser preview is shown until the real runner result is available.</p>}
+          {isConnectedPreview && !showPreview && !runnerResult?.job_id && <p className="workspace-connected-pending">Run the connected {activeLanguage?.label || "language"} file successfully to start the web preview. No browser preview is shown until the real execution result is available.</p>}
           {showPreview ? <>
             <iframe id="playground-preview-frame" key={refresh} title={isReactPreview ? "React application preview" : "Playground preview"} sandbox="allow-scripts" srcDoc={isReactPreview ? reactDocument : browserDocument} />
             {!!browserOutput.length && <div className="workspace-console"><strong>Preview console</strong>{browserOutput.map((entry, index) => <pre key={`${index}-${entry.kind}`} className={`console-${entry.kind}`}>{entry.text}</pre>)}</div>}
             {isConnectedPreview && connectedOutput && <div className="workspace-console workspace-connected-output"><strong>{connectedOutput.language} execution result</strong><pre>{connectedOutput.stdout || "(no stdout)"}</pre>{connectedOutput.stderr && <pre className="console-error">{connectedOutput.stderr}</pre>}</div>}
-          </> : runnerResult ? <div className="workspace-terminal" aria-live="polite"><strong>stdout</strong><pre>{runnerResult.stdout || "(empty)"}</pre><strong>stderr / result</strong><pre>{runnerResult.stderr || runnerResult.error || runnerResult.message || "(empty)"}</pre>{runnerResult.exit_code !== undefined && <p>Exit code: {runnerResult.exit_code}</p>}{runnerResult.job_id && <small>Job ID: {runnerResult.job_id}</small>}</div> : activeFile ? <div className="workspace-terminal workspace-terminal-idle" aria-live="polite"><div className="workspace-terminal-prompt"><span>CODELEAF TERMINAL</span><span>{languageLabel}</span></div><pre>{runnerMessage || (outputMode.reason === "connected-runtime-unavailable" ? "This project connection is saved, but the configured runner does not advertise support for this language. CodeLeaf has not executed it." : outputMode.runnerSupported ? "Ready. Select Run file to execute your program and view stdout/stderr here." : `${languageLabel} uses the terminal-style output panel. The configured isolated runner currently supports: ${runnerSupportedLanguages.join(", ") || "no languages"}. This language needs a compatible runtime before it can execute. No output is being fabricated.`)}</pre></div> : <div className="workspace-output-empty"><Code2 size={25} /><h2>Your workspace is empty</h2><p>Create a file in Explorer to get started.</p></div>}
+          </> : runnerResult ? <div className="workspace-terminal" aria-live="polite">
+            <div className="workspace-terminal-toolbar"><strong>Execution result</strong><span>{runnerResult.provider || "CodeLeaf runner"}</span></div>
+            <div className="workspace-terminal-stream"><strong>stdout / compiler output</strong><pre>{runnerResult.stdout || "(no standard output or compiler output)"}</pre></div>
+            {(runnerResult.stderr || runnerResult.error || runnerResult.message) && <div className="workspace-terminal-stream is-stderr"><strong>stderr / compiler messages</strong><pre>{runnerResult.stderr || runnerResult.error || runnerResult.message}</pre></div>}
+            <div className="workspace-terminal-meta">{runnerResult.exit_code !== undefined && <span>Exit code: {runnerResult.exit_code}</span>}{runnerResult.cpu_time && <span>CPU: {runnerResult.cpu_time}s</span>}{runnerResult.memory && <span>Memory: {runnerResult.memory} KB</span>}{runnerResult.job_id && <span>Job: {runnerResult.job_id}</span>}</div>
+          </div> : activeFile ? <div className="workspace-terminal workspace-terminal-idle" aria-live="polite"><div className="workspace-terminal-prompt"><span>CODELEAF TERMINAL</span><span>{languageLabel}</span></div><pre>{runnerMessage || (outputMode.reason === "connected-runtime-unavailable" ? "The selected server runtime is not enabled. Choose a language with an available compiler or configure its backend provider." : outputMode.runnerSupported ? "Terminal ready. Select Run file to compile or execute this program. Standard output and compiler/runtime errors will appear here." : `${languageLabel} uses terminal output. This language currently has no execution adapter configured, so the source has not been run.`)}</pre></div> : <div className="workspace-output-empty"><Code2 size={25} /><h2>Your workspace is empty</h2><p>Create a file in Explorer to get started.</p></div>}
           {runnerMessage && <p className="workspace-runner-message" role="status">{runnerMessage}</p>}
           {runnerResult?.job_id && <div className="workspace-output-actions"><button type="button" className="button button-secondary button-small" onClick={checkRunnerStatus} disabled={running}>Check status</button><button type="button" className="button button-secondary button-small" onClick={cancelRunnerJob} disabled={running || FINAL_RUNNER_STATES.has(runnerStatus)}>Cancel</button></div>}
           {!showPreview && !runnerResult?.job_id && activeFile && runnerSupportedLanguages.includes(activeLanguage?.key) && <label className="workspace-stdin">Standard input <textarea value={stdin} onChange={(event) => setStdin(event.target.value)} rows={3} maxLength={8000} placeholder="Input provided to your program" /></label>}
         </section>
       </div>
 
-      <div className="playground-note"><ShieldCheck size={16} /><span>Files auto-save in this browser. Use Account saves to persist workspaces and reusable snippets to your signed-in account; these are subject to plan-specific count and storage allowances. HTML previews run in a sandboxed frame with restrictive Content Security Policy. Server-side code is sent only to CodeLeaf's separate isolated runner; unsupported languages are not executed.</span></div>
+      <div className="playground-note"><ShieldCheck size={16} /><span>Files auto-save in this browser. Use Account saves to persist workspaces and reusable snippets to your signed-in account; these are subject to plan-specific count and storage allowances. HTML previews run in a sandboxed frame with restrictive Content Security Policy. Server-side code is sent only to CodeLeaf's configured execution providers; unsupported languages are not executed.</span></div>
     </PageShell>
   );
 }

@@ -10,5 +10,5 @@ assert.match(page, /runnerConfigChecked/);
 assert.match(page, /disabled=\{running\}/);
 assert.match(page, /if \(!runnerConfigured\)/);
 assert.match(page, /source remains editable and has not been executed/);
-assert.match(page, /The isolated runner is not configured yet/);
+assert.match(page, /No server-side execution provider is configured yet/);
 console.log("PASS playground reads non-sensitive runner status and disables server execution until configured");

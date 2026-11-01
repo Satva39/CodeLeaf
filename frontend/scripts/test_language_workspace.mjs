@@ -21,6 +21,9 @@ assert.equal(resolveLanguage('nodejs').filename, 'script.js');
 assert.equal(getLanguageForFilename('main.c').key, 'c');
 assert.equal(getLanguageForFilename('README.md').key, 'markdown');
 assert.equal(getLanguageForFilename('values.yml').key, 'yaml');
+assert.equal(getLanguageForFilename('query.mysql').key, 'mysql');
+assert.equal(getLanguageForFilename('query.sqlite').key, 'sqlite');
+assert.equal(getLanguageForFilename('query.mongodb').key, 'mongodb');
 assert.match(defaultSourceForLanguage('c'), /#include <stdio\.h>/);
 assert.match(defaultSourceForLanguage('python'), /print\(/);
 

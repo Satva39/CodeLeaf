@@ -11,8 +11,9 @@ const LANGUAGE_CONFIGS = {
   php: { label: "PHP", extension: "php", filename: "index.php", execution: "static" },
   sql: { label: "SQL", extension: "sql", filename: "query.sql", execution: "static" },
   postgresql: { label: "PostgreSQL", extension: "sql", filename: "query.sql", execution: "static" },
-  mysql: { label: "MySQL", extension: "sql", filename: "query.sql", execution: "static" },
-  sqlite: { label: "SQLite", extension: "sql", filename: "query.sql", execution: "static" },
+  mysql: { label: "MySQL", extension: "mysql", filename: "query.mysql", execution: "runner" },
+  sqlite: { label: "SQLite", extension: "sqlite", filename: "query.sqlite", execution: "runner" },
+  mongodb: { label: "MongoDB", extension: "mongodb", filename: "query.mongodb", execution: "runner" },
   redis: { label: "Redis CLI", extension: "redis", filename: "commands.redis", execution: "static" },
   bash: { label: "Bash", extension: "sh", filename: "main.sh", execution: "static" },
   powershell: { label: "PowerShell", extension: "ps1", filename: "main.ps1", execution: "static" },
@@ -41,11 +42,11 @@ const LANGUAGE_CONFIGS = {
   bootstrap: { label: "Bootstrap", extension: "html", filename: "index.html", execution: "browser-html" },
   git: { label: "Git", extension: "md", filename: "README.md", execution: "static" },
   tailwind: { label: "Tailwind CSS", extension: "html", filename: "index.html", execution: "browser-html" },
-  django: { label: "Django / Python", extension: "py", filename: "views.py", execution: "static" },
-  flask: { label: "Flask / Python", extension: "py", filename: "app.py", execution: "static" },
-  expressjs: { label: "Express.js", extension: "js", filename: "server.js", execution: "static" },
-  fastapi: { label: "FastAPI / Python", extension: "py", filename: "main.py", execution: "static" },
-  data: { label: "Data science / Python", extension: "py", filename: "analysis.py", execution: "static" },
+  django: { label: "Django / Python", extension: "py", filename: "views.py", execution: "runner" },
+  flask: { label: "Flask", extension: "py", filename: "app.py", execution: "runner" },
+  expressjs: { label: "Express.js", extension: "js", filename: "server.js", execution: "runner" },
+  fastapi: { label: "FastAPI / Python", extension: "py", filename: "main.py", execution: "runner" },
+  data: { label: "Data science / Python", extension: "py", filename: "analysis.py", execution: "runner" },
   aws: { label: "AWS configuration", extension: "yml", filename: "template.yml", execution: "static" },
   githubactions: { label: "GitHub Actions", extension: "yml", filename: "workflow.yml", execution: "static" },
   markdown: { label: "Markdown", extension: "md", filename: "README.md", execution: "static" },
@@ -75,7 +76,7 @@ export function resolveLanguage(courseSlug = "html", codeLanguage = "") {
     [["aws", "cloudformation"], "aws"], [["github-actions", "github actions"], "githubactions"],
     [["ai", "artificial intelligence"], "data"],
     [["git", "version control"], "git"], [["markdown", "md"], "markdown"],
-    [["jquery"], "javascript"], [["mongodb"], "javascript"], [["redis"], "redis"], [["linux"], "bash"],
+    [["jquery"], "javascript"], [["mongodb", "mongo db"], "mongodb"], [["redis"], "redis"], [["linux"], "bash"],
     [["rest-api-development", "rest api development"], "javascript"], [["json-yaml", "json and yaml"], "yaml"],
     [["sass", "scss"], "sass"],
     [["html", "html5"], "html"],
@@ -136,6 +137,7 @@ export function defaultSourceForLanguage(languageKey) {
     postgresql: "SELECT version();",
     mysql: "SELECT VERSION();",
     sqlite: "SELECT sqlite_version();",
+    mongodb: "db.samples.insertOne({ message: 'Hello, CodeLeaf!' })\ndb.samples.find()",
     bash: "#!/usr/bin/env bash\nprintf '%s\\n' 'Hello, CodeLeaf!'",
     powershell: "Write-Output 'Hello, CodeLeaf!'",
     r: "message <- 'Hello, CodeLeaf!'\nprint(message)",
@@ -221,7 +223,7 @@ export function openSeededWorkspace(mode, payload = {}) {
   return true;
 }
 
-export function getLanguageForFilename(filename) {
+export function getLanguageForFilename(filename, explicitLanguage = "") {
   const name = String(filename || "").toLowerCase();
   const ext = name.includes(".") ? name.split(".").pop() : name;
   const byExtension = {
@@ -231,9 +233,12 @@ export function getLanguageForFilename(filename) {
     swift: "swift", dart: "dart", rb: "ruby", lua: "lua", sh: "bash", bash: "bash", ps1: "powershell",
     ts: "typescript", tsx: "typescript", jsx: "jsx", vue: "vue", scss: "sass", sass: "sass", xml: "xml",
     json: "json", yaml: "yaml", yml: "yaml", md: "markdown", redis: "redis", sol: "solidity", csv: "excel", asp: "asp", txt: "plain",
+    mysql: "mysql", sqlite: "sqlite", mongodb: "mongodb", psql: "postgresql",
   };
-  const key = byExtension[ext] || (name === "dockerfile" ? "docker" : "plain");
-  return { key, ...LANGUAGE_CONFIGS[key] };
+  const explicit = String(explicitLanguage || "").trim().toLowerCase();
+  const supportedExplicit = LANGUAGE_CONFIGS[explicit] ? explicit : "";
+  const key = supportedExplicit || byExtension[ext] || (name === "dockerfile" ? "docker" : "plain");
+  return { key, ...(LANGUAGE_CONFIGS[key] || LANGUAGE_CONFIGS.plain) };
 }
 
 export function compatibleFilename(candidate, language) {
@@ -279,7 +284,7 @@ export function detectOutputMode({
   webConnection = null,
 } = {}) {
   const currentName = String(currentFile?.name || "");
-  const currentLanguage = getLanguageForFilename(currentName);
+  const currentLanguage = getLanguageForFilename(currentName, currentFile?.language);
   const htmlFiles = (Array.isArray(files) ? files : []).filter((file) => /\.html?$/i.test(file?.name || ""));
   const htmlEntry = findFileByName(files, webConnection?.entryFile) || htmlFiles[0] || null;
   const supports = new Set((Array.isArray(runnerCapabilities) ? runnerCapabilities : []).map((item) => String(item).toLowerCase()));
@@ -294,7 +299,7 @@ export function detectOutputMode({
     return { mode: "react-preview", reason: "react-entry", entryFile: currentName, language: "jsx" };
   }
 
-  if (/\.(?:m?js|cjs)$/i.test(currentName) || currentLanguage.key === "javascript") {
+  if (currentLanguage.key === "javascript" && /\.(?:m?js|cjs)$/i.test(currentName)) {
     const referenced = htmlFiles.some((html) => referencedLocalFiles(html.content, "script", "src").includes(filenameOf(currentName)));
     if (referenced) {
       const entry = htmlFiles.find((html) => referencedLocalFiles(html.content, "script", "src").includes(filenameOf(currentName)));

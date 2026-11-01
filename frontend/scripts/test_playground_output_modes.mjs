@@ -22,6 +22,7 @@ const files = [
   { name: "main.c", content: '#include <stdio.h>\nint main(void){return 0;}' },
   { name: "main.cpp", content: "int main(){return 0;}" },
   { name: "query.sql", content: "select 1;" },
+  { name: "server.js", language: "expressjs", content: "console.log('server')" },
 ];
 
 assert.equal(detectOutputMode({ currentFile: files[0], files, runnerCapabilities: runner }).mode, "browser-preview", "HTML should render in browser preview");
@@ -33,6 +34,8 @@ assert.equal(detectOutputMode({ currentFile: files[5], files, runnerCapabilities
 assert.equal(detectOutputMode({ currentFile: files[6], files, runnerCapabilities: runner }).mode, "terminal", "SQL must use terminal/query output, not a browser");
 assert.equal(detectOutputMode({ currentFile: files[3], files: [files[3], files[0]], runnerCapabilities: runner }).mode, "terminal", "the mere presence of HTML must not connect Python");
 assert.equal(detectOutputMode({ currentFile: files[2], files: [files[2]], runnerCapabilities: runner }).mode, "terminal", "unlinked JavaScript should use the JavaScript runner");
+assert.equal(getLanguageForFilename(files[7].name, files[7].language).key, "expressjs", "explicit server framework metadata should survive a .js filename");
+assert.equal(detectOutputMode({ currentFile: files[7], files, runnerCapabilities: ["expressjs"] }).mode, "terminal", "Express server files must use terminal output, not a browser preview");
 
 const connection = { enabled: true, mode: "stdout-bridge", entryFile: "index.html", languageFile: "main.py", language: "python" };
 const connected = detectOutputMode({ currentFile: files[3], files, runnerCapabilities: runner, webConnection: connection });

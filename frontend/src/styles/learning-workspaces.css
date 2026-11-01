@@ -212,7 +212,7 @@
   .code-card-footer-actions { width: 100%; }
 }
 
-/* Terminal-style output for non-browser languages; execution is always delegated to the isolated runner. */
+/* Terminal-style output for non-browser languages, regardless of backend provider. */
 .workspace-terminal-idle { display: block; box-sizing: border-box; min-height: 300px; }
 .workspace-terminal-prompt { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding-bottom: 10px; border-bottom: 1px solid rgba(148,163,184,.18); color: #91a2ba; font: 10px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .08em; }
 .workspace-terminal-idle pre { margin-top: 15px; color: #cbd5e1; }
@@ -232,3 +232,169 @@
 .account-workspace-notice { margin: 2px 0 0; color: #a8b8cc; overflow-wrap: anywhere; font-size: 9px; line-height: 1.6; }
 @media (max-width: 800px) { .account-workspace-panel { grid-template-columns: repeat(2,minmax(0,1fr)); } .account-workspace-heading, .account-workspace-usage, .account-workspace-panel label, .account-workspace-panel input, .account-workspace-panel select, .account-workspace-notice { grid-column: 1 / -1; } }
 @media (max-width: 520px) { .account-workspace-panel { grid-template-columns: minmax(0,1fr); } }
+
+
+/* Playground / Try-it visual refresh: balanced panels, readable terminal, and
+   a consistent dark palette for server-side compiler output. */
+.workspace-shell {
+  grid-template-columns: minmax(205px, 232px) minmax(0, 1.18fr) minmax(330px, .92fr);
+  min-height: 720px;
+  border: 1px solid rgba(148,163,184,.2);
+  border-radius: 16px;
+  background: #080f1d;
+  box-shadow: 0 18px 48px rgba(0,0,0,.18);
+}
+.workspace-files { min-height: 0; overflow: auto; background: #0c1525; }
+.workspace-editor { min-height: 720px; background: #080f1d; }
+.workspace-tabbar { min-height: 48px; background: #101b2d; border-bottom-color: rgba(148,163,184,.16); }
+.workspace-editor-label { background: #0c1728; color: #91a2ba; border-bottom-color: rgba(148,163,184,.12); }
+.workspace-source {
+  min-height: 560px;
+  padding: 18px 19px;
+  color: #dce8f6;
+  background: #080f1d;
+  font-size: 13px;
+  line-height: 1.85;
+  tab-size: 4;
+}
+.workspace-source::selection, .tryit-code-editor::selection { color: #07111e; background: #8be9cf; }
+.workspace-output {
+  min-height: 720px;
+  min-width: 0;
+  overflow: hidden;
+  background: #080f1d;
+  color: #dce8f6;
+  border-left: 1px solid rgba(148,163,184,.16);
+}
+.workspace-output-heading {
+  min-height: 48px;
+  padding: 0 14px;
+  background: #101b2d;
+  color: #dce8f6;
+  border-bottom: 1px solid rgba(148,163,184,.16);
+}
+.workspace-output-heading > span:first-child { color: #dce8f6; font-size: 11px; }
+.workspace-output iframe { min-height: 620px; background: #fff; }
+.workspace-output-empty { min-height: 620px; background: #080f1d; color: #91a2ba; }
+.workspace-terminal {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 620px;
+  padding: 16px;
+  box-sizing: border-box;
+  overflow: auto;
+  background: #080f1d;
+  color: #dce8f6;
+}
+.workspace-terminal-toolbar, .tryit-console-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 0 11px;
+  border-bottom: 1px solid rgba(148,163,184,.17);
+}
+.workspace-terminal-toolbar strong, .tryit-console-toolbar strong { margin: 0; color: #cbd8e8; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.workspace-terminal-toolbar span, .tryit-console-toolbar span { color: #6f839f; font: 10px ui-monospace, monospace; }
+.workspace-terminal-stream { min-width: 0; }
+.workspace-terminal-stream > strong { margin: 0 0 7px; color: #81a0c4; font-size: 9px; letter-spacing: .1em; }
+.workspace-terminal-stream pre {
+  min-height: 64px;
+  max-height: 330px;
+  margin: 0;
+  padding: 13px;
+  overflow: auto;
+  border: 1px solid rgba(148,163,184,.13);
+  border-radius: 9px;
+  background: #0e192a;
+  color: #d8e6f5;
+  font: 12px/1.75 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.workspace-terminal-stream.is-stderr pre, .tryit-console-stderr { color: #ffb6ae !important; border-color: rgba(248,113,113,.2) !important; }
+.workspace-terminal-meta, .tryit-console-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: auto;
+  padding-top: 11px;
+  border-top: 1px solid rgba(148,163,184,.14);
+  color: #8296b1;
+  font: 10px ui-monospace, monospace;
+}
+.workspace-terminal-idle { min-height: 620px; padding: 17px; }
+.workspace-terminal-idle pre { max-width: 55ch; margin-top: 17px; color: #9eb0c8; font: 12px/1.8 ui-monospace, monospace; }
+.workspace-runner-message, .runner-message {
+  margin: 10px 13px 13px;
+  padding: 10px 12px;
+  border: 1px solid rgba(251,146,60,.23);
+  border-radius: 9px;
+  background: rgba(251,146,60,.09);
+  color: #fdc58c;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.workspace-connected-pending { background: rgba(251,146,60,.08); color: #fdc58c; border-bottom-color: rgba(251,146,60,.17); }
+.workspace-stdin { border-top: 1px solid rgba(148,163,184,.14); background: #0c1728; color: #a9bbd2; }
+.workspace-stdin textarea { border-color: rgba(148,163,184,.22); color: #e4edf8; background: #080f1d; }
+.workspace-output-actions { border-top-color: rgba(148,163,184,.14); background: #101b2d; }
+.workspace-statusbar { background: #101b2d; border-top-color: rgba(148,163,184,.14); }
+
+.tryit-workspace { grid-template-columns: minmax(0, 1.08fr) minmax(330px, .92fr); gap: 16px; align-items: stretch; }
+.tryit-editor-panel, .tryit-result-panel { min-height: 650px; border: 1px solid rgba(148,163,184,.2); border-radius: 14px; background: #0a1322; }
+.tryit-toolbar, .tryit-result-heading { background: #101b2d; border-bottom-color: rgba(148,163,184,.16); }
+.tryit-toolbar > span, .tryit-result-heading h2 { color: #dce8f6; }
+.tryit-result-heading span { color: #8499b5; }
+.tryit-code-editor { min-height: 550px; background: #080f1d; font-size: 13px; line-height: 1.85; }
+.tryit-stdin { background: #0c1728; color: #a9bbd2; }
+.tryit-stdin textarea { border-color: rgba(148,163,184,.22); color: #e4edf8; background: #080f1d; }
+.tryit-status { background: #101b2d; border-top-color: rgba(148,163,184,.16); }
+.tryit-result-panel iframe { min-height: 610px; }
+.tryit-console {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 580px;
+  padding: 16px;
+  box-sizing: border-box;
+  background: #080f1d;
+}
+.tryit-console > strong { margin: 0; color: #81a0c4; font-size: 9px; letter-spacing: .1em; }
+.tryit-console pre { max-height: 330px; min-height: 64px; margin: 0; padding: 13px; border: 1px solid rgba(148,163,184,.13); background: #0e192a; color: #d8e6f5; font: 12px/1.75 ui-monospace, monospace; }
+.tryit-empty-output { min-height: 550px; align-content: center; background: #080f1d; color: #8da2bd; }
+.tryit-empty-output h3 { color: #e2eaf5; }
+.tryit-empty-output p { color: #9baec6; }
+.tryit-empty-output pre { color: #dce8f6; background: #101b2d; border-color: rgba(148,163,184,.16); }
+.tryit-expected-output { padding: 12px 16px; background: #0c1728; color: #aebfd4; }
+.tryit-expected-output pre { color: #dce8f6; background: #101b2d; }
+
+@media (max-width: 1280px) {
+  .workspace-shell { grid-template-columns: 205px minmax(0,1fr); }
+  .workspace-output { grid-column: 1 / -1; min-height: 500px; border-left: 0; border-top: 1px solid rgba(148,163,184,.16); }
+  .workspace-output iframe, .workspace-output-empty { min-height: 460px; }
+  .workspace-terminal, .workspace-terminal-idle { min-height: 460px; }
+}
+@media (max-width: 900px) {
+  .tryit-workspace { grid-template-columns: minmax(0,1fr); }
+  .tryit-editor-panel, .tryit-result-panel { min-height: 0; }
+  .tryit-code-editor { min-height: 430px; }
+  .tryit-result-panel iframe, .tryit-empty-output { min-height: 430px; }
+  .tryit-console { min-height: 430px; }
+}
+@media (max-width: 800px) {
+  .workspace-shell { grid-template-columns: minmax(0,1fr); min-height: 0; }
+  .workspace-files { max-height: 460px; border-right: 0; border-bottom: 1px solid rgba(148,163,184,.17); }
+  .workspace-editor { min-height: 0; }
+  .workspace-source { min-height: 390px; }
+  .workspace-output { grid-column: auto; min-height: 420px; }
+  .workspace-output iframe, .workspace-output-empty, .workspace-terminal, .workspace-terminal-idle { min-height: 390px; }
+}
+@media (max-width: 520px) {
+  .workspace-shell { border-radius: 10px; }
+  .workspace-source, .tryit-code-editor { min-height: 340px; padding: 13px; font-size: 12px; }
+  .workspace-terminal, .workspace-terminal-idle, .tryit-console { min-height: 340px; padding: 12px; }
+  .workspace-terminal-stream pre, .tryit-console pre { font-size: 11px; }
+  .tryit-result-panel iframe, .tryit-empty-output { min-height: 350px; }
+}

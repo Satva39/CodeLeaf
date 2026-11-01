@@ -60,7 +60,7 @@ export default function TryItPage() {
         if (!active) return;
         setRunnerConfigured(payload.configured === true);
         setRunnerSupportedLanguages(Array.isArray(payload.supported_languages) ? payload.supported_languages.map((item) => String(item).toLowerCase()) : []);
-        if (payload.configured !== true) setRunnerMessage(payload.message || "The isolated runner is not configured.");
+        if (payload.configured !== true) setRunnerMessage(payload.message || "No server-side execution provider is configured.");
       })
       .catch(() => {
         if (active) setRunnerMessage("Runner availability could not be checked. No server-side code has been executed.");
@@ -141,15 +141,15 @@ export default function TryItPage() {
   async function runIsolated() {
     if (!runnerCapabilitiesChecked) {
       setRunnerStatus("unavailable");
-      setRunnerMessage("Checking isolated runner availability. Try again once the status check finishes.");
+      setRunnerMessage("Checking execution-provider availability. Try again once the status check finishes.");
       setResult(null);
       return;
     }
     if (!runnerConfigured || !runnerSupportsLanguage) {
       setRunnerStatus(runnerConfigured ? "unsupported" : "unavailable");
       setRunnerMessage(runnerConfigured
-        ? `${language.label} is editable and downloadable, but the configured runner does not advertise this runtime. CodeLeaf has not executed the code.`
-        : "The isolated runner is not configured. CodeLeaf has not executed this code.");
+        ? `No execution adapter is enabled for ${language.label}. The source is unchanged, but CodeLeaf has not run it.`
+        : "No server-side execution provider is configured. CodeLeaf has not run this code.");
       setResult(null);
       return;
     }
@@ -175,7 +175,7 @@ export default function TryItPage() {
       setResult({ kind: "runner", job_id: jobId, message: "The job is still running. Open the Playground to check the latest status." });
     } catch (err) {
       setRunnerStatus("unavailable");
-      setRunnerMessage(err.message || "The isolated runner is unavailable.");
+      setRunnerMessage(err.message || "The configured execution provider is unavailable.");
     } finally { setRunning(false); }
   }
 
@@ -233,13 +233,18 @@ export default function TryItPage() {
           </section>
           <section className="tryit-result-panel panel" aria-labelledby="tryit-result-title">
             <div className="tryit-result-heading"><h2 id="tryit-result-title">{isBrowser ? "Live result" : "Program output"}</h2><span>{isBrowser ? "Sandboxed browser preview" : "Isolated runner only"}</span></div>
-            {isBrowser ? <iframe key={`${runCount}-${language.key}`} ref={frameRef} title={isReactPreview ? "Try-it React application preview" : "Try-it browser result"} sandbox="allow-scripts" srcDoc={doc} /> : result ? <div className="tryit-console" aria-live="polite"><strong>stdout</strong><pre>{result.stdout || "(empty)"}</pre><strong>stderr / result</strong><pre>{result.stderr || result.error || result.message || "(empty)"}</pre>{result.exit_code !== undefined && <p>Exit code: {result.exit_code}</p>}</div> : <div className="tryit-empty-output"><ShieldCheck size={22} /><h3>Ready to run</h3><p>{runnerSupportsLanguage && runnerConfigured ? "Run submits this program to the separately configured isolated runner." : `${language.label} execution is not currently advertised by the configured isolated runner. Your code stays editable; it will not be simulated as if it ran.`}</p>{expectedOutput && <details><summary>Reference output</summary><pre>{expectedOutput}</pre></details>}</div>}
+            {isBrowser ? <iframe key={`${runCount}-${language.key}`} ref={frameRef} title={isReactPreview ? "Try-it React application preview" : "Try-it browser result"} sandbox="allow-scripts" srcDoc={doc} /> : result ? <div className="tryit-console" aria-live="polite">
+              <div className="tryit-console-toolbar"><strong>Execution result</strong><span>{result.provider || "CodeLeaf runner"}</span></div>
+              <strong>stdout / compiler output</strong><pre>{result.stdout || "(no standard output or compiler output)"}</pre>
+              {(result.stderr || result.error || result.message) && <><strong>stderr / compiler messages</strong><pre className="tryit-console-stderr">{result.stderr || result.error || result.message}</pre></>}
+              <div className="tryit-console-meta">{result.exit_code !== undefined && <span>Exit code: {result.exit_code}</span>}{result.cpu_time && <span>CPU: {result.cpu_time}s</span>}{result.memory && <span>Memory: {result.memory} KB</span>}</div>
+            </div> : <div className="tryit-empty-output"><ShieldCheck size={22} /><h3>Ready to run</h3><p>{runnerSupportsLanguage && runnerConfigured ? "Run sends this program to the configured execution provider. Its actual output and compiler errors will appear here." : `${language.label} currently has no enabled execution adapter. Your source remains editable and downloadable; CodeLeaf will not display simulated output.`}</p>{expectedOutput && <details><summary>Reference output</summary><pre>{expectedOutput}</pre></details>}</div>}
             {runnerMessage && <p className="runner-message" role="status">{runnerMessage}</p>}
             {!isBrowser && result?.kind === "runner" && expectedOutput && <details className="tryit-expected-output"><summary>Compare with reference output</summary><pre>{expectedOutput}</pre></details>}
           </section>
         </div>
       )}
-      <div className="playground-note"><ShieldCheck size={16} /><span>HTML, CSS and React examples use a restricted browser preview. JavaScript previews only when it is linked to an HTML entry; otherwise it runs through the configured server runtime. Other languages use terminal output only when the isolated runner advertises support.</span></div>
+      <div className="playground-note"><ShieldCheck size={16} /><span>HTML, CSS and React examples use a restricted browser preview. JavaScript previews only when it is linked to an HTML entry; otherwise it runs through the configured server runtime. Other languages use terminal output when a matching server-side execution adapter is enabled.</span></div>
       <div className="tryit-footer-links"><button type="button" className="button button-secondary" onClick={() => openSeededWorkspace("playground", { courseSlug: course, lessonSlug, title, language: language.key, code, expectedOutput, runMode })}>Open the full multi-file Playground <ExternalLink size={13} /></button></div>
     </PageShell>
   );

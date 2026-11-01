@@ -63,10 +63,12 @@ class RunnerConfigStatusTests(unittest.TestCase):
 
         self.assertTrue(payload["configured"])
         self.assertEqual(payload["provider"], "jdoodle")
-        self.assertEqual(
-            payload["supported_languages"],
-            ["python", "javascript"],
-        )
+        self.assertIn("python", payload["supported_languages"])
+        self.assertIn("javascript", payload["supported_languages"])
+        self.assertIn("cpp", payload["supported_languages"])
+        self.assertIn("java", payload["supported_languages"])
+        self.assertIn("mysql", payload["supported_languages"])
+        self.assertIn("postgresql", payload["supported_languages"])
         self.assertNotIn("TEST_CLIENT_ID", response.text)
         self.assertNotIn("TEST_SECRET", response.text)
 

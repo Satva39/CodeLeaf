@@ -88,8 +88,18 @@ class JDoodleAdapterTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(payload["clientId"], "test-client-id")
         self.assertEqual(payload["clientSecret"], "test-client-secret")
         self.assertEqual(payload["language"], "python3")
-        self.assertEqual(payload["versionIndex"], "5")
+        self.assertEqual(payload["versionIndex"], "6")
         self.assertEqual(payload["script"], "print('hello from python')")
+
+    async def test_python_package_imports_request_allowlisted_jdoodle_libraries(self):
+        client = FakeAsyncClient(
+            response=FakeResponse(payload={"statusCode": 200, "output": "1.0"})
+        )
+        with patch.object(jdoodle_runner.httpx, "AsyncClient", return_value=client):
+            await jdoodle_runner.execute_jdoodle(
+                language="python", source="import pandas as pd\nprint(pd.__version__)"
+            )
+        self.assertEqual(client.post_calls[0][1]["libs"], ["pandas"])
 
     async def test_javascript_request_uses_nodejs_configuration(self):
         client = FakeAsyncClient(
@@ -105,10 +115,32 @@ class JDoodleAdapterTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(payload["language"], "nodejs")
         self.assertEqual(payload["versionIndex"], "7")
 
+    async def test_cpp_request_uses_cpp_compiler_configuration(self):
+        client = FakeAsyncClient(
+            response=FakeResponse(payload={"statusCode": 200, "output": "Hello C++\n", "cpuTime": "0.02", "memory": "12"})
+        )
+        with patch.object(jdoodle_runner.httpx, "AsyncClient", return_value=client):
+            result = await jdoodle_runner.execute_jdoodle(
+                language="cpp", source='#include <iostream>\nint main(){std::cout << "Hello C++";} '
+            )
+        self.assertEqual(result["stdout"], "Hello C++\n")
+        payload = client.post_calls[0][1]
+        self.assertEqual(payload["language"], "cpp")
+        self.assertEqual(payload["versionIndex"], "7")
+
+    async def test_compiler_output_is_preserved_as_stderr(self):
+        client = FakeAsyncClient(
+            response=FakeResponse(payload={"statusCode": 200, "output": "main.cpp: error: expected ;", "compilationStatus": 1})
+        )
+        with patch.object(jdoodle_runner.httpx, "AsyncClient", return_value=client):
+            result = await jdoodle_runner.execute_jdoodle(language="cpp", source="int main(){")
+        self.assertEqual(result["stdout"], "")
+        self.assertIn("expected ;", result["stderr"])
+
     async def test_unsupported_language_is_rejected_before_network_call(self):
         with patch.object(jdoodle_runner.httpx, "AsyncClient") as client_class:
             with self.assertRaises(HTTPException) as raised:
-                await jdoodle_runner.execute_jdoodle(language="ruby", source="puts 1")
+                await jdoodle_runner.execute_jdoodle(language="powershell", source="Write-Output 1")
         self.assertEqual(raised.exception.status_code, 422)
         client_class.assert_not_called()
 
@@ -130,6 +162,10 @@ class JDoodleAdapterTests(unittest.IsolatedAsyncioTestCase):
 
 
 class RunnerRouteTests(unittest.IsolatedAsyncioTestCase):
+    def test_single_character_language_keys_are_valid(self):
+        self.assertEqual(routes.RunnerCreateInput(language="c", source="int main(){return 0;}").language, "c")
+        self.assertEqual(routes.RunnerCreateInput(language="r", source="cat(1)").language, "r")
+
     def _prepare_db_for_create(self):
         db = Mock()
         # The route checks recent-job and active-job counts when no idempotency
@@ -249,6 +285,29 @@ class RunnerRouteTests(unittest.IsolatedAsyncioTestCase):
 
         self.assertEqual(raised.exception.status_code, 409)
         client_class.assert_not_called()
+
+    async def test_cpp_uses_jdoodle_even_when_external_runner_is_configured(self):
+        db = self._prepare_db_for_create()
+        user = SimpleNamespace(id=uuid4())
+        body = routes.RunnerCreateInput(language="cpp", source="#include <iostream>\nint main(){std::cout << 42;}")
+        usage_reservation = SimpleNamespace(id=uuid4())
+        with (
+            patch.object(routes.settings, "runner_service_url", "https://runner.example"),
+            patch.object(routes.settings, "runner_service_token", "test-runner-token"),
+            patch.object(routes.settings, "jdoodle_client_id", "test-client-id"),
+            patch.object(routes.settings, "jdoodle_client_secret", "test-client-secret"),
+            patch.object(routes, "effective_plan_id", return_value="full_access"),
+            patch.object(routes, "plan_limits", return_value={"code_executions_per_day": 150}),
+            patch.object(routes, "reserve_daily_usage", return_value=(usage_reservation, False)),
+            patch.object(routes, "finalize_daily_usage"),
+            patch.object(routes, "execute_jdoodle", new_callable=AsyncMock, return_value={"provider": "jdoodle", "stdout": "42", "stderr": ""}) as execute_mock,
+            patch.object(routes.httpx, "AsyncClient") as external_client,
+        ):
+            response = await routes.create_runner_job(body=body, user=user, db=db)
+        self.assertEqual(response["job"]["status"], "completed")
+        self.assertEqual(db.add.call_args.args[0].result_json["provider"], "jdoodle")
+        execute_mock.assert_awaited_once()
+        external_client.assert_not_called()
 
     async def test_existing_external_runner_remains_preferred(self):
         db = self._prepare_db_for_create()
