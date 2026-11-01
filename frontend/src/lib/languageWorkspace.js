@@ -27,7 +27,7 @@ const LANGUAGE_CONFIGS = {
   solidity: { label: "Solidity", extension: "sol", filename: "Contract.sol", execution: "static" },
   json: { label: "JSON / YAML", extension: "json", filename: "data.json", execution: "static" },
   xml: { label: "XML", extension: "xml", filename: "document.xml", execution: "static" },
-  jsx: { label: "React / JSX", extension: "jsx", filename: "App.jsx", execution: "static" },
+  jsx: { label: "React / JSX", extension: "jsx", filename: "App.jsx", execution: "browser-react" },
   vue: { label: "Vue", extension: "vue", filename: "App.vue", execution: "static" },
   sass: { label: "Sass", extension: "scss", filename: "styles.scss", execution: "static" },
   asp: { label: "ASP", extension: "asp", filename: "default.asp", execution: "static" },
@@ -195,7 +195,7 @@ export function starterFiles({ courseSlug = "html", codeLanguage = "", source = 
 
 export function safeWorkspaceFilename(value) {
   const name = String(value || "").trim();
-  if (!name || name.length > 100 || name === "." || name === "..") return false;
+  if (!name || name.length > 100 || name === "." || name === ".." || name === "__codeleaf_project_config__.json") return false;
   if (/[<>:"/\\|?*\x00-\x1f]/.test(name)) return false;
   return !name.endsWith(".");
 }
@@ -244,25 +244,210 @@ export function compatibleFilename(candidate, language) {
   return language?.filename || "notes.txt";
 }
 
-export function isBrowserWorkspace(files) {
-  return Array.isArray(files) && files.some((file) => /\.html?$/i.test(file.name)) && files.some((file) => /\.css$/i.test(file.name) || /\.html?$/i.test(file.name));
+function filenameOf(value) {
+  return String(value || "").trim().replaceAll("\\", "/").split("/").pop().toLowerCase();
 }
 
-export function createBrowserDocument(files, messageSource = "codeleaf-try-output") {
-  const htmlFile = files.find((file) => /\.html?$/i.test(file.name));
-  const cssFile = files.find((file) => /\.css$/i.test(file.name));
-  const jsFile = files.find((file) => /\.(m?js|cjs)$/i.test(file.name));
-  const html = htmlFile?.content || defaultSourceForLanguage("html");
-  const css = cssFile?.content || "";
-  const js = jsFile?.content || "";
-  const style = `<style>${css.replace(/<\/style/gi, "<\\/style")}</style>`;
-  const bridge = `<script>(function(){var source=${JSON.stringify(String(messageSource))};var send=function(kind,args){var output=Array.from(args||[]).map(function(value){if(typeof value==='string')return value;try{return JSON.stringify(value)}catch(_){return String(value)}}).join(' ');try{parent.postMessage({source:source,kind:kind,output:output,error:kind==='error'?output:''},'*')}catch(_){}};['log','info','warn','error'].forEach(function(kind){var original=console[kind].bind(console);console[kind]=function(){send(kind,arguments);original.apply(console,arguments)}});window.addEventListener('error',function(event){send('error',[event.message||'Preview error'])})})();<\/script>`;
-  const script = js ? `<script>${js.replace(/<\/script/gi, "<\\/script")}<\/script>` : "";
-  const csp = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">`;
-  if (/<head[\s>]/i.test(html)) {
-    let result = html.replace(/<head([^>]*)>/i, `<head$1><meta charset="utf-8">${csp}${style}${bridge}`);
-    if (script) result = /<\/body>/i.test(result) ? result.replace(/<\/body>/i, `${script}</body>`) : `${result}${script}`;
-    return result;
+function findFileByName(files, name) {
+  const target = filenameOf(name);
+  if (!target) return null;
+  return (Array.isArray(files) ? files : []).find((file) => filenameOf(file?.name) === target) || null;
+}
+
+function referencedLocalFiles(html, tagName, attributeName) {
+  const references = [];
+  const tagPattern = new RegExp(`<${tagName}\\b[^>]*>`, "gi");
+  const attributePattern = new RegExp(`\\b${attributeName}\\s*=\\s*(["'])(.*?)\\1`, "i");
+  for (const tag of String(html || "").match(tagPattern) || []) {
+    const match = tag.match(attributePattern);
+    if (!match) continue;
+    const value = match[2].trim();
+    if (!value || /^(?:[a-z]+:|\/\/|#|data:)/i.test(value)) continue;
+    references.push(filenameOf(value.split(/[?#]/)[0]));
   }
-  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${csp}${style}${bridge}</head><body>${html}${script}</body></html>`;
+  return references.filter(Boolean);
+}
+
+/**
+ * One resolver is shared by Try It and the multi-file Playground. It deliberately
+ * does not infer a web connection from the mere presence of index.html.
+ */
+export function detectOutputMode({
+  currentFile = null,
+  files = [],
+  runnerCapabilities = ["python", "javascript"],
+  webConnection = null,
+} = {}) {
+  const currentName = String(currentFile?.name || "");
+  const currentLanguage = getLanguageForFilename(currentName);
+  const htmlFiles = (Array.isArray(files) ? files : []).filter((file) => /\.html?$/i.test(file?.name || ""));
+  const htmlEntry = findFileByName(files, webConnection?.entryFile) || htmlFiles[0] || null;
+  const supports = new Set((Array.isArray(runnerCapabilities) ? runnerCapabilities : []).map((item) => String(item).toLowerCase()));
+
+  if (/\.html?$/i.test(currentName)) {
+    return { mode: "browser-preview", reason: "html-entry", entryFile: currentName, language: "html" };
+  }
+  if (/\.css$/i.test(currentName)) {
+    return { mode: "browser-preview", reason: "stylesheet-preview", entryFile: htmlEntry?.name || "", language: "css" };
+  }
+  if (/\.jsx$/i.test(currentName) || currentLanguage.key === "jsx") {
+    return { mode: "react-preview", reason: "react-entry", entryFile: currentName, language: "jsx" };
+  }
+
+  if (/\.(?:m?js|cjs)$/i.test(currentName) || currentLanguage.key === "javascript") {
+    const referenced = htmlFiles.some((html) => referencedLocalFiles(html.content, "script", "src").includes(filenameOf(currentName)));
+    if (referenced) {
+      const entry = htmlFiles.find((html) => referencedLocalFiles(html.content, "script", "src").includes(filenameOf(currentName)));
+      return { mode: "browser-preview", reason: "javascript-referenced-by-html", entryFile: entry?.name || "", language: "javascript" };
+    }
+  }
+
+  const connectionIsExplicit = webConnection?.enabled === true
+    && filenameOf(webConnection?.languageFile) === filenameOf(currentName)
+    && Boolean(findFileByName(files, webConnection?.entryFile))
+    && Boolean(findFileByName(files, webConnection?.languageFile));
+  if (connectionIsExplicit && supports.has(currentLanguage.key)) {
+    return {
+      mode: "connected-preview",
+      reason: "explicit-language-html-connection",
+      entryFile: findFileByName(files, webConnection.entryFile)?.name || "",
+      languageFile: currentName,
+      language: currentLanguage.key,
+    };
+  }
+
+  return {
+    mode: "terminal",
+    reason: connectionIsExplicit ? "connected-runtime-unavailable" : "non-browser-language",
+    language: currentLanguage.key,
+    runnerSupported: supports.has(currentLanguage.key),
+  };
+}
+
+export function isBrowserWorkspace(files) {
+  return Array.isArray(files) && files.some((file) => /\.html?$/i.test(file?.name || ""));
+}
+
+function scriptBridge(messageSource) {
+  return `<script>(function(){var source=${JSON.stringify(String(messageSource))};var send=function(kind,args){var output=Array.from(args||[]).map(function(value){if(typeof value==='string')return value;try{return JSON.stringify(value)}catch(_){return String(value)}}).join(' ');try{parent.postMessage({source:source,kind:kind,output:output,error:kind==='error'?output:''},'*')}catch(_){}};['log','info','warn','error'].forEach(function(kind){var original=console[kind].bind(console);console[kind]=function(){send(kind,arguments);original.apply(console,arguments)}});window.addEventListener('error',function(event){send('error',[event.message||'Preview error'])});window.addEventListener('unhandledrejection',function(event){send('error',[event.reason&&event.reason.message||event.reason||'Unhandled promise rejection'])})})();<\/script>`;
+}
+
+function injectIntoHead(html, markup) {
+  if (/<head[\s>]/i.test(html)) return html.replace(/<head([^>]*)>/i, `<head$1>${markup}`);
+  return html.replace(/<html([^>]*)>/i, `<html$1><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${markup}</head>`);
+}
+
+function safeInlineText(value, closingTag) {
+  return String(value || "").replace(new RegExp(`</${closingTag}`, "gi"), `<\\/${closingTag}`);
+}
+
+export function createBrowserDocument(files, messageSource = "codeleaf-playground-output", options = {}) {
+  const collection = Array.isArray(files) ? files : [];
+  const requestedEntry = findFileByName(collection, options.entryFile);
+  const htmlFile = requestedEntry || collection.find((file) => /\.html?$/i.test(file?.name || "")) || null;
+  const activeFile = findFileByName(collection, options.activeFileName);
+  const activeCss = activeFile && /\.css$/i.test(activeFile.name) ? activeFile : null;
+  let html = htmlFile?.content || defaultSourceForLanguage("html");
+  const cssFiles = collection.filter((file) => /\.css$/i.test(file?.name || ""));
+  const jsFiles = collection.filter((file) => /\.(?:m?js|cjs)$/i.test(file?.name || ""));
+  const cssRefs = referencedLocalFiles(html, "link", "href");
+  const jsRefs = referencedLocalFiles(html, "script", "src");
+  const inlineStyles = [];
+
+  for (const cssName of cssRefs) {
+    const file = findFileByName(cssFiles, cssName);
+    if (!file) continue;
+    const style = `<style data-codeleaf-file="${file.name}">${safeInlineText(file.content, "style")}</style>`;
+    inlineStyles.push(style);
+    const linkPattern = new RegExp(`<link\\b(?=[^>]*\\bhref\\s*=\\s*(["'])${cssName.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&")}\\1)[^>]*>`, "gi");
+    html = html.replace(linkPattern, "");
+  }
+  if (!cssRefs.length && cssFiles.length === 1) {
+    inlineStyles.push(`<style data-codeleaf-file="${cssFiles[0].name}">${safeInlineText(cssFiles[0].content, "style")}</style>`);
+  }
+  if (activeCss && !inlineStyles.some((style) => style.includes(`data-codeleaf-file="${activeCss.name}"`))) {
+    inlineStyles.push(`<style data-codeleaf-active-css="true">${safeInlineText(activeCss.content, "style")}</style>`);
+  }
+
+  for (const jsName of jsRefs) {
+    const file = findFileByName(jsFiles, jsName);
+    if (!file) continue;
+    const script = `<script data-codeleaf-file="${file.name}">${safeInlineText(file.content, "script")}<\/script>`;
+    const escaped = jsName.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&");
+    const scriptPattern = new RegExp(`<script\\b(?=[^>]*\\bsrc\\s*=\\s*(["'])${escaped}\\1)[^>]*>\\s*<\\/script\\s*>`, "gi");
+    html = html.replace(scriptPattern, script);
+  }
+
+  const connected = options.connectedOutput && typeof options.connectedOutput === "object"
+    ? `<script>window.CODELEAF_CONNECTED_OUTPUT=${JSON.stringify(options.connectedOutput).replace(/</g, "\\u003c")};window.CODELEAF_CONNECTED_LANGUAGE=${JSON.stringify(options.connectedOutput.language || "")};document.addEventListener('DOMContentLoaded',function(){window.dispatchEvent(new CustomEvent('codeleaf:language-output',{detail:window.CODELEAF_CONNECTED_OUTPUT}));});<\/script>`
+    : "";
+  const csp = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">`;
+  const bridge = scriptBridge(messageSource);
+  html = injectIntoHead(html, `<meta charset="utf-8">${csp}${inlineStyles.join("")}${bridge}${connected}`);
+  return html;
+}
+
+/**
+ * Build a restricted React preview document. React/Babel assets are pinned to
+ * explicit CDN versions; user code runs only inside an opaque sandboxed iframe.
+ * Relative JS/JSX imports and CSS side-effect imports are resolved from the
+ * in-memory workspace. Unknown npm packages fail with a visible error.
+ */
+export function createReactPreviewDocument(files, entryFile, messageSource = "codeleaf-playground-output") {
+  const collection = Array.isArray(files) ? files : [];
+  const entry = findFileByName(collection, entryFile) || collection.find((file) => /\.jsx$/i.test(file?.name || ""));
+  const sources = Object.fromEntries(collection.map((file) => [filenameOf(file.name), { name: file.name, content: String(file.content || "") }]));
+  const css = collection.filter((file) => /\.css$/i.test(file?.name || "")).map((file) => `<style data-codeleaf-file="${file.name}">${safeInlineText(file.content, "style")}</style>`).join("");
+  const csp = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' https://unpkg.com; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">`;
+  const payload = JSON.stringify({ files: sources, entryFile: entry?.name || "" }).replace(/</g, "\\u003c");
+  const bootstrap = `(function(){
+    var source=${JSON.stringify(String(messageSource))};
+    var project=${payload};
+    var report=function(kind,message){try{parent.postMessage({source:source,kind:kind,output:String(message||''),error:kind==='error'?String(message||''):''},'*')}catch(_){}};
+    var showError=function(error){var message=error&&error.message?error.message:String(error||'React preview failed');var node=document.getElementById('preview-error');if(node){node.hidden=false;node.textContent=message}report('error',message)};
+    window.onerror=function(message,_url,line,column,error){showError(error||message);return true};
+    window.addEventListener('unhandledrejection',function(event){showError(event.reason||'Unhandled promise rejection')});
+    var modules={
+      'react':function(){return window.React},
+      'react-dom':function(){return window.ReactDOM},
+      'react-dom/client':function(){return {createRoot:window.ReactDOM.createRoot.bind(window.ReactDOM),hydrateRoot:window.ReactDOM.hydrateRoot&&window.ReactDOM.hydrateRoot.bind(window.ReactDOM)}},
+      'react-router-dom':function(){if(!window.ReactRouterDOM)throw new Error('React Router runtime did not load.');return window.ReactRouterDOM}
+    };
+    var cache={};
+    function findLocal(request,parent){
+      var clean=String(request||'').replace(/^\\.\\//,'').replace(/\\.(?:jsx?|tsx?|css)$/i,'').toLowerCase();
+      var direct=clean.split('/').pop();
+      var keys=Object.keys(project.files);
+      var match=keys.find(function(key){return key.replace(/\\.(?:jsx?|tsx?|css)$/i,'')===direct});
+      if(!match)throw new Error('Cannot resolve local import "'+request+'" from '+parent+'. Add the file to this flat workspace or remove the import.');
+      return match;
+    }
+    function loadModule(key){
+      if(cache[key])return cache[key].exports;
+      var file=project.files[key];
+      if(!file)throw new Error('Project file not found: '+key);
+      if(/\\.css$/i.test(file.name))return {};
+      if(!window.Babel)throw new Error('The JSX compiler did not load. Check the connection and refresh the preview.');
+      var compiled=window.Babel.transform(file.content,{filename:file.name,presets:[['env',{modules:'commonjs',targets:{chrome:'100'}}],'react']}).code;
+      var module={exports:{}};cache[key]=module;
+      function localRequire(request){
+        if(Object.prototype.hasOwnProperty.call(modules,request))return modules[request]();
+        if(request.startsWith('.'))return loadModule(findLocal(request,file.name));
+        if(request.endsWith('.css'))return {};
+        throw new Error('Unsupported React preview dependency "'+request+'". Supported packages: react, react-dom, react-dom/client and react-router-dom.');
+      }
+      new Function('require','module','exports','React','ReactDOM',compiled)(localRequire,module,module.exports,window.React,window.ReactDOM);
+      return module.exports;
+    }
+    try{
+      if(!project.entryFile)throw new Error('Choose an App.jsx or main.jsx file to preview.');
+      var key=project.entryFile.toLowerCase().split('/').pop();
+      var exports=loadModule(key);
+      var App=exports&&exports.default||exports&&exports.App||exports&&exports.default&&exports.default.default;
+      if(typeof App==='function')window.ReactDOM.createRoot(document.getElementById('root')).render(window.React.createElement(App));
+      else if(!document.getElementById('root').hasChildNodes())throw new Error('The selected React entry did not render an application. Export a default React component or render it with createRoot().');
+      report('log','React preview compiled successfully.');
+    }catch(error){showError(error)}
+  })();`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${csp}${css}<title>CodeLeaf React Preview</title></head><body><div id="root"></div><pre id="preview-error" hidden style="white-space:pre-wrap;overflow-wrap:anywhere;margin:16px;padding:12px;border:1px solid #dc6b6b;border-radius:8px;color:#7f1d1d;background:#fff1f1;font:13px/1.5 ui-monospace,monospace"></pre><script src="https://unpkg.com/react@18.3.1/umd/react.development.js"><\/script><script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"><\/script><script src="https://unpkg.com/@remix-run/router@1.21.0/dist/router.umd.js"><\/script><script src="https://unpkg.com/react-router@6.28.0/dist/umd/react-router.development.js"><\/script><script src="https://unpkg.com/react-router-dom@6.28.0/dist/umd/react-router-dom.development.js"><\/script><script src="https://unpkg.com/@babel/standalone@7.29.7/babel.min.js"><\/script><script>${bootstrap}</script></body></html>`;
 }

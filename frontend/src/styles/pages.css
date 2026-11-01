@@ -1204,14 +1204,23 @@
   background: var(--panel-soft);
   border-color: var(--line);
 }
-.sidebar-item.active {
+.sidebar-item.active,
+.sidebar-item.active.completed {
   color: var(--text);
   background: var(--mint-wash);
   border-color: var(--line-strong);
   font-weight: 800;
 }
 .sidebar-item.active::before {
-  display: none;
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 7px;
+  bottom: 7px;
+  display: block;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--mint);
 }
 .sidebar-item.completed {
   color: var(--mint);

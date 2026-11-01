@@ -79,7 +79,7 @@ class WorkspaceFile(StrictModel):
 class WorkspaceInput(StrictModel):
     name: str = Field(min_length=1, max_length=120)
     language: str = Field(default="plain", min_length=1, max_length=40)
-    files: list[WorkspaceFile] = Field(min_length=1, max_length=100)
+    files: list[WorkspaceFile] = Field(min_length=1, max_length=101)
 
     @field_validator("name")
     @classmethod

@@ -1174,14 +1174,18 @@ def _verify_catalyst_object(storage, key: str, *, expected_size: int, expected_s
 
 
 def _delete_staging_objects(storage, keys: list[str]) -> list[str]:
-    """Delete only deterministic staging keys owned by this upload; return failures."""
+    """Delete owned Catalyst keys and verify absence before reporting success."""
     failed = []
     for key in dict.fromkeys(str(value) for value in keys if value):
         try:
             if storage.object_exists(key):
                 storage.delete_object(key)
-        except StorageError:
-            logger.exception("Catalyst staging cleanup failed for an owned project upload object.")
+            # A provider can return a false/ambiguous delete result. Never discard
+            # the database reference until an independent existence check passes.
+            if storage.object_exists(key):
+                failed.append(key)
+        except Exception:
+            logger.exception("Catalyst cleanup failed for an owned project upload object.")
             failed.append(key)
     return failed
 
@@ -1931,7 +1935,10 @@ def delete_portfolio_submission(
 ) -> dict[str, bool]:
     """Delete owned Catalyst objects first; retain the row if remote deletion fails."""
     item = db.scalar(select(ProjectSubmission).where(ProjectSubmission.id == submission_id, ProjectSubmission.user_id == user.id).with_for_update())
-    if item is None: return {"deleted": False}
+    if item is None:
+        # Use the same response for missing and not-owned IDs so this endpoint
+        # cannot be used to probe another learner's private submissions.
+        raise HTTPException(status_code=404, detail="Project submission was not found.")
     metadata = dict(item.portfolio_metadata or {})
     keys = []
     if item.storage_provider == "catalyst_stratus" and item.storage_key and item.object_status != "object_deleted":
@@ -1949,7 +1956,13 @@ def delete_portfolio_submission(
         if failed:
             metadata["delete_cleanup_pending"] = failed; item.portfolio_metadata = metadata; db.add(item); db.commit()
             raise HTTPException(status_code=503, detail="The Catalyst archive could not be fully deleted. The submission is retained; retry deletion later.")
-    db.delete(item); db.commit(); return {"deleted": True}
+    # Remove legacy chunk rows explicitly as well as the parent row. This keeps
+    # quota/storage accounting and cleanup deterministic even on databases whose
+    # foreign-key cascade settings differ between environments.
+    db.execute(delete(ProjectSubmissionZipChunk).where(ProjectSubmissionZipChunk.submission_id == submission_id))
+    db.delete(item)
+    db.commit()
+    return {"deleted": True}
 
 
 @router.get("/api/me/portfolio/{submission_id}/download")

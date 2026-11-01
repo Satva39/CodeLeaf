@@ -12,6 +12,11 @@ assert.match(sidebar, /const \[expandedGroup, setExpandedGroup\] = useState\(act
 assert.match(sidebar, /setExpandedGroup\(\(previous\) => previous === g\.title \? \"\" : g\.title\)/, "clicking a module should close the previous one");
 assert.match(sidebar, /aria-expanded=\{expandedGroup === g\.title\}/, "module toggle should expose its expansion state accessibly");
 assert.match(sidebar, /setExpandedGroup\(activeGroupTitle\)/, "navigation to a different lesson should open its parent module");
+assert.match(sidebar, /ref=\{sidebarRef\}/, "scrolling must be scoped to the sidebar container");
+assert.match(sidebar, /ref=\{active \? activeLessonRef : null\}/, "the active lesson should be the scroll target");
+assert.match(sidebar, /aria-current=\{active \? "page" : undefined\}/, "the active lesson should expose aria-current");
+assert.match(sidebar, /container\.scrollTo\(/, "long sidebars should scroll to the selected lesson");
+assert.doesNotMatch(sidebar, /window\.scrollTo\(/, "lesson navigation must not scroll the main document");
 assert.doesNotMatch(sidebar, /Object\.fromEntries\(groups\.map\(\(g\) => \[g\.title, true\]\)\)/, "all modules must not be expanded by default");
 assert.match(page, /<LessonLiveExample[\s\S]*?lessonTitle=\{current\?\.title/, "lesson page should integrate the relevant interactive example");
-console.log("Lesson navigation checks passed (single-open accordion, active-module tracking, accessibility, and live-example integration).");
+console.log("Lesson navigation checks passed (single-open accordion, active-module tracking, active-link scrolling, aria-current, and live-example integration).");

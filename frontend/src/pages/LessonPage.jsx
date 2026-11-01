@@ -1,5 +1,5 @@
 import { apiFetch } from "../lib/apiClient.js";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft,
@@ -84,12 +84,34 @@ function CourseSidebar({
     groups[0]?.title ||
     "";
   const [expandedGroup, setExpandedGroup] = useState(activeGroupTitle);
+  const sidebarRef = useRef(null);
+  const activeLessonRef = useRef(null);
   const allItems = flattenGroups(groups);
   useEffect(() => {
     setExpandedGroup(activeGroupTitle);
   }, [activeGroupTitle, courseSlug]);
+  useEffect(() => {
+    if (!activeGroupTitle || expandedGroup !== activeGroupTitle) return undefined;
+    const container = sidebarRef.current;
+    const activeLink = activeLessonRef.current;
+    if (!container || !activeLink) return undefined;
+    const frame = window.requestAnimationFrame(() => {
+      const containerRect = container.getBoundingClientRect();
+      const linkRect = activeLink.getBoundingClientRect();
+      const itemTop = container.scrollTop + linkRect.top - containerRect.top;
+      const itemBottom = itemTop + activeLink.offsetHeight;
+      const visibleTop = container.scrollTop + 8;
+      const visibleBottom = container.scrollTop + container.clientHeight - 8;
+      if (itemTop < visibleTop) {
+        container.scrollTo({ top: Math.max(0, itemTop - 16), behavior: "auto" });
+      } else if (itemBottom > visibleBottom) {
+        container.scrollTo({ top: Math.max(0, itemBottom - container.clientHeight + 16), behavior: "auto" });
+      }
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [courseSlug, currentSlug, activeGroupTitle, expandedGroup]);
   return (
-    <aside className="course-sidebar">
+    <aside className="course-sidebar" ref={sidebarRef}>
       <div className="sidebar-course-heading">
         <span className="sidebar-eyebrow">COURSE PATH</span>
         <h3>
@@ -134,8 +156,10 @@ function CourseSidebar({
                 return (
                   <Link
                     key={slug}
+                    ref={active ? activeLessonRef : null}
                     onClick={onNavigate}
                     to={`/learn/${courseSlug}/${slug}`}
+                    aria-current={active ? "page" : undefined}
                     className={`sidebar-item ${active ? "active" : ""} ${completed ? "completed" : ""}`}
                   >
                     <span className="sidebar-item-mark">

@@ -22,14 +22,16 @@ import { apiFetch } from "../lib/apiClient.js";
 import { API_BASE } from "../lib/demoState.js";
 import {
   createBrowserDocument,
+  createReactPreviewDocument,
+  detectOutputMode,
   defaultSourceForLanguage,
   getLanguageForFilename,
-  isBrowserWorkspace,
   safeWorkspaceFilename,
   starterFiles,
 } from "../lib/languageWorkspace.js";
 
 const WORKSPACE_STORAGE_KEY = "codeleaf:playground-workspace:v1";
+const WORKSPACE_CONFIG_FILE = "__codeleaf_project_config__.json";
 const FINAL_RUNNER_STATES = new Set(["completed", "failed", "timeout", "output_limit", "cancelled", "expired"]);
 
 async function responsePayload(response) {
@@ -60,7 +62,7 @@ function fileId(name) {
 function normalizeFiles(value) {
   if (!Array.isArray(value)) return [];
   return value
-    .filter((file) => file && typeof file.name === "string" && safeWorkspaceFilename(file.name))
+    .filter((file) => file && typeof file.name === "string" && file.name !== WORKSPACE_CONFIG_FILE && safeWorkspaceFilename(file.name))
     .slice(0, 100)
     .map((file) => ({
       id: typeof file.id === "string" && file.id ? file.id : fileId(file.name),
@@ -70,10 +72,37 @@ function normalizeFiles(value) {
     }));
 }
 
+function normalizeWorkspace(value) {
+  const rawFiles = Array.isArray(value?.files) ? value.files : [];
+  const configFile = rawFiles.find((file) => file?.name === WORKSPACE_CONFIG_FILE);
+  let savedConfig = null;
+  try { savedConfig = configFile?.content ? JSON.parse(configFile.content) : null; } catch { savedConfig = null; }
+  const files = normalizeFiles(rawFiles);
+  const candidate = value?.webConnection || savedConfig?.webConnection || null;
+  const validEntry = files.some((file) => file.name === candidate?.entryFile && /\.html?$/i.test(file.name));
+  const validLanguage = files.some((file) => file.name === candidate?.languageFile && getLanguageForFilename(file.name).key === candidate?.language);
+  const webConnection = candidate?.enabled === true && validEntry && validLanguage
+    ? { enabled: true, mode: "stdout-bridge", entryFile: candidate.entryFile, languageFile: candidate.languageFile, language: candidate.language }
+    : null;
+  return { files, webConnection };
+}
+
+function savedWorkspaceFiles(files, webConnection) {
+  return [
+    ...files.map(({ id, name, language, content }) => ({ id, name, language, content })),
+    {
+      id: fileId(WORKSPACE_CONFIG_FILE),
+      name: WORKSPACE_CONFIG_FILE,
+      language: "json",
+      content: JSON.stringify({ version: 1, webConnection: webConnection || null }),
+    },
+  ];
+}
+
 function loadInitialWorkspace(seed, queryLanguage) {
   if (Array.isArray(seed?.files) && seed.files.length) {
-    const files = normalizeFiles(seed.files);
-    if (files.length) return { files, activeFileId: files.find((file) => file.id === seed.activeFileId)?.id || files[0].id };
+    const parsed = normalizeWorkspace(seed);
+    if (parsed.files.length) return { ...parsed, activeFileId: parsed.files.find((file) => file.id === seed.activeFileId)?.id || parsed.files[0].id };
   }
   if (seed) {
     const courseSlug = seed.courseSlug || queryLanguage || "html";
@@ -84,18 +113,18 @@ function loadInitialWorkspace(seed, queryLanguage) {
       source: typeof seed.code === "string" ? seed.code : typeof seed.source === "string" ? seed.source : "",
       title: seed.title || "",
     });
-    return { files, activeFileId: files[0]?.id || "" };
+    return { files, activeFileId: files[0]?.id || "", webConnection: null };
   }
   try {
     const saved = JSON.parse(window.localStorage.getItem(WORKSPACE_STORAGE_KEY) || "null");
-    const files = normalizeFiles(saved?.files);
-    if (files.length) return { files, activeFileId: files.find((file) => file.id === saved.activeFileId)?.id || files[0].id };
+    const parsed = normalizeWorkspace(saved);
+    if (parsed.files.length) return { ...parsed, activeFileId: parsed.files.find((file) => file.id === saved.activeFileId)?.id || parsed.files[0].id };
   } catch {
     // A blocked or stale local draft should not prevent opening the editor.
   }
   const language = queryLanguage || "html";
   const files = starterFiles({ courseSlug: language, codeLanguage: language });
-  return { files, activeFileId: files[0]?.id || "" };
+  return { files, activeFileId: files[0]?.id || "", webConnection: null };
 }
 
 function downloadText(filename, text, type = "text/plain;charset=utf-8") {
@@ -120,7 +149,11 @@ export default function PlaygroundPage() {
   const [runnerMessage, setRunnerMessage] = useState("");
   const [running, setRunning] = useState(false);
   const [runnerConfigured, setRunnerConfigured] = useState(false);
+  const [runnerSupportedLanguages, setRunnerSupportedLanguages] = useState([]);
   const [runnerConfigChecked, setRunnerConfigChecked] = useState(false);
+  const [connectedOutput, setConnectedOutput] = useState(null);
+  const [connectionEntryDraft, setConnectionEntryDraft] = useState("");
+  const [connectionLanguageDraft, setConnectionLanguageDraft] = useState("");
   const [stdin, setStdin] = useState("");
   const [fileDialog, setFileDialog] = useState("");
   const [fileNameDraft, setFileNameDraft] = useState("");
@@ -140,9 +173,25 @@ export default function PlaygroundPage() {
   const files = workspace.files;
   const activeFile = files.find((file) => file.id === workspace.activeFileId) || files[0] || null;
   const activeLanguage = activeFile ? getLanguageForFilename(activeFile.name) : null;
-  const browserProject = isBrowserWorkspace(files);
-  const browserActiveFile = Boolean(browserProject && activeFile && /\.(html?|css|m?js|cjs)$/i.test(activeFile.name));
-  const browserDocument = useMemo(() => createBrowserDocument(files, "codeleaf-playground-output"), [files, refresh]);
+  const outputMode = detectOutputMode({ currentFile: activeFile, files, runnerCapabilities: runnerSupportedLanguages, webConnection: workspace.webConnection });
+  const isConnectedPreview = outputMode.mode === "connected-preview";
+  const isReactPreview = outputMode.mode === "react-preview";
+  const isBrowserPreview = outputMode.mode === "browser-preview" || isConnectedPreview;
+  const connectedExecutionFailed = isConnectedPreview && Boolean(runnerResult?.job_id)
+    && (runnerResult.status !== "completed" || (runnerResult.exit_code !== undefined && Number(runnerResult.exit_code) !== 0));
+  const connectedRunReady = isConnectedPreview && Boolean(connectedOutput);
+  const showPreview = (isBrowserPreview || isReactPreview) && (!isConnectedPreview || connectedRunReady) && !connectedExecutionFailed;
+  const browserDocument = useMemo(() => createBrowserDocument(files, "codeleaf-playground-output", {
+    entryFile: outputMode.entryFile, activeFileName: activeFile?.name, connectedOutput,
+  }), [files, refresh, outputMode.entryFile, activeFile?.name, connectedOutput]);
+  const reactDocument = useMemo(() => createReactPreviewDocument(files, outputMode.entryFile || activeFile?.name, "codeleaf-playground-output"), [files, outputMode.entryFile, activeFile?.name, refresh]);
+  const htmlEntryFiles = files.filter((file) => /\.html?$/i.test(file.name));
+  const connectableFiles = files.filter((file) => runnerSupportedLanguages.includes(getLanguageForFilename(file.name).key));
+
+  useEffect(() => {
+    setConnectionEntryDraft((current) => htmlEntryFiles.some((file) => file.name === current) ? current : workspace.webConnection?.entryFile || htmlEntryFiles[0]?.name || "");
+    setConnectionLanguageDraft((current) => connectableFiles.some((file) => file.name === current) ? current : workspace.webConnection?.languageFile || connectableFiles.find((file) => getLanguageForFilename(file.name).key === "python")?.name || connectableFiles[0]?.name || "");
+  }, [files, workspace.webConnection, runnerSupportedLanguages]);
 
   useEffect(() => {
     if (seedId) {
@@ -200,7 +249,7 @@ export default function PlaygroundPage() {
     }
     setWorkspaceBusy(true);
     setWorkspaceNotice("");
-    const body = { name: cleanName, language: activeLanguage?.key || "plain", files: files.map(({ id, name, language, content }) => ({ id, name, language, content })) };
+    const body = { name: cleanName, language: activeLanguage?.key || "plain", files: savedWorkspaceFiles(files, workspace.webConnection) };
     try {
       const isUpdate = !createNew && Boolean(selectedSavedWorkspaceId);
       const response = await apiFetch(`${API_BASE}/api/me/workspaces${isUpdate ? `/${encodeURIComponent(selectedSavedWorkspaceId)}` : ""}`, {
@@ -292,12 +341,14 @@ export default function PlaygroundPage() {
       setWorkspaceNotice("Choose a saved workspace to load.");
       return;
     }
-    const files = normalizeFiles(saved.files);
+    const parsed = normalizeWorkspace(saved);
+    const files = parsed.files;
     if (!files.length) {
       setWorkspaceNotice("This saved workspace has no valid files.");
       return;
     }
-    setWorkspace({ files, activeFileId: files[0].id });
+    setWorkspace({ ...parsed, activeFileId: files[0].id });
+    setConnectedOutput(null);
     setWorkspaceName(saved.name);
     setWorkspaceNotice(`Loaded “${saved.name}” from your account. Your browser draft now mirrors these files.`);
     setRunnerResult(null);
@@ -330,6 +381,7 @@ export default function PlaygroundPage() {
         const payload = await responsePayload(await apiFetch(`${API_BASE}/api/runner/status`));
         if (!active) return;
         setRunnerConfigured(payload.configured === true);
+        setRunnerSupportedLanguages(Array.isArray(payload.supported_languages) ? payload.supported_languages.map((item) => String(item).toLowerCase()) : []);
         if (payload.configured !== true) setRunnerMessage(payload.message || "The isolated runner is not configured yet.");
       } catch {
         if (!active) return;
@@ -360,6 +412,7 @@ export default function PlaygroundPage() {
       files: current.files.map((file) => file.id === activeFile.id ? { ...file, content: value } : file),
     }));
     setRunnerResult(null);
+    setConnectedOutput(null);
     setBrowserOutput([]);
   }
 
@@ -380,7 +433,7 @@ export default function PlaygroundPage() {
     event.preventDefault();
     const name = fileNameDraft.trim();
     if (!safeWorkspaceFilename(name)) {
-      setFileDialogError("Use a valid file name with an optional extension. Folder paths and reserved filename characters are not supported.");
+      setFileDialogError("Use a valid file name with an optional extension. Folder paths, reserved names and reserved filename characters are not supported.");
       return;
     }
     const duplicate = files.some((file) => file.id !== (fileDialog === "rename" ? activeFile?.id : "") && file.name.toLowerCase() === name.toLowerCase());
@@ -389,7 +442,8 @@ export default function PlaygroundPage() {
       return;
     }
     if (fileDialog === "rename" && activeFile) {
-      setWorkspace((current) => ({ ...current, files: current.files.map((file) => file.id === activeFile.id ? { ...file, name, language: getLanguageForFilename(name).key } : file) }));
+      setWorkspace((current) => ({ ...current, files: current.files.map((file) => file.id === activeFile.id ? { ...file, name, language: getLanguageForFilename(name).key } : file), webConnection: current.webConnection && [current.webConnection.entryFile, current.webConnection.languageFile].includes(activeFile.name) ? null : current.webConnection }));
+      setConnectedOutput(null);
     } else {
       const language = getLanguageForFilename(name);
       const file = { id: fileId(name), name, language: language.key, content: defaultSourceForLanguage(language.key) };
@@ -406,10 +460,12 @@ export default function PlaygroundPage() {
     if (!window.confirm(`Delete ${activeFile.name} from this local workspace?`)) return;
     setWorkspace((current) => {
       const nextFiles = current.files.filter((file) => file.id !== activeFile.id);
-      return { files: nextFiles, activeFileId: nextFiles[0]?.id || "" };
+      const webConnection = current.webConnection && [current.webConnection.entryFile, current.webConnection.languageFile].includes(activeFile.name) ? null : current.webConnection;
+      return { files: nextFiles, activeFileId: nextFiles[0]?.id || "", webConnection };
     });
     setRunnerResult(null);
     setRunnerStatus("idle");
+    setConnectedOutput(null);
     setBrowserOutput([]);
   }
 
@@ -418,7 +474,7 @@ export default function PlaygroundPage() {
   }
 
   function exportWorkspace() {
-    downloadText("codeleaf-workspace.json", JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), files }, null, 2), "application/json;charset=utf-8");
+    downloadText("codeleaf-workspace.json", JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), files, webConnection: workspace.webConnection || null }, null, 2), "application/json;charset=utf-8");
   }
 
   async function importWorkspaceFile(event) {
@@ -440,6 +496,7 @@ export default function PlaygroundPage() {
       const normalized = [];
       const names = new Set();
       for (const source of document.files) {
+        if (source?.name === WORKSPACE_CONFIG_FILE) continue;
         if (!source || typeof source.name !== "string" || !safeWorkspaceFilename(source.name)) {
           throw new Error("The workspace contains an unsafe file path. No files were imported.");
         }
@@ -456,7 +513,14 @@ export default function PlaygroundPage() {
           content: source.content,
         });
       }
-      setWorkspace({ files: normalized, activeFileId: normalized[0]?.id || "" });
+      const candidate = document.webConnection || null;
+      const validEntry = normalized.some((item) => item.name === candidate?.entryFile && /\.html?$/i.test(item.name));
+      const validLanguage = normalized.some((item) => item.name === candidate?.languageFile && getLanguageForFilename(item.name).key === candidate?.language);
+      const webConnection = candidate?.enabled === true && validEntry && validLanguage
+        ? { enabled: true, mode: "stdout-bridge", entryFile: candidate.entryFile, languageFile: candidate.languageFile, language: candidate.language }
+        : null;
+      setWorkspace({ files: normalized, activeFileId: normalized[0]?.id || "", webConnection });
+      setConnectedOutput(null);
       setRunnerResult(null);
       setRunnerStatus("idle");
       setBrowserOutput([]);
@@ -500,16 +564,20 @@ export default function PlaygroundPage() {
         const payload = await responsePayload(await apiFetch(`${API_BASE}/api/runner/jobs/${encodeURIComponent(jobId)}`));
         const result = payload.job || {};
         setRunnerStatus(result.status || "unknown");
-        setRunnerResult({ ...(result.result || {}), job_id: jobId });
-        if (FINAL_RUNNER_STATES.has(result.status)) return;
+        const completedResult = { ...(result.result || {}), job_id: jobId, status: result.status || "unknown" };
+        setRunnerResult(completedResult);
+        if (FINAL_RUNNER_STATES.has(result.status)) return completedResult;
         await new Promise((resolve) => setTimeout(resolve, 500));
       }
       setRunnerMessage("The job is still running. Use Check status to retrieve the latest result.");
       setRunnerStatus("running");
-      setRunnerResult((previous) => ({ ...(previous || {}), job_id: jobId }));
+      const pendingResult = { job_id: jobId, status: "running" };
+      setRunnerResult(pendingResult);
+      return pendingResult;
     } catch (error) {
       setRunnerStatus("unavailable");
       setRunnerMessage(error instanceof Error ? error.message : "Could not run the code.");
+      return null;
     } finally {
       setRunning(false);
     }
@@ -523,18 +591,75 @@ export default function PlaygroundPage() {
     }
     setRunnerMessage("");
     setRunnerResult(null);
-    if (browserActiveFile) {
+    if (outputMode.mode === "connected-preview") {
+      setConnectedOutput(null);
+      const execution = await runRemoteCode(activeLanguage.key, activeFile.content);
+      if (!execution) return;
+      const succeeded = execution.status === "completed"
+        && (execution.exit_code === undefined || Number(execution.exit_code) === 0)
+        && !execution.error;
+      if (!succeeded) {
+        setConnectedOutput(null);
+        return;
+      }
+      setConnectedOutput({
+        language: activeLanguage.key,
+        stdout: execution.stdout || "",
+        stderr: execution.stderr || "",
+        exit_code: execution.exit_code ?? 0,
+      });
+      setRunnerStatus("preview");
+      setRefresh((value) => value + 1);
+      return;
+    }
+    if (outputMode.mode === "browser-preview" || outputMode.mode === "react-preview") {
       setBrowserOutput([]);
       setRunnerStatus("preview");
       setRefresh((value) => value + 1);
       return;
     }
-    if (activeLanguage && ["python", "javascript"].includes(activeLanguage.key)) {
+    if (runnerSupportedLanguages.includes(activeLanguage?.key)) {
       await runRemoteCode(activeLanguage.key, activeFile.content);
       return;
     }
     setRunnerStatus("unsupported");
-    setRunnerMessage(`${activeLanguage?.label || "This file type"} is editable, saveable, and downloadable. Its isolated runtime is not configured, so CodeLeaf has not executed the code.`);
+    setRunnerMessage(`${activeLanguage?.label || "This file type"} is editable, saveable, and downloadable. The configured isolated runner does not report a compatible runtime for this language, so CodeLeaf has not executed the code.`);
+  }
+
+  function connectLanguageToHtml() {
+    const entry = htmlEntryFiles.find((file) => file.name === connectionEntryDraft);
+    const languageFile = connectableFiles.find((file) => file.name === connectionLanguageDraft);
+    if (!entry || !languageFile) {
+      setWorkspaceNotice("Choose an existing HTML entry file and a file whose language is supported by the configured runner.");
+      return;
+    }
+    const language = getLanguageForFilename(languageFile.name).key;
+    if (!runnerSupportedLanguages.includes(language)) {
+      setWorkspaceNotice(`The configured runner does not currently support ${getLanguageForFilename(languageFile.name).label}.`);
+      return;
+    }
+    setWorkspace((current) => ({ ...current, webConnection: { enabled: true, mode: "stdout-bridge", entryFile: entry.name, languageFile: languageFile.name, language } }));
+    setConnectedOutput(null);
+    setRunnerResult(null);
+    setRunnerStatus("idle");
+    setWorkspaceNotice(`${languageFile.name} is connected to ${entry.name}. Run the language file to execute it on the isolated runner. The preview receives the real result through window.CODELEAF_CONNECTED_OUTPUT and the codeleaf:language-output event.`);
+  }
+
+  function removeLanguageConnection() {
+    setWorkspace((current) => ({ ...current, webConnection: null }));
+    setConnectedOutput(null);
+    setRunnerResult(null);
+    setRunnerStatus("idle");
+    setWorkspaceNotice("The HTML-language connection was removed. The programming file now uses normal terminal execution.");
+  }
+
+  function selectWorkspaceFile(file) {
+    setWorkspace((current) => ({ ...current, activeFileId: file.id }));
+    setConnectedOutput(null);
+    setRunnerResult(null);
+    setRunnerStatus("idle");
+    setRunnerMessage("");
+    setBrowserOutput([]);
   }
 
   async function checkRunnerStatus() {
@@ -579,9 +704,9 @@ export default function PlaygroundPage() {
         </div>
         <div className="workspace-primary-actions">
           <button type="button" className="button button-primary" onClick={runCurrentFile} disabled={running}>
-            <Play size={15} fill="currentColor" /> {running ? "Running…" : browserActiveFile ? "Run preview" : "Run file"}
+            <Play size={15} fill="currentColor" /> {running ? "Running…" : showPreview ? "Run preview" : isConnectedPreview ? "Run connected app" : "Run file"}
           </button>
-          <button type="button" className="button button-secondary" onClick={() => { setRefresh((value) => value + 1); setBrowserOutput([]); }} disabled={!browserProject}>
+          <button type="button" className="button button-secondary" onClick={() => { setRefresh((value) => value + 1); setBrowserOutput([]); }} disabled={!showPreview}>
             <RefreshCw size={14} /> Refresh preview
           </button>
         </div>
@@ -592,7 +717,7 @@ export default function PlaygroundPage() {
           <div className="workspace-files-heading"><span><FolderOpen size={15} /> EXPLORER</span><button type="button" title="Create file" aria-label="Create file" onClick={openNewFileDialog}><FilePlus2 size={15} /></button></div>
           <div className="workspace-file-list">
             {files.map((file) => (
-              <button type="button" key={file.id} className={`workspace-file-entry ${file.id === activeFile?.id ? "active" : ""}`} onClick={() => setWorkspace((current) => ({ ...current, activeFileId: file.id }))} aria-current={file.id === activeFile?.id ? "page" : undefined}>
+              <button type="button" key={file.id} className={`workspace-file-entry ${file.id === activeFile?.id ? "active" : ""}`} onClick={() => selectWorkspaceFile(file)} aria-current={file.id === activeFile?.id ? "page" : undefined}>
                 <FileCode2 size={14} /><span>{file.name}</span>
               </button>
             ))}
@@ -605,6 +730,17 @@ export default function PlaygroundPage() {
             <button type="button" onClick={openRenameDialog} disabled={!activeFile}><Pencil size={14} /> Rename</button>
             <button type="button" onClick={deleteActiveFile} disabled={!activeFile}><Trash2 size={14} /> Delete</button>
           </div>
+          {htmlEntryFiles.length > 0 && <section className="workspace-web-connection" aria-label="HTML project connection">
+            <div className="workspace-web-connection-title"><strong>Web project connection</strong><span>{workspace.webConnection ? "Connected" : "Optional"}</span></div>
+            <label>HTML entry file<select value={connectionEntryDraft} onChange={(event) => setConnectionEntryDraft(event.target.value)}><option value="">Choose HTML file…</option>{htmlEntryFiles.map((file) => <option key={file.id} value={file.name}>{file.name}</option>)}</select></label>
+            <label>Run this file<select value={connectionLanguageDraft} onChange={(event) => setConnectionLanguageDraft(event.target.value)}><option value="">Choose supported file…</option>{connectableFiles.map((file) => <option key={file.id} value={file.name}>{file.name} · {getLanguageForFilename(file.name).label}</option>)}</select></label>
+            <small>Only an explicit connection enables backend output to reach the HTML preview. The selected file still runs on CodeLeaf’s isolated server runner.</small>
+            <div className="workspace-web-connection-actions"><button type="button" onClick={connectLanguageToHtml} disabled={!runnerConfigChecked || !runnerConfigured || !connectionEntryDraft || !connectionLanguageDraft}>Connect files</button>{workspace.webConnection && <button type="button" className="is-muted" onClick={removeLanguageConnection}>Remove</button>}</div>
+            {workspace.webConnection && <small className="workspace-web-connection-active">{workspace.webConnection.languageFile} → {workspace.webConnection.entryFile}</small>}
+            {workspace.webConnection && <small className="workspace-web-connection-help">In your HTML, listen for <code>codeleaf:language-output</code> and read <code>event.detail.stdout</code>. Only the selected server file is executed; the browser never runs Python or another server language.</small>}
+            {!runnerConfigured && runnerConfigChecked && <small>Configure a supported backend runner to enable language connections.</small>}
+          </section>}
+
           <div className="account-workspace-panel">
             <div className="account-workspace-heading"><strong>Account saves</strong><button type="button" title="Refresh saved workspaces" onClick={() => void refreshSavedWorkspaces()} disabled={workspaceBusy}><RefreshCw size={12} /></button></div>
             <small className="account-workspace-usage">{workspaceUsage.used} / {workspaceUsage.limit} workspaces · {workspaceUsage.current_plan || "free"} plan</small>
@@ -639,7 +775,7 @@ export default function PlaygroundPage() {
 
         <section className="workspace-editor" aria-label="Code editor">
           <div className="workspace-tabbar" role="tablist" aria-label="Open files">
-            {files.map((file) => <button type="button" role="tab" aria-selected={file.id === activeFile?.id} key={file.id} className={file.id === activeFile?.id ? "active" : ""} onClick={() => setWorkspace((current) => ({ ...current, activeFileId: file.id }))}><FileCode2 size={13} /> {file.name}</button>)}
+            {files.map((file) => <button type="button" role="tab" aria-selected={file.id === activeFile?.id} key={file.id} className={file.id === activeFile?.id ? "active" : ""} onClick={() => selectWorkspaceFile(file)}><FileCode2 size={13} /> {file.name}</button>)}
             <div className="workspace-tabbar-actions"><button type="button" title="Download active file" aria-label="Download active file" onClick={downloadActiveFile} disabled={!activeFile}><Download size={14} /></button><button type="button" title="Export all files" aria-label="Export project" onClick={exportWorkspace}><FileDown size={14} /></button></div>
           </div>
           {fileDialog && <form className="workspace-file-dialog" onSubmit={submitFileDialog}>
@@ -658,14 +794,16 @@ export default function PlaygroundPage() {
         </section>
 
         <section className="workspace-output" aria-label="Run result">
-          <div className="workspace-output-heading"><span>{browserActiveFile ? <Monitor size={15} /> : <TerminalSquare size={15} />} {browserActiveFile ? "Preview" : "Terminal"}</span><span className={`runner-status runner-status-${runnerStatus}`}>{runnerStatus.replaceAll("_", " ")}</span></div>
-          {browserActiveFile ? <>
-            <iframe id="playground-preview-frame" key={refresh} title="Playground preview" sandbox="allow-scripts" srcDoc={browserDocument} />
-            {!!browserOutput.length && <div className="workspace-console"><strong>Browser console</strong>{browserOutput.map((entry, index) => <pre key={`${index}-${entry.kind}`} className={`console-${entry.kind}`}>{entry.text}</pre>)}</div>}
-          </> : runnerResult ? <div className="workspace-terminal" aria-live="polite"><strong>stdout</strong><pre>{runnerResult.stdout || "(empty)"}</pre><strong>stderr / result</strong><pre>{runnerResult.stderr || runnerResult.error || runnerResult.message || "(empty)"}</pre>{runnerResult.exit_code !== undefined && <p>Exit code: {runnerResult.exit_code}</p>}{runnerResult.job_id && <small>Job ID: {runnerResult.job_id}</small>}</div> : activeFile ? <div className="workspace-terminal workspace-terminal-idle" aria-live="polite"><div className="workspace-terminal-prompt"><span>CODELEAF TERMINAL</span><span>{languageLabel}</span></div><pre>{runnerMessage || (activeLanguage && ["python", "javascript"].includes(activeLanguage.key) ? "Ready. Select Run file to execute your program and view stdout/stderr here." : `${languageLabel} uses the terminal-style output panel. CodeLeaf's configured isolated runner currently accepts Python and JavaScript only; this language needs a compatible isolated runtime before it can execute. No output is being fabricated.`)}</pre></div> : <div className="workspace-output-empty"><Code2 size={25} /><h2>Your workspace is empty</h2><p>Create a file in Explorer to get started.</p></div>}
+          <div className="workspace-output-heading"><span>{showPreview ? <Monitor size={15} /> : <TerminalSquare size={15} />} {showPreview ? (isReactPreview ? "React Preview" : "Preview") : "Terminal"}</span><span className={`runner-status runner-status-${runnerStatus}`}>{runnerStatus.replaceAll("_", " ")}</span></div>
+          {isConnectedPreview && !showPreview && !runnerResult?.job_id && <p className="workspace-connected-pending">Run the connected {activeLanguage?.label || "language"} file successfully to start the web preview. No browser preview is shown until the real runner result is available.</p>}
+          {showPreview ? <>
+            <iframe id="playground-preview-frame" key={refresh} title={isReactPreview ? "React application preview" : "Playground preview"} sandbox="allow-scripts" srcDoc={isReactPreview ? reactDocument : browserDocument} />
+            {!!browserOutput.length && <div className="workspace-console"><strong>Preview console</strong>{browserOutput.map((entry, index) => <pre key={`${index}-${entry.kind}`} className={`console-${entry.kind}`}>{entry.text}</pre>)}</div>}
+            {isConnectedPreview && connectedOutput && <div className="workspace-console workspace-connected-output"><strong>{connectedOutput.language} execution result</strong><pre>{connectedOutput.stdout || "(no stdout)"}</pre>{connectedOutput.stderr && <pre className="console-error">{connectedOutput.stderr}</pre>}</div>}
+          </> : runnerResult ? <div className="workspace-terminal" aria-live="polite"><strong>stdout</strong><pre>{runnerResult.stdout || "(empty)"}</pre><strong>stderr / result</strong><pre>{runnerResult.stderr || runnerResult.error || runnerResult.message || "(empty)"}</pre>{runnerResult.exit_code !== undefined && <p>Exit code: {runnerResult.exit_code}</p>}{runnerResult.job_id && <small>Job ID: {runnerResult.job_id}</small>}</div> : activeFile ? <div className="workspace-terminal workspace-terminal-idle" aria-live="polite"><div className="workspace-terminal-prompt"><span>CODELEAF TERMINAL</span><span>{languageLabel}</span></div><pre>{runnerMessage || (outputMode.reason === "connected-runtime-unavailable" ? "This project connection is saved, but the configured runner does not advertise support for this language. CodeLeaf has not executed it." : outputMode.runnerSupported ? "Ready. Select Run file to execute your program and view stdout/stderr here." : `${languageLabel} uses the terminal-style output panel. The configured isolated runner currently supports: ${runnerSupportedLanguages.join(", ") || "no languages"}. This language needs a compatible runtime before it can execute. No output is being fabricated.`)}</pre></div> : <div className="workspace-output-empty"><Code2 size={25} /><h2>Your workspace is empty</h2><p>Create a file in Explorer to get started.</p></div>}
           {runnerMessage && <p className="workspace-runner-message" role="status">{runnerMessage}</p>}
           {runnerResult?.job_id && <div className="workspace-output-actions"><button type="button" className="button button-secondary button-small" onClick={checkRunnerStatus} disabled={running}>Check status</button><button type="button" className="button button-secondary button-small" onClick={cancelRunnerJob} disabled={running || FINAL_RUNNER_STATES.has(runnerStatus)}>Cancel</button></div>}
-          {!browserActiveFile && !runnerResult?.job_id && activeFile && ["python", "javascript"].includes(activeLanguage?.key) && <label className="workspace-stdin">Standard input <textarea value={stdin} onChange={(event) => setStdin(event.target.value)} rows={3} maxLength={8000} placeholder="Input provided to your program" /></label>}
+          {!showPreview && !runnerResult?.job_id && activeFile && runnerSupportedLanguages.includes(activeLanguage?.key) && <label className="workspace-stdin">Standard input <textarea value={stdin} onChange={(event) => setStdin(event.target.value)} rows={3} maxLength={8000} placeholder="Input provided to your program" /></label>}
         </section>
       </div>
 

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowRight, Award, Download, ExternalLink, FileArchive, FolderKanban, LockKeyhole, Save, Share2 } from "lucide-react";
+import { ArrowRight, Award, Download, ExternalLink, FileArchive, FolderKanban, LockKeyhole, Save, Share2, Trash2 } from "lucide-react";
 import { EmptyState, PageShell } from "../components/common.jsx";
 import { apiFetch } from "../lib/apiClient.js";
 import { API_BASE } from "../lib/demoState.js";
@@ -42,6 +42,7 @@ export default function PortfolioPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [savingId, setSavingId] = useState("");
+  const [deletingId, setDeletingId] = useState("");
   const [notice, setNotice] = useState("");
   const [submissionDraft, setSubmissionDraft] = useState({ course_slug: "", project_slug: "", title: "" });
   const [archiveFile, setArchiveFile] = useState(null);
@@ -65,6 +66,23 @@ export default function PortfolioPage() {
       setNotice(`Saved “${body.item.title}”. ${body.item.visibility === "public" ? "It is now visible on the public portfolio link." : "It is private."}`);
     } catch (err) { setError(err.message || "Changes could not be saved."); }
     finally { setSavingId(""); }
+  };
+
+  const deleteProject = async (item) => {
+    const title = String(item?.title || "this project");
+    if (!item?.id || !window.confirm(`Delete “${title}” permanently? Its project ZIP and portfolio details will also be removed.`)) return;
+    setDeletingId(item.id);
+    setNotice("");
+    setError("");
+    try {
+      await request(`/api/me/portfolio/submissions/${encodeURIComponent(item.id)}`, { method: "DELETE" });
+      await load();
+      setNotice(`“${title}” was deleted from your portfolio.`);
+    } catch (err) {
+      setError(err.message || `Could not delete “${title}”.`);
+    } finally {
+      setDeletingId("");
+    }
   };
 
   const createSubmission = async (event) => {
@@ -146,7 +164,7 @@ export default function PortfolioPage() {
       <div className="phase5-tag-row">{(item.technologies || []).map((tag) => <span key={tag}>{tag}</span>)}</div>
       {!isPublic && <label className="phase5-field">Screenshot URLs (one HTTPS URL per line)<textarea rows={2} defaultValue={(item.screenshot_urls || []).join("\n")} placeholder="https://…" onBlur={(event) => { const value = event.target.value.split(/\r?\n/).map((line) => line.trim()).filter(Boolean); if (JSON.stringify(value) !== JSON.stringify(item.screenshot_urls || [])) void updateItem(item, { screenshot_urls: value.slice(0, 5) }); }}/></label>}
       {(item.screenshot_urls || []).length > 0 && <div className="phase5-screenshot-grid">{item.screenshot_urls.map((url) => <a key={url} href={url} rel="noreferrer" target="_blank"><img src={url} alt={`Screenshot for ${item.title}`} loading="lazy" referrerPolicy="no-referrer"/><span>Open screenshot <ExternalLink size={12}/></span></a>)}</div>}
-      <footer><small>Submitted {new Date(item.submitted_at).toLocaleDateString()}</small><div className="phase5-card-actions">{item.has_downloadable_zip && <a className="button button-secondary button-small" href={isPublic ? `${API_BASE}/api/portfolio/${encodeURIComponent(username)}/projects/${encodeURIComponent(item.id)}/download` : `${API_BASE}/api/me/portfolio/${encodeURIComponent(item.id)}/download`}><Download size={13}/> Download ZIP</a>}{!isPublic && <span className="phase5-save-status">{savingId === item.id ? "Saving…" : <><Save size={12}/> Auto-saves on field exit</>}</span>}</div></footer>
+      <footer><small>Submitted {new Date(item.submitted_at).toLocaleDateString()}</small><div className="phase5-card-actions">{item.has_downloadable_zip && <a className="button button-secondary button-small" href={isPublic ? `${API_BASE}/api/portfolio/${encodeURIComponent(username)}/projects/${encodeURIComponent(item.id)}/download` : `${API_BASE}/api/me/portfolio/${encodeURIComponent(item.id)}/download`}><Download size={13}/> Download ZIP</a>}{!isPublic && <span className="phase5-save-status">{savingId === item.id ? "Saving…" : <><Save size={12}/> Auto-saves on field exit</>}</span>}{!isPublic && <button type="button" className="phase5-delete-project" onClick={() => void deleteProject(item)} disabled={Boolean(deletingId) || savingId === item.id} aria-label={`Delete project ${item.title}`}>{deletingId === item.id ? <><span className="phase5-delete-spinner" aria-hidden="true"/> Deleting…</> : <><Trash2 size={13}/> Delete project</>}</button>}</div></footer>
     </article>)}</div>}
   </PageShell>;
 }

@@ -30,6 +30,7 @@ from app.phase5_routes import (
 from fastapi import HTTPException  # noqa: E402
 from starlette.datastructures import UploadFile  # noqa: E402
 from app.storage.base import StoredObject, StorageError  # noqa: E402
+from app.plan_entitlements import total_storage_used  # noqa: E402
 
 
 def make_zip(entries: dict[str, bytes | str]) -> bytes:
@@ -51,12 +52,13 @@ def expect_http_error(operation, expected_status: int) -> None:
 
 class FakeCatalystStorage:
     bucket_name = "codeleaf-test-bucket"
-    def __init__(self, *, corrupt_final_checksum: bool = False, fail_upload: bool = False, fail_delete: bool = False):
+    def __init__(self, *, corrupt_final_checksum: bool = False, fail_upload: bool = False, fail_delete: bool = False, ignore_delete: bool = False):
         self.objects: dict[str, bytes] = {}
         self.deleted: list[str] = []
         self.corrupt_final_checksum = corrupt_final_checksum
         self.fail_upload = fail_upload
         self.fail_delete = fail_delete
+        self.ignore_delete = ignore_delete
     def upload_stream(self, key, stream, *, expected_size=None):
         if self.fail_upload: raise StorageError("simulated Catalyst outage")
         stream.seek(0); payload = stream.read(); stream.seek(0)
@@ -79,7 +81,8 @@ class FakeCatalystStorage:
         yield self.objects[key]
     def delete_object(self, key):
         if self.fail_delete: raise StorageError("simulated delete outage")
-        self.objects.pop(key, None); self.deleted.append(key); return True
+        if not self.ignore_delete: self.objects.pop(key, None)
+        self.deleted.append(key); return True
 
 
 class FakeRequest:
@@ -134,6 +137,9 @@ def _test_catalyst_upload_routes(session, owner, archive_payload: bytes, *, corr
         completed.visibility = "public"; session.commit()
         public_response = phase5_routes.download_public_project_submission(owner.username, submission_id, session)
         assert public_response.status_code == 200 or hasattr(public_response, "body_iterator")
+        # The archive's quota reservation is removed only after verified remote deletion.
+        usage_before_delete = total_storage_used(session, owner.id)
+        assert usage_before_delete >= int(completed.stored_bytes or 0)
         # A remote deletion failure must retain the submission and retry marker.
         storage.fail_delete = True
         expect_http_error(lambda: delete_portfolio_submission(submission_id, owner, session), 503)
@@ -142,6 +148,22 @@ def _test_catalyst_upload_routes(session, owner, archive_payload: bytes, *, corr
         storage.fail_delete = False
         delete_result = delete_portfolio_submission(submission_id, owner, session)
         assert delete_result["deleted"] and not storage.objects
+        assert total_storage_used(session, owner.id) == usage_before_delete - int(completed.stored_bytes or 0)
+
+        ignored_storage = FakeCatalystStorage(ignore_delete=True)
+        remote_key = f"projects/{submission_id}/stuck.zip"
+        ignored_storage.objects[remote_key] = b"still here"
+        stuck = ProjectSubmission(
+            user_id=owner.id, project_slug="stuck-delete", title="Stuck deletion", code_bundle={},
+            storage_provider="catalyst_stratus", storage_key=remote_key, object_status="verified",
+            portfolio_metadata={"archive_upload_complete": True},
+        )
+        session.add(stuck); session.commit()
+        phase5_routes.get_catalyst_storage = lambda: ignored_storage
+        expect_http_error(lambda: delete_portfolio_submission(stuck.id, owner, session), 503)
+        retained_stuck = session.get(ProjectSubmission, stuck.id)
+        assert retained_stuck is not None and remote_key in retained_stuck.portfolio_metadata.get("delete_cleanup_pending", [])
+        assert remote_key in ignored_storage.objects
         return storage, submission_id
     finally:
         phase5_routes.settings.portfolio_storage_provider = old_provider
@@ -239,7 +261,33 @@ def main() -> None:
         try:
             owner = User(email="zip-test@example.test", display_name="ZIP Test", password_hash="test-hash", username="zip-test")
             session.add(owner)
+            other_user = User(email="zip-other@example.test", display_name="Other User", password_hash="test-hash", username="zip-other")
+            session.add(other_user)
             session.commit()
+            # Owner checks must hide another learner's project and preserve it.
+            protected = ProjectSubmission(user_id=other_user.id, project_slug="protected", title="Protected", code_bundle={}, zip_bundle=b"legacy", stored_bytes=6)
+            session.add(protected)
+            session.commit()
+            expect_http_error(lambda: delete_portfolio_submission(protected.id, owner, session), 404)
+            assert session.get(ProjectSubmission, protected.id) is not None
+
+            # Legacy Neon ZIP chunks are deleted with the owned parent row and their quota is released.
+            legacy_usage_before = total_storage_used(session, owner.id)
+            legacy_delete = ProjectSubmission(user_id=owner.id, project_slug="legacy-delete", title="Legacy delete", code_bundle={}, zip_bundle=None, zip_filename="legacy-delete.zip", stored_bytes=14)
+            session.add(legacy_delete)
+            session.commit()
+            session.add_all([
+                ProjectSubmissionZipChunk(submission_id=legacy_delete.id, sequence=0, payload=b"legacy-"),
+                ProjectSubmissionZipChunk(submission_id=legacy_delete.id, sequence=1, payload=b"archive"),
+            ])
+            session.commit()
+            assert session.query(ProjectSubmissionZipChunk).filter_by(submission_id=legacy_delete.id).count() == 2
+            assert delete_portfolio_submission(legacy_delete.id, owner, session)["deleted"]
+            assert session.get(ProjectSubmission, legacy_delete.id) is None
+            assert session.query(ProjectSubmissionZipChunk).filter_by(submission_id=legacy_delete.id).count() == 0
+            assert total_storage_used(session, owner.id) == legacy_usage_before
+            assert session.get(ProjectSubmission, protected.id) is not None
+
             # Production-mode chunk uploads stage bytes in Catalyst and leave Neon metadata-only.
             _test_catalyst_upload_routes(session, owner, valid_archive)
             # A remote checksum mismatch leaves the upload pending and retryable, never in Neon.

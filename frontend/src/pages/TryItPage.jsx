@@ -4,7 +4,7 @@ import { ArrowLeft, Copy, Download, ExternalLink, Play, RotateCcw, ShieldCheck, 
 import { PageShell } from "../components/common.jsx";
 import { apiFetch } from "../lib/apiClient.js";
 import { API_BASE } from "../lib/demoState.js";
-import { createBrowserDocument, defaultSourceForLanguage, openSeededWorkspace, resolveLanguage, starterFiles } from "../lib/languageWorkspace.js";
+import { createBrowserDocument, createReactPreviewDocument, defaultSourceForLanguage, detectOutputMode, openSeededWorkspace, resolveLanguage, starterFiles } from "../lib/languageWorkspace.js";
 
 const TERMINAL_STATES = new Set(["completed", "failed", "timeout", "output_limit", "cancelled", "expired"]);
 
@@ -46,8 +46,28 @@ export default function TryItPage() {
   const [runnerStatus, setRunnerStatus] = useState("idle");
   const [runnerMessage, setRunnerMessage] = useState("");
   const [running, setRunning] = useState(false);
+  const [runnerConfigured, setRunnerConfigured] = useState(false);
+  const [runnerSupportedLanguages, setRunnerSupportedLanguages] = useState([]);
+  const [runnerCapabilitiesChecked, setRunnerCapabilitiesChecked] = useState(false);
   const [stdin, setStdin] = useState("");
   const frameRef = useRef(null);
+
+  useEffect(() => {
+    let active = true;
+    apiFetch(`${API_BASE}/api/runner/status`)
+      .then(readPayload)
+      .then((payload) => {
+        if (!active) return;
+        setRunnerConfigured(payload.configured === true);
+        setRunnerSupportedLanguages(Array.isArray(payload.supported_languages) ? payload.supported_languages.map((item) => String(item).toLowerCase()) : []);
+        if (payload.configured !== true) setRunnerMessage(payload.message || "The isolated runner is not configured.");
+      })
+      .catch(() => {
+        if (active) setRunnerMessage("Runner availability could not be checked. No server-side code has been executed.");
+      })
+      .finally(() => { if (active) setRunnerCapabilitiesChecked(true); });
+    return () => { active = false; };
+  }, []);
 
   useEffect(() => {
     if (seeded) {
@@ -98,9 +118,16 @@ export default function TryItPage() {
   }, [seedId, seeded, courseSlug, lessonSlug]);
 
   const language = resolveLanguage(course, codeLanguage);
-  const isBrowser = language.execution === "browser-html";
-  const browserFiles = starterFiles({ courseSlug: course, codeLanguage: language.key, source: code, title });
-  const doc = useMemo(() => createBrowserDocument(browserFiles), [code, course, language.key, title]);
+  const browserFiles = useMemo(() => starterFiles({ courseSlug: course, codeLanguage: language.key, source: code, title }), [code, course, language.key, title]);
+  const activeWorkspaceFile = browserFiles[0] || null;
+  const outputMode = detectOutputMode({ currentFile: activeWorkspaceFile, files: browserFiles, runnerCapabilities: runnerSupportedLanguages });
+  const isReactPreview = outputMode.mode === "react-preview";
+  const isBrowser = outputMode.mode === "browser-preview" || isReactPreview;
+  const runnerSupportsLanguage = runnerSupportedLanguages.includes(language.key);
+  const doc = useMemo(() => isReactPreview
+    ? createReactPreviewDocument(browserFiles, outputMode.entryFile || activeWorkspaceFile?.name, "codeleaf-try-output")
+    : createBrowserDocument(browserFiles, "codeleaf-try-output", { entryFile: outputMode.entryFile, activeFileName: activeWorkspaceFile?.name }),
+  [browserFiles, isReactPreview, outputMode.entryFile, activeWorkspaceFile?.name]);
 
   useEffect(() => {
     function receive(event) {
@@ -112,9 +139,17 @@ export default function TryItPage() {
   }, []);
 
   async function runIsolated() {
-    if (!["python", "javascript"].includes(language.key)) {
-      setRunnerStatus("unsupported");
-      setRunnerMessage(`${language.label} is editable and downloadable, but its isolated runtime is not configured yet. CodeLeaf has not executed this code.`);
+    if (!runnerCapabilitiesChecked) {
+      setRunnerStatus("unavailable");
+      setRunnerMessage("Checking isolated runner availability. Try again once the status check finishes.");
+      setResult(null);
+      return;
+    }
+    if (!runnerConfigured || !runnerSupportsLanguage) {
+      setRunnerStatus(runnerConfigured ? "unsupported" : "unavailable");
+      setRunnerMessage(runnerConfigured
+        ? `${language.label} is editable and downloadable, but the configured runner does not advertise this runtime. CodeLeaf has not executed the code.`
+        : "The isolated runner is not configured. CodeLeaf has not executed this code.");
       setResult(null);
       return;
     }
@@ -193,18 +228,18 @@ export default function TryItPage() {
               </div>
             </div>
             <textarea className="tryit-code-editor" aria-label={`${filename} source code`} value={code} onChange={(event) => { setCode(event.target.value); setResult(null); setRunnerMessage(""); }} spellCheck="false" maxLength={100000} />
-            {!isBrowser && ["python", "javascript"].includes(language.key) && <label className="tryit-stdin">Standard input <textarea value={stdin} onChange={(event) => setStdin(event.target.value)} rows={2} maxLength={8000} placeholder="Input provided to your program" /></label>}
+            {!isBrowser && runnerSupportsLanguage && <label className="tryit-stdin">Standard input <textarea value={stdin} onChange={(event) => setStdin(event.target.value)} rows={2} maxLength={8000} placeholder="Input provided to your program" /></label>}
             <div className="tryit-status"><span><span className="live-dot" /> {runnerStatus.replaceAll("_", " ")}</span><span>Local draft · independent from lesson code</span></div>
           </section>
           <section className="tryit-result-panel panel" aria-labelledby="tryit-result-title">
             <div className="tryit-result-heading"><h2 id="tryit-result-title">{isBrowser ? "Live result" : "Program output"}</h2><span>{isBrowser ? "Sandboxed browser preview" : "Isolated runner only"}</span></div>
-            {isBrowser ? <iframe key={`${runCount}-${language.key}`} ref={frameRef} title="Try-it browser result" sandbox="allow-scripts" srcDoc={doc} /> : result ? <div className="tryit-console" aria-live="polite"><strong>stdout</strong><pre>{result.stdout || "(empty)"}</pre><strong>stderr / result</strong><pre>{result.stderr || result.error || result.message || "(empty)"}</pre>{result.exit_code !== undefined && <p>Exit code: {result.exit_code}</p>}</div> : <div className="tryit-empty-output"><ShieldCheck size={22} /><h3>Ready to run</h3><p>{["python", "javascript"].includes(language.key) ? "Run submits this program to the separately configured isolated runner." : `${language.label} execution is not configured in the runner yet. Your code stays editable; it will not be simulated as if it ran.`}</p>{expectedOutput && <details><summary>Reference output</summary><pre>{expectedOutput}</pre></details>}</div>}
+            {isBrowser ? <iframe key={`${runCount}-${language.key}`} ref={frameRef} title={isReactPreview ? "Try-it React application preview" : "Try-it browser result"} sandbox="allow-scripts" srcDoc={doc} /> : result ? <div className="tryit-console" aria-live="polite"><strong>stdout</strong><pre>{result.stdout || "(empty)"}</pre><strong>stderr / result</strong><pre>{result.stderr || result.error || result.message || "(empty)"}</pre>{result.exit_code !== undefined && <p>Exit code: {result.exit_code}</p>}</div> : <div className="tryit-empty-output"><ShieldCheck size={22} /><h3>Ready to run</h3><p>{runnerSupportsLanguage && runnerConfigured ? "Run submits this program to the separately configured isolated runner." : `${language.label} execution is not currently advertised by the configured isolated runner. Your code stays editable; it will not be simulated as if it ran.`}</p>{expectedOutput && <details><summary>Reference output</summary><pre>{expectedOutput}</pre></details>}</div>}
             {runnerMessage && <p className="runner-message" role="status">{runnerMessage}</p>}
             {!isBrowser && result?.kind === "runner" && expectedOutput && <details className="tryit-expected-output"><summary>Compare with reference output</summary><pre>{expectedOutput}</pre></details>}
           </section>
         </div>
       )}
-      <div className="playground-note"><ShieldCheck size={16} /><span>Browser previews use a restricted sandbox and do not share the CodeLeaf app's origin. Server execution is only available for runtimes explicitly supported by the separate runner service.</span></div>
+      <div className="playground-note"><ShieldCheck size={16} /><span>HTML, CSS and React examples use a restricted browser preview. JavaScript previews only when it is linked to an HTML entry; otherwise it runs through the configured server runtime. Other languages use terminal output only when the isolated runner advertises support.</span></div>
       <div className="tryit-footer-links"><button type="button" className="button button-secondary" onClick={() => openSeededWorkspace("playground", { courseSlug: course, lessonSlug, title, language: language.key, code, expectedOutput, runMode })}>Open the full multi-file Playground <ExternalLink size={13} /></button></div>
     </PageShell>
   );
