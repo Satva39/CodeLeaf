@@ -55,6 +55,8 @@ class Settings(BaseSettings):
     # Optional URL for the isolated runner control plane. The main API never executes learner code.
     runner_service_url: str | None = None
     runner_service_token: str | None = None
+    runner_service_timeout_seconds: int = Field(default=8, ge=2, le=30)
+    runner_jdoodle_fallback_enabled: bool = True
     # Portfolio archives remain in PostgreSQL unless Catalyst Stratus is explicitly selected.
     portfolio_storage_provider: str = "database"
     catalyst_stratus_enabled: bool = False
@@ -162,6 +164,25 @@ class Settings(BaseSettings):
             problems.append("COOKIE_SECURE must be true in production")
         if self.email_test_mode:
             problems.append("EMAIL_TEST_MODE must be false in production")
+
+        runner_url = (self.runner_service_url or "").strip()
+        runner_token = (self.runner_service_token or "").strip()
+        if bool(runner_url) != bool(runner_token):
+            problems.append("RUNNER_SERVICE_URL and RUNNER_SERVICE_TOKEN must be configured together")
+        if runner_url:
+            parsed_runner = urlsplit(runner_url)
+            if (
+                parsed_runner.scheme != "https"
+                or not parsed_runner.netloc
+                or parsed_runner.path not in {"", "/"}
+                or parsed_runner.query
+                or parsed_runner.fragment
+                or parsed_runner.username is not None
+                or parsed_runner.password is not None
+            ):
+                problems.append("RUNNER_SERVICE_URL must be a base HTTPS URL without credentials, path, query, or fragment")
+            if len(runner_token) < 32 or runner_token == secret:
+                problems.append("RUNNER_SERVICE_TOKEN must be a distinct random secret of at least 32 characters")
         if not self.smtp_host or not self.email_from:
             problems.append("SMTP_HOST and EMAIL_FROM are required in production for account email")
         if not self.smtp_username or not self.smtp_password:

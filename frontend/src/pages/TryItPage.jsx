@@ -50,6 +50,7 @@ export default function TryItPage() {
   const [runnerSupportedLanguages, setRunnerSupportedLanguages] = useState([]);
   const [runnerCapabilitiesChecked, setRunnerCapabilitiesChecked] = useState(false);
   const [stdin, setStdin] = useState("");
+  const [databaseSetupSql, setDatabaseSetupSql] = useState("");
   const frameRef = useRef(null);
 
   useEffect(() => {
@@ -157,7 +158,15 @@ export default function TryItPage() {
     try {
       const created = await readPayload(await apiFetch(`${API_BASE}/api/runner/jobs`, {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ language: language.key, source: code, stdin }),
+        body: JSON.stringify({
+          language: language.key,
+          source: code,
+          stdin: ["sqlite", "mysql", "postgresql"].includes(language.key) ? "" : stdin,
+          ...(["sqlite", "mysql", "postgresql"].includes(language.key) ? { setup_sql: databaseSetupSql } : {}),
+          idempotency_key: typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+            ? crypto.randomUUID()
+            : `${Date.now()}-${Math.random().toString(36).slice(2, 12)}`,
+        }),
       }));
       const jobId = created.job?.id;
       if (!jobId) throw new Error("The API did not return a runner job ID.");
@@ -228,7 +237,9 @@ export default function TryItPage() {
               </div>
             </div>
             <textarea className="tryit-code-editor" aria-label={`${filename} source code`} value={code} onChange={(event) => { setCode(event.target.value); setResult(null); setRunnerMessage(""); }} spellCheck="false" maxLength={100000} />
-            {!isBrowser && runnerSupportsLanguage && <label className="tryit-stdin">Standard input <textarea value={stdin} onChange={(event) => setStdin(event.target.value)} rows={2} maxLength={8000} placeholder="Input provided to your program" /></label>}
+            {!isBrowser && runnerSupportsLanguage && (["sqlite", "mysql", "postgresql"].includes(language.key)
+              ? <label className="tryit-stdin">Database setup SQL <textarea value={databaseSetupSql} onChange={(event) => setDatabaseSetupSql(event.target.value)} rows={3} maxLength={131072} placeholder="Optional setup statements for a fresh temporary database" /></label>
+              : <label className="tryit-stdin">Standard input <textarea value={stdin} onChange={(event) => setStdin(event.target.value)} rows={2} maxLength={8000} placeholder="Input provided to your program" /></label>)}
             <div className="tryit-status"><span><span className="live-dot" /> {runnerStatus.replaceAll("_", " ")}</span><span>Local draft · independent from lesson code</span></div>
           </section>
           <section className="tryit-result-panel panel" aria-labelledby="tryit-result-title">
@@ -237,7 +248,7 @@ export default function TryItPage() {
               <div className="tryit-console-toolbar"><strong>Execution result</strong><span>{result.provider || "CodeLeaf runner"}</span></div>
               <strong>stdout / compiler output</strong><pre>{result.stdout || "(no standard output or compiler output)"}</pre>
               {(result.stderr || result.error || result.message) && <><strong>stderr / compiler messages</strong><pre className="tryit-console-stderr">{result.stderr || result.error || result.message}</pre></>}
-              <div className="tryit-console-meta">{result.exit_code !== undefined && <span>Exit code: {result.exit_code}</span>}{result.cpu_time && <span>CPU: {result.cpu_time}s</span>}{result.memory && <span>Memory: {result.memory} KB</span>}</div>
+              <div className="tryit-console-meta">{result.exit_code !== undefined && <span>Exit code: {result.exit_code}</span>}{result.engine && <span>Database: {result.engine}</span>}{result.row_count !== undefined && <span>Rows: {result.row_count}</span>}{result.execution_ms !== undefined && <span>Execution: {result.execution_ms} ms</span>}{result.cpu_time && <span>CPU: {result.cpu_time}s</span>}{result.memory && <span>Memory: {result.memory} KB</span>}</div>
             </div> : <div className="tryit-empty-output"><ShieldCheck size={22} /><h3>Ready to run</h3><p>{runnerSupportsLanguage && runnerConfigured ? "Run sends this program to the configured execution provider. Its actual output and compiler errors will appear here." : `${language.label} currently has no enabled execution adapter. Your source remains editable and downloadable; CodeLeaf will not display simulated output.`}</p>{expectedOutput && <details><summary>Reference output</summary><pre>{expectedOutput}</pre></details>}</div>}
             {runnerMessage && <p className="runner-message" role="status">{runnerMessage}</p>}
             {!isBrowser && result?.kind === "runner" && expectedOutput && <details className="tryit-expected-output"><summary>Compare with reference output</summary><pre>{expectedOutput}</pre></details>}

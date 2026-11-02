@@ -35,7 +35,7 @@ from fastapi import (
     UploadFile,
     status,
 )
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 from sqlalchemy import func, select, delete, text, update
 from sqlalchemy.orm import Session
 
@@ -46,6 +46,12 @@ from .jdoodle_runner import (
     get_jdoodle_supported_languages,
     is_jdoodle_language_supported,
     normalize_language_key,
+)
+from .runner_client import (
+    RunnerServiceError,
+    jdoodle_fallback_configured,
+    runner_request_json,
+    runner_service_configured,
 )
 from .db import SessionLocal, get_db
 from .models import (
@@ -299,20 +305,88 @@ class AnalyticsEventInput(StrictModel):
         return value
 
 
+class RunnerFileInput(StrictModel):
+    name: str = Field(min_length=1, max_length=120)
+    content: str = Field(min_length=1, max_length=65536)
+
+    @field_validator("name")
+    @classmethod
+    def safe_runner_filename(cls, value: str) -> str:
+        if (
+            not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._+-]{0,119}", value)
+            or value in {".", ".."}
+            or ".." in value
+            or "/" in value
+            or "\\" in value
+            or "\x00" in value
+        ):
+            raise ValueError("Runner file names must be simple root-level names without paths.")
+        return value
+
+    @field_validator("content")
+    @classmethod
+    def safe_runner_file_content(cls, value: str) -> str:
+        if "\x00" in value:
+            raise ValueError("Source files cannot contain NUL characters.")
+        return value
+
+
 class RunnerCreateInput(StrictModel):
-    language: str = Field(min_length=1, max_length=24)
-    source: str = Field(min_length=1, max_length=16000)
-    stdin: str = Field(default="", max_length=8000)
+    language: str = Field(min_length=1, max_length=40)
+    source: str | None = Field(default=None, min_length=1, max_length=65536)
+    files: list[RunnerFileInput] | None = Field(default=None, max_length=10)
+    version: str = Field(default="*", min_length=1, max_length=40)
+    stdin: str = Field(default="", max_length=16384)
+    args: list[str] = Field(default_factory=list, max_length=16)
+    setup_sql: str = Field(default="", max_length=131072)
     idempotency_key: str | None = Field(default=None, min_length=8, max_length=100)
 
     @field_validator("language")
     @classmethod
-    def supported_runner_language(cls, value: str) -> str:
-        normalized = normalize_language_key(value)
-        external_languages = {"python", "javascript"}
-        if normalized not in external_languages and not is_jdoodle_language_supported(normalized):
-            raise ValueError("This language does not have a configured execution adapter.")
+    def canonical_execution_language(cls, value: str) -> str:
+        normalized = str(value or "").strip().lower().replace("_", "-")
+        # SQLite is an engine key in the isolated database API, not JDoodle's
+        # generic SQL alias. Preserve it so live engine routing stays accurate.
+        if normalized in {"sqlite", "sqlite3"}:
+            return "sqlite"
+        normalized = normalize_language_key(normalized)
+        if not re.fullmatch(r"[a-z0-9][a-z0-9.+#-]{0,39}", normalized):
+            raise ValueError("language must be a supported CodeLeaf runtime or database key")
         return normalized
+
+    @field_validator("version")
+    @classmethod
+    def valid_runner_version(cls, value: str) -> str:
+        if not re.fullmatch(r"(?:\*|[0-9A-Za-z.+*^~<>= -]{1,39})", value.strip()):
+            raise ValueError("Invalid runtime version selector.")
+        return value.strip()
+
+    @field_validator("stdin")
+    @classmethod
+    def valid_runner_stdin(cls, value: str) -> str:
+        if "\x00" in value:
+            raise ValueError("Standard input cannot contain NUL characters.")
+        return value
+
+    @field_validator("args")
+    @classmethod
+    def valid_runner_args(cls, value: list[str]) -> list[str]:
+        if any(
+            not isinstance(item, str)
+            or len(item) > 256
+            or len(item.encode("utf-8")) > 256
+            or "\x00" in item
+            for item in value
+        ):
+            raise ValueError("Each execution argument must be text of at most 256 bytes.")
+        return value
+
+    @field_validator("source", "setup_sql")
+    @classmethod
+    def reject_runner_nul(cls, value: str | None) -> str | None:
+        if value is not None and "\x00" in value:
+            raise ValueError("Execution source cannot contain NUL characters.")
+        return value
 
     @field_validator("idempotency_key")
     @classmethod
@@ -320,6 +394,33 @@ class RunnerCreateInput(StrictModel):
         if value is not None and not re.fullmatch(r"[A-Za-z0-9._:-]{8,100}", value):
             raise ValueError("idempotency_key contains unsupported characters")
         return value
+
+    @model_validator(mode="after")
+    def validate_execution_payload(self) -> "RunnerCreateInput":
+        has_source = self.source is not None
+        has_files = bool(self.files)
+        if has_source == has_files:
+            raise ValueError("Provide exactly one of source or files.")
+        if self.language in {"sqlite", "mysql", "postgresql"} and has_files:
+            raise ValueError("Database jobs accept a SQL query in source, not a file bundle.")
+        if self.setup_sql and self.language not in {"sqlite", "mysql", "postgresql"}:
+            raise ValueError("setup_sql is only available for SQLite, MySQL, and PostgreSQL jobs.")
+        if self.source is not None and len(self.source.encode("utf-8")) > 65_536:
+            raise ValueError("Source or SQL query must not exceed 64 KB when encoded as UTF-8.")
+        if len(self.stdin.encode("utf-8")) > 16_384:
+            raise ValueError("Standard input must not exceed 16 KB when encoded as UTF-8.")
+        if len(self.setup_sql.encode("utf-8")) > 131_072:
+            raise ValueError("Database setup SQL must not exceed 128 KB when encoded as UTF-8.")
+        names = [item.name.lower() for item in (self.files or [])]
+        if len(names) != len(set(names)):
+            raise ValueError("Runner file names must be unique, ignoring case.")
+        file_sizes = [len(item.content.encode("utf-8")) for item in (self.files or [])]
+        if any(size > 65_536 for size in file_sizes):
+            raise ValueError("Each source file must not exceed 64 KB when encoded as UTF-8.")
+        total_bytes = sum(file_sizes)
+        if total_bytes > 131_072:
+            raise ValueError("Combined source files must not exceed 128 KB.")
+        return self
 
 
 class RunnerResultInput(StrictModel):
@@ -2502,42 +2603,159 @@ def analytics_summary(
     }
 
 
+RUNNER_DATABASE_ENGINE_KEYS = {"sqlite", "mysql", "postgresql"}
+
+
+def _canonical_runner_key(value: str) -> str:
+    raw = str(value or "").strip().lower().replace("_", "-")
+    if raw in {"sqlite", "sqlite3"}:
+        return "sqlite"
+    return normalize_language_key(raw)
+
+
+def _runner_language_keys(payload: dict[str, Any]) -> set[str]:
+    languages = payload.get("languages")
+    if not isinstance(languages, list):
+        raise RunnerServiceError("The Runner language catalogue is invalid.")
+    supported: set[str] = set()
+    for item in languages:
+        if not isinstance(item, dict) or item.get("available") is not True:
+            continue
+        aliases = item.get("aliases") if isinstance(item.get("aliases"), list) else []
+        candidates = [item.get("key"), *aliases]
+        for candidate in candidates:
+            key = _canonical_runner_key(str(candidate or ""))
+            if key:
+                supported.add(key)
+    # Course/framework names are aliases of their actual source runtime. Add
+    # them only when the corresponding live runtime is installed.
+    for alias in get_jdoodle_supported_languages():
+        key = _canonical_runner_key(alias)
+        if key in supported:
+            supported.add(alias)
+    return supported
+
+
+def _runner_database_engine_keys(payload: dict[str, Any]) -> set[str]:
+    engines = payload.get("engines")
+    if not isinstance(engines, list):
+        raise RunnerServiceError("The Runner database-engine catalogue is invalid.")
+    return {
+        str(item.get("key"))
+        for item in engines
+        if isinstance(item, dict)
+        and item.get("available") is True
+        and str(item.get("key")) in RUNNER_DATABASE_ENGINE_KEYS
+    }
+
+
+def _database_result_for_client(result: dict[str, Any]) -> dict[str, Any]:
+    columns = result.get("columns") if isinstance(result.get("columns"), list) else []
+    rows = result.get("rows") if isinstance(result.get("rows"), list) else []
+    safe_columns = [str(value)[:128] for value in columns[:50]]
+    output_lines: list[str] = []
+    if safe_columns:
+        output_lines.append(" | ".join(safe_columns))
+        output_lines.append("-+-".join("-" * min(max(len(value), 3), 24) for value in safe_columns))
+        for row in rows[:100]:
+            if not isinstance(row, list):
+                continue
+            output_lines.append(" | ".join(
+                value if isinstance(value, str) else json.dumps(value, ensure_ascii=False, default=str)
+                for value in row[:len(safe_columns)]
+            ))
+    elif result.get("message"):
+        output_lines.append(str(result.get("message"))[:2000])
+    elif result.get("affected_rows") is not None:
+        output_lines.append(f"{int(result.get('affected_rows') or 0)} row(s) affected")
+    else:
+        output_lines.append("Query completed.")
+    if result.get("truncated") is True:
+        output_lines.append("[Result rows were truncated by the execution service.]")
+    error = result.get("error") if isinstance(result.get("error"), str) else ""
+    return {
+        "provider": "codeleaf-runner",
+        "engine": str(result.get("engine") or "database"),
+        "stdout": "\n".join(output_lines)[:32768],
+        "stderr": error[:8000],
+        "error": error[:8000] or None,
+        "exit_code": 1 if error else 0,
+        "columns": safe_columns,
+        "rows": rows[:100],
+        "row_count": int(result.get("row_count") or 0),
+        "affected_rows": result.get("affected_rows"),
+        "execution_ms": int(result.get("execution_ms") or 0),
+        "truncated": result.get("truncated") is True,
+        "message": str(result.get("message") or "")[:2000],
+    }
+
+
+async def _load_runner_capabilities() -> tuple[set[str], set[str], bool]:
+    if not runner_service_configured():
+        return set(), set(), False
+    languages: set[str] = set()
+    engines: set[str] = set()
+    reachable = False
+    try:
+        language_payload = await runner_request_json("GET", "/v1/languages")
+        languages = _runner_language_keys(language_payload)
+        reachable = True
+    except RunnerServiceError:
+        logger.warning("Runner language catalogue is currently unavailable.")
+    try:
+        database_payload = await runner_request_json("GET", "/v1/database/engines")
+        engines = _runner_database_engine_keys(database_payload)
+        reachable = True
+    except RunnerServiceError:
+        logger.warning("Runner database-engine catalogue is currently unavailable.")
+    return languages, engines, reachable
+
+
 @router.get("/api/runner/status")
-def runner_status() -> dict[str, Any]:
-    """Report only runtimes backed by configured, real execution providers."""
+async def runner_status() -> dict[str, Any]:
+    """Report only languages and database engines backed by a live provider."""
+    runner_languages, runner_engines, runner_reachable = await _load_runner_capabilities()
+    fallback_configured = jdoodle_fallback_configured()
+    jdoodle_languages = set(get_jdoodle_supported_languages()) if fallback_configured else set()
 
-    external_configured = bool(
-        (settings.runner_service_url or "").strip()
-        and (settings.runner_service_token or "").strip()
-    )
-    jdoodle_configured = bool(
-        (settings.jdoodle_client_id or "").strip()
-        and (settings.jdoodle_client_secret or "").strip()
-    )
+    supported = set(runner_languages) | set(runner_engines) | jdoodle_languages
+    providers: dict[str, str] = {key: "jdoodle" for key in jdoodle_languages}
+    for key in runner_languages | runner_engines:
+        providers[key] = "codeleaf-runner"
 
-    supported = set(get_jdoodle_supported_languages()) if jdoodle_configured else set()
-    if external_configured:
-        # The separately hosted CodeLeaf runner is intentionally limited to
-        # Python and JavaScript. Other languages are dispatched to JDoodle.
-        supported.update({"python", "javascript"})
-
-    if external_configured and jdoodle_configured:
+    runner_has_capabilities = bool(runner_languages or runner_engines)
+    if runner_has_capabilities and fallback_configured:
         provider = "hybrid"
-        message = "CodeLeaf uses its isolated runner for Python/JavaScript and JDoodle for the additional enabled runtimes."
-    elif external_configured:
-        provider = "external"
-        message = "The CodeLeaf isolated runner is configured for Python and JavaScript."
-    elif jdoodle_configured:
+        message = (
+            "CodeLeaf Runner is preferred for installed runtimes and available database engines. "
+            "JDoodle remains enabled as a rollback fallback for its supported languages."
+        )
+    elif runner_has_capabilities:
+        provider = "codeleaf-runner"
+        message = "CodeLeaf Runner is available for the installed runtimes and database engines listed here."
+    elif fallback_configured and runner_service_configured() and not runner_reachable:
         provider = "jdoodle"
-        message = "JDoodle is configured for the languages listed in supported_languages."
+        message = "CodeLeaf Runner is temporarily unreachable. JDoodle fallback is available for its supported languages."
+    elif fallback_configured:
+        provider = "jdoodle"
+        message = "JDoodle is configured for the supported languages listed here."
     else:
         provider = None
-        message = "No server-side execution provider is configured. Browser HTML/CSS/React preview remains available."
+        message = "No server-side execution provider is currently available. Browser HTML/CSS/React preview remains available."
 
     return {
         "configured": bool(supported),
         "provider": provider,
         "supported_languages": sorted(supported),
+        "providers_by_language": providers,
+        "database_engines": sorted(runner_engines),
+        "runner": {
+            "configured": runner_service_configured(),
+            "reachable": runner_reachable,
+            "available_language_count": len(runner_languages),
+            "available_database_engine_count": len(runner_engines),
+        },
+        "jdoodle_fallback_enabled": fallback_configured,
         "message": message,
     }
 
@@ -2548,26 +2766,31 @@ async def create_runner_job(
     user: User = Depends(require_user),
     db: Session = Depends(get_db),
 ) -> dict[str, Any]:
-    base_url = (settings.runner_service_url or "").strip().rstrip("/")
-    token = settings.runner_service_token or ""
+    runner_languages, runner_engines, runner_reachable = await _load_runner_capabilities()
+    language = _canonical_runner_key(body.language)
+    runner_job_type: str | None = None
+    if language in RUNNER_DATABASE_ENGINE_KEYS and language in runner_engines:
+        runner_job_type = "database"
+    elif language in runner_languages:
+        runner_job_type = "code"
 
-    external_configured = bool(base_url and token)
-    jdoodle_configured = bool(
-        (settings.jdoodle_client_id or "").strip()
-        and (settings.jdoodle_client_secret or "").strip()
+    use_jdoodle = (
+        runner_job_type is None
+        and language != "sqlite"
+        and jdoodle_fallback_configured()
+        and is_jdoodle_language_supported(body.language)
     )
 
-    external_language_supported = body.language in {"python", "javascript"}
-    use_external = external_configured and external_language_supported
-    use_jdoodle = jdoodle_configured and is_jdoodle_language_supported(body.language)
-
-    if not use_external and not use_jdoodle:
+    if runner_job_type is None and not use_jdoodle:
+        if runner_service_configured() and not runner_reachable:
+            detail = "The isolated Runner is currently unavailable and no JDoodle fallback can run this language. No code was executed."
+        else:
+            detail = f"No configured provider has an installed runtime for {body.language}. No code was executed."
+        raise HTTPException(status_code=503, detail=detail)
+    if use_jdoodle and body.files:
         raise HTTPException(
             status_code=503,
-            detail=(
-                f"No configured execution provider can run {body.language}. "
-                "No code was executed. Check the backend runner configuration."
-            ),
+            detail="JDoodle rollback supports single-file requests only. The multi-file job was not executed.",
         )
 
     request_key = body.idempotency_key or uuid4().hex
@@ -2600,7 +2823,6 @@ async def create_runner_job(
         )
         .values(status="expired", updated_at=now)
     )
-
     db.execute(
         delete(RunnerJob).where(
             RunnerJob.user_id == user.id,
@@ -2617,7 +2839,6 @@ async def create_runner_job(
         )
         or 0
     )
-
     active = (
         db.scalar(
             select(func.count(RunnerJob.id)).where(
@@ -2627,19 +2848,14 @@ async def create_runner_job(
         )
         or 0
     )
-
     if recent >= 8 or active >= 2:
         raise HTTPException(
             status_code=429,
-            detail=(
-                "Runner rate limit reached. Finish or wait for an existing "
-                "job before starting another."
-            ),
+            detail="Runner rate limit reached. Finish or wait for an existing job before starting another.",
         )
 
     plan_id = effective_plan_id(db, user.id)
     allowance = int(plan_limits(plan_id)["code_executions_per_day"])
-
     reservation, duplicate = reserve_daily_usage(
         db,
         user,
@@ -2647,7 +2863,6 @@ async def create_runner_job(
         allowance=allowance,
         idempotency_key=request_key,
     )
-
     if duplicate:
         previous = db.scalar(
             select(RunnerJob).where(
@@ -2655,7 +2870,6 @@ async def create_runner_job(
                 RunnerJob.request_key == request_key,
             )
         )
-
         if previous is not None:
             return {
                 "job": {
@@ -2665,121 +2879,120 @@ async def create_runner_job(
                     "created_at": previous.created_at.isoformat(),
                 }
             }
-
         raise HTTPException(
             status_code=409,
-            detail=(
-                "This code execution request is already being processed. "
-                "Check your runner status before retrying."
-            ),
+            detail="This code execution request is already being processed. Check runner status before retrying.",
         )
 
     try:
-        if use_external:
-            # The dedicated CodeLeaf sandbox remains preferred for its two
-            # supported runtimes; all other languages use JDoodle below.
-            async with httpx.AsyncClient(timeout=8.0) as client:
-                response = await client.post(
-                    f"{base_url}/v1/jobs",
-                    headers={"X-Runner-Key": token},
-                    json={
-                        "owner_id": str(user.id),
-                        "language": body.language,
-                        "source": body.source,
-                        "stdin": body.stdin,
-                    },
-                )
-
-            if response.status_code >= 400:
-                raise HTTPException(
-                    status_code=503,
-                    detail=(
-                        "The isolated runner service rejected this request. "
-                        "Your daily execution allowance was not consumed."
-                    ),
-                )
-
-            try:
-                result = response.json()
-            except ValueError as exc:
-                raise HTTPException(
-                    status_code=502,
-                    detail=(
-                        "The runner service returned an invalid response. "
-                        "Your daily execution allowance was not consumed."
-                    ),
-                ) from exc
-
-            external_id = result.get("job_id") if isinstance(result, dict) else None
-
-            if not isinstance(external_id, str) or not external_id:
-                raise HTTPException(
-                    status_code=502,
-                    detail=(
-                        "The runner service returned an invalid job reference. "
-                        "Your daily execution allowance was not consumed."
-                    ),
-                )
-
+        if runner_job_type == "database":
+            runner_payload = {
+                "engine": language,
+                "query": body.source,
+                "setup_sql": body.setup_sql,
+            }
+            result = await runner_request_json(
+                "POST",
+                "/v1/database/jobs",
+                user_id=str(user.id),
+                payload=runner_payload,
+            )
+            external_id = result.get("job_id")
             job_status = str(result.get("status", "queued"))[:20]
-            saved_result: dict[str, Any] = {}
-
-        elif use_jdoodle:
-            # JDoodle executes synchronously and returns the finished output.
+            saved_result: dict[str, Any] = {
+                "provider": "codeleaf-runner",
+                "job_type": "database",
+            }
+        elif runner_job_type == "code":
+            runner_payload: dict[str, Any] = {
+                "language": language,
+                "version": body.version,
+                "stdin": body.stdin,
+                "args": body.args,
+            }
+            if body.files:
+                runner_payload["files"] = [
+                    {"name": item.name, "content": item.content}
+                    for item in body.files
+                ]
+            else:
+                runner_payload["source"] = body.source
+            result = await runner_request_json(
+                "POST",
+                "/v1/jobs",
+                user_id=str(user.id),
+                payload=runner_payload,
+            )
+            external_id = result.get("job_id")
+            job_status = str(result.get("status", "queued"))[:20]
+            saved_result = {
+                "provider": "codeleaf-runner",
+                "job_type": "code",
+            }
+        else:
+            # Only the explicit, configured rollback provider may receive this
+            # request. A Runner submission error after a live runtime match is
+            # never silently re-executed by JDoodle.
+            if body.source is None:
+                raise HTTPException(status_code=503, detail="JDoodle fallback requires one source file.")
+            jdoodle_source = body.source
+            if body.setup_sql:
+                jdoodle_source = body.setup_sql.rstrip().rstrip(";") + ";\n" + jdoodle_source
             jdoodle_result = await execute_jdoodle(
                 language=body.language,
-                source=body.source,
+                source=jdoodle_source,
                 stdin=body.stdin,
             )
-
             external_id = f"jdoodle-{uuid4().hex}"
             job_status = "completed"
-
             saved_result = {
                 "provider": "jdoodle",
                 "result": jdoodle_result,
             }
-        else:
+
+        if not isinstance(external_id, str) or not external_id:
             raise HTTPException(
-                status_code=503,
-                detail=f"No configured runner can execute {body.language}.",
+                status_code=502,
+                detail="The execution provider returned an invalid job reference. Your daily allowance was not consumed.",
             )
+        if runner_job_type is not None:
+            try:
+                UUID(external_id)
+            except (TypeError, ValueError) as exc:
+                raise HTTPException(
+                    status_code=502,
+                    detail="The isolated Runner returned an invalid job reference. Your daily allowance was not consumed.",
+                ) from exc
 
     except HTTPException:
         finalize_daily_usage(db, reservation.id, success=False)
         raise
-
+    except RunnerServiceError as exc:
+        finalize_daily_usage(db, reservation.id, success=False)
+        status_code = 404 if exc.status_code == 404 else 503
+        raise HTTPException(
+            status_code=status_code,
+            detail="The isolated execution service could not accept this job. Your daily allowance was not consumed.",
+        ) from exc
     except httpx.HTTPError as exc:
         finalize_daily_usage(db, reservation.id, success=False)
         raise HTTPException(
             status_code=503,
-            detail=(
-                "The isolated runner service could not be reached. "
-                "Your daily execution allowance was not consumed."
-            ),
+            detail="The execution provider could not be reached. Your daily allowance was not consumed.",
         ) from exc
 
     row = RunnerJob(
         user_id=user.id,
         external_job_id=external_id,
         request_key=request_key,
-        language=body.language,
+        language=language,
         status=job_status,
         result_json=saved_result,
         created_at=now,
         updated_at=now,
     )
-
     db.add(row)
-
-    # Count the execution once, in the same transaction as the saved job.
-    finalize_daily_usage(
-        db,
-        reservation.id,
-        success=True,
-        commit=False,
-    )
-
+    finalize_daily_usage(db, reservation.id, success=True, commit=False)
     db.commit()
     db.refresh(row)
 
@@ -2789,6 +3002,7 @@ async def create_runner_job(
             "language": row.language,
             "status": row.status,
             "created_at": row.created_at.isoformat(),
+            "provider": saved_result.get("provider"),
         }
     }
 
@@ -2808,13 +3022,9 @@ async def get_runner_job(
     if row is None:
         raise HTTPException(status_code=404, detail="Runner job was not found.")
 
-    # JDoodle executes synchronously. Its completed output is already stored
-    # in the database, so do not contact the external asynchronous runner.
-    if (
-        isinstance(row.result_json, dict)
-        and row.result_json.get("provider") == "jdoodle"
-    ):
-        result = row.result_json.get("result")
+    metadata = row.result_json if isinstance(row.result_json, dict) else {}
+    if metadata.get("provider") == "jdoodle":
+        result = metadata.get("result")
         if not isinstance(result, dict):
             result = {}
         return {
@@ -2823,77 +3033,67 @@ async def get_runner_job(
                 "language": row.language,
                 "status": row.status,
                 "result": result,
+                "provider": "jdoodle",
             }
         }
 
-    # Preserve the existing external runner behavior for legacy jobs.
-    base_url = (settings.runner_service_url or "").strip().rstrip("/")
-    token = settings.runner_service_token or ""
-    if not base_url or not token:
-        raise HTTPException(
-            status_code=503,
-            detail="The isolated runner service is not configured.",
-        )
-
-    async with httpx.AsyncClient(timeout=5.0) as client:
-        try:
-            response = await client.get(
-                f"{base_url}/v1/jobs/{row.external_job_id}",
-                headers={
-                    "X-Runner-Key": token,
-                    "X-CodeLeaf-User": str(user.id),
-                },
-            )
-        except httpx.HTTPError as exc:
-            raise HTTPException(
-                status_code=503,
-                detail="The isolated runner service could not be reached.",
-            ) from exc
-
-    if response.status_code == 404:
-        row.status = "expired"
-        db.commit()
-        return {
-            "job": {
-                "id": str(row.id),
-                "language": row.language,
-                "status": row.status,
-                "result": {},
-            }
-        }
-
-    if response.status_code >= 400:
-        raise HTTPException(
-            status_code=503,
-            detail="The isolated runner service failed to return job status.",
-        )
-
+    job_type = metadata.get("job_type") if metadata.get("provider") == "codeleaf-runner" else "code"
+    endpoint = "/v1/database/jobs/" if job_type == "database" else "/v1/jobs/"
     try:
-        data = response.json()
-    except ValueError as exc:
+        data = await runner_request_json(
+            "GET",
+            f"{endpoint}{row.external_job_id}",
+            user_id=str(user.id),
+        )
+    except RunnerServiceError as exc:
+        if exc.status_code == 404:
+            row.status = "expired"
+            row.updated_at = utc_now()
+            db.commit()
+            last_result = metadata.get("last_result") if isinstance(metadata.get("last_result"), dict) else {}
+            display_result = (
+                _database_result_for_client(last_result)
+                if job_type == "database" and last_result
+                else last_result
+            )
+            return {
+                "job": {
+                    "id": str(row.id),
+                    "language": row.language,
+                    "status": row.status,
+                    "result": display_result,
+                }
+            }
         raise HTTPException(
-            status_code=502,
-            detail="The runner service returned an invalid status response.",
+            status_code=503,
+            detail="The isolated Runner could not return this job's status.",
         ) from exc
 
-    if not isinstance(data, dict):
-        raise HTTPException(
-            status_code=502,
-            detail="The runner service returned an invalid status response.",
-        )
-
-    row.status = str(data.get("status", row.status))[:20]
-    result = data.get("result") if isinstance(data.get("result"), dict) else {}
-    row.result_json = result
+    remote_status = str(data.get("status", row.status))[:20]
+    if remote_status not in {"queued", "running", "completed", "failed", "cancelled", "expired"}:
+        raise HTTPException(status_code=502, detail="The Runner returned an unrecognized job status.")
+    raw_result = data.get("result") if isinstance(data.get("result"), dict) else {}
+    row.status = remote_status
+    row.result_json = {
+        "provider": "codeleaf-runner",
+        "job_type": "database" if job_type == "database" else "code",
+        "last_result": raw_result,
+    }
     row.updated_at = utc_now()
     db.commit()
 
+    display_result = (
+        _database_result_for_client(raw_result)
+        if job_type == "database" and raw_result and remote_status in {"completed", "failed"}
+        else raw_result
+    )
     return {
         "job": {
             "id": str(row.id),
             "language": row.language,
             "status": row.status,
-            "result": result,
+            "result": display_result,
+            "provider": "codeleaf-runner",
         }
     }
 
@@ -2913,48 +3113,42 @@ async def cancel_runner_job(
     if row is None:
         raise HTTPException(status_code=404, detail="Runner job was not found.")
 
-    # JDoodle runs synchronously. By the time a job is saved, it has completed
-    # and cannot be cancelled. Keep the existing cancellation path for the
-    # asynchronous external runner.
-    if (
-        isinstance(row.result_json, dict)
-        and row.result_json.get("provider") == "jdoodle"
-    ):
+    metadata = row.result_json if isinstance(row.result_json, dict) else {}
+    if metadata.get("provider") == "jdoodle":
         raise HTTPException(
             status_code=409,
             detail="JDoodle executions complete immediately and cannot be cancelled.",
         )
 
-    base_url = (settings.runner_service_url or "").strip().rstrip("/")
-    token = settings.runner_service_token or ""
-    if not base_url or not token:
-        raise HTTPException(
-            status_code=503,
-            detail="The isolated runner service is not configured.",
+    job_type = metadata.get("job_type") if metadata.get("provider") == "codeleaf-runner" else "code"
+    endpoint = "/v1/database/jobs/" if job_type == "database" else "/v1/jobs/"
+    try:
+        result = await runner_request_json(
+            "DELETE",
+            f"{endpoint}{row.external_job_id}",
+            user_id=str(user.id),
         )
-
-    async with httpx.AsyncClient(timeout=5.0) as client:
-        try:
-            response = await client.delete(
-                f"{base_url}/v1/jobs/{row.external_job_id}",
-                headers={
-                    "X-Runner-Key": token,
-                    "X-CodeLeaf-User": str(user.id),
-                },
-            )
-        except httpx.HTTPError as exc:
+    except RunnerServiceError as exc:
+        if exc.status_code == 409:
+            raise HTTPException(
+                status_code=409,
+                detail="This job is already running and cannot be cancelled through the queue API.",
+            ) from exc
+        if exc.status_code != 404:
             raise HTTPException(
                 status_code=503,
-                detail="The isolated runner service could not be reached.",
+                detail="The isolated Runner could not cancel this job.",
             ) from exc
+        result = {"status": "cancelled"}
 
-    if response.status_code >= 400 and response.status_code != 404:
+    remote_status = str(result.get("status", "cancelled"))[:20]
+    if remote_status == "running":
         raise HTTPException(
-            status_code=503,
-            detail="The isolated runner service could not cancel this job.",
+            status_code=409,
+            detail="This job is already running and cannot be cancelled through the queue API.",
         )
-
-    row.status = "cancelled"
+    row.status = "cancelled" if remote_status in {"cancelled", "missing", "expired"} else remote_status
     row.updated_at = utc_now()
     db.commit()
     return {"ok": True, "status": row.status}
+

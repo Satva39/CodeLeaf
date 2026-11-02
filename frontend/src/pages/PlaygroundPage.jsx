@@ -33,6 +33,10 @@ import {
 const WORKSPACE_STORAGE_KEY = "codeleaf:playground-workspace:v1";
 const WORKSPACE_CONFIG_FILE = "__codeleaf_project_config__.json";
 const FINAL_RUNNER_STATES = new Set(["completed", "failed", "timeout", "output_limit", "cancelled", "expired"]);
+const RUNNER_MAX_FILES = 10;
+const RUNNER_MAX_FILE_BYTES = 65_536;
+const RUNNER_MAX_TOTAL_BYTES = 131_072;
+const RUNNER_DATA_FILE_LANGUAGES = new Set(["json", "xml", "yaml", "markdown", "plain", "excel"]);
 
 async function responsePayload(response) {
   const payload = await response.json().catch(() => ({}));
@@ -155,6 +159,7 @@ export default function PlaygroundPage() {
   const [connectionEntryDraft, setConnectionEntryDraft] = useState("");
   const [connectionLanguageDraft, setConnectionLanguageDraft] = useState("");
   const [stdin, setStdin] = useState("");
+  const [databaseSetupSql, setDatabaseSetupSql] = useState("");
   const [fileDialog, setFileDialog] = useState("");
   const [fileNameDraft, setFileNameDraft] = useState("");
   const [fileDialogError, setFileDialogError] = useState("");
@@ -173,6 +178,7 @@ export default function PlaygroundPage() {
   const files = workspace.files;
   const activeFile = files.find((file) => file.id === workspace.activeFileId) || files[0] || null;
   const activeLanguage = activeFile ? getLanguageForFilename(activeFile.name, activeFile.language) : null;
+  const isDatabaseLanguage = ["sqlite", "mysql", "postgresql"].includes(activeLanguage?.key);
   const outputMode = detectOutputMode({ currentFile: activeFile, files, runnerCapabilities: runnerSupportedLanguages, webConnection: workspace.webConnection });
   const isConnectedPreview = outputMode.mode === "connected-preview";
   const isReactPreview = outputMode.mode === "react-preview";
@@ -532,7 +538,7 @@ export default function PlaygroundPage() {
     }
   }
 
-  async function runRemoteCode(language, source) {
+  async function runRemoteCode(language, source, projectFiles = null, setupSql = "") {
     if (!runnerConfigChecked) {
       setRunnerMessage("Checking execution-provider availability. Try again in a moment.");
       return;
@@ -547,15 +553,23 @@ export default function PlaygroundPage() {
     setRunnerResult(null);
     setRunnerStatus("submitting");
     try {
+      const requestBody = {
+        language,
+        stdin: ["sqlite", "mysql", "postgresql"].includes(language) ? "" : stdin,
+        idempotency_key: typeof crypto !== "undefined" && typeof crypto.randomUUID === "function" ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2, 12)}`,
+      };
+      if (["sqlite", "mysql", "postgresql"].includes(language)) {
+        requestBody.setup_sql = setupSql;
+      }
+      if (Array.isArray(projectFiles) && projectFiles.length > 1) {
+        requestBody.files = projectFiles.map((file) => ({ name: file.name, content: file.content }));
+      } else {
+        requestBody.source = source;
+      }
       const created = await responsePayload(await apiFetch(`${API_BASE}/api/runner/jobs`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          language,
-          source,
-          stdin,
-          idempotency_key: typeof crypto !== "undefined" && typeof crypto.randomUUID === "function" ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2, 12)}`,
-        }),
+        body: JSON.stringify(requestBody),
       }));
       const jobId = created.job?.id;
       if (!jobId) throw new Error("The API did not return a valid job reference.");
@@ -619,7 +633,40 @@ export default function PlaygroundPage() {
       return;
     }
     if (runnerSupportedLanguages.includes(activeLanguage?.key)) {
-      await runRemoteCode(activeLanguage.key, activeFile.content);
+      if (["sqlite", "mysql", "postgresql"].includes(activeLanguage.key)) {
+        await runRemoteCode(activeLanguage.key, activeFile.content, null, databaseSetupSql);
+        return;
+      }
+      // Include source files belonging to the active runtime plus common text/data
+      // assets. HTML/CSS/JS preview files are not sent into a terminal job unless
+      // they are the active language itself.
+      const companionFiles = files.filter((file) => {
+        if (!file || typeof file.name !== "string" || !safeWorkspaceFilename(file.name)) return false;
+        const key = getLanguageForFilename(file.name, file.language).key;
+        if (key === activeLanguage.key || RUNNER_DATA_FILE_LANGUAGES.has(key)) return true;
+        if (activeLanguage.key === "cpp" && /\.(?:h|hpp|hh|hxx)$/i.test(file.name)) return true;
+        if (activeLanguage.key === "c" && /\.(?:h)$/i.test(file.name)) return true;
+        return false;
+      });
+      const orderedFiles = [activeFile, ...companionFiles.filter((file) => file.id !== activeFile.id)];
+      const uniqueFiles = orderedFiles.filter((file, index, all) => all.findIndex((candidate) => candidate.name.toLowerCase() === file.name.toLowerCase()) === index);
+      if (uniqueFiles.length > RUNNER_MAX_FILES) {
+        setRunnerStatus("unsupported");
+        setRunnerMessage(`This project has ${uniqueFiles.length} relevant files. The isolated Runner accepts up to ${RUNNER_MAX_FILES} files per job. Remove unrelated files or run a smaller project.`);
+        return;
+      }
+      const fileSizes = uniqueFiles.map((file) => new Blob([file.content]).size);
+      if (fileSizes.some((size) => size > RUNNER_MAX_FILE_BYTES)) {
+        setRunnerStatus("unsupported");
+        setRunnerMessage("Each source or data file must be 64 KB or smaller for an isolated multi-file run.");
+        return;
+      }
+      if (fileSizes.reduce((sum, size) => sum + size, 0) > RUNNER_MAX_TOTAL_BYTES) {
+        setRunnerStatus("unsupported");
+        setRunnerMessage("The combined source and data files must be 128 KB or smaller for this isolated run.");
+        return;
+      }
+      await runRemoteCode(activeLanguage.key, activeFile.content, uniqueFiles.length > 1 ? uniqueFiles : null);
       return;
     }
     setRunnerStatus("unsupported");
@@ -804,11 +851,13 @@ export default function PlaygroundPage() {
             <div className="workspace-terminal-toolbar"><strong>Execution result</strong><span>{runnerResult.provider || "CodeLeaf runner"}</span></div>
             <div className="workspace-terminal-stream"><strong>stdout / compiler output</strong><pre>{runnerResult.stdout || "(no standard output or compiler output)"}</pre></div>
             {(runnerResult.stderr || runnerResult.error || runnerResult.message) && <div className="workspace-terminal-stream is-stderr"><strong>stderr / compiler messages</strong><pre>{runnerResult.stderr || runnerResult.error || runnerResult.message}</pre></div>}
-            <div className="workspace-terminal-meta">{runnerResult.exit_code !== undefined && <span>Exit code: {runnerResult.exit_code}</span>}{runnerResult.cpu_time && <span>CPU: {runnerResult.cpu_time}s</span>}{runnerResult.memory && <span>Memory: {runnerResult.memory} KB</span>}{runnerResult.job_id && <span>Job: {runnerResult.job_id}</span>}</div>
+            <div className="workspace-terminal-meta">{runnerResult.exit_code !== undefined && <span>Exit code: {runnerResult.exit_code}</span>}{runnerResult.engine && <span>Database: {runnerResult.engine}</span>}{runnerResult.row_count !== undefined && <span>Rows: {runnerResult.row_count}</span>}{runnerResult.execution_ms !== undefined && <span>Execution: {runnerResult.execution_ms} ms</span>}{runnerResult.cpu_time && <span>CPU: {runnerResult.cpu_time}s</span>}{runnerResult.memory && <span>Memory: {runnerResult.memory} KB</span>}{runnerResult.job_id && <span>Job: {runnerResult.job_id}</span>}</div>
           </div> : activeFile ? <div className="workspace-terminal workspace-terminal-idle" aria-live="polite"><div className="workspace-terminal-prompt"><span>CODELEAF TERMINAL</span><span>{languageLabel}</span></div><pre>{runnerMessage || (outputMode.reason === "connected-runtime-unavailable" ? "The selected server runtime is not enabled. Choose a language with an available compiler or configure its backend provider." : outputMode.runnerSupported ? "Terminal ready. Select Run file to compile or execute this program. Standard output and compiler/runtime errors will appear here." : `${languageLabel} uses terminal output. This language currently has no execution adapter configured, so the source has not been run.`)}</pre></div> : <div className="workspace-output-empty"><Code2 size={25} /><h2>Your workspace is empty</h2><p>Create a file in Explorer to get started.</p></div>}
           {runnerMessage && <p className="workspace-runner-message" role="status">{runnerMessage}</p>}
           {runnerResult?.job_id && <div className="workspace-output-actions"><button type="button" className="button button-secondary button-small" onClick={checkRunnerStatus} disabled={running}>Check status</button><button type="button" className="button button-secondary button-small" onClick={cancelRunnerJob} disabled={running || FINAL_RUNNER_STATES.has(runnerStatus)}>Cancel</button></div>}
-          {!showPreview && !runnerResult?.job_id && activeFile && runnerSupportedLanguages.includes(activeLanguage?.key) && <label className="workspace-stdin">Standard input <textarea value={stdin} onChange={(event) => setStdin(event.target.value)} rows={3} maxLength={8000} placeholder="Input provided to your program" /></label>}
+          {!showPreview && !runnerResult?.job_id && activeFile && runnerSupportedLanguages.includes(activeLanguage?.key) && (isDatabaseLanguage
+            ? <label className="workspace-stdin">Database setup SQL <textarea value={databaseSetupSql} onChange={(event) => setDatabaseSetupSql(event.target.value)} rows={4} maxLength={131072} placeholder="Optional: CREATE TABLE / INSERT statements run in a fresh temporary database before the query" /></label>
+            : <label className="workspace-stdin">Standard input <textarea value={stdin} onChange={(event) => setStdin(event.target.value)} rows={3} maxLength={8000} placeholder="Input provided to your program" /></label>)}
         </section>
       </div>
 

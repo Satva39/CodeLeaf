@@ -301,22 +301,25 @@ class RunnerRouteTests(unittest.IsolatedAsyncioTestCase):
             patch.object(routes, "reserve_daily_usage", return_value=(usage_reservation, False)),
             patch.object(routes, "finalize_daily_usage"),
             patch.object(routes, "execute_jdoodle", new_callable=AsyncMock, return_value={"provider": "jdoodle", "stdout": "42", "stderr": ""}) as execute_mock,
-            patch.object(routes.httpx, "AsyncClient") as external_client,
+            patch.object(routes, "_load_runner_capabilities", new_callable=AsyncMock, return_value=(set(), set(), True)),
+            patch.object(routes, "runner_request_json", new_callable=AsyncMock) as runner_mock,
         ):
             response = await routes.create_runner_job(body=body, user=user, db=db)
         self.assertEqual(response["job"]["status"], "completed")
         self.assertEqual(db.add.call_args.args[0].result_json["provider"], "jdoodle")
         execute_mock.assert_awaited_once()
-        external_client.assert_not_called()
+        runner_mock.assert_not_awaited()
 
     async def test_existing_external_runner_remains_preferred(self):
         db = self._prepare_db_for_create()
         user = SimpleNamespace(id=uuid4())
         body = routes.RunnerCreateInput(language="javascript", source="console.log(1)")
         usage_reservation = SimpleNamespace(id=uuid4())
-        fake_client = FakeAsyncClient(
-            response=FakeResponse(status_code=202, payload={"job_id": "external-job-123", "status": "queued"})
-        )
+        external_job_id = str(uuid4())
+        async def fake_runner_request(method, path, **kwargs):
+            if method == "POST" and path == "/v1/jobs":
+                return {"job_id": external_job_id, "status": "queued"}
+            raise AssertionError(f"Unexpected Runner request: {method} {path}")
 
         with (
             patch.object(routes.settings, "runner_service_url", "https://runner.example"),
@@ -327,17 +330,21 @@ class RunnerRouteTests(unittest.IsolatedAsyncioTestCase):
             patch.object(routes, "plan_limits", return_value={"code_executions_per_day": 150}),
             patch.object(routes, "reserve_daily_usage", return_value=(usage_reservation, False)),
             patch.object(routes, "finalize_daily_usage"),
-            patch.object(routes.httpx, "AsyncClient", return_value=fake_client),
+            patch.object(routes, "_load_runner_capabilities", new_callable=AsyncMock, return_value=({"javascript", "js"}, set(), True)),
+            patch.object(routes, "runner_request_json", new_callable=AsyncMock, side_effect=fake_runner_request) as runner_mock,
             patch.object(routes, "execute_jdoodle", new_callable=AsyncMock) as execute_mock,
         ):
             response = await routes.create_runner_job(body=body, user=user, db=db)
 
         saved_row = db.add.call_args.args[0]
         self.assertEqual(response["job"]["status"], "queued")
-        self.assertEqual(saved_row.external_job_id, "external-job-123")
-        self.assertEqual(saved_row.result_json, {})
+        self.assertEqual(saved_row.external_job_id, external_job_id)
+        self.assertEqual(saved_row.result_json["provider"], "codeleaf-runner")
+        self.assertEqual(saved_row.result_json["job_type"], "code")
         execute_mock.assert_not_awaited()
-        self.assertEqual(fake_client.post_calls[0][0], "https://runner.example/v1/jobs")
+        runner_mock.assert_awaited_once()
+        self.assertEqual(runner_mock.await_args.args[:2], ("POST", "/v1/jobs"))
+        self.assertEqual(runner_mock.await_args.kwargs["user_id"], str(user.id))
 
 
 if __name__ == "__main__":
