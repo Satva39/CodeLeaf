@@ -181,6 +181,8 @@ export default function PlaygroundPage() {
   const isDatabaseLanguage = ["sqlite", "mysql", "postgresql"].includes(activeLanguage?.key);
   const outputMode = detectOutputMode({ currentFile: activeFile, files, runnerCapabilities: runnerSupportedLanguages, webConnection: workspace.webConnection });
   const isConnectedPreview = outputMode.mode === "connected-preview";
+  const runnerAvailabilityPending = !runnerConfigChecked
+    && (outputMode.mode === "terminal" || outputMode.mode === "connected-preview");
   const isReactPreview = outputMode.mode === "react-preview";
   const isBrowserPreview = outputMode.mode === "browser-preview" || isConnectedPreview;
   const connectedExecutionFailed = isConnectedPreview && Boolean(runnerResult?.job_id)
@@ -750,8 +752,8 @@ export default function PlaygroundPage() {
           <p>A personal, multi-file workspace. Create files with any extension, edit them independently, and run only in a runtime CodeLeaf has explicitly configured.</p>
         </div>
         <div className="workspace-primary-actions">
-          <button type="button" className="button button-primary" onClick={runCurrentFile} disabled={running}>
-            <Play size={15} fill="currentColor" /> {running ? "Running…" : showPreview ? "Run preview" : isConnectedPreview ? "Run connected app" : "Run file"}
+          <button type="button" className="button button-primary" onClick={runCurrentFile} disabled={running || runnerAvailabilityPending}>
+            <Play size={15} fill="currentColor" /> {runnerAvailabilityPending ? "Checking…" : running ? "Running…" : showPreview ? "Run preview" : isConnectedPreview ? "Run connected app" : "Run file"}
           </button>
           <button type="button" className="button button-secondary" onClick={() => { setRefresh((value) => value + 1); setBrowserOutput([]); }} disabled={!showPreview}>
             <RefreshCw size={14} /> Refresh preview
