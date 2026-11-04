@@ -125,6 +125,7 @@ export default function TryItPage() {
   const isReactPreview = outputMode.mode === "react-preview";
   const isBrowser = outputMode.mode === "browser-preview" || isReactPreview;
   const runnerSupportsLanguage = runnerSupportedLanguages.includes(language.key);
+  const runnerAvailabilityPending = !isBrowser && !runnerCapabilitiesChecked;
   const doc = useMemo(() => isReactPreview
     ? createReactPreviewDocument(browserFiles, outputMode.entryFile || activeWorkspaceFile?.name, "codeleaf-try-output")
     : createBrowserDocument(browserFiles, "codeleaf-try-output", { entryFile: outputMode.entryFile, activeFileName: activeWorkspaceFile?.name }),
@@ -233,7 +234,7 @@ export default function TryItPage() {
                 <button type="button" onClick={() => navigator.clipboard?.writeText(code).catch(() => {})}><Copy size={13} /> Copy</button>
                 <button type="button" onClick={downloadExample}><Download size={13} /> Download</button>
                 <button type="button" onClick={resetExample}><RotateCcw size={13} /> Reset</button>
-                <button type="button" className="button button-primary button-small" disabled={running || !code.trim()} onClick={runExample}><Play size={13} /> {running ? "Running…" : isBrowser ? "Run" : "Run code"}</button>
+                <button type="button" className="button button-primary button-small" disabled={running || !code.trim() || runnerAvailabilityPending} onClick={runExample}><Play size={13} /> {runnerAvailabilityPending ? "Checking…" : running ? "Running…" : isBrowser ? "Run" : "Run code"}</button>
               </div>
             </div>
             <textarea className="tryit-code-editor" aria-label={`${filename} source code`} value={code} onChange={(event) => { setCode(event.target.value); setResult(null); setRunnerMessage(""); }} spellCheck="false" maxLength={100000} />
