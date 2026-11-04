@@ -21,6 +21,8 @@ import PlansPage from "./pages/PlansPage.jsx";
 import ProjectsPage from "./pages/ProjectsPage.jsx";
 import ProjectGuidePage from "./pages/ProjectGuidePage.jsx";
 import PlaygroundPage from "./pages/PlaygroundPage.jsx";
+import BattlesPage from "./pages/BattlesPage.jsx";
+import AvatarStudioPage from "./pages/AvatarStudioPage.jsx";
 import TryItPage from "./pages/TryItPage.jsx";
 import ExerciseDetailPage from "./pages/ExerciseDetailPage.jsx";
 import ChallengesPage from "./pages/ChallengesPage.jsx";
@@ -113,6 +115,8 @@ export default function App() {
         />
         <Route path="/projects/:courseSlug" element={<ProjectsPage />} />
         <Route path="/playground" element={<PlaygroundPage />} />
+        <Route path="/battles" element={<BattlesPage />} />
+        <Route path="/avatar" element={<AvatarStudioPage />} />
         <Route path="/try/:courseSlug/:lessonSlug?" element={<TryItPage />} />
         <Route
           path="/practice"

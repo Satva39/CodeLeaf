@@ -31,6 +31,12 @@ from app.config import settings  # noqa: E402
 from app.db import Base, SessionLocal, engine  # noqa: E402
 from app.auth_security import create_session  # noqa: E402
 from app.models import Entitlement, PlanUsage, User, UsageReservation, SavedWorkspace  # noqa: E402
+# This contract test explicitly covers the "provider not configured" branch.
+# Clear values loaded from a developer .env as well as process environment so no
+# external AI request can be made while the test runs.
+settings.ai_api_base_url = ""
+settings.ai_api_key = ""
+settings.ai_model = ""
 from app.plan_entitlements import (  # noqa: E402
     PLAN_DEFINITIONS, effective_plan_id, plan_limits, reserve_daily_usage, finalize_daily_usage,
     plan_features, required_exercise_plan, can_access_exercise,
@@ -91,7 +97,7 @@ def main() -> None:
         check([limits[p]["project_storage_bytes"] for p in limits] == [1024**3, 10*1024**3, 50*1024**3, 100*1024**3], "project-storage allowances match all four tiers")
         check([limits[p]["max_single_zip_bytes"] for p in limits] == [500*1024**2]*4, "individual ZIP cap is 500 MiB on every tier")
         check([limits[p]["ads_enabled"] for p in limits] == [True, True, False, False], "ad entitlement is enabled only for Free and Pro")
-        check([limits[p]["xp_multiplier"] for p in limits] == [1.0, 1.0, 1.5, 1.5], "XP multiplier is 1× for Free/Pro and 1.5× for Max/Lifetime")
+        check([limits[p]["xp_multiplier"] for p in limits] == [1.0, 1.0, 1.0, 1.0], "XP multiplier is fixed at 1× across all plans")
         check([plan_features(p)["premium_practice_sets"] for p in ("free", "pro", "max", "full_access")] == [False, False, True, True], "only Max and Full Access include premium practice sets")
         standard_exercise = SimpleNamespace(difficulty="beginner", is_premium=False)
         pro_exercise = SimpleNamespace(difficulty="advanced", is_premium=False)

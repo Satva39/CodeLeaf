@@ -161,7 +161,7 @@ export function Header() {
             <NavLink to="/practice">Practice</NavLink>
             <div className={`primary-nav-more ${moreOpen ? "primary-nav-more-open" : ""}`} ref={moreMenuRef}>
               <button
-                className={`primary-nav-more-trigger ${["/review", "/learning-hub", "/ai", "/portfolio", "/certificates"].some((path) => location.pathname === path || location.pathname.startsWith(`${path}/`)) ? "active" : ""}`}
+                className={`primary-nav-more-trigger ${["/review", "/learning-hub", "/ai", "/portfolio", "/certificates", "/battles", "/avatar"].some((path) => location.pathname === path || location.pathname.startsWith(`${path}/`)) ? "active" : ""}`}
                 type="button"
                 aria-haspopup="true"
                 aria-expanded={moreOpen}
@@ -176,6 +176,8 @@ export function Header() {
                 <NavLink to="/ai" onClick={() => { setMoreOpen(false); setMobileOpen(false); }}>AI coach</NavLink>
                 <NavLink to="/portfolio" onClick={() => { setMoreOpen(false); setMobileOpen(false); }}>Portfolio</NavLink>
                 <NavLink to="/certificates" onClick={() => { setMoreOpen(false); setMobileOpen(false); }}>Certificates</NavLink>
+                <NavLink to="/battles" onClick={() => { setMoreOpen(false); setMobileOpen(false); }}>Coding Battles</NavLink>
+                <NavLink to="/avatar" onClick={() => { setMoreOpen(false); setMobileOpen(false); }}>Dog Avatar Studio</NavLink>
               </div>}
             </div>
           </nav>

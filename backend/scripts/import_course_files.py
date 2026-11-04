@@ -110,7 +110,7 @@ def upsert_exercise(db, lesson, data, published: bool):
         "public_tests": data.get("public_tests", []), "acceptance_criteria": data.get("acceptance_criteria", []),
         "hints": data.get("hints", []), "solution": data.get("solution", {}),
         "grading_config": data.get("grading_config", {}), "sequence": int(data.get("sequence", 0)),
-        "difficulty": data.get("difficulty", "easy"), "xp_points": 20, "is_published": published,
+        "difficulty": data.get("difficulty", "easy"), "xp_points": 10, "is_published": published,
     }
     # Premium flags may be managed in the database while course manifests are
     # being migrated. Do not silently clear an existing lock if a routine import

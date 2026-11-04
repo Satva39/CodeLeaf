@@ -39,6 +39,7 @@ import {
   publishGuestStats,
 } from "../lib/demoState.js";
 import { useGamificationStats } from "../lib/useGamificationStats.js";
+import AchievementRewardNotice from "../components/avatar/AchievementRewardNotice.jsx";
 import {
   useLearnerProgress,
   confirmRemoteLessonCompletion,
@@ -361,6 +362,8 @@ export default function LessonPage() {
   const [completionError, setCompletionError] = useState("");
   const [completionBusy, setCompletionBusy] = useState(false);
   const [completionNotice, setCompletionNotice] = useState("");
+  const [achievementRewards, setAchievementRewards] = useState([]);
+  const [achievementXpEarned, setAchievementXpEarned] = useState(0);
   const catalogCourse =
     COURSE_CATALOG.find((c) => c.slug === courseSlug) || COURSE_CATALOG[0];
   const activeOutline =
@@ -490,6 +493,8 @@ export default function LessonPage() {
     setRunResult(false);
     setCompletionError("");
     setCompletionNotice("");
+    setAchievementRewards([]);
+    setAchievementXpEarned(0);
   }, [course.slug, current?.slug]);
   useEffect(() => {
     let active = true;
@@ -587,11 +592,12 @@ export default function LessonPage() {
       rememberRemoteCompletion("lesson", id);
       confirmRemoteLessonCompletion(id);
       if (data.stats) publishRemoteStats(data.stats);
-      setCompletionNotice(
-        Number(data.xp_awarded) > 0
-          ? `+${Number(data.xp_awarded)} XP earned. Your progress is saved.`
-          : "Your progress is saved. This lesson has already been rewarded, so no duplicate XP was added.",
-      );
+      const rewards = Array.isArray(data.new_rewards) ? data.new_rewards : [];
+      setAchievementRewards(rewards);
+      const achievementXp = rewards.reduce((sum, reward) => sum + Number(reward.xp_awarded || 0), 0);
+      setAchievementXpEarned(Number(data.xp_awarded || 0) + achievementXp);
+      const totalXp = Number(data.xp_awarded || 0) + achievementXp;
+      setCompletionNotice(totalXp > 0 ? `+${totalXp} XP earned. Your progress is saved.` : "Your progress is saved. This lesson has already been rewarded, so no duplicate XP was added.");
     } catch {
       setCompletionError(
         "The API could not be reached, so this lesson was not marked complete. Check the backend and retry.",
@@ -1129,6 +1135,9 @@ export default function LessonPage() {
               <ArrowRight size={15} />
             </button>
           </div>
+          {completionError && <p className="lesson-completion-feedback error" role="alert">{completionError}</p>}
+          {completionNotice && <p className="lesson-completion-feedback" role="status">{completionNotice}</p>}
+          <AchievementRewardNotice rewards={achievementRewards} xpEarned={achievementXpEarned} onDismiss={() => setAchievementRewards([])} />
         </section>
         <section className="lesson-practice-library panel" aria-labelledby="lesson-practice-library-title">
           <span className="lesson-practice-library-icon"><ListChecks size={20} /></span>

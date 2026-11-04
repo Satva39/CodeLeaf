@@ -398,3 +398,69 @@
   .workspace-terminal-stream pre, .tryit-console pre { font-size: 11px; }
   .tryit-result-panel iframe, .tryit-empty-output { min-height: 350px; }
 }
+
+/* Playground workspace polish: keep the same editor/Runner contracts, refine the shell. */
+.playground-page { max-width: 1560px; }
+.playground-heading { align-items: flex-end; margin-bottom: 18px; }
+.playground-heading h1 { font-size: clamp(26px, 3vw, 36px); letter-spacing: -.035em; }
+.playground-heading p { max-width: 760px; }
+.workspace-primary-actions { gap: 8px; }
+.workspace-shell { grid-template-columns: 215px minmax(0,1.08fr) minmax(320px,.92fr); min-height: 700px; border-radius: 16px; box-shadow: 0 16px 48px rgba(0,0,0,.12); }
+.workspace-files { background: #0c1727; }
+.workspace-files-heading { min-height: 48px; }
+.workspace-editor { background: #0b1421; }
+.workspace-tabbar { min-height: 46px; background: #101c2d; }
+.workspace-tabbar button[role="tab"] { min-height: 44px; }
+.workspace-editor-label { min-height: 36px; background: #0e1929; }
+.workspace-source { min-height: 590px; padding: 18px 20px; background: #0b1421; font-size: 12.5px; line-height: 1.8; }
+.workspace-statusbar { min-height: 38px; background: #0f1b2b; }
+.workspace-output { min-height: 700px; background: #080f1d; }
+.workspace-output-heading { min-height: 48px; background: #111e30; }
+.workspace-output iframe { min-height: 590px; }
+.workspace-terminal,.workspace-empty-output { min-height: 590px; }
+.workspace-terminal { padding: 18px; }
+.workspace-terminal-stream pre { padding: 14px; line-height: 1.75; }
+.workspace-files-heading button,.workspace-tabbar-actions button { transition: background .15s ease,border-color .15s ease,color .15s ease; }
+.workspace-file-entry { min-height: 39px; border-radius: 7px; }
+.workspace-file-entry.active { border-color: rgba(44,205,163,.18); background: rgba(44,205,163,.1); }
+.workspace-runner-message { border-radius: 9px; }
+.playground-note { display:flex; align-items:flex-start; gap:9px; margin-top:14px; padding:11px 13px; border:1px solid var(--line); border-radius:10px; background:var(--panel-soft); color:var(--muted); font-size:10px; line-height:1.65; }
+.playground-note svg { flex:0 0 auto; color:var(--mint); }
+@media (max-width: 1120px) {
+  .workspace-shell { grid-template-columns: 185px minmax(0,1fr); }
+  .workspace-output { grid-column: 1 / -1; min-height: 520px; border-top:1px solid rgba(148,163,184,.16); border-left:0; }
+  .workspace-output iframe,.workspace-terminal,.workspace-empty-output { min-height: 480px; }
+}
+@media (max-width: 700px) {
+  .workspace-shell { grid-template-columns:minmax(0,1fr); }
+  .workspace-files { max-height:260px; border-right:0; border-bottom:1px solid rgba(148,163,184,.17); }
+  .workspace-source { min-height:390px; font-size:12px; }
+  .workspace-output { grid-column:auto; min-height:450px; }
+  .workspace-output iframe,.workspace-terminal,.workspace-empty-output { min-height:420px; }
+  .workspace-primary-actions { width:100%; justify-content:flex-start; }
+  .workspace-primary-actions .button { flex:1 1 auto; }
+}
+
+
+/* One-time cosmetic reward confirmation in lesson and exercise completion flows. */
+.lesson-completion-feedback { margin: 12px 0 0; color: var(--mint); font-size: 12px; line-height: 1.6; }
+.lesson-completion-feedback.error { color: #fb7185; }
+.achievement-reward-notice { position: relative; display: grid; grid-template-columns: 40px 62px minmax(0,1fr); gap: 12px; align-items: center; margin-top: 14px; padding: 14px 42px 14px 14px; border: 1px solid color-mix(in srgb, var(--mint) 34%, var(--line)); border-radius: 13px; background: linear-gradient(130deg, color-mix(in srgb, var(--mint) 9%, var(--panel)), var(--panel)); }
+.achievement-reward-dismiss { position: absolute; top: 9px; right: 9px; display: grid; place-items: center; width: 27px; height: 27px; border: 0; border-radius: 7px; color: var(--muted); background: transparent; cursor: pointer; }
+.achievement-reward-dismiss:hover { color: var(--text); background: var(--panel-soft); }
+.achievement-reward-icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 11px; color: var(--mint); background: var(--mint-wash); }
+.achievement-reward-item-preview { display: grid; place-items: center; width: 62px; height: 62px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel-soft); font-size: 30px; }
+.achievement-reward-copy { display: grid; gap: 4px; min-width: 0; }
+.achievement-reward-copy > strong { color: var(--text); font-size: 14px; }
+.achievement-reward-copy > p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.55; }
+.achievement-reward-meta { display: flex; flex-wrap: wrap; gap: 8px 14px; color: var(--muted); font-size: 10px; }
+.achievement-reward-meta span { display: inline-flex; align-items: center; gap: 5px; }
+.achievement-reward-meta span:first-child { color: var(--mint); font-weight: 750; }
+.achievement-reward-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 5px; }
+.achievement-reward-actions button, .achievement-reward-actions a { display: inline-flex; align-items: center; justify-content: center; min-height: 29px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 7px; color: var(--text); background: var(--panel-soft); font: inherit; font-size: 10px; font-weight: 750; text-decoration: none; cursor: pointer; }
+.achievement-reward-actions button:first-child { border-color: transparent; color: #062019; background: var(--mint); }
+.achievement-reward-actions button:disabled { opacity: .6; cursor: wait; }
+.achievement-reward-actions .achievement-later { color: var(--muted); background: transparent; }
+.achievement-equipped { display: inline-flex; align-items: center; gap: 5px; color: var(--mint); font-size: 11px; font-weight: 800; }
+.achievement-reward-error { color: #fb7185; font-size: 10px; }
+@media (max-width: 560px) { .achievement-reward-notice { grid-template-columns: 36px 52px minmax(0,1fr); gap: 8px; padding: 12px 34px 12px 10px; } .achievement-reward-item-preview { width: 52px; height: 52px; font-size: 25px; } .achievement-reward-icon { width: 36px; height: 36px; } }

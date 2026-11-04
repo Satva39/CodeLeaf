@@ -672,8 +672,8 @@ def main() -> None:
             "practical assessment cannot be accessed without a passed MCQ attempt",
         )
 
-        # XP is server-computed: Free/Pro get 20, Max/Full Access get 30; lesson/exercise duplicates get 0.
-        expected = {"free": 20, "pro": 20, "max": 30, "full_access": 30}
+        # XP is server-computed: every plan receives exactly 10 XP; duplicate events receive 0.
+        expected = {"free": 10, "pro": 10, "max": 10, "full_access": 10}
         for suffix, expected_xp in expected.items():
             set_cookie(client, users[suffix])
             first = client.post(

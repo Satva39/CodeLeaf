@@ -28,7 +28,9 @@ from .auth_security import require_user, optional_user, user_payload, TOKEN_ALGO
 from .auth_routes import router as auth_router
 from .phase5_routes import router as phase5_router
 from .plan_routes import router as plan_router
+from .games_routes import router as games_router
 from .phase5_service import record_review_result
+from .gamification import XP_REWARDS, evaluate_achievements
 from .practice_policy import (
     is_supported_practice_exercise,
     practice_exercise_kind,
@@ -142,12 +144,12 @@ async def enforce_allowed_origin(request: Request, call_next):
 app.include_router(auth_router)
 app.include_router(phase5_router)
 app.include_router(plan_router)
+app.include_router(games_router)
 
 
 SESSION_COOKIE = "codeleaf_session"
 TOKEN_ALGORITHM = "HS256"
 # Award rules are owned by the backend and exposed read-only through /api/public/config.
-XP_REWARDS = {"lesson": 20, "exercise": 20, "max_multiplier": 1.5}
 
 
 # Integer INR subunits (paise) are fixed by the server; the browser never supplies an amount.
@@ -5011,11 +5013,8 @@ def user_gamification_stats(
         .where(UserActivityDay.user_id == user_id)
         .order_by(UserActivityDay.activity_date)
     ).all()
-    boosted = any(
-        item.plan_id in {"max", "full_access"}
-        for item in active_entitlements(db, user_id)
-    )
-    multiplier = XP_REWARDS["max_multiplier"] if boosted else 1.0
+    # XP is intentionally standardized across plans: every normal activity is 10 XP.
+    multiplier = 1.0
     return {
         "total_xp": int(aggregate["total_xp"] or 0),
         "completed_lessons": int(aggregate["completed_lessons"] or 0),
@@ -5033,14 +5032,11 @@ def user_gamification_stats(
 
 
 def xp_award(db: Session, user_id: UUID, activity_type: str) -> tuple[int, int, bool]:
+    """Return the fixed server-owned reward; plans no longer multiply XP."""
+    if activity_type not in {"lesson", "exercise", "battle", "achievement", "project"}:
+        raise ValueError(f"Unsupported XP activity type: {activity_type}")
     base_points = XP_REWARDS[activity_type]
-    boosted = any(
-        e.plan_id in {"max", "full_access"} for e in active_entitlements(db, user_id)
-    )
-    awarded = (
-        int(base_points * XP_REWARDS["max_multiplier"]) if boosted else base_points
-    )
-    return base_points, awarded, boosted
+    return base_points, base_points, False
 
 
 @app.get("/api/me/stats")
@@ -5211,6 +5207,10 @@ def mark_lesson_complete(
                 )
             )
     record_activity_day(db, user.id, body.timezone)
+    new_rewards: list[dict[str, str]] = []
+    if newly_completed:
+        db.flush()
+        new_rewards = evaluate_achievements(db, user.id)
     if newly_completed:
         # Lesson completion seeds a later retrieval review; this is not represented as skill mastery.
         record_review_result(db, user.id, course_slug, "lesson", lesson_slug, True)
@@ -5255,6 +5255,7 @@ def mark_lesson_complete(
         "course_completed_now": course_completed_now,
         "base_xp": base_points,
         "xp_awarded": xp_awarded,
+        "new_rewards": new_rewards,
         "stats": stats,
     }
 
@@ -5718,6 +5719,10 @@ def submit_exercise(
                     boost_applied=boost_applied,
                 )
             )
+    new_rewards: list[dict[str, str]] = []
+    if newly_completed:
+        db.flush()
+        new_rewards = evaluate_achievements(db, user.id)
     db.commit()
     stats = user_gamification_stats(db, user.id, body.timezone)
     return {
@@ -5728,6 +5733,7 @@ def submit_exercise(
         "attempts": progress.attempts,
         "base_xp": base_points,
         "xp_awarded": xp_awarded,
+        "new_rewards": new_rewards,
         "stats": stats,
     }
 

@@ -7,6 +7,7 @@ import { useGamificationStats } from "../lib/useGamificationStats.js";
 import { compatibleFilename, openSeededWorkspace, resolveLanguage } from "../lib/languageWorkspace.js";
 import { isSupportedPracticeExercise, practiceExerciseLabel } from "../lib/practiceExerciseTypes.js";
 import { EmptyState, PageShell } from "../components/common.jsx";
+import AchievementRewardNotice from "../components/avatar/AchievementRewardNotice.jsx";
 
 async function responsePayload(response) {
   const payload = await response.json().catch(() => ({}));
@@ -96,6 +97,8 @@ export default function ExerciseDetailPage() {
   const [solutionError, setSolutionError] = useState("");
   const [checking, setChecking] = useState(false);
   const [feedback, setFeedback] = useState(null);
+  const [achievementRewards, setAchievementRewards] = useState([]);
+  const [achievementXpEarned, setAchievementXpEarned] = useState(0);
   const [navigation, setNavigation] = useState({ previous: null, next: null, index: -1, total: 0 });
 
   useEffect(() => {
@@ -159,7 +162,7 @@ export default function ExerciseDetailPage() {
 
   async function checkAnswer() {
     if (!exercise || !String(currentAnswer || "").trim()) { setFeedback({ tone: "error", message: "Choose or write an answer before submitting." }); return; }
-    setChecking(true); setFeedback(null);
+    setChecking(true); setFeedback(null); setAchievementRewards([]); setAchievementXpEarned(0);
     try {
       const response = await apiFetch(`${API_BASE}/api/me/exercises/${encodeURIComponent(courseSlug)}/${encodeURIComponent(lessonSlug)}/${encodeURIComponent(exerciseSlug)}/submit`, {
         method: "POST", credentials: "include", headers: { "Content-Type": "application/json" },
@@ -170,7 +173,12 @@ export default function ExerciseDetailPage() {
         setFeedback({ tone: "error", message: response.status === 401 ? "Sign in to check this answer and save progress and XP." : data.detail || "This answer could not be checked." });
         return;
       }
-      setFeedback({ tone: data.correct ? "success" : "error", message: data.correct ? (data.xp_awarded > 0 ? `Correct! You earned ${data.xp_awarded} XP.` : "Correct! This exercise has already been rewarded.") : "Not quite yet. Review the hint, try another approach, and check again." });
+      const rewards = Array.isArray(data.new_rewards) ? data.new_rewards : [];
+      setAchievementRewards(rewards);
+      const achievementXp = rewards.reduce((sum, reward) => sum + Number(reward.xp_awarded || 0), 0);
+      setAchievementXpEarned(Number(data.xp_awarded || 0) + achievementXp);
+      const totalXp = Number(data.xp_awarded || 0) + achievementXp;
+      setFeedback({ tone: data.correct ? "success" : "error", message: data.correct ? (totalXp > 0 ? `Correct! You earned ${totalXp} XP.` : "Correct! This exercise has already been rewarded.") : "Not quite yet. Review the hint, try another approach, and check again." });
       setExercise((current) => current ? { ...current, completed: Boolean(data.completed) } : current);
     } catch (err) { setFeedback({ tone: "error", message: err.message || "The API could not be reached." }); }
     finally { setChecking(false); }
@@ -209,6 +217,7 @@ export default function ExerciseDetailPage() {
             {criteria.length > 0 && <details className="exercise-criteria"><summary>What a good answer should include <ChevronDown size={14} /></summary><ul>{criteria.map((criterion, index) => <li key={`${index}-${criterion}`}>{criterion}</li>)}</ul></details>}
             <div className="exercise-detail-actions"><button type="button" className="button button-primary" disabled={checking} onClick={checkAnswer}><CheckCircle2 size={15} /> {checking ? "Checking…" : "Check answer"}</button>{isCode && <button type="button" className="button button-secondary" onClick={() => openSeededWorkspace("try", { courseSlug, lessonSlug, title: exercise.title, language: language.key, code: answer || exercise.starter?.code || "" })}><Play size={14} /> Open in Try-it editor</button>}</div>
             {feedback && <p className={`exercise-feedback ${feedback.tone}`} role="status">{feedback.message}{feedback.message.startsWith("Sign in") && <> <Link to="/login">Sign in</Link>.</>}</p>}
+            <AchievementRewardNotice rewards={achievementRewards} xpEarned={achievementXpEarned} onDismiss={() => setAchievementRewards([])} />
           </section>
           {hints.length > 0 && <section className="exercise-detail-card panel"><button className="exercise-reveal-toggle" type="button" aria-expanded={hintOpen} onClick={() => setHintOpen((value) => !value)}><span><Lightbulb size={17} /> Need a hint?</span><ChevronDown size={16} className={hintOpen ? "rotate-180" : ""} /></button>{hintOpen && <div className="exercise-hint-list">{hints.map((hint, index) => <p key={`${index}-${hint}`}><span>{index + 1}</span>{hint}</p>)}</div>}</section>}
           <section className="exercise-detail-card panel">

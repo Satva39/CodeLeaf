@@ -199,7 +199,7 @@ def main() -> None:
             grading_config={"mode": "choice", "correct_answer": "yes"},
             sequence=1,
             difficulty="easy",
-            xp_points=20,
+            xp_points=10,
             is_published=False,
         )
         db.add(exercise)
@@ -363,8 +363,8 @@ def main() -> None:
     )
     require(
         first_completion.status_code == 200
-        and first_completion.json()["xp_awarded"] == 20,
-        "first Free-plan lesson completion awards 20 XP",
+        and first_completion.json()["xp_awarded"] == 10,
+        "first Free-plan lesson completion awards 10 XP",
     )
     require(
         second_completion.status_code == 200
@@ -380,9 +380,9 @@ def main() -> None:
     )
     require(
         boosted_completion.status_code == 200
-        and boosted_completion.json()["base_xp"] == 20
-        and boosted_completion.json()["xp_awarded"] == 30,
-        "Max entitlement applies the server-side 1.5x lesson XP boost",
+        and boosted_completion.json()["base_xp"] == 10
+        and boosted_completion.json()["xp_awarded"] == 10,
+        "Max entitlement receives the same fixed 10 XP lesson reward",
     )
 
     wrong = client.post(
@@ -406,8 +406,8 @@ def main() -> None:
     require(
         correct.status_code == 200
         and correct.json()["correct"]
-        and correct.json()["xp_awarded"] == 30,
-        "correct exercise answer receives the server-side boosted reward",
+        and correct.json()["xp_awarded"] == 10,
+        "correct exercise answer receives the fixed 10 XP reward",
     )
     require(
         retry.status_code == 200 and retry.json()["xp_awarded"] == 0,
@@ -417,8 +417,10 @@ def main() -> None:
     with SessionLocal() as db:
         rewards = db.query(XPTransaction).filter(XPTransaction.user_id == user_id).all()
         require(
-            len(rewards) == 3 and sum(row.awarded_points for row in rewards) == 80,
-            "XP transaction table records exactly three unique rewards totaling 80 XP",
+            len(rewards) == 5 and sum(row.awarded_points for row in rewards) == 50
+            and sum(1 for row in rewards if row.source_type == "achievement_completed") == 2
+            and all(row.awarded_points == 10 for row in rewards),
+            "XP transaction table records three normal rewards and two one-time achievement rewards, totaling 50 XP",
         )
 
     today = utc_now().date()

@@ -200,7 +200,7 @@ class Exercise(Base):
     grading_config: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
     sequence: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
     difficulty: Mapped[str] = mapped_column(String(30), default="easy", nullable=False)
-    xp_points: Mapped[int] = mapped_column(Integer, default=20, nullable=False)
+    xp_points: Mapped[int] = mapped_column(Integer, default=10, nullable=False)
     is_published: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     is_premium: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     __table_args__ = (
@@ -739,3 +739,99 @@ class ProjectMilestoneProgress(Base):
     milestone_key: Mapped[str] = mapped_column(String(12), nullable=False)
     completed: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, onupdate=now_utc, nullable=False)
+
+
+class UserAvatarProfile(Base):
+    """Persistent dog appearance and equipped cosmetic slots for one learner."""
+    __tablename__ = "user_avatar_profiles"
+    user_id: Mapped[object] = mapped_column(
+        Uuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    breed: Mapped[str] = mapped_column(String(24), default="classic", nullable=False)
+    fur_color: Mapped[str] = mapped_column(String(24), default="golden", nullable=False)
+    eye_color: Mapped[str] = mapped_column(String(24), default="brown", nullable=False)
+    equipment: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=now_utc, onupdate=now_utc, nullable=False
+    )
+
+
+class UserAchievement(Base):
+    """One-time achievement unlock, unique per account and achievement definition."""
+    __tablename__ = "user_achievements"
+    __table_args__ = (
+        UniqueConstraint("user_id", "achievement_id", name="uq_user_achievement_once"),
+        Index("ix_user_achievements_user_unlocked", "user_id", "unlocked_at"),
+    )
+    id: Mapped[object] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
+    user_id: Mapped[object] = mapped_column(
+        Uuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    achievement_id: Mapped[str] = mapped_column(String(80), nullable=False)
+    reward_item_id: Mapped[str] = mapped_column(String(80), nullable=False)
+    unlocked_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, nullable=False)
+
+
+class UserAvatarInventory(Base):
+    """Authoritative cosmetic ownership; browser state is never used as proof of ownership."""
+    __tablename__ = "user_avatar_inventory"
+    __table_args__ = (
+        UniqueConstraint("user_id", "item_id", name="uq_user_avatar_item_once"),
+    )
+    id: Mapped[object] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
+    user_id: Mapped[object] = mapped_column(
+        Uuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    item_id: Mapped[str] = mapped_column(String(80), nullable=False)
+    acquired_via: Mapped[str] = mapped_column(String(30), default="achievement", nullable=False)
+    source_achievement_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    acquired_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, nullable=False)
+
+
+class CodingBattle(Base):
+    """Server-authoritative two-player battle lifecycle and winner record."""
+    __tablename__ = "coding_battles"
+    __table_args__ = (
+        Index("ix_coding_battles_queue", "status", "language", "difficulty", "created_at"),
+        Index("ix_coding_battles_players", "challenger_id", "opponent_id", "status"),
+    )
+    id: Mapped[object] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
+    challenger_id: Mapped[object] = mapped_column(
+        Uuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    opponent_id: Mapped[object | None] = mapped_column(
+        Uuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=True
+    )
+    language: Mapped[str] = mapped_column(String(24), nullable=False)
+    difficulty: Mapped[str] = mapped_column(String(20), nullable=False)
+    challenge_id: Mapped[str] = mapped_column(String(80), nullable=False)
+    status: Mapped[str] = mapped_column(String(20), default="waiting", nullable=False)
+    winner_id: Mapped[object | None] = mapped_column(
+        Uuid(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, nullable=False)
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class BattleSubmission(Base):
+    """Stores verdict metadata only; learner source code is never persisted."""
+    __tablename__ = "battle_submissions"
+    __table_args__ = (
+        UniqueConstraint("battle_id", "user_id", "request_key", name="uq_battle_submission_request"),
+        Index("ix_battle_submissions_battle_status", "battle_id", "status"),
+    )
+    id: Mapped[object] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
+    battle_id: Mapped[object] = mapped_column(
+        Uuid(as_uuid=True), ForeignKey("coding_battles.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    user_id: Mapped[object] = mapped_column(
+        Uuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    request_key: Mapped[str] = mapped_column(String(100), nullable=False)
+    status: Mapped[str] = mapped_column(String(20), default="evaluating", nullable=False)
+    passed: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    result_summary: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, nullable=False)
+    evaluated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

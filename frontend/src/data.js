@@ -847,7 +847,7 @@ export const PLANS = [
     note: "Ad-free learning, premium projects and AI when configured.",
     features: [
       "Everything in Pro",
-      "Ad-free learning and 1.5× XP multiplier",
+      "Ad-free learning and advanced project tools",
       "Premium capstones and interview-preparation projects",
       "AI tutor and code review when a provider is configured",
       "100 saved workspaces · 500 snippets · 50 GB storage",
@@ -866,7 +866,7 @@ export const PLANS = [
     note: "The complete standard individual CodeLeaf experience.",
     features: [
       "All standard Pro and Max individual features",
-      "Ad-free learning and 1.5× XP multiplier",
+      "Ad-free learning and advanced project tools",
       "200 saved workspaces · 1,000 snippets · 100 GB storage",
       "Highest individual allowance: 1,500 supported runs/day",
       "150 AI requests/day when a provider is configured",
