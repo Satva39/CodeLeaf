@@ -41,6 +41,8 @@ from app.plan_entitlements import (  # noqa: E402
     PLAN_DEFINITIONS, effective_plan_id, plan_limits, reserve_daily_usage, finalize_daily_usage,
     plan_features, required_exercise_plan, can_access_exercise,
 )
+from app.gamification import calculate_xp_award  # noqa: E402
+from decimal import Decimal  # noqa: E402
 import app.main as main_module  # noqa: E402
 import jwt  # noqa: E402
 
@@ -97,7 +99,7 @@ def main() -> None:
         check([limits[p]["project_storage_bytes"] for p in limits] == [1024**3, 10*1024**3, 50*1024**3, 100*1024**3], "project-storage allowances match all four tiers")
         check([limits[p]["max_single_zip_bytes"] for p in limits] == [500*1024**2]*4, "individual ZIP cap is 500 MiB on every tier")
         check([limits[p]["ads_enabled"] for p in limits] == [True, True, False, False], "ad entitlement is enabled only for Free and Pro")
-        check([limits[p]["xp_multiplier"] for p in limits] == [1.0, 1.0, 1.0, 1.0], "XP multiplier is fixed at 1× across all plans")
+        check([limits[p]["xp_multiplier"] for p in ("free", "pro", "max", "full_access")] == [1.0, 1.5, 1.5, 1.5], "Pro, Max and Full Access receive 1.5x XP; Free has no bonus")
         check([plan_features(p)["premium_practice_sets"] for p in ("free", "pro", "max", "full_access")] == [False, False, True, True], "only Max and Full Access include premium practice sets")
         standard_exercise = SimpleNamespace(difficulty="beginner", is_premium=False)
         pro_exercise = SimpleNamespace(difficulty="advanced", is_premium=False)
@@ -108,6 +110,21 @@ def main() -> None:
         check(required_exercise_plan(max_exercise) == "max", "professional, specialist and capstone exercises require Max")
         check(required_exercise_plan(legacy_premium_exercise) == "pro", "existing database premium flags keep their Pro requirement")
         check(not can_access_exercise("pro", max_exercise) and can_access_exercise("full_access", max_exercise), "exercise tier checks use the effective plan hierarchy")
+
+        for plan_id, expected_lesson_xp, expected_project_xp in (
+            ("free", Decimal("10.00"), Decimal("100.00")),
+            ("pro", Decimal("15.00"), Decimal("150.00")),
+            ("max", Decimal("15.00"), Decimal("150.00")),
+            ("full_access", Decimal("15.00"), Decimal("150.00")),
+        ):
+            xp_user = make_user(f"xp_{plan_id}")
+            if plan_id != "free":
+                grant(xp_user.id, plan_id)
+            with SessionLocal() as db:
+                base, awarded, boost = calculate_xp_award(db, xp_user.id, "lesson")
+                check(base == 10 and awarded == expected_lesson_xp and boost == (plan_id != "free"), f"{plan_id} lesson reward applies the correct plan bonus")
+                project_base, project_awarded, project_boost = calculate_xp_award(db, xp_user.id, "project")
+                check(project_base == 100 and project_awarded == expected_project_xp and project_boost == (plan_id != "free"), f"{plan_id} eligible project reward applies the correct plan bonus")
 
         user = make_user("plan_free")
         authenticate(client, user.id)

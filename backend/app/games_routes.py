@@ -23,6 +23,8 @@ from .gamification import (
     ITEM_BY_ID,
     ensure_avatar_records,
     evaluate_achievements,
+    calculate_xp_award,
+    xp_amount_for_json,
 )
 from .models import (
     BattleSubmission,
@@ -570,14 +572,17 @@ async def submit_battle_solution(
                 XPTransaction.source_type == "battle_win",
                 XPTransaction.source_id == str(battle.id),
             ))
+            awarded_xp = 0
             if existing_xp is None:
+                base_points, awarded_points, boost_applied = calculate_xp_award(db, user.id, "battle")
                 db.add(XPTransaction(
                     user_id=user.id, source_type="battle_win", source_id=str(battle.id),
-                    base_points=XP_REWARDS["battle"], awarded_points=XP_REWARDS["battle"], boost_applied=False,
+                    base_points=base_points, awarded_points=awarded_points, boost_applied=boost_applied,
                 ))
+                awarded_xp = xp_amount_for_json(awarded_points)
             db.flush()
             unlocked = evaluate_achievements(db, user.id)
-            submission.result_summary = {"message": "All hidden tests passed. You won the battle!", "tests_passed": len(test_results), "xp_awarded": XP_REWARDS["battle"] if existing_xp is None else 0, "new_rewards": unlocked}
+            submission.result_summary = {"message": "All hidden tests passed. You won the battle!", "tests_passed": len(test_results), "xp_awarded": awarded_xp, "new_rewards": unlocked}
         else:
             submission.result_summary = {"message": "All tests passed, but the opponent's valid solution was accepted first.", "tests_passed": len(test_results), "xp_awarded": 0}
     db.commit()

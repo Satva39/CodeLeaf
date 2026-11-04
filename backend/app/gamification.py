@@ -6,6 +6,7 @@ slots are persisted in PostgreSQL. This keeps the client from declaring rewards.
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta
+from decimal import Decimal, ROUND_HALF_UP
 from typing import Any
 from uuid import UUID
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
@@ -13,6 +14,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from .plan_entitlements import effective_plan_id, plan_limits
 from .models import (
     BattleSubmission,
     CodingBattle,
@@ -36,6 +38,27 @@ EYE_COLORS = ["brown", "blue", "green", "amber"]
 
 # Server-owned reward policy. Frontend values are display-only.
 XP_REWARDS = {"lesson": 10, "exercise": 10, "project": 100, "battle": 10, "achievement": 10}
+
+
+def xp_amount_for_json(value: Any) -> int | float:
+    """Serialize an exact two-decimal XP amount without unnecessary .0 suffixes."""
+    amount = Decimal(str(value or 0)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    if amount == amount.to_integral_value():
+        return int(amount)
+    return float(amount)
+
+
+def calculate_xp_award(db: Session, user_id: UUID, activity_type: str) -> tuple[int, Decimal, bool]:
+    """Calculate an XP reward from trusted active subscription entitlements."""
+    if activity_type not in XP_REWARDS:
+        raise ValueError(f"Unsupported XP activity type: {activity_type}")
+    base_points = XP_REWARDS[activity_type]
+    plan_id = effective_plan_id(db, user_id)
+    multiplier = Decimal(str(plan_limits(plan_id).get("xp_multiplier", 1.0)))
+    awarded_points = (Decimal(base_points) * multiplier).quantize(
+        Decimal("0.01"), rounding=ROUND_HALF_UP
+    )
+    return base_points, awarded_points, multiplier > Decimal("1.0")
 
 # Each achievement reward maps to one unique item and one compatible equipment slot.
 AVATAR_ITEMS: list[dict[str, Any]] = [
@@ -216,9 +239,9 @@ def evaluate_achievements(db: Session, user_id: UUID) -> list[dict[str, str]]:
     battle_wins = int(db.scalar(select(func.count(CodingBattle.id)).where(
         CodingBattle.winner_id == user_id, CodingBattle.status == "completed"
     )) or 0)
-    total_xp = int(db.scalar(select(func.coalesce(func.sum(XPTransaction.awarded_points), 0)).where(
+    total_xp = Decimal(str(db.scalar(select(func.coalesce(func.sum(XPTransaction.awarded_points), 0)).where(
         XPTransaction.user_id == user_id
-    )) or 0)
+    )) or 0))
     values = {
         "tasks_completed": lessons + exercises,
         "coding_challenges_completed": coding_challenges,
@@ -235,6 +258,26 @@ def evaluate_achievements(db: Session, user_id: UUID) -> list[dict[str, str]]:
             UserAchievement.user_id == user_id,
             UserAchievement.achievement_id == achievement["id"],
         ))
+        # Achievement XP is one-time, server-owned and tied to the achievement ID.
+        # The unique XP event key prevents repeated evaluator calls from paying twice.
+        achievement_xp = db.scalar(select(XPTransaction.id).where(
+            XPTransaction.user_id == user_id,
+            XPTransaction.source_type == "achievement_completed",
+            XPTransaction.source_id == achievement["id"],
+        ))
+        base_points = XP_REWARDS["achievement"]
+        awarded_points = Decimal(base_points)
+        boost_applied = False
+        if achievement_xp is None:
+            base_points, awarded_points, boost_applied = calculate_xp_award(db, user_id, "achievement")
+            db.add(XPTransaction(
+                user_id=user_id,
+                source_type="achievement_completed",
+                source_id=achievement["id"],
+                base_points=base_points,
+                awarded_points=awarded_points,
+                boost_applied=boost_applied,
+            ))
         if current is None:
             current = UserAchievement(
                 user_id=user_id,
@@ -243,23 +286,7 @@ def evaluate_achievements(db: Session, user_id: UUID) -> list[dict[str, str]]:
             )
             db.add(current)
             db.flush()
-            unlocked.append({"achievement_id": achievement["id"], "achievement_name": achievement["name"], "item_id": achievement["reward_item_id"], "item_name": ITEM_BY_ID[achievement["reward_item_id"]]["name"], "item_slot": ITEM_BY_ID[achievement["reward_item_id"]]["slot"], "item_icon": ITEM_BY_ID[achievement["reward_item_id"]]["icon"], "xp_awarded": XP_REWARDS["achievement"]})
-        # Achievement XP is one-time, server-owned and tied to the achievement ID.
-        # The unique XP event key prevents repeated evaluator calls from paying twice.
-        achievement_xp = db.scalar(select(XPTransaction.id).where(
-            XPTransaction.user_id == user_id,
-            XPTransaction.source_type == "achievement_completed",
-            XPTransaction.source_id == achievement["id"],
-        ))
-        if achievement_xp is None:
-            db.add(XPTransaction(
-                user_id=user_id,
-                source_type="achievement_completed",
-                source_id=achievement["id"],
-                base_points=XP_REWARDS["achievement"],
-                awarded_points=XP_REWARDS["achievement"],
-                boost_applied=False,
-            ))
+            unlocked.append({"achievement_id": achievement["id"], "achievement_name": achievement["name"], "item_id": achievement["reward_item_id"], "item_name": ITEM_BY_ID[achievement["reward_item_id"]]["name"], "item_slot": ITEM_BY_ID[achievement["reward_item_id"]]["slot"], "item_icon": ITEM_BY_ID[achievement["reward_item_id"]]["icon"], "xp_awarded": xp_amount_for_json(awarded_points if achievement_xp is None else 0)})
         inventory = db.scalar(select(UserAvatarInventory.id).where(
             UserAvatarInventory.user_id == user_id,
             UserAvatarInventory.item_id == achievement["reward_item_id"],

@@ -132,7 +132,7 @@ export default function PlansPage() {
     { label: "Premium capstones and interview-preparation projects", kind: "feature", key: "premium_projects" },
     { label: "AI tutor and AI code review when configured", kind: "feature", key: "ai_tutor" },
     { label: "Ad-free learning", kind: "feature", key: "ad_free" },
-    { label: "XP multiplier", kind: "limit", key: "xp_multiplier", format: (value) => `${value}×` },
+    { label: "XP boost", kind: "limit", key: "xp_multiplier", format: (value) => Number(value) > 1 ? `${Number(value).toFixed(1).replace(/\.0$/, "")}× XP (+${((Number(value) - 1) * 100).toFixed(0)}% extra)` : "No bonus" },
     { label: "Saved workspaces", kind: "limit", key: "workspaces" },
     { label: "Saved code snippets", kind: "limit", key: "saved_snippets" },
     { label: "Total portfolio / project storage", kind: "limit", key: "project_storage_bytes", format: formatBytes },

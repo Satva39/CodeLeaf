@@ -672,8 +672,8 @@ def main() -> None:
             "practical assessment cannot be accessed without a passed MCQ attempt",
         )
 
-        # XP is server-computed: every plan receives exactly 10 XP; duplicate events receive 0.
-        expected = {"free": 10, "pro": 10, "max": 10, "full_access": 10}
+        # Base XP is 10; paid plans receive a 1.5x multiplier. Duplicate events receive 0.
+        expected = {"free": 10, "pro": 15, "max": 15, "full_access": 15}
         for suffix, expected_xp in expected.items():
             set_cookie(client, users[suffix])
             first = client.post(
@@ -687,6 +687,15 @@ def main() -> None:
             check(
                 first.status_code == 200 and first.json()["xp_awarded"] == expected_xp,
                 f"{suffix} lesson XP matches server policy ({expected_xp})",
+            )
+            expected_multiplier = 1.0 if suffix == "free" else 1.5
+            stats_response = client.get("/api/me/stats?timezone=UTC")
+            check(
+                stats_response.status_code == 200
+                and stats_response.json()["xp_multiplier"] == expected_multiplier
+                and stats_response.json()["lesson_xp"] == expected_xp
+                and stats_response.json()["exercise_xp"] == expected_xp,
+                f"{suffix} profile stats expose the authoritative XP boost and display reward",
             )
             check(
                 second.status_code == 200 and second.json()["xp_awarded"] == 0,

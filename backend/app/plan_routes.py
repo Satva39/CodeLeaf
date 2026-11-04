@@ -620,10 +620,10 @@ def advanced_analytics(user: User = Depends(require_user), db: Session = Depends
             XPTransaction.created_at >= cutoff,
         ).order_by(XPTransaction.created_at.asc()).limit(5000)
     ).all()
-    daily_xp: dict[str, int] = {}
+    daily_xp: dict[str, float] = {}
     for row in xp_rows:
         key = row.created_at.date().isoformat()
-        daily_xp[key] = daily_xp.get(key, 0) + int(row.awarded_points)
+        daily_xp[key] = daily_xp.get(key, 0.0) + float(row.awarded_points)
 
     lesson_rows = db.execute(
         select(Course.slug, Course.title, Lesson.id, LessonProgress.id)

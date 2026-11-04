@@ -27,6 +27,9 @@ MIB = 1024 * 1024
 GIB = 1024 * MIB
 MAX_SINGLE_ZIP_BYTES = 500 * MIB
 
+# Pro, Max and Full Access receive 1.5x the standard XP reward.
+PAID_XP_MULTIPLIER = 1.5
+
 FEATURES_FREE = {
     "published_learning": True,
     "standard_exercises": True,
@@ -101,7 +104,7 @@ PLAN_DEFINITIONS: dict[str, dict[str, Any]] = {
             "saved_snippets": 100,
             "code_executions_per_day": 300,
             "ai_requests_per_day": 0,
-            "xp_multiplier": 1.0,
+            "xp_multiplier": PAID_XP_MULTIPLIER,
             "ads_enabled": True,
         },
         "features": FEATURES_PRO,
@@ -118,7 +121,7 @@ PLAN_DEFINITIONS: dict[str, dict[str, Any]] = {
             "saved_snippets": 500,
             "code_executions_per_day": 1_000,
             "ai_requests_per_day": 100,
-            "xp_multiplier": 1.0,
+            "xp_multiplier": PAID_XP_MULTIPLIER,
             "ads_enabled": False,
         },
         "features": FEATURES_MAX,
@@ -135,7 +138,7 @@ PLAN_DEFINITIONS: dict[str, dict[str, Any]] = {
             "saved_snippets": 1_000,
             "code_executions_per_day": 1_500,
             "ai_requests_per_day": 150,
-            "xp_multiplier": 1.0,
+            "xp_multiplier": PAID_XP_MULTIPLIER,
             "ads_enabled": False,
         },
         "features": FEATURES_MAX,

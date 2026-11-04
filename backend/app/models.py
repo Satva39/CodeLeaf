@@ -1,6 +1,7 @@
 """Starter PostgreSQL schema. Create a proper Alembic migration before production."""
 
 from datetime import date, datetime, timezone
+from decimal import Decimal
 from uuid import uuid4
 from sqlalchemy import (
     BigInteger,
@@ -12,6 +13,7 @@ from sqlalchemy import (
     Integer,
     JSON,
     LargeBinary,
+    Numeric,
     String,
     Text,
     UniqueConstraint,
@@ -286,7 +288,7 @@ class XPTransaction(Base):
     source_type: Mapped[str] = mapped_column(String(50), nullable=False)
     source_id: Mapped[str] = mapped_column(String(160), nullable=False)
     base_points: Mapped[int] = mapped_column(Integer, nullable=False)
-    awarded_points: Mapped[int] = mapped_column(Integer, nullable=False)
+    awarded_points: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
     boost_applied: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=now_utc, nullable=False

@@ -10,6 +10,7 @@ import json
 import os
 import tempfile
 from datetime import timedelta
+from decimal import Decimal
 from pathlib import Path
 import sys
 
@@ -381,8 +382,8 @@ def main() -> None:
     require(
         boosted_completion.status_code == 200
         and boosted_completion.json()["base_xp"] == 10
-        and boosted_completion.json()["xp_awarded"] == 10,
-        "Max entitlement receives the same fixed 10 XP lesson reward",
+        and boosted_completion.json()["xp_awarded"] == 15,
+        "Max entitlement receives 1.5x the 10 XP base lesson reward",
     )
 
     wrong = client.post(
@@ -406,8 +407,8 @@ def main() -> None:
     require(
         correct.status_code == 200
         and correct.json()["correct"]
-        and correct.json()["xp_awarded"] == 10,
-        "correct exercise answer receives the fixed 10 XP reward",
+        and correct.json()["xp_awarded"] == 15,
+        "Max entitlement receives 1.5x the 10 XP base exercise reward",
     )
     require(
         retry.status_code == 200 and retry.json()["xp_awarded"] == 0,
@@ -417,10 +418,11 @@ def main() -> None:
     with SessionLocal() as db:
         rewards = db.query(XPTransaction).filter(XPTransaction.user_id == user_id).all()
         require(
-            len(rewards) == 5 and sum(row.awarded_points for row in rewards) == 50
+            len(rewards) == 5 and sum(row.awarded_points for row in rewards) == Decimal("65.00")
             and sum(1 for row in rewards if row.source_type == "achievement_completed") == 2
-            and all(row.awarded_points == 10 for row in rewards),
-            "XP transaction table records three normal rewards and two one-time achievement rewards, totaling 50 XP",
+            and all(row.base_points == 10 for row in rewards)
+            and sum(1 for row in rewards if row.boost_applied) == 3,
+            "XP transaction table records base and 1.5x-boosted rewards with exact decimal totals",
         )
 
     today = utc_now().date()

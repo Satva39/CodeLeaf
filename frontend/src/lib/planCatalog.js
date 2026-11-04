@@ -84,7 +84,7 @@ export const FALLBACK_PLAN_CATALOG = [
     billing: "monthly",
     description: "More structure, analytics and room for projects.",
     features: FEATURES_PRO,
-    limits: limits({ storageGiB: 10, workspaces: 25, snippets: 100, runs: 300, ai: 0, xp: 1, ads: true }),
+    limits: limits({ storageGiB: 10, workspaces: 25, snippets: 100, runs: 300, ai: 0, xp: 1.5, ads: true }),
   },
   {
     id: "max",
@@ -94,7 +94,7 @@ export const FALLBACK_PLAN_CATALOG = [
     billing: "monthly",
     description: "Ad-free learning with advanced projects and AI tools when configured.",
     features: FEATURES_MAX,
-    limits: limits({ storageGiB: 50, workspaces: 100, snippets: 500, runs: 1_000, ai: 100, xp: 1, ads: false }),
+    limits: limits({ storageGiB: 50, workspaces: 100, snippets: 500, runs: 1_000, ai: 100, xp: 1.5, ads: false }),
   },
   {
     id: "full_access",
@@ -104,7 +104,7 @@ export const FALLBACK_PLAN_CATALOG = [
     billing: "lifetime",
     description: "One-time lifetime access to all standard individual Pro and Max features.",
     features: FEATURES_MAX,
-    limits: limits({ storageGiB: 100, workspaces: 200, snippets: 1_000, runs: 1_500, ai: 150, xp: 1, ads: false }),
+    limits: limits({ storageGiB: 100, workspaces: 200, snippets: 1_000, runs: 1_500, ai: 150, xp: 1.5, ads: false }),
   },
 ];
 

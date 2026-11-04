@@ -8,6 +8,7 @@ import json
 import re
 import secrets
 from datetime import date, datetime, timedelta, timezone
+from decimal import Decimal
 from pathlib import Path
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from typing import Any
@@ -30,7 +31,9 @@ from .phase5_routes import router as phase5_router
 from .plan_routes import router as plan_router
 from .games_routes import router as games_router
 from .phase5_service import record_review_result
-from .gamification import XP_REWARDS, evaluate_achievements
+from .gamification import (
+    XP_REWARDS, calculate_xp_award, evaluate_achievements, xp_amount_for_json,
+)
 from .practice_policy import (
     is_supported_practice_exercise,
     practice_exercise_kind,
@@ -3917,7 +3920,7 @@ def who_am_i(
             for e in entitlements
         ],
         "stats": {
-            "total_xp": int(total_xp),
+            "total_xp": xp_amount_for_json(total_xp),
             "completed_lessons": completed_lessons,
             "bookmarks": bookmarks,
             "certificates": certificates,
@@ -5013,10 +5016,10 @@ def user_gamification_stats(
         .where(UserActivityDay.user_id == user_id)
         .order_by(UserActivityDay.activity_date)
     ).all()
-    # XP is intentionally standardized across plans: every normal activity is 10 XP.
-    multiplier = 1.0
+    # Base rewards stay standardized; paid plans receive a server-calculated 1.5x multiplier.
+    multiplier = float(plan_limits(effective_plan_id(db, user_id))["xp_multiplier"])
     return {
-        "total_xp": int(aggregate["total_xp"] or 0),
+        "total_xp": xp_amount_for_json(aggregate["total_xp"] or 0),
         "completed_lessons": int(aggregate["completed_lessons"] or 0),
         "completed_exercises": int(aggregate["completed_exercises"] or 0),
         "exercises_attempted": int(aggregate["exercises_attempted"] or 0),
@@ -5025,18 +5028,15 @@ def user_gamification_stats(
         "bookmarks": int(aggregate["bookmarks"] or 0),
         "certificates": int(aggregate["certificates"] or 0),
         "xp_multiplier": multiplier,
-        "lesson_xp": int(XP_REWARDS["lesson"] * multiplier),
-        "exercise_xp": int(XP_REWARDS["exercise"] * multiplier),
+        "lesson_xp": xp_amount_for_json(Decimal(XP_REWARDS["lesson"]) * Decimal(str(multiplier))),
+        "exercise_xp": xp_amount_for_json(Decimal(XP_REWARDS["exercise"]) * Decimal(str(multiplier))),
         **calculate_streaks(list(activity_dates), timezone_name),
     }
 
 
-def xp_award(db: Session, user_id: UUID, activity_type: str) -> tuple[int, int, bool]:
-    """Return the fixed server-owned reward; plans no longer multiply XP."""
-    if activity_type not in {"lesson", "exercise", "battle", "achievement", "project"}:
-        raise ValueError(f"Unsupported XP activity type: {activity_type}")
-    base_points = XP_REWARDS[activity_type]
-    return base_points, base_points, False
+def xp_award(db: Session, user_id: UUID, activity_type: str) -> tuple[int, Decimal, bool]:
+    """Return the server-owned base reward plus the user's active-plan bonus."""
+    return calculate_xp_award(db, user_id, activity_type)
 
 
 @app.get("/api/me/stats")
@@ -5078,7 +5078,7 @@ def get_leaderboard(
             "display_name": row[1],
             "username": row[2],
             "avatar": {},
-            "xp": int(row[3] or 0),
+            "xp": xp_amount_for_json(row[3] or 0),
         }
         for index, row in enumerate(rows, start=1)
     ]
@@ -5254,7 +5254,7 @@ def mark_lesson_complete(
         "newly_completed": newly_completed,
         "course_completed_now": course_completed_now,
         "base_xp": base_points,
-        "xp_awarded": xp_awarded,
+        "xp_awarded": xp_amount_for_json(xp_awarded),
         "new_rewards": new_rewards,
         "stats": stats,
     }
@@ -5732,7 +5732,7 @@ def submit_exercise(
         "newly_completed": newly_completed,
         "attempts": progress.attempts,
         "base_xp": base_points,
-        "xp_awarded": xp_awarded,
+        "xp_awarded": xp_amount_for_json(xp_awarded),
         "new_rewards": new_rewards,
         "stats": stats,
     }

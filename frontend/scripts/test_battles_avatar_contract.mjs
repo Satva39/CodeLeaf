@@ -1,0 +1,39 @@
+import fs from "node:fs";
+import path from "node:path";
+import assert from "node:assert/strict";
+
+const root = path.resolve(import.meta.dirname, "..");
+const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
+const app = read("src/App.jsx");
+const header = read("src/components/layout/Header.jsx");
+const battles = read("src/pages/BattlesPage.jsx");
+const avatar = read("src/pages/AvatarStudioPage.jsx");
+const dog = read("src/components/avatar/DogAvatar.jsx");
+const reward = read("src/components/avatar/AchievementRewardNotice.jsx");
+const lesson = read("src/pages/LessonPage.jsx");
+const exercise = read("src/pages/ExerciseDetailPage.jsx");
+
+assert.match(app, /path="\/battles"\s+element=\{<BattlesPage\s*\/>\}/);
+assert.match(app, /path="\/avatar"\s+element=\{<AvatarStudioPage\s*\/>\}/);
+assert.match(header, /to="\/battles"/);
+assert.match(header, /to="\/avatar"/);
+assert.match(battles, /data\.runner\?\.configured === true && data\.runner\?\.reachable === true/);
+assert.match(battles, /data\.providers_by_language\?\.\[key\] === "codeleaf-runner"/);
+assert.match(battles, /\/api\/battles\/matchmake/);
+assert.match(battles, /\/api\/battles\/\$\{battle\.id\}\/submit/);
+assert.match(battles, /\/api\/me\/battles\/current/);
+assert.match(battles, /<AchievementRewardNotice/);
+assert.match(battles, /result\.new_rewards/);
+assert.match(avatar, /\/api\/me\/avatar/);
+assert.match(avatar, /Backgrounds/);
+assert.match(avatar, /\/api\/me\/avatar\/equipment/);
+assert.match(dog, /useId\(\)/);
+assert.match(dog, /equipment\.background/);
+assert.match(dog, /const snoutWidth/);
+assert.match(reward, /NEW REWARD UNLOCKED/);
+assert.match(lesson, /<AchievementRewardNotice/);
+assert.match(exercise, /<AchievementRewardNotice/);
+
+console.log("PASS Coding Battles routes, Runner ownership, matchmaking, submission, and refresh contracts.");
+console.log("PASS Dog Avatar routes, persistent equipment, background catalog, and unique live SVG appearance.");
+console.log("PASS Achievement reward notifications are wired into lesson and exercise completion flows.");
