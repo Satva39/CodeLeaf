@@ -11,6 +11,7 @@ const achievementNotice = read("../src/components/avatar/AchievementRewardNotice
 const leaderboard = read("../src/pages/LeaderboardPage.jsx");
 const renderer = read("../src/components/avatar/DogAvatar.jsx");
 const itemArtwork = read("../src/components/avatar/avatarItemArtwork.js");
+const itemArtworkComponent = read("../src/components/avatar/AvatarItemArtwork.jsx");
 const publicProfile = read("../src/pages/PublicProfilePage.jsx");
 
 assert.match(header, /if \(!variant \|\| variant === "dog"\)/, "default profile avatar must render the dog");
@@ -31,7 +32,7 @@ assert.doesNotMatch(editor, /\/api\/me\/avatar\/appearance|\/api\/me\/avatar\/eq
 assert.match(editor, /AvatarItemArtwork/, "wardrobe cards must preview each item on the shared dog character");
 assert.match(renderer, /dog-avatar-2d/, "the shared dog renderer must use the flat 2D character style");
 assert.doesNotMatch(renderer, /<image\b|linearGradient|feGaussianBlur/, "the character must not be built from floating product images or 3D-style effects");
-assert.match(itemArtwork, /<DogAvatar/, "catalog cards must show cosmetics worn on the same dog renderer");
+assert.match(itemArtworkComponent, /<DogAvatar/, "catalog cards must show cosmetics worn on the same dog renderer");
 assert.doesNotMatch(editor, /profile-dog-achievements|avatar\.achievements/, "the long achievement catalogue must not appear in the dog editor");
 assert.match(itemArtwork, /AVATAR_ITEM_ARTWORK/, "every cosmetic artwork mapping must have one shared registry");
 assert.match(publicProfile, /credentials: "omit"/, "public profile requests must not depend on an authenticated session");
