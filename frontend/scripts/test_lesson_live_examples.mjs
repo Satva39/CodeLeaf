@@ -1,5 +1,27 @@
 import assert from "node:assert/strict";
-import { buildSandboxDocument, getLessonLiveExampleMode } from "../src/lib/lessonLiveExampleModel.js";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { buildSandboxDocument, getLessonLiveExampleMode, normalizeLessonValue } from "../src/lib/lessonLiveExampleModel.js";
+
+assert.equal(normalizeLessonValue(" XML "), "xml", "XML code language should be normalized safely");
+assert.equal(normalizeLessonValue("YAML"), "yaml", "YAML code language should be normalized safely");
+assert.equal(normalizeLessonValue("json_yaml"), "json-yaml", "underscore aliases should normalize consistently");
+
+
+const liveExampleComponent = readFileSync(
+  resolve(process.cwd(), "src/components/lessons/LessonLiveExample.jsx"),
+  "utf8"
+);
+assert.match(
+  liveExampleComponent,
+  /import\s*\{[^}]*normalizeLessonValue[^}]*\}\s*from\s*["']\.\.\/\.\.\/lib\/lessonLiveExampleModel\.js["']/,
+  "LessonLiveExample must import the shared normalizer used by config mode"
+);
+assert.equal(
+  (liveExampleComponent.match(/normalizeLessonValue\(codeLanguage\)/g) || []).length,
+  2,
+  "both YAML and XML config checks must use the imported normalizer"
+);
 
 const fixtures = [
   [{ courseSlug: "html", lessonTitle: "Introduction to HTML", codeLanguage: "html" }, "browser-html"],
@@ -20,6 +42,8 @@ const fixtures = [
   [{ courseSlug: "scikit-learn", lessonTitle: "Classification Thresholds", codeLanguage: "python" }, "data"],
   [{ courseSlug: "excel", lessonTitle: "Spreadsheet Formulas", codeLanguage: "excel-formula" }, "spreadsheet"],
   [{ courseSlug: "json-yaml", lessonTitle: "JSON Configuration", codeLanguage: "json" }, "config"],
+  [{ courseSlug: "xml", lessonTitle: "Introduction to XML", codeLanguage: "xml" }, "config"],
+  [{ courseSlug: "yaml", lessonTitle: "Introduction to YAML", codeLanguage: "yaml" }, "config"],
   [{ courseSlug: "linux", lessonTitle: "File Permissions", codeLanguage: "bash" }, "filesystem"],
   [{ courseSlug: "python", lessonTitle: "Classes and Object-Oriented Programming", codeLanguage: "python" }, "oop"],
   [{ courseSlug: "python", lessonTitle: "Exception Handling", codeLanguage: "python" }, "error-flow"],

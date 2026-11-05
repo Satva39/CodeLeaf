@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Activity, ArrowRight, Braces, CheckCircle2, Code2, Database, GitBranch, Lightbulb, RotateCcw, ShieldCheck, Sparkles } from "lucide-react";
-import { buildSandboxDocument, getLessonLiveExampleMode } from "../../lib/lessonLiveExampleModel.js";
+import { buildSandboxDocument, getLessonLiveExampleMode, normalizeLessonValue } from "../../lib/lessonLiveExampleModel.js";
 import "../../styles/lesson-live-example.css";
 
 const DEMO_ROWS = [
@@ -256,8 +256,8 @@ function Simulator({ mode, lessonTitle, codeLanguage, intro }) {
   }
 
   if (mode === "config") {
-    const isYaml = ["yaml", "yml"].includes(normalized(codeLanguage));
-    const isXml = normalized(codeLanguage) === "xml";
+    const isYaml = ["yaml", "yml"].includes(normalizeLessonValue(codeLanguage));
+    const isXml = normalizeLessonValue(codeLanguage) === "xml";
     const xmlKey = (configKey || "key").replace(/[^a-zA-Z0-9_.-]/g, "_");
     const xmlEscape = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
     const configText = isYaml

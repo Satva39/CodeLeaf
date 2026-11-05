@@ -1,6 +1,6 @@
-const normalized = (value) => String(value || "").toLowerCase().replaceAll("_", "-");
+export const normalizeLessonValue = (value) => String(value || "").trim().toLowerCase().replaceAll("_", "-");
 
-const matches = (text, pattern) => pattern.test(normalized(text));
+const matches = (text, pattern) => pattern.test(normalizeLessonValue(text));
 
 /**
  * Chooses a safe, topic-aware browser demonstration for a published lesson.
@@ -9,9 +9,9 @@ const matches = (text, pattern) => pattern.test(normalized(text));
  * Python, SQL, native binaries, shell commands, or other arbitrary code.
  */
 export function getLessonLiveExampleMode({ courseSlug = "", lessonTitle = "", codeLanguage = "" } = {}) {
-  const course = normalized(courseSlug);
-  const title = normalized(lessonTitle);
-  const language = normalized(codeLanguage);
+  const course = normalizeLessonValue(courseSlug);
+  const title = normalizeLessonValue(lessonTitle);
+  const language = normalizeLessonValue(codeLanguage);
 
   // Execute only browser-native source languages in the isolated frame.
   // Framework templates and preprocessors (JSX, TSX, SCSS, Sass, Vue SFCs)
