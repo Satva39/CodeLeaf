@@ -126,7 +126,7 @@ export default function CourseOverview({
               <div className="course-overview-meta">
                 <span>{course?.category || "Learning path"}</span>
                 <span>{course?.level || "Level not set"}</span>
-                <span className={`course-status-pill course-status-${statusLabel.toLowerCase().replaceAll(" ", "-")}`}>{statusLabel}</span>
+                {statusLabel !== "Published" && <span className={`course-status-pill course-status-${statusLabel.toLowerCase().replaceAll(" ", "-")}`}>{statusLabel}</span>}
               </div>
             </div>
           </div>

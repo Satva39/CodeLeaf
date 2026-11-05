@@ -97,6 +97,16 @@ async function main() {
     assert.equal(unsafe.body, '{"detail":"Invalid API path."}');
     assert.equal(fetchCalls.length, 2);
     console.log("PASS path traversal rejected without making an upstream request");
+
+    const privateAccount = await invoke(request({
+      url: "/api/proxy/me",
+      path: ["me"],
+    }));
+    assert.equal(privateAccount.statusCode, 201);
+    assert.match(privateAccount.getHeader("cache-control"), /no-store/);
+    assert.match(privateAccount.getHeader("vary"), /Cookie/);
+    assert.equal(fetchCalls.length, 3);
+    console.log("PASS private account API responses cannot be cached by the browser or Vercel edge");
   } finally {
     globalThis.fetch = originalFetch;
     if (originalOrigin === undefined) delete process.env.CODELEAF_API_ORIGIN;

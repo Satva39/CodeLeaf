@@ -60,6 +60,7 @@ export function apiGetJson(
     persist = false,
     headers = {},
     timeoutMs = 0,
+    requestCache = "default",
   } = {},
 ) {
   const key = keyFor(url, credentials);
@@ -77,6 +78,7 @@ export function apiGetJson(
     method: "GET",
     credentials,
     headers: { Accept: "application/json", ...headers },
+    cache: requestCache,
     ...(controller ? { signal: controller.signal } : {}),
   })
     .then(async (response) => {

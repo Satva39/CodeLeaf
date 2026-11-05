@@ -24,6 +24,31 @@ PUBLIC_COLUMNS = (
 )
 
 
+USERNAME_INDEX = "uq_users_username_lower"
+
+
+def _username_index_exists(bind: sa.engine.Connection) -> bool:
+    """Check expression indexes without relying on SQLite's incomplete reflection."""
+    dialect = bind.dialect.name
+    if dialect == "sqlite":
+        return bind.execute(
+            sa.text("SELECT 1 FROM sqlite_master WHERE type = 'index' AND name = :name LIMIT 1"),
+            {"name": USERNAME_INDEX},
+        ).first() is not None
+    if dialect == "postgresql":
+        return bind.execute(
+            sa.text(
+                "SELECT 1 FROM pg_indexes "
+                "WHERE schemaname = ANY (current_schemas(false)) AND indexname = :name LIMIT 1"
+            ),
+            {"name": USERNAME_INDEX},
+        ).first() is not None
+    return any(
+        index.get("name") == USERNAME_INDEX
+        for index in sa.inspect(bind).get_indexes("users")
+    )
+
+
 def upgrade() -> None:
     bind = op.get_bind()
     inspector = sa.inspect(bind)
@@ -50,10 +75,13 @@ def upgrade() -> None:
             "deleting accounts, then rerun this migration."
         )
 
-    indexes = {index["name"] for index in sa.inspect(bind).get_indexes("users")}
-    if "uq_users_username_lower" not in indexes:
+    # The baseline migration creates this model-level expression index as part of
+    # Base.metadata.create_all(). SQLite does not report expression indexes from
+    # Inspector.get_indexes(), so a plain inspector check would try to create the
+    # already-existing index and fail every fresh CI migration.
+    if not _username_index_exists(bind):
         op.create_index(
-            "uq_users_username_lower",
+            USERNAME_INDEX,
             "users",
             [sa.text("lower(username)")],
             unique=True,
@@ -62,9 +90,9 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     bind = op.get_bind()
-    indexes = {index["name"] for index in sa.inspect(bind).get_indexes("users")}
-    if "uq_users_username_lower" in indexes:
-        op.drop_index("uq_users_username_lower", table_name="users")
+    # Keep the case-insensitive username index: it is also part of the canonical
+    # User SQLAlchemy metadata and may have been created by revision 0001. This
+    # visibility migration must not remove a pre-existing account uniqueness rule.
     existing = {column["name"] for column in sa.inspect(bind).get_columns("users")}
     for name in reversed(PUBLIC_COLUMNS):
         if name in existing:

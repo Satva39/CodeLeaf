@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Any, Literal
 from uuid import UUID, uuid4
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -790,7 +790,13 @@ async def submit_battle_solution(
 
 
 @router.get("/api/me/avatar")
-def get_my_avatar(user: User = Depends(require_user), db: Session = Depends(get_db)) -> dict[str, Any]:
+def get_my_avatar(
+    response: Response,
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    response.headers["Cache-Control"] = "private, no-store, no-cache, max-age=0, must-revalidate"
+    response.headers["Vary"] = "Cookie, Authorization"
     # Reconciliation is batched and idempotent; the evaluator also ensures the
     # avatar profile, so avoid a second ensure/query pass here.
     evaluate_achievements(db, user.id)

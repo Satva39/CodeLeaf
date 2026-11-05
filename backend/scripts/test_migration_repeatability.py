@@ -48,11 +48,11 @@ def main() -> int:
         with closing(sqlite3.connect(database_path)) as connection:
             tables = {row[0] for row in connection.execute("SELECT name FROM sqlite_master WHERE type='table'")}
             revisions = [row[0] for row in connection.execute("SELECT version_num FROM alembic_version")]
-        required = {"courses", "course_modules", "lessons", "exercises", "users", "auth_sessions", "account_action_tokens", "auth_rate_limit_events", "learning_preferences", "review_schedules", "content_revisions", "audit_logs", "product_analytics_events", "runner_jobs", "practical_exam_attempts", "saved_workspaces", "plan_usage", "usage_reservations", "saved_snippets", "support_requests", "project_milestone_progress", "mock_assessment_attempts", "alembic_version", "course_content_bundles"}
+        required = {"courses", "course_modules", "lessons", "exercises", "users", "auth_sessions", "account_action_tokens", "auth_rate_limit_events", "learning_preferences", "review_schedules", "content_revisions", "audit_logs", "product_analytics_events", "runner_jobs", "practical_exam_attempts", "saved_workspaces", "plan_usage", "usage_reservations", "saved_snippets", "support_requests", "project_milestone_progress", "mock_assessment_attempts", "alembic_version", "course_content_bundles", "user_avatar_profiles", "user_avatar_inventory", "user_achievements", "coding_battles", "battle_submissions"}
         missing = sorted(required - tables)
         if missing:
             raise SystemExit("FAIL: migration left missing tables: " + ", ".join(missing))
-        if len(revisions) != 1 or revisions[0] != "0011_course_content_bundles":
+        if len(revisions) != 1 or revisions[0] != "0014_public_profile_visibility":
             raise SystemExit(f"FAIL: unexpected migration state: {revisions!r}")
         with closing(sqlite3.connect(database_path)) as connection:
             bundle_columns = {
@@ -92,9 +92,23 @@ def main() -> int:
             user_columns = {row[1] for row in connection.execute("PRAGMA table_info(users)")}
         if "is_email_verified" not in user_columns:
             raise SystemExit("FAIL: migration left users.is_email_verified missing")
+        expected_public_columns = {
+            "public_profile_enabled", "public_show_xp", "public_show_streak",
+            "public_show_certificates", "public_show_achievements", "public_show_progress",
+        }
+        if not expected_public_columns.issubset(user_columns):
+            raise SystemExit(
+                "FAIL: public-profile migration left missing users columns: "
+                + ", ".join(sorted(expected_public_columns - user_columns))
+            )
         with closing(sqlite3.connect(database_path)) as connection:
             submission_columns = {row[1] for row in connection.execute("PRAGMA table_info(project_submissions)")}
             runner_columns = {row[1] for row in connection.execute("PRAGMA table_info(runner_jobs)")}
+            username_index = connection.execute(
+                "SELECT 1 FROM sqlite_master WHERE type='index' AND name='uq_users_username_lower' LIMIT 1"
+            ).fetchone()
+        if not username_index:
+            raise SystemExit("FAIL: case-insensitive username index is missing after migrations")
         catalyst_columns = {
             "storage_provider", "storage_bucket", "storage_key", "file_size_bytes",
             "checksum_sha256", "object_status", "uploaded_at", "migrated_at",
@@ -103,7 +117,7 @@ def main() -> int:
             raise SystemExit("FAIL: Catalyst archive migration is missing columns: " + ", ".join(sorted(catalyst_columns - submission_columns)))
         if "stored_bytes" not in submission_columns or "request_key" not in runner_columns:
             raise SystemExit("FAIL: plan usage migration did not add storage or runner idempotency columns")
-        print("PASS migration state has one 0011 head, Catalyst archive metadata, and all existing auth/review/privacy/practical/plan-usage/snippet/support/mock-assessment tables after repeated upgrades")
+        print("PASS migration state has one 0014 head, case-insensitive username index, public-profile fields, Catalyst archive metadata, and all existing auth/review/privacy/practical/plan-usage/snippet/support/mock-assessment tables after repeated upgrades")
     print("Migration repeatability checks passed; only a temporary SQLite database was used.")
     return 0
 

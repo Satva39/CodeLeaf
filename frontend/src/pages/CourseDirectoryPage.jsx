@@ -146,7 +146,7 @@ export default function CourseDirectoryPage({ collection = "references" }) {
               <Link to={config.route(course.slug)} className="collection-course-card panel" key={course.slug}>
                 <div className="collection-course-card-top">
                   <CourseIcon course={course} size="xl" />
-                  <span className={`course-status-pill course-status-${course.status.toLowerCase().replaceAll(" ", "-")}`}>{course.status}</span>
+                  {course.status !== "Published" && <span className={`course-status-pill course-status-${course.status.toLowerCase().replaceAll(" ", "-")}`}>{course.status}</span>}
                 </div>
                 <span className="collection-course-category">{course.category || "Technology"}</span>
                 <h2>{title} {config.noun}</h2>

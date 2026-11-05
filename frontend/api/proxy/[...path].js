@@ -104,6 +104,12 @@ export default async function handler(req, res) {
       if (HOP_BY_HOP_HEADERS.has(lowerName) || lowerName === "set-cookie") continue;
       res.setHeader(name, value);
     }
+    // Account routes are private even when an older backend release omits cache
+    // headers. Do not let the Vercel edge or browser reuse one learner's data.
+    if (path === "me" || path.startsWith("me/")) {
+      res.setHeader("cache-control", "private, no-store, no-cache, max-age=0, must-revalidate");
+      res.setHeader("vary", "Cookie, Authorization");
+    }
     const cookies = upstream.headers.getSetCookie?.() || [];
     if (cookies.length) res.setHeader("set-cookie", cookies);
 

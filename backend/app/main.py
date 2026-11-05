@@ -3878,8 +3878,13 @@ def list_plans() -> dict[str, Any]:
 
 @app.get("/api/me")
 def who_am_i(
+    response: Response,
     user: User = Depends(require_user), db: Session = Depends(get_db)
 ) -> dict[str, Any]:
+    # This response contains private account data. Never allow a browser, CDN,
+    # or same-origin proxy to reuse another session's account response.
+    response.headers["Cache-Control"] = "private, no-store, no-cache, max-age=0, must-revalidate"
+    response.headers["Vary"] = "Cookie, Authorization"
     entitlements = active_entitlements(db, user.id)
     total_xp = (
         db.scalar(

@@ -108,7 +108,7 @@ export function Header() {
     async function checkSession() {
       const version = ++sessionRequestVersion;
       try {
-        await apiGetJson(`${API_BASE}/api/me`, { credentials: "include", ttlMs: 10_000, timeoutMs: 8_000 });
+        await apiGetJson(`${API_BASE}/api/me`, { credentials: "include", ttlMs: 0, requestCache: "no-store", timeoutMs: 35_000 });
         if (active && version === sessionRequestVersion) setIsAuthenticated(true);
       } catch (error) {
         if (active && version === sessionRequestVersion) setIsAuthenticated(error?.status === 401 ? false : null);

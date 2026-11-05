@@ -104,7 +104,7 @@ export function CourseCard({ course, showDescription = true }) {
     >
       <div className="course-card-top">
         <CourseIcon course={course} />
-        <span
+        {course.status !== "Published" && <span
           className={`course-status-pill course-status-${String(
             course.status || "Roadmap",
           )
@@ -112,7 +112,7 @@ export function CourseCard({ course, showDescription = true }) {
             .replaceAll(" ", "-")}`}
         >
           {course.status || "Roadmap"}
-        </span>
+        </span>}
       </div>
       <h3>{course.title}</h3>
       {showDescription && course.desc && <p>{course.desc}</p>}

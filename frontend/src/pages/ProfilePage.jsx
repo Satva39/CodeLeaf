@@ -28,6 +28,7 @@ import { PageShell } from "../components/common.jsx";
 import { Avatar } from "../components/layout/Header.jsx";
 import DogAvatarEditor from "../components/avatar/DogAvatarEditor.jsx";
 import { apiGetJson, invalidateApiCache } from "../lib/apiCache.js";
+import { fetchCurrentAccountUser } from "../lib/accountProfile.js";
 import "../styles/phase3c-personal-learning.css";
 
 export default function ProfilePage() {
@@ -49,6 +50,7 @@ export default function ProfilePage() {
   const [saved, setSaved] = useState(false);
   const [accountMode, setAccountMode] = useState("loading");
   const [profileReload, setProfileReload] = useState(0);
+  const [profileLoadMessage, setProfileLoadMessage] = useState("");
   const [emailVerified, setEmailVerified] = useState(false);
   const [publicProfileSettings, setPublicProfileSettings] = useState({
     is_public: false, show_xp: false, show_streak: false, show_certificates: false,
@@ -79,15 +81,18 @@ export default function ProfilePage() {
   const [preferencesReload, setPreferencesReload] = useState(0);
   useEffect(() => {
     let mounted = true;
-    apiGetJson(`${API_BASE}/api/me`, { credentials: "include", ttlMs: 10_000, timeoutMs: 8_000 })
-      .then((data) => {
+    const controller = new AbortController();
+    setAccountMode("loading");
+    setProfileLoadMessage("");
+    setFeedback("");
+    fetchCurrentAccountUser({
+      signal: controller.signal,
+      onRetry: ({ attempt, attempts }) => {
+        if (mounted) setProfileLoadMessage(`The account service is taking longer than usual. Reconnecting (${attempt}/${attempts - 1})…`);
+      },
+    })
+      .then((user) => {
         if (!mounted) return;
-        if (!data?.user || typeof data.user !== "object") {
-          setAccountMode("unavailable");
-          setFeedback("The account service returned an incomplete profile response. Please retry.");
-          return;
-        }
-        const user = data.user;
         setAccountEmail(user.email || "");
         setEmailVerified(user.email_verified === true);
         const next = {
@@ -100,18 +105,24 @@ export default function ProfilePage() {
         setProfile(next);
         setName(next.nickname);
         setHandle(next.handle);
+        setProfileLoadMessage("");
         setAccountMode("remote");
       })
       .catch((error) => {
-        if (!mounted) return;
+        if (!mounted || controller.signal.aborted) return;
         if (error?.status === 401) {
+          setProfileLoadMessage("");
           setAccountMode("guest");
           return;
         }
         setAccountMode("unavailable");
-        setFeedback("Account details could not be checked. Your account profile was not changed.");
+        setProfileLoadMessage("");
+        setFeedback(`${error?.message || "Account details could not be loaded."} Your account profile was not changed.`);
       });
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+      controller.abort();
+    };
   }, [profileReload]);
 
   useEffect(() => {
@@ -471,6 +482,7 @@ export default function ProfilePage() {
             </button>
           </div>
           {accountMode === "guest" && <p className="profile-save-note" role="status">You are in guest mode. Profile details save only in this browser.</p>}
+          {accountMode === "loading" && <p className="profile-save-note" role="status">{profileLoadMessage || "Loading your account profile…"}</p>}
           {accountMode === "unavailable" && <p className="profile-save-note" role="status">
             Account status could not be verified. Your profile data has not been changed.
             <button type="button" className="text-link" onClick={() => { setAccountMode("loading"); setProfileReload((value) => value + 1); }}>

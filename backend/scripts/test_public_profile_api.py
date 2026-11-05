@@ -45,6 +45,12 @@ def check_migration() -> None:
         connection.exec_driver_sql(
             "CREATE TABLE users (id VARCHAR(36) PRIMARY KEY, username VARCHAR(40) NOT NULL UNIQUE)"
         )
+        # The baseline metadata migration creates this expression index before
+        # revision 0014. SQLite Inspector.get_indexes() skips expression indexes,
+        # so revision 0014 must detect it through sqlite_master instead.
+        connection.exec_driver_sql(
+            "CREATE UNIQUE INDEX uq_users_username_lower ON users (lower(username))"
+        )
         migration.op = Operations(MigrationContext.configure(connection))
         migration.upgrade()
         columns = {column["name"] for column in inspect(connection).get_columns("users")}
@@ -56,6 +62,12 @@ def check_migration() -> None:
             ).fetchall()
         }
         assert "uq_users_username_lower" in indexes
+        migration.upgrade()
+        assert "uq_users_username_lower" in {
+            row[0] for row in connection.exec_driver_sql(
+                "SELECT name FROM sqlite_master WHERE type='index'"
+            ).fetchall()
+        }
     engine.dispose()
     print("PASS additive public-profile migration adds opt-in fields and case-insensitive username index")
 
@@ -117,6 +129,12 @@ def main() -> None:
 
     try:
         with TestClient(app) as client:
+            account = client.get("/api/me")
+            assert account.status_code == 200, account.text
+            assert account.json()["user"]["username"] == "testlearner"
+            assert "no-store" in account.headers.get("cache-control", "")
+            print("PASS current-account endpoint returns the expected user envelope with private no-store cache headers")
+
             settings = client.get("/api/me/public-profile")
             assert settings.status_code == 200, settings.text
             assert settings.json()["settings"]["is_public"] is False

@@ -3,7 +3,9 @@ import { apiFetch } from "../../lib/apiClient.js";
 import { API_BASE } from "../../lib/demoState.js";
 
 const CACHE_TTL_MS = 30_000;
-const REQUEST_TIMEOUT_MS = 12_000;
+// Render may need time to wake a sleeping service. Keep the last good dog visible
+// and allow the first authenticated request enough time to complete.
+const REQUEST_TIMEOUT_MS = 35_000;
 
 export const DEFAULT_DOG_AVATAR = {
   appearance: { breed: "classic", fur_color: "golden", eye_color: "brown" },
@@ -66,6 +68,7 @@ export function DogAvatarProvider({ children }) {
       try {
         const response = await apiFetch(`${API_BASE}/api/me/avatar`, {
           credentials: "include",
+          cache: "no-store",
           headers: { Accept: "application/json" },
           signal: controller.signal,
         });
