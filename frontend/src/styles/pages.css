@@ -4615,3 +4615,160 @@
 .plan-payment-status ul { margin: 0 0 10px; padding-left: 20px; }
 .plan-payment-status li { margin: 4px 0; overflow-wrap: anywhere; }
 .plan-payment-status small { color: var(--text-muted, #91a0b7); }
+
+
+/* Profile picture and inline dog customizer */
+.profile-edit-backdrop {
+  position: fixed;
+  z-index: 1300;
+  inset: 0;
+  display: grid;
+  place-items: start center;
+  overflow: auto;
+  padding: clamp(12px, 3vw, 36px);
+  background: rgba(3, 9, 18, .78);
+  backdrop-filter: blur(10px);
+}
+.profile-edit-dialog {
+  width: min(1080px, 100%);
+  max-height: none;
+  padding: clamp(17px, 2.5vw, 28px);
+  border: 1px solid var(--line-strong);
+  border-radius: 20px;
+  background: var(--panel);
+  box-shadow: 0 28px 90px rgba(0,0,0,.42);
+}
+.profile-edit-dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding-bottom: 17px;
+  border-bottom: 1px solid var(--line);
+}
+.profile-edit-dialog-header h2 {
+  margin: 6px 0 5px;
+  color: var(--text);
+  font: 800 24px Manrope, sans-serif;
+}
+.profile-edit-dialog-header p,
+.profile-edit-dog-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.65;
+}
+.profile-edit-dialog-header .icon-button {
+  flex: 0 0 auto;
+  font-size: 22px;
+}
+.profile-edit-details {
+  margin: 18px 0 24px;
+}
+.profile-edit-details label {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.profile-edit-details input {
+  width: 100%;
+  min-width: 0;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  color: var(--text);
+  background: var(--panel-deep);
+  font-size: 13px;
+}
+.profile-edit-dog-heading {
+  margin: 0 0 12px;
+}
+.profile-edit-dog-heading h3 {
+  margin: 6px 0 5px;
+  color: var(--text);
+  font: 800 18px Manrope, sans-serif;
+}
+.profile-dog-editor-main {
+  display: grid;
+  grid-template-columns: minmax(250px, .78fr) minmax(0, 1.22fr);
+  align-items: start;
+  gap: 12px;
+}
+.profile-dog-editor-preview,
+.profile-dog-editor-catalog,
+.profile-dog-achievements {
+  min-width: 0;
+  padding: 15px;
+  border-color: var(--line);
+}
+.profile-dog-stage {
+  display: grid;
+  place-items: center;
+  min-height: 195px;
+  margin: 7px 0 12px;
+  overflow: hidden;
+  border: 1px solid rgba(133,164,181,.14);
+  border-radius: 15px;
+  background: radial-gradient(circle at 50% 45%,rgba(43,119,126,.14),transparent 65%),linear-gradient(145deg,#101e30,#0b1422);
+}
+.profile-dog-stage .dog-avatar {
+  filter: drop-shadow(0 9px 16px rgba(0,0,0,.25));
+}
+.profile-dog-editor .avatar-appearance-controls {
+  grid-template-columns: 1fr 1fr;
+}
+.profile-dog-editor .avatar-appearance-controls label:first-child {
+  grid-column: 1 / -1;
+}
+.profile-dog-editor-catalog .avatar-catalog-heading h3 {
+  margin: 6px 0 5px;
+  color: var(--text);
+  font-size: 16px;
+}
+.profile-dog-editor-catalog .avatar-catalog-heading p {
+  max-width: 480px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.55;
+}
+.profile-dog-item-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-height: 420px;
+  overflow: auto;
+  padding-right: 3px;
+}
+.profile-dog-item-grid .avatar-item-visual {
+  min-height: 54px;
+}
+.profile-dog-achievements {
+  margin-top: 12px;
+}
+.profile-dog-achievements h3 {
+  margin: 6px 0 0;
+  color: var(--text);
+  font-size: 15px;
+}
+.profile-edit-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  padding-top: 18px;
+  margin-top: 18px;
+  border-top: 1px solid var(--line);
+}
+@media (max-width: 760px) {
+  .profile-edit-backdrop { padding: 8px; }
+  .profile-edit-dialog { padding: 14px; border-radius: 14px; }
+  .profile-dog-editor-main { grid-template-columns: minmax(0,1fr); }
+  .profile-dog-editor-preview { position: static; }
+  .profile-dog-item-grid { max-height: 350px; }
+}
+@media (max-width: 480px) {
+  .profile-edit-details { grid-template-columns: minmax(0,1fr); }
+  .profile-dog-item-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .profile-edit-dialog-actions { flex-direction: column-reverse; }
+  .profile-edit-dialog-actions .button { width: 100%; }
+}

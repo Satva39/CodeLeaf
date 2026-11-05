@@ -24,8 +24,9 @@ from sqlalchemy import select, func  # noqa: E402
 from app.config import settings  # noqa: E402
 from app.db import Base, SessionLocal, engine  # noqa: E402
 from app.auth_security import token_digest  # noqa: E402
-from app.models import AuthSession, CodingBattle, User, UserAchievement, UserAvatarInventory, XPTransaction  # noqa: E402
-from app.main import TOKEN_ALGORITHM, app  # noqa: E402
+from app.models import AuthSession, CodingBattle, User, UserAchievement, UserAvatarInventory, UserAvatarProfile, XPTransaction  # noqa: E402
+from app.main import TOKEN_ALGORITHM, app, get_leaderboard  # noqa: E402
+import app.main as main_module  # noqa: E402
 import app.games_routes as games_routes  # noqa: E402
 
 
@@ -83,6 +84,8 @@ def main() -> None:
     original_available = games_routes._available_battle_languages
     original_test_runner = games_routes._run_test_case
     original_battle_provider = games_routes._battle_provider_for_language
+    original_require_feature = main_module.require_feature
+    main_module.require_feature = lambda db, user, feature: None
     games_routes._available_battle_languages = fake_available_languages
     games_routes._battle_provider_for_language = fake_battle_provider
     games_routes._run_test_case = fake_run_test_case
@@ -143,10 +146,17 @@ def main() -> None:
         appearance = client_a.patch("/api/me/avatar/appearance", json={"breed": "husky", "fur_color": "snow", "eye_color": "blue"})
         persisted = client_a.get("/api/me/avatar")
         check(appearance.status_code == 200 and persisted.json()["appearance"]["breed"] == "husky" and persisted.json()["equipment"]["collar"] == "classic-collar", "appearance and equipment persist on the account")
+
+        with SessionLocal() as db:
+            leaderboard = get_leaderboard(period="all_time", limit=20, user=user_a, db=db)
+            ranked_self = next((item for item in leaderboard["items"] if item["username"] == user_a.username), None)
+            check(ranked_self is not None and ranked_self["dog_avatar"]["appearance"]["breed"] == "husky", "leaderboard returns each learner's saved dog profile picture")
+            check(ranked_self["dog_avatar"]["equipment"].get("collar") == "classic-collar", "leaderboard includes only the equipped dog cosmetic slots")
     finally:
         client_a.close(); client_b.close(); client_c.close()
         games_routes._available_battle_languages = original_available
         games_routes._battle_provider_for_language = original_battle_provider
+        main_module.require_feature = original_require_feature
         games_routes._run_test_case = original_test_runner
         engine.dispose()
         _TEMP.cleanup()

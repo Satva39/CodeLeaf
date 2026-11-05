@@ -77,6 +77,7 @@ from .models import (
     PracticalExamAttempt,
     PaymentRecord,
     User,
+    UserAvatarProfile,
     UserActivityDay,
     WebhookEvent,
     XPTransaction,
@@ -5077,12 +5078,32 @@ def get_leaderboard(
         .order_by(func.sum(XPTransaction.awarded_points).desc(), User.username.asc())
         .limit(limit)
     ).all()
+    ranked_user_ids = [row[0] for row in rows]
+    avatar_profiles = (
+        db.scalars(select(UserAvatarProfile).where(UserAvatarProfile.user_id.in_(ranked_user_ids))).all()
+        if ranked_user_ids else []
+    )
+    dog_by_user_id = {
+        profile.user_id: {
+            "appearance": {
+                "breed": profile.breed,
+                "fur_color": profile.fur_color,
+                "eye_color": profile.eye_color,
+            },
+            "equipment": profile.equipment if isinstance(profile.equipment, dict) else {},
+        }
+        for profile in avatar_profiles
+    }
     items = [
         {
             "rank": index,
             "display_name": row[1],
             "username": row[2],
-            "avatar": {},
+            "avatar": {},  # Retained for backwards compatibility with older clients.
+            "dog_avatar": dog_by_user_id.get(row[0], {
+                "appearance": {"breed": "classic", "fur_color": "golden", "eye_color": "brown"},
+                "equipment": {},
+            }),
             "xp": xp_amount_for_json(row[3] or 0),
         }
         for index, row in enumerate(rows, start=1)

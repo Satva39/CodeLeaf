@@ -158,7 +158,7 @@ export default function LeaderboardPage() {
           rows.map((row) => (
             <div key={row.username} className="leader-row">
               <span className="leader-rank">{row.rank}</span>
-              <Avatar size="sm" variant={row.avatar?.variant || "spark"} />
+              <Avatar size="sm" dogAvatar={row.dog_avatar} />
               <div className="leader-user">
                 <strong>{row.display_name || row.username}</strong>
                 <small>@{row.username}</small>

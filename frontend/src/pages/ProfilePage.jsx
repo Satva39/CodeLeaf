@@ -4,17 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   Activity,
   ArrowRight,
-  Check,
   ChevronRight,
-  Code2,
-  Compass,
   Crown,
   ExternalLink,
   Flame,
   LogOut,
   Settings,
-  Sparkles,
-  UserRound,
   Zap,
 } from "lucide-react";
 
@@ -27,6 +22,7 @@ import {
 import { useGamificationStats } from "../lib/useGamificationStats.js";
 import { PageShell } from "../components/common.jsx";
 import { Avatar } from "../components/layout/Header.jsx";
+import DogAvatarEditor from "../components/avatar/DogAvatarEditor.jsx";
 import { apiGetJson, invalidateApiCache } from "../lib/apiCache.js";
 import "../styles/phase3c-personal-learning.css";
 
@@ -51,7 +47,7 @@ export default function ProfilePage() {
   const [feedback, setFeedback] = useState("");
   const [saveError, setSaveError] = useState("");
   const [saving, setSaving] = useState(false);
-  const [avatarPick, setAvatarPick] = useState(profile.avatar || "spark");
+  const [editingProfile, setEditingProfile] = useState(() => new URLSearchParams(window.location.search).get("edit") === "1");
   const browserTimeZone = (() => {
     try { return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"; } catch { return "UTC"; }
   })();
@@ -66,12 +62,6 @@ export default function ProfilePage() {
   const [preferencesMessage, setPreferencesMessage] = useState("");
   const [preferencesError, setPreferencesError] = useState("");
   const [preferencesReload, setPreferencesReload] = useState(0);
-  const avatars = [
-    { id: "spark", label: "Spark", Icon: Sparkles },
-    { id: "orbit", label: "Orbit", Icon: Compass },
-    { id: "code", label: "Code", Icon: Code2 },
-    { id: "user", label: "Classic", Icon: UserRound },
-  ];
   useEffect(() => {
     let mounted = true;
     apiGetJson(`${API_BASE}/api/me`, { credentials: "include", ttlMs: 10_000 })
@@ -79,18 +69,16 @@ export default function ProfilePage() {
         if (!mounted || !data.user) return;
         const user = data.user;
         setAccountEmail(user.email || "");
-        const avatar = user.avatar?.variant || "spark";
         const next = {
           ...getProfile(),
           nickname: user.display_name || "Learner",
           handle: `@${user.username || "learner"}`,
-          avatar,
+          avatar: user.avatar && typeof user.avatar === "object" ? user.avatar : {},
           theme: user.theme || "dark",
         };
         setProfile(next);
         setName(next.nickname);
         setHandle(next.handle);
-        setAvatarPick(avatar);
         setAccountMode("remote");
       })
       .catch((error) => {
@@ -274,7 +262,7 @@ export default function ProfilePage() {
     if (saving) return;
     const cleanName = name.trim() || "Learner";
     const cleanHandle = (handle.startsWith("@") ? handle.slice(1) : handle).trim();
-    const next = { ...profile, nickname: cleanName, handle: `@${cleanHandle}`, avatar: avatarPick };
+    const next = { ...profile, nickname: cleanName, handle: `@${cleanHandle}` };
     setSaving(true);
     setSaveError("");
     setFeedback("");
@@ -288,7 +276,7 @@ export default function ProfilePage() {
           body: JSON.stringify({
             display_name: cleanName,
             username: cleanHandle,
-            avatar: { variant: avatarPick },
+            avatar: profile.avatar && typeof profile.avatar === "object" ? profile.avatar : {},
             theme: profile.theme === "light" ? "light" : "dark",
           }),
         });
@@ -299,15 +287,14 @@ export default function ProfilePage() {
           ...next,
           nickname: user.display_name || cleanName,
           handle: `@${user.username || cleanHandle}`,
-          avatar: user.avatar?.variant || avatarPick,
+          avatar: user.avatar && typeof user.avatar === "object" ? user.avatar : next.avatar,
           theme: user.theme || next.theme,
         };
         setProfile(confirmed);
         setName(confirmed.nickname);
         setHandle(confirmed.handle);
-        setAvatarPick(confirmed.avatar);
         invalidateApiCache("/api/me");
-        setFeedback("Profile changes synced to your account.");
+        setFeedback("Your profile details have been saved. Your dog avatar is saved separately as you customize it.");
       } else if (accountMode === "guest") {
         writeDemo({ profile: next });
         setProfile(next);
@@ -316,19 +303,28 @@ export default function ProfilePage() {
         throw new Error("Account status is unavailable, so the profile was not saved. Retry when the account service is available.");
       }
       setSaved(true);
+      setEditingProfile(false);
     } catch (error) {
       setSaveError(error?.message || "Profile could not be saved. Please try again.");
     } finally {
       setSaving(false);
     }
   };
+
+  const cancelProfileEdit = () => {
+    setName(profile.nickname || "Learner");
+    setHandle(profile.handle || "@learner");
+    setSaveError("");
+    setEditingProfile(false);
+  };
+
   return (
     <PageShell>
       <div className="profile-layout">
         <div className="panel profile-main-card">
           <div className="profile-header">
             <div className="profile-avatar-wrap">
-              <Avatar size="xl" variant={avatarPick} />
+              <Avatar size="xl" />
             </div>
             <div className="profile-identity">
               <div className="profile-title-line">
@@ -344,66 +340,36 @@ export default function ProfilePage() {
             <button
               type="button"
               className="button button-secondary button-small"
-              onClick={save}
-              disabled={saving || accountMode === "loading"}
+              onClick={() => setEditingProfile(true)}
+              disabled={accountMode === "loading"}
             >
-              {saved ? <Check size={14} /> : <Settings size={14} />}
-              {saving ? "Saving…" : saved ? "Saved" : "Save changes"}
+              <Settings size={14} />
+              Edit profile
             </button>
           </div>
           {accountMode === "guest" && <p className="profile-save-note" role="status">You are in guest mode. Profile details save only in this browser.</p>}
           {accountMode === "unavailable" && <p className="profile-save-note" role="status">Account status could not be verified.</p>}
           {feedback && <p className="profile-save-note" role="status">{feedback}</p>}
           {saveError && <p className="profile-save-error" role="alert">{saveError}</p>}
-          <div className="profile-section">
-            <div className="eyebrow">PERSONAL DETAILS</div>
-            <h2>Make this profile yours</h2>
-            <div className="form-grid">
-              <label>
-                Display name
-                <input
-                  value={name}
-                  onChange={(e) => { setName(e.target.value); setSaved(false); }}
-                  maxLength={50}
-                />
-              </label>
-              <label>
-                Public handle
-                <input
-                  value={handle}
-                  onChange={(e) => { setHandle(e.target.value); setSaved(false); }}
-                  maxLength={30}
-                />
-              </label>
-            </div>
-          </div>
-          <div className="profile-section avatar-customizer">
-            <div className="eyebrow">AVATAR STUDIO</div>
-            <h2>Choose your learning identity</h2>
-            <p>
-              Select a simple base style. More outfits, colors and accessories
-              can become unlockable items later.
-            </p>
-            <div className="avatar-options">
-              {avatars.map(({ id, label, Icon }) => (
-                <button
-                  key={id}
-                  className={avatarPick === id ? "selected" : ""}
-                  onClick={() => { setAvatarPick(id); setSaved(false); }}
-                >
-                  <span className={`avatar avatar-lg avatar-${id}`}>
-                    <Icon size={21} />
-                  </span>
-                  <strong>{label}</strong>
-                  {avatarPick === id && (
-                    <span className="avatar-selected-check">
-                      <Check size={12} />
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
+          {editingProfile && <div className="profile-edit-backdrop" role="presentation">
+            <section className="profile-edit-dialog panel" role="dialog" aria-modal="true" aria-labelledby="profile-edit-title">
+              <div className="profile-edit-dialog-header">
+                <div><div className="eyebrow">YOUR CODELEAF IDENTITY</div><h2 id="profile-edit-title">Edit profile</h2><p>Update your public details and customize the dog that represents you across CodeLeaf.</p></div>
+                <button type="button" className="icon-button" onClick={cancelProfileEdit} aria-label="Close profile editor">×</button>
+              </div>
+              <div className="profile-edit-details form-grid">
+                <label>Display name<input value={name} onChange={(event) => { setName(event.target.value); setSaved(false); }} maxLength={50} /></label>
+                <label>Public handle<input value={handle} onChange={(event) => { setHandle(event.target.value); setSaved(false); }} maxLength={30} /></label>
+              </div>
+              <div className="profile-edit-dog-heading"><div className="eyebrow">YOUR PROFILE PICTURE</div><h3>Customize your dog</h3><p>Choose its breed, fur and eye colors, then equip accessories you have unlocked. Changes to the dog are saved to your account as you make them.</p></div>
+              {accountMode === "remote" ? <DogAvatarEditor compact /> : <div className="phase3c-preferences-note" role="status">Sign in to customize and save your profile dog across devices.</div>}
+              {saveError && <p className="profile-save-error" role="alert">{saveError}</p>}
+              <div className="profile-edit-dialog-actions">
+                <button type="button" className="button button-secondary" onClick={cancelProfileEdit} disabled={saving}>Close</button>
+                <button type="button" className="button button-primary" onClick={save} disabled={saving || accountMode === "loading"}>{saving ? "Saving profile…" : "Save profile details"}</button>
+              </div>
+            </section>
+          </div>}
           <div className="profile-section phase3c-preferences-section">
             <div className="eyebrow">LEARNING PREFERENCES</div>
             <h2>Set a pace that works for you</h2>
@@ -474,7 +440,7 @@ export default function ProfilePage() {
         </div>
         <div className="profile-side-stack">
           <div className="panel profile-summary-card">
-            <Avatar size="lg" variant={avatarPick} />
+            <Avatar size="lg" />
             <h3>{name || "Learner"}</h3>
             <p>{handle || "@learner"}</p>
             <div className="profile-summary-stats">

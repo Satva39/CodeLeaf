@@ -21,24 +21,36 @@ import { useCourseCatalogState } from "../../lib/useCourseCatalog.js";
 import { loadBookmarkState, resetBookmarkState } from "../../lib/bookmarkState.js";
 import { API_BASE, getProfile, writeDemo } from "../../lib/demoState.js";
 import { apiGetJson, invalidateApiCache } from "../../lib/apiCache.js";
+import DogAvatar from "../avatar/DogAvatar.jsx";
+import { useDogAvatar } from "../avatar/DogAvatarContext.jsx";
 
-export function Avatar({ size = "md", variant }) {
+export function Avatar({ size = "md", variant, dogAvatar }) {
+  const { dogAvatar: accountDog } = useDogAvatar();
   const profile = getProfile();
+  const pixelSize = ({ xs: 22, sm: 33, md: 40, lg: 64, xl: 88 })[size] || 40;
+  // User profile pictures are always the learner's customizable dog. Explicit
+  // legacy variants remain available only for decorative/sample avatars.
+  if (!variant || variant === "dog") {
+    const selectedDog = dogAvatar || accountDog;
+    return (
+      <span className={`avatar avatar-${size} avatar-dog`} aria-label="Your CodeLeaf dog avatar">
+        <DogAvatar
+          appearance={selectedDog?.appearance || { breed: "classic", fur_color: "golden", eye_color: "brown" }}
+          equipment={selectedDog?.equipment || {}}
+          size={pixelSize}
+          className="avatar-dog-image"
+          title="Your customizable CodeLeaf dog"
+        />
+      </span>
+    );
+  }
   const v = variant || profile.avatar || "spark";
   return (
-    <span
-      className={`avatar avatar-${size} avatar-${v}`}
-      aria-label="Profile avatar"
-    >
-      {v === "spark" ? (
-        <Sparkles size={size === "sm" ? 15 : 22} />
-      ) : v === "orbit" ? (
-        <Compass size={size === "sm" ? 15 : 22} />
-      ) : v === "code" ? (
-        <Code2 size={size === "sm" ? 15 : 22} />
-      ) : (
-        <UserRound size={size === "sm" ? 15 : 22} />
-      )}
+    <span className={`avatar avatar-${size} avatar-${v}`} aria-label="Decorative avatar">
+      {v === "spark" ? <Sparkles size={size === "sm" ? 15 : 22} />
+        : v === "orbit" ? <Compass size={size === "sm" ? 15 : 22} />
+          : v === "code" ? <Code2 size={size === "sm" ? 15 : 22} />
+            : <UserRound size={size === "sm" ? 15 : 22} />}
     </span>
   );
 }
@@ -161,7 +173,7 @@ export function Header() {
             <NavLink to="/practice">Practice</NavLink>
             <div className={`primary-nav-more ${moreOpen ? "primary-nav-more-open" : ""}`} ref={moreMenuRef}>
               <button
-                className={`primary-nav-more-trigger ${["/review", "/learning-hub", "/ai", "/portfolio", "/certificates", "/battles", "/avatar"].some((path) => location.pathname === path || location.pathname.startsWith(`${path}/`)) ? "active" : ""}`}
+                className={`primary-nav-more-trigger ${["/review", "/learning-hub", "/ai", "/portfolio", "/certificates", "/battles"].some((path) => location.pathname === path || location.pathname.startsWith(`${path}/`)) ? "active" : ""}`}
                 type="button"
                 aria-haspopup="true"
                 aria-expanded={moreOpen}
@@ -177,7 +189,6 @@ export function Header() {
                 <NavLink to="/portfolio" onClick={() => { setMoreOpen(false); setMobileOpen(false); }}>Portfolio</NavLink>
                 <NavLink to="/certificates" onClick={() => { setMoreOpen(false); setMobileOpen(false); }}>Certificates</NavLink>
                 <NavLink to="/battles" onClick={() => { setMoreOpen(false); setMobileOpen(false); }}>Coding Battles</NavLink>
-                <NavLink to="/avatar" onClick={() => { setMoreOpen(false); setMobileOpen(false); }}>Dog Avatar Studio</NavLink>
               </div>}
             </div>
           </nav>

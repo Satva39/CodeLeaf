@@ -21,6 +21,7 @@ export default function AchievementRewardNotice({ rewards = [], xpEarned = 0, on
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(typeof payload.detail === "string" ? payload.detail : "Could not equip this reward.");
       setEquippedId(first.item_id);
+      window.dispatchEvent(new CustomEvent("codeleaf:dog-avatar-changed"));
     } catch (err) { setError(err.message || "Could not equip this reward."); }
     finally { setEquipping(false); }
   }
@@ -37,7 +38,7 @@ export default function AchievementRewardNotice({ rewards = [], xpEarned = 0, on
         {error && <small className="achievement-reward-error">{error}</small>}
         <div className="achievement-reward-actions">
           {equippedId ? <span className="achievement-equipped"><Check size={14} /> Equipped!</span> : <button type="button" onClick={equipNow} disabled={equipping || !first?.item_slot}>{equipping ? "Equipping…" : "Equip now"}</button>}
-          <Link to="/avatar" onClick={onDismiss}>View collection</Link>
+          <Link to="/profile?edit=1#dog-avatar" onClick={onDismiss}>Customize your dog</Link>
           <button type="button" className="achievement-later" onClick={onDismiss}>Later</button>
         </div>
       </div>
