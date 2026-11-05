@@ -266,20 +266,6 @@ export default function DogAvatarEditor({ compact = false }) {
             </section>
           </div>
 
-          {avatar.achievements?.length > 0 && (
-            <section className="profile-dog-achievements panel">
-              <div className="eyebrow">DOG REWARDS</div>
-              <h3>Achievements that unlock items</h3>
-              <div className="avatar-achievement-grid">
-                {avatar.achievements.map((achievement) => (
-                  <article className={`avatar-achievement-card ${achievement.unlocked ? "unlocked" : ""}`} key={achievement.id}>
-                    <span className="achievement-check">{achievement.unlocked ? <Check size={14} /> : <Lock size={13} />}</span>
-                    <div><strong>{achievement.name}</strong><p>{achievement.description}</p><small>Reward: {achievement.reward_item_name}</small></div>
-                  </article>
-                ))}
-              </div>
-            </section>
-          )}
         </>
       )}
     </div>

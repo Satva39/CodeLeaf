@@ -47,6 +47,8 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState(getProfile());
   const [name, setName] = useState(profile.nickname);
   const [handle, setHandle] = useState(profile.handle);
+  const [accountUsername, setAccountUsername] = useState("");
+  const [accountProfilePath, setAccountProfilePath] = useState("");
   const [saved, setSaved] = useState(false);
   const [accountMode, setAccountMode] = useState("loading");
   const [profileReload, setProfileReload] = useState(0);
@@ -94,6 +96,8 @@ export default function ProfilePage() {
       .then((user) => {
         if (!mounted) return;
         setAccountEmail(user.email || "");
+        setAccountUsername(String(user.username || "").trim());
+        setAccountProfilePath(typeof user.profile_path === "string" ? user.profile_path : "");
         setEmailVerified(user.email_verified === true);
         const next = {
           ...getProfile(),
@@ -144,6 +148,8 @@ export default function ProfilePage() {
           show_progress: settings.show_progress === true,
         });
         setEmailVerified(payload.email_verified === true);
+        if (typeof payload.username === "string" && payload.username.trim()) setAccountUsername(payload.username.trim());
+        if (typeof payload.profile_path === "string") setAccountProfilePath(payload.profile_path);
         setPublicProfileMode("ready");
       })
       .catch((error) => {
@@ -244,6 +250,8 @@ export default function ProfilePage() {
         show_progress: settings.show_progress === true,
       });
       setEmailVerified(payload.email_verified === true);
+      if (typeof payload.username === "string" && payload.username.trim()) setAccountUsername(payload.username.trim());
+      if (typeof payload.profile_path === "string") setAccountProfilePath(payload.profile_path);
       setPublicProfileMode("ready");
       setPublicProfileFeedback(settings.is_public ? "Your public profile is live." : "Your public profile is private.");
       invalidateApiCache("/api/me/public-profile");
@@ -412,6 +420,8 @@ export default function ProfilePage() {
         setProfile(confirmed);
         setName(confirmed.nickname);
         setHandle(confirmed.handle);
+        setAccountUsername(String(user.username || cleanHandle).trim());
+        setAccountProfilePath("");
         invalidateApiCache("/api/me");
         setFeedback("Your profile details have been saved. Your dog avatar is saved separately as you customize it.");
       } else if (accountMode === "guest") {
@@ -437,10 +447,16 @@ export default function ProfilePage() {
     setEditingProfile(false);
   };
 
-  const publicUsername = String(handle || "").replace(/^@/, "").trim().toLowerCase();
-  const validPublicUsername = /^[a-z0-9_]{3,40}$/.test(publicUsername);
-  const publicProfileUrl = accountMode === "remote" && validPublicUsername
-    ? `${window.location.origin}/u/${encodeURIComponent(publicUsername)}`
+  // Always derive the share URL from the username confirmed by /api/me or
+  // /api/me/public-profile, never from the editable local handle field.
+  const publicUsername = String(accountUsername || "").trim();
+  const validPublicUsername = /^[A-Za-z0-9_]{3,40}$/.test(publicUsername);
+  const safeProfilePath = typeof accountProfilePath === "string"
+    && /^\/u\/[A-Za-z0-9_%]+$/.test(accountProfilePath)
+    ? accountProfilePath
+    : validPublicUsername ? `/u/${encodeURIComponent(publicUsername)}` : "";
+  const publicProfileUrl = accountMode === "remote" && validPublicUsername && safeProfilePath
+    ? `${window.location.origin}${safeProfilePath}`
     : "";
   const saveVisibilitySettings = () => savePublicProfileSettings({
     show_xp: publicProfileSettings.show_xp,
@@ -469,7 +485,7 @@ export default function ProfilePage() {
                   <ExternalLink size={13} /> {publicProfileUrl}
                 </a>
               ) : (
-                <span className="profile-public-link">{accountMode === "remote" ? "Choose a valid username to create your profile link." : "Sign in to view your public profile link."}</span>
+                <span className="profile-public-link">{accountMode === "remote" ? "Your account username must contain 3–40 letters, numbers or underscores to create a profile link." : "Sign in to view your public profile link."}</span>
               )}
             </div>
             <button
@@ -494,7 +510,7 @@ export default function ProfilePage() {
           <section className="profile-section profile-public-settings-card" aria-labelledby="public-profile-heading">
             <div className="profile-public-settings-heading">
               <span><Globe2 size={17} /></span>
-              <div><div className="eyebrow">SHARE YOUR LEARNING JOURNEY</div><h2 id="public-profile-heading">Public profile</h2><p>Your profile link stays visible even while the page is private.</p></div>
+              <div><div className="eyebrow">SHARE YOUR LEARNING JOURNEY</div><h2 id="public-profile-heading">Public profile</h2><p>Your share link is always available here. Publishing controls whether other people can view it.</p></div>
               <span className={`profile-public-status ${publicProfileSettings.is_public ? "is-live" : "is-private"}`}>
                 {publicProfileSettings.is_public ? <ShieldCheck size={13} /> : <LockKeyhole size={13} />}
                 {publicProfileSettings.is_public ? "Live" : "Private"}
@@ -507,7 +523,7 @@ export default function ProfilePage() {
                 <a className="button button-secondary button-small" href={publicProfileUrl} target="_blank" rel="noreferrer"><ExternalLink size={13} /> Open</a>
               </div>
             ) : (
-              <p className="profile-public-settings-note">{accountMode === "remote" ? "A public URL will be available after you set a username with 3–40 letters, numbers or underscores in Edit profile." : "Sign in to manage publication settings and view your account's public URL."}</p>
+              <p className="profile-public-settings-note">{accountMode === "remote" ? "A share URL will appear when your account has a valid username. You can keep the profile private until you choose to publish it." : "Sign in to manage publication settings and view your account's public URL."}</p>
             )}
             {publicProfileMode === "loading" && <p className="profile-public-settings-note" role="status">Loading your publication settings…</p>}
             {publicProfileMode === "unavailable" && <p className="profile-public-settings-error" role="alert">{publicProfileError} <button type="button" className="text-link" onClick={() => setPublicProfileReload((value) => value + 1)}>Retry</button></p>}

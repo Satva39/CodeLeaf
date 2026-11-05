@@ -28,8 +28,11 @@ assert.match(editor, /Preview item/, "owned items must be previewable before sav
 assert.match(editor, /Discard preview/, "unsaved changes must be cancellable");
 assert.match(editor, /Save changes/, "the learner must explicitly save avatar changes");
 assert.doesNotMatch(editor, /\/api\/me\/avatar\/appearance|\/api\/me\/avatar\/equipment/, "the editor must not persist each click immediately");
-assert.match(editor, /AvatarItemArtwork/, "wardrobe cards must show accessory artwork instead of miniature dog avatars");
-assert.match(renderer, /getAvatarItemArtwork/, "the shared dog renderer must use the centralized item-art registry");
+assert.match(editor, /AvatarItemArtwork/, "wardrobe cards must preview each item on the shared dog character");
+assert.match(renderer, /dog-avatar-2d/, "the shared dog renderer must use the flat 2D character style");
+assert.doesNotMatch(renderer, /<image\b|linearGradient|feGaussianBlur/, "the character must not be built from floating product images or 3D-style effects");
+assert.match(itemArtwork, /<DogAvatar/, "catalog cards must show cosmetics worn on the same dog renderer");
+assert.doesNotMatch(editor, /profile-dog-achievements|avatar\.achievements/, "the long achievement catalogue must not appear in the dog editor");
 assert.match(itemArtwork, /AVATAR_ITEM_ARTWORK/, "every cosmetic artwork mapping must have one shared registry");
 assert.match(publicProfile, /credentials: "omit"/, "public profile requests must not depend on an authenticated session");
 assert.match(publicProfile, /api\/public-profiles/, "public profile must load through the dedicated public API");
@@ -40,6 +43,9 @@ assert.match(profile, /Publish profile/, "the owner must be able to publish thei
 assert.match(profile, /Make profile private/, "the owner must be able to unpublish their profile");
 assert.match(profile, /Copy link/, "the profile URL must be copyable");
 assert.match(profile, /publicProfileUrl/, "the username-based public URL must be shown even while private");
+assert.match(profile, /setAccountUsername/, "the public link must use the server-confirmed account username");
+assert.match(profile, /payload\.profile_path/, "the canonical profile path returned by the API must be retained");
+assert.doesNotMatch(profile, /String\(handle \|\| ""\)/, "an unsaved local handle must not control whether the public link appears");
 assert.doesNotMatch(header, /Dog Avatar Studio/, "separate studio navigation must be removed");
 assert.match(achievementNotice, /\/profile\?edit=1#dog-avatar/, "reward links must open profile dog customization");
 assert.match(leaderboard, /dogAvatar=\{row\.dog_avatar\}/, "leaderboard profile pictures must use each learner's dog");
