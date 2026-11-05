@@ -49,8 +49,28 @@
 .avatar-item-card { display:flex; flex-direction:column; min-width:0; padding:10px; border:1px solid var(--line); border-radius:12px; background:var(--panel-soft); }
 .avatar-item-card.is-equipped { border-color:rgba(44,205,163,.48); box-shadow:inset 0 0 0 1px rgba(44,205,163,.08); }
 .avatar-item-card.is-locked { opacity:.82; }
-.avatar-item-visual { position:relative; display:grid; place-items:center; min-height:70px; border-radius:9px; background:linear-gradient(145deg,rgba(115,141,172,.15),rgba(115,141,172,.04)); }
-.avatar-item-visual > span { font-size:30px; }
+.avatar-item-visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 112px;
+  overflow: hidden;
+  border: 1px solid rgba(125, 153, 181, .12);
+  border-radius: 11px;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(55, 175, 159, .12), transparent 58%),
+    linear-gradient(145deg, rgba(115, 141, 172, .16), rgba(115, 141, 172, .045));
+}
+.avatar-item-visual > .dog-avatar {
+  display: block;
+  width: 104px;
+  height: 104px;
+  filter: drop-shadow(0 6px 9px rgba(0, 0, 0, .24));
+  transition: transform .18s ease;
+}
+.avatar-item-card:hover .avatar-item-visual > .dog-avatar {
+  transform: translateY(-2px) scale(1.035);
+}
 .avatar-item-visual > i { position:absolute; top:6px; right:6px; display:grid; place-items:center; width:21px; height:21px; border-radius:50%; background:var(--mint); color:#062019; font-style:normal; }
 .avatar-item-visual > i.avatar-lock { background:rgba(125,143,165,.22); color:var(--muted); }
 .avatar-item-copy { display:grid; gap:4px; margin:9px 0 7px; }

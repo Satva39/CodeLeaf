@@ -29,7 +29,7 @@ assert.match(avatar, /Backgrounds/);
 assert.match(avatar, /PROFILE DOG/);
 assert.match(avatar, /\/api\/me\/avatar\/equipment/);
 assert.match(dog, /useId\(\)/);
-assert.match(dog, /equipment\.background/);
+assert.match(dog, /itemId\(equipment, "background"\)/);
 assert.match(dog, /const snoutWidth/);
 assert.match(reward, /NEW REWARD UNLOCKED/);
 assert.match(reward, /profile\?edit=1#dog-avatar/);

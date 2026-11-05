@@ -11,7 +11,7 @@ from typing import Any
 from uuid import UUID
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from sqlalchemy import func, select
+from sqlalchemy import case, func, select
 from sqlalchemy.orm import Session
 
 from .plan_entitlements import effective_plan_id, plan_limits
@@ -153,12 +153,21 @@ def ensure_avatar_records(db: Session, user_id: UUID) -> UserAvatarProfile:
         profile = UserAvatarProfile(user_id=user_id, breed="classic", fur_color="golden", eye_color="brown", equipment={})
         db.add(profile)
         db.flush()
-    for item_id in ("classic-collar", "leaf-bandana", "aurora-background", "forest-background", "pixel-lab-background"):
-        owned = db.scalar(select(UserAvatarInventory.id).where(
+    starter_item_ids = (
+        "classic-collar",
+        "leaf-bandana",
+        "aurora-background",
+        "forest-background",
+        "pixel-lab-background",
+    )
+    existing_starters = set(db.scalars(
+        select(UserAvatarInventory.item_id).where(
             UserAvatarInventory.user_id == user_id,
-            UserAvatarInventory.item_id == item_id,
-        ))
-        if owned is None:
+            UserAvatarInventory.item_id.in_(starter_item_ids),
+        )
+    ).all())
+    for item_id in starter_item_ids:
+        if item_id not in existing_starters:
             db.add(UserAvatarInventory(user_id=user_id, item_id=item_id, acquired_via="starter"))
     db.flush()
     return profile
@@ -190,58 +199,64 @@ def _current_streak(db: Session, user_id: UUID) -> int:
 
 
 def _completed_course_count(db: Session, user_id: UUID) -> int:
-    courses = db.scalars(select(Course.id).where(Course.published.is_(True))).all()
-    completed = 0
-    for course_id in courses:
-        total = int(db.scalar(
-            select(func.count(Lesson.id)).join(Module, Module.id == Lesson.module_id).where(
-                Module.course_id == course_id, Lesson.is_published.is_(True)
-            )
-        ) or 0)
-        if not total:
-            continue
-        done = int(db.scalar(
-            select(func.count(LessonProgress.id)).join(Lesson, Lesson.id == LessonProgress.lesson_id)
-            .join(Module, Module.id == Lesson.module_id)
-            .where(
-                LessonProgress.user_id == user_id,
-                LessonProgress.completed.is_(True),
-                Module.course_id == course_id,
-                Lesson.is_published.is_(True),
-            )
-        ) or 0)
-        if done >= total:
-            completed += 1
-    return completed
+    """Count completed published courses in one aggregate query (not N+1 queries)."""
+    completed_lessons = func.coalesce(
+        func.sum(case((LessonProgress.completed.is_(True), 1), else_=0)),
+        0,
+    )
+    rows = db.execute(
+        select(Module.course_id)
+        .join(Lesson, Lesson.module_id == Module.id)
+        .join(Course, Course.id == Module.course_id)
+        .outerjoin(
+            LessonProgress,
+            (LessonProgress.lesson_id == Lesson.id)
+            & (LessonProgress.user_id == user_id),
+        )
+        .where(
+            Course.published.is_(True),
+            Lesson.is_published.is_(True),
+        )
+        .group_by(Module.course_id)
+        .having(completed_lessons >= func.count(Lesson.id))
+    ).all()
+    return len(rows)
 
 
 def evaluate_achievements(db: Session, user_id: UUID) -> list[dict[str, str]]:
-    """Unlock every newly met achievement once and grant exactly its one catalog item."""
+    """Unlock newly earned achievements with bounded, batched database queries."""
     # Serialize progress-triggered unlocks for an account. Unique constraints remain
-    # the final guard, while this lock prevents routine concurrent completions from
-    # racing each other into avoidable integrity errors.
+    # the final guard, while this lock prevents routine concurrent completions racing.
     db.scalar(select(User.id).where(User.id == user_id).with_for_update())
     ensure_avatar_records(db, user_id)
+
     lessons = int(db.scalar(select(func.count(LessonProgress.id)).where(
-        LessonProgress.user_id == user_id, LessonProgress.completed.is_(True)
+        LessonProgress.user_id == user_id,
+        LessonProgress.completed.is_(True),
     )) or 0)
     exercises = int(db.scalar(select(func.count(ExerciseProgress.id)).where(
-        ExerciseProgress.user_id == user_id, ExerciseProgress.completed.is_(True)
+        ExerciseProgress.user_id == user_id,
+        ExerciseProgress.completed.is_(True),
     )) or 0)
     coding_challenges = int(db.scalar(
-        select(func.count(ExerciseProgress.id)).join(Exercise, Exercise.id == ExerciseProgress.exercise_id)
+        select(func.count(ExerciseProgress.id))
+        .join(Exercise, Exercise.id == ExerciseProgress.exercise_id)
         .where(
             ExerciseProgress.user_id == user_id,
             ExerciseProgress.completed.is_(True),
-            func.lower(Exercise.exercise_type).in_(["code", "coding_challenge", "code_challenge", "codechallenge"]),
+            func.lower(Exercise.exercise_type).in_(
+                ["code", "coding_challenge", "code_challenge", "codechallenge"]
+            ),
         )
     ) or 0)
     battle_wins = int(db.scalar(select(func.count(CodingBattle.id)).where(
-        CodingBattle.winner_id == user_id, CodingBattle.status == "completed"
+        CodingBattle.winner_id == user_id,
+        CodingBattle.status == "completed",
     )) or 0)
-    total_xp = Decimal(str(db.scalar(select(func.coalesce(func.sum(XPTransaction.awarded_points), 0)).where(
-        XPTransaction.user_id == user_id
-    )) or 0))
+    total_xp = Decimal(str(db.scalar(select(func.coalesce(func.sum(
+        XPTransaction.awarded_points
+    ), 0)).where(XPTransaction.user_id == user_id)) or 0))
+
     values = {
         "tasks_completed": lessons + exercises,
         "coding_challenges_completed": coding_challenges,
@@ -250,53 +265,76 @@ def evaluate_achievements(db: Session, user_id: UUID) -> list[dict[str, str]]:
         "courses_completed": _completed_course_count(db, user_id),
         "total_xp": total_xp,
     }
-    unlocked: list[dict[str, str]] = []
-    for achievement in ACHIEVEMENTS:
-        if values[achievement["requirement_type"]] < achievement["threshold"]:
-            continue
-        current = db.scalar(select(UserAchievement).where(
+
+    achievement_ids = [item["id"] for item in ACHIEVEMENTS]
+    existing_achievement_ids = set(db.scalars(
+        select(UserAchievement.achievement_id).where(
             UserAchievement.user_id == user_id,
-            UserAchievement.achievement_id == achievement["id"],
-        ))
-        # Achievement XP is one-time, server-owned and tied to the achievement ID.
-        # The unique XP event key prevents repeated evaluator calls from paying twice.
-        achievement_xp = db.scalar(select(XPTransaction.id).where(
+            UserAchievement.achievement_id.in_(achievement_ids),
+        )
+    ).all())
+    existing_xp_ids = set(db.scalars(
+        select(XPTransaction.source_id).where(
             XPTransaction.user_id == user_id,
             XPTransaction.source_type == "achievement_completed",
-            XPTransaction.source_id == achievement["id"],
-        ))
-        base_points = XP_REWARDS["achievement"]
-        awarded_points = Decimal(base_points)
-        boost_applied = False
-        if achievement_xp is None:
-            base_points, awarded_points, boost_applied = calculate_xp_award(db, user_id, "achievement")
+            XPTransaction.source_id.in_(achievement_ids),
+        )
+    ).all())
+    owned_item_ids = set(db.scalars(
+        select(UserAvatarInventory.item_id).where(
+            UserAvatarInventory.user_id == user_id,
+        )
+    ).all())
+
+    unlocked: list[dict[str, str]] = []
+    for achievement in ACHIEVEMENTS:
+        achievement_id = achievement["id"]
+        if values[achievement["requirement_type"]] < achievement["threshold"]:
+            continue
+
+        xp_awarded: int | float = 0
+        if achievement_id not in existing_xp_ids:
+            _base_points, awarded_points, _boost_applied = calculate_xp_award(
+                db, user_id, "achievement"
+            )
             db.add(XPTransaction(
                 user_id=user_id,
                 source_type="achievement_completed",
-                source_id=achievement["id"],
-                base_points=base_points,
+                source_id=achievement_id,
+                base_points=XP_REWARDS["achievement"],
                 awarded_points=awarded_points,
-                boost_applied=boost_applied,
+                boost_applied=awarded_points > Decimal(XP_REWARDS["achievement"]),
             ))
-        if current is None:
-            current = UserAchievement(
+            existing_xp_ids.add(achievement_id)
+            xp_awarded = xp_amount_for_json(awarded_points)
+
+        reward_item_id = achievement["reward_item_id"]
+        if achievement_id not in existing_achievement_ids:
+            db.add(UserAchievement(
                 user_id=user_id,
-                achievement_id=achievement["id"],
-                reward_item_id=achievement["reward_item_id"],
-            )
-            db.add(current)
-            db.flush()
-            unlocked.append({"achievement_id": achievement["id"], "achievement_name": achievement["name"], "item_id": achievement["reward_item_id"], "item_name": ITEM_BY_ID[achievement["reward_item_id"]]["name"], "item_slot": ITEM_BY_ID[achievement["reward_item_id"]]["slot"], "item_icon": ITEM_BY_ID[achievement["reward_item_id"]]["icon"], "xp_awarded": xp_amount_for_json(awarded_points if achievement_xp is None else 0)})
-        inventory = db.scalar(select(UserAvatarInventory.id).where(
-            UserAvatarInventory.user_id == user_id,
-            UserAvatarInventory.item_id == achievement["reward_item_id"],
-        ))
-        if inventory is None:
+                achievement_id=achievement_id,
+                reward_item_id=reward_item_id,
+            ))
+            existing_achievement_ids.add(achievement_id)
+            reward_item = ITEM_BY_ID[reward_item_id]
+            unlocked.append({
+                "achievement_id": achievement_id,
+                "achievement_name": achievement["name"],
+                "item_id": reward_item_id,
+                "item_name": reward_item["name"],
+                "item_slot": reward_item["slot"],
+                "item_icon": reward_item["icon"],
+                "xp_awarded": xp_awarded,
+            })
+
+        if reward_item_id not in owned_item_ids:
             db.add(UserAvatarInventory(
                 user_id=user_id,
-                item_id=achievement["reward_item_id"],
+                item_id=reward_item_id,
                 acquired_via="achievement",
-                source_achievement_id=achievement["id"],
+                source_achievement_id=achievement_id,
             ))
+            owned_item_ids.add(reward_item_id)
+
     db.flush()
     return unlocked

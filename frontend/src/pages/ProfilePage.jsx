@@ -44,6 +44,7 @@ export default function ProfilePage() {
   const [handle, setHandle] = useState(profile.handle);
   const [saved, setSaved] = useState(false);
   const [accountMode, setAccountMode] = useState("loading");
+  const [profileReload, setProfileReload] = useState(0);
   const [feedback, setFeedback] = useState("");
   const [saveError, setSaveError] = useState("");
   const [saving, setSaving] = useState(false);
@@ -64,9 +65,14 @@ export default function ProfilePage() {
   const [preferencesReload, setPreferencesReload] = useState(0);
   useEffect(() => {
     let mounted = true;
-    apiGetJson(`${API_BASE}/api/me`, { credentials: "include", ttlMs: 10_000 })
+    apiGetJson(`${API_BASE}/api/me`, { credentials: "include", ttlMs: 10_000, timeoutMs: 8_000 })
       .then((data) => {
-        if (!mounted || !data.user) return;
+        if (!mounted) return;
+        if (!data?.user || typeof data.user !== "object") {
+          setAccountMode("unavailable");
+          setFeedback("The account service returned an incomplete profile response. Please retry.");
+          return;
+        }
         const user = data.user;
         setAccountEmail(user.email || "");
         const next = {
@@ -91,14 +97,14 @@ export default function ProfilePage() {
         setFeedback("Account details could not be checked. Your account profile was not changed.");
       });
     return () => { mounted = false; };
-  }, []);
+  }, [profileReload]);
 
   useEffect(() => {
     if (accountMode !== "remote") return undefined;
     let mounted = true;
     setPreferencesMode("loading");
     setPreferencesError("");
-    apiGetJson(`${API_BASE}/api/me/learning-preferences`, { credentials: "include", ttlMs: 0 })
+    apiGetJson(`${API_BASE}/api/me/learning-preferences`, { credentials: "include", ttlMs: 0, timeoutMs: 8_000 })
       .then((payload) => {
         if (!mounted) return;
         const value = payload?.preferences;
@@ -341,14 +347,18 @@ export default function ProfilePage() {
               type="button"
               className="button button-secondary button-small"
               onClick={() => setEditingProfile(true)}
-              disabled={accountMode === "loading"}
             >
               <Settings size={14} />
               Edit profile
             </button>
           </div>
           {accountMode === "guest" && <p className="profile-save-note" role="status">You are in guest mode. Profile details save only in this browser.</p>}
-          {accountMode === "unavailable" && <p className="profile-save-note" role="status">Account status could not be verified.</p>}
+          {accountMode === "unavailable" && <p className="profile-save-note" role="status">
+            Account status could not be verified. Your profile data has not been changed.
+            <button type="button" className="text-link" onClick={() => { setAccountMode("loading"); setProfileReload((value) => value + 1); }}>
+              Retry account loading
+            </button>
+          </p>}
           {feedback && <p className="profile-save-note" role="status">{feedback}</p>}
           {saveError && <p className="profile-save-error" role="alert">{saveError}</p>}
           {editingProfile && <div className="profile-edit-backdrop" role="presentation">
@@ -362,7 +372,7 @@ export default function ProfilePage() {
                 <label>Public handle<input value={handle} onChange={(event) => { setHandle(event.target.value); setSaved(false); }} maxLength={30} /></label>
               </div>
               <div className="profile-edit-dog-heading"><div className="eyebrow">YOUR PROFILE PICTURE</div><h3>Customize your dog</h3><p>Choose its breed, fur and eye colors, then equip accessories you have unlocked. Changes to the dog are saved to your account as you make them.</p></div>
-              {accountMode === "remote" ? <DogAvatarEditor compact /> : <div className="phase3c-preferences-note" role="status">Sign in to customize and save your profile dog across devices.</div>}
+              {accountMode === "remote" || accountMode === "loading" ? <DogAvatarEditor compact /> : <div className="phase3c-preferences-note" role="status">Sign in again or retry account verification to customize and save your profile dog across devices.</div>}
               {saveError && <p className="profile-save-error" role="alert">{saveError}</p>}
               <div className="profile-edit-dialog-actions">
                 <button type="button" className="button button-secondary" onClick={cancelProfileEdit} disabled={saving}>Close</button>

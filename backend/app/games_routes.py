@@ -786,13 +786,26 @@ async def submit_battle_solution(
 
 @router.get("/api/me/avatar")
 def get_my_avatar(user: User = Depends(require_user), db: Session = Depends(get_db)) -> dict[str, Any]:
-    # Reconcile achievements already earned before this feature was deployed.
+    # Reconciliation is batched and idempotent; the evaluator also ensures the
+    # avatar profile, so avoid a second ensure/query pass here.
     evaluate_achievements(db, user.id)
-    profile = ensure_avatar_records(db, user.id)
+    profile = db.get(UserAvatarProfile, user.id)
+    if profile is None:  # Defensive fallback for an interrupted first-time setup.
+        profile = ensure_avatar_records(db, user.id)
+
+    equipped = dict(profile.equipment) if isinstance(profile.equipment, dict) else {}
+    # Older versions allowed a shirt and a full outfit to be equipped together.
+    # The renderer has one top-clothing layer, so keep the most recently supported
+    # everyday layer (shirt) and remove the stale full-outfit key to prevent the UI
+    # claiming one item is equipped while another visibly covers it.
+    if equipped.get("shirt") and equipped.get("outfit"):
+        equipped.pop("outfit", None)
+        profile.equipment = equipped
+        profile.updated_at = utc_now()
+
     db.commit()
     owned_rows = db.scalars(select(UserAvatarInventory).where(UserAvatarInventory.user_id == user.id)).all()
     owned_ids = {row.item_id for row in owned_rows}
-    equipped = profile.equipment if isinstance(profile.equipment, dict) else {}
     unlocked_rows = db.scalars(select(UserAchievement).where(UserAchievement.user_id == user.id)).all()
     achievement_ids = {row.achievement_id for row in unlocked_rows}
     catalog = []
@@ -861,6 +874,12 @@ def update_avatar_equipment(
         ))
         if owned is None:
             raise HTTPException(status_code=403, detail="This cosmetic is locked. Complete its achievement to unlock it.")
+        # A full outfit and a shirt/jacket use the same visible body layer.
+        # Keep only one of them so the equipped label always matches the artwork.
+        if body.slot == "shirt":
+            equipment.pop("outfit", None)
+        elif body.slot == "outfit":
+            equipment.pop("shirt", None)
         equipment[body.slot] = body.item_id
     profile.equipment = equipment
     profile.updated_at = utc_now()
