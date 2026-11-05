@@ -17,10 +17,119 @@ import httpx
 from .config import settings
 
 
+# Verified against OnlineCompiler's live compiler catalogue (GET /api/compilers/)
+# and https://onlinecompiler.io/docs/compilers. These keys are CodeLeaf language
+# keys, not user-controlled provider identifiers. Frameworks without an actual
+# OnlineCompiler runtime remain on their existing provider.
 COMPILER_BY_LANGUAGE = {
     "python": "python-3.14",
     "javascript": "nodejs-24",
+    "typescript": "typescript-deno",
+    "c": "gcc-15",
+    "cpp": "g++-15",
+    "cpp14": "g++-15",  # g++-15 uses GNU C++17 by default (C++14-compatible)
+    "cpp17": "g++-15",
+    "cpp20": "g++-15-cpp20",
+    "java": "openjdk-25",
+    "csharp": "dotnet-csharp-10",
+    "fsharp": "dotnet-fsharp-10",
+    "go": "go-1.26",
+    "rust": "rust-1.93",
+    "php": "php-8.5",
+    "ruby": "ruby-4.0",
+    "haskell": "haskell-9.12",
+    "bash": "bash-5.2",
+    "fortran": "gfortran-15",
+    "vbnet": "dotnet-vbnet-10",
+    "kotlin": "kotlin-2.4",
+    "r": "r-4.6",
+    "swift": "swift-6.4",
+    "cobol": "gnucobol-3.2",
+    "perl": "perl-5.44",
+    "julia": "julia-1.13",
+    "pascal": "fpc-3.2",
+    "octave": "octave-11",
+    "nasm": "nasm-3",
+    "assembler-nasm": "nasm-3",
+    "lua": "lua-5.5",
+    "ocaml": "ocaml-5.4",
+    "clisp": "sbcl-2.6",
+    "erlang": "erlang-29",
+    "elixir": "elixir-1.20",
+    "prolog": "swipl-10",
+    "d": "ldc-1.43",
+    "freebasic": "fbc-1.10",
+    "dart": "dart-3.13",
+    "clojure": "clojure-1.12",
+    "groovy": "groovy-6.0",
+    "scala": "scala-3.10",
+    "zig": "zig-0.17",
+    "nim": "nim-2.2",
+    "crystal": "crystal-1.22",
+    "ada": "gnat-15",
+    "powershell": "powershell-7.6",
+    "racket": "racket-9.3",
+    "objectivec": "clang-objc-21",
+    # Generic SQL workspaces use the provider SQLite 3 runtime. DuckDB is explicit.
+    # MySQL and PostgreSQL remain dedicated database-engine workflows.
+    "sql": "sqlite-3",
+    "sqlite": "sqlite-3",
+    "duckdb": "duckdb-1.5",
 }
+
+# CodeLeaf course aliases or compiler variants which should use an OnlineCompiler
+# runtime. Kept separate so course-facing labels can be reported accurately while
+# resolving to a pinned compiler id.
+COMPILER_LANGUAGE_ALIASES = {
+    "py": "python-3.14",
+    "python3": "python-3.14",
+    "js": "nodejs-24",
+    "node": "nodejs-24",
+    "nodejs": "nodejs-24",
+    "node.js": "nodejs-24",
+    "ts": "typescript-deno",
+    "deno": "typescript-deno",
+    "c++": "g++-15",
+    "c++14": "g++-15",
+    "c++17": "g++-15",
+    "c++20": "g++-15-cpp20",
+    "c#": "dotnet-csharp-10",
+    "cs": "dotnet-csharp-10",
+    "f#": "dotnet-fsharp-10",
+    "vb.net": "dotnet-vbnet-10",
+    "vb": "dotnet-vbnet-10",
+    "visualbasic": "dotnet-vbnet-10",
+    "visual-basic": "dotnet-vbnet-10",
+    "objective-c": "clang-objc-21",
+    "free-basic": "fbc-1.10",
+    "sqlite3": "sqlite-3",
+    "c99": "gcc-15",
+    "nasm-asm": "nasm-3",
+    # Data/algorithm course labels execute as Python. pandas uses the provider's
+    # dedicated pandas-2 image to retain compatibility with existing lessons.
+    "data": "python-3.14",
+    "datascience": "python-3.14",
+    "data-science": "python-3.14",
+    "dsa": "python-3.14",
+    "pandas": "python-3.14-pandas2",
+}
+
+ONLINECOMPILER_LANGUAGE_TO_ID = {**COMPILER_BY_LANGUAGE, **COMPILER_LANGUAGE_ALIASES}
+
+# These names normalize to Python or JavaScript in CodeLeaf's legacy provider
+# aliases, but the OnlineCompiler images do not include the framework/runtime
+# dependencies needed to execute them faithfully. Keep them on their existing
+# configured provider instead of claiming that a plain language image supports
+# the framework.
+ONLINECOMPILER_UNSUPPORTED_FRAMEWORK_KEYS = {
+    "django", "fastapi", "flask", "express", "expressjs", "react", "reactjs",
+    "vue", "vuejs", "nextjs", "angular", "angularjs", "pytorch",
+    # OnlineCompiler offers a pandas image, but does not advertise dedicated
+    # NumPy/SciPy/scikit-learn/PyTorch environments. Retain package-aware fallback.
+    "numpy", "scipy", "scikit-learn", "scikitlearn",
+    "micropython", "python2", "pypy3", "jython", "bun", "laravel", "spring",
+}
+
 
 
 class OnlineCompilerError(RuntimeError):
@@ -39,15 +148,18 @@ def onlinecompiler_configured() -> bool:
 
 
 def compiler_for_language(language: str) -> str | None:
+    """Resolve a CodeLeaf language key to a fixed, documented compiler id."""
     key = str(language or "").strip().lower().replace("_", "-")
-    aliases = {
-        "py": "python",
-        "python3": "python",
-        "js": "javascript",
-        "node": "javascript",
-        "nodejs": "javascript",
-    }
-    return COMPILER_BY_LANGUAGE.get(aliases.get(key, key))
+    if key in ONLINECOMPILER_UNSUPPORTED_FRAMEWORK_KEYS:
+        return None
+    direct = ONLINECOMPILER_LANGUAGE_TO_ID.get(key)
+    if direct:
+        return direct
+    # Reuse CodeLeaf's existing alias canonicalizer for names such as C++, C#,
+    # PostgreSQL, and course slugs. Only mapped compiler ids can be returned.
+    from .jdoodle_runner import normalize_language_key
+    canonical = normalize_language_key(key)
+    return ONLINECOMPILER_LANGUAGE_TO_ID.get(canonical)
 
 
 def _base_url() -> str:
@@ -155,7 +267,7 @@ async def check_onlinecompiler_capabilities() -> dict[str, Any]:
         }
 
     supported = [
-        language for language, compiler in COMPILER_BY_LANGUAGE.items()
+        language for language, compiler in ONLINECOMPILER_LANGUAGE_TO_ID.items()
         if compiler in compiler_ids
     ]
     # A valid key and healthy service are not enough when the account or this
@@ -180,7 +292,7 @@ async def check_onlinecompiler_capabilities() -> dict[str, Any]:
         "reachable": True,
         "available": available,
         "supported_languages": supported if available else [],
-        "compilers": sorted(compiler_ids.intersection(COMPILER_BY_LANGUAGE.values())),
+        "compilers": sorted(compiler_ids.intersection(ONLINECOMPILER_LANGUAGE_TO_ID.values())),
         "health_status": health_status,
         "usage_available": usage_available,
     }

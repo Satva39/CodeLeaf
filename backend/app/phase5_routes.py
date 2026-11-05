@@ -351,11 +351,12 @@ class RunnerCreateInput(StrictModel):
     @classmethod
     def canonical_execution_language(cls, value: str) -> str:
         normalized = str(value or "").strip().lower().replace("_", "-")
-        # SQLite is an engine key in the isolated database API, not JDoodle's
-        # generic SQL alias. Preserve it so live engine routing stays accurate.
+        # Preserve source aliases and runtime variants until provider selection.
+        # In particular, OnlineCompiler has a distinct pandas-2 compiler id and
+        # a separate C++20 compiler id. Internal Runner/JDoodle routing still
+        # uses _canonical_runner_key() after the original key is retained here.
         if normalized in {"sqlite", "sqlite3"}:
             return "sqlite"
-        normalized = normalize_language_key(normalized)
         if not re.fullmatch(r"[a-z0-9][a-z0-9.+#-]{0,39}", normalized):
             raise ValueError("language must be a supported CodeLeaf runtime or database key")
         return normalized
@@ -2730,8 +2731,8 @@ async def runner_status() -> dict[str, Any]:
     providers: dict[str, str] = {key: "jdoodle" for key in jdoodle_languages}
     for key in runner_languages | runner_engines:
         providers[key] = "codeleaf-runner"
-    # OnlineCompiler is the preferred provider for these runtimes when its live
-    # registry and health check both succeed; no fallback is attempted after a run.
+    # OnlineCompiler is preferred for every mapped CodeLeaf runtime present in
+    # the live compiler registry. No fallback is attempted after a run begins.
     for key in online_languages:
         providers[key] = "onlinecompiler"
 
@@ -2740,13 +2741,13 @@ async def runner_status() -> dict[str, Any]:
     if online_languages and has_other_provider:
         provider = "hybrid"
         message = (
-            "OnlineCompiler is preferred for Python and JavaScript. CodeLeaf Runner "
-            "continues to provide other installed runtimes and database engines; "
-            "JDoodle remains an explicit fallback for its supported languages."
+            "OnlineCompiler is preferred for every CodeLeaf language with a verified "
+            "matching compiler. CodeLeaf Runner and JDoodle remain available for "
+            "languages or framework/database runtimes OnlineCompiler does not provide."
         )
     elif online_languages:
         provider = "onlinecompiler"
-        message = "OnlineCompiler is available for Python and JavaScript. Other languages require another installed provider."
+        message = "OnlineCompiler is available for all listed compatible runtimes. Languages without a matching OnlineCompiler compiler require another configured provider."
     elif runner_has_capabilities and fallback_configured:
         provider = "hybrid"
         message = (
@@ -2799,19 +2800,24 @@ async def create_runner_job(
     runner_languages, runner_engines, runner_reachable = await _load_runner_capabilities()
     language = _canonical_runner_key(body.language)
     online_status = await check_onlinecompiler_capabilities()
+    online_languages = set(online_status.get("supported_languages", [])) if online_status.get("available") else set()
+    # Preserve the original course/workspace key for special runtime variants
+    # such as pandas-2 and C++20; `language` is the canonical key used by Runner.
     use_onlinecompiler = bool(
         online_status.get("available")
-        and language in set(online_status.get("supported_languages", []))
-        and compiler_for_language(language)
+        and (body.language.strip().lower().replace("_", "-") in online_languages or language in online_languages)
+        and compiler_for_language(body.language)
     )
     runner_job_type: str | None = None
-    if language in RUNNER_DATABASE_ENGINE_KEYS and language in runner_engines:
-        runner_job_type = "database"
-    elif language in runner_languages:
-        runner_job_type = "code"
+    if not use_onlinecompiler:
+        if language in RUNNER_DATABASE_ENGINE_KEYS and language in runner_engines:
+            runner_job_type = "database"
+        elif language in runner_languages:
+            runner_job_type = "code"
 
     use_jdoodle = (
-        runner_job_type is None
+        not use_onlinecompiler
+        and runner_job_type is None
         and language != "sqlite"
         and jdoodle_fallback_configured()
         and is_jdoodle_language_supported(body.language)
@@ -2941,8 +2947,10 @@ async def create_runner_job(
                 ]
             else:
                 raise HTTPException(status_code=422, detail="Provide source code or a source file before running this program.")
+            if language in {"sql", "sqlite"} and body.setup_sql:
+                online_source = body.setup_sql.rstrip().rstrip(";") + ";\n" + online_source
             online_result = await run_onlinecompiler_code(
-                language=language,
+                language=body.language,
                 code=online_source,
                 stdin=body.stdin,
                 files=online_files,

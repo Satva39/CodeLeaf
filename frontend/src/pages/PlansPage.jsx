@@ -59,7 +59,7 @@ export default function PlansPage() {
   const [entitlements, setEntitlements] = useState(null);
   const [planCatalog, setPlanCatalog] = useState([]);
   const [catalogStatus, setCatalogStatus] = useState("loading");
-  const [integrations, setIntegrations] = useState({ ai_available: false, supported_runner_languages: ["python", "javascript"] });
+  const [integrations, setIntegrations] = useState({ ai_available: false });
   const [paymentReadiness, setPaymentReadiness] = useState(null);
   const [cancelPending, setCancelPending] = useState("");
   const navigate = useNavigate();
@@ -79,7 +79,7 @@ export default function PlansPage() {
         const items = normalizePlanCatalogPayload(catalog);
         setPlanCatalog(items);
         setCatalogStatus(hasCompletePlanCatalog(items) ? "live" : "fallback");
-        setIntegrations(catalog.integrations || { ai_available: false, supported_runner_languages: ["python", "javascript"] });
+        setIntegrations(catalog.integrations || { ai_available: false });
         setPaymentReadiness(catalog.payments || null);
       } else {
         setPlanCatalog([]);
@@ -502,7 +502,7 @@ export default function PlansPage() {
           </table>
         </div>
         {catalogStatus !== "live" && <p className="plan-catalog-fallback" role="status">The live plan catalog is unavailable or incomplete, so this table is using CodeLeaf's configured plan defaults. These display values do not grant access; the backend still enforces account entitlements. Refresh the page or check the Render API deployment if this message persists.</p>}
-        <p className="plan-comparison-note">Daily usage windows reset at 00:00 UTC. The execution quota applies only to the configured runtimes ({(integrations.supported_runner_languages || ["python", "javascript"]).join(" and ")}). {integrations.ai_available ? "An AI provider is configured; service availability and daily allowances still apply." : "AI is currently unavailable because the backend has no complete AI provider configuration. No simulated responses are supplied."}</p>
+        <p className="plan-comparison-note">Daily usage windows reset at 00:00 UTC. Eligible server-side code runs count toward the execution quota; the selected language must have an available execution provider. {integrations.ai_available ? "An AI provider is configured; service availability and daily allowances still apply." : "AI is currently unavailable because the backend has no complete AI provider configuration. No simulated responses are supplied."}</p>
       </section>
       {entitlements?.current_plan && (
         <section className="membership-usage-panel panel">

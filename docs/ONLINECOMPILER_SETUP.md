@@ -28,20 +28,37 @@ RUNNER_JDOODLE_FALLBACK_ENABLED=true
 
 The OnlineCompiler setting defaults to disabled until explicitly enabled. The
 backend checks the provider compiler registry, service health, and authenticated
-usage endpoint before advertising Python or JavaScript as available. These checks
-do not run learner code. Compiler identifiers are `python-3.14` and `nodejs-24`.
+usage endpoint before advertising compatible CodeLeaf runtimes as available. These
+checks do not run learner code. The mapping covers every compiler currently listed in the provider catalogue,
+including C, C++, Java, C#, Go, Rust, PHP, Ruby, TypeScript, R, Swift, Dart,
+Kotlin, Bash, PowerShell, SQL/SQLite, and the other documented runtimes. The
+exact language-key-to-compiler mapping is maintained in
+`backend/app/onlinecompiler_client.py`; aliases and special variants such as
+Pandas 2 and C++20 are preserved through provider selection.
 
 ## Provider routing
 
-- Python and JavaScript use OnlineCompiler when its live checks succeed.
-- Other installed languages and database execution continue to use CodeLeaf Runner.
-- Existing JDoodle fallback remains enabled only for its existing supported languages
-  when neither preferred runtime provider can handle that language.
+- Every mapped CodeLeaf language uses OnlineCompiler when the key is configured,
+  the service/usage checks succeed, and the provider's live registry contains the
+  mapped compiler ID.
+- Languages without a compatible OnlineCompiler runtime keep their existing
+  CodeLeaf Runner or JDoodle path. In particular, MySQL, PostgreSQL, MongoDB, Redis,
+  Django/Flask/FastAPI/Express apps, Vue/React framework builds, and framework-specific runtimes are not falsely mapped
+  to a generic compiler.
+- Generic SQL and SQLite workspaces use OnlineCompiler's SQLite 3 runtime;
+  DuckDB has its own `duckdb-1.5` runtime key. MySQL and PostgreSQL remain dedicated
+  database-engine workflows on CodeLeaf Runner or their existing fallback.
+- Existing JDoodle fallback remains available for languages/providers that OnlineCompiler
+  does not support. OnlineCompiler errors are not automatically replayed through JDoodle.
 - A request is not automatically re-executed on another provider after an
   OnlineCompiler timeout or transport failure. This avoids duplicate executions
   when the provider may already have started the submitted code.
 - HTML, CSS, browser JavaScript, and React previews remain in the existing browser
   preview environment; they are not sent to OnlineCompiler as server programs.
+- Framework lesson keys such as Django, Flask, FastAPI, Express, Vue, React, and
+  PyTorch are not treated as plain Python/JavaScript because their packages or
+  framework runtimes are not included in the provider images. They retain the
+  configured Runner/JDoodle path where available.
 
 ## OnlineCompiler limits and Coding Battles
 

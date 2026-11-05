@@ -25,6 +25,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from .config import settings
+from .onlinecompiler_client import ONLINECOMPILER_LANGUAGE_TO_ID
 from .auth_security import require_user, optional_user, user_payload, TOKEN_ALGORITHM
 from .auth_routes import router as auth_router
 from .phase5_routes import router as phase5_router
@@ -3848,7 +3849,9 @@ def list_plans() -> dict[str, Any]:
             "ai_available": bool(
                 settings.ai_api_base_url and settings.ai_api_key and settings.ai_model
             ),
-            "supported_runner_languages": ["python", "javascript"],
+            # Potential compiler coverage, independent of whether a provider key
+            # is configured. Actual live availability is reported by /api/runner/status.
+            "supported_runner_languages": sorted(ONLINECOMPILER_LANGUAGE_TO_ID),
         },
         "items": [
             {

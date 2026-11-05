@@ -286,7 +286,7 @@ class RunnerRouteTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(raised.exception.status_code, 409)
         client_class.assert_not_called()
 
-    async def test_onlinecompiler_is_advertised_only_for_its_live_python_and_javascript_runtimes(self):
+    async def test_onlinecompiler_is_advertised_only_for_its_live_registered_compilers(self):
         live_status = {
             "configured": True,
             "reachable": True,
@@ -305,6 +305,123 @@ class RunnerRouteTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result["providers_by_language"]["javascript"], "onlinecompiler")
         self.assertNotIn("api_key", result)
         self.assertNotIn("TEST", str(result))
+
+    async def test_onlinecompiler_executes_cpp_before_jdoodle_and_runner(self):
+        db = self._prepare_db_for_create()
+        user = SimpleNamespace(id=uuid4())
+        body = routes.RunnerCreateInput(language="cpp", source='#include <iostream>\nint main(){std::cout << "ok";}')
+        usage_reservation = SimpleNamespace(id=uuid4())
+        result = {
+            "provider": "onlinecompiler", "stdout": "ok", "stderr": "", "error": None,
+            "execution_status": "success", "success": True, "exit_code": 0,
+            "execution_ms": 25, "files": [], "files_truncated": False,
+        }
+        with (
+            patch.object(routes, "_load_runner_capabilities", new_callable=AsyncMock, return_value=({"cpp"}, set(), True)),
+            patch.object(routes, "jdoodle_fallback_configured", return_value=True),
+            patch.object(routes, "check_onlinecompiler_capabilities", new_callable=AsyncMock, return_value={"available": True, "supported_languages": ["cpp"]}),
+            patch.object(routes, "effective_plan_id", return_value="full_access"),
+            patch.object(routes, "plan_limits", return_value={"code_executions_per_day": 150}),
+            patch.object(routes, "reserve_daily_usage", return_value=(usage_reservation, False)),
+            patch.object(routes, "finalize_daily_usage") as finalize_usage,
+            patch.object(routes, "run_onlinecompiler_code", new_callable=AsyncMock, return_value=result) as execute_mock,
+            patch.object(routes, "execute_jdoodle", new_callable=AsyncMock) as jdoodle_mock,
+            patch.object(routes, "runner_request_json", new_callable=AsyncMock) as runner_mock,
+        ):
+            response = await routes.create_runner_job(body=body, user=user, db=db)
+
+        saved_row = db.add.call_args.args[0]
+        self.assertEqual(response["job"]["provider"], "onlinecompiler")
+        self.assertEqual(saved_row.result_json["provider"], "onlinecompiler")
+        self.assertTrue(saved_row.external_job_id.startswith("onlinecompiler-"))
+        self.assertEqual(execute_mock.await_args.kwargs["language"], "cpp")
+        jdoodle_mock.assert_not_awaited()
+        runner_mock.assert_not_awaited()
+        self.assertTrue(finalize_usage.call_args.kwargs["success"])
+
+    async def test_onlinecompiler_precedes_runner_for_sqlite_and_includes_setup_sql(self):
+        db = self._prepare_db_for_create()
+        user = SimpleNamespace(id=uuid4())
+        body = routes.RunnerCreateInput(
+            language="sqlite", source="SELECT COUNT(*) FROM learners;",
+            setup_sql="CREATE TABLE learners(id INTEGER); INSERT INTO learners VALUES (1);",
+        )
+        usage_reservation = SimpleNamespace(id=uuid4())
+        result = {
+            "provider": "onlinecompiler", "stdout": "1", "stderr": "", "error": None,
+            "execution_status": "success", "success": True, "exit_code": 0,
+            "execution_ms": 24, "files": [], "files_truncated": False,
+        }
+        with (
+            patch.object(routes, "_load_runner_capabilities", new_callable=AsyncMock, return_value=(set(), {"sqlite"}, True)),
+            patch.object(routes, "check_onlinecompiler_capabilities", new_callable=AsyncMock, return_value={"available": True, "supported_languages": ["sqlite"]}),
+            patch.object(routes, "effective_plan_id", return_value="full_access"),
+            patch.object(routes, "plan_limits", return_value={"code_executions_per_day": 150}),
+            patch.object(routes, "reserve_daily_usage", return_value=(usage_reservation, False)),
+            patch.object(routes, "finalize_daily_usage") as finalize_usage,
+            patch.object(routes, "run_onlinecompiler_code", new_callable=AsyncMock, return_value=result) as execute_mock,
+            patch.object(routes, "runner_request_json", new_callable=AsyncMock) as runner_mock,
+            patch.object(routes, "execute_jdoodle", new_callable=AsyncMock) as jdoodle_mock,
+        ):
+            response = await routes.create_runner_job(body=body, user=user, db=db)
+
+        saved_row = db.add.call_args.args[0]
+        self.assertEqual(response["job"]["provider"], "onlinecompiler")
+        self.assertEqual(saved_row.result_json["provider"], "onlinecompiler")
+        self.assertTrue(saved_row.external_job_id.startswith("onlinecompiler-"))
+        self.assertEqual(execute_mock.await_args.kwargs["language"], "sqlite")
+        self.assertTrue(execute_mock.await_args.kwargs["code"].startswith("CREATE TABLE learners"))
+        runner_mock.assert_not_awaited()
+        jdoodle_mock.assert_not_awaited()
+        self.assertTrue(finalize_usage.call_args.kwargs["success"])
+
+    async def test_onlinecompiler_status_prefers_every_live_codeleaf_compiler_over_jdoodle(self):
+        live_status = {
+            "configured": True, "reachable": True, "available": True,
+            "supported_languages": ["python", "javascript", "cpp", "c", "java", "csharp", "typescript", "data", "pandas", "sql", "sqlite"],
+            "compilers": ["python-3.14", "nodejs-24", "g++-15", "gcc-15", "openjdk-25", "dotnet-csharp-10", "typescript-deno", "duckdb-1.5", "sqlite-3"],
+        }
+        with (
+            patch.object(routes, "_load_runner_capabilities", new_callable=AsyncMock, return_value=({"cpp", "java"}, {"sqlite"}, True)),
+            patch.object(routes, "jdoodle_fallback_configured", return_value=True),
+            patch.object(routes, "get_jdoodle_supported_languages", return_value=["python", "javascript", "cpp", "java", "pandas", "mysql"]),
+            patch.object(routes, "check_onlinecompiler_capabilities", new_callable=AsyncMock, return_value=live_status),
+        ):
+            result = await routes.runner_status()
+        self.assertEqual(result["providers_by_language"]["cpp"], "onlinecompiler")
+        self.assertEqual(result["providers_by_language"]["java"], "onlinecompiler")
+        self.assertEqual(result["providers_by_language"]["pandas"], "onlinecompiler")
+        self.assertEqual(result["providers_by_language"]["sql"], "onlinecompiler")
+        self.assertEqual(result["providers_by_language"]["sqlite"], "onlinecompiler")
+        self.assertEqual(result["providers_by_language"]["mysql"], "jdoodle")
+        self.assertIn("OnlineCompiler", result["message"])
+
+    async def test_original_runtime_alias_is_preserved_for_compiler_variant_selection(self):
+        db = self._prepare_db_for_create()
+        user = SimpleNamespace(id=uuid4())
+        body = routes.RunnerCreateInput(language="pandas", source="import pandas as pd\nprint(pd.__version__)")
+        self.assertEqual(body.language, "pandas")
+        usage_reservation = SimpleNamespace(id=uuid4())
+        result = {
+            "provider": "onlinecompiler", "stdout": "2.3.3", "stderr": "", "error": None,
+            "execution_status": "success", "success": True, "exit_code": 0,
+            "execution_ms": 31, "files": [], "files_truncated": False,
+        }
+        with (
+            patch.object(routes, "_load_runner_capabilities", new_callable=AsyncMock, return_value=(set(), set(), False)),
+            patch.object(routes, "check_onlinecompiler_capabilities", new_callable=AsyncMock, return_value={"available": True, "supported_languages": ["pandas", "python"]}),
+            patch.object(routes, "effective_plan_id", return_value="full_access"),
+            patch.object(routes, "plan_limits", return_value={"code_executions_per_day": 150}),
+            patch.object(routes, "reserve_daily_usage", return_value=(usage_reservation, False)),
+            patch.object(routes, "finalize_daily_usage") as finalize_usage,
+            patch.object(routes, "run_onlinecompiler_code", new_callable=AsyncMock, return_value=result) as execute_mock,
+            patch.object(routes, "execute_jdoodle", new_callable=AsyncMock) as jdoodle_mock,
+        ):
+            response = await routes.create_runner_job(body=body, user=user, db=db)
+        self.assertEqual(response["job"]["provider"], "onlinecompiler")
+        self.assertEqual(execute_mock.await_args.kwargs["language"], "pandas")
+        jdoodle_mock.assert_not_awaited()
+        self.assertTrue(finalize_usage.call_args.kwargs["success"])
 
     async def test_onlinecompiler_executes_python_through_private_adapter(self):
         db = self._prepare_db_for_create()

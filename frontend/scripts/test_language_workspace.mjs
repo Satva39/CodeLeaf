@@ -24,6 +24,27 @@ assert.equal(getLanguageForFilename('values.yml').key, 'yaml');
 assert.equal(getLanguageForFilename('query.mysql').key, 'mysql');
 assert.equal(getLanguageForFilename('query.sqlite').key, 'sqlite');
 assert.equal(getLanguageForFilename('query.mongodb').key, 'mongodb');
+
+// Every OnlineCompiler compiler exposed by CodeLeaf has a selectable file profile.
+const onlineCompilerProfiles = [
+  'python', 'c', 'cpp', 'java', 'csharp', 'fsharp', 'go', 'rust', 'php', 'ruby',
+  'haskell', 'typescript', 'javascript', 'sql', 'duckdb', 'bash', 'fortran',
+  'vbnet', 'kotlin', 'r', 'swift', 'cobol', 'perl', 'julia', 'pascal', 'octave',
+  'nasm', 'lua', 'ocaml', 'clisp', 'erlang', 'elixir', 'prolog', 'd', 'freebasic',
+  'dart', 'clojure', 'groovy', 'scala', 'zig', 'nim', 'crystal', 'ada', 'powershell',
+  'racket', 'objectivec', 'pandas', 'cpp20',
+];
+for (const slug of onlineCompilerProfiles) {
+  const profile = resolveLanguage(slug, slug);
+  assert.equal(profile.key, slug, `${slug} should keep its own compiler profile`);
+  assert.ok(profile.filename, `${slug} should have a default filename`);
+  assert.ok(defaultSourceForLanguage(slug).trim(), `${slug} should have starter code`);
+  const files = starterFiles({ courseSlug: slug, codeLanguage: slug });
+  assert.ok(files.some((file) => file.language === slug), `${slug} starter file should preserve its execution key`);
+}
+assert.equal(resolveLanguage('numpy').key, 'numpy');
+assert.equal(resolveLanguage('scipy').key, 'scipy');
+assert.equal(resolveLanguage('scikit-learn').key, 'scikit-learn');
 assert.match(defaultSourceForLanguage('c'), /#include <stdio\.h>/);
 assert.match(defaultSourceForLanguage('python'), /print\(/);
 

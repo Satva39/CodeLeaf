@@ -64,13 +64,64 @@ class OnlineCompilerAdapterTests(unittest.IsolatedAsyncioTestCase):
         FakeAsyncClient.post_response = None
         FakeAsyncClient.last_request = None
 
-    def test_compiler_mapping_is_restricted_to_python_and_javascript(self):
-        self.assertEqual(client.compiler_for_language("python"), "python-3.14")
-        self.assertEqual(client.compiler_for_language("py"), "python-3.14")
-        self.assertEqual(client.compiler_for_language("javascript"), "nodejs-24")
-        self.assertEqual(client.compiler_for_language("js"), "nodejs-24")
-        self.assertIsNone(client.compiler_for_language("cpp"))
+    def test_compiler_mapping_covers_all_verified_codeleaf_runtimes(self):
+        expected = {
+            "python": "python-3.14", "javascript": "nodejs-24",
+            "typescript": "typescript-deno", "c": "gcc-15", "cpp": "g++-15",
+            "cpp20": "g++-15-cpp20", "java": "openjdk-25",
+            "csharp": "dotnet-csharp-10", "fsharp": "dotnet-fsharp-10",
+            "go": "go-1.26", "rust": "rust-1.93", "php": "php-8.5",
+            "ruby": "ruby-4.0", "haskell": "haskell-9.12", "bash": "bash-5.2",
+            "fortran": "gfortran-15", "vbnet": "dotnet-vbnet-10",
+            "kotlin": "kotlin-2.4", "r": "r-4.6", "swift": "swift-6.4",
+            "cobol": "gnucobol-3.2", "perl": "perl-5.44", "julia": "julia-1.13",
+            "pascal": "fpc-3.2", "octave": "octave-11", "nasm": "nasm-3",
+            "lua": "lua-5.5", "ocaml": "ocaml-5.4", "clisp": "sbcl-2.6",
+            "erlang": "erlang-29", "elixir": "elixir-1.20", "prolog": "swipl-10",
+            "d": "ldc-1.43", "freebasic": "fbc-1.10", "dart": "dart-3.13",
+            "clojure": "clojure-1.12", "groovy": "groovy-6.0", "scala": "scala-3.10",
+            "zig": "zig-0.17", "nim": "nim-2.2", "crystal": "crystal-1.22",
+            "ada": "gnat-15", "powershell": "powershell-7.6", "racket": "racket-9.3",
+            "objectivec": "clang-objc-21", "sql": "sqlite-3", "duckdb": "duckdb-1.5", "sqlite": "sqlite-3",
+        }
+        for language, compiler_id in expected.items():
+            with self.subTest(language=language):
+                self.assertEqual(client.compiler_for_language(language), compiler_id)
+        self.assertEqual(client.compiler_for_language("pandas"), "python-3.14-pandas2")
+        self.assertEqual(client.compiler_for_language("C++"), "g++-15")
+        self.assertEqual(client.compiler_for_language("C++20"), "g++-15-cpp20")
+        self.assertEqual(client.compiler_for_language("c#"), "dotnet-csharp-10")
+        self.assertEqual(client.compiler_for_language("f#"), "dotnet-fsharp-10")
+        self.assertEqual(client.compiler_for_language("Deno"), "typescript-deno")
+        self.assertEqual(client.compiler_for_language("duckdb"), "duckdb-1.5")
+        self.assertEqual(client.compiler_for_language("sql"), "sqlite-3")
+        self.assertEqual(client.compiler_for_language("sqlite3"), "sqlite-3")
+        self.assertIsNone(client.compiler_for_language("mysql"))
+        self.assertIsNone(client.compiler_for_language("postgresql"))
         self.assertIsNone(client.compiler_for_language("html"))
+        self.assertIsNone(client.compiler_for_language("vue"))
+        self.assertIsNone(client.compiler_for_language("django"))
+        self.assertIsNone(client.compiler_for_language("fastapi"))
+        self.assertIsNone(client.compiler_for_language("pytorch"))
+        self.assertIsNone(client.compiler_for_language("numpy"))
+        self.assertIsNone(client.compiler_for_language("scipy"))
+        self.assertIsNone(client.compiler_for_language("scikit-learn"))
+        self.assertIsNone(client.compiler_for_language("micropython"))
+
+    def test_mapping_covers_every_documented_onlinecompiler_compiler_id(self):
+        documented_ids = {
+            "python-3.14", "gcc-15", "g++-15", "openjdk-25", "dotnet-csharp-10",
+            "dotnet-fsharp-10", "go-1.26", "rust-1.93", "php-8.5", "ruby-4.0",
+            "haskell-9.12", "typescript-deno", "nodejs-24", "sqlite-3", "duckdb-1.5",
+            "bash-5.2", "gfortran-15", "dotnet-vbnet-10", "kotlin-2.4", "r-4.6",
+            "swift-6.4", "gnucobol-3.2", "perl-5.44", "julia-1.13", "fpc-3.2",
+            "octave-11", "nasm-3", "lua-5.5", "ocaml-5.4", "sbcl-2.6", "erlang-29",
+            "elixir-1.20", "swipl-10", "ldc-1.43", "fbc-1.10", "dart-3.13",
+            "clojure-1.12", "groovy-6.0", "scala-3.10", "zig-0.17", "nim-2.2",
+            "crystal-1.22", "gnat-15", "powershell-7.6", "racket-9.3", "clang-objc-21",
+            "python-3.14-pandas2", "g++-15-cpp20",
+        }
+        self.assertTrue(documented_ids.issubset(set(client.ONLINECOMPILER_LANGUAGE_TO_ID.values())))
 
     def test_run_result_never_claims_success_from_exit_code_alone(self):
         result = client.normalize_run_result({
@@ -92,7 +143,12 @@ class OnlineCompilerAdapterTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_capability_check_requires_registry_health_and_valid_key(self):
         FakeAsyncClient.get_responses = [
-            FakeResponse(200, [{"id": "python-3.14"}, {"id": "nodejs-24"}]),
+            FakeResponse(200, [
+                {"id": "python-3.14"}, {"id": "nodejs-24"},
+                {"id": "gcc-15"}, {"id": "g++-15"}, {"id": "openjdk-25"},
+                {"id": "dotnet-csharp-10"}, {"id": "typescript-deno"},
+                {"id": "go-1.26"}, {"id": "rust-1.93"}, {"id": "php-8.5"},
+            ]),
             FakeResponse(200, {"status": "ok"}),
             FakeResponse(200, {"remaining": 100}),
         ]
@@ -101,7 +157,7 @@ class OnlineCompilerAdapterTests(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(status["configured"])
         self.assertTrue(status["reachable"])
         self.assertTrue(status["available"])
-        self.assertEqual(set(status["supported_languages"]), {"python", "javascript"})
+        self.assertTrue({"python", "javascript", "c", "cpp", "java", "csharp", "typescript"}.issubset(set(status["supported_languages"])))
         self.assertNotIn("TEST_ONLY_NOT_A_REAL_KEY", str(status))
 
     async def test_invalid_key_does_not_report_available(self):
