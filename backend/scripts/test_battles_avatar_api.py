@@ -68,6 +68,11 @@ async def fake_available_languages() -> set[str]:
     return {"python", "javascript"}
 
 
+async def fake_battle_provider(language: str) -> str:
+    # Keep this legacy Runner-path regression independent of external providers.
+    return "codeleaf-runner"
+
+
 async def fake_run_test_case(*, db, user, language, source_code, stdin, expected_output, idempotency_key):
     # The route must invoke every hidden case; `pass` is accepted, other code is rejected.
     return source_code == "pass", ("Test passed." if source_code == "pass" else "The program output did not match."), True
@@ -77,7 +82,9 @@ def main() -> None:
     Base.metadata.create_all(bind=engine)
     original_available = games_routes._available_battle_languages
     original_test_runner = games_routes._run_test_case
+    original_battle_provider = games_routes._battle_provider_for_language
     games_routes._available_battle_languages = fake_available_languages
+    games_routes._battle_provider_for_language = fake_battle_provider
     games_routes._run_test_case = fake_run_test_case
     user_a = make_user("battle_a")
     user_b = make_user("battle_b")
@@ -139,6 +146,7 @@ def main() -> None:
     finally:
         client_a.close(); client_b.close(); client_c.close()
         games_routes._available_battle_languages = original_available
+        games_routes._battle_provider_for_language = original_battle_provider
         games_routes._run_test_case = original_test_runner
         engine.dispose()
         _TEMP.cleanup()

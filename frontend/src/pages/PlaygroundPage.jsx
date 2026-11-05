@@ -185,10 +185,13 @@ export default function PlaygroundPage() {
     && (outputMode.mode === "terminal" || outputMode.mode === "connected-preview");
   const isReactPreview = outputMode.mode === "react-preview";
   const isBrowserPreview = outputMode.mode === "browser-preview" || isConnectedPreview;
+  const previewEntryFile = files.find((file) => file.name === (outputMode.entryFile || activeFile?.name)) || activeFile;
+  const previewHasContent = Boolean(previewEntryFile?.content?.trim());
+  const emptyBrowserPreview = !isConnectedPreview && (isBrowserPreview || isReactPreview) && !previewHasContent;
   const connectedExecutionFailed = isConnectedPreview && Boolean(runnerResult?.job_id)
     && (runnerResult.status !== "completed" || (runnerResult.exit_code !== undefined && Number(runnerResult.exit_code) !== 0));
   const connectedRunReady = isConnectedPreview && Boolean(connectedOutput);
-  const showPreview = (isBrowserPreview || isReactPreview) && (!isConnectedPreview || connectedRunReady) && !connectedExecutionFailed;
+  const showPreview = (isBrowserPreview || isReactPreview) && (!isConnectedPreview || connectedRunReady) && !connectedExecutionFailed && !emptyBrowserPreview;
   const browserDocument = useMemo(() => createBrowserDocument(files, "codeleaf-playground-output", {
     entryFile: outputMode.entryFile, activeFileName: activeFile?.name, connectedOutput,
   }), [files, refresh, outputMode.entryFile, activeFile?.name, connectedOutput]);
@@ -422,6 +425,21 @@ export default function PlaygroundPage() {
     setRunnerResult(null);
     setConnectedOutput(null);
     setBrowserOutput([]);
+  }
+
+  function insertStarterCode() {
+    if (!activeFile || !activeLanguage) return;
+    const starter = defaultSourceForLanguage(activeLanguage.key);
+    if (!starter) return;
+    setWorkspace((current) => ({
+      ...current,
+      files: current.files.map((file) => file.id === activeFile.id ? { ...file, content: starter } : file),
+    }));
+    setRunnerResult(null);
+    setConnectedOutput(null);
+    setBrowserOutput([]);
+    setRunnerStatus("idle");
+    setRunnerMessage("");
   }
 
   function openNewFileDialog() {
@@ -837,15 +855,30 @@ export default function PlaygroundPage() {
           {activeFile ? <>
             <div className="workspace-editor-label"><span>{activeFile.name}</span><span>{activeLanguage?.label || "Plain text"} · {activeFile.content.length.toLocaleString()} characters</span></div>
             <label htmlFor="workspace-source" className="sr-only">Edit {activeFile.name}</label>
-            <textarea id="workspace-source" className="workspace-source" spellCheck="false" autoCapitalize="off" autoCorrect="off" value={activeFile.content} onChange={(event) => updateActiveContent(event.target.value)} maxLength={100_000} />
+            <textarea
+              id="workspace-source"
+              className="workspace-source"
+              spellCheck="false"
+              autoCapitalize="off"
+              autoCorrect="off"
+              value={activeFile.content}
+              onChange={(event) => updateActiveContent(event.target.value)}
+              maxLength={100_000}
+              placeholder={`This ${activeLanguage?.label || "text"} file is empty. Start typing or insert the starter code.`}
+              aria-describedby={!activeFile.content.trim() ? "workspace-empty-code-help" : undefined}
+            />
+            {!activeFile.content.trim() && <div className="workspace-empty-code-help" id="workspace-empty-code-help">
+              <span>This saved file is empty. Your draft has been preserved.</span>
+              <button type="button" onClick={insertStarterCode}>Insert starter code</button>
+            </div>}
           </> : <div className="workspace-empty-editor"><FilePlus2 size={24} /><h2>No file selected</h2><p>Create a file to start writing.</p><button type="button" className="button button-primary" onClick={openNewFileDialog}>Create file</button></div>}
           <div className="workspace-statusbar"><span><span className="live-dot" /> {runnerStatus.replaceAll("_", " ")}</span><span>Auto-saved in this browser · account save optional</span><span>{languageLabel}</span></div>
         </section>
 
         <section className="workspace-output" aria-label="Run result">
-          <div className="workspace-output-heading"><span>{showPreview ? <Monitor size={15} /> : <TerminalSquare size={15} />} {showPreview ? (isReactPreview ? "React Preview" : "Preview") : "Terminal"}</span><span className={`runner-status runner-status-${runnerStatus}`}>{runnerStatus.replaceAll("_", " ")}</span></div>
+          <div className="workspace-output-heading"><span>{(showPreview || emptyBrowserPreview) ? <Monitor size={15} /> : <TerminalSquare size={15} />} {(showPreview || emptyBrowserPreview) ? (isReactPreview ? "React Preview" : "Preview") : "Terminal"}</span><span className={`runner-status runner-status-${runnerStatus}`}>{runnerStatus.replaceAll("_", " ")}</span></div>
           {isConnectedPreview && !showPreview && !runnerResult?.job_id && <p className="workspace-connected-pending">Run the connected {activeLanguage?.label || "language"} file successfully to start the web preview. No browser preview is shown until the real execution result is available.</p>}
-          {showPreview ? <>
+          {emptyBrowserPreview ? <div className="workspace-output-empty workspace-preview-empty"><Monitor size={24} /><h2>Preview is ready</h2><p>The selected preview file is empty, so there is nothing to render yet. Add HTML or JSX in the editor, or insert its starter code.</p></div> : showPreview ? <>
             <iframe id="playground-preview-frame" key={refresh} title={isReactPreview ? "React application preview" : "Playground preview"} sandbox="allow-scripts" srcDoc={isReactPreview ? reactDocument : browserDocument} />
             {!!browserOutput.length && <div className="workspace-console"><strong>Preview console</strong>{browserOutput.map((entry, index) => <pre key={`${index}-${entry.kind}`} className={`console-${entry.kind}`}>{entry.text}</pre>)}</div>}
             {isConnectedPreview && connectedOutput && <div className="workspace-console workspace-connected-output"><strong>{connectedOutput.language} execution result</strong><pre>{connectedOutput.stdout || "(no stdout)"}</pre>{connectedOutput.stderr && <pre className="console-error">{connectedOutput.stderr}</pre>}</div>}
@@ -853,7 +886,10 @@ export default function PlaygroundPage() {
             <div className="workspace-terminal-toolbar"><strong>Execution result</strong><span>{runnerResult.provider || "CodeLeaf runner"}</span></div>
             <div className="workspace-terminal-stream"><strong>stdout / compiler output</strong><pre>{runnerResult.stdout || "(no standard output or compiler output)"}</pre></div>
             {(runnerResult.stderr || runnerResult.error || runnerResult.message) && <div className="workspace-terminal-stream is-stderr"><strong>stderr / compiler messages</strong><pre>{runnerResult.stderr || runnerResult.error || runnerResult.message}</pre></div>}
-            <div className="workspace-terminal-meta">{runnerResult.exit_code !== undefined && <span>Exit code: {runnerResult.exit_code}</span>}{runnerResult.engine && <span>Database: {runnerResult.engine}</span>}{runnerResult.row_count !== undefined && <span>Rows: {runnerResult.row_count}</span>}{runnerResult.execution_ms !== undefined && <span>Execution: {runnerResult.execution_ms} ms</span>}{runnerResult.cpu_time && <span>CPU: {runnerResult.cpu_time}s</span>}{runnerResult.memory && <span>Memory: {runnerResult.memory} KB</span>}{runnerResult.job_id && <span>Job: {runnerResult.job_id}</span>}</div>
+            {runnerResult.truncated && <p className="workspace-runner-message" role="status">The execution provider truncated the output because it exceeded the display limit.</p>}
+            {runnerResult.files_truncated && <p className="workspace-runner-message" role="status">Some output files were omitted because the provider or CodeLeaf reached its file-size limit.</p>}
+            {Array.isArray(runnerResult.files) && runnerResult.files.some((file) => typeof file?.content_base64 === "string") && <div className="workspace-terminal-files"><strong>Output files</strong><div>{runnerResult.files.filter((file) => typeof file?.content_base64 === "string").map((file) => <a key={file.name} href={`data:${file.mime || "application/octet-stream"};base64,${file.content_base64}`} download={file.name}>{file.name} · {Number(file.size || 0).toLocaleString()} bytes <Download size={12} /></a>)}</div></div>}
+            <div className="workspace-terminal-meta">{runnerResult.execution_status && <span>Execution: {runnerResult.execution_status}</span>}{runnerResult.exit_code !== undefined && <span>Exit code: {runnerResult.exit_code}</span>}{runnerResult.signal && <span>Signal: {runnerResult.signal}</span>}{runnerResult.engine && <span>Database: {runnerResult.engine}</span>}{runnerResult.row_count !== undefined && <span>Rows: {runnerResult.row_count}</span>}{runnerResult.execution_ms !== undefined && runnerResult.execution_ms !== null && <span>Time: {runnerResult.execution_ms} ms</span>}{runnerResult.total_time && <span>Total: {runnerResult.total_time}s</span>}{runnerResult.cpu_time && <span>Run: {runnerResult.cpu_time}s</span>}{runnerResult.memory && <span>Memory: {runnerResult.memory} KB</span>}{runnerResult.job_id && <span>Job: {runnerResult.job_id}</span>}</div>
           </div> : activeFile ? <div className="workspace-terminal workspace-terminal-idle" aria-live="polite"><div className="workspace-terminal-prompt"><span>CODELEAF TERMINAL</span><span>{languageLabel}</span></div><pre>{runnerMessage || (outputMode.reason === "connected-runtime-unavailable" ? "The selected server runtime is not enabled. Choose a language with an available compiler or configure its backend provider." : outputMode.runnerSupported ? "Terminal ready. Select Run file to compile or execute this program. Standard output and compiler/runtime errors will appear here." : `${languageLabel} uses terminal output. This language currently has no execution adapter configured, so the source has not been run.`)}</pre></div> : <div className="workspace-output-empty"><Code2 size={25} /><h2>Your workspace is empty</h2><p>Create a file in Explorer to get started.</p></div>}
           {runnerMessage && <p className="workspace-runner-message" role="status">{runnerMessage}</p>}
           {runnerResult?.job_id && <div className="workspace-output-actions"><button type="button" className="button button-secondary button-small" onClick={checkRunnerStatus} disabled={running}>Check status</button><button type="button" className="button button-secondary button-small" onClick={cancelRunnerJob} disabled={running || FINAL_RUNNER_STATES.has(runnerStatus)}>Cancel</button></div>}

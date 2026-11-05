@@ -57,6 +57,11 @@ class Settings(BaseSettings):
     runner_service_token: str | None = None
     runner_service_timeout_seconds: int = Field(default=8, ge=2, le=30)
     runner_jdoodle_fallback_enabled: bool = True
+    # Optional OnlineCompiler hosted runtime. Its API key is used only by the backend.
+    onlinecompiler_enabled: bool = False
+    onlinecompiler_api_key: str | None = None
+    onlinecompiler_base_url: str = "https://api.onlinecompiler.io"
+    onlinecompiler_timeout_seconds: int = Field(default=65, ge=5, le=75)
     # Portfolio archives remain in PostgreSQL unless Catalyst Stratus is explicitly selected.
     portfolio_storage_provider: str = "database"
     catalyst_stratus_enabled: bool = False

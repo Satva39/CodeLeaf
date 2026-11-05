@@ -17,8 +17,8 @@ assert.match(app, /path="\/battles"\s+element=\{<BattlesPage\s*\/>\}/);
 assert.match(app, /path="\/avatar"\s+element=\{<AvatarStudioPage\s*\/>\}/);
 assert.match(header, /to="\/battles"/);
 assert.match(header, /to="\/avatar"/);
-assert.match(battles, /data\.runner\?\.configured === true && data\.runner\?\.reachable === true/);
-assert.match(battles, /data\.providers_by_language\?\.\[key\] === "codeleaf-runner"/);
+assert.match(battles, /\["onlinecompiler", "codeleaf-runner"\]\.includes\(data\.providers_by_language\?\.\[key\]\)/);
+assert.match(battles, /no execution provider has confirmed those runtimes/);
 assert.match(battles, /\/api\/battles\/matchmake/);
 assert.match(battles, /\/api\/battles\/\$\{battle\.id\}\/submit/);
 assert.match(battles, /\/api\/me\/battles\/current/);
@@ -34,6 +34,6 @@ assert.match(reward, /NEW REWARD UNLOCKED/);
 assert.match(lesson, /<AchievementRewardNotice/);
 assert.match(exercise, /<AchievementRewardNotice/);
 
-console.log("PASS Coding Battles routes, Runner ownership, matchmaking, submission, and refresh contracts.");
+console.log("PASS Coding Battles routes, provider-aware runtime status, matchmaking, submission, and refresh contracts.");
 console.log("PASS Dog Avatar routes, persistent equipment, background catalog, and unique live SVG appearance.");
 console.log("PASS Achievement reward notifications are wired into lesson and exercise completion flows.");

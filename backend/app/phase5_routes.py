@@ -53,6 +53,12 @@ from .runner_client import (
     runner_request_json,
     runner_service_configured,
 )
+from .onlinecompiler_client import (
+    OnlineCompilerError,
+    check_onlinecompiler_capabilities,
+    compiler_for_language,
+    run_code_sync as run_onlinecompiler_code,
+)
 from .db import SessionLocal, get_db
 from .models import (
     AuditLog,
@@ -2713,18 +2719,35 @@ async def _load_runner_capabilities() -> tuple[set[str], set[str], bool]:
 
 @router.get("/api/runner/status")
 async def runner_status() -> dict[str, Any]:
-    """Report only languages and database engines backed by a live provider."""
+    """Report only languages backed by a live, server-side execution provider."""
     runner_languages, runner_engines, runner_reachable = await _load_runner_capabilities()
     fallback_configured = jdoodle_fallback_configured()
     jdoodle_languages = set(get_jdoodle_supported_languages()) if fallback_configured else set()
+    online_status = await check_onlinecompiler_capabilities()
+    online_languages = set(online_status.get("supported_languages", [])) if online_status.get("available") else set()
 
-    supported = set(runner_languages) | set(runner_engines) | jdoodle_languages
+    supported = set(runner_languages) | set(runner_engines) | jdoodle_languages | online_languages
     providers: dict[str, str] = {key: "jdoodle" for key in jdoodle_languages}
     for key in runner_languages | runner_engines:
         providers[key] = "codeleaf-runner"
+    # OnlineCompiler is the preferred provider for these runtimes when its live
+    # registry and health check both succeed; no fallback is attempted after a run.
+    for key in online_languages:
+        providers[key] = "onlinecompiler"
 
     runner_has_capabilities = bool(runner_languages or runner_engines)
-    if runner_has_capabilities and fallback_configured:
+    has_other_provider = runner_has_capabilities or fallback_configured
+    if online_languages and has_other_provider:
+        provider = "hybrid"
+        message = (
+            "OnlineCompiler is preferred for Python and JavaScript. CodeLeaf Runner "
+            "continues to provide other installed runtimes and database engines; "
+            "JDoodle remains an explicit fallback for its supported languages."
+        )
+    elif online_languages:
+        provider = "onlinecompiler"
+        message = "OnlineCompiler is available for Python and JavaScript. Other languages require another installed provider."
+    elif runner_has_capabilities and fallback_configured:
         provider = "hybrid"
         message = (
             "CodeLeaf Runner is preferred for installed runtimes and available database engines. "
@@ -2755,6 +2778,13 @@ async def runner_status() -> dict[str, Any]:
             "available_language_count": len(runner_languages),
             "available_database_engine_count": len(runner_engines),
         },
+        "onlinecompiler": {
+            "configured": bool(online_status.get("configured")),
+            "reachable": bool(online_status.get("reachable")),
+            "available": bool(online_status.get("available")),
+            "supported_languages": sorted(online_languages),
+            "compilers": online_status.get("compilers", []),
+        },
         "jdoodle_fallback_enabled": fallback_configured,
         "message": message,
     }
@@ -2768,6 +2798,12 @@ async def create_runner_job(
 ) -> dict[str, Any]:
     runner_languages, runner_engines, runner_reachable = await _load_runner_capabilities()
     language = _canonical_runner_key(body.language)
+    online_status = await check_onlinecompiler_capabilities()
+    use_onlinecompiler = bool(
+        online_status.get("available")
+        and language in set(online_status.get("supported_languages", []))
+        and compiler_for_language(language)
+    )
     runner_job_type: str | None = None
     if language in RUNNER_DATABASE_ENGINE_KEYS and language in runner_engines:
         runner_job_type = "database"
@@ -2781,7 +2817,7 @@ async def create_runner_job(
         and is_jdoodle_language_supported(body.language)
     )
 
-    if runner_job_type is None and not use_jdoodle:
+    if not use_onlinecompiler and runner_job_type is None and not use_jdoodle:
         if runner_service_configured() and not runner_reachable:
             detail = "The isolated Runner is currently unavailable and no JDoodle fallback can run this language. No code was executed."
         else:
@@ -2809,6 +2845,7 @@ async def create_runner_job(
                     "language": previous.language,
                     "status": previous.status,
                     "created_at": previous.created_at.isoformat(),
+                    "provider": (previous.result_json or {}).get("provider") if isinstance(previous.result_json, dict) else None,
                 }
             }
 
@@ -2885,7 +2922,39 @@ async def create_runner_job(
         )
 
     try:
-        if runner_job_type == "database":
+        if use_onlinecompiler:
+            if body.args:
+                raise HTTPException(status_code=422, detail="OnlineCompiler does not accept command-line arguments for this execution mode.")
+            if body.source is not None:
+                online_source = body.source
+                online_files = [
+                    {"name": item.name, "content": item.content}
+                    for item in (body.files or [])
+                ]
+            elif body.files:
+                # The Playground orders the active source file first, followed by
+                # companion project files. OnlineCompiler expects source in `code`.
+                online_source = body.files[0].content
+                online_files = [
+                    {"name": item.name, "content": item.content}
+                    for item in body.files[1:]
+                ]
+            else:
+                raise HTTPException(status_code=422, detail="Provide source code or a source file before running this program.")
+            online_result = await run_onlinecompiler_code(
+                language=language,
+                code=online_source,
+                stdin=body.stdin,
+                files=online_files,
+                time_limit=10,
+            )
+            external_id = f"onlinecompiler-{uuid4().hex}"
+            job_status = "completed"
+            saved_result = {
+                "provider": "onlinecompiler",
+                "result": online_result,
+            }
+        elif runner_job_type == "database":
             runner_payload = {
                 "engine": language,
                 "query": body.source,
@@ -2974,6 +3043,18 @@ async def create_runner_job(
             status_code=status_code,
             detail="The isolated execution service could not accept this job. Your daily allowance was not consumed.",
         ) from exc
+    except OnlineCompilerError as exc:
+        finalize_daily_usage(db, reservation.id, success=False)
+        if exc.status_code == 429:
+            status_code = 429
+            detail = "OnlineCompiler is busy or its usage limit has been reached. No retry was attempted; check your provider usage and try again later."
+        elif exc.status_code == 400:
+            status_code = 422
+            detail = "OnlineCompiler rejected the execution request. Check the selected language and source files."
+        else:
+            status_code = 503
+            detail = "OnlineCompiler could not complete the request. No other provider was used for this submission."
+        raise HTTPException(status_code=status_code, detail=detail) from exc
     except httpx.HTTPError as exc:
         finalize_daily_usage(db, reservation.id, success=False)
         raise HTTPException(
@@ -3034,6 +3115,20 @@ async def get_runner_job(
                 "status": row.status,
                 "result": result,
                 "provider": "jdoodle",
+            }
+        }
+
+    if metadata.get("provider") == "onlinecompiler":
+        result = metadata.get("result")
+        if not isinstance(result, dict):
+            result = {}
+        return {
+            "job": {
+                "id": str(row.id),
+                "language": row.language,
+                "status": row.status,
+                "result": result,
+                "provider": "onlinecompiler",
             }
         }
 
@@ -3118,6 +3213,12 @@ async def cancel_runner_job(
         raise HTTPException(
             status_code=409,
             detail="JDoodle executions complete immediately and cannot be cancelled.",
+        )
+
+    if metadata.get("provider") == "onlinecompiler":
+        raise HTTPException(
+            status_code=409,
+            detail="OnlineCompiler executions complete synchronously and cannot be cancelled.",
         )
 
     job_type = metadata.get("job_type") if metadata.get("provider") == "codeleaf-runner" else "code"

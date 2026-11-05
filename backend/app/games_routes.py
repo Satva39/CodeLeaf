@@ -43,6 +43,11 @@ from .plan_entitlements import (
     reserve_daily_usage,
 )
 from .runner_client import RunnerServiceError, runner_request_json, runner_service_configured
+from .onlinecompiler_client import (
+    OnlineCompilerError,
+    check_onlinecompiler_capabilities,
+    run_tests as run_onlinecompiler_tests,
+)
 
 router = APIRouter()
 
@@ -180,21 +185,152 @@ def _normalize_output(value: Any) -> str:
     return str(value or "").replace("\r\n", "\n").replace("\r", "\n").strip()
 
 
-async def _available_battle_languages() -> set[str]:
+async def _runner_battle_languages() -> set[str]:
     if not runner_service_configured():
-        raise HTTPException(status_code=503, detail="Coding Battles require the configured isolated CodeLeaf Runner.")
+        return set()
     try:
         payload = await runner_request_json("GET", "/v1/languages")
-    except RunnerServiceError as exc:
-        raise HTTPException(status_code=503, detail="The isolated Runner language catalogue is unavailable. No code was executed.") from exc
+    except RunnerServiceError:
+        return set()
     rows = payload.get("languages")
     if not isinstance(rows, list):
-        raise HTTPException(status_code=503, detail="The Runner returned an invalid language catalogue.")
+        return set()
     return {
         str(row.get("key", "")).strip().lower()
         for row in rows
         if isinstance(row, dict) and row.get("available") is True
     }
+
+
+async def _battle_provider_for_language(language: str) -> str | None:
+    """Prefer a live OnlineCompiler runtime; retain CodeLeaf Runner as fallback."""
+    online_status = await check_onlinecompiler_capabilities()
+    if online_status.get("available") and language in set(online_status.get("supported_languages", [])):
+        return "onlinecompiler"
+    if language in await _runner_battle_languages():
+        return "codeleaf-runner"
+    return None
+
+
+async def _available_battle_languages() -> set[str]:
+    online_status = await check_onlinecompiler_capabilities()
+    supported = set(online_status.get("supported_languages", [])) if online_status.get("available") else set()
+    supported.update((await _runner_battle_languages()).intersection({"python", "javascript"}))
+    if not supported:
+        raise HTTPException(
+            status_code=503,
+            detail="Python and JavaScript battles are unavailable because no execution provider has confirmed those runtimes. No code was executed.",
+        )
+    return supported
+
+
+async def _run_onlinecompiler_battle_tests(
+    *, db: Session, user: User, language: str, source_code: str,
+    tests: list[dict[str, Any]], idempotency_key: str,
+) -> tuple[bool, str, bool, int, int]:
+    """Run a complete visible/hidden test group; only a safe verdict leaves this API.
+
+    Each test is reserved against CodeLeaf's own daily quota because OnlineCompiler
+    charges one provider run per test, even when all tests are sent in one request.
+    """
+    if not 1 <= len(tests) <= 8:
+        return False, "This evaluation exceeds the provider's supported test count.", False, 0, len(tests)
+    plan_id = effective_plan_id(db, user.id)
+    allowance = int(plan_limits(plan_id)["code_executions_per_day"])
+    reservations = []
+    try:
+        for index in range(len(tests)):
+            reservation, duplicate = reserve_daily_usage(
+                db,
+                user,
+                metric="code_execution",
+                allowance=allowance,
+                idempotency_key=f"{idempotency_key}:case:{index + 1}",
+            )
+            if duplicate:
+                for current in reservations:
+                    finalize_daily_usage(db, current.id, success=False, commit=False)
+                db.commit()
+                return False, "This evaluation request was already processed. Please start a new attempt.", False, 0, len(tests)
+            reservations.append(reservation)
+    except HTTPException:
+        for current in reservations:
+            finalize_daily_usage(db, current.id, success=False, commit=False)
+        db.commit()
+        raise
+
+    try:
+        result = await run_onlinecompiler_tests(
+            language=language,
+            code=source_code,
+            tests=[
+                {
+                    "input": str(test.get("input", "")),
+                    "expected_output": str(test.get("output", "")),
+                    "hidden": bool(test.get("hidden", True)),
+                }
+                for test in tests
+            ],
+            checker="trim",
+            time_limit=2,
+            stop_on_failure=False,
+            idempotency_key=idempotency_key,
+        )
+    except OnlineCompilerError as exc:
+        for current in reservations:
+            finalize_daily_usage(db, current.id, success=False, commit=False)
+        db.commit()
+        if exc.status_code == 429:
+            return False, "OnlineCompiler is busy or its usage limit has been reached. No automatic retry was attempted.", False, 0, len(tests)
+        if exc.status_code == 400:
+            return False, "OnlineCompiler rejected the test evaluation request. No victory or reward was granted.", False, 0, len(tests)
+        return False, "OnlineCompiler could not complete the test evaluation. No automatic retry was attempted.", False, 0, len(tests)
+
+    raw_tests = result.get("tests") if isinstance(result.get("tests"), list) else []
+    verdict = str(result.get("verdict") or "").lower()
+    # A `skipped` test did not start and is not charged by the provider. Every
+    # other returned test consumed a run, including a valid wrong-answer verdict.
+    for index, current in enumerate(reservations):
+        row = raw_tests[index] if index < len(raw_tests) and isinstance(raw_tests[index], dict) else None
+        did_run = bool(row and str(row.get("verdict") or "").lower() != "skipped")
+        finalize_daily_usage(db, current.id, success=did_run, commit=False)
+    db.commit()
+
+    valid_test_rows = len(raw_tests) == len(tests) and all(
+        isinstance(row, dict)
+        and row.get("hidden") is bool(test.get("hidden", True))
+        and isinstance(row.get("verdict"), str)
+        for row, test in zip(raw_tests, tests)
+    )
+    passed_count = sum(
+        1 for row in raw_tests
+        if isinstance(row, dict) and str(row.get("verdict") or "").lower() == "accepted"
+    )
+    # `incomplete`, skipped and internal-error verdicts mean the provider did not
+    # finish a trustworthy evaluation. They are not wrong answers and cannot win.
+    provider_accepted = bool(
+        valid_test_rows
+        and verdict not in {"", "incomplete", "internal_error"}
+        and all(str(row.get("verdict") or "").lower() not in {"skipped", "internal_error"} for row in raw_tests)
+    )
+    try:
+        counts_match = int(result.get("passed", -1)) == len(tests) and int(result.get("total", -1)) == len(tests)
+    except (TypeError, ValueError):
+        counts_match = False
+    passed = bool(
+        provider_accepted
+        and verdict == "accepted"
+        and passed_count == len(tests)
+        and counts_match
+        and all(str(row.get("verdict") or "").lower() == "accepted" for row in raw_tests)
+    )
+    if passed:
+        message = "All required tests passed."
+    elif not provider_accepted:
+        message = "The provider did not complete every test. This is not counted as an incorrect solution."
+    else:
+        message = "The solution did not pass all required tests."
+    return passed, message, provider_accepted, passed_count, len(tests)
 
 
 async def _run_test_case(
@@ -472,12 +608,30 @@ async def run_battle_sample(
         raise HTTPException(status_code=409, detail="This battle has expired.")
     challenge = CHALLENGE_BY_ID[battle.challenge_id]
     test = challenge["samples"][0]
-    passed, message, provider_accepted = await _run_test_case(
-        db=db, user=user, language=battle.language, source_code=body.source_code,
-        stdin=test["input"], expected_output=test["output"],
-        idempotency_key=f"battle-run:{battle.id}:{user.id}:{body.request_key}",
-    )
-    return {"passed_sample": passed, "message": message, "provider_accepted": provider_accepted}
+    provider = await _battle_provider_for_language(battle.language)
+    if provider == "onlinecompiler":
+        passed, message, provider_accepted, _, _ = await _run_onlinecompiler_battle_tests(
+            db=db,
+            user=user,
+            language=battle.language,
+            source_code=body.source_code,
+            tests=[{"input": test["input"], "output": test["output"], "hidden": False}],
+            idempotency_key=f"battle-run:{battle.id}:{user.id}:{body.request_key}",
+        )
+    elif provider == "codeleaf-runner":
+        passed, message, provider_accepted = await _run_test_case(
+            db=db, user=user, language=battle.language, source_code=body.source_code,
+            stdin=test["input"], expected_output=test["output"],
+            idempotency_key=f"battle-run:{battle.id}:{user.id}:{body.request_key}",
+        )
+    else:
+        passed, message, provider_accepted = False, "No live provider is available for this battle language. No code was executed.", False
+    return {
+        "passed_sample": passed,
+        "message": message,
+        "provider_accepted": provider_accepted,
+        "provider": provider,
+    }
 
 
 @router.post("/api/battles/{battle_id}/submit")
@@ -528,29 +682,66 @@ async def submit_battle_solution(
     challenge = CHALLENGE_BY_ID[battle.challenge_id]
     test_results: list[dict[str, Any]] = []
     provider_failure = False
-    for index, test in enumerate(challenge["hidden"], start=1):
+    provider = await _battle_provider_for_language(battle.language)
+    if provider == "onlinecompiler":
         try:
-            passed, message, accepted = await _run_test_case(
-                db=db, user=user, language=battle.language, source_code=body.source_code,
-                stdin=test["input"], expected_output=test["output"],
-                idempotency_key=f"battle-submit:{battle.id}:{submission.id}:{index}",
+            all_passed, message, accepted, passed_count, total_count = await _run_onlinecompiler_battle_tests(
+                db=db,
+                user=user,
+                language=battle.language,
+                source_code=body.source_code,
+                tests=[
+                    {"input": test["input"], "output": test["output"], "hidden": True}
+                    for test in challenge["hidden"]
+                ],
+                idempotency_key=f"battle-submit:{battle.id}:{submission.id}",
             )
+            test_results = [
+                {"test": index, "passed": index <= passed_count}
+                for index in range(1, total_count + 1)
+            ]
+            provider_failure = not accepted
+            # The helper only reports accepted when every test has a valid verdict.
+            if all_passed and accepted:
+                test_results = [{"test": index, "passed": True} for index in range(1, total_count + 1)]
+            if provider_failure:
+                message = message or "The provider did not complete evaluation."
         except HTTPException as exc:
             provider_failure = True
             message = str(exc.detail)[:240]
-            passed, accepted = False, False
-        test_results.append({"test": index, "passed": passed, "message": message})
-        if not accepted:
-            provider_failure = True
-        if not passed:
-            break
+            test_results = []
+        if provider_failure:
+            submission.result_summary = {
+                "message": "The execution provider could not complete the hidden-test evaluation. This is not counted as an incorrect solution.",
+                "tests_completed": sum(1 for row in test_results if row.get("passed")),
+            }
+    elif provider == "codeleaf-runner":
+        for index, test in enumerate(challenge["hidden"], start=1):
+            try:
+                passed, message, accepted = await _run_test_case(
+                    db=db, user=user, language=battle.language, source_code=body.source_code,
+                    stdin=test["input"], expected_output=test["output"],
+                    idempotency_key=f"battle-submit:{battle.id}:{submission.id}:{index}",
+                )
+            except HTTPException as exc:
+                provider_failure = True
+                message = str(exc.detail)[:240]
+                passed, accepted = False, False
+            test_results.append({"test": index, "passed": passed, "message": message})
+            if not accepted:
+                provider_failure = True
+            if not passed:
+                break
+    else:
+        provider_failure = True
+        message = "No live execution provider is available. No code was executed."
 
     submission = db.get(BattleSubmission, submission.id)
     submission.evaluated_at = utc_now()
     submission.passed = bool(test_results) and len(test_results) == len(challenge["hidden"]) and all(row["passed"] for row in test_results)
     if provider_failure:
         submission.status = "failed"
-        submission.result_summary = {"message": "The isolated Runner could not complete evaluation. This is not counted as an incorrect solution.", "tests_completed": sum(1 for row in test_results if row["passed"])}
+        submission.result_summary = {"message": "The configured execution provider could not complete evaluation. This is not counted as an incorrect solution.", "tests_completed": sum(1 for row in test_results if row["passed"])}
     elif submission.passed:
         submission.status = "accepted"
         submission.result_summary = {"message": "All hidden tests passed.", "tests_passed": len(test_results)}
