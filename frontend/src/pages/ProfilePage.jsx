@@ -5,9 +5,13 @@ import {
   Activity,
   ArrowRight,
   ChevronRight,
+  Copy,
   Crown,
   ExternalLink,
   Flame,
+  Globe2,
+  LockKeyhole,
+  ShieldCheck,
   LogOut,
   Settings,
   Zap,
@@ -45,6 +49,16 @@ export default function ProfilePage() {
   const [saved, setSaved] = useState(false);
   const [accountMode, setAccountMode] = useState("loading");
   const [profileReload, setProfileReload] = useState(0);
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [publicProfileSettings, setPublicProfileSettings] = useState({
+    is_public: false, show_xp: false, show_streak: false, show_certificates: false,
+    show_achievements: false, show_progress: false,
+  });
+  const [publicProfileMode, setPublicProfileMode] = useState("idle");
+  const [publicProfileBusy, setPublicProfileBusy] = useState(false);
+  const [publicProfileFeedback, setPublicProfileFeedback] = useState("");
+  const [publicProfileError, setPublicProfileError] = useState("");
+  const [publicProfileReload, setPublicProfileReload] = useState(0);
   const [feedback, setFeedback] = useState("");
   const [saveError, setSaveError] = useState("");
   const [saving, setSaving] = useState(false);
@@ -75,6 +89,7 @@ export default function ProfilePage() {
         }
         const user = data.user;
         setAccountEmail(user.email || "");
+        setEmailVerified(user.email_verified === true);
         const next = {
           ...getProfile(),
           nickname: user.display_name || "Learner",
@@ -98,6 +113,35 @@ export default function ProfilePage() {
       });
     return () => { mounted = false; };
   }, [profileReload]);
+
+  useEffect(() => {
+    if (accountMode !== "remote") return undefined;
+    let mounted = true;
+    setPublicProfileMode("loading");
+    setPublicProfileError("");
+    apiGetJson(`${API_BASE}/api/me/public-profile`, { credentials: "include", ttlMs: 0, timeoutMs: 8_000 })
+      .then((payload) => {
+        if (!mounted) return;
+        const settings = payload?.settings;
+        if (!settings || typeof settings !== "object") throw new Error("Public-profile settings were not returned by the server.");
+        setPublicProfileSettings({
+          is_public: settings.is_public === true,
+          show_xp: settings.show_xp === true,
+          show_streak: settings.show_streak === true,
+          show_certificates: settings.show_certificates === true,
+          show_achievements: settings.show_achievements === true,
+          show_progress: settings.show_progress === true,
+        });
+        setEmailVerified(payload.email_verified === true);
+        setPublicProfileMode("ready");
+      })
+      .catch((error) => {
+        if (!mounted) return;
+        setPublicProfileMode("unavailable");
+        setPublicProfileError(error?.message || "Public-profile settings could not be loaded.");
+      });
+    return () => { mounted = false; };
+  }, [accountMode, publicProfileReload]);
 
   useEffect(() => {
     if (accountMode !== "remote") return undefined;
@@ -162,6 +206,64 @@ export default function ProfilePage() {
       setPreferencesError(error?.message || "Learning preferences could not be saved. Please try again.");
     } finally {
       setPreferencesSaving(false);
+    }
+  };
+
+  const savePublicProfileSettings = async (patch) => {
+    if (accountMode !== "remote" || publicProfileBusy) return;
+    setPublicProfileBusy(true);
+    setPublicProfileError("");
+    setPublicProfileFeedback("");
+    try {
+      const response = await apiFetch(`${API_BASE}/api/me/public-profile`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(patch),
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.detail || "Public-profile settings could not be saved.");
+      const settings = payload.settings || {};
+      setPublicProfileSettings({
+        is_public: settings.is_public === true,
+        show_xp: settings.show_xp === true,
+        show_streak: settings.show_streak === true,
+        show_certificates: settings.show_certificates === true,
+        show_achievements: settings.show_achievements === true,
+        show_progress: settings.show_progress === true,
+      });
+      setEmailVerified(payload.email_verified === true);
+      setPublicProfileMode("ready");
+      setPublicProfileFeedback(settings.is_public ? "Your public profile is live." : "Your public profile is private.");
+      invalidateApiCache("/api/me/public-profile");
+    } catch (error) {
+      setPublicProfileError(error?.message || "Public-profile settings could not be saved.");
+    } finally {
+      setPublicProfileBusy(false);
+    }
+  };
+
+  const copyPublicProfileLink = async (url) => {
+    if (!url) return;
+    setPublicProfileError("");
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        const input = document.createElement("textarea");
+        input.value = url;
+        input.setAttribute("readonly", "true");
+        input.style.position = "fixed";
+        input.style.opacity = "0";
+        document.body.appendChild(input);
+        input.select();
+        const copied = document.execCommand("copy");
+        input.remove();
+        if (!copied) throw new Error("Clipboard access is unavailable in this browser.");
+      }
+      setPublicProfileFeedback("Public profile link copied.");
+    } catch (error) {
+      setPublicProfileError(error?.message || "The link could not be copied. Select the URL and copy it manually.");
     }
   };
 
@@ -324,6 +426,19 @@ export default function ProfilePage() {
     setEditingProfile(false);
   };
 
+  const publicUsername = String(handle || "").replace(/^@/, "").trim().toLowerCase();
+  const validPublicUsername = /^[a-z0-9_]{3,40}$/.test(publicUsername);
+  const publicProfileUrl = accountMode === "remote" && validPublicUsername
+    ? `${window.location.origin}/u/${encodeURIComponent(publicUsername)}`
+    : "";
+  const saveVisibilitySettings = () => savePublicProfileSettings({
+    show_xp: publicProfileSettings.show_xp,
+    show_streak: publicProfileSettings.show_streak,
+    show_certificates: publicProfileSettings.show_certificates,
+    show_achievements: publicProfileSettings.show_achievements,
+    show_progress: publicProfileSettings.show_progress,
+  });
+
   return (
     <PageShell>
       <div className="profile-layout">
@@ -338,10 +453,13 @@ export default function ProfilePage() {
                 <span className="pill pill-cyan">PATHFINDER</span>
               </div>
               <p>{profile.handle || "@learner"} · Learning profile</p>
-              <span className="profile-public-link">
-                <ExternalLink size={13} /> Public profile link will appear here
-                when enabled
-              </span>
+              {publicProfileUrl ? (
+                <a className="profile-public-link" href={publicProfileUrl} target="_blank" rel="noreferrer">
+                  <ExternalLink size={13} /> {publicProfileUrl}
+                </a>
+              ) : (
+                <span className="profile-public-link">{accountMode === "remote" ? "Choose a valid username to create your profile link." : "Sign in to view your public profile link."}</span>
+              )}
             </div>
             <button
               type="button"
@@ -361,6 +479,58 @@ export default function ProfilePage() {
           </p>}
           {feedback && <p className="profile-save-note" role="status">{feedback}</p>}
           {saveError && <p className="profile-save-error" role="alert">{saveError}</p>}
+          <section className="profile-section profile-public-settings-card" aria-labelledby="public-profile-heading">
+            <div className="profile-public-settings-heading">
+              <span><Globe2 size={17} /></span>
+              <div><div className="eyebrow">SHARE YOUR LEARNING JOURNEY</div><h2 id="public-profile-heading">Public profile</h2><p>Your profile link stays visible even while the page is private.</p></div>
+              <span className={`profile-public-status ${publicProfileSettings.is_public ? "is-live" : "is-private"}`}>
+                {publicProfileSettings.is_public ? <ShieldCheck size={13} /> : <LockKeyhole size={13} />}
+                {publicProfileSettings.is_public ? "Live" : "Private"}
+              </span>
+            </div>
+            {publicProfileUrl ? (
+              <div className="profile-public-url-row">
+                <input aria-label="Public profile URL" value={publicProfileUrl} readOnly onFocus={(event) => event.target.select()} />
+                <button type="button" className="button button-secondary button-small" onClick={() => copyPublicProfileLink(publicProfileUrl)}><Copy size={13} /> Copy link</button>
+                <a className="button button-secondary button-small" href={publicProfileUrl} target="_blank" rel="noreferrer"><ExternalLink size={13} /> Open</a>
+              </div>
+            ) : (
+              <p className="profile-public-settings-note">{accountMode === "remote" ? "A public URL will be available after you set a username with 3–40 letters, numbers or underscores in Edit profile." : "Sign in to manage publication settings and view your account's public URL."}</p>
+            )}
+            {publicProfileMode === "loading" && <p className="profile-public-settings-note" role="status">Loading your publication settings…</p>}
+            {publicProfileMode === "unavailable" && <p className="profile-public-settings-error" role="alert">{publicProfileError} <button type="button" className="text-link" onClick={() => setPublicProfileReload((value) => value + 1)}>Retry</button></p>}
+            {publicProfileMode === "ready" && (
+              <>
+                <div className="profile-public-control-row">
+                  <div><strong>{publicProfileSettings.is_public ? "Your public profile is live." : "Your public profile is currently private."}</strong><small>{publicProfileSettings.is_public ? "Anyone with your link can see only the sections you enable below." : "Only you can see your account profile. Publishing is optional."}</small></div>
+                  <button type="button" className={`button ${publicProfileSettings.is_public ? "button-secondary" : "button-primary"} button-small`} disabled={publicProfileBusy || !validPublicUsername} onClick={() => savePublicProfileSettings({ is_public: !publicProfileSettings.is_public })}>
+                    {publicProfileBusy ? "Saving…" : publicProfileSettings.is_public ? "Make profile private" : "Publish profile"}
+                  </button>
+                </div>
+                {!emailVerified && !publicProfileSettings.is_public && <p className="profile-public-settings-note">Verify your email address before publishing. <Link to="/verify-email">Open email verification</Link>.</p>}
+                <div className="profile-public-visibility">
+                  <div className="eyebrow">SHOW ON YOUR PUBLIC PROFILE</div>
+                  <div className="profile-public-visibility-grid">
+                    {[
+                      ["show_xp", "Total XP", "Display your earned XP."],
+                      ["show_streak", "Current streak", "Display your active learning streak."],
+                      ["show_certificates", "Certificates", "Show issued, non-revoked certificates."],
+                      ["show_achievements", "Achievements", "Show unlocked CodeLeaf achievements."],
+                      ["show_progress", "Learning progress", "Show course-level progress for published courses."],
+                    ].map(([key, label, description]) => <label key={key}>
+                      <input type="checkbox" checked={publicProfileSettings[key]} disabled={publicProfileBusy} onChange={(event) => setPublicProfileSettings((current) => ({ ...current, [key]: event.target.checked }))} />
+                      <span><strong>{label}</strong><small>{description}</small></span>
+                    </label>)}
+                  </div>
+                  <div className="profile-public-visibility-actions">
+                    <button type="button" className="button button-secondary button-small" onClick={saveVisibilitySettings} disabled={publicProfileBusy || publicProfileMode !== "ready"}>Save visibility settings</button>
+                    {publicProfileFeedback && <span role="status">{publicProfileFeedback}</span>}
+                  </div>
+                </div>
+              </>
+            )}
+            {publicProfileError && publicProfileMode !== "unavailable" && <p className="profile-public-settings-error" role="alert">{publicProfileError}</p>}
+          </section>
           {editingProfile && <div className="profile-edit-backdrop" role="presentation">
             <section className="profile-edit-dialog panel" role="dialog" aria-modal="true" aria-labelledby="profile-edit-title">
               <div className="profile-edit-dialog-header">
@@ -371,7 +541,7 @@ export default function ProfilePage() {
                 <label>Display name<input value={name} onChange={(event) => { setName(event.target.value); setSaved(false); }} maxLength={50} /></label>
                 <label>Public handle<input value={handle} onChange={(event) => { setHandle(event.target.value); setSaved(false); }} maxLength={30} /></label>
               </div>
-              <div className="profile-edit-dog-heading"><div className="eyebrow">YOUR PROFILE PICTURE</div><h3>Customize your dog</h3><p>Choose its breed, fur and eye colors, then equip accessories you have unlocked. Changes to the dog are saved to your account as you make them.</p></div>
+              <div className="profile-edit-dog-heading"><div className="eyebrow">YOUR PROFILE PICTURE</div><h3>Customize your dog</h3><p>Choose its breed, fur and eye colors, then preview accessories you own. Save your changes to apply the new dog across CodeLeaf.</p></div>
               {accountMode === "remote" || accountMode === "loading" ? <DogAvatarEditor compact /> : <div className="phase3c-preferences-note" role="status">Sign in again or retry account verification to customize and save your profile dog across devices.</div>}
               {saveError && <p className="profile-save-error" role="alert">{saveError}</p>}
               <div className="profile-edit-dialog-actions">

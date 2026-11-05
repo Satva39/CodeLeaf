@@ -90,6 +90,11 @@ class AvatarEquipmentInput(StrictModel):
     item_id: str | None = Field(default=None, max_length=80)
 
 
+class AvatarProfileSaveInput(StrictModel):
+    appearance: AvatarAppearanceInput
+    equipment: dict[str, str] = Field(default_factory=dict)
+
+
 # Input/output contract challenges are deliberately language-neutral. Each test is
 # executed by the configured isolated Runner; hidden test data never leaves this API.
 CHALLENGES: list[dict[str, Any]] = [
@@ -836,6 +841,53 @@ def get_my_avatar(user: User = Depends(require_user), db: Session = Depends(get_
         "supported_breeds": BREEDS,
         "supported_fur_colors": FUR_COLORS,
         "supported_eye_colors": EYE_COLORS,
+    }
+
+
+@router.put("/api/me/avatar")
+def save_avatar_profile(
+    body: AvatarProfileSaveInput,
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Atomically save appearance and all equipped cosmetics after server ownership checks."""
+    if len(body.equipment) > 16:
+        raise HTTPException(status_code=422, detail="Too many equipped cosmetic slots were submitted.")
+
+    requested_item_ids: set[str] = set()
+    for slot, item_id in body.equipment.items():
+        if not isinstance(slot, str) or not slot or len(slot) > 24:
+            raise HTTPException(status_code=422, detail="An equipment slot is invalid.")
+        item = ITEM_BY_ID.get(item_id)
+        if item is None or item["slot"] != slot:
+            raise HTTPException(status_code=422, detail=f"The selected item does not fit the {slot} slot.")
+        requested_item_ids.add(item_id)
+
+    if "shirt" in body.equipment and "outfit" in body.equipment:
+        raise HTTPException(status_code=422, detail="Choose either a shirt or a full outfit, not both.")
+
+    if requested_item_ids:
+        owned_item_ids = set(db.scalars(
+            select(UserAvatarInventory.item_id).where(
+                UserAvatarInventory.user_id == user.id,
+                UserAvatarInventory.item_id.in_(requested_item_ids),
+            )
+        ).all())
+        missing = requested_item_ids - owned_item_ids
+        if missing:
+            raise HTTPException(status_code=403, detail="One or more selected cosmetics are locked. Unlock them before saving.")
+
+    profile = ensure_avatar_records(db, user.id)
+    profile.breed = body.appearance.breed
+    profile.fur_color = body.appearance.fur_color
+    profile.eye_color = body.appearance.eye_color
+    profile.equipment = dict(body.equipment)
+    profile.updated_at = utc_now()
+    db.commit()
+    return {
+        "ok": True,
+        "appearance": {"breed": profile.breed, "fur_color": profile.fur_color, "eye_color": profile.eye_color},
+        "equipment": profile.equipment or {},
     }
 
 

@@ -5,7 +5,7 @@ from datetime import timedelta
 from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -37,7 +37,7 @@ def register(body: RegisterInput, request: Request, db: Session = Depends(get_db
     username = body.username.strip().lower()
     record_auth_attempt(db, request, "register", email)
     require_email_delivery_configured()
-    exists = db.scalar(select(User.id).where((User.email == email) | (User.username == username)))
+    exists = db.scalar(select(User.id).where((User.email == email) | (func.lower(User.username) == username)))
     # Match the success response to avoid disclosing whether an email/username is registered.
     if exists:
         return {"message": "If registration can be completed, verification instructions will be sent.", "verification_required": True}

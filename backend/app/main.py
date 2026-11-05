@@ -13,6 +13,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from typing import Any
 from uuid import UUID
+from urllib.parse import quote
 
 import httpx
 import jwt
@@ -20,7 +21,7 @@ from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response, 
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
-from sqlalchemy import inspect, select, func, or_, and_, text
+from sqlalchemy import inspect, select, func, or_, and_, case, text
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -34,7 +35,7 @@ from .plan_routes import router as plan_router
 from .games_routes import router as games_router
 from .phase5_service import record_review_result
 from .gamification import (
-    XP_REWARDS, calculate_xp_award, evaluate_achievements, xp_amount_for_json,
+    ACHIEVEMENTS, XP_REWARDS, calculate_xp_award, evaluate_achievements, xp_amount_for_json,
 )
 from .practice_policy import (
     is_supported_practice_exercise,
@@ -78,6 +79,7 @@ from .models import (
     PaymentRecord,
     User,
     UserAvatarProfile,
+    UserAchievement,
     UserActivityDay,
     WebhookEvent,
     XPTransaction,
@@ -89,6 +91,7 @@ from .schemas import (
     PaymentCreateInput,
     PaymentVerifyInput,
     ProgressUpdate,
+    PublicProfileSettingsUpdate,
     RegisterInput,
 )
 
@@ -3949,17 +3952,217 @@ def update_profile(
         user.display_name = body.display_name.strip()
     if body.username is not None:
         candidate = body.username.strip().lower()
+        if not re.fullmatch(r"[A-Za-z0-9_]{3,40}", candidate):
+            raise HTTPException(status_code=422, detail="Username must be 3–40 letters, numbers or underscores.")
         duplicate = db.scalar(
-            select(User).where(User.username == candidate, User.id != user.id)
+            select(User).where(func.lower(User.username) == candidate, User.id != user.id)
         )
         if duplicate:
             raise HTTPException(
                 status_code=409, detail="That username is already in use."
             )
         user.username = candidate
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        if body.username is not None:
+            raise HTTPException(status_code=409, detail="That username is already in use. Choose another username.")
+        raise HTTPException(status_code=409, detail="The profile update conflicts with existing account data.")
     db.refresh(user)
     return {"user": user_payload(user)}
+
+
+_PUBLIC_PROFILE_FIELDS = {
+    "is_public": "public_profile_enabled",
+    "show_xp": "public_show_xp",
+    "show_streak": "public_show_streak",
+    "show_certificates": "public_show_certificates",
+    "show_achievements": "public_show_achievements",
+    "show_progress": "public_show_progress",
+}
+
+
+def _public_profile_settings_payload(user: User) -> dict[str, bool]:
+    return {key: bool(getattr(user, column)) for key, column in _PUBLIC_PROFILE_FIELDS.items()}
+
+
+@app.get("/api/me/public-profile")
+def get_my_public_profile_settings(user: User = Depends(require_user)) -> dict[str, Any]:
+    """Return only the current account's public-profile settings and share path."""
+    return {
+        "username": user.username,
+        "profile_path": f"/u/{quote(user.username, safe='')}",
+        "email_verified": bool(user.is_email_verified),
+        "settings": _public_profile_settings_payload(user),
+    }
+
+
+@app.patch("/api/me/public-profile")
+def update_my_public_profile_settings(
+    body: PublicProfileSettingsUpdate,
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    """Save opt-in publication and per-section visibility preferences."""
+    updates = body.model_dump(exclude_unset=True)
+    if not updates:
+        raise HTTPException(status_code=422, detail="Choose at least one public-profile setting to update.")
+    if any(value is None for value in updates.values()):
+        raise HTTPException(status_code=422, detail="Public-profile settings must be true or false.")
+    if updates.get("is_public") is True:
+        if not user.is_active:
+            raise HTTPException(status_code=403, detail="An inactive account cannot publish a public profile.")
+        if not user.is_email_verified:
+            raise HTTPException(status_code=403, detail="Verify your email address before publishing your public profile. Open email verification, complete the verification link, then try again.")
+    for key, value in updates.items():
+        column = _PUBLIC_PROFILE_FIELDS[key]
+        setattr(user, column, bool(value))
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=409, detail="Your public-profile settings could not be saved. Please retry.")
+    db.refresh(user)
+    return {
+        "settings": _public_profile_settings_payload(user),
+        "email_verified": bool(user.is_email_verified),
+        "username": user.username,
+        "profile_path": f"/u/{quote(user.username, safe='')}",
+    }
+
+
+@app.get("/api/public-profiles/{username}")
+def get_public_profile(username: str, db: Session = Depends(get_db)) -> dict[str, Any]:
+    """Expose an explicitly published profile with only owner-approved fields."""
+    candidate = (username or "").strip()
+    if not re.fullmatch(r"[A-Za-z0-9_]{3,40}", candidate):
+        raise HTTPException(status_code=404, detail="This public profile is unavailable.")
+    owner = db.scalar(
+        select(User).where(
+            func.lower(User.username) == candidate.lower(),
+            User.is_active.is_(True),
+        )
+    )
+    if owner is None or not owner.is_email_verified or not owner.public_profile_enabled:
+        # Keep missing, private, inactive and unverified profiles indistinguishable.
+        raise HTTPException(status_code=404, detail="This public profile is unavailable or private.")
+
+    avatar = db.get(UserAvatarProfile, owner.id)
+    payload: dict[str, Any] = {
+        "display_name": owner.display_name,
+        "username": owner.username,
+        "dog_avatar": {
+            "appearance": {
+                "breed": avatar.breed if avatar else "classic",
+                "fur_color": avatar.fur_color if avatar else "golden",
+                "eye_color": avatar.eye_color if avatar else "brown",
+            },
+            "equipment": dict(avatar.equipment or {}) if avatar and isinstance(avatar.equipment, dict) else {},
+        },
+        "stats": {},
+        "certificates": [],
+        "achievements": [],
+        "progress": [],
+    }
+
+    if owner.public_show_xp:
+        total_xp = db.scalar(
+            select(func.coalesce(func.sum(XPTransaction.awarded_points), 0)).where(
+                XPTransaction.user_id == owner.id
+            )
+        ) or 0
+        payload["stats"]["total_xp"] = xp_amount_for_json(total_xp)
+
+    if owner.public_show_streak:
+        activity_rows = db.execute(
+            select(UserActivityDay.activity_date, UserActivityDay.timezone_name)
+            .where(UserActivityDay.user_id == owner.id)
+            .order_by(UserActivityDay.activity_date.desc())
+            .limit(400)
+        ).all()
+        timezone_name = (activity_rows[0].timezone_name or "UTC") if activity_rows else "UTC"
+        payload["stats"]["current_streak"] = calculate_streaks(
+            [row.activity_date for row in activity_rows], timezone_name
+        )["current_streak"]
+
+    if owner.public_show_certificates:
+        certificate_rows = db.execute(
+            select(Certificate.public_id, Certificate.issued_at, Course.title)
+            .join(Course, Course.id == Certificate.course_id)
+            .where(
+                Certificate.user_id == owner.id,
+                Certificate.revoked_at.is_(None),
+            )
+            .order_by(Certificate.issued_at.desc())
+            .limit(50)
+        ).all()
+        payload["certificates"] = [
+            {
+                "public_id": row.public_id,
+                "course_title": row.title,
+                "issued_at": row.issued_at.isoformat() if row.issued_at else None,
+                "path": f"/certificates/view/{quote(row.public_id, safe='')}",
+            }
+            for row in certificate_rows
+        ]
+
+    if owner.public_show_achievements:
+        achievement_by_id = {item["id"]: item for item in ACHIEVEMENTS}
+        unlocked_rows = db.scalars(
+            select(UserAchievement)
+            .where(UserAchievement.user_id == owner.id)
+            .order_by(UserAchievement.unlocked_at.desc())
+            .limit(60)
+        ).all()
+        payload["achievements"] = [
+            {
+                "id": row.achievement_id,
+                "name": achievement_by_id[row.achievement_id]["name"],
+                "description": achievement_by_id[row.achievement_id]["description"],
+                "unlocked_at": row.unlocked_at.isoformat() if row.unlocked_at else None,
+            }
+            for row in unlocked_rows if row.achievement_id in achievement_by_id
+        ]
+
+    if owner.public_show_progress:
+        completed_expr = func.count(
+            func.distinct(case((LessonProgress.completed.is_(True), Lesson.id), else_=None))
+        ).label("completed_lessons")
+        total_expr = func.count(func.distinct(Lesson.id)).label("total_lessons")
+        progress_rows = db.execute(
+            select(Course.slug, Course.title, completed_expr, total_expr)
+            .join(Module, Module.course_id == Course.id)
+            .join(Lesson, Lesson.module_id == Module.id)
+            .outerjoin(
+                LessonProgress,
+                and_(LessonProgress.lesson_id == Lesson.id, LessonProgress.user_id == owner.id),
+            )
+            .where(Course.published.is_(True), Lesson.is_published.is_(True))
+            .group_by(Course.slug, Course.title)
+            .order_by(completed_expr.desc(), Course.title.asc())
+            .limit(20)
+        ).all()
+        payload["progress"] = [
+            {
+                "course_slug": row.slug,
+                "course_title": row.title,
+                "completed_lessons": int(row.completed_lessons or 0),
+                "total_lessons": int(row.total_lessons or 0),
+                "percent": round((int(row.completed_lessons or 0) / int(row.total_lessons or 1)) * 100),
+            }
+            for row in progress_rows
+        ]
+
+    # No email, account ID, role, private portfolio, token, or internal DB fields are serialized.
+    payload["visibility"] = {
+        "xp": bool(owner.public_show_xp),
+        "streak": bool(owner.public_show_streak),
+        "certificates": bool(owner.public_show_certificates),
+        "achievements": bool(owner.public_show_achievements),
+        "progress": bool(owner.public_show_progress),
+    }
+    return payload
 
 
 @app.post("/api/payments/create")

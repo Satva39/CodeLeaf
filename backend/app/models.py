@@ -49,6 +49,13 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     # Existing accounts are backfilled as verified by migration; new registrations opt out.
     is_email_verified: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    # Public profiles are opt-in. Each public section is independently controlled.
+    public_profile_enabled: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false", nullable=False)
+    public_show_xp: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false", nullable=False)
+    public_show_streak: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false", nullable=False)
+    public_show_certificates: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false", nullable=False)
+    public_show_achievements: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false", nullable=False)
+    public_show_progress: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false", nullable=False)
     # Privileges are assigned through trusted operations, never through profile payloads.
     role: Mapped[str] = mapped_column(String(20), default="learner", nullable=False)
 
@@ -537,6 +544,7 @@ class AuthRateLimitEvent(Base):
     key_hash: Mapped[str] = mapped_column(String(64), index=True, nullable=False)
     occurred_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now_utc, nullable=False)
 
+Index("uq_users_username_lower", func.lower(User.username), unique=True)
 Index("ix_auth_sessions_user_revoked", AuthSession.user_id, AuthSession.revoked_at)
 Index("ix_auth_tokens_user_purpose", AccountActionToken.user_id, AccountActionToken.purpose)
 Index("ix_auth_rate_events_key_time", AuthRateLimitEvent.key_hash, AuthRateLimitEvent.occurred_at)

@@ -187,3 +187,62 @@
 .battle-leave-active:hover { color:#fb7185; border-color:rgba(248,113,113,.35); }
 .battle-player-icon { overflow:hidden; }
 .battle-player-icon .dog-avatar { width:46px; height:46px; object-fit:contain; }
+
+/* Saved-preview wardrobe: cards show the cosmetic itself, never duplicate dog renders. */
+.avatar-item-preview-button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 112px;
+  padding: 9px;
+  overflow: hidden;
+  border: 1px solid rgba(125,153,181,.14);
+  border-radius: 11px;
+  background: radial-gradient(circle at 50% 35%,rgba(55,175,159,.13),transparent 62%),linear-gradient(145deg,rgba(115,141,172,.16),rgba(115,141,172,.045));
+  cursor: pointer;
+}
+.avatar-item-preview-button:disabled { cursor: not-allowed; opacity: .72; }
+.avatar-item-artwork {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 88px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.avatar-item-artwork img {
+  display: block;
+  max-width: 96%;
+  max-height: 104px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 9px rgba(0,0,0,.2));
+}
+.avatar-item-artwork-fallback {
+  display: grid;
+  place-items: center;
+  width: 74px;
+  height: 74px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 22px;
+  background: linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.04));
+  font-size: 42px;
+  filter: drop-shadow(0 8px 9px rgba(0,0,0,.2));
+}
+.avatar-item-artwork.is-background-artwork { min-height: 88px; }
+.avatar-item-artwork-glow { width: 58px; height: 58px; border: 2px solid rgba(255,255,255,.58); border-radius: 50%; box-shadow: 0 0 30px rgba(255,255,255,.28); }
+.avatar-item-owned-mark { position:absolute; top:6px; right:6px; display:grid; place-items:center; width:22px; height:22px; border-radius:50%; background:var(--mint); color:#062019; font-style:normal; }
+.avatar-item-card.is-selected { border-color:rgba(87,147,255,.65); box-shadow:inset 0 0 0 1px rgba(87,147,255,.14),0 8px 22px rgba(31,91,180,.12); }
+.avatar-item-card.is-locked .avatar-item-preview-button { filter:saturate(.65); }
+.avatar-editor-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:9px; }
+.avatar-editor-actions .game-button { width:100%; min-width:0; }
+.profile-dog-editor-preview .avatar-equipped-list { margin-top:12px; }
+.profile-dog-editor-preview .avatar-equipped-list span { background:rgba(44,205,163,.07); }
+@media (max-width:760px) {
+  .avatar-editor-actions { grid-template-columns:1fr; }
+  .avatar-item-preview-button { min-height:100px; }
+}

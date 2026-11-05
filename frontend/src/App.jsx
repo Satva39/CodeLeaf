@@ -16,6 +16,7 @@ import CertificateViewPage from "./pages/CertificateViewPage.jsx";
 import ExamPage from "./pages/ExamPage.jsx";
 import PracticalExamPage from "./pages/PracticalExamPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
+import PublicProfilePage from "./pages/PublicProfilePage.jsx";
 import AuthPage from "./pages/AuthPage.jsx";
 import PlansPage from "./pages/PlansPage.jsx";
 import ProjectsPage from "./pages/ProjectsPage.jsx";
@@ -97,6 +98,7 @@ export default function App() {
         <Route path="/practical/:examSlug" element={<PracticalExamPage />} />
         <Route path="/mock-exam/:examSlug" element={<MockExamPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/u/:username" element={<PublicProfilePage />} />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/register" element={<AuthPage />} />
         <Route path="/forgot-password" element={<AuthPage />} />

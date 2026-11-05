@@ -1,16 +1,5 @@
 import React, { useId } from "react";
-import explorerCap from "../../assets/avatar/items/explorer-cap.webp";
-import tealCrown from "../../assets/avatar/items/teal-crown.webp";
-import wizardHat from "../../assets/avatar/items/wizard-hat.webp";
-import codingHeadset from "../../assets/avatar/items/coding-headset.webp";
-import developerGlasses from "../../assets/avatar/items/developer-glasses.webp";
-import cyberVisor from "../../assets/avatar/items/cyber-visor.webp";
-import blueHoodie from "../../assets/avatar/items/blue-hoodie.webp";
-import developerJacket from "../../assets/avatar/items/developer-jacket.webp";
-import redCollar from "../../assets/avatar/items/red-collar.webp";
-import emeraldBandana from "../../assets/avatar/items/emerald-bandana.webp";
-import explorerBackpack from "../../assets/avatar/items/explorer-backpack.webp";
-import heroCloak from "../../assets/avatar/items/hero-cloak.webp";
+import { getAvatarBackgroundColors, getAvatarItemArtwork } from "./avatarItemArtwork.js";
 
 const FUR = {
   golden: ["#f2bd68", "#c9823a", "#8b4e2b"],
@@ -21,11 +10,6 @@ const FUR = {
   copper: ["#f1a06e", "#b85e3e", "#723b30"],
 };
 const EYES = { brown: "#75451f", blue: "#328bc8", green: "#398b69", amber: "#bf812b" };
-const BACKGROUNDS = {
-  "aurora-background": ["#173f58", "#27315b"],
-  "forest-background": ["#245342", "#142d35"],
-  "pixel-lab-background": ["#443369", "#17223c"],
-};
 const CLOTHING = {
   "blue-hoodie": ["#4b9cef", "#1760ac"],
   "developer-jacket": ["#40c8b0", "#167b70"],
@@ -40,51 +24,6 @@ const CLOTHING = {
   "emerald-dog-suit": ["#5ad49a", "#16794e"],
 };
 
-const HEADWEAR_ART = {
-  "starter-cap": explorerCap,
-  "battle-champion-cap": explorerCap,
-  "golden-crown": tealCrown,
-  "diamond-crown": tealCrown,
-  "compiler-crown": tealCrown,
-  "wizard-hat": wizardHat,
-  "graduation-hat": tealCrown,
-  "coding-headset": codingHeadset,
-  "master-headphones": codingHeadset,
-};
-const GLASSES_ART = {
-  "developer-glasses": developerGlasses,
-  "cyber-visor": cyberVisor,
-  "golden-battle-glasses": cyberVisor,
-};
-const CLOTHING_ART = {
-  "blue-hoodie": blueHoodie,
-  "moon-hoodie": blueHoodie,
-  "developer-jacket": developerJacket,
-  "scholar-outfit": developerJacket,
-  "warrior-outfit": heroCloak,
-  "legendary-battle-costume": heroCloak,
-  "legendary-streak-costume": heroCloak,
-  "xp-master-costume": developerJacket,
-  "legendary-dog-outfit": heroCloak,
-  "grandmaster-outfit": heroCloak,
-  "emerald-dog-suit": developerJacket,
-};
-const COLLAR_ART = {
-  "classic-collar": redCollar,
-  "programmer-collar": redCollar,
-  "fire-collar": redCollar,
-};
-const NECKWEAR_ART = {
-  "leaf-bandana": emeraldBandana,
-  "streak-bandana": emeraldBandana,
-  "comet-bandana": emeraldBandana,
-};
-const BACK_ART = {
-  "explorer-backpack": explorerBackpack,
-  "galaxy-cape": heroCloak,
-  "hero-cape": heroCloak,
-};
-
 function itemId(equipment, slot) {
   const value = equipment?.[slot];
   if (typeof value === "string") return value;
@@ -92,7 +31,7 @@ function itemId(equipment, slot) {
   return "";
 }
 
-function Art({ href, x, y, width, height, opacity = 1 }) {
+function Art({ href, x, y, width, height, opacity = 1, filter }) {
   if (!href) return null;
   return (
     <image
@@ -103,6 +42,7 @@ function Art({ href, x, y, width, height, opacity = 1 }) {
       height={height}
       opacity={opacity}
       preserveAspectRatio="xMidYMid meet"
+      style={filter ? { filter } : undefined}
     />
   );
 }
@@ -118,7 +58,7 @@ export default function DogAvatar({
   const breed = appearance.breed || "classic";
   const furStops = FUR[appearance.fur_color] || FUR.golden;
   const eye = EYES[appearance.eye_color] || EYES.brown;
-  const background = BACKGROUNDS[itemId(equipment, "background")] || ["#17384b", "#101d30"];
+  const background = getAvatarBackgroundColors(itemId(equipment, "background"));
 
   const headwear = itemId(equipment, "headwear");
   const glasses = itemId(equipment, "glasses");
@@ -140,14 +80,21 @@ export default function DogAvatar({
   const broadFace = breed === "bulldog";
   const retriever = breed === "retriever";
   const husky = breed === "husky";
+  const shiba = breed === "shiba";
+  const corgi = breed === "corgi";
   const snoutWidth = broadFace ? 58 : husky ? 47 : retriever ? 53 : 49;
+  const bodyPath = corgi
+    ? "M80 188 Q88 164 121 162 L179 162 Q212 164 220 188 L235 249 Q150 272 65 249Z"
+    : broadFace
+      ? "M78 188 Q83 161 119 160 L181 160 Q217 161 222 188 L229 259 Q150 286 71 259Z"
+      : "M91 190 Q95 166 126 163 L174 163 Q205 166 209 190 L221 260 Q150 282 79 260Z";
 
-  const headwearImage = HEADWEAR_ART[headwear];
-  const glassesImage = GLASSES_ART[glasses];
-  const clothingImage = CLOTHING_ART[clothingId];
-  const collarImage = COLLAR_ART[collar];
-  const bandanaImage = NECKWEAR_ART[neckwear];
-  const backImage = BACK_ART[back];
+  const headwearImage = getAvatarItemArtwork(headwear);
+  const glassesImage = getAvatarItemArtwork(glasses);
+  const clothingImage = getAvatarItemArtwork(clothingId);
+  const collarImage = getAvatarItemArtwork(collar);
+  const bandanaImage = getAvatarItemArtwork(neckwear);
+  const backImage = getAvatarItemArtwork(back);
 
   return (
     <svg
@@ -205,18 +152,20 @@ export default function DogAvatar({
         </g>
       )}
       {backImage && back !== "explorer-backpack" && (
-        <Art href={backImage} x={66} y={154} width={168} height={142} opacity=".98" />
+        <Art href={backImage.src} filter={backImage.filter} x={66} y={154} width={168} height={142} opacity=".98" />
       )}
 
       {/* Body, legs and paws */}
-      <path d="M91 190 Q95 166 126 163 L174 163 Q205 166 209 190 L221 260 Q150 282 79 260Z" fill={`url(#${gradientId}-fur)`} stroke="#34445a" strokeWidth="5" />
-      <path d="M111 239 Q103 260 113 267 L140 268 L143 246Z" fill={`url(#${gradientId}-fur)`} stroke="#34445a" strokeWidth="4" />
-      <path d="M157 246 L160 268 L187 267 Q198 259 188 239Z" fill={`url(#${gradientId}-fur)`} stroke="#34445a" strokeWidth="4" />
-      <ellipse cx="124" cy="267" rx="20" ry="8" fill="#f1d5b5" opacity=".75" />
-      <ellipse cx="176" cy="267" rx="20" ry="8" fill="#f1d5b5" opacity=".75" />
+      <path d={bodyPath} fill={`url(#${gradientId}-fur)`} stroke="#34445a" strokeWidth="5" />
+      <path d={corgi ? "M106 233 Q99 251 107 258 L137 259 L141 239Z" : "M111 239 Q103 260 113 267 L140 268 L143 246Z"} fill={`url(#${gradientId}-fur)`} stroke="#34445a" strokeWidth="4" />
+      <path d={corgi ? "M159 239 L163 259 L193 258 Q201 251 194 233Z" : "M157 246 L160 268 L187 267 Q198 259 188 239Z"} fill={`url(#${gradientId}-fur)`} stroke="#34445a" strokeWidth="4" />
+      <ellipse cx="124" cy={corgi ? 258 : 267} rx="20" ry="8" fill="#f1d5b5" opacity=".8" />
+      <ellipse cx="176" cy={corgi ? 258 : 267} rx="20" ry="8" fill="#f1d5b5" opacity=".8" />
       <path d="M98 204 Q82 218 87 238 Q91 248 108 244 L120 207Z" fill={`url(#${gradientId}-fur)`} stroke="#34445a" strokeWidth="4" />
       <path d="M202 204 Q218 218 213 238 Q209 248 192 244 L180 207Z" fill={`url(#${gradientId}-fur)`} stroke="#34445a" strokeWidth="4" />
-      {back === "explorer-backpack" && <Art href={explorerBackpack} x={45} y={171} width={102} height={112} opacity=".98" />}
+      <path d={corgi ? "M113 185 Q150 203 187 185 Q177 224 150 231 Q123 224 113 185Z" : "M119 182 Q150 202 181 182 Q174 220 150 226 Q126 220 119 182Z"} fill="#fff0d9" opacity={husky || shiba || retriever ? ".9" : ".58"} />
+      <path d="M119 249 Q126 255 133 250 M167 250 Q174 255 181 249" fill="none" stroke="#fff4df" strokeOpacity=".6" strokeWidth="2.2" strokeLinecap="round" />
+      {back === "explorer-backpack" && <Art href={backImage?.src} filter={backImage?.filter} x={45} y={171} width={102} height={112} opacity=".98" />}
 
       {/* Shirt/outfit underlay. The selected top is rendered by item ID below. */}
       {clothingId && (
@@ -227,7 +176,7 @@ export default function DogAvatar({
           <path d="M105 218 L120 218 M180 218 L195 218" stroke="#d7f3ff" strokeOpacity=".35" strokeWidth="3" strokeLinecap="round" />
         </g>
       )}
-      {clothingImage && <Art href={clothingImage} x={68} y={156} width={164} height={135} />}
+      {clothingImage && <Art href={clothingImage.src} filter={clothingImage.filter} x={68} y={156} width={164} height={135} />}
       {!clothingId && <path d="M121 179 Q150 205 179 179 L190 248 Q150 266 110 248Z" fill="#f8dfbf" opacity=".45" />}
 
       {pants && (
@@ -269,20 +218,28 @@ export default function DogAvatar({
       )}
 
       {/* Head silhouette and soft cheek highlights */}
-      <ellipse cx="150" cy="135" rx={broadFace ? 96 : 91} ry={broadFace ? 82 : 86} fill={`url(#${gradientId}-fur)`} stroke="#34445a" strokeWidth="6" />
-      {husky && <path d="M150 54 Q115 80 124 144 Q139 162 150 157 Q161 162 176 144 Q185 80 150 54Z" fill="#f0f4f5" opacity=".88" />}
-      {retriever && <path d="M75 120 Q86 75 121 67 Q95 109 109 153 Q84 153 75 120Z" fill="#ffe0a5" opacity=".2" />}
+      <ellipse cx="150" cy={broadFace ? 137 : 135} rx={broadFace ? 96 : corgi ? 89 : 91} ry={broadFace ? 82 : 86} fill={`url(#${gradientId}-fur)`} stroke="#34445a" strokeWidth="6" />
+      {(husky || shiba) && <path d="M150 54 Q115 80 124 144 Q139 162 150 157 Q161 162 176 144 Q185 80 150 54Z" fill={husky ? "#f0f4f5" : "#fff0d7"} opacity={husky ? ".92" : ".82"} />}
+      {retriever && <path d="M75 120 Q86 75 121 67 Q95 109 109 153 Q84 153 75 120Z" fill="#ffe0a5" opacity=".28" />}
+      {corgi && <path d="M94 81 Q111 52 150 54 Q189 52 206 81 Q180 72 150 76 Q120 72 94 81Z" fill="#fff0d9" opacity=".38" />}
+      {broadFace && <g fill="none" stroke="#704b3b" strokeOpacity=".45" strokeWidth="3.5" strokeLinecap="round"><path d="M109 92 Q125 99 136 91 M164 91 Q176 99 191 92"/><path d="M113 102 Q126 108 137 101 M163 101 Q176 108 187 102"/></g>}
       <ellipse cx="112" cy="171" rx="28" ry="19" fill="#ffd6bd" opacity=".32" />
       <ellipse cx="188" cy="171" rx="28" ry="19" fill="#ffd6bd" opacity=".32" />
+      <path d="M91 157 Q101 160 108 156 M192 156 Q199 160 209 157" fill="none" stroke="#fff1d7" strokeOpacity=".4" strokeWidth="3" strokeLinecap="round" />
+      <path d="M110 190 Q105 198 108 206 M190 190 Q195 198 192 206" fill="none" stroke="#6f4b36" strokeOpacity=".35" strokeWidth="2.3" strokeLinecap="round" />
 
       {/* Face */}
       <ellipse cx="150" cy="169" rx={snoutWidth} ry="38" fill={`url(#${gradientId}-muzzle)`} />
       <ellipse cx="119" cy="130" rx="14" ry="17" fill="#fff" />
       <ellipse cx="181" cy="130" rx="14" ry="17" fill="#fff" />
-      <ellipse cx="121" cy="132" rx="7" ry="10" fill={eye} />
-      <ellipse cx="179" cy="132" rx="7" ry="10" fill={eye} />
-      <circle cx="124" cy="127" r="3.2" fill="#fff" />
-      <circle cx="182" cy="127" r="3.2" fill="#fff" />
+      <ellipse cx="121" cy="132" rx="7.5" ry="10.5" fill={eye} />
+      <ellipse cx="179" cy="132" rx="7.5" ry="10.5" fill={eye} />
+      <ellipse cx="122" cy="134" rx="3.3" ry="5.5" fill="#182438" />
+      <ellipse cx="180" cy="134" rx="3.3" ry="5.5" fill="#182438" />
+      <circle cx="124" cy="127" r="3.4" fill="#fff" />
+      <circle cx="182" cy="127" r="3.4" fill="#fff" />
+      <circle cx="117" cy="138" r="1.5" fill="#fff" opacity=".72" />
+      <circle cx="175" cy="138" r="1.5" fill="#fff" opacity=".72" />
       <path d="M102 111 Q118 100 135 108 M165 108 Q183 100 198 111" fill="none" stroke="#704c36" strokeOpacity=".55" strokeWidth="4" strokeLinecap="round" />
       {eyes === "starry-eyes" && (
         <g fill="#ffe58a" stroke="#ab792d" strokeWidth="1">
@@ -290,8 +247,15 @@ export default function DogAvatar({
           <path d="M173 107 L177 98 L181 107 L190 111 L181 115 L177 124 L173 115 L164 111Z" />
         </g>
       )}
-      <ellipse cx="150" cy="164" rx="12" ry="8.5" fill="#26384b" />
+      <ellipse cx="150" cy="164" rx={broadFace ? 14 : 12} ry="8.5" fill="#26384b" />
+      <ellipse cx="146" cy="161" rx="4" ry="2" fill="#a9b6c4" opacity=".62" />
+      <circle cx="145" cy="165" r="1.5" fill="#101c2a" />
+      <circle cx="155" cy="165" r="1.5" fill="#101c2a" />
       <path d="M150 171 Q148 185 135 186 M150 171 Q152 185 165 186" fill="none" stroke="#785044" strokeWidth="3.7" strokeLinecap="round" />
+      <path d="M138 184 Q150 196 162 184 Q160 202 150 203 Q140 202 138 184Z" fill="#e97883" stroke="#a94c5c" strokeWidth="1.8" />
+      <path d="M144 188 Q150 191 156 188" fill="none" stroke="#f8b2b7" strokeWidth="2" strokeLinecap="round" />
+      <g fill="#815943" opacity=".58"><circle cx="112" cy="177" r="1.8"/><circle cx="121" cy="181" r="1.6"/><circle cx="188" cy="177" r="1.8"/><circle cx="179" cy="181" r="1.6"/></g>
+      <path d="M111 147 Q118 152 126 148 M174 148 Q182 152 189 147" fill="none" stroke="#b87550" strokeOpacity=".45" strokeWidth="2.4" strokeLinecap="round" />
       <path d="M91 161 Q103 169 116 165 M209 161 Q197 169 184 165" fill="none" stroke="#a66b4e" strokeWidth="2.5" strokeLinecap="round" opacity=".55" />
 
       {/* Collar, tag and bandana layers */}
@@ -299,8 +263,8 @@ export default function DogAvatar({
       {collar && <><circle cx="150" cy="207" r="7" fill="#f2c65f" stroke="#654e3b" strokeWidth="2"/><path d="M150 204 L150 210" stroke="#79522b" strokeWidth="2"/></>}
       {neckwear && <path d="M127 195 L150 211 L173 195 L166 226 L150 239 L134 226Z" fill={neckwear === "comet-bandana" ? "#9265da" : "#279a70"} stroke="#34445a" strokeWidth="3.5" />}
       {neckwear && <path d="M142 214 L150 220 L158 214" fill="none" stroke="#e0f4d4" strokeWidth="2.5" strokeLinecap="round"/>}
-      <Art href={collarImage} x={94} y={176} width={112} height={84} />
-      <Art href={bandanaImage} x={94} y={176} width={112} height={86} />
+      <Art href={collarImage?.src} filter={collarImage?.filter} x={94} y={176} width={112} height={84} />
+      <Art href={bandanaImage?.src} filter={bandanaImage?.filter} x={94} y={176} width={112} height={86} />
 
       {/* Face accessory and eyewear */}
       {face === "xp-champion-accessory" && (
@@ -316,7 +280,7 @@ export default function DogAvatar({
           <path d="M140 130 Q150 125 160 130" />
         </g>
       )}
-      <Art href={glassesImage} x={65} y={101} width={170} height={94} />
+      <Art href={glassesImage?.src} filter={glassesImage?.filter} x={65} y={101} width={170} height={94} />
 
       {/* Headwear is the top-most layer so the visual always matches the item ID. */}
       {headwear && !headwearImage && (
@@ -335,7 +299,8 @@ export default function DogAvatar({
         )
       )}
       <Art
-        href={headwearImage}
+        href={headwearImage?.src}
+        filter={headwearImage?.filter}
         x={headwear === "wizard-hat" ? 75 : 76}
         y={headwear === "wizard-hat" ? -11 : headwear?.includes("crown") ? 4 : 5}
         width={headwear === "wizard-hat" ? 150 : 148}

@@ -78,3 +78,14 @@ class ExerciseSubmission(BaseModel):
     answer: Any = None
     source_code: str | None = Field(default=None, max_length=100_000)
     timezone: str = Field(default="UTC", min_length=1, max_length=80)
+
+
+class PublicProfileSettingsUpdate(BaseModel):
+    is_public: bool | None = None
+    show_xp: bool | None = None
+    show_streak: bool | None = None
+    show_certificates: bool | None = None
+    show_achievements: bool | None = None
+    show_progress: bool | None = None
+
+    model_config = {"extra": "forbid"}
