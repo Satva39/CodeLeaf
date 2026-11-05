@@ -84,6 +84,50 @@ const LANGUAGE_CONFIGS = {
   aws: { label: "AWS configuration", extension: "yml", filename: "template.yml", execution: "static" },
   githubactions: { label: "GitHub Actions", extension: "yml", filename: "workflow.yml", execution: "static" },
   markdown: { label: "Markdown", extension: "md", filename: "README.md", execution: "static" },
+
+  // Additional runtimes from the CodeLeaf Runner's live Piston registry.
+  // They are shown as runnable only when /api/runner/status reports an installed runtime.
+  python2: { label: "Python 2", extension: "py2", filename: "main.py2", execution: "runner" },
+  raku: { label: "Raku", extension: "raku", filename: "main.raku", execution: "runner" },
+  vlang: { label: "V", extension: "vlang", filename: "main.vlang", execution: "runner" },
+  basic: { label: "BASIC", extension: "basic", filename: "main.basic", execution: "runner" },
+  basicnet: { label: "BASIC.NET", extension: "vbnet", filename: "Program.vbnet", execution: "runner" },
+  cjam: { label: "CJam", extension: "cjam", filename: "main.cjam", execution: "runner" },
+  brainfuck: { label: "Brainfuck", extension: "bf", filename: "main.bf", execution: "runner" },
+  befunge93: { label: "Befunge-93", extension: "bf93", filename: "main.bf93", execution: "runner" },
+  awk: { label: "AWK", extension: "awk", filename: "main.awk", execution: "runner" },
+  dash: { label: "Dash shell", extension: "dash", filename: "main.dash", execution: "runner" },
+  lisp: { label: "Lisp", extension: "lisp2", filename: "main.lisp2", execution: "runner" },
+  smalltalk: { label: "Smalltalk", extension: "st", filename: "main.st", execution: "runner" },
+  emacslisp: { label: "Emacs Lisp", extension: "el", filename: "main.el", execution: "runner" },
+  coffeescript: { label: "CoffeeScript", extension: "coffee", filename: "main.coffee", execution: "runner" },
+  fsi: { label: "F# Interactive", extension: "fsx2", filename: "main.fsx2", execution: "runner" },
+  llvmir: { label: "LLVM IR", extension: "ll", filename: "main.ll", execution: "runner" },
+  nasm64: { label: "NASM 64-bit", extension: "asm64", filename: "main.asm64", execution: "runner" },
+  iverilog: { label: "Verilog (Icarus)", extension: "vlog", filename: "main.vlog", execution: "runner" },
+  ponylang: { label: "Pony", extension: "pony", filename: "main.pony", execution: "runner" },
+  emojicode: { label: "Emojicode", extension: "emojic", filename: "main.emojic", execution: "runner" },
+  forte: { label: "Forte", extension: "forte", filename: "main.forte", execution: "runner" },
+  forth: { label: "Forth", extension: "fth", filename: "main.fth", execution: "runner" },
+  dragon: { label: "Dragon", extension: "dragon", filename: "main.dragon", execution: "runner" },
+  cow: { label: "COW", extension: "cow", filename: "main.cow", execution: "runner" },
+  husk: { label: "Husk", extension: "husk", filename: "main.husk", execution: "runner" },
+  jelly: { label: "Jelly", extension: "jelly", filename: "main.jelly", execution: "runner" },
+  rockstar: { label: "Rockstar", extension: "rock", filename: "main.rock", execution: "runner" },
+  vyxal: { label: "Vyxal", extension: "vyxal", filename: "main.vyxal", execution: "runner" },
+  matl: { label: "MATL", extension: "matl", filename: "main.matl", execution: "runner" },
+  golfscript: { label: "Golfscript", extension: "golfscript", filename: "main.golfscript", execution: "runner" },
+  osabie: { label: "Osabie", extension: "osabie", filename: "main.osabie", execution: "runner" },
+  pyth: { label: "Pyth", extension: "pyth", filename: "main.pyth", execution: "runner" },
+  samarium: { label: "Samarium", extension: "samarium", filename: "main.samarium", execution: "runner" },
+  retina: { label: "Retina", extension: "retina", filename: "main.retina", execution: "runner" },
+  bqn: { label: "BQN", extension: "bqn", filename: "main.bqn", execution: "runner" },
+  japt: { label: "Japt", extension: "japt", filename: "main.japt", execution: "runner" },
+  brachylog: { label: "Brachylog", extension: "brl", filename: "main.brl", execution: "runner" },
+  paradoc: { label: "Paradoc", extension: "paradoc", filename: "main.paradoc", execution: "runner" },
+  yeethon: { label: "Yeethon", extension: "yeethon", filename: "main.yeethon", execution: "runner" },
+  pure: { label: "Pure", extension: "pure", filename: "main.pure", execution: "runner" },
+  toml: { label: "TOML", extension: "toml", filename: "config.toml", execution: "static" },
 };
 
 function normalizeToken(value) {
@@ -194,7 +238,7 @@ export function defaultSourceForLanguage(languageKey) {
     xml: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<message>Hello, CodeLeaf!</message>",
     jsx: "export default function App() {\n  return <h1>Hello, CodeLeaf!</h1>;\n}",
     vue: "<template>\n  <h1>Hello, CodeLeaf!</h1>\n</template>\n\n<script setup>\n</script>",
-    sass: "$accent: #0da875;\n\nbody\n  font-family: system-ui, sans-serif\n\nh1\n  color: $accent",
+    sass: "$accent: #0da875;\n$surface: #f4f7fb;\nbody { font-family: system-ui, sans-serif; background: $surface; padding: 2rem; }\n.card { padding: 2rem; border-top: 4px solid $accent; h1 { color: $accent; } }",
     asp: "<% Response.Write(\"Hello, CodeLeaf!\") %>",
     excel: "name,message\nCodeLeaf,Hello!",
     docker: "FROM python:3.13-slim\nWORKDIR /app\nCOPY . .\nCMD [\"python\", \"main.py\"]",
@@ -233,6 +277,48 @@ export function defaultSourceForLanguage(languageKey) {
     racket: "#lang racket\n(displayln \"Hello, Racket!\")\n",
     objectivec: "#include <stdio.h>\n\nint main(void) {\n    puts(\"Hello, Objective-C!\");\n    return 0;\n}\n",
     duckdb: "SELECT 'Hello, DuckDB!' AS message;\n",
+
+    python2: "print 'Hello from Python 2!'\n",
+    raku: 'say "Hello from Raku!";\n',
+    vlang: 'fn main() {\n    println("Hello from V!");\n}\n',
+    basic: 'PRINT "Hello from BASIC!"\n',
+    basicnet: 'Module Program\n    Sub Main()\n        Console.WriteLine("Hello from BASIC.NET!")\n    End Sub\nEnd Module\n',
+    cjam: '2 3 +\n',
+    brainfuck: '++++++++[>++++++++<-]>+.\n',
+    befunge93: '"!dlroW ,olleH">:v\n',
+    awk: 'BEGIN { print "Hello from AWK!" }\n',
+    dash: '#!/bin/dash\nprintf "%s\\n" "Hello from Dash!"\n',
+    lisp: '(print "Hello from Lisp!")\n',
+    smalltalk: 'Transcript show: \'Hello from Smalltalk!\'; cr.\n',
+    emacslisp: '(princ "Hello from Emacs Lisp!\\n")\n',
+    coffeescript: 'console.log "Hello from CoffeeScript!"\n',
+    fsi: 'printfn "Hello from F# Interactive!"\n',
+    llvmir: 'define i32 @main() {\nentry:\n  ret i32 0\n}\n',
+    nasm64: 'section .text\nglobal _start\n_start:\n  mov eax, 60\n  xor edi, edi\n  syscall\n',
+    iverilog: 'module main;\ninitial begin\n  $display("Hello from Verilog!");\n  $finish;\nend\nendmodule\n',
+    ponylang: 'actor Main\n  new create(env: Env) =>\n    env.out.print("Hello from Pony!")\n',
+    emojicode: '🏁\n  😀 🔤Hello from Emojicode!🔤❗️\n',
+    forte: 'PROGRAM Hello;\nBEGIN\n  WRITE("Hello from Forte!");\nEND.\n',
+    forth: ': hello ." Hello from Forth!" ;\nhello\n',
+    dragon: 'Hello from Dragon!\n',
+    cow: 'MoO moO mOo Moo moO mOo moo\n',
+    husk: '+"Hello from Husk!"\n',
+    jelly: '“Hello from Jelly!”',
+    rockstar: 'Say Hello from Rockstar!\n',
+    vyxal: 'k"Hello from Vyxal!"',
+    matl: "'Hello from MATL!'\n",
+    golfscript: '"Hello from Golfscript!"',
+    osabie: 'Hello from Osabie\n',
+    pyth: '."Hello from Pyth!"',
+    samarium: 'print("Hello from Samarium!")\n',
+    retina: 'Hello\n',
+    bqn: '"Hello from BQN!"',
+    japt: '`Hello from Japt!`',
+    brachylog: '"Hello from Brachylog!"',
+    paradoc: '"Hello from Paradoc!"',
+    yeethon: 'print("Hello from Yeethon!")\n',
+    pure: 'puts "Hello from Pure";\n',
+    toml: 'title = "CodeLeaf"\nversion = 1\n[playground]\nmode = "preview"\n',
   };
   return examples[languageKey] || "# Start writing here.\n";
 }
@@ -313,6 +399,15 @@ export function getLanguageForFilename(filename, explicitLanguage = "") {
     exs: "elixir", pro: "prolog", d: "d", bas: "freebasic", clj: "clojure", groovy: "groovy",
     scala: "scala", zig: "zig", nim: "nim", cr: "crystal", adb: "ada", rkt: "racket",
     objc: "objectivec", duckdb: "duckdb", cpp20: "cpp20",
+    py2: "python2", raku: "raku", vlang: "vlang", basic: "basic", vbnet: "basicnet",
+    cjam: "cjam", bf: "brainfuck", bf93: "befunge93", awk: "awk", dash: "dash",
+    lisp2: "lisp", st: "smalltalk", el: "emacslisp", coffee: "coffeescript",
+    fsx2: "fsi", ll: "llvmir", asm64: "nasm64", vlog: "iverilog", pony: "ponylang",
+    emojic: "emojicode", forte: "forte", fth: "forth", dragon: "dragon", cow: "cow",
+    husk: "husk", jelly: "jelly", rock: "rockstar", vyxal: "vyxal", matl: "matl",
+    golfscript: "golfscript", osabie: "osabie", pyth: "pyth", samarium: "samarium",
+    retina: "retina", bqn: "bqn", japt: "japt", brl: "brachylog", paradoc: "paradoc",
+    yeethon: "yeethon", pure: "pure", toml: "toml",
   };
   const explicit = String(explicitLanguage || "").trim().toLowerCase();
   const supportedExplicit = LANGUAGE_CONFIGS[explicit] ? explicit : "";
@@ -377,6 +472,12 @@ export function detectOutputMode({
   if (/\.jsx$/i.test(currentName) || currentLanguage.key === "jsx") {
     return { mode: "react-preview", reason: "react-entry", entryFile: currentName, language: "jsx" };
   }
+  if (currentLanguage.key === "sass") {
+    return { mode: "sass-preview", reason: "sass-browser-compiler", entryFile: currentName, language: "sass" };
+  }
+  if (currentLanguage.key === "angularjs") {
+    return { mode: "angularjs-preview", reason: "angularjs-browser-runtime", entryFile: currentName, language: "angularjs" };
+  }
 
   if (currentLanguage.key === "javascript" && /\.(?:m?js|cjs)$/i.test(currentName)) {
     const referenced = htmlFiles.some((html) => referencedLocalFiles(html.content, "script", "src").includes(filenameOf(currentName)));
@@ -414,6 +515,52 @@ export function isBrowserWorkspace(files) {
 
 function scriptBridge(messageSource) {
   return `<script>(function(){var source=${JSON.stringify(String(messageSource))};var send=function(kind,args){var output=Array.from(args||[]).map(function(value){if(typeof value==='string')return value;try{return JSON.stringify(value)}catch(_){return String(value)}}).join(' ');try{parent.postMessage({source:source,kind:kind,output:output,error:kind==='error'?output:''},'*')}catch(_){}};['log','info','warn','error'].forEach(function(kind){var original=console[kind].bind(console);console[kind]=function(){send(kind,arguments);original.apply(console,arguments)}});window.addEventListener('error',function(event){send('error',[event.message||'Preview error'])});window.addEventListener('unhandledrejection',function(event){send('error',[event.reason&&event.reason.message||event.reason||'Unhandled promise rejection'])})})();<\/script>`;
+}
+
+export function createSassPreviewDocument(source, messageSource = "codeleaf-playground-output", syntax = "scss") {
+  const payload = JSON.stringify(String(source || "")).replace(/</g, "\\u003c");
+  const safeSource = JSON.stringify(String(messageSource));
+  const safeSyntax = syntax === "indented" ? "indented" : "scss";
+  const bridge = scriptBridge(messageSource);
+  const demo = `<main class="codeleaf-sass-demo"><section class="card"><h1>Sass preview</h1><p>This page is styled by the compiled Sass in your editor.</p><button type="button">Example button</button></section></main>`;
+  const compiler = `<script type="module">
+    const source=${payload};
+    const channel=${safeSource};
+    const report=(kind,message)=>{try{parent.postMessage({source:channel,kind,output:String(message||''),error:kind==='error'?String(message||''):''},'*')}catch(_){}};
+    const status=document.getElementById('sass-status');
+    try {
+      const sass=await import('https://jspm.dev/sass');
+      const result=sass.compileString(source,{syntax:${JSON.stringify(safeSyntax)},style:'expanded'});
+      const style=document.createElement('style');
+      style.setAttribute('data-codeleaf-compiled-sass','true');
+      style.textContent=result.css;
+      document.head.appendChild(style);
+      status.textContent='Sass compiled successfully.';
+      report('log','Dart Sass compiled successfully. The preview uses the generated CSS.');
+      const output=document.getElementById('sass-css-output');
+      if(output) output.textContent=result.css;
+    } catch(error) {
+      const message=error&&error.message?error.message:String(error||'Sass compilation failed.');
+      status.textContent='Sass compilation failed: '+message;
+      status.setAttribute('data-error','true');
+      report('error',message);
+    }
+  <\/script>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CodeLeaf Sass Preview</title>${bridge}</head><body><p id="sass-status" role="status">Loading Sass compiler…</p>${demo}<details><summary>Compiled CSS</summary><pre id="sass-css-output"></pre></details>${compiler}</body></html>`;
+}
+
+export function createAngularJSPreviewDocument(source, messageSource = "codeleaf-playground-output") {
+  const text = String(source || "");
+  const moduleMatch = text.match(/angular\s*\.\s*module\s*\(\s*['"]([A-Za-z0-9_.-]+)['"]/);
+  const controllerMatch = text.match(/\.\s*controller\s*\(\s*['"]([A-Za-z0-9_.-]+)['"]/);
+  const moduleName = moduleMatch?.[1] || "codeleafApp";
+  const controllerName = controllerMatch?.[1] || "";
+  const safeModule = moduleName.replace(/[^A-Za-z0-9_.-]/g, "");
+  const safeController = controllerName.replace(/[^A-Za-z0-9_.-]/g, "");
+  const ngController = safeController ? ` ng-controller="${safeController}"` : "";
+  const safeScript = safeInlineText(text, "script");
+  const bridge = scriptBridge(messageSource);
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CodeLeaf AngularJS Preview</title><script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"><\/script>${bridge}<style>body{font-family:system-ui,sans-serif;padding:2rem;background:#f4f7fb;color:#172033}.card{max-width:680px;margin:auto;padding:2rem;background:white;border-radius:1rem;box-shadow:0 10px 30px #0f172a14}h1{color:#0d9488}#angular-status{color:#64748b}</style></head><body><main class="card"><p id="angular-status">AngularJS browser runtime · ${safeModule}</p><h1>AngularJS preview</h1><section ng-app="${safeModule}"><div${ngController}><p>{{ message || 'AngularJS is running. Add a controller message to see your data here.' }}</p></div></section></main><script>${safeScript}<\/script><script>window.addEventListener('error',function(event){var node=document.getElementById('angular-status');if(node){node.textContent='AngularJS preview error: '+(event.message||'runtime failed')}});<\/script></body></html>`;
 }
 
 function injectIntoHead(html, markup) {

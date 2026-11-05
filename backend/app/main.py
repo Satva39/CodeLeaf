@@ -29,6 +29,7 @@ from .onlinecompiler_client import ONLINECOMPILER_LANGUAGE_TO_ID
 from .auth_security import require_user, optional_user, user_payload, TOKEN_ALGORITHM
 from .auth_routes import router as auth_router
 from .phase5_routes import router as phase5_router
+from .playground_tools import router as playground_tools_router
 from .plan_routes import router as plan_router
 from .games_routes import router as games_router
 from .phase5_service import record_review_result
@@ -147,6 +148,7 @@ async def enforce_allowed_origin(request: Request, call_next):
 
 app.include_router(auth_router)
 app.include_router(phase5_router)
+app.include_router(playground_tools_router)
 app.include_router(plan_router)
 app.include_router(games_router)
 

@@ -23,6 +23,8 @@ import { API_BASE } from "../lib/demoState.js";
 import {
   createBrowserDocument,
   createReactPreviewDocument,
+  createSassPreviewDocument,
+  createAngularJSPreviewDocument,
   detectOutputMode,
   defaultSourceForLanguage,
   getLanguageForFilename,
@@ -36,7 +38,8 @@ const FINAL_RUNNER_STATES = new Set(["completed", "failed", "timeout", "output_l
 const RUNNER_MAX_FILES = 10;
 const RUNNER_MAX_FILE_BYTES = 65_536;
 const RUNNER_MAX_TOTAL_BYTES = 131_072;
-const RUNNER_DATA_FILE_LANGUAGES = new Set(["json", "xml", "yaml", "markdown", "plain", "excel"]);
+const RUNNER_DATA_FILE_LANGUAGES = new Set(["json", "xml", "yaml", "markdown", "plain", "excel", "toml"]);
+const STRUCTURED_TOOL_LANGUAGES = new Set(["xml", "json", "yaml", "excel", "markdown", "plain", "docker", "aws", "githubactions", "git", "toml", "redis"]);
 
 async function responsePayload(response) {
   const payload = await response.json().catch(() => ({}));
@@ -160,6 +163,7 @@ export default function PlaygroundPage() {
   const [connectionLanguageDraft, setConnectionLanguageDraft] = useState("");
   const [stdin, setStdin] = useState("");
   const [databaseSetupSql, setDatabaseSetupSql] = useState("");
+  const [structuredQuery, setStructuredQuery] = useState("");
   const [fileDialog, setFileDialog] = useState("");
   const [fileNameDraft, setFileNameDraft] = useState("");
   const [fileDialogError, setFileDialogError] = useState("");
@@ -180,11 +184,14 @@ export default function PlaygroundPage() {
   const activeLanguage = activeFile ? getLanguageForFilename(activeFile.name, activeFile.language) : null;
   const isDatabaseLanguage = ["sqlite", "mysql", "postgresql"].includes(activeLanguage?.key);
   const outputMode = detectOutputMode({ currentFile: activeFile, files, runnerCapabilities: runnerSupportedLanguages, webConnection: workspace.webConnection });
+  const isStructuredTool = STRUCTURED_TOOL_LANGUAGES.has(activeLanguage?.key);
   const isConnectedPreview = outputMode.mode === "connected-preview";
-  const runnerAvailabilityPending = !runnerConfigChecked
+  const runnerAvailabilityPending = !isStructuredTool && !runnerConfigChecked
     && (outputMode.mode === "terminal" || outputMode.mode === "connected-preview");
   const isReactPreview = outputMode.mode === "react-preview";
-  const isBrowserPreview = outputMode.mode === "browser-preview" || isConnectedPreview;
+  const isSassPreview = outputMode.mode === "sass-preview";
+  const isAngularJSPreview = outputMode.mode === "angularjs-preview";
+  const isBrowserPreview = outputMode.mode === "browser-preview" || isConnectedPreview || isSassPreview || isAngularJSPreview;
   const previewEntryFile = files.find((file) => file.name === (outputMode.entryFile || activeFile?.name)) || activeFile;
   const previewHasContent = Boolean(previewEntryFile?.content?.trim());
   const emptyBrowserPreview = !isConnectedPreview && (isBrowserPreview || isReactPreview) && !previewHasContent;
@@ -196,6 +203,15 @@ export default function PlaygroundPage() {
     entryFile: outputMode.entryFile, activeFileName: activeFile?.name, connectedOutput,
   }), [files, refresh, outputMode.entryFile, activeFile?.name, connectedOutput]);
   const reactDocument = useMemo(() => createReactPreviewDocument(files, outputMode.entryFile || activeFile?.name, "codeleaf-playground-output"), [files, outputMode.entryFile, activeFile?.name, refresh]);
+  const sassDocument = useMemo(() => createSassPreviewDocument(
+    activeFile?.content || "",
+    "codeleaf-playground-output",
+    String(activeFile?.name || "").toLowerCase().endsWith(".sass") ? "indented" : "scss",
+  ), [activeFile?.content, activeFile?.name, refresh]);
+  const angularJSPreviewDocument = useMemo(() => createAngularJSPreviewDocument(
+    activeFile?.content || "",
+    "codeleaf-playground-output",
+  ), [activeFile?.content, refresh]);
   const htmlEntryFiles = files.filter((file) => /\.html?$/i.test(file.name));
   const connectableFiles = files.filter((file) => runnerSupportedLanguages.includes(getLanguageForFilename(file.name, file.language).key));
 
@@ -617,6 +633,33 @@ export default function PlaygroundPage() {
     }
   }
 
+  async function runStructuredTool(language, source, query = "") {
+    setRunning(true);
+    setRunnerMessage("");
+    setRunnerResult(null);
+    setRunnerStatus("submitting");
+    try {
+      const payload = await responsePayload(await apiFetch(`${API_BASE}/api/playground/tools/run`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ language, source, query }),
+      }));
+      const result = payload.result;
+      if (!result || typeof result.success !== "boolean") {
+        throw new Error("The Playground tool returned an invalid result.");
+      }
+      setRunnerResult(result);
+      setRunnerStatus(result.success ? "completed" : "failed");
+      return result;
+    } catch (error) {
+      setRunnerStatus("failed");
+      setRunnerMessage(error instanceof Error ? error.message : "Could not process this file.");
+      return null;
+    } finally {
+      setRunning(false);
+    }
+  }
+
   async function runCurrentFile() {
     if (!activeFile || !activeFile.content.trim()) {
       setRunnerStatus("idle");
@@ -646,10 +689,15 @@ export default function PlaygroundPage() {
       setRefresh((value) => value + 1);
       return;
     }
-    if (outputMode.mode === "browser-preview" || outputMode.mode === "react-preview") {
+    if (outputMode.mode === "sass-preview" || outputMode.mode === "angularjs-preview"
+      || outputMode.mode === "browser-preview" || outputMode.mode === "react-preview") {
       setBrowserOutput([]);
       setRunnerStatus("preview");
       setRefresh((value) => value + 1);
+      return;
+    }
+    if (STRUCTURED_TOOL_LANGUAGES.has(activeLanguage?.key)) {
+      await runStructuredTool(activeLanguage.key, activeFile.content, activeLanguage.key === "xml" ? structuredQuery : "");
       return;
     }
     if (runnerSupportedLanguages.includes(activeLanguage?.key)) {
@@ -689,8 +737,14 @@ export default function PlaygroundPage() {
       await runRemoteCode(activeLanguage.key, activeFile.content, uniqueFiles.length > 1 ? uniqueFiles : null);
       return;
     }
+    const environmentGuidance = {
+      angular: "Modern Angular is a project framework, not a standalone TypeScript file. It needs an Angular CLI workspace, installed Angular packages, and a project build step; CodeLeaf does not yet have that full project builder configured.",
+      asp: "Classic ASP requires a Windows IIS server with its ASP runtime. The current CodeLeaf Runner is Linux/Piston-based, so it cannot execute ASP pages as a normal compiler job.",
+      pytorch: "PyTorch is not part of OnlineCompiler's published Python packages, and no PyTorch-enabled Runner image is currently advertised. NumPy, SciPy, scikit-learn and the other documented Python packages use OnlineCompiler's Python runtime.",
+    };
     setRunnerStatus("unsupported");
-    setRunnerMessage(`No execution adapter is enabled for ${activeLanguage?.label || "this file type"}. The source is unchanged and downloadable, but no program was run.`);
+    setRunnerMessage(environmentGuidance[activeLanguage?.key]
+      || `No compatible execution adapter is currently available for ${activeLanguage?.label || "this file type"}. The source is unchanged and downloadable; CodeLeaf will not claim it ran.`);
   }
 
   function connectLanguageToHtml() {
@@ -876,10 +930,11 @@ export default function PlaygroundPage() {
         </section>
 
         <section className="workspace-output" aria-label="Run result">
-          <div className="workspace-output-heading"><span>{(showPreview || emptyBrowserPreview) ? <Monitor size={15} /> : <TerminalSquare size={15} />} {(showPreview || emptyBrowserPreview) ? (isReactPreview ? "React Preview" : "Preview") : "Terminal"}</span><span className={`runner-status runner-status-${runnerStatus}`}>{runnerStatus.replaceAll("_", " ")}</span></div>
+          <div className="workspace-output-heading"><span>{(showPreview || emptyBrowserPreview) ? <Monitor size={15} /> : <TerminalSquare size={15} />} {(showPreview || emptyBrowserPreview) ? (isReactPreview ? "React Preview" : isSassPreview ? "Sass Preview" : isAngularJSPreview ? "AngularJS Preview" : "Preview") : isStructuredTool ? "Structured / command output" : "Program output"}</span><span className={`runner-status runner-status-${runnerStatus}`}>{runnerStatus.replaceAll("_", " ")}</span></div>
           {isConnectedPreview && !showPreview && !runnerResult?.job_id && <p className="workspace-connected-pending">Run the connected {activeLanguage?.label || "language"} file successfully to start the web preview. No browser preview is shown until the real execution result is available.</p>}
+          {activeLanguage?.key === "xml" && <label className="workspace-stdin">Optional XPath query <input value={structuredQuery} onChange={(event) => setStructuredQuery(event.target.value)} maxLength={256} placeholder=".//product or .//product[@sku='P-101']" /></label>}
           {emptyBrowserPreview ? <div className="workspace-output-empty workspace-preview-empty"><Monitor size={24} /><h2>Preview is ready</h2><p>The selected preview file is empty, so there is nothing to render yet. Add HTML or JSX in the editor, or insert its starter code.</p></div> : showPreview ? <>
-            <iframe id="playground-preview-frame" key={refresh} title={isReactPreview ? "React application preview" : "Playground preview"} sandbox="allow-scripts" srcDoc={isReactPreview ? reactDocument : browserDocument} />
+            <iframe id="playground-preview-frame" key={refresh} title={isReactPreview ? "React application preview" : isSassPreview ? "Sass compiled preview" : isAngularJSPreview ? "AngularJS application preview" : "Playground preview"} sandbox="allow-scripts" srcDoc={isSassPreview ? sassDocument : isAngularJSPreview ? angularJSPreviewDocument : isReactPreview ? reactDocument : browserDocument} />
             {!!browserOutput.length && <div className="workspace-console"><strong>Preview console</strong>{browserOutput.map((entry, index) => <pre key={`${index}-${entry.kind}`} className={`console-${entry.kind}`}>{entry.text}</pre>)}</div>}
             {isConnectedPreview && connectedOutput && <div className="workspace-console workspace-connected-output"><strong>{connectedOutput.language} execution result</strong><pre>{connectedOutput.stdout || "(no stdout)"}</pre>{connectedOutput.stderr && <pre className="console-error">{connectedOutput.stderr}</pre>}</div>}
           </> : runnerResult ? <div className="workspace-terminal" aria-live="polite">
@@ -890,7 +945,7 @@ export default function PlaygroundPage() {
             {runnerResult.files_truncated && <p className="workspace-runner-message" role="status">Some output files were omitted because the provider or CodeLeaf reached its file-size limit.</p>}
             {Array.isArray(runnerResult.files) && runnerResult.files.some((file) => typeof file?.content_base64 === "string") && <div className="workspace-terminal-files"><strong>Output files</strong><div>{runnerResult.files.filter((file) => typeof file?.content_base64 === "string").map((file) => <a key={file.name} href={`data:${file.mime || "application/octet-stream"};base64,${file.content_base64}`} download={file.name}>{file.name} · {Number(file.size || 0).toLocaleString()} bytes <Download size={12} /></a>)}</div></div>}
             <div className="workspace-terminal-meta">{runnerResult.execution_status && <span>Execution: {runnerResult.execution_status}</span>}{runnerResult.exit_code !== undefined && <span>Exit code: {runnerResult.exit_code}</span>}{runnerResult.signal && <span>Signal: {runnerResult.signal}</span>}{runnerResult.engine && <span>Database: {runnerResult.engine}</span>}{runnerResult.row_count !== undefined && <span>Rows: {runnerResult.row_count}</span>}{runnerResult.execution_ms !== undefined && runnerResult.execution_ms !== null && <span>Time: {runnerResult.execution_ms} ms</span>}{runnerResult.total_time && <span>Total: {runnerResult.total_time}s</span>}{runnerResult.cpu_time && <span>Run: {runnerResult.cpu_time}s</span>}{runnerResult.memory && <span>Memory: {runnerResult.memory} KB</span>}{runnerResult.job_id && <span>Job: {runnerResult.job_id}</span>}</div>
-          </div> : activeFile ? <div className="workspace-terminal workspace-terminal-idle" aria-live="polite"><div className="workspace-terminal-prompt"><span>CODELEAF TERMINAL</span><span>{languageLabel}</span></div><pre>{runnerMessage || (outputMode.reason === "connected-runtime-unavailable" ? "The selected server runtime is not enabled. Choose a language with an available compiler or configure its backend provider." : outputMode.runnerSupported ? "Terminal ready. Select Run file to compile or execute this program. Standard output and compiler/runtime errors will appear here." : `${languageLabel} uses terminal output. This language currently has no execution adapter configured, so the source has not been run.`)}</pre></div> : <div className="workspace-output-empty"><Code2 size={25} /><h2>Your workspace is empty</h2><p>Create a file in Explorer to get started.</p></div>}
+          </div> : activeFile ? <div className="workspace-terminal workspace-terminal-idle" aria-live="polite"><div className="workspace-terminal-prompt"><span>CODELEAF TERMINAL</span><span>{languageLabel}</span></div><pre>{runnerMessage || (isStructuredTool ? `${languageLabel} uses a dedicated safe Playground tool. Select Run file to validate, format, preview, or simulate the supported commands for this file type.` : outputMode.reason === "connected-runtime-unavailable" ? "The selected server runtime is not enabled. Choose a language with an available compiler or configure its backend provider." : outputMode.runnerSupported ? "Terminal ready. Select Run file to compile or execute this program. Standard output and compiler/runtime errors will appear here." : `${languageLabel} uses terminal output. This language currently has no execution adapter configured, so the source has not been run.`)}</pre></div> : <div className="workspace-output-empty"><Code2 size={25} /><h2>Your workspace is empty</h2><p>Create a file in Explorer to get started.</p></div>}
           {runnerMessage && <p className="workspace-runner-message" role="status">{runnerMessage}</p>}
           {runnerResult?.job_id && <div className="workspace-output-actions"><button type="button" className="button button-secondary button-small" onClick={checkRunnerStatus} disabled={running}>Check status</button><button type="button" className="button button-secondary button-small" onClick={cancelRunnerJob} disabled={running || FINAL_RUNNER_STATES.has(runnerStatus)}>Cancel</button></div>}
           {!showPreview && !runnerResult?.job_id && activeFile && runnerSupportedLanguages.includes(activeLanguage?.key) && (isDatabaseLanguage
@@ -899,7 +954,7 @@ export default function PlaygroundPage() {
         </section>
       </div>
 
-      <div className="playground-note"><ShieldCheck size={16} /><span>Files auto-save in this browser. Use Account saves to persist workspaces and reusable snippets to your signed-in account; these are subject to plan-specific count and storage allowances. HTML previews run in a sandboxed frame with restrictive Content Security Policy. Server-side code is sent only to CodeLeaf's configured execution providers; unsupported languages are not executed.</span></div>
+      <div className="playground-note"><ShieldCheck size={16} /><span>Files auto-save in this browser. Use Account saves to persist workspaces and reusable snippets to your signed-in account; these are subject to plan-specific count and storage allowances. HTML previews run in a sandboxed frame with restrictive Content Security Policy. Server-side code is sent only to CodeLeaf's configured execution providers; structured formats use dedicated validators/previews; unsupported languages are not executed.</span></div>
     </PageShell>
   );
 }

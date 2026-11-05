@@ -112,6 +112,12 @@ COMPILER_LANGUAGE_ALIASES = {
     "data-science": "python-3.14",
     "dsa": "python-3.14",
     "pandas": "python-3.14-pandas2",
+    # Data-science course aliases use the base Python 3.14 image, where these
+    # exact packages are preinstalled by OnlineCompiler.
+    "numpy": "python-3.14",
+    "scipy": "python-3.14",
+    "scikit-learn": "python-3.14",
+    "scikitlearn": "python-3.14",
 }
 
 ONLINECOMPILER_LANGUAGE_TO_ID = {**COMPILER_BY_LANGUAGE, **COMPILER_LANGUAGE_ALIASES}
@@ -124,9 +130,7 @@ ONLINECOMPILER_LANGUAGE_TO_ID = {**COMPILER_BY_LANGUAGE, **COMPILER_LANGUAGE_ALI
 ONLINECOMPILER_UNSUPPORTED_FRAMEWORK_KEYS = {
     "django", "fastapi", "flask", "express", "expressjs", "react", "reactjs",
     "vue", "vuejs", "nextjs", "angular", "angularjs", "pytorch",
-    # OnlineCompiler offers a pandas image, but does not advertise dedicated
-    # NumPy/SciPy/scikit-learn/PyTorch environments. Retain package-aware fallback.
-    "numpy", "scipy", "scikit-learn", "scikitlearn",
+    # PyTorch is not included in OnlineCompiler's published Python package set.
     "micropython", "python2", "pypy3", "jython", "bun", "laravel", "spring",
 }
 
