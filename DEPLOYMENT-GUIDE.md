@@ -47,7 +47,7 @@ The first frontend deployment is used to establish the exact production HTTPS or
 2. Set **Root Directory** to `frontend`.
 3. Use **Build Command** `npm run build` and **Output Directory** `dist`. Vercel can install dependencies from `frontend/package-lock.json`.
 4. Deploy and copy the exact HTTPS site origin, e.g. `https://your-project.vercel.app`. Do not include a page path or trailing slash in the environment values.
-5. Keep `VITE_API_BASE_URL` unset in Vercel. The frontend should use the same-origin `/api/*` route. The Vercel rewrite routes those requests to the serverless proxy.
+5. Keep `VITE_API_BASE_URL` unset in Vercel. The frontend should use the same-origin `/api/*` route. The Vercel rewrite forwards those requests to the Render API while the browser continues using the same Vercel origin.
 
 ## 4. Deploy the API to Render
 
@@ -64,10 +64,10 @@ The first frontend deployment is used to establish the exact production HTTPS or
 
 ## 5. Connect the frontend to the deployed API
 
-1. In Vercel Project Settings → Environment Variables, add `CODELEAF_API_ORIGIN` for **Production**. Its value is the Render service origin only, e.g. `https://codeleaf-api.onrender.com`—no `/api` suffix, path, credentials, query, or trailing slash.
-2. Keep `VITE_API_BASE_URL` unset for Vercel production.
-3. Redeploy the frontend after saving the environment variable.
-4. Confirm the `frontend/vercel.json` rewrite sends `/api/:path*` to `/api/proxy/:path*`; do not hard-code a real service hostname into frontend source or Vercel's rewrite target.
+1. Keep `VITE_API_BASE_URL` unset in Vercel so authenticated browser requests remain same-origin.
+2. Confirm `frontend/vercel.json` contains the production API rewrite: `/api/:path*` → `https://codeleaf-api.onrender.com/api/:path*`.
+3. Redeploy the frontend after changing the rewrite.
+4. The Vercel rewrite target is the public Render API origin; it does not require a `CODELEAF_API_ORIGIN` Vercel environment variable. An old `CODELEAF_API_ORIGIN` variable may remain temporarily, but this routing configuration does not read it.
 
 ## 6. Test the live system before public launch
 
@@ -101,24 +101,20 @@ Because `PREVIEW_DRAFT_COURSES=false`, unpublished content is intentionally hidd
 
 - Use HTTPS everywhere and a custom domain only after the default domains work correctly.
 - Create and test a database backup/restore routine before real learner data is stored.
-- Monitor Render deploy logs and service events, and check Vercel function logs for proxy errors.
+- Monitor Render deploy logs and service events, and check Vercel deployment/request logs for API rewrite errors.
 - Keep a staging database/project separate from production, test migrations in staging first, and keep secrets in provider environment settings rather than source files.
 - Do not announce a fully production-ready platform until payment flows, privacy/legal notices, course publishing, accessible mobile workflows, and isolated execution have been independently verified.
 
 
-## Vercel API proxy configuration
+## Vercel API routing
 
-The frontend routes `/api/*` through the same-origin Vercel serverless proxy in `frontend/api/proxy/[...path].js`. Configure the following **server-side Vercel environment variable** for Production and Preview as appropriate:
+The frontend calls the same-origin `/api/*` paths. `frontend/vercel.json` uses a Vercel external-origin rewrite to forward those requests to `https://codeleaf-api.onrender.com/api/*`, without exposing a separate API URL in the browser. This restores the routing configuration that was in place before the serverless-proxy change.
 
-- `CODELEAF_API_ORIGIN=https://codeleaf-api.onrender.com`
-
-Enter only the API origin (scheme + hostname, no `/api` suffix, path, credentials, query, or trailing custom path). The proxy forwards cookies and raw request bodies to `/api/*`, including signed payment webhook payloads. Never prefix this variable with `VITE_`; it must not be exposed in the browser bundle. After adding or changing it, redeploy the Vercel project.
-
-The proxy is configured as the `/api/:path*` rewrite destination in `frontend/vercel.json`; do not replace it with a direct cross-origin rewrite unless the proxy is deliberately removed and cookie/webhook behavior is revalidated.
+Keep `VITE_API_BASE_URL` unset in Vercel. `CODELEAF_API_ORIGIN` is not used by this rewrite and is not required; an existing value can be removed after the live API route has been verified. Keep the `/api/:path*` rewrite before the SPA fallback so API calls are not served `index.html`.
 
 ## Chunked portfolio ZIP uploads
 
-Portfolio ZIP uploads now use authenticated 4 MiB binary chunk requests through the same-origin Vercel API proxy rather than sending a near-500 MiB archive in one function request. The backend reserves the whole archive's storage allowance up front, scopes chunks to the authenticated owner, permits identical chunk retries, verifies all chunk sequences and byte counts, validates the reconstructed ZIP, and keeps an incomplete upload private. Chunks are stored in PostgreSQL; this patch does not add third-party object storage.
+Portfolio ZIP uploads now use authenticated 4 MiB binary chunk requests through the same-origin Vercel API rewrite to Render rather than sending a near-500 MiB archive in one function request. The backend reserves the whole archive's storage allowance up front, scopes chunks to the authenticated owner, permits identical chunk retries, verifies all chunk sequences and byte counts, validates the reconstructed ZIP, and keeps an incomplete upload private. Chunks are stored in PostgreSQL; this patch does not add third-party object storage.
 
 Before broad production use, perform a staging smoke test with a small ZIP, a ZIP spanning multiple chunks, cancellation/retry cases, and a near-limit upload only when staging capacity permits. Confirm PostgreSQL storage use and Render/Vercel request and timeout logs. Abandoned sessions are eligible for cleanup after 24 hours when the account starts another upload.
 
